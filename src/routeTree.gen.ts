@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AngeboteRouteImport } from './routes/angebote'
+import { Route as MehrRouteImport } from './routes/mehr'
+import { Route as RezepteRouteImport } from './routes/rezepte'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AngeboteRoute = AngeboteRouteImport.update({
+  id: '/angebote',
+  path: '/angebote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MehrRoute = MehrRouteImport.update({
+  id: '/mehr',
+  path: '/mehr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RezepteRoute = RezepteRouteImport.update({
+  id: '/rezepte',
+  path: '/rezepte',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/angebote': typeof AngeboteRoute
+  '/mehr': typeof MehrRoute
+  '/rezepte': typeof RezepteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/angebote': typeof AngeboteRoute
+  '/mehr': typeof MehrRoute
+  '/rezepte': typeof RezepteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/angebote': typeof AngeboteRoute
+  '/mehr': typeof MehrRoute
+  '/rezepte': typeof RezepteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/angebote' | '/mehr' | '/rezepte'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/angebote' | '/mehr' | '/rezepte'
+  id: '__root__' | '/' | '/angebote' | '/mehr' | '/rezepte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AngeboteRoute: typeof AngeboteRoute
+  MehrRoute: typeof MehrRoute
+  RezepteRoute: typeof RezepteRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/angebote': {
+      id: '/angebote'
+      path: '/angebote'
+      fullPath: '/angebote'
+      preLoaderRoute: typeof AngeboteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mehr': {
+      id: '/mehr'
+      path: '/mehr'
+      fullPath: '/mehr'
+      preLoaderRoute: typeof MehrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rezepte': {
+      id: '/rezepte'
+      path: '/rezepte'
+      fullPath: '/rezepte'
+      preLoaderRoute: typeof RezepteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AngeboteRoute: AngeboteRoute,
+  MehrRoute: MehrRoute,
+  RezepteRoute: RezepteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
