@@ -169,7 +169,7 @@ function RootComponent() {
           </div>
         </header>
 
-        <main className="px-5 pb-28 pt-2">
+        <main className="px-5 pb-36 pt-2">
           <Outlet />
         </main>
 
