@@ -28,7 +28,7 @@ export const CATEGORIES: Category[] = [
 ];
 
 export function getCategory(id: CategoryId): Category {
-  return CATEGORIES.find((c) => c.id === id) ?? CATEGORIES[CATEGORIES.length - 1];
+  return CATEGORIES.find((c) => c.id === id) ?? CATEGORIES[CATEGORIES.length - 1]!;
 }
 
 export interface ListItem {
