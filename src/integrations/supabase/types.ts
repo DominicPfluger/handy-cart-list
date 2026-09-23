@@ -14,7 +14,100 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      departments: {
+        Row: {
+          color: string | null
+          created_at: string
+          emoji: string | null
+          id: string
+          image_path: string | null
+          name: string
+          parent_id: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          image_path?: string | null
+          name: string
+          parent_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          image_path?: string | null
+          name?: string
+          parent_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "departments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
+        Row: {
+          created_at: string
+          default_quantity: number
+          default_unit: Database["public"]["Enums"]["unit_of_measure"]
+          department_id: string
+          emoji: string | null
+          id: string
+          image_path: string | null
+          name: string
+          organic_available: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_quantity?: number
+          default_unit?: Database["public"]["Enums"]["unit_of_measure"]
+          department_id: string
+          emoji?: string | null
+          id?: string
+          image_path?: string | null
+          name: string
+          organic_available?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_quantity?: number
+          default_unit?: Database["public"]["Enums"]["unit_of_measure"]
+          department_id?: string
+          emoji?: string | null
+          id?: string
+          image_path?: string | null
+          name?: string
+          organic_available?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +116,29 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      unit_of_measure:
+        | "stueck"
+        | "gramm"
+        | "kilogramm"
+        | "milligramm"
+        | "pfund"
+        | "unzen"
+        | "milliliter"
+        | "deziliter"
+        | "liter"
+        | "gallone"
+        | "tasse"
+        | "glas"
+        | "flasche"
+        | "dose"
+        | "beutel"
+        | "packung"
+        | "schachtel"
+        | "box"
+        | "karton"
+        | "kiste"
+        | "kanister"
+        | "buendel"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +265,31 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      unit_of_measure: [
+        "stueck",
+        "gramm",
+        "kilogramm",
+        "milligramm",
+        "pfund",
+        "unzen",
+        "milliliter",
+        "deziliter",
+        "liter",
+        "gallone",
+        "tasse",
+        "glas",
+        "flasche",
+        "dose",
+        "beutel",
+        "packung",
+        "schachtel",
+        "box",
+        "karton",
+        "kiste",
+        "kanister",
+        "buendel",
+      ],
+    },
   },
 } as const
