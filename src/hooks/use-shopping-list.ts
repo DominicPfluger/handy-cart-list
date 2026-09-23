@@ -39,6 +39,27 @@ export interface ListItem {
   checked: boolean;
   addedBy: string;
   addedAt: number;
+  /** catalog extras */
+  unit?: string;
+  organic?: boolean;
+  emoji?: string;
+  imageUrl?: string | null;
+  groupLabel?: string;
+  groupEmoji?: string;
+  productId?: string;
+}
+
+export interface FavoriteProduct {
+  productId: string;
+  name: string;
+  emoji?: string | null;
+  imageUrl?: string | null;
+  defaultQuantity: number;
+  defaultUnit: string;
+  organicAvailable: boolean;
+  groupLabel?: string;
+  groupEmoji?: string;
+  addedAt: number;
 }
 
 export interface ActivityEntry {
@@ -69,10 +90,24 @@ const SEED_ACTIVITY: ActivityEntry[] = [
 
 const LIST_KEY = "shoppi:list";
 const ACT_KEY = "shoppi:activity";
+const FAV_KEY = "shoppi:favorites";
+
+export interface AddCatalogItemInput {
+  productId: string;
+  name: string;
+  quantity: string;
+  unit: string;
+  organic: boolean;
+  emoji?: string | null;
+  imageUrl?: string | null;
+  groupLabel?: string;
+  groupEmoji?: string;
+}
 
 export function useShoppingList() {
   const [items, setItems] = useState<ListItem[]>(SEED_ITEMS);
   const [activity, setActivity] = useState<ActivityEntry[]>(SEED_ACTIVITY);
+  const [favorites, setFavorites] = useState<FavoriteProduct[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   // Load from localStorage after hydration
@@ -80,8 +115,10 @@ export function useShoppingList() {
     try {
       const savedList = localStorage.getItem(LIST_KEY);
       const savedAct = localStorage.getItem(ACT_KEY);
+      const savedFav = localStorage.getItem(FAV_KEY);
       if (savedList) setItems(JSON.parse(savedList));
       if (savedAct) setActivity(JSON.parse(savedAct));
+      if (savedFav) setFavorites(JSON.parse(savedFav));
     } catch {
       /* ignore */
     }
@@ -107,6 +144,15 @@ export function useShoppingList() {
     }
   }, [activity, hydrated]);
 
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      localStorage.setItem(FAV_KEY, JSON.stringify(favorites));
+    } catch {
+      /* ignore */
+    }
+  }, [favorites, hydrated]);
+
   const logActivity = useCallback((user: string, action: string, item: string) => {
     setActivity((prev) => [
       { id: `a${Date.now()}`, user, action, item, at: Date.now() },
@@ -131,6 +177,30 @@ export function useShoppingList() {
     [logActivity]
   );
 
+  const addCatalogItem = useCallback(
+    (input: AddCatalogItemInput, user = "Du") => {
+      const item: ListItem = {
+        id: `i${Date.now()}${Math.round(Math.random() * 1000)}`,
+        name: input.name,
+        quantity: input.quantity,
+        category: "sonstiges",
+        checked: false,
+        addedBy: user,
+        addedAt: Date.now(),
+        unit: input.unit,
+        organic: input.organic,
+        emoji: input.emoji ?? undefined,
+        imageUrl: input.imageUrl ?? null,
+        groupLabel: input.groupLabel ?? "Sonstiges",
+        groupEmoji: input.groupEmoji ?? "📦",
+        productId: input.productId,
+      };
+      setItems((prev) => [...prev, item]);
+      logActivity(user, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
+    },
+    [logActivity]
+  );
+
   const toggleItem = useCallback((id: string) => {
     setItems((prev) =>
       prev.map((it) => {
@@ -149,5 +219,31 @@ export function useShoppingList() {
     setItems((prev) => prev.filter((it) => !it.checked));
   }, []);
 
-  return { items, activity, members: MEMBERS, hydrated, addItem, toggleItem, removeItem, clearChecked };
+  const isFavorite = useCallback(
+    (productId: string) => favorites.some((f) => f.productId === productId),
+    [favorites]
+  );
+
+  const toggleFavorite = useCallback((fav: Omit<FavoriteProduct, "addedAt">) => {
+    setFavorites((prev) =>
+      prev.some((f) => f.productId === fav.productId)
+        ? prev.filter((f) => f.productId !== fav.productId)
+        : [...prev, { ...fav, addedAt: Date.now() }]
+    );
+  }, []);
+
+  return {
+    items,
+    activity,
+    favorites,
+    members: MEMBERS,
+    hydrated,
+    addItem,
+    addCatalogItem,
+    toggleItem,
+    removeItem,
+    clearChecked,
+    isFavorite,
+    toggleFavorite,
+  };
 }
