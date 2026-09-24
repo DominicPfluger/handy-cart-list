@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AbteilungenRouteImport } from './routes/abteilungen'
 import { Route as AngeboteRouteImport } from './routes/angebote'
+import { Route as FavoritenRouteImport } from './routes/favoriten'
 import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
 
@@ -19,9 +21,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AbteilungenRoute = AbteilungenRouteImport.update({
+  id: '/abteilungen',
+  path: '/abteilungen',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AngeboteRoute = AngeboteRouteImport.update({
   id: '/angebote',
   path: '/angebote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritenRoute = FavoritenRouteImport.update({
+  id: '/favoriten',
+  path: '/favoriten',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MehrRoute = MehrRouteImport.update({
@@ -37,34 +49,50 @@ const RezepteRoute = RezepteRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/abteilungen': typeof AbteilungenRoute
   '/angebote': typeof AngeboteRoute
+  '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/abteilungen': typeof AbteilungenRoute
   '/angebote': typeof AngeboteRoute
+  '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/abteilungen': typeof AbteilungenRoute
   '/angebote': typeof AngeboteRoute
+  '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/angebote' | '/mehr' | '/rezepte'
+  fullPaths:
+    '/' | '/abteilungen' | '/angebote' | '/favoriten' | '/mehr' | '/rezepte'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/angebote' | '/mehr' | '/rezepte'
-  id: '__root__' | '/' | '/angebote' | '/mehr' | '/rezepte'
+  to: '/' | '/abteilungen' | '/angebote' | '/favoriten' | '/mehr' | '/rezepte'
+  id:
+    | '__root__'
+    | '/'
+    | '/abteilungen'
+    | '/angebote'
+    | '/favoriten'
+    | '/mehr'
+    | '/rezepte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AbteilungenRoute: typeof AbteilungenRoute
   AngeboteRoute: typeof AngeboteRoute
+  FavoritenRoute: typeof FavoritenRoute
   MehrRoute: typeof MehrRoute
   RezepteRoute: typeof RezepteRoute
 }
@@ -78,11 +106,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/abteilungen': {
+      id: '/abteilungen'
+      path: '/abteilungen'
+      fullPath: '/abteilungen'
+      preLoaderRoute: typeof AbteilungenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/angebote': {
       id: '/angebote'
       path: '/angebote'
       fullPath: '/angebote'
       preLoaderRoute: typeof AngeboteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favoriten': {
+      id: '/favoriten'
+      path: '/favoriten'
+      fullPath: '/favoriten'
+      preLoaderRoute: typeof FavoritenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mehr': {
@@ -104,7 +146,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AbteilungenRoute: AbteilungenRoute,
   AngeboteRoute: AngeboteRoute,
+  FavoritenRoute: FavoritenRoute,
   MehrRoute: MehrRoute,
   RezepteRoute: RezepteRoute,
 }
