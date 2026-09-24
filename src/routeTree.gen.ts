@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AbteilungenRouteImport } from './routes/abteilungen'
 import { Route as AngeboteRouteImport } from './routes/angebote'
 import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
@@ -17,6 +18,11 @@ import { Route as RezepteRouteImport } from './routes/rezepte'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AbteilungenRoute = AbteilungenRouteImport.update({
+  id: '/abteilungen',
+  path: '/abteilungen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AngeboteRoute = AngeboteRouteImport.update({
@@ -37,12 +43,14 @@ const RezepteRoute = RezepteRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/abteilungen': typeof AbteilungenRoute
   '/angebote': typeof AngeboteRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/abteilungen': typeof AbteilungenRoute
   '/angebote': typeof AngeboteRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/abteilungen': typeof AbteilungenRoute
   '/angebote': typeof AngeboteRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/angebote' | '/mehr' | '/rezepte'
+  fullPaths: '/' | '/abteilungen' | '/angebote' | '/mehr' | '/rezepte'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/angebote' | '/mehr' | '/rezepte'
-  id: '__root__' | '/' | '/angebote' | '/mehr' | '/rezepte'
+  to: '/' | '/abteilungen' | '/angebote' | '/mehr' | '/rezepte'
+  id: '__root__' | '/' | '/abteilungen' | '/angebote' | '/mehr' | '/rezepte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AbteilungenRoute: typeof AbteilungenRoute
   AngeboteRoute: typeof AngeboteRoute
   MehrRoute: typeof MehrRoute
   RezepteRoute: typeof RezepteRoute
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/abteilungen': {
+      id: '/abteilungen'
+      path: '/abteilungen'
+      fullPath: '/abteilungen'
+      preLoaderRoute: typeof AbteilungenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/angebote': {
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AbteilungenRoute: AbteilungenRoute,
   AngeboteRoute: AngeboteRoute,
   MehrRoute: MehrRoute,
   RezepteRoute: RezepteRoute,

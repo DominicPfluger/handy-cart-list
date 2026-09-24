@@ -15,7 +15,6 @@ import {
   ListIcon,
   ListIconFilled,
   RecipeIcon,
-  OffersIcon,
   MoreIcon,
   DepartmentIcon,
   HeartIcon,
