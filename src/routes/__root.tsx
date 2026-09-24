@@ -17,6 +17,8 @@ import {
   RecipeIcon,
   OffersIcon,
   MoreIcon,
+  DepartmentIcon,
+  HeartIcon,
   ShoppiLogo,
 } from "../components/icons";
 
@@ -110,8 +112,9 @@ function RootShell({ children }: { children: ReactNode }) {
 
 const NAV_ITEMS = [
   { to: "/", label: "Liste", Icon: ListIcon, ActiveIcon: ListIconFilled },
+  { to: "/abteilungen", label: "Abteilungen", Icon: DepartmentIcon, ActiveIcon: DepartmentIcon },
+  { to: "/favoriten", label: "Favoriten", Icon: HeartIcon, ActiveIcon: HeartIcon },
   { to: "/rezepte", label: "Rezepte", Icon: RecipeIcon, ActiveIcon: RecipeIcon },
-  { to: "/angebote", label: "Angebote", Icon: OffersIcon, ActiveIcon: OffersIcon },
   { to: "/mehr", label: "Mehr", Icon: MoreIcon, ActiveIcon: MoreIcon },
 ] as const;
 
@@ -129,7 +132,7 @@ function BottomNav() {
           >
             {({ isActive }) => (
               <>
-                <item.Icon className="h-6 w-6" />
+                {isActive ? <item.ActiveIcon className="h-6 w-6" /> : <item.Icon className="h-6 w-6" />}
                 <span className={`text-[10px] font-medium ${isActive ? "font-semibold" : ""}`}>
                   {item.label}
                 </span>

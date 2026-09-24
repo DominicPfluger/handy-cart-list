@@ -46,10 +46,12 @@ function ListPage() {
   );
 
   const grouped = useMemo(() => {
-    const map = new Map<CategoryId, typeof items>();
+    const map = new Map<string, typeof items>();
     for (const it of sortedItems) {
-      if (!map.has(it.category)) map.set(it.category, []);
-      map.get(it.category)!.push(it);
+      const key = it.groupLabel ?? it.category;
+      if (!map.has(key)) map.set(key, []);
+      const group = map.get(key);
+      if (group) group.push(it);
     }
     return [...map.entries()];
   }, [sortedItems]);
@@ -146,13 +148,17 @@ function ListPage() {
       )}
 
       <div className="space-y-6">
-        {grouped.map(([catId, catItems]) => {
-          const cat = getCategory(catId);
+        {grouped.map(([groupKey, catItems]) => {
+          const firstItem = catItems[0];
+          if (!firstItem) return null;
+          const cat = getCategory(firstItem.category);
+          const groupLabel = firstItem.groupLabel ?? cat.label;
+          const groupEmoji = firstItem.groupEmoji ?? cat.emoji;
           return (
-            <div key={catId}>
+            <div key={groupKey}>
               <div className="mb-2 flex items-center gap-2">
-                <span className="text-base">{cat.emoji}</span>
-                <h2 className="text-sm font-semibold text-foreground">{cat.label}</h2>
+                <span className="text-base">{groupEmoji}</span>
+                <h2 className="text-sm font-semibold text-foreground">{groupLabel}</h2>
                 <span className="text-xs text-muted-foreground">· {catItems.length}</span>
               </div>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
@@ -169,9 +175,14 @@ function ListPage() {
                     >
                       {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
+                    {(item.imageUrl || item.emoji) && (
+                      <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl">
+                        {item.imageUrl ? <img src={item.imageUrl} alt="" className="h-full w-full object-cover" /> : item.emoji}
+                      </div>
+                    )}
                     <div className="min-w-0 flex-1">
                       <p className={`truncate text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
-                        {item.name}
+                        {item.name}{item.organic ? " (Bio)" : ""}
                       </p>
                       <p className="truncate text-xs text-muted-foreground">
                         {item.quantity || "—"} · von {item.addedBy}
