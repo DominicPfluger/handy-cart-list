@@ -40,25 +40,25 @@ export interface ListItem {
   addedBy: string;
   addedAt: number;
   /** catalog extras */
-  unit?: string;
-  organic?: boolean;
-  emoji?: string;
-  imageUrl?: string | null;
-  groupLabel?: string;
-  groupEmoji?: string;
-  productId?: string;
+  unit?: string | undefined;
+  organic?: boolean | undefined;
+  emoji?: string | undefined;
+  imageUrl?: string | null | undefined;
+  groupLabel?: string | undefined;
+  groupEmoji?: string | undefined;
+  productId?: string | undefined;
 }
 
 export interface FavoriteProduct {
   productId: string;
   name: string;
-  emoji?: string | null;
-  imageUrl?: string | null;
+  emoji?: string | null | undefined;
+  imageUrl?: string | null | undefined;
   defaultQuantity: number;
   defaultUnit: string;
   organicAvailable: boolean;
-  groupLabel?: string;
-  groupEmoji?: string;
+  groupLabel?: string | undefined;
+  groupEmoji?: string | undefined;
   addedAt: number;
 }
 
@@ -98,10 +98,10 @@ export interface AddCatalogItemInput {
   quantity: string;
   unit: string;
   organic: boolean;
-  emoji?: string | null;
-  imageUrl?: string | null;
-  groupLabel?: string;
-  groupEmoji?: string;
+  emoji?: string | null | undefined;
+  imageUrl?: string | null | undefined;
+  groupLabel?: string | undefined;
+  groupEmoji?: string | undefined;
 }
 
 export function useShoppingList() {
