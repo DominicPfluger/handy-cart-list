@@ -4,9 +4,9 @@ import { LeafIcon } from "../components/icons";
 export const Route = createFileRoute("/rezepte")({
   head: () => ({
     meta: [
-      { title: "Shoppi — Rezepte" },
+      { title: "Shoppi — Rezept-Kreator" },
       { name: "description", content: "Rezepte entdecken und Zutaten direkt zur Einkaufsliste hinzufügen." },
-      { property: "og:title", content: "Shoppi — Rezepte" },
+      { property: "og:title", content: "Shoppi — Rezept-Kreator" },
       { property: "og:description", content: "Rezepte entdecken und Zutaten direkt zur Einkaufsliste hinzufügen." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -28,7 +28,7 @@ function RecipesPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Rezepte</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">Rezept-Kreator</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Inspiration finden & Zutaten übernehmen
         </p>

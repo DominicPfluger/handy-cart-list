@@ -112,7 +112,7 @@ const NAV_ITEMS = [
   { to: "/", label: "Liste", Icon: ListIcon, ActiveIcon: ListIconFilled },
   { to: "/abteilungen", label: "Abteilungen", Icon: DepartmentIcon, ActiveIcon: DepartmentIcon },
   { to: "/favoriten", label: "Favoriten", Icon: HeartIcon, ActiveIcon: HeartIcon },
-  { to: "/rezepte", label: "Rezepte", Icon: RecipeIcon, ActiveIcon: RecipeIcon },
+  { to: "/rezepte", label: "Rezept-Kreator", Icon: RecipeIcon, ActiveIcon: RecipeIcon },
   { to: "/mehr", label: "Mehr", Icon: MoreIcon, ActiveIcon: MoreIcon },
 ] as const;
 
