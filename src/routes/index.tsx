@@ -2,13 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
 import {
   useShoppingList,
-  CATEGORIES,
   getCategory,
-  type CategoryId,
 } from "../hooks/use-shopping-list";
 import {
-  PlusIcon,
-  SearchIcon,
   CheckIcon,
   DotsIcon,
   ScanIcon,
@@ -30,10 +26,7 @@ export const Route = createFileRoute("/")({
 });
 
 function ListPage() {
-  const { items, hydrated, addItem, toggleItem, removeItem, clearChecked } = useShoppingList();
-  const [input, setInput] = useState("");
-  const [qty, setQty] = useState("");
-  const [selectedCat, setSelectedCat] = useState<CategoryId>("sonstiges");
+  const { items, hydrated, toggleItem, removeItem, clearChecked } = useShoppingList();
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
 
   const sortedItems = useMemo(
@@ -60,13 +53,6 @@ function ListPage() {
   const total = items.length;
   const progress = total > 0 ? (doneCount / total) * 100 : 0;
 
-  const handleAdd = () => {
-    if (!input.trim()) return;
-    addItem(input, qty, selectedCat);
-    setInput("");
-    setQty("");
-  };
-
   return (
     <div className="space-y-5">
       {/* Title + progress */}
@@ -85,52 +71,6 @@ function ListPage() {
         </div>
       </div>
 
-      {/* Add item input */}
-      <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
-        <div className="flex items-center gap-2 rounded-xl bg-background px-3 py-2.5">
-          <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-            placeholder="Artikel hinzufügen..."
-            className="min-w-0 flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-          />
-          <input
-            value={qty}
-            onChange={(e) => setQty(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleAdd()}
-            placeholder="Menge"
-            className="w-16 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
-          />
-          <button
-            onClick={handleAdd}
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground transition active:scale-90"
-            aria-label="Hinzufügen"
-          >
-            <PlusIcon className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* Category chips */}
-        <div className="no-scrollbar flex gap-2 overflow-x-auto">
-          {CATEGORIES.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCat(cat.id)}
-              className={`flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition active:scale-95 ${
-                selectedCat === cat.id
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-background text-muted-foreground"
-              }`}
-            >
-              <span>{cat.emoji}</span>
-              {cat.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* Scan button */}
       <button className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
         <ScanIcon className="h-5 w-5" />
@@ -142,7 +82,7 @@ function ListPage() {
         <div className="py-16 text-center">
           <div className="text-5xl">🧺</div>
           <p className="mt-4 text-sm text-muted-foreground">
-            Deine Liste ist leer.<br />Füge oben Artikel hinzu!
+            Deine Liste ist leer.<br />Füge Artikel über „Abteilungen" hinzu!
           </p>
         </div>
       )}
