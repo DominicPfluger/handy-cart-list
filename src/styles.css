@@ -46,7 +46,7 @@
   --radius: 1.125rem;
 
   /* Shoppi palette */
-  --background: oklch(0.97 0.018 90);        /* Beige #F7F4E9 */
+  --background: oklch(1 0 0);                /* Weiß */
   --foreground: oklch(0.28 0.015 240);       /* Anthrazit #263238 */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.28 0.015 240);
@@ -95,19 +95,3 @@
   }
 }
 
-@layer utilities {
-  .tab-active-indicator {
-    position: relative;
-  }
-  .tab-active-indicator::before {
-    content: "";
-    position: absolute;
-    top: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 24px;
-    height: 3px;
-    border-radius: 999px;
-    background-color: var(--color-primary);
-  }
-}
