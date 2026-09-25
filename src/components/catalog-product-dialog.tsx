@@ -24,8 +24,8 @@ import {
 
 interface CatalogProductDialogProps {
   product: CatalogProduct | null;
-  groupLabel?: string;
-  groupEmoji?: string | null;
+  groupLabel?: string | undefined;
+  groupEmoji?: string | null | undefined;
   onOpenChange: (open: boolean) => void;
 }
 
