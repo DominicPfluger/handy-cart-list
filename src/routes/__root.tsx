@@ -18,7 +18,6 @@ import {
   MoreIcon,
   DepartmentIcon,
   HeartIcon,
-  ShoppiLogo,
 } from "../components/icons";
 
 function NotFoundComponent() {
@@ -101,7 +100,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="bg-[oklch(0.88_0.01_90)]">
+      <body className="bg-background">
         {children}
         <Scripts />
       </body>
@@ -125,7 +124,7 @@ function BottomNav() {
           <Link
             key={item.to}
             to={item.to}
-            className="tab-active-indicator flex flex-1 flex-col items-center gap-1 rounded-xl py-2 transition active:scale-95"
+            className="flex flex-1 flex-col items-center gap-1 rounded-xl py-2 transition active:scale-95"
             activeProps={{ className: "text-primary" }}
             activeOptions={{ exact: item.to === "/" }}
           >
@@ -149,29 +148,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="relative mx-auto min-h-screen w-full max-w-[440px] bg-background shadow-xl">
-        {/* App header with logo */}
-        <header className="sticky top-0 z-40 flex items-center justify-between bg-background/90 px-5 py-3 backdrop-blur-md">
-          <Link to="/" className="flex items-center gap-2">
-            <ShoppiLogo className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold tracking-tight text-foreground">Shoppi</span>
-          </Link>
-          <div className="flex items-center -space-x-2">
-            {["D", "J", "M", "P"].map((initial, i) => (
-              <div
-                key={i}
-                className="grid h-7 w-7 place-items-center rounded-full border-2 border-background text-[11px] font-semibold text-card"
-                style={{
-                  background: ["oklch(0.52 0.155 144)", "oklch(0.75 0.16 47)", "oklch(0.62 0.18 280)", "oklch(0.55 0.13 210)"][i],
-                }}
-              >
-                {initial}
-              </div>
-            ))}
-          </div>
-        </header>
-
-        <main className="px-5 pb-36 pt-2">
+      <div className="relative mx-auto min-h-screen w-full max-w-[440px] bg-background">
+        <main className="px-5 pb-36 pt-5">
           <Outlet />
         </main>
 
