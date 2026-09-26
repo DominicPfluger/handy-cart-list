@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { Toaster } from "@/components/ui/sonner";
 import {
   ListIcon,
   ListIconFilled,
@@ -151,6 +152,7 @@ function RootComponent() {
       <div className="relative mx-auto min-h-screen w-full max-w-[440px] bg-background">
         <main className="px-5 pb-36 pt-5">
           <Outlet />
+          <Toaster position="top-center" />
         </main>
 
         <BottomNav />
