@@ -104,8 +104,23 @@ export interface AddCatalogItemInput {
   groupEmoji?: string | undefined;
 }
 
+export interface ShoppingList {
+  id: string;
+  name: string;
+  items: ListItem[];
+  createdAt: number;
+}
+
+const LISTS_KEY = "shoppi:lists";
+const ACTIVE_KEY = "shoppi:active-list";
+
+const DEFAULT_LISTS: ShoppingList[] = [
+  { id: "l-default", name: "Unsere Einkaufsliste", items: SEED_ITEMS, createdAt: 0 },
+];
+
 export function useShoppingList() {
-  const [items, setItems] = useState<ListItem[]>(SEED_ITEMS);
+  const [lists, setLists] = useState<ShoppingList[]>(DEFAULT_LISTS);
+  const [activeListId, setActiveListId] = useState<string>("l-default");
   const [activity, setActivity] = useState<ActivityEntry[]>(SEED_ACTIVITY);
   const [favorites, setFavorites] = useState<FavoriteProduct[]>([]);
   const [hydrated, setHydrated] = useState(false);
@@ -113,10 +128,18 @@ export function useShoppingList() {
   // Load from localStorage after hydration
   useEffect(() => {
     try {
+      const savedLists = localStorage.getItem(LISTS_KEY);
+      const savedActive = localStorage.getItem(ACTIVE_KEY);
       const savedList = localStorage.getItem(LIST_KEY);
       const savedAct = localStorage.getItem(ACT_KEY);
       const savedFav = localStorage.getItem(FAV_KEY);
-      if (savedList) setItems(JSON.parse(savedList));
+      if (savedLists) {
+        const parsed = JSON.parse(savedLists) as ShoppingList[];
+        if (parsed.length) setLists(parsed);
+      } else if (savedList) {
+        setLists([{ ...DEFAULT_LISTS[0]!, items: JSON.parse(savedList) }]);
+      }
+      if (savedActive) setActiveListId(savedActive);
       if (savedAct) setActivity(JSON.parse(savedAct));
       if (savedFav) setFavorites(JSON.parse(savedFav));
     } catch {
@@ -125,15 +148,69 @@ export function useShoppingList() {
     setHydrated(true);
   }, []);
 
+  const activeList = lists.find((l) => l.id === activeListId) ?? lists[0]!;
+  const items = activeList.items;
+
+  const setItems = useCallback(
+    (fn: (prev: ListItem[]) => ListItem[]) => {
+      setLists((prev) => {
+        const target = prev.find((l) => l.id === activeListId) ?? prev[0];
+        if (!target) return prev;
+        return prev.map((l) => (l.id === target.id ? { ...l, items: fn(l.items) } : l));
+      });
+    },
+    [activeListId]
+  );
+
   // Persist
   useEffect(() => {
     if (!hydrated) return;
     try {
-      localStorage.setItem(LIST_KEY, JSON.stringify(items));
+      localStorage.setItem(LISTS_KEY, JSON.stringify(lists));
+      localStorage.setItem(ACTIVE_KEY, activeListId);
     } catch {
       /* ignore */
     }
-  }, [items, hydrated]);
+  }, [lists, activeListId, hydrated]);
+
+  const createList = useCallback((name: string) => {
+    const list: ShoppingList = {
+      id: `l${Date.now()}`,
+      name: name.trim() || "Neue Liste",
+      items: [],
+      createdAt: Date.now(),
+    };
+    setLists((prev) => [...prev, list]);
+    setActiveListId(list.id);
+    return list.id;
+  }, []);
+
+  const renameList = useCallback((id: string, name: string) => {
+    const n = name.trim();
+    if (!n) return;
+    setLists((prev) => prev.map((l) => (l.id === id ? { ...l, name: n } : l)));
+  }, []);
+
+  const deleteList = useCallback((id: string) => {
+    setLists((prev) => {
+      if (prev.length <= 1) return prev;
+      const next = prev.filter((l) => l.id !== id);
+      setActiveListId((cur) => (cur === id ? next[0]!.id : cur));
+      return next;
+    });
+  }, []);
+
+  const reorderLists = useCallback((fromId: string, toId: string) => {
+    setLists((prev) => {
+      const from = prev.findIndex((l) => l.id === fromId);
+      const to = prev.findIndex((l) => l.id === toId);
+      if (from < 0 || to < 0) return prev;
+      const next = [...prev];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved!);
+      return next;
+    });
+  }, []);
 
   useEffect(() => {
     if (!hydrated) return;
@@ -234,6 +311,13 @@ export function useShoppingList() {
 
   return {
     items,
+    lists,
+    activeList,
+    setActiveListId,
+    createList,
+    renameList,
+    deleteList,
+    reorderLists,
     activity,
     favorites,
     members: MEMBERS,
