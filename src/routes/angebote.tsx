@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { HeartIcon, PinIcon } from "../components/icons";
+import { useT } from "../i18n";
 
 export const Route = createFileRoute("/angebote")({
   head: () => ({
@@ -26,6 +27,7 @@ const OFFERS = [
 ];
 
 function OffersPage() {
+  const { t } = useT();
   const [tab, setTab] = useState<"nahe" | "favoriten">("nahe");
   const [favorites, setFavorites] = useState<number[]>([1, 3]);
 
@@ -37,7 +39,7 @@ function OffersPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Angebote</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("off.title")}</h1>
         <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
           <PinIcon className="h-4 w-4" /> Frankfurt am Main · 2 km Umkreis
         </p>
