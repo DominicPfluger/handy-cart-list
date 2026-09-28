@@ -56,9 +56,6 @@ function toCatalogProduct(favorite: FavoriteProduct): CatalogProduct {
 }
 
 function ProductThumb({ product }: { product: CatalogProduct }) {
-  if (product.imageUrl) {
-    return <img src={product.imageUrl} alt="" className="h-full w-full object-cover" />;
-  }
   return <span className="text-3xl" aria-hidden="true">{product.emoji ?? "🛒"}</span>;
 }
 
