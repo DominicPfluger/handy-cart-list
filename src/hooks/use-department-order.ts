@@ -58,7 +58,7 @@ export function useDepartmentOrder(source: CatalogDepartment[]) {
       if (parentId !== null && isDescendant(parentId, id)) return false;
       const siblings = departments
         .filter((d) => d.parentId === parentId && d.id !== id)
-        .sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name, "de"))
+        .sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name))
         .map((d) => d.id);
       const at = index === undefined ? siblings.length : Math.max(0, Math.min(index, siblings.length));
       siblings.splice(at, 0, id);

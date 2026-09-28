@@ -9,6 +9,7 @@ import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
 import { useShoppingList, type FavoriteProduct } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
+  useCatalog,
   compareByName,
   matchesProductSearch,
   type CatalogDepartment,
@@ -63,7 +64,7 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 
 function FavoritesPage() {
   const { addCatalogItem, favorites, hydrated, toggleFavorite } = useShoppingList();
-  const { data } = useSuspenseQuery(catalogQueryOptions);
+  const data = useCatalog();
   const { departments } = useDepartmentOrder(data.departments);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<FavRow | null>(null);
@@ -139,7 +140,7 @@ function FavoritesPage() {
       if (a.row.product.sortOrder !== b.row.product.sortOrder) {
         return a.row.product.sortOrder - b.row.product.sortOrder;
       }
-      return a.row.favorite.name.localeCompare(b.row.favorite.name, "de");
+      return a.row.favorite.name.localeCompare(b.row.favorite.name);
     });
 
   const sections = useMemo(
@@ -154,7 +155,7 @@ function FavoritesPage() {
     [rootDepartments, entriesByRoot],
   );
 
-  const normalizedQuery = query.trim().toLocaleLowerCase("de");
+  const normalizedQuery = query.trim().toLocaleLowerCase();
   const searchResults = useMemo<FavRow[]>(() => {
     if (!normalizedQuery) return [];
     const rows: FavRow[] = [];

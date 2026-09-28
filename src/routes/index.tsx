@@ -9,6 +9,7 @@ import {
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import {
   catalogQueryOptions,
+  useCatalog,
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import {
@@ -42,7 +43,7 @@ function ListPage() {
   } = useShoppingList();
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [managerOpen, setManagerOpen] = useState(false);
-  const { data } = useSuspenseQuery(catalogQueryOptions);
+  const data = useCatalog();
   const { departments } = useDepartmentOrder(data.departments);
 
   const deptById = useMemo(

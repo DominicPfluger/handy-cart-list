@@ -9,6 +9,7 @@ import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon } from "../componen
 import { useShoppingList } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
+  useCatalog,
   childrenOf,
   compareByName,
   matchesProductSearch,
@@ -46,7 +47,7 @@ function DepartmentThumb({ department }: { department: CatalogDepartment }) {
 }
 
 function DepartmentsPage() {
-  const { data } = useSuspenseQuery(catalogQueryOptions);
+  const data = useCatalog();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const { departments, move } = useDepartmentOrder(data.departments);
   const [currentId, setCurrentId] = useState<string | null>(null);
@@ -57,7 +58,7 @@ function DepartmentsPage() {
   const breadcrumbs = pathTo(departments, currentId);
   const childDepartments = childrenOf(departments, currentId);
   const directProducts = currentId ? productsOf(data.products, currentId) : [];
-  const normalizedQuery = query.trim().toLocaleLowerCase("de");
+  const normalizedQuery = query.trim().toLocaleLowerCase();
   const searchResults = useMemo(
     () => normalizedQuery
       ? data.products
