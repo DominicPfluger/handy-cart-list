@@ -174,9 +174,9 @@ export function ListManager(props: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/30" onClick={onClose}>
+    <div className="fixed inset-0 z-[70] flex items-end justify-center bg-foreground/30" onClick={onClose}>
       <div
-        className="max-h-[85vh] w-full max-w-[440px] overflow-y-auto rounded-t-3xl bg-background p-5 pb-8"
+        className="max-h-[85dvh] w-full max-w-[440px] overflow-y-auto rounded-t-3xl bg-background p-5 pb-[calc(2rem+env(safe-area-inset-bottom))]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-muted" />

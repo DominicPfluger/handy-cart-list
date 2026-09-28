@@ -114,11 +114,11 @@ export function ShareSheet() {
   const close = () => setPayload(null);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40" onClick={close}>
+    <div className="fixed inset-0 z-[70] flex items-end justify-center bg-foreground/40" onClick={close}>
       <div
         role="dialog"
         aria-label="Liste teilen"
-        className="w-full max-w-[440px] rounded-t-3xl bg-card p-5 pb-8 shadow-xl"
+        className="max-h-[85dvh] w-full max-w-[440px] overflow-y-auto rounded-t-3xl bg-card p-5 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-muted" />
