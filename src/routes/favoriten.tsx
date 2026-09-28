@@ -148,16 +148,26 @@ function FavoritesPage() {
                   })}
                   className="rounded-full bg-coral/15 text-coral"
                 >
-                  <HeartIcon className="fill-current" />
+                  <HeartIcon className="h-3.5 w-3.5 fill-current" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`${favorite.name} schnell hinzufügen (Standardmenge)`}
+                  onClick={() => quickAdd(favorite)}
+                  className="rounded-full text-muted-foreground"
+                >
+                  <BoltIcon className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                   type="button"
                   size="icon"
-                  aria-label={`${favorite.name} hinzufügen`}
+                  aria-label={`${favorite.name} mit Menge hinzufügen`}
                   onClick={() => setSelected(favorite)}
                   className="rounded-full shadow-none"
                 >
-                  <PlusIcon />
+                  <PlusIcon className="h-3.5 w-3.5" />
                 </Button>
               </div>
             ))}
