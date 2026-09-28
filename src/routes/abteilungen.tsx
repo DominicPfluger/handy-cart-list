@@ -4,7 +4,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
-import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
+import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon } from "../components/icons";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
@@ -223,6 +223,11 @@ function DepartmentsPage() {
           </div>
         </section>
       )}
+
+      <button className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
+        <ScanIcon className="h-5 w-5" />
+        Barcode scannen
+      </button>
 
       {normalizedQuery && shownProducts.length === 0 && (
         <div className="py-12 text-center">
