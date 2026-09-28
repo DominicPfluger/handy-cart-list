@@ -8,6 +8,8 @@ import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
 import { useShoppingList, type FavoriteProduct } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
+  compareByName,
+  matchesProductSearch,
   type CatalogDepartment,
   type CatalogProduct,
 } from "../lib/catalog-query";
@@ -157,10 +159,10 @@ function FavoritesPage() {
     if (!normalizedQuery) return [];
     const rows: FavRow[] = [];
     for (const fav of favorites) {
-      if (!fav.name.toLocaleLowerCase("de").includes(normalizedQuery)) continue;
+      if (!matchesProductSearch(fav.name, normalizedQuery)) continue;
       rows.push({ product: productById.get(fav.productId) ?? toCatalogProduct(fav), favorite: fav });
     }
-    return rows;
+    return rows.sort((a, b) => compareByName(a.favorite, b.favorite));
   }, [normalizedQuery, favorites, productById]);
 
   const categoryLabel = (product: CatalogProduct, fallback: string | undefined): string => {

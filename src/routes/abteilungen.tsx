@@ -9,6 +9,8 @@ import { useShoppingList } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
   childrenOf,
+  compareByName,
+  matchesProductSearch,
   pathTo,
   productsOf,
   type CatalogDepartment,
