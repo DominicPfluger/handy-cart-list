@@ -115,13 +115,14 @@ function ListPage() {
     for (const group of groups) {
       group.items.sort((a, b) => {
         if (a.checked !== b.checked) return a.checked ? 1 : -1;
+        const ta = segOf(a).tree;
+        const tb = segOf(b).tree;
+        if (ta !== tb) return ta - tb;
+        const ia = itemOrder[a.id];
+        const ib = itemOrder[b.id];
+        if (ia !== undefined && ib !== undefined && ia !== ib) return ia - ib;
         const pa = a.productId ? productById.get(a.productId) : undefined;
         const pb = b.productId ? productById.get(b.productId) : undefined;
-        const la = pa?.departmentId ? deptById.get(pa.departmentId) : undefined;
-        const lb = pb?.departmentId ? deptById.get(pb.departmentId) : undefined;
-        const ta = la ? treeOrder(la) : Number.MAX_SAFE_INTEGER;
-        const tb = lb ? treeOrder(lb) : Number.MAX_SAFE_INTEGER;
-        if (ta !== tb) return ta - tb;
         const oa = pa?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         const ob = pb?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         if (oa !== ob) return oa - ob;
@@ -130,7 +131,48 @@ function ListPage() {
     }
     return groups;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, productById, deptById]);
+  }, [items, productById, deptById, itemOrder]);
+
+  /** Segment = gleiche Hauptgruppe + gleiche Unterkategorie + gleicher Abhak-Status. */
+  function segOf(it: ListItem) {
+    const p = it.productId ? productById.get(it.productId) : undefined;
+    const leaf = p?.departmentId ? deptById.get(p.departmentId) : undefined;
+    return { tree: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER, key: `${leaf?.id ?? "none"}|${it.checked}` };
+  }
+
+  const [drag, setDrag] = useState<{ id: string; seg: string; group: string; target: string | null; after: boolean } | null>(null);
+
+  const onHandleDown = (e: React.PointerEvent, item: ListItem, groupKey: string) => {
+    e.preventDefault();
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    setDrag({ id: item.id, seg: segOf(item).key, group: groupKey, target: null, after: false });
+  };
+  const onHandleMove = (e: React.PointerEvent) => {
+    if (!drag) return;
+    const el = document.elementFromPoint(e.clientX, e.clientY)?.closest<HTMLElement>("[data-item-id]");
+    if (!el || el.dataset.seg !== drag.seg || el.dataset.group !== drag.group) {
+      if (drag.target) setDrag({ ...drag, target: null });
+      return;
+    }
+    const r = el.getBoundingClientRect();
+    const after = e.clientY > r.top + r.height / 2;
+    const target = el.dataset.itemId!;
+    if (target !== drag.target || after !== drag.after) setDrag({ ...drag, target, after });
+  };
+  const onHandleUp = () => {
+    if (drag?.target && drag.target !== drag.id) {
+      const group = grouped.find((g) => g.key === drag.group);
+      if (group) {
+        const seg = group.items.filter((i) => segOf(i).key === drag.seg).map((i) => i.id);
+        const without = seg.filter((id) => id !== drag.id);
+        let idx = without.indexOf(drag.target);
+        if (drag.after) idx += 1;
+        without.splice(idx, 0, drag.id);
+        saveItemOrder(without);
+      }
+    }
+    setDrag(null);
+  };
 
   const doneCount = items.filter((i) => i.checked).length;
   const total = items.length;
