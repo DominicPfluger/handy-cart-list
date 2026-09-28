@@ -6,7 +6,7 @@ import { addCustomDepartment, addCustomProduct } from "../hooks/use-custom-catal
 import { getUnits } from "../lib/units";
 import { useT } from "../i18n";
 
-export type AddEntryTarget = { kind: "department" | "product"; parentId: string | null; parentName?: string };
+export type AddEntryTarget = { kind: "department" | "product"; parentId: string | null; parentName?: string | undefined };
 
 export function AddEntryDialog({ target, onClose }: { target: AddEntryTarget | null; onClose: () => void }) {
   const { t } = useT();
