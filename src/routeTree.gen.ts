@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AbteilungenRouteImport } from './routes/abteilungen'
+import { Route as AktivitaetenRouteImport } from './routes/aktivitaeten'
 import { Route as AngeboteRouteImport } from './routes/angebote'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FavoritenRouteImport } from './routes/favoriten'
@@ -32,6 +33,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
 const AbteilungenRoute = AbteilungenRouteImport.update({
   id: '/abteilungen',
   path: '/abteilungen',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AktivitaetenRoute = AktivitaetenRouteImport.update({
+  id: '/aktivitaeten',
+  path: '/aktivitaeten',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AngeboteRoute = AngeboteRouteImport.update({
@@ -73,6 +79,7 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/abteilungen': typeof AbteilungenRoute
+  '/aktivitaeten': typeof AktivitaetenRoute
   '/angebote': typeof AngeboteRoute
   '/auth': typeof AuthRoute
   '/favoriten': typeof FavoritenRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/abteilungen': typeof AbteilungenRoute
+  '/aktivitaeten': typeof AktivitaetenRoute
   '/angebote': typeof AngeboteRoute
   '/auth': typeof AuthRoute
   '/favoriten': typeof FavoritenRoute
@@ -97,6 +105,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/abteilungen': typeof AbteilungenRoute
+  '/aktivitaeten': typeof AktivitaetenRoute
   '/angebote': typeof AngeboteRoute
   '/auth': typeof AuthRoute
   '/favoriten': typeof FavoritenRoute
@@ -110,6 +119,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/abteilungen'
+    | '/aktivitaeten'
     | '/angebote'
     | '/auth'
     | '/favoriten'
@@ -121,6 +131,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/abteilungen'
+    | '/aktivitaeten'
     | '/angebote'
     | '/auth'
     | '/favoriten'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/abteilungen'
+    | '/aktivitaeten'
     | '/angebote'
     | '/auth'
     | '/favoriten'
@@ -146,6 +158,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AbteilungenRoute: typeof AbteilungenRoute
+  AktivitaetenRoute: typeof AktivitaetenRoute
   AngeboteRoute: typeof AngeboteRoute
   AuthRoute: typeof AuthRoute
   FavoritenRoute: typeof FavoritenRoute
@@ -175,6 +188,13 @@ declare module '@tanstack/react-router' {
       path: '/abteilungen'
       fullPath: '/abteilungen'
       preLoaderRoute: typeof AbteilungenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aktivitaeten': {
+      id: '/aktivitaeten'
+      path: '/aktivitaeten'
+      fullPath: '/aktivitaeten'
+      preLoaderRoute: typeof AktivitaetenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/angebote': {
@@ -244,6 +264,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AbteilungenRoute: AbteilungenRoute,
+  AktivitaetenRoute: AktivitaetenRoute,
   AngeboteRoute: AngeboteRoute,
   AuthRoute: AuthRoute,
   FavoritenRoute: FavoritenRoute,

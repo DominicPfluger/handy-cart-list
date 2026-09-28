@@ -9,8 +9,7 @@ import {
   ShareIcon,
   PlusIcon,
 } from "../components/icons";
-import { LOCALES, getExplicitLocale, setLocale, translate, useT, type Locale } from "../i18n";
-import type { MessageKey } from "../i18n/de";
+import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/mehr")({
@@ -27,17 +26,6 @@ export const Route = createFileRoute("/mehr")({
   component: MorePage,
 });
 
-function timeAgo(ts: number, locale: string): string {
-  const t = (k: MessageKey, n?: number) => translate(locale, k, { n: n ?? 0 });
-  const diff = Date.now() - ts;
-  const min = Math.floor(diff / 60000);
-  if (min < 1) return t("more.justNow");
-  if (min < 60) return t("more.minAgo", min);
-  const h = Math.floor(min / 60);
-  if (h < 24) return t("more.hAgo", h);
-  const d = Math.floor(h / 24);
-  return t("more.dAgo", d);
-}
 
 const AVATAR_COLORS = [
   "oklch(0.52 0.155 144)",
@@ -47,7 +35,7 @@ const AVATAR_COLORS = [
 ];
 
 function MorePage() {
-  const { members, activity } = useShoppingList();
+  const { members } = useShoppingList();
   const { t, locale } = useT();
   const [choice, setChoice] = useState<string>("auto");
   useEffect(() => setChoice(getExplicitLocale() ?? "auto"), [locale]);
@@ -91,29 +79,6 @@ function MorePage() {
         </button>
       </section>
 
-      {/* Activity feed */}
-      <section className="space-y-3">
-        <h2 className="text-base font-semibold text-foreground">{t("more.activity")}</h2>
-        <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-          {activity.slice(0, 10).map((a) => (
-            <div key={a.id} className="flex items-center gap-3 px-4 py-3">
-              <div
-                className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-bold text-card"
-                style={{ background: AVATAR_COLORS[members.indexOf(a.user) % AVATAR_COLORS.length] }}
-              >
-                {a.user[0]}
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm text-foreground">
-                  <span className="font-semibold">{a.user}</span> {a.action}{" "}
-                  <span className="font-medium">{a.item}</span>
-                </p>
-                <p className="text-xs text-muted-foreground">{timeAgo(a.at, locale)}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       {/* Sprache & Admin */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
@@ -166,6 +131,16 @@ function MorePage() {
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-foreground">{t("more.scanner")}</p>
             <p className="truncate text-xs text-muted-foreground">{t("more.scannerSub")}</p>
+          </div>
+          <span className="text-muted-foreground">›</span>
+        </Link>
+        <Link to="/aktivitaeten" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+            <span className="text-lg" aria-hidden="true">🕘</span>
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground">{t("more.activity")}</p>
+            <p className="truncate text-xs text-muted-foreground">{t("more.activitySub")}</p>
           </div>
           <span className="text-muted-foreground">›</span>
         </Link>
