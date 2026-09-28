@@ -47,9 +47,24 @@ interface FavoriteGroup {
 }
 
 function FavoritesPage() {
-  const { favorites, hydrated, toggleFavorite } = useShoppingList();
+  const { addCatalogItem, favorites, hydrated, toggleFavorite } = useShoppingList();
   const [selected, setSelected] = useState<FavoriteProduct | null>(null);
   const { data: catalog } = useQuery(catalogQueryOptions);
+
+  const quickAdd = (favorite: FavoriteProduct) => {
+    addCatalogItem({
+      productId: favorite.productId,
+      name: favorite.name,
+      quantity: formatQuantity(favorite.defaultQuantity, favorite.defaultUnit),
+      unit: favorite.defaultUnit,
+      organic: false,
+      emoji: favorite.emoji,
+      imageUrl: favorite.imageUrl,
+      groupLabel: favorite.groupLabel,
+      groupEmoji: favorite.groupEmoji,
+    });
+    toast.success(`${favorite.name} zur Liste hinzugefügt`);
+  };
 
   const groups = useMemo<FavoriteGroup[]>(() => {
     const deptById = new Map(catalog?.departments.map((d) => [d.id, d]) ?? []);
