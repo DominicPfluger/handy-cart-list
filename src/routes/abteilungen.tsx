@@ -81,8 +81,8 @@ function DepartmentsPage() {
   const findTarget = (x: number, y: number, draggedId: string): DropTarget | null => {
     const el = document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-drop]");
     if (!el) return null;
-    const id = el.dataset.id || null;
-    if (el.dataset.drop === "crumb") return { kind: "into", id };
+    const id = el.dataset["id"] || null;
+    if (el.dataset["drop"] === "crumb") return { kind: "into", id };
     if (id === draggedId) return null;
     const r = el.getBoundingClientRect();
     const fx = (x - r.left) / r.width;
@@ -261,7 +261,7 @@ function DepartmentsPage() {
                 onContextMenu={(e) => e.preventDefault()}
                 onClick={() => { if (!suppressClick.current) openDepartment(department.id); }}
                 style={{ WebkitTouchCallout: "none" }}
-                className={`relative select-none ${drag?.id === department.id ? "opacity-40" : ""} ${t === "into" ? "ring-2 ring-primary" : ""} ${t === "before" ? "shadow-[-4px_0_0_0_var(--color-primary)]" : ""} ${t === "after" ? "shadow-[4px_0_0_0_var(--color-primary)]" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
+                className={`relative select-none ${drag?.id === department.id ? "opacity-40" : ""} ${t === "into" ? "ring-2 ring-primary" : ""} ${t === "before" ? "!border-l-4 !border-l-primary" : ""} ${t === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
               >
                 <span className="grid aspect-[4/3] w-full place-items-center overflow-hidden bg-primary-soft/25">
                   <DepartmentThumb department={department} />
