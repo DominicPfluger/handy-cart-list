@@ -20,6 +20,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
 import type { ShoppingList } from "../hooks/use-shopping-list";
 import { PlusIcon, ShareIcon, TrashIcon, CheckIcon } from "./icons";
+import { getLocale, translate, useT } from "../i18n";
 
 interface Props {
   open: boolean;
@@ -35,9 +36,9 @@ interface Props {
 
 export async function shareList(list: ShoppingList) {
   const lines = list.items.map(
-    (i) => `${i.checked ? "✓" : "•"} ${i.name}${i.organic ? " (Bio)" : ""}${i.quantity ? ` – ${i.quantity}` : ""}${i.note ? ` (${i.note})` : ""}`
+    (i) => `${i.checked ? "✓" : "•"} ${i.name}${i.organic ? ` (${translate(getLocale(), "common.organic")})` : ""}${i.quantity ? ` – ${i.quantity}` : ""}${i.note ? ` (${i.note})` : ""}`
   );
-  const text = `🛒 ${list.name}\n\n${lines.join("\n") || "(leer)"}\n\nGeteilt mit Shoppi`;
+  const text = `🛒 ${list.name}\n\n${lines.join("\n") || translate(getLocale(), "lm.shareEmpty")}\n\n${translate(getLocale(), "lm.sharedWith")}`;
   openShareSheet({ title: list.name, text });
 }
 
@@ -57,6 +58,7 @@ function Row({
   onDelete: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: list.id });
+  const { t } = useT();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(list.name);
   const open = list.items.filter((i) => !i.checked).length;
@@ -78,7 +80,7 @@ function Row({
         {...attributes}
         {...listeners}
         className="grid h-9 w-7 shrink-0 cursor-grab touch-none place-items-center text-muted-foreground active:cursor-grabbing"
-        aria-label="Verschieben"
+        aria-label={t("lm.move")}
       >
         <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
           {[6, 12, 18].map((y) => (
@@ -112,7 +114,7 @@ function Row({
             {list.name}
           </p>
           <p className="text-xs text-muted-foreground">
-            {open} offen · {list.items.length} Artikel
+            {t("lm.open", { open, n: list.items.length })}
           </p>
         </button>
       )}
@@ -120,7 +122,7 @@ function Row({
       <button
         onClick={() => (editing ? save() : setEditing(true))}
         className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
-        aria-label="Umbenennen"
+        aria-label={t("lm.rename")}
       >
         <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 20h4L19 9l-4-4L4 16v4z" />
@@ -130,20 +132,20 @@ function Row({
       <button
         onClick={() => shareList(list)}
         className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
-        aria-label="Teilen"
+        aria-label={t("lm.share")}
       >
         <ShareIcon className="h-[18px] w-[18px]" />
       </button>
       <button
         onClick={() => {
           if (!canDelete) {
-            toast.error("Die letzte Liste kann nicht gelöscht werden");
+            toast.error(t("lm.lastList"));
             return;
           }
-          if (confirm(`Liste „${list.name}" wirklich löschen?`)) onDelete();
+          if (confirm(t("lm.confirmDelete", { name: list.name }))) onDelete();
         }}
         className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-coral active:bg-muted"
-        aria-label="Löschen"
+        aria-label={t("lm.delete")}
       >
         <TrashIcon className="h-[18px] w-[18px]" />
       </button>
@@ -153,6 +155,7 @@ function Row({
 
 export function ListManager(props: Props) {
   const { open, onClose, lists, activeId } = props;
+  const { t } = useT();
   const [newName, setNewName] = useState("");
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -181,9 +184,9 @@ export function ListManager(props: Props) {
       >
         <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-muted" />
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-foreground">Meine Listen</h2>
+          <h2 className="text-lg font-bold text-foreground">{t("lm.title")}</h2>
           <button onClick={onClose} className="text-sm font-semibold text-primary">
-            Fertig
+            {t("common.done")}
           </button>
         </div>
 
@@ -213,7 +216,7 @@ export function ListManager(props: Props) {
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && create()}
-            placeholder="Neue Liste, z. B. Wochenmarkt"
+            placeholder={t("lm.newPlaceholder")}
             className="min-w-0 flex-1 rounded-xl border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
           />
           <button
@@ -221,7 +224,7 @@ export function ListManager(props: Props) {
             disabled={!newName.trim()}
             className="flex items-center gap-1 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-50"
           >
-            <PlusIcon className="h-4 w-4" /> Erstellen
+            <PlusIcon className="h-4 w-4" /> {t("lm.create")}
           </button>
         </div>
       </div>

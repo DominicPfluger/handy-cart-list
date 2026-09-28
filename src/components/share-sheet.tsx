@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { getLocale, translate, useT } from "../i18n";
 
 export const SHARE_EVENT = "shoppi:share";
 export interface SharePayload {
@@ -31,7 +32,7 @@ async function copy(text: string) {
 async function copyAndOpen(p: SharePayload, url: string, app: string) {
   const ok = await copy(p.text);
   toast.success(
-    ok ? `Liste kopiert – in ${app} einfügen` : `${app} wird geöffnet`
+    translate(getLocale(), ok ? "share.pasteIn" : "share.opening", { app })
   );
   window.open(url, "_blank", "noopener");
 }
@@ -102,6 +103,7 @@ const TARGETS: Target[] = [
 ];
 
 export function ShareSheet() {
+  const { t } = useT();
   const [payload, setPayload] = useState<SharePayload | null>(null);
 
   useEffect(() => {
@@ -117,31 +119,31 @@ export function ShareSheet() {
     <div className="fixed inset-0 z-[70] flex items-end justify-center bg-foreground/40" onClick={close}>
       <div
         role="dialog"
-        aria-label="Liste teilen"
+        aria-label={t("list.share")}
         className="max-h-[85dvh] w-full max-w-[440px] overflow-y-auto rounded-t-3xl bg-card p-5 pb-[calc(2rem+env(safe-area-inset-bottom))] shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-muted" />
-        <h2 className="text-lg font-semibold">„{payload.title}" teilen</h2>
-        <p className="mb-4 text-sm text-muted-foreground">Wähle einen Dienst</p>
+        <h2 className="text-lg font-semibold">{t("share.title", { name: payload.title })}</h2>
+        <p className="mb-4 text-sm text-muted-foreground">{t("share.choose")}</p>
         <div className="grid grid-cols-3 gap-4">
-          {TARGETS.map((t) => (
+          {TARGETS.map((target) => (
             <button
-              key={t.id}
+              key={target.id}
               type="button"
               onClick={async () => {
-                await t.run(payload);
+                await target.run(payload);
                 close();
               }}
               className="flex flex-col items-center gap-2 rounded-2xl p-2 hover:bg-muted"
             >
               <span
                 className="flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold text-primary-foreground"
-                style={{ backgroundColor: t.bg }}
+                style={{ backgroundColor: target.bg }}
               >
-                {t.letter}
+                {target.letter}
               </span>
-              <span className="text-xs font-medium">{t.label}</span>
+              <span className="text-xs font-medium">{target.id === "email" ? t("share.email") : target.label}</span>
             </button>
           ))}
         </div>
@@ -150,14 +152,14 @@ export function ShareSheet() {
             type="button"
             className="flex-1 rounded-2xl border border-border py-3 text-sm font-medium"
             onClick={async () => {
-              toast.success((await copy(payload.text)) ? "Liste kopiert" : "Kopieren nicht möglich");
+              toast.success((await copy(payload.text)) ? t("share.copied") : t("share.copyFailed"));
               close();
             }}
           >
-            Text kopieren
+            {t("share.copyText")}
           </button>
           <button type="button" className="flex-1 rounded-2xl bg-muted py-3 text-sm font-medium" onClick={close}>
-            Abbrechen
+            {t("common.cancel")}
           </button>
         </div>
       </div>

@@ -9,6 +9,8 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { initLocale, useT } from "../i18n";
+import type { MessageKey } from "../i18n/de";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -24,17 +26,18 @@ import {
 } from "../components/icons";
 
 function NotFoundComponent() {
+  const { t } = useT();
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Seite nicht gefunden</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">{t("common.notFound")}</h2>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
           >
-            Zurück zur Liste
+            {t("common.backToList")}
           </Link>
         </div>
       </div>
@@ -45,6 +48,7 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const { t } = useT();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
@@ -53,7 +57,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Etwas ist schiefgelaufen
+          {t("common.error")}
         </h1>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
@@ -63,7 +67,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary/90"
           >
-            Erneut versuchen
+            {t("common.retry")}
           </button>
         </div>
       </div>
@@ -106,15 +110,16 @@ function RootShell({ children }: { children: ReactNode }) {
 }
 
 const NAV_ITEMS = [
-  { to: "/abteilungen", label: "Abteilungen", Icon: DepartmentIcon, ActiveIcon: DepartmentIcon },
-  { to: "/favoriten", label: "Favoriten", Icon: HeartIcon, ActiveIcon: HeartIcon },
-  { to: "/", label: "Listen", Icon: ListIcon, ActiveIcon: ListIconFilled },
-  { to: "/rezepte", label: "Rezept-Kreator", Icon: RecipeIcon, ActiveIcon: RecipeIcon },
-  { to: "/mehr", label: "Mehr", Icon: MoreIcon, ActiveIcon: MoreIcon },
+  { to: "/abteilungen", label: "nav.departments", Icon: DepartmentIcon, ActiveIcon: DepartmentIcon },
+  { to: "/favoriten", label: "nav.favorites", Icon: HeartIcon, ActiveIcon: HeartIcon },
+  { to: "/", label: "nav.lists", Icon: ListIcon, ActiveIcon: ListIconFilled },
+  { to: "/rezepte", label: "nav.recipes", Icon: RecipeIcon, ActiveIcon: RecipeIcon },
+  { to: "/mehr", label: "nav.more", Icon: MoreIcon, ActiveIcon: MoreIcon },
 ] as const;
 
 function BottomNav() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const { t } = useT();
 
   return (
     <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-[440px] -translate-x-1/2 border-t border-border bg-card/95 backdrop-blur-lg pb-[env(safe-area-inset-bottom)]">
@@ -136,7 +141,7 @@ function BottomNav() {
               <>
                 {isActive ? <item.ActiveIcon className="h-6 w-6" /> : <item.Icon className="h-6 w-6" />}
                 <span className={`text-[10px] font-medium ${isActive ? "font-semibold" : ""}`}>
-                  {item.label}
+                  {t(item.label as MessageKey)}
                 </span>
               </>
             )}
@@ -149,6 +154,7 @@ function BottomNav() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  useEffect(() => initLocale(), []);
 
   return (
     <QueryClientProvider client={queryClient}>
