@@ -1,0 +1,30 @@
+-- Reihenfolge in Hand & Fusspflege: Handkosmetik zuoberst
+UPDATE public.products SET sort_order = 1 WHERE id = 'a1b2c3d4-2101-4000-8000-000000000001'; -- Handcreme
+UPDATE public.products SET sort_order = 2 WHERE id = 'a1b2c3d4-2114-4000-8000-000000000014'; -- Handpeeling
+UPDATE public.products SET sort_order = 3 WHERE id = 'a1b2c3d4-2115-4000-8000-000000000015'; -- Handmaske
+UPDATE public.products SET sort_order = 4 WHERE id = 'a1b2c3d4-2116-4000-8000-000000000016'; -- Handseife
+
+UPDATE public.products SET sort_order = 5 WHERE id = 'a1b2c3d4-2102-4000-8000-000000000002'; -- Handdesinfektionsmittel
+UPDATE public.products SET sort_order = 6 WHERE id = 'a1b2c3d4-2103-4000-8000-000000000003'; -- Fusscreme
+UPDATE public.products SET sort_order = 7 WHERE id = 'a1b2c3d4-2104-4000-8000-000000000004'; -- Fusspeeling
+UPDATE public.products SET sort_order = 8 WHERE id = 'a1b2c3d4-2105-4000-8000-000000000005'; -- Fussbad
+UPDATE public.products SET sort_order = 9 WHERE id = 'a1b2c3d4-2106-4000-8000-000000000006'; -- Bimsstein
+UPDATE public.products SET sort_order = 10 WHERE id = 'a1b2c3d4-2107-4000-8000-000000000007'; -- Hornhautentferner
+UPDATE public.products SET sort_order = 11 WHERE id = 'a1b2c3d4-2108-4000-8000-000000000008'; -- Hornhautraspel
+UPDATE public.products SET sort_order = 12 WHERE id = 'a1b2c3d4-2109-4000-8000-000000000009'; -- Nagelfeile
+UPDATE public.products SET sort_order = 13 WHERE id = 'a1b2c3d4-2110-4000-8000-000000000010'; -- Nagelknipser
+UPDATE public.products SET sort_order = 14 WHERE id = 'a1b2c3d4-2111-4000-8000-000000000011'; -- Nagelhautentferner
+UPDATE public.products SET sort_order = 15 WHERE id = 'a1b2c3d4-2112-4000-8000-000000000012'; -- Nagelöl
+UPDATE public.products SET sort_order = 16 WHERE id = 'a1b2c3d4-2113-4000-8000-000000000013'; -- Nagelhärter
+UPDATE public.products SET sort_order = 17 WHERE id = 'a1b2c3d4-2117-4000-8000-000000000017'; -- Nagelzwicker
+UPDATE public.products SET sort_order = 18 WHERE id = 'a1b2c3d4-2118-4000-8000-000000000018'; -- Nagelschere
+UPDATE public.products SET sort_order = 19 WHERE id = 'a1b2c3d4-2119-4000-8000-000000000019'; -- Nagelbürste
+UPDATE public.products SET sort_order = 20 WHERE id = 'a1b2c3d4-2120-4000-8000-000000000020'; -- Nagelpflegeset
+UPDATE public.products SET sort_order = 21 WHERE id = 'a1b2c3d4-2121-4000-8000-000000000021'; -- Nagelstudio-Set
+UPDATE public.products SET sort_order = 22 WHERE id = 'a1b2c3d4-2122-4000-8000-000000000022'; -- Fussdeo-Spray
+UPDATE public.products SET sort_order = 23 WHERE id = 'a1b2c3d4-2123-4000-8000-000000000023'; -- Fusspuder
+UPDATE public.products SET sort_order = 24 WHERE id = 'a1b2c3d4-2124-4000-8000-000000000024'; -- Fussmaske
+UPDATE public.products SET sort_order = 25 WHERE id = 'a1b2c3d4-2125-4000-8000-000000000025'; -- Fusswärmer
+UPDATE public.products SET sort_order = 26 WHERE id = 'a1b2c3d4-2126-4000-8000-000000000026'; -- Paraffinbad
+UPDATE public.products SET sort_order = 27 WHERE id = 'a1b2c3d4-2127-4000-8000-000000000027'; -- Nageltipps
+UPDATE public.products SET sort_order = 28 WHERE id = 'a1b2c3d4-2128-4000-8000-000000000028'; -- UV-Nagellampe
