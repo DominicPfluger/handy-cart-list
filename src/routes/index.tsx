@@ -1,9 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   useShoppingList,
   getCategory,
+  type ListItem,
 } from "../hooks/use-shopping-list";
+import { useDepartmentOrder } from "../hooks/use-department-order";
+import {
+  catalogQueryOptions,
+  type CatalogDepartment,
+} from "../lib/catalog-query";
 import {
   CheckIcon,
   DotsIcon,
@@ -14,6 +21,7 @@ import {
 import { ListManager, shareList } from "../components/list-manager";
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
   head: () => ({
     meta: [
       { title: "Shoppi — Unsere Einkaufsliste" },
@@ -34,26 +42,74 @@ function ListPage() {
   } = useShoppingList();
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [managerOpen, setManagerOpen] = useState(false);
+  const { data } = useSuspenseQuery(catalogQueryOptions);
+  const { departments } = useDepartmentOrder(data.departments);
 
-  const sortedItems = useMemo(
-    () =>
-      [...items].sort((a, b) => {
-        if (a.checked !== b.checked) return a.checked ? 1 : -1;
-        return a.addedAt - b.addedAt;
-      }),
-    [items]
+  const deptById = useMemo(
+    () => new Map(departments.map((d) => [d.id, d])),
+    [departments],
+  );
+  const productById = useMemo(
+    () => new Map(data.products.map((p) => [p.id, p])),
+    [data.products],
   );
 
-  const grouped = useMemo(() => {
-    const map = new Map<string, typeof items>();
-    for (const it of sortedItems) {
-      const key = it.groupLabel ?? it.category;
-      if (!map.has(key)) map.set(key, []);
-      const group = map.get(key);
-      if (group) group.push(it);
+  /** Sortierschlüssel einer Kategorie entlang des Kategoriebaums
+   *  (Wurzel → ... → Blatt), analog zur Abteilungsansicht. */
+  const treeOrder = (leaf: CatalogDepartment): number => {
+    const chain: CatalogDepartment[] = [];
+    let current: CatalogDepartment | undefined = leaf;
+    while (current) {
+      chain.unshift(current);
+      current = current.parentId ? deptById.get(current.parentId) : undefined;
     }
-    return [...map.entries()];
-  }, [sortedItems]);
+    return chain.reduce((acc, d) => acc * 1000 + d.sortOrder, 0);
+  };
+
+  interface Group {
+    key: string;
+    label: string;
+    emoji: string;
+    order: number;
+    items: ListItem[];
+  }
+
+  /** Gruppierung + Sortierung analog zur Abteilungsansicht:
+   *  Kategorien als Überschriften in Baumreihenfolge, Produkte nach Katalog-Reihenfolge. */
+  const grouped = useMemo(() => {
+    const map = new Map<string, Group>();
+    for (const it of items) {
+      const product = it.productId ? productById.get(it.productId) : undefined;
+      const leaf = product?.departmentId ? deptById.get(product.departmentId) : undefined;
+      const key = leaf ? leaf.id : `label:${it.groupLabel ?? it.category}`;
+      let group = map.get(key);
+      if (!group) {
+        group = {
+          key,
+          label: leaf?.name ?? it.groupLabel ?? getCategory(it.category).label,
+          emoji: leaf?.emoji ?? it.groupEmoji ?? getCategory(it.category).emoji,
+          order: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER,
+          items: [],
+        };
+        map.set(key, group);
+      }
+      group.items.push(it);
+    }
+    const groups = [...map.values()].sort((a, b) => a.order - b.order);
+    for (const group of groups) {
+      group.items.sort((a, b) => {
+        if (a.checked !== b.checked) return a.checked ? 1 : -1;
+        const pa = a.productId ? productById.get(a.productId) : undefined;
+        const pb = b.productId ? productById.get(b.productId) : undefined;
+        const oa = pa?.sortOrder ?? Number.MAX_SAFE_INTEGER;
+        const ob = pb?.sortOrder ?? Number.MAX_SAFE_INTEGER;
+        if (oa !== ob) return oa - ob;
+        return a.addedAt - b.addedAt;
+      });
+    }
+    return groups;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, productById, deptById]);
 
   const doneCount = items.filter((i) => i.checked).length;
   const total = items.length;
@@ -122,7 +178,7 @@ function ListPage() {
       </div>
 
       {/* List grouped by category */}
-      {sortedItems.length === 0 && hydrated && (
+      {items.length === 0 && hydrated && (
         <div className="py-16 text-center">
           <div className="text-5xl">🧺</div>
           <p className="mt-4 text-sm text-muted-foreground">
@@ -132,21 +188,16 @@ function ListPage() {
       )}
 
       <div className="space-y-6">
-        {grouped.map(([groupKey, catItems]) => {
-          const firstItem = catItems[0];
-          if (!firstItem) return null;
-          const cat = getCategory(firstItem.category);
-          const groupLabel = firstItem.groupLabel ?? cat.label;
-          const groupEmoji = firstItem.groupEmoji ?? cat.emoji;
+        {grouped.map((group) => {
           return (
-            <div key={groupKey}>
+            <div key={group.key}>
               <div className="mb-2 flex items-center gap-2">
-                <span className="text-base">{groupEmoji}</span>
-                <h2 className="text-sm font-semibold text-foreground">{groupLabel}</h2>
-                <span className="text-xs text-muted-foreground">· {catItems.length}</span>
+                <span className="text-base">{group.emoji}</span>
+                <h2 className="text-sm font-semibold text-foreground">{group.label}</h2>
+                <span className="text-xs text-muted-foreground">· {group.items.length}</span>
               </div>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-                {catItems.map((item) => (
+                {group.items.map((item) => (
                   <div key={item.id} className="relative flex items-center gap-3 px-4 py-3">
                     <button
                       onClick={() => toggleItem(item.id)}
