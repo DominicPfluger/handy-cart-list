@@ -196,16 +196,26 @@ function DepartmentsPage() {
                     })}
                     className={favorite ? "rounded-full bg-coral/15 text-coral" : "rounded-full text-muted-foreground"}
                   >
-                    <HeartIcon className={favorite ? "fill-current" : ""} />
+                    <HeartIcon className={`h-3.5 w-3.5 ${favorite ? "fill-current" : ""}`} />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`${product.name} schnell hinzufügen (Standardmenge)`}
+                    onClick={() => quickAdd(product, group)}
+                    className="rounded-full text-muted-foreground"
+                  >
+                    <BoltIcon className="h-3.5 w-3.5" />
                   </Button>
                   <Button
                     type="button"
                     size="icon"
-                    aria-label={`${product.name} hinzufügen`}
+                    aria-label={`${product.name} mit Menge hinzufügen`}
                     onClick={() => setSelectedProduct(product)}
                     className="rounded-full shadow-none"
                   >
-                    <PlusIcon />
+                    <PlusIcon className="h-3.5 w-3.5" />
                   </Button>
                 </div>
               );
