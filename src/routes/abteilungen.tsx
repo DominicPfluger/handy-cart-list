@@ -76,7 +76,7 @@ function DepartmentsPage() {
     const walk = (id: string): [number, number] => {
       let a = all.get(id) ?? 0, b = shown.get(id) ?? 0;
       for (const c of kids.get(id) ?? []) { const [x, y] = walk(c); a += x; b += y; }
-      if (a > 0 && b === 0) hidden.add(id);
+      if (b === 0) hidden.add(id);
       return [a, b];
     };
     for (const r of kids.get(null) ?? []) walk(r);
