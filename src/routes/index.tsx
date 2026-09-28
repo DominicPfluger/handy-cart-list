@@ -49,12 +49,19 @@ function ListPage() {
   const data = useCatalog();
   const itemOrder = useItemOrder();
   const { t } = useT();
+  /** "Beliebige/Beliebiger/Beliebiges …" (und Übersetzungen wie "Any …") nicht anzeigen. */
+  const stripAnyPrefix = (name: string) =>
+    name.replace(
+      /^(beliebiges|beliebiger|beliebige|willekeurige|willekeurig|cualquier|qualquer|any)\s+/i,
+      "",
+    ).trim();
   /** Katalogartikel in der gewählten Sprache anzeigen (Sorte bleibt erhalten). */
   const displayName = (item: ListItem) => {
     const product = item.productId ? productById.get(item.productId) : undefined;
-    if (!product) return item.name;
+    if (!product) return stripAnyPrefix(item.name);
     const i = item.name.indexOf(" · ");
-    return i >= 0 ? product.name + item.name.slice(i) : product.name;
+    const base = i >= 0 ? product.name + item.name.slice(i) : product.name;
+    return stripAnyPrefix(base);
   };
   const { departments } = useDepartmentOrder(data.departments);
 
