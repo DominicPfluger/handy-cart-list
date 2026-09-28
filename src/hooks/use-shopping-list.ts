@@ -137,7 +137,16 @@ export function useShoppingList() {
       const savedFav = localStorage.getItem(FAV_KEY);
       if (savedLists) {
         const parsed = JSON.parse(savedLists) as ShoppingList[];
-        if (parsed.length) setLists(parsed);
+        if (parsed.length) {
+          setLists(
+            parsed.map((l) => ({
+              ...l,
+              items: l.items.map((it) =>
+                isButterProduct(it.name) && !it.emoji ? { ...it, emoji: "🧈" } : it
+              ),
+            }))
+          );
+        }
       } else if (savedList) {
         setLists([{ ...DEFAULT_LISTS[0]!, items: JSON.parse(savedList) }]);
       }
