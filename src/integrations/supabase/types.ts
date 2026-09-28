@@ -98,6 +98,7 @@ export type Database = {
           default_unit: Database["public"]["Enums"]["unit_of_measure"]
           department_id: string
           emoji: string | null
+          excluded_diets: string[]
           id: string
           image_path: string | null
           name: string
@@ -112,6 +113,7 @@ export type Database = {
           default_unit?: Database["public"]["Enums"]["unit_of_measure"]
           department_id: string
           emoji?: string | null
+          excluded_diets?: string[]
           id?: string
           image_path?: string | null
           name: string
@@ -126,6 +128,7 @@ export type Database = {
           default_unit?: Database["public"]["Enums"]["unit_of_measure"]
           department_id?: string
           emoji?: string | null
+          excluded_diets?: string[]
           id?: string
           image_path?: string | null
           name?: string

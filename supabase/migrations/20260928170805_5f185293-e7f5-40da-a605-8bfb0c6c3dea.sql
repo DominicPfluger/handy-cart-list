@@ -1,0 +1,1 @@
+ALTER TABLE public.products ADD COLUMN excluded_diets text[] NOT NULL DEFAULT '{}'::text[];
