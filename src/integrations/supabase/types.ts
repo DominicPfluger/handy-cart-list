@@ -71,6 +71,7 @@ export type Database = {
           organic_available: boolean
           sort_order: number
           updated_at: string
+          variants: string[]
         }
         Insert: {
           created_at?: string
@@ -84,6 +85,7 @@ export type Database = {
           organic_available?: boolean
           sort_order?: number
           updated_at?: string
+          variants?: string[]
         }
         Update: {
           created_at?: string
@@ -97,6 +99,7 @@ export type Database = {
           organic_available?: boolean
           sort_order?: number
           updated_at?: string
+          variants?: string[]
         }
         Relationships: [
           {
