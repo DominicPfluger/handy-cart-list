@@ -248,14 +248,14 @@ function ListPage() {
                       {item.emoji ?? "🛒"}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className={`truncate text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
+                      <p className={`break-words text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
                         {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
                       </p>
-                      <p className="truncate text-xs text-muted-foreground">
+                      <p className="break-words text-xs text-muted-foreground">
                         {item.quantity ? relocalizeQuantity(item.quantity, item.unit) : "—"} · {t("list.by", { name: item.addedBy })}
                       </p>
                       {item.note && (
-                        <p className="truncate text-xs italic text-muted-foreground/80">
+                        <p className="break-words text-xs italic text-muted-foreground/80">
                           📝 {item.note}
                         </p>
                       )}
