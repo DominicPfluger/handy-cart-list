@@ -13,7 +13,6 @@ import {
 } from "../lib/catalog-query";
 import {
   CheckIcon,
-  DotsIcon,
   TrashIcon,
   PlusIcon,
   ShareIcon,
@@ -44,7 +43,6 @@ function ListPage() {
     items, hydrated, toggleItem, removeItem, clearChecked,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
   } = useShoppingList();
-  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
   const itemOrder = useItemOrder();
@@ -315,25 +313,12 @@ function ListPage() {
                       )}
                     </div>
                     <button
-                      onClick={() => setMenuOpenId(menuOpenId === item.id ? null : item.id)}
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-muted-foreground transition active:scale-90"
-                      aria-label={t("list.options")}
+                      onClick={() => removeItem(item.id)}
+                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-coral transition active:scale-90"
+                      aria-label={t("list.remove")}
                     >
-                      <DotsIcon className="h-5 w-5" />
+                      <TrashIcon className="h-5 w-5" />
                     </button>
-                    {menuOpenId === item.id && (
-                      <div className="absolute right-3 top-12 z-10 rounded-xl border border-border bg-popover py-1 shadow-lg">
-                        <button
-                          onClick={() => {
-                            removeItem(item.id);
-                            setMenuOpenId(null);
-                          }}
-                          className="flex w-full items-center gap-2 px-4 py-2 text-xs font-medium text-coral hover:bg-muted"
-                        >
-                          <TrashIcon className="h-4 w-4" /> {t("list.remove")}
-                        </button>
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
