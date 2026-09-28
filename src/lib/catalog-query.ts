@@ -4,7 +4,8 @@ import { getCatalog, type Catalog, type CatalogDepartment, type CatalogProduct }
 export const catalogQueryOptions = queryOptions({
   queryKey: ["catalog"],
   queryFn: () => getCatalog(),
-  staleTime: 5 * 60 * 1000,
+  staleTime: 30 * 1000,
+  refetchInterval: 45 * 60 * 1000, // renew signed image URLs before they expire
 });
 
 export type { Catalog, CatalogDepartment, CatalogProduct };
