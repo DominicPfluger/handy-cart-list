@@ -10,15 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AbteilungenRouteImport } from './routes/abteilungen'
 import { Route as AngeboteRouteImport } from './routes/angebote'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FavoritenRouteImport } from './routes/favoriten'
 import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AbteilungenRoute = AbteilungenRouteImport.update({
@@ -29,6 +36,11 @@ const AbteilungenRoute = AbteilungenRouteImport.update({
 const AngeboteRoute = AngeboteRouteImport.update({
   id: '/angebote',
   path: '/angebote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FavoritenRoute = FavoritenRouteImport.update({
@@ -46,52 +58,84 @@ const RezepteRoute = RezepteRouteImport.update({
   path: '/rezepte',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/abteilungen': typeof AbteilungenRoute
   '/angebote': typeof AngeboteRoute
+  '/auth': typeof AuthRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
+  '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/abteilungen': typeof AbteilungenRoute
   '/angebote': typeof AngeboteRoute
+  '/auth': typeof AuthRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
+  '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/abteilungen': typeof AbteilungenRoute
   '/angebote': typeof AngeboteRoute
+  '/auth': typeof AuthRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/abteilungen' | '/angebote' | '/favoriten' | '/mehr' | '/rezepte'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/abteilungen' | '/angebote' | '/favoriten' | '/mehr' | '/rezepte'
-  id:
-    | '__root__'
     | '/'
     | '/abteilungen'
     | '/angebote'
+    | '/auth'
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
+    | '/admin'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/abteilungen'
+    | '/angebote'
+    | '/auth'
+    | '/favoriten'
+    | '/mehr'
+    | '/rezepte'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/abteilungen'
+    | '/angebote'
+    | '/auth'
+    | '/favoriten'
+    | '/mehr'
+    | '/rezepte'
+    | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AbteilungenRoute: typeof AbteilungenRoute
   AngeboteRoute: typeof AngeboteRoute
+  AuthRoute: typeof AuthRoute
   FavoritenRoute: typeof FavoritenRoute
   MehrRoute: typeof MehrRoute
   RezepteRoute: typeof RezepteRoute
@@ -106,6 +150,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/abteilungen': {
       id: '/abteilungen'
       path: '/abteilungen'
@@ -118,6 +169,13 @@ declare module '@tanstack/react-router' {
       path: '/angebote'
       fullPath: '/angebote'
       preLoaderRoute: typeof AngeboteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/favoriten': {
@@ -141,13 +199,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RezepteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AbteilungenRoute: AbteilungenRoute,
   AngeboteRoute: AngeboteRoute,
+  AuthRoute: AuthRoute,
   FavoritenRoute: FavoritenRoute,
   MehrRoute: MehrRoute,
   RezepteRoute: RezepteRoute,
