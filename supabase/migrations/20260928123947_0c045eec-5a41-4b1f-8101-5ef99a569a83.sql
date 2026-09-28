@@ -1,0 +1,1 @@
+UPDATE public.departments SET image_path = 'departments/eier-2.png' WHERE name = 'Eier' AND parent_id = 'a8785ff5-dcd3-4f83-b2dc-d208e9e8c09f';
