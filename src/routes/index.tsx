@@ -178,7 +178,7 @@ function ListPage() {
       </div>
 
       {/* List grouped by category */}
-      {sortedItems.length === 0 && hydrated && (
+      {items.length === 0 && hydrated && (
         <div className="py-16 text-center">
           <div className="text-5xl">🧺</div>
           <p className="mt-4 text-sm text-muted-foreground">
@@ -188,21 +188,16 @@ function ListPage() {
       )}
 
       <div className="space-y-6">
-        {grouped.map(([groupKey, catItems]) => {
-          const firstItem = catItems[0];
-          if (!firstItem) return null;
-          const cat = getCategory(firstItem.category);
-          const groupLabel = firstItem.groupLabel ?? cat.label;
-          const groupEmoji = firstItem.groupEmoji ?? cat.emoji;
+        {grouped.map((group) => {
           return (
-            <div key={groupKey}>
+            <div key={group.key}>
               <div className="mb-2 flex items-center gap-2">
-                <span className="text-base">{groupEmoji}</span>
-                <h2 className="text-sm font-semibold text-foreground">{groupLabel}</h2>
-                <span className="text-xs text-muted-foreground">· {catItems.length}</span>
+                <span className="text-base">{group.emoji}</span>
+                <h2 className="text-sm font-semibold text-foreground">{group.label}</h2>
+                <span className="text-xs text-muted-foreground">· {group.items.length}</span>
               </div>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-                {catItems.map((item) => (
+                {group.items.map((item) => (
                   <div key={item.id} className="relative flex items-center gap-3 px-4 py-3">
                     <button
                       onClick={() => toggleItem(item.id)}
