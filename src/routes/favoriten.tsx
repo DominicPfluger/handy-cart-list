@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useDepartmentOrder } from "../hooks/use-department-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
@@ -62,12 +63,13 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 function FavoritesPage() {
   const { addCatalogItem, favorites, hydrated, toggleFavorite } = useShoppingList();
   const { data } = useSuspenseQuery(catalogQueryOptions);
+  const { departments } = useDepartmentOrder(data.departments);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<FavRow | null>(null);
 
   const deptById = useMemo(
-    () => new Map(data.departments.map((d) => [d.id, d])),
-    [data.departments],
+    () => new Map(departments.map((d) => [d.id, d])),
+    [departments],
   );
   const productById = useMemo(
     () => new Map(data.products.map((p) => [p.id, p])),
@@ -77,10 +79,10 @@ function FavoritesPage() {
   /** Hauptabteilungen (oberste Ebene), sortiert wie in der Abteilungsansicht. */
   const rootDepartments = useMemo(
     () =>
-      data.departments
+      departments
         .filter((d) => !d.parentId)
         .sort((a, b) => a.sortOrder - b.sortOrder),
-    [data.departments],
+    [departments],
   );
 
   /** Hauptabteilung eines Produkts über die Hierarchie auflösen. */
@@ -114,7 +116,7 @@ function FavoritesPage() {
     }
     return { entriesByRoot: byRoot, looseFavorites: loose };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [favorites, deptById, productById, data.departments]);
+  }, [favorites, deptById, productById, departments]);
 
   /** Sortierung innerhalb einer Kategorie analog zur Abteilungsansicht:
    *  zuerst nach Kategorie (sortOrder), dann nach Produkt (sortOrder). */
