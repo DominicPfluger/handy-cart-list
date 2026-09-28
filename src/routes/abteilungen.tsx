@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
@@ -47,13 +48,14 @@ function DepartmentThumb({ department }: { department: CatalogDepartment }) {
 function DepartmentsPage() {
   const { data } = useSuspenseQuery(catalogQueryOptions);
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
+  const { departments, move } = useDepartmentOrder(data.departments);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
 
-  const current = data.departments.find((department) => department.id === currentId) ?? null;
-  const breadcrumbs = pathTo(data.departments, currentId);
-  const childDepartments = childrenOf(data.departments, currentId);
+  const current = departments.find((department) => department.id === currentId) ?? null;
+  const breadcrumbs = pathTo(departments, currentId);
+  const childDepartments = childrenOf(departments, currentId);
   const directProducts = currentId ? productsOf(data.products, currentId) : [];
   const normalizedQuery = query.trim().toLocaleLowerCase("de");
   const searchResults = useMemo(
@@ -66,7 +68,92 @@ function DepartmentsPage() {
   );
 
   const groupFor = (product: CatalogProduct) =>
-    data.departments.find((department) => department.id === product.departmentId) ?? current;
+    departments.find((department) => department.id === product.departmentId) ?? current;
+
+  // ---- Drag & Drop (langes Drücken) ----
+  type DropTarget = { kind: "before" | "after" | "into"; id: string | null };
+  const [drag, setDrag] = useState<{ id: string; name: string; x: number; y: number; target: DropTarget | null } | null>(null);
+  const pressRef = useRef<{ timer: number; x: number; y: number } | null>(null);
+  const suppressClick = useRef(false);
+  const dragRef = useRef(drag);
+  dragRef.current = drag;
+
+  const findTarget = (x: number, y: number, draggedId: string): DropTarget | null => {
+    const el = document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-drop]");
+    if (!el) return null;
+    const id = el.dataset.id || null;
+    if (el.dataset.drop === "crumb") return { kind: "into", id };
+    if (id === draggedId) return null;
+    const r = el.getBoundingClientRect();
+    const fx = (x - r.left) / r.width;
+    return { kind: fx < 0.28 ? "before" : fx > 0.72 ? "after" : "into", id };
+  };
+
+  const cancelPress = () => {
+    if (pressRef.current) window.clearTimeout(pressRef.current.timer);
+    pressRef.current = null;
+  };
+
+  const startPress = (event: React.PointerEvent, department: CatalogDepartment) => {
+    if (event.button !== 0) return;
+    const { clientX: x, clientY: y } = event;
+    cancelPress();
+    pressRef.current = {
+      x, y,
+      timer: window.setTimeout(() => {
+        pressRef.current = null;
+        navigator.vibrate?.(30);
+        setDrag({ id: department.id, name: department.name, x, y, target: null });
+      }, 420),
+    };
+  };
+
+  const pressMove = (event: React.PointerEvent) => {
+    const p = pressRef.current;
+    if (p && Math.hypot(event.clientX - p.x, event.clientY - p.y) > 8) cancelPress();
+  };
+
+  useEffect(() => {
+    if (!drag) return;
+    const onMove = (e: PointerEvent) => {
+      const d = dragRef.current;
+      if (!d) return;
+      setDrag({ ...d, x: e.clientX, y: e.clientY, target: findTarget(e.clientX, e.clientY, d.id) });
+    };
+    const onUp = () => {
+      const d = dragRef.current;
+      setDrag(null);
+      suppressClick.current = true;
+      window.setTimeout(() => (suppressClick.current = false), 50);
+      if (!d?.target) return;
+      const { kind, id } = d.target;
+      if (kind === "into") {
+        const dragged = departments.find((dep) => dep.id === d.id);
+        if (dragged?.parentId === id) return;
+        const ok = move(d.id, id);
+        const name = id ? departments.find((dep) => dep.id === id)?.name : "Alle Abteilungen";
+        if (ok) toast.success(`${d.name} nach „${name}“ verschoben`);
+        else toast.error("Eine Kategorie kann nicht in sich selbst verschoben werden");
+        return;
+      }
+      const target = departments.find((dep) => dep.id === id);
+      if (!target) return;
+      const siblings = childrenOf(departments, target.parentId).filter((dep) => dep.id !== d.id);
+      const index = siblings.findIndex((dep) => dep.id === target.id) + (kind === "after" ? 1 : 0);
+      move(d.id, target.parentId, index);
+    };
+    const block = (e: TouchEvent) => e.preventDefault();
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
+    window.addEventListener("touchmove", block, { passive: false });
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+      window.removeEventListener("touchmove", block);
+    };
+  }, [drag?.id, departments, move]);
 
   const openDepartment = (id: string | null) => {
     setCurrentId(id);
@@ -103,6 +190,14 @@ function DepartmentsPage() {
 
   return (
     <div className="space-y-5">
+      {drag && (
+        <div
+          className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-[120%] rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-lg"
+          style={{ left: drag.x, top: drag.y }}
+        >
+          {drag.name}
+        </div>
+      )}
       <div>
         <h1 className="text-2xl font-bold text-foreground">Abteilungen</h1>
         <p className="mt-1 text-sm text-muted-foreground">Was möchtest du einkaufen?</p>
@@ -122,7 +217,7 @@ function DepartmentsPage() {
 
       {!normalizedQuery && breadcrumbs.length > 0 && (
         <nav aria-label="Brotkrumen" className="no-scrollbar flex items-center gap-1 overflow-x-auto text-xs">
-          <Button type="button" variant="ghost" size="sm" onClick={() => openDepartment(null)} className="shrink-0 px-2 text-muted-foreground">
+          <Button type="button" variant="ghost" size="sm" onClick={() => openDepartment(null)} data-drop="crumb" data-id="" className={`shrink-0 px-2 text-muted-foreground ${drag?.target?.kind === "into" && drag.target.id === null ? "ring-2 ring-primary" : ""}`}>
             Alle
           </Button>
           {breadcrumbs.map((department, index) => (
@@ -133,7 +228,9 @@ function DepartmentsPage() {
                 variant="ghost"
                 size="sm"
                 onClick={() => openDepartment(department.id)}
-                className={index === breadcrumbs.length - 1 ? "px-2 font-semibold text-primary" : "px-2 text-muted-foreground"}
+                data-drop="crumb"
+                data-id={department.id}
+                className={`${index === breadcrumbs.length - 1 ? "px-2 font-semibold text-primary" : "px-2 text-muted-foreground"} ${drag?.target?.kind === "into" && drag.target.id === department.id ? "ring-2 ring-primary" : ""}`}
               >
                 {department.name}
               </Button>
@@ -148,13 +245,23 @@ function DepartmentsPage() {
             <h2 className="text-base font-semibold text-foreground">{current ? "Kategorien" : "Alle Abteilungen"}</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            {childDepartments.map((department) => (
+            {childDepartments.map((department) => {
+              const t = drag?.target?.id === department.id ? drag.target.kind : null;
+              return (
               <Button
                 key={department.id}
                 type="button"
                 variant="ghost"
-                onClick={() => openDepartment(department.id)}
-                className="h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]"
+                data-drop="tile"
+                data-id={department.id}
+                onPointerDown={(e) => startPress(e, department)}
+                onPointerMove={pressMove}
+                onPointerUp={cancelPress}
+                onPointerLeave={cancelPress}
+                onContextMenu={(e) => e.preventDefault()}
+                onClick={() => { if (!suppressClick.current) openDepartment(department.id); }}
+                style={{ WebkitTouchCallout: "none" }}
+                className={`relative select-none ${drag?.id === department.id ? "opacity-40" : ""} ${t === "into" ? "ring-2 ring-primary" : ""} ${t === "before" ? "shadow-[-4px_0_0_0_var(--color-primary)]" : ""} ${t === "after" ? "shadow-[4px_0_0_0_var(--color-primary)]" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]"
               >
                 <span className="grid aspect-[4/3] w-full place-items-center overflow-hidden bg-primary-soft/25">
                   <DepartmentThumb department={department} />
@@ -164,8 +271,10 @@ function DepartmentsPage() {
                   <span className="shrink-0 text-lg text-primary" aria-hidden="true">›</span>
                 </span>
               </Button>
-            ))}
+              );
+            })}
           </div>
+          <p className="mt-2 text-xs text-muted-foreground">Tipp: Kategorie lange drücken und ziehen – an den Rand zum Umsortieren, in die Mitte oder auf die Brotkrumen zum Verschieben in eine andere Ebene.</p>
         </section>
       )}
 
