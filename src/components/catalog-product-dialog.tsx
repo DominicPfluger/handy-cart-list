@@ -40,6 +40,9 @@ export function CatalogProductDialog({
   const [unit, setUnit] = useState<UnitId>("stueck");
   const [organic, setOrganic] = useState(false);
   const [note, setNote] = useState("");
+  const [selected, setSelected] = useState<string[]>([]);
+  const [custom, setCustom] = useState<string[]>([]);
+  const [customInput, setCustomInput] = useState("");
 
   useEffect(() => {
     if (!product) return;
@@ -47,16 +50,33 @@ export function CatalogProductDialog({
     setUnit(product.defaultUnit as UnitId);
     setOrganic(false);
     setNote("");
+    setSelected([]);
+    setCustom([]);
+    setCustomInput("");
   }, [product]);
+
+  const toggleVariant = (v: string) =>
+    setSelected((prev) => (prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v]));
+
+  const addCustom = () => {
+    const v = customInput.trim();
+    if (!v) return;
+    if (!custom.includes(v) && !(product?.variants ?? []).includes(v)) setCustom((c) => [...c, v]);
+    setSelected((prev) => (prev.includes(v) ? prev : [...prev, v]));
+    setCustomInput("");
+  };
 
   const amount = Number(quantity.replace(",", "."));
   const validAmount = Number.isFinite(amount) && amount > 0;
 
   const addProduct = () => {
     if (!product || !validAmount) return;
-    addCatalogItem({
+    const pending = customInput.trim();
+    const sorts = pending && !selected.includes(pending) ? [...selected, pending] : selected;
+    const names = sorts.length ? sorts.map((v) => `${product.name} · ${v}`) : [product.name];
+    for (const name of names) addCatalogItem({
       productId: product.id,
-      name: product.name,
+      name,
       quantity: formatQuantity(amount, unit),
       unit,
       organic,
@@ -71,7 +91,7 @@ export function CatalogProductDialog({
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={onOpenChange}>
-      <DialogContent className="w-[calc(100%-2rem)] max-w-sm rounded-2xl p-5">
+      <DialogContent className="max-h-[85vh] w-[calc(100%-2rem)] max-w-sm overflow-y-auto rounded-2xl p-5">
         <DialogHeader className="pr-7 text-left">
           <DialogTitle>{product?.name ?? "Produkt hinzufügen"}</DialogTitle>
           <DialogDescription>Lege Menge und gewünschte Variante fest.</DialogDescription>
@@ -124,6 +144,52 @@ export function CatalogProductDialog({
         )}
 
         <div className="space-y-2">
+          <Label htmlFor="catalog-variant">Sorte (optional, mehrere möglich)</Label>
+          {[...(product?.variants ?? []), ...custom].length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {[...(product?.variants ?? []), ...custom].map((v) => {
+                const on = selected.includes(v);
+                return (
+                  <button
+                    key={v}
+                    type="button"
+                    onClick={() => toggleVariant(v)}
+                    aria-pressed={on}
+                    className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                      on
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-card text-foreground"
+                    }`}
+                  >
+                    {v}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+          <div className="flex gap-2">
+            <Input
+              id="catalog-variant"
+              type="text"
+              value={customInput}
+              onChange={(event) => setCustomInput(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  addCustom();
+                }
+              }}
+              placeholder="Eigene Sorte eingeben …"
+              maxLength={40}
+              className="h-10 rounded-xl bg-card"
+            />
+            <Button type="button" variant="outline" onClick={addCustom} disabled={!customInput.trim()} className="h-10 rounded-xl">
+              +
+            </Button>
+          </div>
+        </div>
+
+        <div className="space-y-2">
           <Label htmlFor="catalog-note">Notiz (optional)</Label>
           <Input
             id="catalog-note"
@@ -143,7 +209,7 @@ export function CatalogProductDialog({
             disabled={!validAmount}
             className="h-11 w-full rounded-xl font-semibold"
           >
-            Zur Einkaufsliste hinzufügen
+            {selected.length > 1 ? `${selected.length} Sorten hinzufügen` : "Zur Einkaufsliste hinzufügen"}
           </Button>
         </DialogFooter>
       </DialogContent>
