@@ -33,6 +33,12 @@ export const de = {
   "dept.moved": "{name} nach „{target}“ verschoben",
   "dept.moveSelf": "Eine Kategorie kann nicht in sich selbst verschoben werden",
   "dept.scan": "Barcode scannen",
+  "rename.action": "{name} umbenennen",
+  "rename.title": "Bezeichnung ändern",
+  "rename.hint": "Der neue Name gilt nur für dich auf diesem Gerät.",
+  "rename.original": "Original: {name}",
+  "rename.reset": "Original wiederherstellen",
+  "rename.save": "Speichern",
   "dept.noProduct": "Kein Produkt gefunden",
   "dept.empty": "In dieser Kategorie gibt es noch keine Produkte.",
 

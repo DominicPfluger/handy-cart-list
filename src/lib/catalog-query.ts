@@ -2,6 +2,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { getLocale, pickName, useLocale } from "../i18n";
 import { getCatalog, type Catalog, type CatalogDepartment, type CatalogProduct } from "./catalog.functions";
+import { useCustomNames } from "../hooks/use-custom-names";
 
 export const catalogQueryOptions = queryOptions({
   queryKey: ["catalog"],
@@ -10,16 +11,22 @@ export const catalogQueryOptions = queryOptions({
   refetchInterval: 45 * 60 * 1000, // renew signed image URLs before they expire
 });
 
-/** Katalog mit Namen in der aktuell gewählten Sprache. */
+/** Übersetzter Katalogname ohne persönliche Umbenennung. */
+export function originalName(e: { names: Record<string, string>; baseName: string }) {
+  return pickName(e.names, getLocale(), e.baseName);
+}
+
+/** Katalog mit Namen in der aktuell gewählten Sprache (persönliche Namen haben Vorrang). */
 export function useCatalog(): Catalog {
   const { data } = useSuspenseQuery(catalogQueryOptions);
   const locale = useLocale();
+  const custom = useCustomNames();
   return useMemo(
     () => ({
-      departments: data.departments.map((d) => ({ ...d, name: pickName(d.names, locale, d.baseName) })),
-      products: data.products.map((p) => ({ ...p, name: pickName(p.names, locale, p.baseName) })),
+      departments: data.departments.map((d) => ({ ...d, name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
+      products: data.products.map((p) => ({ ...p, name: custom[p.id] ?? pickName(p.names, locale, p.baseName) })),
     }),
-    [data, locale],
+    [data, locale, custom],
   );
 }
 
