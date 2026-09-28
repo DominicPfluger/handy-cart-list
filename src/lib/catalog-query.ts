@@ -4,7 +4,6 @@ import { getLocale, pickName, useLocale } from "../i18n";
 import { getCatalog, type Catalog, type CatalogDepartment, type CatalogProduct } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
-import { useProductOrder } from "../hooks/use-product-order";
 
 export const catalogQueryOptions = queryOptions({
   queryKey: ["catalog"],
@@ -24,7 +23,6 @@ export function useCatalog(): Catalog {
   const locale = useLocale();
   const custom = useCustomNames();
   const own = useCustomCatalog();
-  const order = useProductOrder();
   return useMemo(() => {
     const ownDepts: CatalogDepartment[] = own.departments.map((d, i) => ({
       id: d.id, parentId: d.parentId, name: d.name, emoji: d.emoji, color: null, imageUrl: null,
@@ -40,10 +38,9 @@ export function useCatalog(): Catalog {
       products: [...data.products, ...ownProducts].map((p) => ({
         ...p,
         name: custom[p.id] ?? pickName(p.names, locale, p.baseName),
-        sortOrder: order[p.id] ?? p.sortOrder,
       })),
     };
-  }, [data, locale, custom, own, order]);
+  }, [data, locale, custom, own]);
 }
 
 export type { Catalog, CatalogDepartment, CatalogProduct };
