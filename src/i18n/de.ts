@@ -209,6 +209,17 @@ export const de = {
   "rk.addAll": "{n} Zutaten zur Liste",
   "rk.added": "Zutaten zur Liste hinzugefügt",
   "rk.nothing": "Wähle Zutaten, um dein Rezept zu sehen.",
+  "rk.save": "Rezept speichern",
+  "rk.saveTo": "In Liste speichern",
+  "rk.newCollection": "Neue Liste",
+  "rk.collectionPh": "z. B. Wochenplan, Lieblingsrezepte",
+  "rk.create": "Erstellen",
+  "rk.saved": "Gespeichert",
+  "rk.myRecipes": "Meine Rezeptlisten",
+  "rk.emptyCollection": "Noch keine Rezepte gespeichert.",
+  "rk.open": "Öffnen",
+  "rk.cancel": "Abbrechen",
+  "rk.deleteList": "Liste löschen",
 } as const;
 
 export type MessageKey = keyof typeof de;
