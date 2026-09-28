@@ -116,6 +116,11 @@ export interface ShoppingList {
 const LISTS_KEY = "shoppi:lists";
 const ACTIVE_KEY = "shoppi:active-list";
 
+function isButterProduct(name: string): boolean {
+  const n = name.toLowerCase();
+  return n.includes("butter") || n === "margarine" || n === "butterschmalz" || n === "mehlbutter";
+}
+
 const DEFAULT_LISTS: ShoppingList[] = [
   { id: "l-default", name: "Unsere Einkaufsliste", items: SEED_ITEMS, createdAt: 0 },
 ];
@@ -137,7 +142,16 @@ export function useShoppingList() {
       const savedFav = localStorage.getItem(FAV_KEY);
       if (savedLists) {
         const parsed = JSON.parse(savedLists) as ShoppingList[];
-        if (parsed.length) setLists(parsed);
+        if (parsed.length) {
+          setLists(
+            parsed.map((l) => ({
+              ...l,
+              items: l.items.map((it) =>
+                isButterProduct(it.name) && !it.emoji ? { ...it, emoji: "🧈" } : it
+              ),
+            }))
+          );
+        }
       } else if (savedList) {
         setLists([{ ...DEFAULT_LISTS[0]!, items: JSON.parse(savedList) }]);
       }
