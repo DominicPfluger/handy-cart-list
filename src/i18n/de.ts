@@ -133,6 +133,7 @@ export const de = {
   "more.invite": "Einladen",
   "more.invitePeople": "Personen einladen",
   "more.activity": "Aktivitäten",
+  "more.activitySub": "Was in deinen Listen passiert ist",
   "more.offers": "Angebote",
   "more.offersSub": "Aktuelle Deals in deiner Nähe",
   "more.reminders": "Erinnerungen",
