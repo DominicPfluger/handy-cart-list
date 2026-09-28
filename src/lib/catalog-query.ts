@@ -32,3 +32,19 @@ export function pathTo(departments: CatalogDepartment[], id: string | null): Cat
   }
   return out;
 }
+
+/**
+ * Artikelsuche: bis 4 Buchstaben nur Treffer am Wortanfang,
+ * ab 5 Buchstaben auch Treffer mitten im Namen.
+ */
+export function matchesProductSearch(name: string, normalizedQuery: string): boolean {
+  const normalized = name.toLocaleLowerCase("de");
+  return normalizedQuery.length > 4
+    ? normalized.includes(normalizedQuery)
+    : normalized.startsWith(normalizedQuery);
+}
+
+/** Alphabetische Sortierung der Suchtreffer (deutsche Regeln). */
+export function compareByName(a: { name: string }, b: { name: string }) {
+  return a.name.localeCompare(b.name, "de");
+}

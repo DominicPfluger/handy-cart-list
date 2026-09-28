@@ -9,6 +9,8 @@ import { useShoppingList } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
   childrenOf,
+  compareByName,
+  matchesProductSearch,
   pathTo,
   productsOf,
   type CatalogDepartment,
@@ -59,7 +61,9 @@ function DepartmentsPage() {
   const normalizedQuery = query.trim().toLocaleLowerCase("de");
   const searchResults = useMemo(
     () => normalizedQuery
-      ? data.products.filter((product) => product.name.toLocaleLowerCase("de").includes(normalizedQuery))
+      ? data.products
+          .filter((product) => matchesProductSearch(product.name, normalizedQuery))
+          .sort(compareByName)
       : [],
     [data.products, normalizedQuery],
   );
