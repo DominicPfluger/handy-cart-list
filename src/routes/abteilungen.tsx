@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
@@ -74,7 +74,18 @@ function DepartmentsPage() {
   const openDepartment = (id: string | null) => {
     setCurrentId(id);
     setQuery("");
+    if (id === null) window.scrollTo({ top: 0 });
   };
+
+  useEffect(() => {
+    const reset = () => {
+      setCurrentId(null);
+      setQuery("");
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener("shoppi:abteilungen-reset", reset);
+    return () => window.removeEventListener("shoppi:abteilungen-reset", reset);
+  }, []);
 
   const quickAdd = (product: CatalogProduct, group: CatalogDepartment | null) => {
     addCatalogItem({
