@@ -4,7 +4,9 @@ import { useDepartmentOrder } from "../hooks/use-department-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
-import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon } from "../components/icons";
+import { BoltIcon, HeartIcon, PencilIcon, PlusIcon, ScanIcon, SearchIcon } from "../components/icons";
+import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
+import { useCustomNames } from "../hooks/use-custom-names";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
@@ -12,6 +14,7 @@ import {
   childrenOf,
   compareByName,
   matchesProductSearch,
+  originalName,
   pathTo,
   productsOf,
   type CatalogDepartment,
@@ -55,6 +58,10 @@ function DepartmentsPage() {
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
+  const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
+  const customNames = useCustomNames();
+  const openRename = (e: CatalogDepartment | CatalogProduct) =>
+    setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames });
 
   const current = departments.find((department) => department.id === currentId) ?? null;
   const breadcrumbs = pathTo(departments, currentId);
@@ -237,6 +244,11 @@ function DepartmentsPage() {
               >
                 {department.name}
               </Button>
+              {index === breadcrumbs.length - 1 && (
+                <Button type="button" variant="ghost" size="icon" onClick={() => openRename(department)} aria-label={t("rename.action", { name: department.name })} className="h-7 w-7 rounded-full text-muted-foreground">
+                  <PencilIcon className="h-3.5 w-3.5" />
+                </Button>
+              )}
             </div>
           ))}
         </nav>
@@ -298,7 +310,10 @@ function DepartmentsPage() {
                     <ProductThumb product={product} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm font-semibold text-foreground">{product.name}</p>
+                    <button type="button" onClick={() => openRename(product)} aria-label={t("rename.action", { name: product.name })} className="group inline-flex items-center gap-1.5 text-left text-sm font-semibold text-foreground">
+                      <span>{product.name}</span>
+                      <PencilIcon className="h-3 w-3 shrink-0 text-muted-foreground/60" />
+                    </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                       {normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                     </p>
