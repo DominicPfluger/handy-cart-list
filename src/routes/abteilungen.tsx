@@ -144,12 +144,14 @@ function DepartmentsPage() {
   };
 
   const startPress = (event: React.PointerEvent, entry: { id: string; name: string }, what: "dept" | "product" = "dept") => {
+    console.log("startPress", what, entry.name, event.button);
     if (event.button !== 0) return;
     const { clientX: x, clientY: y } = event;
     cancelPress();
     pressRef.current = {
       x, y,
       timer: window.setTimeout(() => {
+        console.log("longpress fired", entry.name);
         pressRef.current = null;
         navigator.vibrate?.(30);
         setDrag({ what, id: entry.id, name: entry.name, x, y, target: null });
