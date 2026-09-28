@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
-import { HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
+import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
