@@ -1,9 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
-import { HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
+import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
@@ -46,7 +47,7 @@ function DepartmentThumb({ department }: { department: CatalogDepartment }) {
 
 function DepartmentsPage() {
   const { data } = useSuspenseQuery(catalogQueryOptions);
-  const { isFavorite, toggleFavorite } = useShoppingList();
+  const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
@@ -69,6 +70,21 @@ function DepartmentsPage() {
   const openDepartment = (id: string | null) => {
     setCurrentId(id);
     setQuery("");
+  };
+
+  const quickAdd = (product: CatalogProduct, group: CatalogDepartment | null) => {
+    addCatalogItem({
+      productId: product.id,
+      name: product.name,
+      quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
+      unit: product.defaultUnit,
+      organic: false,
+      emoji: product.emoji,
+      imageUrl: product.imageUrl,
+      groupLabel: group?.name,
+      groupEmoji: group?.emoji ?? undefined,
+    });
+    toast.success(`${product.name} zur Liste hinzugefügt`);
   };
 
   const shownProducts = normalizedQuery ? searchResults : directProducts;
@@ -180,16 +196,26 @@ function DepartmentsPage() {
                     })}
                     className={favorite ? "rounded-full bg-coral/15 text-coral" : "rounded-full text-muted-foreground"}
                   >
-                    <HeartIcon className={favorite ? "fill-current" : ""} />
+                    <HeartIcon className={`h-3.5 w-3.5 ${favorite ? "fill-current" : ""}`} />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    aria-label={`${product.name} schnell hinzufügen (Standardmenge)`}
+                    onClick={() => quickAdd(product, group)}
+                    className="rounded-full text-muted-foreground"
+                  >
+                    <BoltIcon className="h-3.5 w-3.5" />
                   </Button>
                   <Button
                     type="button"
                     size="icon"
-                    aria-label={`${product.name} hinzufügen`}
+                    aria-label={`${product.name} mit Menge hinzufügen`}
                     onClick={() => setSelectedProduct(product)}
                     className="rounded-full shadow-none"
                   >
-                    <PlusIcon />
+                    <PlusIcon className="h-3.5 w-3.5" />
                   </Button>
                 </div>
               );

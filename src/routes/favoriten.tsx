@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
-import { HeartIcon, PlusIcon } from "../components/icons";
+import { BoltIcon, HeartIcon, PlusIcon } from "../components/icons";
 import { Button } from "../components/ui/button";
 import { useShoppingList, type FavoriteProduct } from "../hooks/use-shopping-list";
 import { catalogQueryOptions, type CatalogProduct } from "../lib/catalog-query";
@@ -46,9 +47,24 @@ interface FavoriteGroup {
 }
 
 function FavoritesPage() {
-  const { favorites, hydrated, toggleFavorite } = useShoppingList();
+  const { addCatalogItem, favorites, hydrated, toggleFavorite } = useShoppingList();
   const [selected, setSelected] = useState<FavoriteProduct | null>(null);
   const { data: catalog } = useQuery(catalogQueryOptions);
+
+  const quickAdd = (favorite: FavoriteProduct) => {
+    addCatalogItem({
+      productId: favorite.productId,
+      name: favorite.name,
+      quantity: formatQuantity(favorite.defaultQuantity, favorite.defaultUnit),
+      unit: favorite.defaultUnit,
+      organic: false,
+      emoji: favorite.emoji,
+      imageUrl: favorite.imageUrl,
+      groupLabel: favorite.groupLabel,
+      groupEmoji: favorite.groupEmoji,
+    });
+    toast.success(`${favorite.name} zur Liste hinzugefügt`);
+  };
 
   const groups = useMemo<FavoriteGroup[]>(() => {
     const deptById = new Map(catalog?.departments.map((d) => [d.id, d]) ?? []);
@@ -132,16 +148,26 @@ function FavoritesPage() {
                   })}
                   className="rounded-full bg-coral/15 text-coral"
                 >
-                  <HeartIcon className="fill-current" />
+                  <HeartIcon className="h-3.5 w-3.5 fill-current" />
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`${favorite.name} schnell hinzufügen (Standardmenge)`}
+                  onClick={() => quickAdd(favorite)}
+                  className="rounded-full text-muted-foreground"
+                >
+                  <BoltIcon className="h-3.5 w-3.5" />
                 </Button>
                 <Button
                   type="button"
                   size="icon"
-                  aria-label={`${favorite.name} hinzufügen`}
+                  aria-label={`${favorite.name} mit Menge hinzufügen`}
                   onClick={() => setSelected(favorite)}
                   className="rounded-full shadow-none"
                 >
-                  <PlusIcon />
+                  <PlusIcon className="h-3.5 w-3.5" />
                 </Button>
               </div>
             ))}
