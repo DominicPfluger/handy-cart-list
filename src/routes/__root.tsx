@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -113,6 +114,8 @@ const NAV_ITEMS = [
 ] as const;
 
 function BottomNav() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+
   return (
     <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-[440px] -translate-x-1/2 border-t border-border bg-card/95 backdrop-blur-lg pb-[env(safe-area-inset-bottom)]">
       <div className="flex items-stretch justify-around px-2 py-1.5">
@@ -123,6 +126,11 @@ function BottomNav() {
             className="flex flex-1 flex-col items-center gap-1 rounded-xl py-2 transition active:scale-95"
             activeProps={{ className: "text-primary" }}
             activeOptions={{ exact: item.to === "/" }}
+            onClick={() => {
+              if (item.to === "/abteilungen" && pathname === "/abteilungen") {
+                window.dispatchEvent(new Event("shoppi:abteilungen-reset"));
+              }
+            }}
           >
             {({ isActive }) => (
               <>
