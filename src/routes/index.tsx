@@ -1,9 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   useShoppingList,
   getCategory,
+  type ListItem,
 } from "../hooks/use-shopping-list";
+import { useDepartmentOrder } from "../hooks/use-department-order";
+import {
+  catalogQueryOptions,
+  type CatalogDepartment,
+} from "../lib/catalog-query";
 import {
   CheckIcon,
   DotsIcon,
@@ -14,6 +21,7 @@ import {
 import { ListManager, shareList } from "../components/list-manager";
 
 export const Route = createFileRoute("/")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
   head: () => ({
     meta: [
       { title: "Shoppi — Unsere Einkaufsliste" },
