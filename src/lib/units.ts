@@ -4,7 +4,8 @@ import type { MessageKey } from "../i18n/de";
 const UNIT_IDS = [
   "stueck", "gramm", "kilogramm", "milligramm", "pfund", "unzen", "milliliter", "deziliter",
   "liter", "gallone", "tasse", "glas", "flasche", "dose", "beutel", "packung", "schachtel",
-  "box", "karton", "kiste", "kanister", "buendel",
+  "box", "karton", "kiste", "kanister", "buendel", "portion", "sack", "eimer", "becher",
+  "tube", "netz", "palette", "tablett", "rolle", "blister", "sixpack",
 ] as const;
 
 export type UnitId = (typeof UNIT_IDS)[number];
