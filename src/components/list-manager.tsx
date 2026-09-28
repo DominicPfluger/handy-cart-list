@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { openShareSheet } from "./share-sheet";
 import {
   DndContext,
   closestCenter,
@@ -34,19 +35,10 @@ interface Props {
 
 export async function shareList(list: ShoppingList) {
   const lines = list.items.map(
-    (i) => `${i.checked ? "✓" : "•"} ${i.name}${i.organic ? " (Bio)" : ""}${i.quantity ? ` – ${i.quantity}` : ""}`
+    (i) => `${i.checked ? "✓" : "•"} ${i.name}${i.organic ? " (Bio)" : ""}${i.quantity ? ` – ${i.quantity}` : ""}${i.note ? ` (${i.note})` : ""}`
   );
   const text = `🛒 ${list.name}\n\n${lines.join("\n") || "(leer)"}\n\nGeteilt mit Shoppi`;
-  try {
-    if (navigator.share) {
-      await navigator.share({ title: list.name, text });
-      return;
-    }
-    await navigator.clipboard.writeText(text);
-    toast.success("Liste in die Zwischenablage kopiert");
-  } catch (e) {
-    if ((e as Error)?.name !== "AbortError") toast.error("Teilen nicht möglich");
-  }
+  openShareSheet({ title: list.name, text });
 }
 
 function Row({
