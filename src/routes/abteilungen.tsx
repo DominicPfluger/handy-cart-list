@@ -112,21 +112,28 @@ function DepartmentsPage() {
   const groupFor = (product: CatalogProduct) =>
     departments.find((department) => department.id === product.departmentId) ?? current;
 
-  // ---- Drag & Drop für Kategorien (langes Drücken) ----
+  // ---- Drag & Drop für Kategorien und Artikel (langes Drücken) ----
   type DropTarget = { kind: "before" | "after" | "into"; id: string | null };
-  const [drag, setDrag] = useState<{ id: string; name: string; x: number; y: number; target: DropTarget | null } | null>(null);
+  type DragState = { what: "dept" | "product"; id: string; name: string; x: number; y: number; target: DropTarget | null };
+  const [drag, setDrag] = useState<DragState | null>(null);
   const pressRef = useRef<{ timer: number; x: number; y: number } | null>(null);
   const suppressClick = useRef(false);
   const dragRef = useRef(drag);
   dragRef.current = drag;
 
-  const findTarget = (x: number, y: number, draggedId: string): DropTarget | null => {
+  const findTarget = (x: number, y: number, dragged: { what: "dept" | "product"; id: string }): DropTarget | null => {
     const el = document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-drop]");
     if (!el) return null;
     const id = el.dataset["id"] || null;
-    if (el.dataset["drop"] === "crumb") return { kind: "into", id };
-    if (id === draggedId) return null;
+    const drop = el.dataset["drop"];
+    if (drop === "crumb") return { kind: "into", id };
+    if (id === dragged.id) return null;
     const r = el.getBoundingClientRect();
+    if (drop === "product") {
+      if (dragged.what !== "product") return null;
+      const fy = (y - r.top) / r.height;
+      return { kind: fy < 0.5 ? "before" : "after", id };
+    }
     const fx = (x - r.left) / r.width;
     return { kind: fx < 0.28 ? "before" : fx > 0.72 ? "after" : "into", id };
   };
@@ -136,7 +143,7 @@ function DepartmentsPage() {
     pressRef.current = null;
   };
 
-  const startPress = (event: React.PointerEvent, department: { id: string; name: string }) => {
+  const startPress = (event: React.PointerEvent, entry: { id: string; name: string }, what: "dept" | "product" = "dept") => {
     if (event.button !== 0) return;
     const { clientX: x, clientY: y } = event;
     cancelPress();
@@ -145,7 +152,7 @@ function DepartmentsPage() {
       timer: window.setTimeout(() => {
         pressRef.current = null;
         navigator.vibrate?.(30);
-        setDrag({ id: department.id, name: department.name, x, y, target: null });
+        setDrag({ what, id: entry.id, name: entry.name, x, y, target: null });
       }, 420),
     };
   };
@@ -160,7 +167,7 @@ function DepartmentsPage() {
     const onMove = (e: PointerEvent) => {
       const d = dragRef.current;
       if (!d) return;
-      setDrag({ ...d, x: e.clientX, y: e.clientY, target: findTarget(e.clientX, e.clientY, d.id) });
+      setDrag({ ...d, x: e.clientX, y: e.clientY, target: findTarget(e.clientX, e.clientY, d) });
     };
     const onUp = () => {
       const d = dragRef.current;
@@ -169,6 +176,23 @@ function DepartmentsPage() {
       window.setTimeout(() => (suppressClick.current = false), 50);
       if (!d?.target) return;
       const { kind, id } = d.target;
+      if (d.what === "product") {
+        if (kind === "into") {
+          if (!id) return;
+          const dragged = products.find((p) => p.id === d.id);
+          if (dragged?.departmentId === id) return;
+          moveProduct(d.id, id);
+          const name = departments.find((dep) => dep.id === id)?.name;
+          toast.success(t("dept.moved", { name: d.name, target: name ?? "" }));
+          return;
+        }
+        const target = products.find((p) => p.id === id);
+        if (!target) return;
+        const siblings = productsOf(products, target.departmentId).filter((p) => p.id !== d.id);
+        const index = siblings.findIndex((p) => p.id === target.id) + (kind === "after" ? 1 : 0);
+        moveProduct(d.id, target.departmentId, index);
+        return;
+      }
       if (kind === "into") {
         const dragged = departments.find((dep) => dep.id === d.id);
         if (dragged?.parentId === id) return;
@@ -195,7 +219,7 @@ function DepartmentsPage() {
       window.removeEventListener("pointercancel", onUp);
       window.removeEventListener("touchmove", block);
     };
-  }, [drag?.id, departments, move, t]);
+  }, [drag?.id, departments, products, move, moveProduct, t]);
 
   const openDepartment = (id: string | null) => {
     setCurrentId(id);
