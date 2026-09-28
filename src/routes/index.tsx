@@ -19,6 +19,9 @@ import {
   ShareIcon,
 } from "../components/icons";
 import { ListManager, shareList } from "../components/list-manager";
+import { relocalizeQuantity } from "../lib/units";
+import { useT } from "../i18n";
+
 
 export const Route = createFileRoute("/")({
   loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
@@ -43,6 +46,14 @@ function ListPage() {
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
+  const { t } = useT();
+  /** Katalogartikel in der gewählten Sprache anzeigen (Sorte bleibt erhalten). */
+  const displayName = (item: ListItem) => {
+    const product = item.productId ? productById.get(item.productId) : undefined;
+    if (!product) return item.name;
+    const i = item.name.indexOf(" · ");
+    return i >= 0 ? product.name + item.name.slice(i) : product.name;
+  };
   const { departments } = useDepartmentOrder(data.departments);
 
   const deptById = useMemo(
@@ -156,7 +167,7 @@ function ListPage() {
           onClick={() => setManagerOpen(true)}
           className="flex shrink-0 items-center gap-1 rounded-full border border-dashed border-primary/40 px-3 py-1.5 text-xs font-semibold text-primary"
         >
-          <PlusIcon className="h-3.5 w-3.5" /> Listen
+          <PlusIcon className="h-3.5 w-3.5" /> {t("list.lists")}
         </button>
       </div>
 
@@ -167,9 +178,9 @@ function ListPage() {
             <h1 className="truncate text-2xl font-bold tracking-tight text-foreground">{activeList.name}</h1>
           </button>
           <button
-            onClick={() => shareList(activeList)}
+            onClick={() => shareList({ ...activeList, items: activeList.items.map((i) => ({ ...i, name: displayName(i), quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : i.quantity })) })}
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
-            aria-label="Liste teilen"
+            aria-label={t("list.share")}
           >
             <ShareIcon className="h-5 w-5" />
           </button>
@@ -192,7 +203,7 @@ function ListPage() {
         <div className="py-16 text-center">
           <div className="text-5xl">🧺</div>
           <p className="mt-4 text-sm text-muted-foreground">
-            Deine Liste ist leer.<br />Füge Artikel über „Abteilungen" hinzu!
+            {t("list.empty1")}<br />{t("list.empty2")}
           </p>
         </div>
       )}
@@ -216,7 +227,7 @@ function ListPage() {
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-muted-foreground/30 bg-transparent"
                       }`}
-                      aria-label={item.checked ? "Abwählen" : "Auswählen"}
+                      aria-label={item.checked ? t("list.uncheck") : t("list.check")}
                     >
                       {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
@@ -227,10 +238,10 @@ function ListPage() {
                     )}
                     <div className="min-w-0 flex-1">
                       <p className={`truncate text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
-                        {item.name}{item.organic ? " (Bio)" : ""}
+                        {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
                       </p>
                       <p className="truncate text-xs text-muted-foreground">
-                        {item.quantity || "—"} · von {item.addedBy}
+                        {item.quantity ? relocalizeQuantity(item.quantity, item.unit) : "—"} · {t("list.by", { name: item.addedBy })}
                       </p>
                       {item.note && (
                         <p className="truncate text-xs italic text-muted-foreground/80">
@@ -241,7 +252,7 @@ function ListPage() {
                     <button
                       onClick={() => setMenuOpenId(menuOpenId === item.id ? null : item.id)}
                       className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-muted-foreground transition active:scale-90"
-                      aria-label="Optionen"
+                      aria-label={t("list.options")}
                     >
                       <DotsIcon className="h-5 w-5" />
                     </button>
@@ -254,7 +265,7 @@ function ListPage() {
                           }}
                           className="flex w-full items-center gap-2 px-4 py-2 text-xs font-medium text-coral hover:bg-muted"
                         >
-                          <TrashIcon className="h-4 w-4" /> Entfernen
+                          <TrashIcon className="h-4 w-4" /> {t("list.remove")}
                         </button>
                       </div>
                     )}
@@ -272,7 +283,7 @@ function ListPage() {
           onClick={clearChecked}
           className="w-full rounded-xl bg-muted py-3 text-sm font-semibold text-muted-foreground transition active:scale-[0.98]"
         >
-          {doneCount} abgehakte Artikel entfernen
+          {t("list.clearChecked", { n: doneCount })}
         </button>
       )}
     </div>

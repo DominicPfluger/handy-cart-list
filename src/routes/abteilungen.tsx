@@ -18,6 +18,8 @@ import {
   type CatalogProduct,
 } from "../lib/catalog-query";
 import { formatQuantity } from "../lib/units";
+import { useT } from "../i18n";
+
 
 export const Route = createFileRoute("/abteilungen")({
   loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
@@ -47,6 +49,7 @@ function DepartmentThumb({ department }: { department: CatalogDepartment }) {
 
 function DepartmentsPage() {
   const data = useCatalog();
+  const { t } = useT();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const { departments, move } = useDepartmentOrder(data.departments);
   const [currentId, setCurrentId] = useState<string | null>(null);
@@ -131,9 +134,9 @@ function DepartmentsPage() {
         const dragged = departments.find((dep) => dep.id === d.id);
         if (dragged?.parentId === id) return;
         const ok = move(d.id, id);
-        const name = id ? departments.find((dep) => dep.id === id)?.name : "Alle Abteilungen";
-        if (ok) toast.success(`${d.name} nach „${name}“ verschoben`);
-        else toast.error("Eine Kategorie kann nicht in sich selbst verschoben werden");
+        const name = id ? departments.find((dep) => dep.id === id)?.name : t("dept.allDepartments");
+        if (ok) toast.success(t("dept.moved", { name: d.name, target: name ?? "" }));
+        else toast.error(t("dept.moveSelf"));
         return;
       }
       const target = departments.find((dep) => dep.id === id);
@@ -153,7 +156,7 @@ function DepartmentsPage() {
       window.removeEventListener("pointercancel", onUp);
       window.removeEventListener("touchmove", block);
     };
-  }, [drag?.id, departments, move]);
+  }, [drag?.id, departments, move, t]);
 
   const openDepartment = (id: string | null) => {
     setCurrentId(id);
@@ -183,7 +186,7 @@ function DepartmentsPage() {
       groupLabel: group?.name,
       groupEmoji: group?.emoji ?? undefined,
     });
-    toast.success(`${product.name} zur Liste hinzugefügt`);
+    toast.success(t("common.addedToList", { name: product.name }));
   };
 
   const shownProducts = normalizedQuery ? searchResults : directProducts;
@@ -199,8 +202,8 @@ function DepartmentsPage() {
         </div>
       )}
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Abteilungen</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Was möchtest du einkaufen?</p>
+        <h1 className="text-2xl font-bold text-foreground">{t("nav.departments")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("dept.subtitle")}</p>
       </div>
 
       <div className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
@@ -209,16 +212,16 @@ function DepartmentsPage() {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Produkte durchsuchen"
-          aria-label="Produkte durchsuchen"
+          placeholder={t("dept.search")}
+          aria-label={t("dept.search")}
           className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
         />
       </div>
 
       {!normalizedQuery && breadcrumbs.length > 0 && (
-        <nav aria-label="Brotkrumen" className="no-scrollbar flex items-center gap-1 overflow-x-auto text-xs">
+        <nav aria-label={t("dept.breadcrumb")} className="no-scrollbar flex items-center gap-1 overflow-x-auto text-xs">
           <Button type="button" variant="ghost" size="sm" onClick={() => openDepartment(null)} data-drop="crumb" data-id="" className={`shrink-0 px-2 text-muted-foreground ${drag?.target?.kind === "into" && drag.target.id === null ? "ring-2 ring-primary" : ""}`}>
-            Alle
+            {t("dept.all")}
           </Button>
           {breadcrumbs.map((department, index) => (
             <div key={department.id} className="flex shrink-0 items-center gap-1">
@@ -242,7 +245,7 @@ function DepartmentsPage() {
       {!normalizedQuery && childDepartments.length > 0 && (
         <section>
           <div className="mb-3 flex items-end justify-between">
-            <h2 className="text-base font-semibold text-foreground">{current ? "Kategorien" : "Alle Abteilungen"}</h2>
+            <h2 className="text-base font-semibold text-foreground">{current ? t("dept.categories") : t("dept.allDepartments")}</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {childDepartments.map((department) => {
@@ -275,15 +278,15 @@ function DepartmentsPage() {
               );
             })}
           </div>
-          <p className="mt-2 text-xs text-muted-foreground">Tipp: Kategorie lange drücken und ziehen – an den Rand zum Umsortieren, in die Mitte oder auf die Brotkrumen zum Verschieben in eine andere Ebene.</p>
+          <p className="mt-2 text-xs text-muted-foreground">{t("dept.tip")}</p>
         </section>
       )}
 
       {(normalizedQuery || shownProducts.length > 0) && (
         <section>
           <div className="mb-3 flex items-end justify-between gap-3">
-            <h2 className="text-base font-semibold text-foreground">{normalizedQuery ? "Suchergebnisse" : "Produkte"}</h2>
-            <span className="shrink-0 text-xs text-muted-foreground">{shownProducts.length} Artikel</span>
+            <h2 className="text-base font-semibold text-foreground">{normalizedQuery ? t("common.searchResults") : t("dept.products")}</h2>
+            <span className="shrink-0 text-xs text-muted-foreground">{t("common.articles", { n: shownProducts.length })}</span>
           </div>
           <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
             {shownProducts.map((product) => {
@@ -305,7 +308,7 @@ function DepartmentsPage() {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    aria-label={favorite ? `${product.name} aus Favoriten entfernen` : `${product.name} favorisieren`}
+                    aria-label={favorite ? t("common.removeFavorite", { name: product.name }) : t("common.addFavorite", { name: product.name })}
                     onClick={() => toggleFavorite({
                       productId: product.id,
                       name: product.name,
@@ -325,7 +328,7 @@ function DepartmentsPage() {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    aria-label={`${product.name} schnell hinzufügen (Standardmenge)`}
+                    aria-label={t("common.quickAdd", { name: product.name })}
                     onClick={() => quickAdd(product, group)}
                     className="h-8 w-8 rounded-full text-muted-foreground"
                   >
@@ -334,7 +337,7 @@ function DepartmentsPage() {
                   <Button
                     type="button"
                     size="icon"
-                    aria-label={`${product.name} mit Menge hinzufügen`}
+                    aria-label={t("common.addWithQty", { name: product.name })}
                     onClick={() => setSelectedProduct(product)}
                     className="h-8 w-8 rounded-full shadow-none"
                   >
@@ -350,19 +353,19 @@ function DepartmentsPage() {
 
       <button className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
         <ScanIcon className="h-5 w-5" />
-        Barcode scannen
+        {t("dept.scan")}
       </button>
 
       {normalizedQuery && shownProducts.length === 0 && (
         <div className="py-12 text-center">
           <div className="text-4xl" aria-hidden="true">🔎</div>
-          <p className="mt-3 text-sm font-medium text-foreground">Kein Produkt gefunden</p>
-          <p className="mt-1 text-xs text-muted-foreground">Versuche einen anderen Suchbegriff.</p>
+          <p className="mt-3 text-sm font-medium text-foreground">{t("dept.noProduct")}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("common.tryOther")}</p>
         </div>
       )}
 
       {!normalizedQuery && childDepartments.length === 0 && directProducts.length === 0 && (
-        <div className="py-12 text-center text-sm text-muted-foreground">In dieser Kategorie gibt es noch keine Produkte.</div>
+        <div className="py-12 text-center text-sm text-muted-foreground">{t("dept.empty")}</div>
       )}
 
       <CatalogProductDialog
