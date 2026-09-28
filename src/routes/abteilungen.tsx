@@ -383,6 +383,7 @@ function DepartmentsPage() {
         <div className="py-12 text-center text-sm text-muted-foreground">{t("dept.empty")}</div>
       )}
 
+      <RenameDialog target={renameTarget} onClose={() => setRenameTarget(null)} />
       <CatalogProductDialog
         product={selectedProduct}
         groupLabel={selectedProduct ? groupFor(selectedProduct)?.name : undefined}
