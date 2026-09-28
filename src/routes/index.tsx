@@ -44,7 +44,6 @@ function ListPage() {
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
-  const itemOrder = useItemOrder();
   const { t } = useT();
   /** "Beliebige/Beliebiger/Beliebiges …" (und Übersetzungen wie "Any …") nicht anzeigen. */
   const stripAnyPrefix = (name: string) =>
@@ -94,9 +93,8 @@ function ListPage() {
     items: ListItem[];
   }
 
-  /** Gruppierung + Sortierung analog zur Abteilungsansicht:
-   *  Hauptabteilungen als Überschriften in Baumreihenfolge,
-   *  darin Unterkategorien und Produkte nach Katalog-Reihenfolge. */
+  /** Sortierung analog zur Abteilungsansicht: Einträge in Baumreihenfolge
+   *  der Unterkategorien, innerhalb einer Unterkategorie in Katalog-Reihenfolge. */
   const grouped = useMemo(() => {
     const map = new Map<string, Group>();
     for (const it of items) {
@@ -124,9 +122,6 @@ function ListPage() {
         const ta = segOf(a).tree;
         const tb = segOf(b).tree;
         if (ta !== tb) return ta - tb;
-        const ia = itemOrder[a.id];
-        const ib = itemOrder[b.id];
-        if (ia !== undefined && ib !== undefined && ia !== ib) return ia - ib;
         const pa = a.productId ? productById.get(a.productId) : undefined;
         const pb = b.productId ? productById.get(b.productId) : undefined;
         const oa = pa?.sortOrder ?? Number.MAX_SAFE_INTEGER;
@@ -137,13 +132,13 @@ function ListPage() {
     }
     return groups;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, productById, deptById, itemOrder]);
+  }, [items, productById, deptById]);
 
-  /** Segment = gleiche Hauptgruppe + gleiche Unterkategorie + gleicher Abhak-Status. */
+  /** Baum-Sortierschlüssel entlang des Kategoriebaums (analog Abteilungsansicht). */
   function segOf(it: ListItem) {
     const p = it.productId ? productById.get(it.productId) : undefined;
     const leaf = p?.departmentId ? deptById.get(p.departmentId) : undefined;
-    return { tree: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER, key: `${leaf?.id ?? "none"}|${it.checked}` };
+    return { tree: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER };
   }
 
   const [drag, setDrag] = useState<{ id: string; seg: string; group: string; target: string | null; after: boolean } | null>(null);
