@@ -1,0 +1,2 @@
+DELETE FROM public.catalog_translations WHERE entity_type = 'department' AND entity_id = 'f9149036-74e4-476f-8058-a89b9e50fffb';
+DELETE FROM public.departments WHERE id = 'f9149036-74e4-476f-8058-a89b9e50fffb';
