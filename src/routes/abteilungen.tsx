@@ -394,11 +394,20 @@ function DepartmentsPage() {
             {shownProducts.map((product) => {
               const group = groupFor(product);
               const favorite = isFavorite(product.id);
+              const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
+              const draggable = !normalizedQuery;
               return (
                 <div
                   key={product.id}
+                  data-drop={draggable ? "product" : undefined}
+                  data-id={product.id}
+                  onPointerDown={draggable ? (e) => startPress(e, product, "product") : undefined}
+                  onPointerMove={draggable ? pressMove : undefined}
+                  onPointerUp={draggable ? cancelPress : undefined}
+                  onPointerLeave={draggable ? cancelPress : undefined}
+                  onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
                   onClickCapture={(e) => { if (suppressClick.current) { e.stopPropagation(); e.preventDefault(); } }}
-                  className="flex min-h-20 select-none items-center gap-3 px-3 py-2.5"
+                  className={`flex min-h-20 select-none items-center gap-3 px-3 py-2.5 ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" ? "!border-b-2 !border-b-primary" : ""}`}
                 >
                   <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25">
                     <ProductThumb product={product} />
