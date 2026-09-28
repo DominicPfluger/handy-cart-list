@@ -16,7 +16,7 @@ function read(): Overrides {
 }
 
 /** Persönliche (nur lokal gespeicherte) Anordnung der Artikel. */
-export function useProductOrder(source: CatalogProduct[]) {
+export function useProductOrder(source: CatalogProduct[], validDepartmentIds?: Set<string>) {
   const [overrides, setOverrides] = useState<Overrides>({});
 
   useEffect(() => {
@@ -31,13 +31,14 @@ export function useProductOrder(source: CatalogProduct[]) {
   }, []);
 
   const products = useMemo(() => {
-    const ids = new Set(source.map((p) => p.id));
     return source.map((p) => {
       const o = overrides[p.id];
-      if (!o || !ids.has(p.id)) return p;
+      if (!o) return p;
+      // Veraltete Zuordnung zu gelöschten Kategorien ignorieren
+      if (validDepartmentIds && !validDepartmentIds.has(o.departmentId)) return p;
       return { ...p, departmentId: o.departmentId, sortOrder: o.sortOrder };
     });
-  }, [source, overrides]);
+  }, [source, overrides, validDepartmentIds]);
 
   /** Verschiebt `id` in die Kategorie `departmentId`, an Position `index` (Ende wenn undefined). */
   const move = useCallback(

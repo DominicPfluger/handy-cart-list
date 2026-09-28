@@ -57,7 +57,8 @@ function DepartmentsPage() {
   const data = useCatalog();
   const diets = useDietFilter();
   const [dietOpen, setDietOpen] = useState(false);
-  const { products: orderedProducts, move: moveProduct } = useProductOrder(data.products);
+  const deptIds = useMemo(() => new Set(data.departments.map((d) => d.id)), [data.departments]);
+  const { products: orderedProducts, move: moveProduct } = useProductOrder(data.products, deptIds);
   const products = useMemo(
     () => diets.length ? orderedProducts.filter((p) => !p.excludedDiets.some((d) => (diets as string[]).includes(d))) : orderedProducts,
     [orderedProducts, diets],
