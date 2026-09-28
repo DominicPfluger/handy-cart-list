@@ -150,28 +150,46 @@ export function CatalogProductDialog({
 
         <div className="space-y-2">
           <Label htmlFor="catalog-variant">{t("dlg.variant")}</Label>
-          {[...(product?.variants ?? []), ...custom].length > 0 && (
-            <div className="flex flex-wrap gap-1.5">
-              {[...(product?.variants ?? []), ...custom].map((v) => {
-                const on = selected.includes(v);
-                return (
+          {(() => {
+            const all = [...(product?.variants ?? []), ...custom];
+            if (all.length === 0) return null;
+            const limit = 12;
+            const collapsible = all.length > limit;
+            const visible = expanded || !collapsible ? all : all.slice(0, limit);
+            return (
+              <>
+                <div className="flex flex-wrap gap-1.5">
+                  {visible.map((v) => {
+                    const on = selected.includes(v);
+                    return (
+                      <button
+                        key={v}
+                        type="button"
+                        onClick={() => toggleVariant(v)}
+                        aria-pressed={on}
+                        className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                          on
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border bg-card text-foreground"
+                        }`}
+                      >
+                        {v}
+                      </button>
+                    );
+                  })}
+                </div>
+                {collapsible && (
                   <button
-                    key={v}
                     type="button"
-                    onClick={() => toggleVariant(v)}
-                    aria-pressed={on}
-                    className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
-                      on
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-card text-foreground"
-                    }`}
+                    onClick={() => setExpanded((prev) => !prev)}
+                    className="text-xs font-medium text-primary underline-offset-2 hover:underline"
                   >
-                    {v}
+                    {expanded ? t("dlg.showLess") : t("dlg.showAll", { n: all.length })}
                   </button>
-                );
-              })}
-            </div>
-          )}
+                )}
+              </>
+            );
+          })()}
           <div className="flex gap-2">
             <Input
               id="catalog-variant"
