@@ -152,13 +152,13 @@ function ListPage() {
   const onHandleMove = (e: React.PointerEvent) => {
     if (!drag) return;
     const el = document.elementFromPoint(e.clientX, e.clientY)?.closest<HTMLElement>("[data-item-id]");
-    if (!el || el.dataset.seg !== drag.seg || el.dataset.group !== drag.group) {
+    if (!el || el.dataset["seg"] !== drag.seg || el.dataset["group"] !== drag.group) {
       if (drag.target) setDrag({ ...drag, target: null });
       return;
     }
     const r = el.getBoundingClientRect();
     const after = e.clientY > r.top + r.height / 2;
-    const target = el.dataset.itemId!;
+    const target = el.dataset["itemId"]!;
     if (target !== drag.target || after !== drag.after) setDrag({ ...drag, target, after });
   };
   const onHandleUp = () => {
