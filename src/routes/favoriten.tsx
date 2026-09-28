@@ -230,7 +230,7 @@ function FavoritesPage() {
           size="icon"
           aria-label={`${row.favorite.name} schnell hinzufügen (Standardmenge)`}
           onClick={() => quickAdd(row)}
-          className="rounded-full text-muted-foreground"
+          className="h-8 w-8 rounded-full text-muted-foreground"
         >
           <BoltIcon className="h-3.5 w-3.5" />
         </Button>
@@ -239,10 +239,11 @@ function FavoritesPage() {
           size="icon"
           aria-label={`${row.favorite.name} mit Menge hinzufügen`}
           onClick={() => setSelected(row)}
-          className="rounded-full shadow-none"
+          className="h-8 w-8 rounded-full shadow-none"
         >
           <PlusIcon className="h-3.5 w-3.5" />
         </Button>
+        </div>
       </div>
     );
   };

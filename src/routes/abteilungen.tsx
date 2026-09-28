@@ -317,7 +317,7 @@ function DepartmentsPage() {
                       groupLabel: group?.name,
                       groupEmoji: group?.emoji ?? undefined,
                     })}
-                    className={favorite ? "rounded-full bg-coral/15 text-coral" : "rounded-full text-muted-foreground"}
+                    className={`h-8 w-8 ${favorite ? "rounded-full bg-coral/15 text-coral" : "rounded-full text-muted-foreground"}`}
                   >
                     <HeartIcon className={`h-3.5 w-3.5 ${favorite ? "fill-current" : ""}`} />
                   </Button>
@@ -327,7 +327,7 @@ function DepartmentsPage() {
                     size="icon"
                     aria-label={`${product.name} schnell hinzufügen (Standardmenge)`}
                     onClick={() => quickAdd(product, group)}
-                    className="rounded-full text-muted-foreground"
+                    className="h-8 w-8 rounded-full text-muted-foreground"
                   >
                     <BoltIcon className="h-3.5 w-3.5" />
                   </Button>
@@ -336,7 +336,7 @@ function DepartmentsPage() {
                     size="icon"
                     aria-label={`${product.name} mit Menge hinzufügen`}
                     onClick={() => setSelectedProduct(product)}
-                    className="rounded-full shadow-none"
+                    className="h-8 w-8 rounded-full shadow-none"
                   >
                     <PlusIcon className="h-3.5 w-3.5" />
                   </Button>
