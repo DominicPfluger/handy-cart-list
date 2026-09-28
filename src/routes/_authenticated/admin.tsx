@@ -110,7 +110,7 @@ function AdminPage() {
   const saveBase = async (e: Entity, name: string) => {
     if (!name.trim() || name === e.name) return;
     const { error } = await supabase.from(e.type === "department" ? "departments" : "products").update({ name: name.trim() }).eq("id", e.id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Gespeichert");
     await refresh();
   };
@@ -123,7 +123,7 @@ function AdminPage() {
           { onConflict: "entity_type,entity_id,locale" },
         )
       : await supabase.from("catalog_translations").delete().eq("entity_id", e.id).eq("locale", locale);
-    if (res.error) return toast.error(res.error.message);
+    if (res.error) { toast.error(res.error.message); return; }
     toast.success("Gespeichert");
     await refresh();
   };
@@ -234,7 +234,7 @@ function CreateForm({ departments, path, onCreated }: { departments: Entity[]; p
             default_quantity: Number(qty.replace(",", ".")) || 1, default_unit: unit as never, sort_order: 999,
           }).select("id").single()
         : await supabase.from("departments").insert({ parent_id: parent || null, name: name.trim(), emoji: emoji || null, sort_order: 999 }).select("id").single();
-    if (res.error) return toast.error(res.error.message);
+    if (res.error) { toast.error(res.error.message); return; }
     toast.success(`„${name}“ angelegt – wird übersetzt`);
     setName("");
     setEmoji("");
