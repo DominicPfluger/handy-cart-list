@@ -46,6 +46,7 @@ export function CatalogProductDialog({
   const [selected, setSelected] = useState<string[]>([]);
   const [custom, setCustom] = useState<string[]>([]);
   const [customInput, setCustomInput] = useState("");
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (!product) return;
@@ -56,6 +57,7 @@ export function CatalogProductDialog({
     setSelected([]);
     setCustom([]);
     setCustomInput("");
+    setExpanded(false);
   }, [product]);
 
   const toggleVariant = (v: string) =>
