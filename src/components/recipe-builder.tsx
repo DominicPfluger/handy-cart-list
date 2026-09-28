@@ -5,6 +5,9 @@ import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { RECIPE_TEMPLATES, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { formatQuantity } from "../lib/units";
+import {
+  createCollection, deleteCollection, deleteRecipe, saveRecipe, useRecipeCollections,
+} from "../hooks/use-saved-recipes";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -24,6 +27,10 @@ export function RecipeBuilder() {
   const [tplId, setTplId] = useState<RecipeTemplate["id"] | null>(null);
   const [picks, setPicks] = useState<Picks>({});
   const [added, setAdded] = useState(false);
+  const [saveOpen, setSaveOpen] = useState(false);
+  const [savedMsg, setSavedMsg] = useState(false);
+  const [newName, setNewName] = useState("");
+  const collections = useRecipeCollections();
 
   const byBase = useMemo(() => {
     const m = new Map<string, CatalogProduct>();
@@ -86,8 +93,76 @@ export function RecipeBuilder() {
     setAdded(true);
   };
 
+  const doSave = (collectionId: string) => {
+    if (!tpl) return;
+    saveRecipe(collectionId, { title, templateId: tpl.id, picks });
+    setSaveOpen(false);
+    setNewName("");
+    setSavedMsg(true);
+  };
+
+  const saveDialog = saveOpen && (
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-foreground/40" onClick={() => setSaveOpen(false)}>
+      <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
+        <h3 className="text-base font-bold text-foreground">{t("rk.saveTo")}</h3>
+        {collections.map((c) => (
+          <button key={c.id} onClick={() => doSave(c.id)} className="flex w-full items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 text-left text-sm font-semibold text-foreground">
+            <span>📒 {c.name}</span><span className="text-xs text-muted-foreground">{c.recipes.length}</span>
+          </button>
+        ))}
+        <div className="flex gap-2">
+          <input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            placeholder={t("rk.collectionPh")}
+            className="min-w-0 flex-1 rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
+          />
+          <button
+            onClick={() => doSave(createCollection(newName))}
+            className="shrink-0 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
+          >
+            + {t("rk.newCollection")}
+          </button>
+        </div>
+        <button onClick={() => setSaveOpen(false)} className="w-full py-2 text-sm text-muted-foreground">{t("rk.cancel")}</button>
+      </div>
+    </div>
+  );
+
+  const collectionsView = collections.length > 0 && (
+    <section className="space-y-3">
+      <h2 className="text-lg font-bold text-foreground">{t("rk.myRecipes")}</h2>
+      {collections.map((c) => (
+        <div key={c.id} className="space-y-2 rounded-2xl border border-border bg-card p-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-semibold text-foreground">📒 {c.name}</p>
+            <button onClick={() => deleteCollection(c.id)} className="text-xs text-muted-foreground">{t("rk.deleteList")}</button>
+          </div>
+          {c.recipes.length === 0 ? (
+            <p className="text-xs text-muted-foreground">{t("rk.emptyCollection")}</p>
+          ) : c.recipes.map((r) => {
+            const rt = RECIPE_TEMPLATES.find((x) => x.id === r.templateId);
+            return (
+              <div key={r.id} className="flex items-center gap-2 rounded-xl bg-background p-2">
+                <span className="text-xl">{rt?.emoji ?? "🍽️"}</span>
+                <button
+                  onClick={() => { if (rt) { setTplId(rt.id); setPicks(r.picks); setAdded(false); setSavedMsg(false); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
+                  className="min-w-0 flex-1 truncate text-left text-sm text-foreground"
+                >
+                  {r.title}
+                </button>
+                <button onClick={() => deleteRecipe(c.id, r.id)} aria-label="✕" className="px-2 text-sm text-muted-foreground">✕</button>
+              </div>
+            );
+          })}
+        </div>
+      ))}
+    </section>
+  );
+
   if (!tpl) {
     return (
+      <div className="space-y-5">
       <section className="space-y-3">
         <div>
           <h2 className="text-lg font-bold text-foreground">{t("rk.title")}</h2>
@@ -108,10 +183,13 @@ export function RecipeBuilder() {
           ))}
         </div>
       </section>
+      {collectionsView}
+      </div>
     );
   }
 
   return (
+    <div className="space-y-5">
     <section className="space-y-4">
       <div className="flex items-center justify-between gap-2">
         <button onClick={() => setTplId(null)} className="text-xs font-semibold text-primary">← {t("rk.back")}</button>
@@ -147,7 +225,7 @@ export function RecipeBuilder() {
                 return (
                   <button
                     key={p.id}
-                    onClick={() => toggle(s.key, p.id, s.max)}
+                    onClick={() => { setSavedMsg(false); toggle(s.key, p.id, s.max); }}
                     className={`rounded-full border px-3 py-1.5 text-xs font-medium transition active:scale-95 ${
                       on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
                     }`}
@@ -180,9 +258,18 @@ export function RecipeBuilder() {
             >
               {added ? `✓ ${t("rk.added")}` : t("rk.addAll", { n: chosen.length })}
             </button>
+            <button
+              onClick={() => { setSavedMsg(false); setSaveOpen(true); }}
+              className="mt-2 w-full rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition active:scale-[0.98]"
+            >
+              {savedMsg ? `✓ ${t("rk.saved")}` : `📒 ${t("rk.save")}`}
+            </button>
           </>
         )}
       </div>
     </section>
+    {collectionsView}
+    {saveDialog}
+    </div>
   );
 }
