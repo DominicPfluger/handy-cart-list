@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { LeafIcon } from "../components/icons";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
+import { RecipeBuilder } from "../components/recipe-builder";
+import { catalogQueryOptions } from "../lib/catalog-query";
 
 export const Route = createFileRoute("/rezepte")({
   head: () => ({
@@ -14,6 +16,7 @@ export const Route = createFileRoute("/rezepte")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
   component: RecipesPage,
 });
 
@@ -36,6 +39,8 @@ function RecipesPage() {
           {t("rec.subtitle")}
         </p>
       </div>
+
+      <RecipeBuilder />
 
       {/* Saisonal banner */}
       <div className="flex items-center gap-3 rounded-2xl bg-primary-soft/40 p-4">
