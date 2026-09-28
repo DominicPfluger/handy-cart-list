@@ -1,38 +1,42 @@
-export const UNITS = [
-  { id: "stueck", label: "Stück", short: "Stk." },
-  { id: "gramm", label: "Gramm", short: "g" },
-  { id: "kilogramm", label: "Kilogramm", short: "kg" },
-  { id: "milligramm", label: "Milligramm", short: "mg" },
-  { id: "pfund", label: "Pfund", short: "Pfd." },
-  { id: "unzen", label: "Unzen", short: "oz" },
-  { id: "milliliter", label: "Milliliter", short: "ml" },
-  { id: "deziliter", label: "Deziliter", short: "dl" },
-  { id: "liter", label: "Liter", short: "l" },
-  { id: "gallone", label: "Gallone", short: "gal" },
-  { id: "tasse", label: "Tasse", short: "Tasse" },
-  { id: "glas", label: "Glas", short: "Glas" },
-  { id: "flasche", label: "Flasche", short: "Fl." },
-  { id: "dose", label: "Dose", short: "Dose" },
-  { id: "beutel", label: "Beutel", short: "Beutel" },
-  { id: "packung", label: "Packung", short: "Pkg." },
-  { id: "schachtel", label: "Schachtel", short: "Schachtel" },
-  { id: "box", label: "Box", short: "Box" },
-  { id: "karton", label: "Karton", short: "Karton" },
-  { id: "kiste", label: "Kiste", short: "Kiste" },
-  { id: "kanister", label: "Kanister", short: "Kanister" },
-  { id: "buendel", label: "Bündel", short: "Bund" },
+import { getLocale, translate } from "../i18n";
+import type { MessageKey } from "../i18n/de";
+
+const UNIT_IDS = [
+  "stueck", "gramm", "kilogramm", "milligramm", "pfund", "unzen", "milliliter", "deziliter",
+  "liter", "gallone", "tasse", "glas", "flasche", "dose", "beutel", "packung", "schachtel",
+  "box", "karton", "kiste", "kanister", "buendel",
 ] as const;
 
-export type UnitId = (typeof UNITS)[number]["id"];
+export type UnitId = (typeof UNIT_IDS)[number];
 
-export function unitShort(id: string | undefined): string {
-  return UNITS.find((u) => u.id === id)?.short ?? "";
+/** Einheiten mit Bezeichnungen in der aktuellen Sprache. */
+export function getUnits(locale: string = getLocale()) {
+  return UNIT_IDS.map((id) => ({
+    id,
+    label: translate(locale, `unit.${id}` as MessageKey),
+    short: translate(locale, `unitS.${id}` as MessageKey),
+  }));
 }
 
-/** "500 g" / "2 Stk." */
-export function formatQuantity(quantity: number | string, unit?: string): string {
+export function unitShort(id: string | undefined, locale: string = getLocale()): string {
+  if (!id || !(UNIT_IDS as readonly string[]).includes(id)) return "";
+  return translate(locale, `unitS.${id}` as MessageKey);
+}
+
+/** "500 g" / "2 Stk." in der aktuellen Sprache */
+export function formatQuantity(quantity: number | string, unit?: string, locale: string = getLocale()): string {
   const q = typeof quantity === "number" ? quantity : Number(quantity);
-  const num = Number.isFinite(q) ? String(q).replace(".", ",") : String(quantity);
-  const short = unitShort(unit);
+  const num = Number.isFinite(q)
+    ? new Intl.NumberFormat(locale, { maximumFractionDigits: 3 }).format(q)
+    : String(quantity);
+  const short = unitShort(unit, locale);
   return short ? `${num} ${short}` : num;
+}
+
+/** Gespeicherte Mengenangabe (z. B. "1,5 kg") in der aktuellen Sprache neu formatieren. */
+export function relocalizeQuantity(stored: string, unit?: string): string {
+  const m = /^\s*([\d.,]+)/.exec(stored);
+  if (!m || !unit) return stored;
+  const n = Number(m[1]!.replace(",", "."));
+  return Number.isFinite(n) ? formatQuantity(n, unit) : stored;
 }
