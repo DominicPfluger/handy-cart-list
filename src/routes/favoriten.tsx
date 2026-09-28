@@ -213,13 +213,14 @@ function FavoritesPage() {
             {formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit)}
           </p>
         </div>
+        <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
         <Button
           type="button"
           variant="ghost"
           size="icon"
           aria-label={`${row.favorite.name} aus Favoriten entfernen`}
           onClick={() => removeFavorite(row)}
-          className="rounded-full bg-coral/15 text-coral"
+          className="h-8 w-8 rounded-full bg-coral/15 text-coral"
         >
           <HeartIcon className="h-3.5 w-3.5 fill-current" />
         </Button>
@@ -229,7 +230,7 @@ function FavoritesPage() {
           size="icon"
           aria-label={`${row.favorite.name} schnell hinzufügen (Standardmenge)`}
           onClick={() => quickAdd(row)}
-          className="rounded-full text-muted-foreground"
+          className="h-8 w-8 rounded-full text-muted-foreground"
         >
           <BoltIcon className="h-3.5 w-3.5" />
         </Button>
@@ -238,10 +239,11 @@ function FavoritesPage() {
           size="icon"
           aria-label={`${row.favorite.name} mit Menge hinzufügen`}
           onClick={() => setSelected(row)}
-          className="rounded-full shadow-none"
+          className="h-8 w-8 rounded-full shadow-none"
         >
           <PlusIcon className="h-3.5 w-3.5" />
         </Button>
+        </div>
       </div>
     );
   };
