@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
