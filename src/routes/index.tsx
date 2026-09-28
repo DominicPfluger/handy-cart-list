@@ -20,7 +20,6 @@ import {
 import { ListManager, shareList } from "../components/list-manager";
 import { relocalizeQuantity } from "../lib/units";
 import { useT } from "../i18n";
-import { useItemOrder, saveItemOrder } from "../hooks/use-item-order";
 
 
 export const Route = createFileRoute("/")({
@@ -45,7 +44,6 @@ function ListPage() {
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
-  const itemOrder = useItemOrder();
   const { t } = useT();
   /** "Beliebige/Beliebiger/Beliebiges …" (und Übersetzungen wie "Any …") nicht anzeigen. */
   const stripAnyPrefix = (name: string) =>
@@ -95,9 +93,8 @@ function ListPage() {
     items: ListItem[];
   }
 
-  /** Gruppierung + Sortierung analog zur Abteilungsansicht:
-   *  Hauptabteilungen als Überschriften in Baumreihenfolge,
-   *  darin Unterkategorien und Produkte nach Katalog-Reihenfolge. */
+  /** Sortierung analog zur Abteilungsansicht: Einträge in Baumreihenfolge
+   *  der Unterkategorien, innerhalb einer Unterkategorie in Katalog-Reihenfolge. */
   const grouped = useMemo(() => {
     const map = new Map<string, Group>();
     for (const it of items) {
@@ -125,9 +122,6 @@ function ListPage() {
         const ta = segOf(a).tree;
         const tb = segOf(b).tree;
         if (ta !== tb) return ta - tb;
-        const ia = itemOrder[a.id];
-        const ib = itemOrder[b.id];
-        if (ia !== undefined && ib !== undefined && ia !== ib) return ia - ib;
         const pa = a.productId ? productById.get(a.productId) : undefined;
         const pb = b.productId ? productById.get(b.productId) : undefined;
         const oa = pa?.sortOrder ?? Number.MAX_SAFE_INTEGER;
@@ -138,48 +132,15 @@ function ListPage() {
     }
     return groups;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, productById, deptById, itemOrder]);
+  }, [items, productById, deptById]);
 
-  /** Segment = gleiche Hauptgruppe + gleiche Unterkategorie + gleicher Abhak-Status. */
+  /** Baum-Sortierschlüssel entlang des Kategoriebaums (analog Abteilungsansicht). */
   function segOf(it: ListItem) {
     const p = it.productId ? productById.get(it.productId) : undefined;
     const leaf = p?.departmentId ? deptById.get(p.departmentId) : undefined;
-    return { tree: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER, key: `${leaf?.id ?? "none"}|${it.checked}` };
+    return { tree: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER };
   }
 
-  const [drag, setDrag] = useState<{ id: string; seg: string; group: string; target: string | null; after: boolean } | null>(null);
-
-  const onHandleDown = (e: React.PointerEvent, item: ListItem, groupKey: string) => {
-    e.preventDefault();
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    setDrag({ id: item.id, seg: segOf(item).key, group: groupKey, target: null, after: false });
-  };
-  const onHandleMove = (e: React.PointerEvent) => {
-    if (!drag) return;
-    const el = document.elementFromPoint(e.clientX, e.clientY)?.closest<HTMLElement>("[data-item-id]");
-    if (!el || el.dataset["seg"] !== drag.seg || el.dataset["group"] !== drag.group) {
-      if (drag.target) setDrag({ ...drag, target: null });
-      return;
-    }
-    const r = el.getBoundingClientRect();
-    const after = e.clientY > r.top + r.height / 2;
-    const target = el.dataset["itemId"]!;
-    if (target !== drag.target || after !== drag.after) setDrag({ ...drag, target, after });
-  };
-  const onHandleUp = () => {
-    if (drag?.target && drag.target !== drag.id) {
-      const group = grouped.find((g) => g.key === drag.group);
-      if (group) {
-        const seg = group.items.filter((i) => segOf(i).key === drag.seg).map((i) => i.id);
-        const without = seg.filter((id) => id !== drag.id);
-        let idx = without.indexOf(drag.target);
-        if (drag.after) idx += 1;
-        without.splice(idx, 0, drag.id);
-        saveItemOrder(without);
-      }
-    }
-    setDrag(null);
-  };
 
   const doneCount = items.filter((i) => i.checked).length;
   const total = items.length;
@@ -270,14 +231,8 @@ function ListPage() {
                 {group.items.map((item) => (
                   <div
                     key={item.id}
-                    data-item-id={item.id}
-                    data-seg={segOf(item).key}
-                    data-group={group.key}
-                    className={`relative flex items-center gap-3 py-3 pl-4 pr-4 ${drag?.id === item.id ? "bg-muted/60" : ""}`}
+                    className="relative flex items-center gap-3 py-3 pl-4 pr-4"
                   >
-                    {drag?.target === item.id && drag.target !== drag.id && (
-                      <div className={`pointer-events-none absolute inset-x-2 h-0.5 rounded bg-primary ${drag.after ? "-bottom-px" : "-top-px"}`} />
-                    )}
                     <button
                       onClick={() => toggleItem(item.id)}
                       className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
@@ -289,14 +244,7 @@ function ListPage() {
                     >
                       {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
-                    <div
-                      onPointerDown={(e) => onHandleDown(e, item, group.key)}
-                      onPointerMove={onHandleMove}
-                      onPointerUp={onHandleUp}
-                      onPointerCancel={() => setDrag(null)}
-                      aria-label="Verschieben"
-                      className="grid h-10 w-10 shrink-0 touch-none cursor-grab select-none place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl active:cursor-grabbing"
-                    >
+                    <div className="grid h-10 w-10 shrink-0 select-none place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl">
                       {item.emoji ?? "🛒"}
                     </div>
                     <div className="min-w-0 flex-1">
