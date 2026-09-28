@@ -279,7 +279,6 @@ function FavoritesPage() {
             <h2 className="text-base font-semibold text-foreground">Suchergebnisse</h2>
             <span className="shrink-0 text-xs text-muted-foreground">{shownRows!.length} Artikel</span>
           </div>
-          {renderSection(shownRows!.map((row) => ({ ...row, showCategory: true } as never)) as never) ?? null}
           {shownRows!.length > 0 && (
             <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
               {shownRows!.map((row) => renderRow(row, { showCategory: true }))}
