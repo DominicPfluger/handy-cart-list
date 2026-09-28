@@ -318,7 +318,6 @@ function DepartmentsPage() {
         <section>
           <div className="mb-3 flex items-end justify-between gap-3">
             <h2 className="text-base font-semibold text-foreground">{normalizedQuery ? t("common.searchResults") : t("dept.products")}</h2>
-            <span className="shrink-0 text-xs text-muted-foreground">{t("common.articles", { n: shownProducts.length })}</span>
           </div>
           <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
             {shownProducts.map((product) => {

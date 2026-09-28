@@ -6,7 +6,6 @@ export const de = {
   "nav.recipes": "Rezept-Kreator",
   "nav.more": "Mehr",
 
-  "common.articles": "{n} Artikel",
   "common.organic": "Bio",
   "common.cancel": "Abbrechen",
   "common.done": "Fertig",
@@ -77,7 +76,7 @@ export const de = {
 
   "lm.title": "Meine Listen",
   "lm.move": "Verschieben",
-  "lm.open": "{open} offen · {n} Artikel",
+  "lm.open": "{open} offen",
   "lm.rename": "Umbenennen",
   "lm.share": "Teilen",
   "lm.delete": "Löschen",

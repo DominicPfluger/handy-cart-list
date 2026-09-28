@@ -287,7 +287,6 @@ function FavoritesPage() {
         <section>
           <div className="mb-3 flex items-end justify-between gap-3">
             <h2 className="text-base font-semibold text-foreground">{t("common.searchResults")}</h2>
-            <span className="shrink-0 text-xs text-muted-foreground">{t("common.articles", { n: shownRows!.length })}</span>
           </div>
           {shownRows!.length > 0 && (
             <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
@@ -311,7 +310,6 @@ function FavoritesPage() {
                   <span className="mr-1.5" aria-hidden="true">{department.emoji ?? "🧺"}</span>
                   {department.name}
                 </h2>
-                <span className="shrink-0 text-xs text-muted-foreground">{t("common.articles", { n: entries.length })}</span>
               </div>
               {renderSection(entries.map((entry) => entry.row))}
             </section>
@@ -321,7 +319,6 @@ function FavoritesPage() {
             <section>
               <div className="mb-3 flex items-center justify-between gap-3">
                 <h2 className="text-base font-semibold text-foreground">{t("fav.more")}</h2>
-                <span className="shrink-0 text-xs text-muted-foreground">{t("common.articles", { n: looseFavorites.length })}</span>
               </div>
               {renderSection(looseFavorites)}
             </section>
