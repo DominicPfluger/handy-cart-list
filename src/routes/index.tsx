@@ -54,17 +54,20 @@ function ListPage() {
     [data.products],
   );
 
-  /** Sortierschlüssel einer Kategorie entlang des Kategoriebaums
-   *  (Wurzel → ... → Blatt), analog zur Abteilungsansicht. */
-  const treeOrder = (leaf: CatalogDepartment): number => {
+  /** Kategoriepfad (Wurzel → ... → Blatt) eines Produkts. */
+  const chainOf = (leaf: CatalogDepartment): CatalogDepartment[] => {
     const chain: CatalogDepartment[] = [];
     let current: CatalogDepartment | undefined = leaf;
     while (current) {
       chain.unshift(current);
       current = current.parentId ? deptById.get(current.parentId) : undefined;
     }
-    return chain.reduce((acc, d) => acc * 1000 + d.sortOrder, 0);
+    return chain;
   };
+
+  /** Sortierschlüssel entlang des Kategoriebaums, analog zur Abteilungsansicht. */
+  const treeOrder = (leaf: CatalogDepartment): number =>
+    chainOf(leaf).reduce((acc, d) => acc * 1000 + d.sortOrder, 0);
 
   interface Group {
     key: string;
@@ -75,20 +78,22 @@ function ListPage() {
   }
 
   /** Gruppierung + Sortierung analog zur Abteilungsansicht:
-   *  Kategorien als Überschriften in Baumreihenfolge, Produkte nach Katalog-Reihenfolge. */
+   *  Hauptabteilungen als Überschriften in Baumreihenfolge,
+   *  darin Unterkategorien und Produkte nach Katalog-Reihenfolge. */
   const grouped = useMemo(() => {
     const map = new Map<string, Group>();
     for (const it of items) {
       const product = it.productId ? productById.get(it.productId) : undefined;
       const leaf = product?.departmentId ? deptById.get(product.departmentId) : undefined;
-      const key = leaf ? leaf.id : `label:${it.groupLabel ?? it.category}`;
+      const root = leaf ? chainOf(leaf)[0] : undefined;
+      const key = root ? root.id : `label:${it.groupLabel ?? it.category}`;
       let group = map.get(key);
       if (!group) {
         group = {
           key,
-          label: leaf?.name ?? it.groupLabel ?? getCategory(it.category).label,
-          emoji: leaf?.emoji ?? it.groupEmoji ?? getCategory(it.category).emoji,
-          order: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER,
+          label: root?.name ?? it.groupLabel ?? getCategory(it.category).label,
+          emoji: root?.emoji ?? it.groupEmoji ?? getCategory(it.category).emoji,
+          order: root ? root.sortOrder : Number.MAX_SAFE_INTEGER,
           items: [],
         };
         map.set(key, group);
@@ -101,6 +106,11 @@ function ListPage() {
         if (a.checked !== b.checked) return a.checked ? 1 : -1;
         const pa = a.productId ? productById.get(a.productId) : undefined;
         const pb = b.productId ? productById.get(b.productId) : undefined;
+        const la = pa?.departmentId ? deptById.get(pa.departmentId) : undefined;
+        const lb = pb?.departmentId ? deptById.get(pb.departmentId) : undefined;
+        const ta = la ? treeOrder(la) : Number.MAX_SAFE_INTEGER;
+        const tb = lb ? treeOrder(lb) : Number.MAX_SAFE_INTEGER;
+        if (ta !== tb) return ta - tb;
         const oa = pa?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         const ob = pb?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         if (oa !== ob) return oa - ob;
