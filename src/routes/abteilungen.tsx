@@ -293,6 +293,9 @@ function DepartmentsPage() {
             })}
           </div>
           <p className="mt-2 text-xs text-muted-foreground">{t("dept.tip")}</p>
+          <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "department", parentId: currentId, parentName: current?.name })} className="mt-3 w-full rounded-xl">
+            <PlusIcon className="h-4 w-4" /> {t("add.category")}
+          </Button>
         </section>
       )}
 
@@ -365,20 +368,12 @@ function DepartmentsPage() {
               );
             })}
           </div>
-        </section>
-      )}
-
-      {!normalizedQuery && (
-        <div className={`grid gap-2 ${currentId ? "grid-cols-2" : "grid-cols-1"}`}>
-          <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "department", parentId: currentId, parentName: current?.name })} className="rounded-xl">
-            <PlusIcon className="h-4 w-4" /> {t("add.category")}
-          </Button>
-          {currentId && (
-            <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "product", parentId: currentId, parentName: current?.name })} className="rounded-xl">
+          {!normalizedQuery && currentId && (
+            <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "product", parentId: currentId, parentName: current?.name })} className="mt-3 w-full rounded-xl">
               <PlusIcon className="h-4 w-4" /> {t("add.product")}
             </Button>
           )}
-        </div>
+        </section>
       )}
       <AddEntryDialog target={addTarget} onClose={() => setAddTarget(null)} />
 
@@ -396,7 +391,19 @@ function DepartmentsPage() {
       )}
 
       {!normalizedQuery && childDepartments.length === 0 && directProducts.length === 0 && (
-        <div className="py-12 text-center text-sm text-muted-foreground">{t("dept.empty")}</div>
+        <>
+          <div className={`grid gap-2 ${currentId ? "grid-cols-2" : "grid-cols-1"}`}>
+            <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "department", parentId: currentId, parentName: current?.name })} className="rounded-xl">
+              <PlusIcon className="h-4 w-4" /> {t("add.category")}
+            </Button>
+            {currentId && (
+              <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "product", parentId: currentId, parentName: current?.name })} className="rounded-xl">
+                <PlusIcon className="h-4 w-4" /> {t("add.product")}
+              </Button>
+            )}
+          </div>
+          <div className="py-6 text-center text-sm text-muted-foreground">{t("dept.empty")}</div>
+        </>
       )}
 
       <RenameDialog target={renameTarget} onClose={() => setRenameTarget(null)} />
