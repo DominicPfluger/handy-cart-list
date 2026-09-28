@@ -13,7 +13,6 @@ import {
 } from "../lib/catalog-query";
 import {
   CheckIcon,
-  DotsIcon,
   TrashIcon,
   PlusIcon,
   ShareIcon,
@@ -44,7 +43,6 @@ function ListPage() {
     items, hydrated, toggleItem, removeItem, clearChecked,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
   } = useShoppingList();
-  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
   const itemOrder = useItemOrder();
