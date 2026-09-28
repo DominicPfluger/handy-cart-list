@@ -9,8 +9,7 @@ import {
   ShareIcon,
   PlusIcon,
 } from "../components/icons";
-import { LOCALES, getExplicitLocale, setLocale, translate, useT, type Locale } from "../i18n";
-import type { MessageKey } from "../i18n/de";
+import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/mehr")({
@@ -27,17 +26,6 @@ export const Route = createFileRoute("/mehr")({
   component: MorePage,
 });
 
-function timeAgo(ts: number, locale: string): string {
-  const t = (k: MessageKey, n?: number) => translate(locale, k, { n: n ?? 0 });
-  const diff = Date.now() - ts;
-  const min = Math.floor(diff / 60000);
-  if (min < 1) return t("more.justNow");
-  if (min < 60) return t("more.minAgo", min);
-  const h = Math.floor(min / 60);
-  if (h < 24) return t("more.hAgo", h);
-  const d = Math.floor(h / 24);
-  return t("more.dAgo", d);
-}
 
 const AVATAR_COLORS = [
   "oklch(0.52 0.155 144)",
@@ -47,7 +35,7 @@ const AVATAR_COLORS = [
 ];
 
 function MorePage() {
-  const { members, activity } = useShoppingList();
+  const { members } = useShoppingList();
   const { t, locale } = useT();
   const [choice, setChoice] = useState<string>("auto");
   useEffect(() => setChoice(getExplicitLocale() ?? "auto"), [locale]);
