@@ -12,3 +12,4 @@
 - Admin writes go through RLS with `has_role(auth.uid(),'admin')`; AI translation runs server-side in `translate.server.ts`. Why: no service-role use in app code.
 - Personal catalog additions/renames live in localStorage (`use-custom-catalog`, `use-custom-names`) and are merged in `useCatalog`. Why: user chose device-only personal changes; shared catalog stays admin-controlled.
 - Diet filter: products.excluded_diets (text[], AI-classified, non-food left empty); selection stored device-only in localStorage (use-diet-filter). Why: simple exclusion list, no per-user backend state.
+- Recipe builder templates live in src/lib/recipe-templates.ts, ingredients referenced by German catalog baseName (missing ones hidden). Why: user will curate ingredient lists manually later without schema changes.
