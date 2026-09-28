@@ -125,7 +125,7 @@ export const de = {
   "dlg.note": "Notiz (optional)",
   "dlg.notePlaceholder": "z. B. reif, Marke, Angebot …",
   "dlg.addN": "{n} Sorten hinzufügen",
-    "dlg.showAll": "Alle {n} anzeigen",
+  "dlg.showAll": "Alle {n} anzeigen",
   "dlg.showLess": "Weniger anzeigen",
 "dlg.addToList": "Zur Einkaufsliste hinzufügen",
 
