@@ -47,7 +47,7 @@ function DepartmentThumb({ department }: { department: CatalogDepartment }) {
 
 function DepartmentsPage() {
   const { data } = useSuspenseQuery(catalogQueryOptions);
-  const { isFavorite, toggleFavorite } = useShoppingList();
+  const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
