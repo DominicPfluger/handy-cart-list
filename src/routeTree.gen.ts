@@ -17,6 +17,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FavoritenRouteImport } from './routes/favoriten'
 import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
+import { Route as ScannerRouteImport } from './routes/scanner'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const IndexRoute = IndexRouteImport.update({
@@ -58,6 +59,11 @@ const RezepteRoute = RezepteRouteImport.update({
   path: '/rezepte',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ScannerRoute = ScannerRouteImport.update({
+  id: '/scanner',
+  path: '/scanner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
+  '/scanner': typeof ScannerRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesByTo {
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
+  '/scanner': typeof ScannerRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesById {
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
+  '/scanner': typeof ScannerRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRouteTypes {
@@ -106,6 +115,7 @@ export interface FileRouteTypes {
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
+    | '/scanner'
     | '/admin'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -116,6 +126,7 @@ export interface FileRouteTypes {
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
+    | '/scanner'
     | '/admin'
   id:
     | '__root__'
@@ -127,6 +138,7 @@ export interface FileRouteTypes {
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
+    | '/scanner'
     | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
 }
@@ -139,6 +151,7 @@ export interface RootRouteChildren {
   FavoritenRoute: typeof FavoritenRoute
   MehrRoute: typeof MehrRoute
   RezepteRoute: typeof RezepteRoute
+  ScannerRoute: typeof ScannerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -199,6 +212,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RezepteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/scanner': {
+      id: '/scanner'
+      path: '/scanner'
+      fullPath: '/scanner'
+      preLoaderRoute: typeof ScannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -229,6 +249,7 @@ const rootRouteChildren: RootRouteChildren = {
   FavoritenRoute: FavoritenRoute,
   MehrRoute: MehrRoute,
   RezepteRoute: RezepteRoute,
+  ScannerRoute: ScannerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
