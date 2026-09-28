@@ -68,6 +68,7 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 
 function FavoritesPage() {
   const { addCatalogItem, favorites, hydrated, toggleFavorite } = useShoppingList();
+  const favOrder = useFavoriteOrder();
   const data = useCatalog();
   const { t } = useT();
   const { departments } = useDepartmentOrder(data.departments);
@@ -366,7 +367,7 @@ function FavoritesPage() {
               <div className="mb-3 flex items-center justify-between gap-3">
                 <h2 className="text-base font-semibold text-foreground">{t("fav.more")}</h2>
               </div>
-              {renderSection(looseFavorites, "loose")}
+              {renderSection([...looseFavorites].sort((a, b) => (favOrder[a.favorite.productId] ?? 1e9) - (favOrder[b.favorite.productId] ?? 1e9)), "loose")}
             </section>
           )}
 
