@@ -10,6 +10,7 @@ import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dialog";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useShoppingList } from "../hooks/use-shopping-list";
+import { DIETS, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
 import {
   catalogQueryOptions,
   useCatalog,
@@ -54,6 +55,33 @@ function DepartmentThumb({ department }: { department: CatalogDepartment }) {
 
 function DepartmentsPage() {
   const data = useCatalog();
+  const diets = useDietFilter();
+  const [dietOpen, setDietOpen] = useState(false);
+  const products = useMemo(
+    () => diets.length ? data.products.filter((p) => !p.excludedDiets.some((d) => (diets as string[]).includes(d))) : data.products,
+    [data.products, diets],
+  );
+  // Kategorien, deren Produkte durch den Filter alle wegfallen, ausblenden
+  const hiddenDepts = useMemo(() => {
+    const hidden = new Set<string>();
+    if (!diets.length) return hidden;
+    const kids = new Map<string | null, string[]>();
+    for (const d of data.departments) kids.set(d.parentId, [...(kids.get(d.parentId) ?? []), d.id]);
+    const count = (list: CatalogProduct[]) => {
+      const m = new Map<string, number>();
+      for (const p of list) m.set(p.departmentId, (m.get(p.departmentId) ?? 0) + 1);
+      return m;
+    };
+    const all = count(data.products), shown = count(products);
+    const walk = (id: string): [number, number] => {
+      let a = all.get(id) ?? 0, b = shown.get(id) ?? 0;
+      for (const c of kids.get(id) ?? []) { const [x, y] = walk(c); a += x; b += y; }
+      if (a > 0 && b === 0) hidden.add(id);
+      return [a, b];
+    };
+    for (const r of kids.get(null) ?? []) walk(r);
+    return hidden;
+  }, [data.departments, data.products, products, diets.length]);
   const { t } = useT();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const { departments, move } = useDepartmentOrder(data.departments);
@@ -68,16 +96,16 @@ function DepartmentsPage() {
 
   const current = departments.find((department) => department.id === currentId) ?? null;
   const breadcrumbs = pathTo(departments, currentId);
-  const childDepartments = childrenOf(departments, currentId);
-  const directProducts = currentId ? productsOf(data.products, currentId) : [];
+  const childDepartments = childrenOf(departments, currentId).filter((d) => !hiddenDepts.has(d.id));
+  const directProducts = currentId ? productsOf(products, currentId) : [];
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const searchResults = useMemo(
     () => normalizedQuery
-      ? data.products
+      ? products
           .filter((product) => matchesProductSearch(product.name, normalizedQuery))
           .sort(compareByName)
       : [],
-    [data.products, normalizedQuery],
+    [products, normalizedQuery],
   );
 
   const groupFor = (product: CatalogProduct) =>
@@ -240,7 +268,43 @@ function DepartmentsPage() {
           aria-label={t("dept.search")}
           className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
         />
+        <button
+          type="button"
+          onClick={() => setDietOpen((v) => !v)}
+          aria-expanded={dietOpen}
+          className={`shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+        >
+          🥗 {t("diet.filter")}{diets.length ? ` · ${diets.length}` : ""}
+        </button>
       </div>
+
+      {dietOpen && (
+        <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
+          <div className="mb-1 text-sm font-semibold text-foreground">{t("diet.title")}</div>
+          <p className="mb-3 text-xs text-muted-foreground">{t("diet.hint")}</p>
+          <div className="flex flex-wrap gap-2">
+            {DIETS.map((d) => {
+              const on = diets.includes(d);
+              return (
+                <button
+                  key={d}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => toggleDiet(d)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-medium ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground"}`}
+                >
+                  {t(`diet.${d}`)}
+                </button>
+              );
+            })}
+          </div>
+          {diets.length > 0 && (
+            <Button type="button" variant="ghost" size="sm" className="mt-2 px-2 text-primary" onClick={() => setDiets([])}>
+              {t("diet.reset")}
+            </Button>
+          )}
+        </section>
+      )}
 
       {!normalizedQuery && breadcrumbs.length > 0 && (
         <nav aria-label={t("dept.breadcrumb")} className="no-scrollbar flex items-center gap-1 overflow-x-auto text-xs">
