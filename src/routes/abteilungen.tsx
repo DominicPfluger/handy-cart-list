@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
+import { useProductOrder } from "../hooks/use-product-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
@@ -56,9 +57,10 @@ function DepartmentsPage() {
   const data = useCatalog();
   const diets = useDietFilter();
   const [dietOpen, setDietOpen] = useState(false);
+  const { products: orderedProducts, move: moveProduct } = useProductOrder(data.products);
   const products = useMemo(
-    () => diets.length ? data.products.filter((p) => !p.excludedDiets.some((d) => (diets as string[]).includes(d))) : data.products,
-    [data.products, diets],
+    () => diets.length ? orderedProducts.filter((p) => !p.excludedDiets.some((d) => (diets as string[]).includes(d))) : orderedProducts,
+    [orderedProducts, diets],
   );
   // Kategorien, deren Produkte durch den Filter alle wegfallen, ausblenden
   const hiddenDepts = useMemo(() => {
