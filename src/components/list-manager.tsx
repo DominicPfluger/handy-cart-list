@@ -114,7 +114,7 @@ function Row({
             {list.name}
           </p>
           <p className="text-xs text-muted-foreground">
-            {t("lm.open", { open, n: list.items.length })}
+            {t("lm.open", { open })}
           </p>
         </button>
       )}
