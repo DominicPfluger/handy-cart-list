@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { ShareSheet } from "@/components/share-sheet";
 import {
   ListIcon,
   ListIconFilled,
@@ -147,6 +148,7 @@ function RootComponent() {
         <main className="px-5 pb-36 pt-5">
           <Outlet />
           <Toaster position="top-center" />
+          <ShareSheet />
         </main>
 
         <BottomNav />
