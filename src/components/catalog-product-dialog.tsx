@@ -39,12 +39,14 @@ export function CatalogProductDialog({
   const [quantity, setQuantity] = useState("1");
   const [unit, setUnit] = useState<UnitId>("stueck");
   const [organic, setOrganic] = useState(false);
+  const [note, setNote] = useState("");
 
   useEffect(() => {
     if (!product) return;
     setQuantity(String(product.defaultQuantity));
     setUnit(product.defaultUnit as UnitId);
     setOrganic(false);
+    setNote("");
   }, [product]);
 
   const amount = Number(quantity.replace(",", "."));
@@ -62,6 +64,7 @@ export function CatalogProductDialog({
       imageUrl: product.imageUrl,
       groupLabel,
       groupEmoji: groupEmoji ?? undefined,
+      note,
     });
     onOpenChange(false);
   };
@@ -119,6 +122,19 @@ export function CatalogProductDialog({
             <span className="text-sm font-medium text-foreground">Bio-Produkt</span>
           </Label>
         )}
+
+        <div className="space-y-2">
+          <Label htmlFor="catalog-note">Notiz (optional)</Label>
+          <Input
+            id="catalog-note"
+            type="text"
+            value={note}
+            onChange={(event) => setNote(event.target.value)}
+            placeholder="z. B. reif, Marke, Angebot …"
+            maxLength={120}
+            className="h-11 rounded-xl bg-card"
+          />
+        </div>
 
         <DialogFooter className="mt-2">
           <Button
