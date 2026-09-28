@@ -116,6 +116,11 @@ export interface ShoppingList {
 const LISTS_KEY = "shoppi:lists";
 const ACTIVE_KEY = "shoppi:active-list";
 
+function isButterProduct(name: string): boolean {
+  const n = name.toLowerCase();
+  return n.includes("butter") || n === "margarine" || n === "butterschmalz" || n === "mehlbutter";
+}
+
 const DEFAULT_LISTS: ShoppingList[] = [
   { id: "l-default", name: "Unsere Einkaufsliste", items: SEED_ITEMS, createdAt: 0 },
 ];
