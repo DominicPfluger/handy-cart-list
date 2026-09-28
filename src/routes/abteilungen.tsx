@@ -300,6 +300,7 @@ function DepartmentsPage() {
                       {normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                     </p>
                   </div>
+                  <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
                   <Button
                     type="button"
                     variant="ghost"

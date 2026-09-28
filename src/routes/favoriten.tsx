@@ -213,13 +213,14 @@ function FavoritesPage() {
             {formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit)}
           </p>
         </div>
+        <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
         <Button
           type="button"
           variant="ghost"
           size="icon"
           aria-label={`${row.favorite.name} aus Favoriten entfernen`}
           onClick={() => removeFavorite(row)}
-          className="rounded-full bg-coral/15 text-coral"
+          className="h-8 w-8 rounded-full bg-coral/15 text-coral"
         >
           <HeartIcon className="h-3.5 w-3.5 fill-current" />
         </Button>
