@@ -388,15 +388,18 @@ function DepartmentsPage() {
                   key={product.id}
                   data-pdrop={normalizedQuery ? undefined : ""}
                   data-id={product.id}
-                  onPointerDown={normalizedQuery ? undefined : (e) => startPress(e, product, "product")}
-                  onPointerMove={pressMove}
-                  onPointerUp={cancelPress}
-                  onPointerLeave={cancelPress}
-                  onContextMenu={(e) => e.preventDefault()}
                   onClickCapture={(e) => { if (suppressClick.current) { e.stopPropagation(); e.preventDefault(); } }}
                   className={`flex min-h-20 select-none items-center gap-3 px-3 py-2.5 ${drag?.id === product.id ? "opacity-40" : ""} ${drag?.target?.id === product.id && drag.target.kind === "before" ? "border-t-4 !border-t-primary" : ""} ${drag?.target?.id === product.id && drag.target.kind === "after" ? "border-b-4 !border-b-primary" : ""}`}
                 >
-                  <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25">
+                  <div
+                    onPointerDown={normalizedQuery ? undefined : (e) => {
+                      if (e.button !== 0) return;
+                      e.preventDefault();
+                      setDrag({ type: "product", id: product.id, name: product.name, x: e.clientX, y: e.clientY, target: null });
+                    }}
+                    onContextMenu={(e) => e.preventDefault()}
+                    className={`grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25 ${normalizedQuery ? "" : "touch-none cursor-grab"}`}
+                  >
                     <ProductThumb product={product} />
                   </div>
                   <div className="min-w-0 flex-1">

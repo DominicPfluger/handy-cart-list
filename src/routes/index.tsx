@@ -268,21 +268,11 @@ function ListPage() {
                     data-item-id={item.id}
                     data-seg={segOf(item).key}
                     data-group={group.key}
-                    className={`relative flex items-center gap-3 py-3 pl-1 pr-4 ${drag?.id === item.id ? "bg-muted/60" : ""}`}
+                    className={`relative flex items-center gap-3 py-3 pl-4 pr-4 ${drag?.id === item.id ? "bg-muted/60" : ""}`}
                   >
                     {drag?.target === item.id && drag.target !== drag.id && (
                       <div className={`pointer-events-none absolute inset-x-2 h-0.5 rounded bg-primary ${drag.after ? "-bottom-px" : "-top-px"}`} />
                     )}
-                    <button
-                      onPointerDown={(e) => onHandleDown(e, item, group.key)}
-                      onPointerMove={onHandleMove}
-                      onPointerUp={onHandleUp}
-                      onPointerCancel={() => setDrag(null)}
-                      className="grid h-8 w-6 shrink-0 touch-none cursor-grab place-items-center text-muted-foreground/50 active:cursor-grabbing"
-                      aria-label="Verschieben"
-                    >
-                      <span className="text-base leading-none">⋮⋮</span>
-                    </button>
                     <button
                       onClick={() => toggleItem(item.id)}
                       className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
@@ -294,11 +284,16 @@ function ListPage() {
                     >
                       {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
-                    {item.emoji && (
-                      <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl">
-                        {item.emoji}
-                      </div>
-                    )}
+                    <div
+                      onPointerDown={(e) => onHandleDown(e, item, group.key)}
+                      onPointerMove={onHandleMove}
+                      onPointerUp={onHandleUp}
+                      onPointerCancel={() => setDrag(null)}
+                      aria-label="Verschieben"
+                      className="grid h-10 w-10 shrink-0 touch-none cursor-grab select-none place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl active:cursor-grabbing"
+                    >
+                      {item.emoji ?? "🛒"}
+                    </div>
                     <div className="min-w-0 flex-1">
                       <p className={`truncate text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
                         {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
