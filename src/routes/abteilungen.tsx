@@ -6,6 +6,7 @@ import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
 import { BoltIcon, HeartIcon, PencilIcon, PlusIcon, ScanIcon, SearchIcon } from "../components/icons";
 import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
+import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dialog";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import {
@@ -59,6 +60,7 @@ function DepartmentsPage() {
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
+  const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
   const customNames = useCustomNames();
   const openRename = (e: CatalogDepartment | CatalogProduct) =>
     setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames });
@@ -365,6 +367,20 @@ function DepartmentsPage() {
           </div>
         </section>
       )}
+
+      {!normalizedQuery && (
+        <div className={`grid gap-2 ${currentId ? "grid-cols-2" : "grid-cols-1"}`}>
+          <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "department", parentId: currentId, parentName: current?.name })} className="rounded-xl">
+            <PlusIcon className="h-4 w-4" /> {t("add.category")}
+          </Button>
+          {currentId && (
+            <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "product", parentId: currentId, parentName: current?.name })} className="rounded-xl">
+              <PlusIcon className="h-4 w-4" /> {t("add.product")}
+            </Button>
+          )}
+        </div>
+      )}
+      <AddEntryDialog target={addTarget} onClose={() => setAddTarget(null)} />
 
       <button className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
         <ScanIcon className="h-5 w-5" />

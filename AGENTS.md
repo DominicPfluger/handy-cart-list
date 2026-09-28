@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 - i18n: UI strings live in `src/i18n/de.ts` (source) + generated `src/i18n/messages.json`; catalog names in `catalog_translations` resolved via `pickName` (locale → same language → German, de-CH swaps ß→ss). Why: one lightweight store, no SSR mismatch (server renders de-DE).
 - Admin writes go through RLS with `has_role(auth.uid(),'admin')`; AI translation runs server-side in `translate.server.ts`. Why: no service-role use in app code.
+- Personal catalog additions/renames live in localStorage (`use-custom-catalog`, `use-custom-names`) and are merged in `useCatalog`. Why: user chose device-only personal changes; shared catalog stays admin-controlled.

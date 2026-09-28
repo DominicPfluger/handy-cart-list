@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import { getLocale, pickName, useLocale } from "../i18n";
 import { getCatalog, type Catalog, type CatalogDepartment, type CatalogProduct } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
+import { useCustomCatalog } from "../hooks/use-custom-catalog";
 
 export const catalogQueryOptions = queryOptions({
   queryKey: ["catalog"],
@@ -21,13 +22,22 @@ export function useCatalog(): Catalog {
   const { data } = useSuspenseQuery(catalogQueryOptions);
   const locale = useLocale();
   const custom = useCustomNames();
-  return useMemo(
-    () => ({
-      departments: data.departments.map((d) => ({ ...d, name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
-      products: data.products.map((p) => ({ ...p, name: custom[p.id] ?? pickName(p.names, locale, p.baseName) })),
-    }),
-    [data, locale, custom],
-  );
+  const own = useCustomCatalog();
+  return useMemo(() => {
+    const ownDepts: CatalogDepartment[] = own.departments.map((d, i) => ({
+      id: d.id, parentId: d.parentId, name: d.name, emoji: d.emoji, color: null, imageUrl: null,
+      sortOrder: 10000 + i, baseName: d.name, names: {},
+    }));
+    const ownProducts: CatalogProduct[] = own.products.map((p, i) => ({
+      id: p.id, departmentId: p.departmentId, name: p.name, emoji: p.emoji, imageUrl: null,
+      defaultQuantity: p.defaultQuantity, defaultUnit: p.defaultUnit, organicAvailable: true, variants: [],
+      sortOrder: 10000 + i, baseName: p.name, names: {},
+    }));
+    return {
+      departments: [...data.departments, ...ownDepts].map((d) => ({ ...d, name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
+      products: [...data.products, ...ownProducts].map((p) => ({ ...p, name: custom[p.id] ?? pickName(p.names, locale, p.baseName) })),
+    };
+  }, [data, locale, custom, own]);
 }
 
 export type { Catalog, CatalogDepartment, CatalogProduct };
