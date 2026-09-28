@@ -29,7 +29,7 @@ export const translateMissing = createServerFn({ method: "POST" })
 
     const [deps, prods] = await Promise.all([
       sb.from("departments").select("id, name"),
-      sb.from("products").select("id, name"),
+      (async () => { const all: Array<{ id: string; name: string }> = []; for (let f = 0; ; f += 1000) { const r = await sb.from("products").select("id, name").order("id").range(f, f + 999); all.push(...(r.data ?? [])); if (!r.data || r.data.length < 1000) break; } return { data: all }; })(),
     ]);
     type E = { id: string; name: string; type: "department" | "product" };
     let entities: E[] = [
