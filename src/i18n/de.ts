@@ -195,6 +195,20 @@ export const de = {
   "unit.kiste": "Kiste", "unitS.kiste": "Kiste",
   "unit.kanister": "Kanister", "unitS.kanister": "Kanister",
   "unit.buendel": "Bündel", "unitS.buendel": "Bund",
+  "rk.title": "Basis-Rezept erstellen",
+  "rk.sub": "Wähle eine Kategorie und stelle dein Rezept aus passenden Zutaten zusammen.",
+  "rk.cat.muesli": "Müsli", "rk.cat.smoothie": "Smoothie", "rk.cat.salat": "Salat", "rk.cat.pizza": "Pizza",
+  "rk.cat.pfanne": "Pfannengericht", "rk.cat.menu": "Menü-Kombination", "rk.cat.dessert": "Dessert",
+  "rk.surprise": "🎲 Überrasch mich",
+  "rk.reset": "Neu beginnen",
+  "rk.back": "Alle Kategorien",
+  "rk.pick": "wähle {min}–{max}",
+  "rk.pickOne": "wähle 1",
+  "rk.empty": "Für diesen Schritt sind noch keine Zutaten hinterlegt.",
+  "rk.yourRecipe": "Dein Rezept",
+  "rk.addAll": "{n} Zutaten zur Liste",
+  "rk.added": "Zutaten zur Liste hinzugefügt",
+  "rk.nothing": "Wähle Zutaten, um dein Rezept zu sehen.",
 } as const;
 
 export type MessageKey = keyof typeof de;
