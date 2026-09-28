@@ -52,6 +52,7 @@ function toCatalogProduct(favorite: FavoriteProduct): CatalogProduct {
     defaultQuantity: favorite.defaultQuantity,
     defaultUnit: favorite.defaultUnit,
     organicAvailable: favorite.organicAvailable,
+    variants: [],
     sortOrder: 0,
   };
 }
