@@ -1,0 +1,1 @@
+INSERT INTO departments (parent_id, name, sort_order, emoji) VALUES ('42cb847d-a961-4b26-9233-9f55766d658c', 'Fische & Aquaristik', 5, '🐟');
