@@ -118,7 +118,6 @@ function DepartmentsPage() {
         <section>
           <div className="mb-3 flex items-end justify-between">
             <h2 className="text-base font-semibold text-foreground">{current ? "Kategorien" : "Alle Abteilungen"}</h2>
-            <span className="text-xs text-muted-foreground">{childDepartments.length} Bereiche</span>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {childDepartments.map((department) => (
