@@ -60,12 +60,24 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
       .order("sort_order", { ascending: true }),
-    supabase
-      .from("products")
-      .select(
-        "id, department_id, name, emoji, image_path, default_quantity, default_unit, organic_available, variants, excluded_diets, sort_order",
-      )
-      .order("sort_order", { ascending: true }),
+    (async () => {
+      // Produkte seitenweise laden (Limit 1000 Zeilen je Abfrage)
+      const all: any[] = [];
+      for (let from = 0; ; from += 1000) {
+        const res = await supabase
+          .from("products")
+          .select(
+            "id, department_id, name, emoji, image_path, default_quantity, default_unit, organic_available, variants, excluded_diets, sort_order",
+          )
+          .order("sort_order", { ascending: true })
+          .order("id", { ascending: true })
+          .range(from, from + 999);
+        if (res.error) return { data: null, error: res.error };
+        all.push(...(res.data ?? []));
+        if (!res.data || res.data.length < 1000) break;
+      }
+      return { data: all, error: null };
+    })(),
   ]);
 
   // Übersetzungen seitenweise laden (Limit 1000 Zeilen je Abfrage)
