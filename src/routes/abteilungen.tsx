@@ -42,7 +42,7 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
   if (department.imageUrl) {
-    return <img src={department.imageUrl} alt="" className="h-full w-full object-cover" />;
+    return <img src={department.imageUrl} alt="" className="h-full w-full object-contain p-1" />;
   }
   return <span className="text-5xl" aria-hidden="true">{department.emoji ?? "🧺"}</span>;
 }
