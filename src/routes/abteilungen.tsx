@@ -5,7 +5,7 @@ import { saveProductOrder } from "../hooks/use-product-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
-import { BoltIcon, HeartIcon, PencilIcon, PlusIcon, ScanIcon, SearchIcon } from "../components/icons";
+import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon } from "../components/icons";
 import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dialog";
 import { useCustomNames } from "../hooks/use-custom-names";
@@ -254,18 +254,14 @@ function DepartmentsPage() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={() => openDepartment(department.id)}
+                onClick={() => { if (index === breadcrumbs.length - 1) openRename(department); else openDepartment(department.id); }}
+                aria-label={index === breadcrumbs.length - 1 ? t("rename.action", { name: department.name }) : undefined}
                 data-drop="crumb"
                 data-id={department.id}
                 className={`${index === breadcrumbs.length - 1 ? "px-2 font-semibold text-primary" : "px-2 text-muted-foreground"} ${drag?.target?.kind === "into" && drag.target.id === department.id ? "ring-2 ring-primary" : ""}`}
               >
                 {department.name}
               </Button>
-              {index === breadcrumbs.length - 1 && (
-                <Button type="button" variant="ghost" size="icon" onClick={() => openRename(department)} aria-label={t("rename.action", { name: department.name })} className="h-7 w-7 rounded-full text-muted-foreground">
-                  <PencilIcon className="h-3.5 w-3.5" />
-                </Button>
-              )}
             </div>
           ))}
         </nav>
