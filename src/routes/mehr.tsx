@@ -9,6 +9,9 @@ import {
   ShareIcon,
   PlusIcon,
 } from "../components/icons";
+import { LOCALES, getExplicitLocale, setLocale, translate, useT, type Locale } from "../i18n";
+import type { MessageKey } from "../i18n/de";
+import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/mehr")({
   head: () => ({
@@ -24,15 +27,16 @@ export const Route = createFileRoute("/mehr")({
   component: MorePage,
 });
 
-function timeAgo(ts: number): string {
+function timeAgo(ts: number, locale: string): string {
+  const t = (k: MessageKey, n?: number) => translate(locale, k, { n: n ?? 0 });
   const diff = Date.now() - ts;
   const min = Math.floor(diff / 60000);
-  if (min < 1) return "gerade eben";
-  if (min < 60) return `vor ${min} Minuten`;
+  if (min < 1) return t("more.justNow");
+  if (min < 60) return t("more.minAgo", min);
   const h = Math.floor(min / 60);
-  if (h < 24) return `vor ${h} Stunde${h > 1 ? "n" : ""}`;
+  if (h < 24) return t("more.hAgo", h);
   const d = Math.floor(h / 24);
-  return `vor ${d} Tag${d > 1 ? "en" : ""}`;
+  return t("more.dAgo", d);
 }
 
 const AVATAR_COLORS = [
@@ -44,18 +48,21 @@ const AVATAR_COLORS = [
 
 function MorePage() {
   const { members, activity } = useShoppingList();
+  const { t, locale } = useT();
+  const [choice, setChoice] = useState<string>("auto");
+  useEffect(() => setChoice(getExplicitLocale() ?? "auto"), [locale]);
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Mehr</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("nav.more")}</h1>
       </div>
 
       {/* Gemeinsam section */}
       <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
         <div className="flex items-center gap-2">
           <PeopleIcon className="h-5 w-5 text-primary" />
-          <h2 className="text-base font-semibold text-foreground">Gemeinsam</h2>
+          <h2 className="text-base font-semibold text-foreground">{t("more.together")}</h2>
         </div>
 
         {/* Member bubbles */}
@@ -75,18 +82,18 @@ function MorePage() {
             <div className="grid h-14 w-14 place-items-center rounded-full border-2 border-dashed border-primary/40 text-primary">
               <PlusIcon className="h-6 w-6" />
             </div>
-            <span className="text-xs text-muted-foreground">Einladen</span>
+            <span className="text-xs text-muted-foreground">{t("more.invite")}</span>
           </div>
         </div>
 
         <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition active:scale-[0.98]">
-          <ShareIcon className="h-4 w-4" /> Personen einladen
+          <ShareIcon className="h-4 w-4" /> {t("more.invitePeople")}
         </button>
       </section>
 
       {/* Activity feed */}
       <section className="space-y-3">
-        <h2 className="text-base font-semibold text-foreground">Aktivitäten</h2>
+        <h2 className="text-base font-semibold text-foreground">{t("more.activity")}</h2>
         <div className="divide-y divide-border rounded-2xl border border-border bg-card">
           {activity.slice(0, 10).map((a) => (
             <div key={a.id} className="flex items-center gap-3 px-4 py-3">
@@ -101,11 +108,43 @@ function MorePage() {
                   <span className="font-semibold">{a.user}</span> {a.action}{" "}
                   <span className="font-medium">{a.item}</span>
                 </p>
-                <p className="text-xs text-muted-foreground">{timeAgo(a.at)}</p>
+                <p className="text-xs text-muted-foreground">{timeAgo(a.at, locale)}</p>
               </div>
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Sprache & Admin */}
+      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <label className="flex w-full items-center gap-3 px-4 py-3.5">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+            <GearIcon className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground">{t("lang.title")}</p>
+            <select
+              value={choice}
+              onChange={(e) => setLocale(e.target.value === "auto" ? null : (e.target.value as Locale))}
+              className="mt-1 w-full rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary"
+            >
+              <option value="auto">{t("lang.auto")}</option>
+              {LOCALES.map((l) => (
+                <option key={l.id} value={l.id}>{l.flag} {l.label}</option>
+              ))}
+            </select>
+          </div>
+        </label>
+        <Link to="/admin" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+            <span className="text-lg" aria-hidden="true">✎</span>
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground">{t("more.admin")}</p>
+            <p className="truncate text-xs text-muted-foreground">{t("more.adminSub")}</p>
+          </div>
+          <span className="text-muted-foreground">›</span>
+        </Link>
       </section>
 
       {/* Settings menu */}
@@ -115,16 +154,15 @@ function MorePage() {
             <span className="text-lg" aria-hidden="true">%</span>
           </div>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-foreground">Angebote</p>
-            <p className="truncate text-xs text-muted-foreground">Aktuelle Deals in deiner Nähe</p>
+            <p className="text-sm font-semibold text-foreground">{t("more.offers")}</p>
+            <p className="truncate text-xs text-muted-foreground">{t("more.offersSub")}</p>
           </div>
           <span className="text-muted-foreground">›</span>
         </Link>
         {[
-          { Icon: BellIcon, label: "Erinnerungen", sub: "Benachrichtigungen verwalten" },
-          { Icon: ScanIcon, label: "Barcode-Scanner", sub: "Produkte per Scan hinzufügen" },
-          { Icon: LeafIcon, label: "Nachhaltig einkaufen", sub: "Saisonale Tipps & Tipps" },
-          { Icon: GearIcon, label: "Einstellungen", sub: "Profil, Sprache & mehr" },
+          { Icon: BellIcon, label: t("more.reminders"), sub: t("more.remindersSub") },
+          { Icon: ScanIcon, label: t("more.scanner"), sub: t("more.scannerSub") },
+          { Icon: LeafIcon, label: t("more.sustainable"), sub: t("more.sustainableSub") },
         ].map((row) => (
           <button
             key={row.label}
@@ -143,7 +181,7 @@ function MorePage() {
       </section>
 
       <p className="pb-2 text-center text-xs text-muted-foreground">
-        Shoppi · Gemeinsam. Einfach. Einkaufen.
+        {t("more.tagline")}
       </p>
     </div>
   );

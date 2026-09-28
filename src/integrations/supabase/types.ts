@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      catalog_translations: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          is_manual: boolean
+          locale: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          is_manual?: boolean
+          locale: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          is_manual?: boolean
+          locale?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       departments: {
         Row: {
           color: string | null
@@ -111,14 +144,39 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       unit_of_measure:
         | "stueck"
         | "gramm"
@@ -269,6 +327,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       unit_of_measure: [
         "stueck",
         "gramm",

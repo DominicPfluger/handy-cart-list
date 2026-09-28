@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
@@ -9,12 +8,15 @@ import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
 import { useShoppingList, type FavoriteProduct } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
+  useCatalog,
   compareByName,
   matchesProductSearch,
   type CatalogDepartment,
   type CatalogProduct,
 } from "../lib/catalog-query";
 import { formatQuantity } from "../lib/units";
+import { useT } from "../i18n";
+
 
 export const Route = createFileRoute("/favoriten")({
   loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
@@ -54,6 +56,8 @@ function toCatalogProduct(favorite: FavoriteProduct): CatalogProduct {
     organicAvailable: favorite.organicAvailable,
     variants: [],
     sortOrder: 0,
+    baseName: favorite.name,
+    names: {},
   };
 }
 
@@ -63,7 +67,8 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 
 function FavoritesPage() {
   const { addCatalogItem, favorites, hydrated, toggleFavorite } = useShoppingList();
-  const { data } = useSuspenseQuery(catalogQueryOptions);
+  const data = useCatalog();
+  const { t } = useT();
   const { departments } = useDepartmentOrder(data.departments);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<FavRow | null>(null);
@@ -139,7 +144,7 @@ function FavoritesPage() {
       if (a.row.product.sortOrder !== b.row.product.sortOrder) {
         return a.row.product.sortOrder - b.row.product.sortOrder;
       }
-      return a.row.favorite.name.localeCompare(b.row.favorite.name, "de");
+      return a.row.favorite.name.localeCompare(b.row.favorite.name);
     });
 
   const sections = useMemo(
@@ -154,15 +159,16 @@ function FavoritesPage() {
     [rootDepartments, entriesByRoot],
   );
 
-  const normalizedQuery = query.trim().toLocaleLowerCase("de");
+  const normalizedQuery = query.trim().toLocaleLowerCase();
   const searchResults = useMemo<FavRow[]>(() => {
     if (!normalizedQuery) return [];
     const rows: FavRow[] = [];
     for (const fav of favorites) {
-      if (!matchesProductSearch(fav.name, normalizedQuery)) continue;
-      rows.push({ product: productById.get(fav.productId) ?? toCatalogProduct(fav), favorite: fav });
+      const product = productById.get(fav.productId) ?? toCatalogProduct(fav);
+      if (!matchesProductSearch(product.name, normalizedQuery)) continue;
+      rows.push({ product, favorite: fav });
     }
-    return rows.sort((a, b) => compareByName(a.favorite, b.favorite));
+    return rows.sort((a, b) => compareByName(a.product, b.product));
   }, [normalizedQuery, favorites, productById]);
 
   const categoryLabel = (product: CatalogProduct, fallback: string | undefined): string => {
@@ -174,7 +180,7 @@ function FavoritesPage() {
     const group = row.product.departmentId ? deptById.get(row.product.departmentId) : undefined;
     addCatalogItem({
       productId: row.favorite.productId,
-      name: row.favorite.name,
+      name: row.product.name,
       quantity: formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit),
       unit: row.favorite.defaultUnit,
       organic: false,
@@ -183,7 +189,7 @@ function FavoritesPage() {
       groupLabel: group?.name ?? row.favorite.groupLabel,
       groupEmoji: (group?.emoji ?? row.favorite.groupEmoji) ?? undefined,
     });
-    toast.success(`${row.favorite.name} zur Liste hinzugefügt`);
+    toast.success(t("common.addedToList", { name: row.product.name }));
   };
 
   const removeFavorite = (row: FavRow) => {
@@ -208,7 +214,7 @@ function FavoritesPage() {
           <ProductThumb product={row.product} />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-foreground">{row.favorite.name}</p>
+          <p className="text-sm font-semibold text-foreground">{row.product.name}</p>
           <p className="mt-0.5 truncate text-xs text-muted-foreground">
             {showCategory && group ? `${group.name} · ` : ""}
             {formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit)}
@@ -219,7 +225,7 @@ function FavoritesPage() {
           type="button"
           variant="ghost"
           size="icon"
-          aria-label={`${row.favorite.name} aus Favoriten entfernen`}
+          aria-label={t("common.removeFavorite", { name: row.product.name })}
           onClick={() => removeFavorite(row)}
           className="h-8 w-8 rounded-full bg-coral/15 text-coral"
         >
@@ -229,7 +235,7 @@ function FavoritesPage() {
           type="button"
           variant="ghost"
           size="icon"
-          aria-label={`${row.favorite.name} schnell hinzufügen (Standardmenge)`}
+          aria-label={t("common.quickAdd", { name: row.product.name })}
           onClick={() => quickAdd(row)}
           className="h-8 w-8 rounded-full text-muted-foreground"
         >
@@ -238,7 +244,7 @@ function FavoritesPage() {
         <Button
           type="button"
           size="icon"
-          aria-label={`${row.favorite.name} mit Menge hinzufügen`}
+          aria-label={t("common.addWithQty", { name: row.product.name })}
           onClick={() => setSelected(row)}
           className="h-8 w-8 rounded-full shadow-none"
         >
@@ -261,8 +267,8 @@ function FavoritesPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold text-foreground">Favoriten</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Deine Lieblingsprodukte auf einen Blick.</p>
+        <h1 className="text-2xl font-bold text-foreground">{t("nav.favorites")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("fav.subtitle")}</p>
       </div>
 
       <div className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
@@ -271,8 +277,8 @@ function FavoritesPage() {
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
-          placeholder="Favoriten durchsuchen"
-          aria-label="Favoriten durchsuchen"
+          placeholder={t("fav.search")}
+          aria-label={t("fav.search")}
           className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
         />
       </div>
@@ -280,8 +286,8 @@ function FavoritesPage() {
       {normalizedQuery ? (
         <section>
           <div className="mb-3 flex items-end justify-between gap-3">
-            <h2 className="text-base font-semibold text-foreground">Suchergebnisse</h2>
-            <span className="shrink-0 text-xs text-muted-foreground">{shownRows!.length} Artikel</span>
+            <h2 className="text-base font-semibold text-foreground">{t("common.searchResults")}</h2>
+            <span className="shrink-0 text-xs text-muted-foreground">{t("common.articles", { n: shownRows!.length })}</span>
           </div>
           {shownRows!.length > 0 && (
             <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
@@ -291,8 +297,8 @@ function FavoritesPage() {
           {shownRows!.length === 0 && (
             <div className="py-12 text-center">
               <div className="text-4xl" aria-hidden="true">🔎</div>
-              <p className="mt-3 text-sm font-medium text-foreground">Kein Favorit gefunden</p>
-              <p className="mt-1 text-xs text-muted-foreground">Versuche einen anderen Suchbegriff.</p>
+              <p className="mt-3 text-sm font-medium text-foreground">{t("fav.noResult")}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{t("common.tryOther")}</p>
             </div>
           )}
         </section>
@@ -305,7 +311,7 @@ function FavoritesPage() {
                   <span className="mr-1.5" aria-hidden="true">{department.emoji ?? "🧺"}</span>
                   {department.name}
                 </h2>
-                <span className="shrink-0 text-xs text-muted-foreground">{entries.length} Artikel</span>
+                <span className="shrink-0 text-xs text-muted-foreground">{t("common.articles", { n: entries.length })}</span>
               </div>
               {renderSection(entries.map((entry) => entry.row))}
             </section>
@@ -314,15 +320,15 @@ function FavoritesPage() {
           {looseFavorites.length > 0 && (
             <section>
               <div className="mb-3 flex items-center justify-between gap-3">
-                <h2 className="text-base font-semibold text-foreground">Weitere Favoriten</h2>
-                <span className="shrink-0 text-xs text-muted-foreground">{looseFavorites.length} Artikel</span>
+                <h2 className="text-base font-semibold text-foreground">{t("fav.more")}</h2>
+                <span className="shrink-0 text-xs text-muted-foreground">{t("common.articles", { n: looseFavorites.length })}</span>
               </div>
               {renderSection(looseFavorites)}
             </section>
           )}
 
           {hydrated && favorites.length > 0 && !hasContent && (
-            <div className="py-12 text-center text-sm text-muted-foreground">Keine Favoriten gefunden.</div>
+            <div className="py-12 text-center text-sm text-muted-foreground">{t("fav.none")}</div>
           )}
         </>
       )}
@@ -330,8 +336,8 @@ function FavoritesPage() {
       {hydrated && favorites.length === 0 && (
         <div className="py-16 text-center">
           <HeartIcon className="mx-auto h-12 w-12 text-primary-soft" />
-          <p className="mt-4 text-sm font-semibold text-foreground">Noch keine Favoriten</p>
-          <p className="mt-1 text-xs text-muted-foreground">Tippe bei einem Produkt auf das Herz.</p>
+          <p className="mt-4 text-sm font-semibold text-foreground">{t("fav.emptyTitle")}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t("fav.emptyHint")}</p>
         </div>
       )}
 

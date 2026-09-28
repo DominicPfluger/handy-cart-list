@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import type { CatalogProduct } from "../lib/catalog-query";
-import { UNITS, formatQuantity, type UnitId } from "../lib/units";
+import { getUnits, formatQuantity, type UnitId } from "../lib/units";
+import { useT } from "../i18n";
+
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
@@ -36,6 +38,7 @@ export function CatalogProductDialog({
   onOpenChange,
 }: CatalogProductDialogProps) {
   const { addCatalogItem } = useShoppingList();
+  const { t, locale } = useT();
   const [quantity, setQuantity] = useState("1");
   const [unit, setUnit] = useState<UnitId>("stueck");
   const [organic, setOrganic] = useState(false);
@@ -93,13 +96,13 @@ export function CatalogProductDialog({
     <Dialog open={Boolean(product)} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[85vh] w-[calc(100%-2rem)] max-w-sm overflow-y-auto rounded-2xl p-5">
         <DialogHeader className="pr-7 text-left">
-          <DialogTitle>{product?.name ?? "Produkt hinzufügen"}</DialogTitle>
-          <DialogDescription>Lege Menge und gewünschte Variante fest.</DialogDescription>
+          <DialogTitle>{product?.name ?? t("dlg.add")}</DialogTitle>
+          <DialogDescription>{t("dlg.desc")}</DialogDescription>
         </DialogHeader>
 
         <div className="grid grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] gap-3 py-2">
           <div className="space-y-2">
-            <Label htmlFor="catalog-quantity">Menge</Label>
+            <Label htmlFor="catalog-quantity">{t("dlg.qty")}</Label>
             <Input
               id="catalog-quantity"
               inputMode="decimal"
@@ -112,13 +115,13 @@ export function CatalogProductDialog({
             />
           </div>
           <div className="space-y-2">
-            <Label>Masseinheit</Label>
+            <Label>{t("dlg.unit")}</Label>
             <Select value={unit} onValueChange={(value) => setUnit(value as UnitId)}>
               <SelectTrigger className="h-11 rounded-xl bg-card">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="max-h-64">
-                {UNITS.map((entry) => (
+                {getUnits(locale).map((entry) => (
                   <SelectItem key={entry.id} value={entry.id}>
                     {entry.label}
                   </SelectItem>
@@ -139,12 +142,12 @@ export function CatalogProductDialog({
               onCheckedChange={(checked) => setOrganic(checked === true)}
               className="h-5 w-5 rounded-md"
             />
-            <span className="text-sm font-medium text-foreground">Bio-Produkt</span>
+            <span className="text-sm font-medium text-foreground">{t("dlg.organic")}</span>
           </Label>
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="catalog-variant">Sorte (optional, mehrere möglich)</Label>
+          <Label htmlFor="catalog-variant">{t("dlg.variant")}</Label>
           {[...(product?.variants ?? []), ...custom].length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {[...(product?.variants ?? []), ...custom].map((v) => {
@@ -179,7 +182,7 @@ export function CatalogProductDialog({
                   addCustom();
                 }
               }}
-              placeholder="Eigene Sorte eingeben …"
+              placeholder={t("dlg.variantPlaceholder")}
               maxLength={40}
               className="h-10 rounded-xl bg-card"
             />
@@ -190,13 +193,13 @@ export function CatalogProductDialog({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="catalog-note">Notiz (optional)</Label>
+          <Label htmlFor="catalog-note">{t("dlg.note")}</Label>
           <Input
             id="catalog-note"
             type="text"
             value={note}
             onChange={(event) => setNote(event.target.value)}
-            placeholder="z. B. reif, Marke, Angebot …"
+            placeholder={t("dlg.notePlaceholder")}
             maxLength={120}
             className="h-11 rounded-xl bg-card"
           />
@@ -209,7 +212,7 @@ export function CatalogProductDialog({
             disabled={!validAmount}
             className="h-11 w-full rounded-xl font-semibold"
           >
-            {selected.length > 1 ? `${selected.length} Sorten hinzufügen` : "Zur Einkaufsliste hinzufügen"}
+            {selected.length > 1 ? t("dlg.addN", { n: selected.length }) : t("dlg.addToList")}
           </Button>
         </DialogFooter>
       </DialogContent>

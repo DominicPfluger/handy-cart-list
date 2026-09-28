@@ -9,6 +9,10 @@ export interface CatalogDepartment {
   color: string | null;
   imageUrl: string | null;
   sortOrder: number;
+  /** Deutscher Ausgangsname */
+  baseName: string;
+  /** Übersetzungen je Sprachvariante */
+  names: Record<string, string>;
 }
 
 export interface CatalogProduct {
@@ -22,6 +26,8 @@ export interface CatalogProduct {
   organicAvailable: boolean;
   variants: string[];
   sortOrder: number;
+  baseName: string;
+  names: Record<string, string>;
 }
 
 export interface Catalog {
@@ -60,6 +66,23 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       .order("sort_order", { ascending: true }),
   ]);
 
+  // Übersetzungen seitenweise laden (Limit 1000 Zeilen je Abfrage)
+  const names = new Map<string, Record<string, string>>();
+  for (let from = 0; ; from += 1000) {
+    const { data, error } = await supabase
+      .from("catalog_translations")
+      .select("entity_id, locale, name")
+      .order("id")
+      .range(from, from + 999);
+    if (error) throw new Error(error.message);
+    for (const row of data ?? []) {
+      const entry = names.get(row.entity_id) ?? {};
+      entry[row.locale] = row.name;
+      names.set(row.entity_id, entry);
+    }
+    if (!data || data.length < 1000) break;
+  }
+
   if (deptRes.error) throw new Error(deptRes.error.message);
   if (prodRes.error) throw new Error(prodRes.error.message);
 
@@ -91,6 +114,8 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       color: (r["color"] as string | null) ?? null,
       imageUrl: signed.get(r["image_path"] as string) ?? null,
       sortOrder: (r["sort_order"] as number) ?? 0,
+      baseName: r["name"] as string,
+      names: names.get(r["id"] as string) ?? {},
     })),
     products: prodRows.map((r) => ({
       id: r["id"] as string,
@@ -103,6 +128,8 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       organicAvailable: (r["organic_available"] as boolean) ?? true,
       variants: (r["variants"] as string[] | null) ?? [],
       sortOrder: (r["sort_order"] as number) ?? 0,
+      baseName: r["name"] as string,
+      names: names.get(r["id"] as string) ?? {},
     })),
   };
 });
