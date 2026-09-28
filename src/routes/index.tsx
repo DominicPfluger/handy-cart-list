@@ -178,6 +178,11 @@ function ListPage() {
                       <p className="truncate text-xs text-muted-foreground">
                         {item.quantity || "—"} · von {item.addedBy}
                       </p>
+                      {item.note && (
+                        <p className="truncate text-xs italic text-muted-foreground/80">
+                          📝 {item.note}
+                        </p>
+                      )}
                     </div>
                     <button
                       onClick={() => setMenuOpenId(menuOpenId === item.id ? null : item.id)}

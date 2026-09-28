@@ -47,6 +47,7 @@ export interface ListItem {
   groupLabel?: string | undefined;
   groupEmoji?: string | undefined;
   productId?: string | undefined;
+  note?: string | undefined;
 }
 
 export interface FavoriteProduct {
@@ -102,6 +103,7 @@ export interface AddCatalogItemInput {
   imageUrl?: string | null | undefined;
   groupLabel?: string | undefined;
   groupEmoji?: string | undefined;
+  note?: string | undefined;
 }
 
 export interface ShoppingList {
@@ -271,6 +273,7 @@ export function useShoppingList() {
         groupLabel: input.groupLabel ?? "Sonstiges",
         groupEmoji: input.groupEmoji ?? "📦",
         productId: input.productId,
+        note: input.note?.trim() ? input.note.trim() : undefined,
       };
       setItems((prev) => [...prev, item]);
       logActivity(user, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
