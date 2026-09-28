@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
+import { useFavoriteOrder, saveFavoriteOrder } from "../hooks/use-item-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
@@ -128,6 +129,9 @@ function FavoritesPage() {
    *  zuerst nach Kategorie (sortOrder), dann nach Produkt (sortOrder). */
   const sortEntries = (entries: FavEntry[]) =>
     [...entries].sort((a, b) => {
+      const oa = favOrder[a.row.favorite.productId];
+      const ob = favOrder[b.row.favorite.productId];
+      if (oa !== undefined && ob !== undefined && oa !== ob) return oa - ob;
       const leafOrder = (entry: FavEntry) => {
         if (!entry.leaf) return Number.MAX_SAFE_INTEGER;
         let order = entry.leaf.sortOrder;
@@ -156,8 +160,38 @@ function FavoritesPage() {
           entries: sortEntries(entriesByRoot.get(department.id)!),
         })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [rootDepartments, entriesByRoot],
+    [rootDepartments, entriesByRoot, favOrder],
   );
+
+  const [drag, setDrag] = useState<{ id: string; sec: string; ids: string[]; target: string | null; after: boolean } | null>(null);
+  const onDragDown = (e: React.PointerEvent, id: string, sec: string, ids: string[]) => {
+    if (e.button !== 0) return;
+    e.preventDefault();
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    setDrag({ id, sec, ids, target: null, after: false });
+  };
+  const onDragMove = (e: React.PointerEvent) => {
+    if (!drag) return;
+    const el = document.elementFromPoint(e.clientX, e.clientY)?.closest<HTMLElement>("[data-fav-id]");
+    if (!el || el.dataset["sec"] !== drag.sec) {
+      if (drag.target) setDrag({ ...drag, target: null });
+      return;
+    }
+    const r = el.getBoundingClientRect();
+    const after = e.clientY > r.top + r.height / 2;
+    const target = el.dataset["favId"]!;
+    if (target !== drag.target || after !== drag.after) setDrag({ ...drag, target, after });
+  };
+  const onDragUp = () => {
+    if (drag?.target && drag.target !== drag.id) {
+      const without = drag.ids.filter((id) => id !== drag.id);
+      let idx = without.indexOf(drag.target);
+      if (drag.after) idx += 1;
+      without.splice(idx, 0, drag.id);
+      saveFavoriteOrder(without);
+    }
+    setDrag(null);
+  };
 
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const searchResults = useMemo<FavRow[]>(() => {
@@ -206,11 +240,20 @@ function FavoritesPage() {
     });
   };
 
-  const renderRow = (row: FavRow, { showCategory = false }: { showCategory?: boolean } = {}) => {
+  const renderRow = (row: FavRow, { showCategory = false, sec, ids }: { showCategory?: boolean; sec?: string; ids?: string[] } = {}) => {
     const group = row.product.departmentId ? deptById.get(row.product.departmentId) : undefined;
+    const id = row.favorite.productId;
+    const isTarget = drag?.target === id && drag.target !== drag.id;
     return (
-      <div key={row.favorite.productId} className="flex min-h-20 items-center gap-3 px-3 py-2.5">
-        <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25">
+      <div key={id} data-fav-id={sec ? id : undefined} data-sec={sec} className={`relative flex min-h-20 items-center gap-3 px-3 py-2.5 ${drag?.id === id ? "bg-muted/60" : ""}`}>
+        {isTarget && <div className={`pointer-events-none absolute inset-x-2 h-0.5 rounded bg-primary ${drag!.after ? "bottom-0" : "top-0"}`} />}
+        <div
+          onPointerDown={sec && ids ? (e) => onDragDown(e, id, sec, ids) : undefined}
+          onPointerMove={onDragMove}
+          onPointerUp={onDragUp}
+          onPointerCancel={() => setDrag(null)}
+          className={`grid h-14 w-14 shrink-0 select-none place-items-center overflow-hidden rounded-xl bg-primary-soft/25 ${sec ? "touch-none cursor-grab" : ""}`}
+        >
           <ProductThumb product={row.product} />
         </div>
         <div className="min-w-0 flex-1">
@@ -255,11 +298,14 @@ function FavoritesPage() {
     );
   };
 
-  const renderSection = (rows: FavRow[]) => (
+  const renderSection = (rows: FavRow[], sec: string) => {
+    const ids = rows.map((r) => r.favorite.productId);
+    return (
     <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
-      {rows.map((row) => renderRow(row))}
+      {rows.map((row) => renderRow(row, { sec, ids }))}
     </div>
-  );
+    );
+  };
 
   const shownRows = normalizedQuery ? searchResults : null;
   const hasContent = sections.length > 0 || looseFavorites.length > 0;
@@ -311,7 +357,7 @@ function FavoritesPage() {
                   {department.name}
                 </h2>
               </div>
-              {renderSection(entries.map((entry) => entry.row))}
+              {renderSection(entries.map((entry) => entry.row), department.id)}
             </section>
           ))}
 
@@ -320,7 +366,7 @@ function FavoritesPage() {
               <div className="mb-3 flex items-center justify-between gap-3">
                 <h2 className="text-base font-semibold text-foreground">{t("fav.more")}</h2>
               </div>
-              {renderSection(looseFavorites)}
+              {renderSection(looseFavorites, "loose")}
             </section>
           )}
 
