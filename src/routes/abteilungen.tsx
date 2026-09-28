@@ -40,7 +40,7 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
   if (department.imageUrl) {
-    return <img src={department.imageUrl} alt="" className="max-h-[74%] max-w-[74%] object-contain" />;
+    return <img src={department.imageUrl} alt="" draggable={false} className="max-h-[74%] max-w-[74%] object-contain" />;
   }
   return <span className="text-5xl" aria-hidden="true">{department.emoji ?? "🧺"}</span>;
 }
@@ -259,6 +259,7 @@ function DepartmentsPage() {
                 onPointerUp={cancelPress}
                 onPointerLeave={cancelPress}
                 onContextMenu={(e) => e.preventDefault()}
+                onDragStart={(e) => e.preventDefault()}
                 onClick={() => { if (!suppressClick.current) openDepartment(department.id); }}
                 style={{ WebkitTouchCallout: "none" }}
                 className={`relative select-none ${drag?.id === department.id ? "opacity-40" : ""} ${t === "into" ? "ring-2 ring-primary" : ""} ${t === "before" ? "!border-l-4 !border-l-primary" : ""} ${t === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
