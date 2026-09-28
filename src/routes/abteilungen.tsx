@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
-import { saveProductOrder } from "../hooks/use-product-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
@@ -111,22 +110,15 @@ function DepartmentsPage() {
   const groupFor = (product: CatalogProduct) =>
     departments.find((department) => department.id === product.departmentId) ?? current;
 
-  // ---- Drag & Drop (langes Drücken) ----
+  // ---- Drag & Drop für Kategorien (langes Drücken) ----
   type DropTarget = { kind: "before" | "after" | "into"; id: string | null };
-  const [drag, setDrag] = useState<{ type: "dept" | "product"; id: string; name: string; x: number; y: number; target: DropTarget | null } | null>(null);
+  const [drag, setDrag] = useState<{ id: string; name: string; x: number; y: number; target: DropTarget | null } | null>(null);
   const pressRef = useRef<{ timer: number; x: number; y: number } | null>(null);
   const suppressClick = useRef(false);
   const dragRef = useRef(drag);
   dragRef.current = drag;
 
-  const findTarget = (x: number, y: number, draggedId: string, type: "dept" | "product" = "dept"): DropTarget | null => {
-    if (type === "product") {
-      const pel = document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-pdrop]");
-      const pid = pel?.dataset["id"];
-      if (!pel || !pid || pid === draggedId) return null;
-      const pr = pel.getBoundingClientRect();
-      return { kind: y < pr.top + pr.height / 2 ? "before" : "after", id: pid };
-    }
+  const findTarget = (x: number, y: number, draggedId: string): DropTarget | null => {
     const el = document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-drop]");
     if (!el) return null;
     const id = el.dataset["id"] || null;
@@ -142,7 +134,7 @@ function DepartmentsPage() {
     pressRef.current = null;
   };
 
-  const startPress = (event: React.PointerEvent, department: { id: string; name: string }, type: "dept" | "product" = "dept") => {
+  const startPress = (event: React.PointerEvent, department: { id: string; name: string }) => {
     if (event.button !== 0) return;
     const { clientX: x, clientY: y } = event;
     cancelPress();
@@ -151,7 +143,7 @@ function DepartmentsPage() {
       timer: window.setTimeout(() => {
         pressRef.current = null;
         navigator.vibrate?.(30);
-        setDrag({ type, id: department.id, name: department.name, x, y, target: null });
+        setDrag({ id: department.id, name: department.name, x, y, target: null });
       }, 420),
     };
   };
@@ -166,7 +158,7 @@ function DepartmentsPage() {
     const onMove = (e: PointerEvent) => {
       const d = dragRef.current;
       if (!d) return;
-      setDrag({ ...d, x: e.clientX, y: e.clientY, target: findTarget(e.clientX, e.clientY, d.id, d.type) });
+      setDrag({ ...d, x: e.clientX, y: e.clientY, target: findTarget(e.clientX, e.clientY, d.id) });
     };
     const onUp = () => {
       const d = dragRef.current;
@@ -175,13 +167,6 @@ function DepartmentsPage() {
       window.setTimeout(() => (suppressClick.current = false), 50);
       if (!d?.target) return;
       const { kind, id } = d.target;
-      if (d.type === "product") {
-        const ids = directProducts.map((pr) => pr.id).filter((pid) => pid !== d.id);
-        const at = ids.indexOf(id ?? "") + (kind === "after" ? 1 : 0);
-        ids.splice(Math.max(0, at), 0, d.id);
-        saveProductOrder(ids);
-        return;
-      }
       if (kind === "into") {
         const dragged = departments.find((dep) => dep.id === d.id);
         if (dragged?.parentId === id) return;
@@ -208,7 +193,7 @@ function DepartmentsPage() {
       window.removeEventListener("pointercancel", onUp);
       window.removeEventListener("touchmove", block);
     };
-  }, [drag?.id, departments, directProducts, move, t]);
+  }, [drag?.id, departments, move, t]);
 
   const openDepartment = (id: string | null) => {
     setCurrentId(id);
@@ -386,20 +371,10 @@ function DepartmentsPage() {
               return (
                 <div
                   key={product.id}
-                  data-pdrop={normalizedQuery ? undefined : ""}
-                  data-id={product.id}
                   onClickCapture={(e) => { if (suppressClick.current) { e.stopPropagation(); e.preventDefault(); } }}
-                  className={`flex min-h-20 select-none items-center gap-3 px-3 py-2.5 ${drag?.id === product.id ? "opacity-40" : ""} ${drag?.target?.id === product.id && drag.target.kind === "before" ? "border-t-4 !border-t-primary" : ""} ${drag?.target?.id === product.id && drag.target.kind === "after" ? "border-b-4 !border-b-primary" : ""}`}
+                  className="flex min-h-20 select-none items-center gap-3 px-3 py-2.5"
                 >
-                  <div
-                    onPointerDown={normalizedQuery ? undefined : (e) => {
-                      if (e.button !== 0) return;
-                      e.preventDefault();
-                      setDrag({ type: "product", id: product.id, name: product.name, x: e.clientX, y: e.clientY, target: null });
-                    }}
-                    onContextMenu={(e) => e.preventDefault()}
-                    className={`grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25 ${normalizedQuery ? "" : "touch-none cursor-grab"}`}
-                  >
+                  <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25">
                     <ProductThumb product={product} />
                   </div>
                   <div className="min-w-0 flex-1">

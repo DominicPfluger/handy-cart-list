@@ -4,7 +4,6 @@ import { getLocale, pickName, useLocale } from "../i18n";
 import { getCatalog, type Catalog, type CatalogDepartment, type CatalogProduct } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
-import { useProductOrder } from "../hooks/use-product-order";
 
 export const catalogQueryOptions = queryOptions({
   queryKey: ["catalog"],
