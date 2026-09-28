@@ -391,7 +391,19 @@ function DepartmentsPage() {
       )}
 
       {!normalizedQuery && childDepartments.length === 0 && directProducts.length === 0 && (
-        <div className="py-12 text-center text-sm text-muted-foreground">{t("dept.empty")}</div>
+        <>
+          <div className={`grid gap-2 ${currentId ? "grid-cols-2" : "grid-cols-1"}`}>
+            <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "department", parentId: currentId, parentName: current?.name })} className="rounded-xl">
+              <PlusIcon className="h-4 w-4" /> {t("add.category")}
+            </Button>
+            {currentId && (
+              <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "product", parentId: currentId, parentName: current?.name })} className="rounded-xl">
+                <PlusIcon className="h-4 w-4" /> {t("add.product")}
+              </Button>
+            )}
+          </div>
+          <div className="py-6 text-center text-sm text-muted-foreground">{t("dept.empty")}</div>
+        </>
       )}
 
       <RenameDialog target={renameTarget} onClose={() => setRenameTarget(null)} />
