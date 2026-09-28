@@ -42,26 +42,74 @@ function ListPage() {
   } = useShoppingList();
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [managerOpen, setManagerOpen] = useState(false);
+  const { data } = useSuspenseQuery(catalogQueryOptions);
+  const { departments } = useDepartmentOrder(data.departments);
 
-  const sortedItems = useMemo(
-    () =>
-      [...items].sort((a, b) => {
-        if (a.checked !== b.checked) return a.checked ? 1 : -1;
-        return a.addedAt - b.addedAt;
-      }),
-    [items]
+  const deptById = useMemo(
+    () => new Map(departments.map((d) => [d.id, d])),
+    [departments],
+  );
+  const productById = useMemo(
+    () => new Map(data.products.map((p) => [p.id, p])),
+    [data.products],
   );
 
-  const grouped = useMemo(() => {
-    const map = new Map<string, typeof items>();
-    for (const it of sortedItems) {
-      const key = it.groupLabel ?? it.category;
-      if (!map.has(key)) map.set(key, []);
-      const group = map.get(key);
-      if (group) group.push(it);
+  /** Sortierschlüssel einer Kategorie entlang des Kategoriebaums
+   *  (Wurzel → ... → Blatt), analog zur Abteilungsansicht. */
+  const treeOrder = (leaf: CatalogDepartment): number => {
+    const chain: CatalogDepartment[] = [];
+    let current: CatalogDepartment | undefined = leaf;
+    while (current) {
+      chain.unshift(current);
+      current = current.parentId ? deptById.get(current.parentId) : undefined;
     }
-    return [...map.entries()];
-  }, [sortedItems]);
+    return chain.reduce((acc, d) => acc * 1000 + d.sortOrder, 0);
+  };
+
+  interface Group {
+    key: string;
+    label: string;
+    emoji: string;
+    order: number;
+    items: ListItem[];
+  }
+
+  /** Gruppierung + Sortierung analog zur Abteilungsansicht:
+   *  Kategorien als Überschriften in Baumreihenfolge, Produkte nach Katalog-Reihenfolge. */
+  const grouped = useMemo(() => {
+    const map = new Map<string, Group>();
+    for (const it of items) {
+      const product = it.productId ? productById.get(it.productId) : undefined;
+      const leaf = product?.departmentId ? deptById.get(product.departmentId) : undefined;
+      const key = leaf ? leaf.id : `label:${it.groupLabel ?? it.category}`;
+      let group = map.get(key);
+      if (!group) {
+        group = {
+          key,
+          label: leaf?.name ?? it.groupLabel ?? getCategory(it.category).label,
+          emoji: leaf?.emoji ?? it.groupEmoji ?? getCategory(it.category).emoji,
+          order: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER,
+          items: [],
+        };
+        map.set(key, group);
+      }
+      group.items.push(it);
+    }
+    const groups = [...map.values()].sort((a, b) => a.order - b.order);
+    for (const group of groups) {
+      group.items.sort((a, b) => {
+        if (a.checked !== b.checked) return a.checked ? 1 : -1;
+        const pa = a.productId ? productById.get(a.productId) : undefined;
+        const pb = b.productId ? productById.get(b.productId) : undefined;
+        const oa = pa?.sortOrder ?? Number.MAX_SAFE_INTEGER;
+        const ob = pb?.sortOrder ?? Number.MAX_SAFE_INTEGER;
+        if (oa !== ob) return oa - ob;
+        return a.addedAt - b.addedAt;
+      });
+    }
+    return groups;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items, productById, deptById]);
 
   const doneCount = items.filter((i) => i.checked).length;
   const total = items.length;
