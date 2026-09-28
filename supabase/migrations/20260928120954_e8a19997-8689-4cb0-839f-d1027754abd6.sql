@@ -1,0 +1,1 @@
+UPDATE public.departments SET parent_id = NULL, sort_order = 15, updated_at = now() WHERE name = 'Fleisch & Fisch';
