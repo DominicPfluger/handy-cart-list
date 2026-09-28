@@ -72,6 +72,21 @@ function DepartmentsPage() {
     setQuery("");
   };
 
+  const quickAdd = (product: CatalogProduct, group: CatalogDepartment | null) => {
+    addCatalogItem({
+      productId: product.id,
+      name: product.name,
+      quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
+      unit: product.defaultUnit,
+      organic: false,
+      emoji: product.emoji,
+      imageUrl: product.imageUrl,
+      groupLabel: group?.name,
+      groupEmoji: group?.emoji ?? undefined,
+    });
+    toast.success(`${product.name} zur Liste hinzugefügt`);
+  };
+
   const shownProducts = normalizedQuery ? searchResults : directProducts;
 
   return (
