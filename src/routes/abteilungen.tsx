@@ -315,9 +315,8 @@ function DepartmentsPage() {
                     <ProductThumb product={product} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <button type="button" onClick={() => openRename(product)} aria-label={t("rename.action", { name: product.name })} className="group inline-flex items-center gap-1.5 text-left text-sm font-semibold text-foreground">
+                    <button type="button" onClick={() => openRename(product)} aria-label={t("rename.action", { name: product.name })} className="inline-flex text-left text-sm font-semibold text-foreground">
                       <span>{product.name}</span>
-                      <PencilIcon className="h-3 w-3 shrink-0 text-muted-foreground/60" />
                     </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                       {normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
