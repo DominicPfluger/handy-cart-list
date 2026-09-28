@@ -251,7 +251,7 @@ export function useShoppingList() {
       setItems((prev) => [...prev, item]);
       logActivity(user, "hat hinzugefügt", item.name);
     },
-    [logActivity]
+    [logActivity, setItems]
   );
 
   const addCatalogItem = useCallback(
@@ -275,7 +275,7 @@ export function useShoppingList() {
       setItems((prev) => [...prev, item]);
       logActivity(user, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
     },
-    [logActivity]
+    [logActivity, setItems]
   );
 
   const toggleItem = useCallback((id: string) => {
@@ -286,15 +286,15 @@ export function useShoppingList() {
         return { ...it, checked: !it.checked };
       })
     );
-  }, [logActivity]);
+  }, [logActivity, setItems]);
 
   const removeItem = useCallback((id: string) => {
     setItems((prev) => prev.filter((it) => it.id !== id));
-  }, []);
+  }, [setItems]);
 
   const clearChecked = useCallback(() => {
     setItems((prev) => prev.filter((it) => !it.checked));
-  }, []);
+  }, [setItems]);
 
   const isFavorite = useCallback(
     (productId: string) => favorites.some((f) => f.productId === productId),
