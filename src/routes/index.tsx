@@ -21,6 +21,7 @@ import {
 import { ListManager, shareList } from "../components/list-manager";
 import { relocalizeQuantity } from "../lib/units";
 import { useT } from "../i18n";
+import { useItemOrder, saveItemOrder } from "../hooks/use-item-order";
 
 
 export const Route = createFileRoute("/")({
@@ -46,6 +47,7 @@ function ListPage() {
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
+  const itemOrder = useItemOrder();
   const { t } = useT();
   /** Katalogartikel in der gewählten Sprache anzeigen (Sorte bleibt erhalten). */
   const displayName = (item: ListItem) => {
@@ -261,7 +263,26 @@ function ListPage() {
               </div>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
                 {group.items.map((item) => (
-                  <div key={item.id} className="relative flex items-center gap-3 px-4 py-3">
+                  <div
+                    key={item.id}
+                    data-item-id={item.id}
+                    data-seg={segOf(item).key}
+                    data-group={group.key}
+                    className={`relative flex items-center gap-3 py-3 pl-1 pr-4 ${drag?.id === item.id ? "bg-muted/60" : ""}`}
+                  >
+                    {drag?.target === item.id && drag.target !== drag.id && (
+                      <div className={`pointer-events-none absolute inset-x-2 h-0.5 rounded bg-primary ${drag.after ? "-bottom-px" : "-top-px"}`} />
+                    )}
+                    <button
+                      onPointerDown={(e) => onHandleDown(e, item, group.key)}
+                      onPointerMove={onHandleMove}
+                      onPointerUp={onHandleUp}
+                      onPointerCancel={() => setDrag(null)}
+                      className="grid h-8 w-6 shrink-0 touch-none cursor-grab place-items-center text-muted-foreground/50 active:cursor-grabbing"
+                      aria-label="Verschieben"
+                    >
+                      <span className="text-base leading-none">⋮⋮</span>
+                    </button>
                     <button
                       onClick={() => toggleItem(item.id)}
                       className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
