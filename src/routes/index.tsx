@@ -159,9 +159,9 @@ function ListPage() {
                     >
                       {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
-                    {(item.imageUrl || item.emoji) && (
+                    {item.emoji && (
                       <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl">
-                        {item.imageUrl ? <img src={item.imageUrl} alt="" className="h-full w-full object-cover" /> : item.emoji}
+                        {item.emoji}
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
