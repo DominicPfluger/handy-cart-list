@@ -159,9 +159,18 @@ function MorePage() {
           </div>
           <span className="text-muted-foreground">›</span>
         </Link>
+        <Link to="/scanner" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+            <ScanIcon className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground">{t("more.scanner")}</p>
+            <p className="truncate text-xs text-muted-foreground">{t("more.scannerSub")}</p>
+          </div>
+          <span className="text-muted-foreground">›</span>
+        </Link>
         {[
           { Icon: BellIcon, label: t("more.reminders"), sub: t("more.remindersSub") },
-          { Icon: ScanIcon, label: t("more.scanner"), sub: t("more.scannerSub") },
           { Icon: LeafIcon, label: t("more.sustainable"), sub: t("more.sustainableSub") },
         ].map((row) => (
           <button
