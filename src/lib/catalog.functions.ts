@@ -20,6 +20,7 @@ export interface CatalogProduct {
   defaultQuantity: number;
   defaultUnit: string;
   organicAvailable: boolean;
+  variants: string[];
   sortOrder: number;
 }
 
@@ -54,7 +55,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     supabase
       .from("products")
       .select(
-        "id, department_id, name, emoji, image_path, default_quantity, default_unit, organic_available, sort_order",
+        "id, department_id, name, emoji, image_path, default_quantity, default_unit, organic_available, variants, sort_order",
       )
       .order("sort_order", { ascending: true }),
   ]);
@@ -100,6 +101,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       defaultQuantity: Number(r["default_quantity"] ?? 1),
       defaultUnit: (r["default_unit"] as string) ?? "stueck",
       organicAvailable: (r["organic_available"] as boolean) ?? true,
+      variants: (r["variants"] as string[] | null) ?? [],
       sortOrder: (r["sort_order"] as number) ?? 0,
     })),
   };
