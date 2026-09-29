@@ -11,6 +11,9 @@ import {
 } from "../components/icons";
 import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState } from "react";
+import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
+import { useCatalog } from "../lib/catalog-query";
+import { Button } from "../components/ui/button";
 
 export const Route = createFileRoute("/mehr")({
   head: () => ({
@@ -38,6 +41,9 @@ function MorePage() {
   const { members } = useShoppingList();
   const { t, locale } = useT();
   const [choice, setChoice] = useState<string>("auto");
+  const hiddenIds = useHiddenDepartments();
+  const catalog = useCatalog();
+  const hiddenCategories = catalog.departments.filter((department) => hiddenIds.includes(department.id));
   useEffect(() => setChoice(getExplicitLocale() ?? "auto"), [locale]);
 
   return (
@@ -163,6 +169,21 @@ function MorePage() {
           </button>
         ))}
       </section>
+
+      {hiddenCategories.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-foreground">{t("more.hiddenCategories")}</h2>
+          <p className="text-sm text-muted-foreground">{t("more.hiddenCategoriesHint")}</p>
+          <div className="divide-y divide-border border-y border-border">
+            {hiddenCategories.map((department) => (
+              <div key={department.id} className="flex items-center justify-between gap-3 py-2.5">
+                <span className="min-w-0 text-sm text-foreground">{department.name}</span>
+                <Button variant="ghost" size="sm" onClick={() => restoreDepartment(department.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <p className="pb-2 text-center text-xs text-muted-foreground">
         {t("more.tagline")}

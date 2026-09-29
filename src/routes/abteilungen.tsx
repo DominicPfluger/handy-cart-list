@@ -5,7 +5,10 @@ import { useProductOrder } from "../hooks/use-product-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
-import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon } from "../components/icons";
+import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon, TrashIcon } from "../components/icons";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../components/ui/alert-dialog";
+import { deleteCustomEntry, isCustomId } from "../hooks/use-custom-catalog";
+import { hideDepartment, useHiddenDepartments } from "../hooks/use-hidden-departments";
 import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dialog";
 import { useCustomNames } from "../hooks/use-custom-names";
@@ -55,26 +58,43 @@ function DepartmentThumb({ department }: { department: CatalogDepartment }) {
 
 function DepartmentsPage() {
   const data = useCatalog();
+  const hiddenIds = useHiddenDepartments();
   const diets = useDietFilter();
   const [dietOpen, setDietOpen] = useState(false);
   const deptIds = useMemo(() => new Set(data.departments.map((d) => d.id)), [data.departments]);
   const { products: orderedProducts, move: moveProduct } = useProductOrder(data.products, deptIds);
+  const { departments: orderedDepartments, move } = useDepartmentOrder(data.departments);
+  const removedIds = useMemo(() => {
+    const removed = new Set(hiddenIds);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const department of orderedDepartments) {
+        if (department.parentId && removed.has(department.parentId) && !removed.has(department.id)) {
+          removed.add(department.id);
+          changed = true;
+        }
+      }
+    }
+    return removed;
+  }, [hiddenIds, orderedDepartments]);
+  const departments = useMemo(() => orderedDepartments.filter((d) => !removedIds.has(d.id)), [orderedDepartments, removedIds]);
   const products = useMemo(
-    () => diets.length ? orderedProducts.filter((p) => !p.excludedDiets.some((d) => (diets as string[]).includes(d))) : orderedProducts,
-    [orderedProducts, diets],
+    () => orderedProducts.filter((p) => !removedIds.has(p.departmentId) && (!diets.length || !p.excludedDiets.some((d) => (diets as string[]).includes(d)))),
+    [orderedProducts, diets, removedIds],
   );
   // Kategorien, deren Produkte durch den Filter alle wegfallen, ausblenden
   const hiddenDepts = useMemo(() => {
     const hidden = new Set<string>();
     if (!diets.length) return hidden;
     const kids = new Map<string | null, string[]>();
-    for (const d of data.departments) kids.set(d.parentId, [...(kids.get(d.parentId) ?? []), d.id]);
+    for (const d of departments) kids.set(d.parentId, [...(kids.get(d.parentId) ?? []), d.id]);
     const count = (list: CatalogProduct[]) => {
       const m = new Map<string, number>();
       for (const p of list) m.set(p.departmentId, (m.get(p.departmentId) ?? 0) + 1);
       return m;
     };
-    const all = count(data.products), shown = count(products);
+    const all = count(orderedProducts), shown = count(products);
     const walk = (id: string): [number, number] => {
       let a = all.get(id) ?? 0, b = shown.get(id) ?? 0;
       for (const c of kids.get(id) ?? []) { const [x, y] = walk(c); a += x; b += y; }
@@ -83,11 +103,11 @@ function DepartmentsPage() {
     };
     for (const r of kids.get(null) ?? []) walk(r);
     return hidden;
-  }, [data.departments, data.products, products, diets.length]);
+  }, [departments, orderedProducts, products, diets.length]);
   const { t } = useT();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
-  const { departments, move } = useDepartmentOrder(data.departments);
   const [currentId, setCurrentId] = useState<string | null>(null);
+  const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
@@ -97,6 +117,15 @@ function DepartmentsPage() {
     setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames });
 
   const current = departments.find((department) => department.id === currentId) ?? null;
+  useEffect(() => {
+    if (currentId && removedIds.has(currentId)) setCurrentId(null);
+  }, [currentId, removedIds]);
+  const confirmRemove = () => {
+    if (!removeTarget) return;
+    if (isCustomId(removeTarget.id)) deleteCustomEntry(removeTarget.id);
+    else hideDepartment(removeTarget.id);
+    setRemoveTarget(null);
+  };
   const breadcrumbs = pathTo(departments, currentId);
   const childDepartments = childrenOf(departments, currentId).filter((d) => !hiddenDepts.has(d.id));
   const directProducts = currentId ? productsOf(products, currentId) : [];
@@ -352,8 +381,8 @@ function DepartmentsPage() {
             {childDepartments.map((department) => {
               const t = drag?.target?.id === department.id ? drag.target.kind : null;
               return (
+              <div key={department.id} className="relative min-w-0">
               <Button
-                key={department.id}
                 type="button"
                 variant="ghost"
                 data-drop="tile"
@@ -366,7 +395,7 @@ function DepartmentsPage() {
                 onDragStart={(e) => e.preventDefault()}
                 onClick={() => { if (!suppressClick.current) openDepartment(department.id); }}
                 style={{ WebkitTouchCallout: "none" }}
-                className={`relative select-none ${drag?.id === department.id ? "opacity-40" : ""} ${t === "into" ? "ring-2 ring-primary" : ""} ${t === "before" ? "!border-l-4 !border-l-primary" : ""} ${t === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
+                className={`relative w-full select-none ${drag?.id === department.id ? "opacity-40" : ""} ${t === "into" ? "ring-2 ring-primary" : ""} ${t === "before" ? "!border-l-4 !border-l-primary" : ""} ${t === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
               >
                 <span className="grid aspect-[4/3] w-full place-items-center overflow-hidden bg-primary-soft/25">
                   <DepartmentThumb department={department} />
@@ -376,6 +405,10 @@ function DepartmentsPage() {
                   <span className="shrink-0 text-lg text-primary" aria-hidden="true">›</span>
                 </span>
               </Button>
+              <Button type="button" variant="ghost" size="icon" aria-label={t("dept.remove", { name: department.name })} title={t("dept.remove", { name: department.name })} onClick={() => setRemoveTarget(department)} className="absolute right-1 top-1 z-10 h-9 w-9 bg-card/90 text-muted-foreground hover:text-destructive">
+                <TrashIcon className="h-4 w-4" />
+              </Button>
+              </div>
               );
             })}
           </div>
@@ -505,6 +538,18 @@ function DepartmentsPage() {
       )}
 
       <RenameDialog target={renameTarget} onClose={() => setRenameTarget(null)} />
+      <AlertDialog open={!!removeTarget} onOpenChange={(open) => { if (!open) setRemoveTarget(null); }}>
+        <AlertDialogContent className="max-w-[calc(100%-2rem)] rounded-lg">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("dept.removeTitle", { name: removeTarget?.name ?? "" })}</AlertDialogTitle>
+            <AlertDialogDescription>{t(isCustomId(removeTarget?.id ?? "") ? "dept.deleteDescription" : "dept.hideDescription")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmRemove} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">{t("dept.removeConfirm")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <CatalogProductDialog
         product={selectedProduct}
         groupLabel={selectedProduct ? groupFor(selectedProduct)?.name : undefined}
