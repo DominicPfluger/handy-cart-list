@@ -3,3 +3,4 @@
 - [x] Namen für die unterstützten Sprachvarianten ergänzen und prüfen.
 - [x] Körperpflege zwischen Süsses und Haushalt einordnen.
 - [x] Apotheke & Drogerie als neue Abteilung ergänzen und lokalisieren.
+- [x] 23 gewünschte Lamm-Artikel und alle sieben vorgeschlagenen Ergänzungen einordnen, übersetzen und prüfen.
