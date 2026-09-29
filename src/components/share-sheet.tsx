@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { siWhatsapp, siTelegram, siSignal, siMessenger, siDiscord } from "simple-icons";
 import { getLocale, translate, useT } from "../i18n";
 
 export const SHARE_EVENT = "shoppi:share";
@@ -16,9 +17,26 @@ type Target = {
   id: string;
   label: string;
   bg: string;
-  letter: string;
+  iconPath?: string;
   run: (p: SharePayload) => Promise<void> | void;
 };
+
+function BrandIcon({ path }: { path: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden="true">
+      <path d={path} />
+    </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect width="20" height="16" x="2" y="4" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+  );
+}
 
 async function copy(text: string) {
   try {
@@ -42,14 +60,14 @@ const TARGETS: Target[] = [
     id: "whatsapp",
     label: "WhatsApp",
     bg: "#25D366",
-    letter: "W",
+    iconPath: siWhatsapp.path,
     run: (p) => void window.open(`https://wa.me/?text=${encodeURIComponent(p.text)}`, "_blank", "noopener"),
   },
   {
     id: "telegram",
     label: "Telegram",
-    bg: "#229ED9",
-    letter: "T",
+    bg: "#26A5E4",
+    iconPath: siTelegram.path,
     run: (p) =>
       void window.open(
         `https://t.me/share/url?url=${encodeURIComponent(" ")}&text=${encodeURIComponent(p.text)}`,
@@ -60,8 +78,8 @@ const TARGETS: Target[] = [
   {
     id: "signal",
     label: "Signal",
-    bg: "#3A76F0",
-    letter: "S",
+    bg: "#3B45FD",
+    iconPath: siSignal.path,
     run: async (p) => {
       if (navigator.share) {
         try {
@@ -77,8 +95,8 @@ const TARGETS: Target[] = [
   {
     id: "messenger",
     label: "Messenger",
-    bg: "#0084FF",
-    letter: "M",
+    bg: "#0866FF",
+    iconPath: siMessenger.path,
     run: (p) => {
       const mobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
       return copyAndOpen(p, mobile ? "fb-messenger://" : "https://www.messenger.com/", "Messenger");
@@ -88,14 +106,13 @@ const TARGETS: Target[] = [
     id: "discord",
     label: "Discord",
     bg: "#5865F2",
-    letter: "D",
+    iconPath: siDiscord.path,
     run: (p) => copyAndOpen(p, "https://discord.com/app", "Discord"),
   },
   {
     id: "email",
     label: "E-Mail",
     bg: "#263238",
-    letter: "@",
     run: (p) => {
       window.location.href = `mailto:?subject=${encodeURIComponent(p.title)}&body=${encodeURIComponent(p.text)}`;
     },
@@ -138,10 +155,10 @@ export function ShareSheet() {
               className="flex flex-col items-center gap-2 rounded-2xl p-2 hover:bg-muted"
             >
               <span
-                className="flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold text-primary-foreground"
+                className="flex h-12 w-12 items-center justify-center rounded-full text-primary-foreground"
                 style={{ backgroundColor: target.bg }}
               >
-                {target.letter}
+                {target.iconPath ? <BrandIcon path={target.iconPath} /> : <MailIcon />}
               </span>
               <span className="text-xs font-medium">{target.id === "email" ? t("share.email") : target.label}</span>
             </button>
