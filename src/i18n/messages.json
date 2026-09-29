@@ -223,7 +223,15 @@
     "unit.blister": "Blister pack",
     "unitS.blister": "blister",
     "unit.sixpack": "Six-pack",
-    "unitS.sixpack": "six-pack"
+    "unitS.sixpack": "six-pack",
+    "dept.remove": "Remove {name}",
+    "dept.removeTitle": "Remove “{name}”?",
+    "dept.hideDescription": "This category and its subcategories and products will be hidden only on this device. Shopping lists and favorites remain unchanged. Restore it under More.",
+    "dept.deleteDescription": "This personal category and its subcategories and products will be deleted only on this device. Shopping lists and favorites remain unchanged.",
+    "dept.removeConfirm": "Remove",
+    "more.hiddenCategories": "Hidden categories",
+    "more.hiddenCategoriesHint": "These categories are hidden only on this device.",
+    "more.restore": "Restore"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -449,7 +457,15 @@
     "unit.blister": "Blister pack",
     "unitS.blister": "blister",
     "unit.sixpack": "Six-pack",
-    "unitS.sixpack": "six-pack"
+    "unitS.sixpack": "six-pack",
+    "dept.remove": "Remove {name}",
+    "dept.removeTitle": "Remove “{name}”?",
+    "dept.hideDescription": "This category and its subcategories and products will be hidden only on this device. Shopping lists and favorites remain unchanged. Restore it under More.",
+    "dept.deleteDescription": "This personal category and its subcategories and products will be deleted only on this device. Shopping lists and favorites remain unchanged.",
+    "dept.removeConfirm": "Remove",
+    "more.hiddenCategories": "Hidden categories",
+    "more.hiddenCategoriesHint": "These categories are hidden only on this device.",
+    "more.restore": "Restore"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -675,7 +691,15 @@
     "unit.blister": "Blister pack",
     "unitS.blister": "blister",
     "unit.sixpack": "Six-pack",
-    "unitS.sixpack": "six-pack"
+    "unitS.sixpack": "six-pack",
+    "dept.remove": "Remove {name}",
+    "dept.removeTitle": "Remove “{name}”?",
+    "dept.hideDescription": "This category and its subcategories and products will be hidden only on this device. Shopping lists and favorites remain unchanged. Restore it under More.",
+    "dept.deleteDescription": "This personal category and its subcategories and products will be deleted only on this device. Shopping lists and favorites remain unchanged.",
+    "dept.removeConfirm": "Remove",
+    "more.hiddenCategories": "Hidden categories",
+    "more.hiddenCategoriesHint": "These categories are hidden only on this device.",
+    "more.restore": "Restore"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -901,7 +925,15 @@
     "unit.blister": "Blíster",
     "unitS.blister": "blíster",
     "unit.sixpack": "Pack de seis",
-    "unitS.sixpack": "six-pack"
+    "unitS.sixpack": "six-pack",
+    "dept.remove": "Quitar {name}",
+    "dept.removeTitle": "¿Quitar «{name}»?",
+    "dept.hideDescription": "Esta categoría, sus subcategorías y productos se ocultarán solo en este dispositivo. Las listas y favoritos permanecerán intactos. Puedes restaurarla en Más.",
+    "dept.deleteDescription": "Esta categoría personal, sus subcategorías y productos se eliminarán solo en este dispositivo. Las listas y favoritos permanecerán intactos.",
+    "dept.removeConfirm": "Quitar",
+    "more.hiddenCategories": "Categorías ocultas",
+    "more.hiddenCategoriesHint": "Estas categorías están ocultas solo en este dispositivo.",
+    "more.restore": "Restaurar"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -1127,7 +1159,15 @@
     "unit.blister": "Blíster",
     "unitS.blister": "blíster",
     "unit.sixpack": "Pack de seis",
-    "unitS.sixpack": "six-pack"
+    "unitS.sixpack": "six-pack",
+    "dept.remove": "Quitar {name}",
+    "dept.removeTitle": "¿Quitar «{name}»?",
+    "dept.hideDescription": "Esta categoría, sus subcategorías y productos se ocultarán solo en este dispositivo. Las listas y favoritos permanecerán intactos. Puedes restaurarla en Más.",
+    "dept.deleteDescription": "Esta categoría personal, sus subcategorías y productos se eliminarán solo en este dispositivo. Las listas y favoritos permanecerán intactos.",
+    "dept.removeConfirm": "Quitar",
+    "more.hiddenCategories": "Categorías ocultas",
+    "more.hiddenCategoriesHint": "Estas categorías están ocultas solo en este dispositivo.",
+    "more.restore": "Restaurar"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -1353,7 +1393,15 @@
     "unit.blister": "Blister",
     "unitS.blister": "blister",
     "unit.sixpack": "Pack de six",
-    "unitS.sixpack": "six-pack"
+    "unitS.sixpack": "six-pack",
+    "dept.remove": "Retirer {name}",
+    "dept.removeTitle": "Retirer « {name} » ?",
+    "dept.hideDescription": "Cette catégorie, ses sous-catégories et ses produits seront masqués uniquement sur cet appareil. Les listes et favoris restent inchangés. Restaurez-la dans Plus.",
+    "dept.deleteDescription": "Cette catégorie personnelle, ses sous-catégories et ses produits seront supprimés uniquement sur cet appareil. Les listes et favoris restent inchangés.",
+    "dept.removeConfirm": "Retirer",
+    "more.hiddenCategories": "Catégories masquées",
+    "more.hiddenCategoriesHint": "Ces catégories sont masquées uniquement sur cet appareil.",
+    "more.restore": "Restaurer"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -1579,7 +1627,15 @@
     "unit.blister": "Blister",
     "unitS.blister": "blister",
     "unit.sixpack": "Pack de six",
-    "unitS.sixpack": "six-pack"
+    "unitS.sixpack": "six-pack",
+    "dept.remove": "Retirer {name}",
+    "dept.removeTitle": "Retirer « {name} » ?",
+    "dept.hideDescription": "Cette catégorie, ses sous-catégories et ses produits seront masqués uniquement sur cet appareil. Les listes et favoris restent inchangés. Restaurez-la dans Plus.",
+    "dept.deleteDescription": "Cette catégorie personnelle, ses sous-catégories et ses produits seront supprimés uniquement sur cet appareil. Les listes et favoris restent inchangés.",
+    "dept.removeConfirm": "Retirer",
+    "more.hiddenCategories": "Catégories masquées",
+    "more.hiddenCategoriesHint": "Ces catégories sont masquées uniquement sur cet appareil.",
+    "more.restore": "Restaurer"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -1805,7 +1861,15 @@
     "unit.blister": "Blister",
     "unitS.blister": "blister",
     "unit.sixpack": "Sixpack",
-    "unitS.sixpack": "sixpack"
+    "unitS.sixpack": "sixpack",
+    "dept.remove": "Rimuovi {name}",
+    "dept.removeTitle": "Rimuovere «{name}»?",
+    "dept.hideDescription": "Questa categoria, le sottocategorie e i prodotti verranno nascosti solo su questo dispositivo. Liste e preferiti restano invariati. Puoi ripristinarla in Altro.",
+    "dept.deleteDescription": "Questa categoria personale, le sottocategorie e i prodotti verranno eliminati solo su questo dispositivo. Liste e preferiti restano invariati.",
+    "dept.removeConfirm": "Rimuovi",
+    "more.hiddenCategories": "Categorie nascoste",
+    "more.hiddenCategoriesHint": "Queste categorie sono nascoste solo su questo dispositivo.",
+    "more.restore": "Ripristina"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -2031,7 +2095,15 @@
     "unit.blister": "Blister",
     "unitS.blister": "blister",
     "unit.sixpack": "Sixpack",
-    "unitS.sixpack": "sixpack"
+    "unitS.sixpack": "sixpack",
+    "dept.remove": "Rimuovi {name}",
+    "dept.removeTitle": "Rimuovere «{name}»?",
+    "dept.hideDescription": "Questa categoria, le sottocategorie e i prodotti verranno nascosti solo su questo dispositivo. Liste e preferiti restano invariati. Puoi ripristinarla in Altro.",
+    "dept.deleteDescription": "Questa categoria personale, le sottocategorie e i prodotti verranno eliminati solo su questo dispositivo. Liste e preferiti restano invariati.",
+    "dept.removeConfirm": "Rimuovi",
+    "more.hiddenCategories": "Categorie nascoste",
+    "more.hiddenCategoriesHint": "Queste categorie sono nascoste solo su questo dispositivo.",
+    "more.restore": "Ripristina"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -2257,7 +2329,15 @@
     "unit.blister": "Blister",
     "unitS.blister": "blister",
     "unit.sixpack": "Pack de seis",
-    "unitS.sixpack": "six-pack"
+    "unitS.sixpack": "six-pack",
+    "dept.remove": "Remover {name}",
+    "dept.removeTitle": "Remover «{name}»?",
+    "dept.hideDescription": "Esta categoria, as subcategorias e os produtos serão ocultados apenas neste dispositivo. Listas e favoritos não mudam. Pode restaurá-la em Mais.",
+    "dept.deleteDescription": "Esta categoria pessoal, as subcategorias e os produtos serão eliminados apenas neste dispositivo. Listas e favoritos não mudam.",
+    "dept.removeConfirm": "Remover",
+    "more.hiddenCategories": "Categorias ocultas",
+    "more.hiddenCategoriesHint": "Estas categorias estão ocultas apenas neste dispositivo.",
+    "more.restore": "Restaurar"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -2483,7 +2563,15 @@
     "unit.blister": "Blister",
     "unitS.blister": "blister",
     "unit.sixpack": "Pack de seis",
-    "unitS.sixpack": "six-pack"
+    "unitS.sixpack": "six-pack",
+    "dept.remove": "Remover {name}",
+    "dept.removeTitle": "Remover «{name}»?",
+    "dept.hideDescription": "Esta categoria, as subcategorias e os produtos serão ocultados apenas neste dispositivo. Listas e favoritos não mudam. Pode restaurá-la em Mais.",
+    "dept.deleteDescription": "Esta categoria pessoal, as subcategorias e os produtos serão eliminados apenas neste dispositivo. Listas e favoritos não mudam.",
+    "dept.removeConfirm": "Remover",
+    "more.hiddenCategories": "Categorias ocultas",
+    "more.hiddenCategoriesHint": "Estas categorias estão ocultas apenas neste dispositivo.",
+    "more.restore": "Restaurar"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -2709,7 +2797,15 @@
     "unit.blister": "Blister",
     "unitS.blister": "blister",
     "unit.sixpack": "Sixpack",
-    "unitS.sixpack": "sixpack"
+    "unitS.sixpack": "sixpack",
+    "dept.remove": "{name} verwijderen",
+    "dept.removeTitle": "„{name}” verwijderen?",
+    "dept.hideDescription": "Deze categorie met subcategorieën en producten wordt alleen op dit toestel verborgen. Lijsten en favorieten blijven behouden. Herstel ze via Meer.",
+    "dept.deleteDescription": "Deze eigen categorie met subcategorieën en producten wordt alleen op dit toestel verwijderd. Lijsten en favorieten blijven behouden.",
+    "dept.removeConfirm": "Verwijderen",
+    "more.hiddenCategories": "Verborgen categorieën",
+    "more.hiddenCategoriesHint": "Deze categorieën zijn alleen op dit toestel verborgen.",
+    "more.restore": "Herstellen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -2935,6 +3031,14 @@
     "unit.blister": "Blister",
     "unitS.blister": "blister",
     "unit.sixpack": "Sixpack",
-    "unitS.sixpack": "sixpack"
+    "unitS.sixpack": "sixpack",
+    "dept.remove": "{name} verwijderen",
+    "dept.removeTitle": "„{name}” verwijderen?",
+    "dept.hideDescription": "Deze categorie met subcategorieën en producten wordt alleen op dit toestel verborgen. Lijsten en favorieten blijven behouden. Herstel ze via Meer.",
+    "dept.deleteDescription": "Deze eigen categorie met subcategorieën en producten wordt alleen op dit toestel verwijderd. Lijsten en favorieten blijven behouden.",
+    "dept.removeConfirm": "Verwijderen",
+    "more.hiddenCategories": "Verborgen categorieën",
+    "more.hiddenCategoriesHint": "Deze categorieën zijn alleen op dit toestel verborgen.",
+    "more.restore": "Herstellen"
   }
 }

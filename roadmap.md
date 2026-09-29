@@ -5,3 +5,4 @@
 - [x] Apotheke & Drogerie als neue Abteilung ergänzen und lokalisieren.
 - [x] 23 gewünschte Lamm-Artikel und alle sieben vorgeschlagenen Ergänzungen einordnen, übersetzen und prüfen.
 - [x] Wild nach Geflügel einordnen; Reh (8), Wildschwein (7) und Hirsch (15) samt Übersetzungen ergänzen und in der App prüfen.
+- [x] Kategorien in der Abteilungsansicht lokal entfernen, bestätigen und unter Mehr wiederherstellen; mobil prüfen.
