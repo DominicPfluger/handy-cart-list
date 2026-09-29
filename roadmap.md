@@ -1,0 +1,3 @@
+- [ ] Backzutaten-Unterkategorie mit 13 Artikeln ergänzen und prüfen.
+- [ ] Drei Büroartikel-Unterkategorien mit 21 Artikeln ergänzen; Paketklebeband verschieben und prüfen.
+- [ ] Namen für die unterstützten Sprachvarianten ergänzen und prüfen.
