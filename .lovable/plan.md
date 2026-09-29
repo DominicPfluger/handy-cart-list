@@ -1,10 +1,10 @@
-# Lamm-Katalog ergänzen
+# Wild im Fleischkatalog ergänzen
 
-- Die 23 genannten Lamm-Artikel in der bestehenden Kategorie **Lamm** anlegen, ohne Dubletten. Ähnliche Stücke zusammen und häufig gekaufte Artikel zuerst anordnen; die Grafik dient als Textreferenz, nicht als Kategoriebild.
-- Passende Standardmengen und Ernährungsform-Einordnung vergeben und die Namen für die unterstützten Sprachvarianten ergänzen, mit schweizerischer Schreibweise für de-CH.
-- Anschliessend die Kategorie und ihre Reihenfolge in der App prüfen.
-- Weitere sinnvolle Artikel **nur vorschlagen**, nicht ungefragt hinzufügen: Lammschnitzel, Lammrücken, Lammrückenfilet, Lammsattel, Lammherz, Lammzunge und Lammknochen.
+- Unter **Fleisch & Fisch** eine Kategorie **Wild** direkt nach **Geflügel** anlegen. **Fisch** und **Meeresfrüchte** bleiben danach in ihrer bisherigen relativen Reihenfolge.
+- Darin die Unterkategorien **Reh**, **Wildschwein** und **Hirsch** mit den 8, 7 und 15 genannten Artikeln anlegen. „Wildschweinruecken“ wird als **Wildschweinrücken** angezeigt.
+- Innerhalb jeder Unterkategorie die Artikel übersichtlich nach Ähnlichkeit ordnen, passende Standardmengen und Ernährungsform-Einordnungen vergeben und alle neuen Namen für die unterstützten Sprachvarianten ergänzen.
+- Anschliessend die Reihenfolge und die vollständigen Artikelbestände in der Abteilungsansicht prüfen.
 
 ## Technische Umsetzung
 
-Die Kategorie **Lamm** besteht bereits unter **Fleisch & Fisch** und enthält derzeit keine Produkte. Die neuen Katalogdaten werden in den vorhandenen Produkt- und Übersetzungseinträgen ergänzt; eine Änderung am App-Code oder an der Datenbankstruktur ist nicht nötig.
+Der vorhandene Katalog nutzt hierarchische Abteilungen mit `parent_id` und `sort_order`, Produkte mit `department_id` sowie separate Katalogübersetzungen. **Geflügel** steht aktuell an Position 8 unter **Fleisch & Fisch**; **Wild** wird an Position 9 eingefügt und die nachfolgenden Kategorien werden eindeutig einsortiert. Die Änderung betrifft Katalogdaten, nicht die Datenbankstruktur oder App-Oberfläche; bereits vorhandene gleichnamige Artikel werden vor dem Anlegen geprüft, damit keine Dubletten entstehen.
