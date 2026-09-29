@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { siWhatsapp, siTelegram, siSignal, siMessenger, siDiscord } from "simple-icons";
 import { getLocale, translate, useT } from "../i18n";
 
 export const SHARE_EVENT = "shoppi:share";
@@ -16,9 +17,26 @@ type Target = {
   id: string;
   label: string;
   bg: string;
-  letter: string;
+  iconPath?: string;
   run: (p: SharePayload) => Promise<void> | void;
 };
+
+function BrandIcon({ path }: { path: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden="true">
+      <path d={path} />
+    </svg>
+  );
+}
+
+function MailIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect width="20" height="16" x="2" y="4" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+  );
+}
 
 async function copy(text: string) {
   try {
