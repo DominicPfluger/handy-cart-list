@@ -60,14 +60,14 @@ const TARGETS: Target[] = [
     id: "whatsapp",
     label: "WhatsApp",
     bg: "#25D366",
-    letter: "W",
+    iconPath: siWhatsapp.path,
     run: (p) => void window.open(`https://wa.me/?text=${encodeURIComponent(p.text)}`, "_blank", "noopener"),
   },
   {
     id: "telegram",
     label: "Telegram",
-    bg: "#229ED9",
-    letter: "T",
+    bg: "#26A5E4",
+    iconPath: siTelegram.path,
     run: (p) =>
       void window.open(
         `https://t.me/share/url?url=${encodeURIComponent(" ")}&text=${encodeURIComponent(p.text)}`,
@@ -78,8 +78,8 @@ const TARGETS: Target[] = [
   {
     id: "signal",
     label: "Signal",
-    bg: "#3A76F0",
-    letter: "S",
+    bg: "#3B45FD",
+    iconPath: siSignal.path,
     run: async (p) => {
       if (navigator.share) {
         try {
@@ -95,8 +95,8 @@ const TARGETS: Target[] = [
   {
     id: "messenger",
     label: "Messenger",
-    bg: "#0084FF",
-    letter: "M",
+    bg: "#0866FF",
+    iconPath: siMessenger.path,
     run: (p) => {
       const mobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
       return copyAndOpen(p, mobile ? "fb-messenger://" : "https://www.messenger.com/", "Messenger");
@@ -106,14 +106,13 @@ const TARGETS: Target[] = [
     id: "discord",
     label: "Discord",
     bg: "#5865F2",
-    letter: "D",
+    iconPath: siDiscord.path,
     run: (p) => copyAndOpen(p, "https://discord.com/app", "Discord"),
   },
   {
     id: "email",
     label: "E-Mail",
     bg: "#263238",
-    letter: "@",
     run: (p) => {
       window.location.href = `mailto:?subject=${encodeURIComponent(p.title)}&body=${encodeURIComponent(p.text)}`;
     },
