@@ -12,10 +12,11 @@ import {
 import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState } from "react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
-import { useCatalog } from "../lib/catalog-query";
+import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 
 export const Route = createFileRoute("/mehr")({
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
   head: () => ({
     meta: [
       { title: "Shoppi — Mehr" },
