@@ -379,7 +379,7 @@ function DepartmentsPage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             {childDepartments.map((department) => {
-              const t = drag?.target?.id === department.id ? drag.target.kind : null;
+              const dropKind = drag?.target?.id === department.id ? drag.target.kind : null;
               return (
               <div key={department.id} className="relative min-w-0">
               <Button
@@ -395,7 +395,7 @@ function DepartmentsPage() {
                 onDragStart={(e) => e.preventDefault()}
                 onClick={() => { if (!suppressClick.current) openDepartment(department.id); }}
                 style={{ WebkitTouchCallout: "none" }}
-                className={`relative w-full select-none ${drag?.id === department.id ? "opacity-40" : ""} ${t === "into" ? "ring-2 ring-primary" : ""} ${t === "before" ? "!border-l-4 !border-l-primary" : ""} ${t === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
+                className={`relative w-full select-none ${drag?.id === department.id ? "opacity-40" : ""} ${dropKind === "into" ? "ring-2 ring-primary" : ""} ${dropKind === "before" ? "!border-l-4 !border-l-primary" : ""} ${dropKind === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
               >
                 <span className="grid aspect-[4/3] w-full place-items-center overflow-hidden bg-primary-soft/25">
                   <DepartmentThumb department={department} />
