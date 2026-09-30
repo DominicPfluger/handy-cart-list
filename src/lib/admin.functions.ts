@@ -84,8 +84,8 @@ export const saveHeading = createServerFn({ method: "POST" })
     const sb = context.supabase;
     let id = data.id;
     if (id) {
-      const patch: Record<string, string> = { department_id: data.departmentId, before_product_id: data.beforeProductId };
-      if (data.name) patch["name"] = data.name;
+      const patch: { department_id: string; before_product_id: string; name?: string } = { department_id: data.departmentId, before_product_id: data.beforeProductId };
+      if (data.name) patch.name = data.name;
       const { error } = await sb.from("product_headings").update(patch).eq("id", id);
       if (error) throw new Error(error.message);
     } else {
