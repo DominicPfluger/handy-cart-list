@@ -110,11 +110,19 @@ function AdminPage() {
   };
 
   const reorder = (kind: "department" | "product", list: { id: string }[], from: number, to: number) => {
-    if (from === to || from < 0 || from >= list.length) return;
+    if (from < 0 || from >= list.length) return;
     const next = [...list];
     const [item] = next.splice(from, 1);
-    next.splice(Math.max(0, Math.min(to, next.length)), 0, item!);
+    const at = Math.max(0, Math.min(to > from ? to - 1 : to, next.length));
+    if (at === from) return;
+    next.splice(at, 0, item!);
     run(() => Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), "Reihenfolge gespeichert");
+  };
+
+  /** Zielindex beim Ablegen auf einer Zeile: obere Hälfte = davor, untere Hälfte = danach. */
+  const dropIndex = (e: React.DragEvent, i: number) => {
+    const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    return e.clientY > r.top + r.height / 2 ? i + 1 : i;
   };
 
   const [drag, setDrag] = useState<{ kind: "department" | "product" | "heading"; index: number; id?: string } | null>(null);
