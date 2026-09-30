@@ -23,6 +23,7 @@ import {
   matchesProductSearch,
   originalName,
   pathTo,
+  headingByProduct,
   productsOf,
   type CatalogDepartment,
   type CatalogProduct,
@@ -30,6 +31,11 @@ import {
 import { formatQuantity } from "../lib/units";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
+import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
+import { useIsAdmin } from "../hooks/use-is-admin";
+import { useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { saveHeading } from "../lib/admin.functions";
 
 
 export const Route = createFileRoute("/abteilungen")({
@@ -115,6 +121,11 @@ function DepartmentsPage() {
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
   const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
+  const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
+  const isAdmin = useIsAdmin();
+  const queryClient = useQueryClient();
+  const saveHeadingFn = useServerFn(saveHeading);
+  const headingOf = useMemo(() => headingByProduct(data.products, data.headings), [data.products, data.headings]);
   const customNames = useCustomNames();
   const openRename = (e: CatalogDepartment | CatalogProduct, kind: "product" | "department") =>
     setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames, kind });
@@ -147,23 +158,23 @@ function DepartmentsPage() {
 
   // ---- Drag & Drop für Kategorien und Artikel (langes Drücken) ----
   type DropTarget = { kind: "before" | "after" | "into"; id: string | null };
-  type DragState = { what: "dept" | "product"; id: string; name: string; x: number; y: number; target: DropTarget | null };
+  type DragState = { what: "dept" | "product" | "heading"; id: string; name: string; x: number; y: number; target: DropTarget | null };
   const [drag, setDrag] = useState<DragState | null>(null);
   const pressRef = useRef<{ timer: number; x: number; y: number } | null>(null);
   const suppressClick = useRef(false);
   const dragRef = useRef(drag);
   dragRef.current = drag;
 
-  const findTarget = (x: number, y: number, dragged: { what: "dept" | "product"; id: string }): DropTarget | null => {
+  const findTarget = (x: number, y: number, dragged: { what: "dept" | "product" | "heading"; id: string }): DropTarget | null => {
     const el = document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-drop]");
     if (!el) return null;
     const id = el.dataset["id"] || null;
     const drop = el.dataset["drop"];
-    if (drop === "crumb") return { kind: "into", id };
+    if (drop === "crumb") return dragged.what === "heading" ? null : { kind: "into", id };
     if (id === dragged.id) return null;
     const r = el.getBoundingClientRect();
     if (drop === "product") {
-      if (dragged.what !== "product") return null;
+      if (dragged.what === "dept") return null;
       const fy = (y - r.top) / r.height;
       return { kind: fy < 0.5 ? "before" : "after", id };
     }
@@ -176,7 +187,7 @@ function DepartmentsPage() {
     pressRef.current = null;
   };
 
-  const startPress = (event: React.PointerEvent, entry: { id: string; name: string }, what: "dept" | "product" = "dept") => {
+  const startPress = (event: React.PointerEvent, entry: { id: string; name: string }, what: "dept" | "product" | "heading" = "dept") => {
     if (event.button !== 0) return;
     const { clientX: x, clientY: y } = event;
     cancelPress();
@@ -209,6 +220,18 @@ function DepartmentsPage() {
       window.setTimeout(() => (suppressClick.current = false), 50);
       if (!d?.target) return;
       const { kind, id } = d.target;
+      if (d.what === "heading") {
+        const heading = data.headings.find((h) => h.id === d.id);
+        if (!heading || !id) return;
+        const list = productsOf(products, heading.departmentId);
+        const i = list.findIndex((p) => p.id === id);
+        const anchor = kind === "after" ? list[i + 1] ?? list[i] : list[i];
+        if (!anchor || anchor.id === heading.beforeProductId) return;
+        void saveHeadingFn({ data: { id: heading.id, departmentId: heading.departmentId, beforeProductId: anchor.id } })
+          .then(() => queryClient.invalidateQueries({ queryKey: ["catalog"] }))
+          .catch((e) => toast.error(String(e?.message ?? e)));
+        return;
+      }
       if (d.what === "product") {
         if (kind === "into") {
           if (!id) return;
@@ -252,7 +275,7 @@ function DepartmentsPage() {
       window.removeEventListener("pointercancel", onUp);
       window.removeEventListener("touchmove", block);
     };
-  }, [drag?.id, departments, products, move, moveProduct, t]);
+  }, [drag?.id, departments, products, move, moveProduct, t, data.headings, saveHeadingFn, queryClient]);
 
   const openDepartment = (id: string | null) => {
     setCurrentId(id);
@@ -437,14 +460,29 @@ function DepartmentsPage() {
             <h2 className="text-base font-semibold text-foreground">{normalizedQuery ? t("common.searchResults") : t("dept.products")}</h2>
           </div>
           <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
-            {shownProducts.map((product) => {
+            {shownProducts.map((product, index) => {
+              const heading = !normalizedQuery ? headingOf.get(product.id) : undefined;
+              const showHeading = heading && headingOf.get(shownProducts[index - 1]?.id ?? "") !== heading;
               const group = groupFor(product);
               const favorite = isFavorite(product.id);
               const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
               const draggable = !normalizedQuery;
               return (
+                <div key={product.id} className="contents">
+                {showHeading && heading && (
+                  <div
+                    onPointerDown={isAdmin ? (e) => startPress(e, heading, "heading") : undefined}
+                    onPointerMove={isAdmin ? pressMove : undefined}
+                    onPointerUp={isAdmin ? cancelPress : undefined}
+                    onPointerLeave={isAdmin ? cancelPress : undefined}
+                    onContextMenu={isAdmin ? (e) => e.preventDefault() : undefined}
+                    onClick={() => { if (isAdmin && !suppressClick.current) setHeadingTarget({ departmentId: heading.departmentId, products: directProducts, heading }); }}
+                    className={`select-none bg-muted/50 px-3 pb-1.5 pt-3 text-sm font-bold text-foreground ${isAdmin ? "cursor-pointer" : ""} ${drag?.what === "heading" && drag.id === heading.id ? "opacity-40" : ""}`}
+                  >
+                    {heading.name}
+                  </div>
+                )}
                 <div
-                  key={product.id}
                   data-drop={draggable ? "product" : undefined}
                   data-id={product.id}
                   onPointerDown={draggable ? (e) => startPress(e, product, "product") : undefined}
@@ -508,6 +546,7 @@ function DepartmentsPage() {
                   </Button>
                   </div>
                 </div>
+                </div>
               );
             })}
           </div>
@@ -516,9 +555,15 @@ function DepartmentsPage() {
               <PlusIcon className="h-4 w-4" /> {t("add.product")}
             </Button>
           )}
+          {!normalizedQuery && currentId && isAdmin && directProducts.length > 0 && (
+            <Button type="button" variant="outline" onClick={() => setHeadingTarget({ departmentId: currentId, products: directProducts })} className="mt-2 w-full rounded-xl font-bold">
+              <PlusIcon className="h-4 w-4" /> {t("heading.add")}
+            </Button>
+          )}
         </section>
       )}
       <AddEntryDialog target={addTarget} onClose={() => setAddTarget(null)} />
+      <HeadingDialog target={headingTarget} onClose={() => setHeadingTarget(null)} />
 
       <button className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
         <ScanIcon className="h-5 w-5" />
