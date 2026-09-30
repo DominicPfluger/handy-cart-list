@@ -324,9 +324,21 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
   );
 }
 
-function Row(p: { emoji: string; name: string; sub: string; active: boolean; disabled: boolean; onOpen?: () => void; onEdit: () => void; onUp: () => void; onDown: () => void }) {
+function Row(p: {
+  emoji: string; name: string; sub: string; active: boolean; disabled: boolean;
+  onOpen?: () => void; onEdit: () => void; onUp: () => void; onDown: () => void;
+  dragging?: boolean; onDragStart?: () => void; onDragOver?: (e: React.DragEvent) => void; onDrop?: () => void; onDragEnd?: () => void;
+}) {
   return (
-    <div className={`flex items-center gap-2 rounded-lg border px-2 py-1.5 ${p.active ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}>
+    <div
+      draggable={Boolean(p.onDragStart)}
+      onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; p.onDragStart?.(); }}
+      onDragOver={p.onDragOver}
+      onDrop={(e) => { e.preventDefault(); p.onDrop?.(); }}
+      onDragEnd={p.onDragEnd}
+      className={`flex items-center gap-2 rounded-lg border px-2 py-1.5 ${p.dragging ? "opacity-40" : ""} ${p.active ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}
+    >
+      {p.onDragStart && <span className="cursor-grab touch-none select-none text-muted-foreground" aria-label="Ziehen">⠿</span>}
       <button className="flex min-w-0 flex-1 items-center gap-2 text-left" onClick={p.onOpen ?? p.onEdit}>
         <span className="text-lg">{p.emoji}</span>
         <span className="min-w-0">
