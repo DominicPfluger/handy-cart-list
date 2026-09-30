@@ -10,6 +10,7 @@ import { useProductOrder } from "../hooks/use-product-order";
 import {
   catalogQueryOptions,
   useCatalog,
+  headingByProduct,
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import { getLocale } from "../i18n";
