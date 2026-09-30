@@ -24,7 +24,7 @@ function shuffle<T>(a: T[]) {
 export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: string | null) => void } = {}) {
   const { t } = useT();
   const catalog = useCatalog();
-  const { addCatalogItem } = useShoppingList();
+  const { addCatalogItem, favorites } = useShoppingList();
   const [tplId, setTplIdRaw] = useState<RecipeTemplate["id"] | null>(null);
   const setTplId = (id: RecipeTemplate["id"] | null) => { setTplIdRaw(id); onTemplateChange?.(id); };
   const [picks, setPicks] = useState<Picks>({});
@@ -33,6 +33,9 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const [savedMsg, setSavedMsg] = useState(false);
   const [newName, setNewName] = useState("");
   const collections = useRecipeCollections();
+  const [onlyFav, setOnlyFav] = useState(false);
+
+  const favIds = useMemo(() => new Set(favorites.map((f) => f.productId)), [favorites]);
 
   const byBase = useMemo(() => {
     const m = new Map<string, CatalogProduct>();
