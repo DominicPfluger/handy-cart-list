@@ -5,6 +5,7 @@ import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { RECIPE_TEMPLATES, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { formatQuantity } from "../lib/units";
+import { ProductEmoji } from "./product-emoji";
 import {
   createCollection, deleteCollection, deleteRecipe, saveRecipe, useRecipeCollections,
 } from "../hooks/use-saved-recipes";
@@ -230,7 +231,7 @@ export function RecipeBuilder() {
                       on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
                     }`}
                   >
-                    {p.emoji ? `${p.emoji} ` : ""}{p.name}
+                    {p.emoji ? <ProductEmoji emoji={p.emoji} className="mr-1" /> : null}{p.name}
                   </button>
                 );
               })}
