@@ -248,7 +248,7 @@ function AdminPage() {
           )}
 
           {bulk && (
-            <BulkAddForm onCancel={() => setBulk(null as unknown as boolean) || setBulk(false)}
+            <BulkAddForm onCancel={() => setBulk(false)}
               onSubmit={(names, emoji, qty, unit) => run(async () => {
                 const rows = names.map((name, i) => ({ department_id: cur!, name, emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: products.length + i + 1 }));
                 const r = await supabase.from("products").insert(rows).select("id");
@@ -448,6 +448,39 @@ function AddForm({ kind, products, onSubmit, onCancel }: { kind: Kind; products:
       )}
       <div className="flex gap-2">
         <Button className="flex-1" disabled={!name.trim()} onClick={() => onSubmit({ name: name.trim(), emoji, qty: Number(qty.replace(",", ".")) || 1, unit, before })}>Anlegen & übersetzen</Button>
+        <Button variant="ghost" onClick={onCancel}>Abbrechen</Button>
+      </div>
+    </div>
+  );
+}
+
+function BulkAddForm({ onSubmit, onCancel }: { onSubmit: (names: string[], emoji: string, qty: number, unit: string) => void; onCancel: () => void }) {
+  const [text, setText] = useState("");
+  const [emoji, setEmoji] = useState("");
+  const [qty, setQty] = useState("1");
+  const [unit, setUnit] = useState("stueck");
+  const names = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  return (
+    <div className="space-y-2 rounded-xl border border-dashed border-primary/50 p-3">
+      <p className="text-sm font-semibold text-primary">Mehrere Produkte — ein Name pro Zeile</p>
+      <textarea
+        autoFocus
+        rows={8}
+        placeholder={"Zuckerstreusel\nZuckerperlen\nZuckerschrift\n…"}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
+      />
+      <div className="grid grid-cols-[4rem_1fr_1fr] gap-2">
+        <Input placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} />
+        <Input inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} />
+        <UnitSelect value={unit} onChange={setUnit} />
+      </div>
+      <p className="text-xs text-muted-foreground">{names.length} Einträge erkannt — Menge, Einheit und Emoji gelten für alle.</p>
+      <div className="flex gap-2">
+        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit)}>
+          {names.length} Produkte anlegen & übersetzen
+        </Button>
         <Button variant="ghost" onClick={onCancel}>Abbrechen</Button>
       </div>
     </div>
