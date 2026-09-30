@@ -18,7 +18,6 @@ import {
   catalogQueryOptions,
   useCatalog,
   childrenOf,
-  compareByName,
   matchesProductSearch,
   originalName,
   pathTo,
@@ -135,7 +134,7 @@ function DepartmentsPage() {
     () => normalizedQuery
       ? products
           .filter((product) => matchesProductSearch(product.name, normalizedQuery))
-          .sort(compareByName)
+          .sort((a, b) => a.sortOrder - b.sortOrder)
       : [],
     [products, normalizedQuery],
   );
@@ -283,10 +282,7 @@ function DepartmentsPage() {
     toast.success(t("common.addedToList", { name: product.name }));
   };
 
-  const shownProducts = useMemo(
-    () => (normalizedQuery ? searchResults : [...directProducts].sort(compareByName)),
-    [normalizedQuery, searchResults, directProducts],
-  );
+  const shownProducts = normalizedQuery ? searchResults : directProducts;
 
   return (
     <div className="space-y-5">
