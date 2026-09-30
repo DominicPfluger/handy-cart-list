@@ -273,6 +273,18 @@ function ListPage() {
 
       <div className="space-y-6">
         {grouped.map((group) => {
+          // Offene Einträge alphabetisch mit fetten Buchstaben-Gruppen (A, B, C …)
+          const open = group.items
+            .filter((i) => !i.checked)
+            .sort((a, b) => displayName(a).localeCompare(displayName(b), getLocale()));
+          const checkedItems = group.items.filter((i) => i.checked);
+          const lettered: { letter: string; items: ListItem[] }[] = [];
+          for (const it of open) {
+            const letter = letterOf(displayName(it));
+            const last = lettered[lettered.length - 1];
+            if (last && last.letter === letter) last.items.push(it);
+            else lettered.push({ letter, items: [it] });
+          }
           return (
             <div key={group.key}>
               <div className="mb-2 flex items-center gap-2">
@@ -280,48 +292,20 @@ function ListPage() {
                 <h2 className="text-sm font-semibold text-foreground">{group.label}</h2>
                 <span className="text-xs text-muted-foreground">· {group.items.length}</span>
               </div>
-              <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-                {group.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="relative flex items-center gap-3 py-3 pl-4 pr-4"
-                  >
-                    <button
-                      onClick={() => toggleItem(item.id)}
-                      className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
-                        item.checked
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "border-muted-foreground/30 bg-transparent"
-                      }`}
-                      aria-label={item.checked ? t("list.uncheck") : t("list.check")}
-                    >
-                      {item.checked && <CheckIcon className="h-4 w-4" />}
-                    </button>
-                    <div className="grid h-10 w-10 shrink-0 select-none place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl">
-                      <ProductEmoji emoji={item.emoji} />
+              <div className="rounded-2xl border border-border bg-card">
+                {lettered.map((letterGroup) => (
+                  <div key={`${letterGroup.letter}-${letterGroup.items[0]?.id ?? ""}`}>
+                    <div className="px-4 pb-1 pt-3 text-sm font-bold text-primary">{letterGroup.letter}</div>
+                    <div className="divide-y divide-border">
+                      {letterGroup.items.map(renderItem)}
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <p className={`break-words text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
-                        {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
-                      </p>
-                      <p className="break-words text-xs text-muted-foreground">
-                        {item.quantity ? relocalizeQuantity(item.quantity, item.unit) : "—"} · {t("list.by", { name: item.addedBy })}
-                      </p>
-                      {item.note && (
-                        <p className="break-words text-xs italic text-muted-foreground/80">
-                          📝 {item.note}
-                        </p>
-                      )}
-                    </div>
-                    <button
-                      onClick={() => removeItem(item.id)}
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-coral transition active:scale-90"
-                      aria-label={t("list.remove")}
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                    </button>
                   </div>
                 ))}
+                {checkedItems.length > 0 && (
+                  <div className="divide-y divide-border">
+                    {checkedItems.map(renderItem)}
+                  </div>
+                )}
               </div>
             </div>
           );
