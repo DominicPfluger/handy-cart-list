@@ -195,7 +195,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     <section className="space-y-2">
       <h2 className="text-lg font-bold text-foreground">🆕 {t("rk.recent")}</h2>
       {recent.length === 0 && <p className="text-sm text-muted-foreground">{t("rk.emptyCollection")}</p>}
-      {recent.map((r) => {
+      {recentShown.map((r) => {
         const rt = RECIPE_TEMPLATES.find((x) => x.id === r.templateId);
         return (
           <Button
