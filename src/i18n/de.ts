@@ -256,6 +256,9 @@ export const de = {
   "rk.open": "Öffnen",
   "rk.cancel": "Abbrechen",
   "rk.deleteList": "Liste löschen",
+  "rk.recent": "Neu erstellte Rezepte",
+  "rk.popular": "Beliebte Rezepte",
+  "rk.ingredientsN": "{n} Zutaten",
 } as const;
 
 export type MessageKey = keyof typeof de;

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
-import { RECIPE_TEMPLATES, type RecipeTemplate } from "../lib/recipe-templates";
+import { POPULAR_RECIPES, RECIPE_TEMPLATES, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { formatQuantity } from "../lib/units";
 import { ProductEmoji } from "./product-emoji";
@@ -21,11 +21,12 @@ function shuffle<T>(a: T[]) {
   return r;
 }
 
-export function RecipeBuilder() {
+export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: string | null) => void } = {}) {
   const { t } = useT();
   const catalog = useCatalog();
   const { addCatalogItem } = useShoppingList();
-  const [tplId, setTplId] = useState<RecipeTemplate["id"] | null>(null);
+  const [tplId, setTplIdRaw] = useState<RecipeTemplate["id"] | null>(null);
+  const setTplId = (id: RecipeTemplate["id"] | null) => { setTplIdRaw(id); onTemplateChange?.(id); };
   const [picks, setPicks] = useState<Picks>({});
   const [added, setAdded] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
@@ -48,6 +49,34 @@ export function RecipeBuilder() {
     })),
     [tpl, byBase],
   );
+
+  const popular = useMemo(() => {
+    if (!tpl) return [];
+    return POPULAR_RECIPES[tpl.id].map((combo, i) => {
+      const p: Picks = {};
+      const items: CatalogProduct[] = [];
+      for (const [k, names] of Object.entries(combo)) {
+        const ps = names.map((n) => byBase.get(n)).filter((x): x is CatalogProduct => !!x);
+        p[k] = ps.map((x) => x.id);
+        items.push(...ps);
+      }
+      return { key: `${tpl.id}-${i}`, picks: p, items };
+    }).filter((r) => r.items.length > 0);
+  }, [tpl, byBase]);
+
+  const recent = useMemo(
+    () => collections
+      .flatMap((c) => c.recipes.map((r) => ({ ...r, collectionId: c.id })))
+      .filter((r) => !tpl || r.templateId === tpl.id)
+      .sort((a, b) => b.savedAt - a.savedAt)
+      .slice(0, 5),
+    [collections, tpl],
+  );
+
+  const openRecipe = (id: RecipeTemplate["id"], p: Picks) => {
+    setTplId(id); setPicks(p); setAdded(false); setSavedMsg(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const toggle = (stepKey: string, id: string, max: number) => {
     setAdded(false);
@@ -130,10 +159,55 @@ export function RecipeBuilder() {
     </div>
   );
 
-  const collectionsView = collections.length > 0 && (
+  const recentView = recent.length > 0 && (
+    <section className="space-y-2">
+      <h2 className="text-lg font-bold text-foreground">🆕 {t("rk.recent")}</h2>
+      {recent.map((r) => {
+        const rt = RECIPE_TEMPLATES.find((x) => x.id === r.templateId);
+        return (
+          <button
+            key={r.id}
+            onClick={() => rt && openRecipe(rt.id, r.picks)}
+            className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left transition active:scale-[0.99]"
+          >
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-xl" style={{ background: rt?.color }}>{rt?.emoji ?? "🍽️"}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-semibold text-foreground">{r.title}</span>
+              <span className="block text-xs text-muted-foreground">{new Date(r.savedAt).toLocaleDateString()}</span>
+            </span>
+          </button>
+        );
+      })}
+    </section>
+  );
+
+  const popularView = tpl && popular.length > 0 && (
+    <section className="space-y-2">
+      <h2 className="text-lg font-bold text-foreground">⭐ {t("rk.popular")}</h2>
+      {popular.map((r) => (
+        <button
+          key={r.key}
+          onClick={() => openRecipe(tpl.id, r.picks)}
+          className="flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left transition active:scale-[0.99]"
+        >
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-xl" style={{ background: tpl.color }}>{tpl.emoji}</span>
+          <span className="min-w-0 flex-1">
+            <span className="block truncate text-sm font-semibold text-foreground">{r.items.slice(0, 3).map((p) => p.name).join(", ")}{r.items.length > 3 ? " …" : ""}</span>
+            <span className="block text-xs text-muted-foreground">{t("rk.ingredientsN", { n: r.items.length })}</span>
+          </span>
+        </button>
+      ))}
+    </section>
+  );
+
+  const visibleCollections = collections
+    .map((c) => ({ ...c, recipes: tpl ? c.recipes.filter((r) => r.templateId === tpl.id) : c.recipes }))
+    .filter((c) => !tpl || c.recipes.length > 0);
+
+  const collectionsView = visibleCollections.length > 0 && (
     <section className="space-y-3">
       <h2 className="text-lg font-bold text-foreground">{t("rk.myRecipes")}</h2>
-      {collections.map((c) => (
+      {visibleCollections.map((c) => (
         <div key={c.id} className="space-y-2 rounded-2xl border border-border bg-card p-3">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold text-foreground">📒 {c.name}</p>
@@ -147,7 +221,7 @@ export function RecipeBuilder() {
               <div key={r.id} className="flex items-center gap-2 rounded-xl bg-background p-2">
                 <span className="text-xl">{rt?.emoji ?? "🍽️"}</span>
                 <button
-                  onClick={() => { if (rt) { setTplId(rt.id); setPicks(r.picks); setAdded(false); setSavedMsg(false); window.scrollTo({ top: 0, behavior: "smooth" }); } }}
+                  onClick={() => { if (rt) openRecipe(rt.id, r.picks); }}
                   className="min-w-0 flex-1 truncate text-left text-sm text-foreground"
                 >
                   {r.title}
@@ -184,6 +258,7 @@ export function RecipeBuilder() {
           ))}
         </div>
       </section>
+      {recentView}
       {collectionsView}
       </div>
     );
@@ -269,6 +344,8 @@ export function RecipeBuilder() {
         )}
       </div>
     </section>
+    {popularView}
+    {recentView}
     {collectionsView}
     {saveDialog}
     </div>

@@ -50,7 +50,10 @@ export const POPULAR_RECIPES: Record<RecipeTemplate["id"], Record<string, string
     { starter: ["Bruschetta"], main: ["Lachs", "Kartoffeln"], side: ["Grüne Bohnen"], dessert: ["Panna Cotta"] },
     { starter: ["Crostini"], main: ["Hähnchenbrust", "Reis"], side: ["Karotten"], dessert: ["Tiramisu"] },
   ],
-  dessert: [],
+  dessert: [
+    { base: ["Mascarpone"], fruit: ["Erdbeeren"], sweet: ["Vanillezucker"], crunch: ["Kekse"] },
+    { base: ["Joghurt"], fruit: ["Mango", "Maracuja / Passionsfrucht"], sweet: ["Honig"], crunch: ["Granola"] },
+  ],
 };
 
 export const RECIPE_TEMPLATES: RecipeTemplate[] = [

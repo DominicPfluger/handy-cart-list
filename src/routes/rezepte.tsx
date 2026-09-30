@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { LeafIcon } from "../components/icons";
+import { useState } from "react";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { RecipeBuilder } from "../components/recipe-builder";
@@ -31,6 +32,7 @@ const RECIPES = [
 
 function RecipesPage() {
   const { t } = useT();
+  const [inTemplate, setInTemplate] = useState(false);
   return (
     <div className="space-y-5">
       <div>
@@ -40,7 +42,9 @@ function RecipesPage() {
         </p>
       </div>
 
-      <RecipeBuilder />
+      <RecipeBuilder onTemplateChange={(id) => setInTemplate(!!id)} />
+
+      {!inTemplate && (<>
 
       {/* Saisonal banner */}
       <div className="flex items-center gap-3 rounded-2xl bg-primary-soft/40 p-4">
@@ -80,6 +84,7 @@ function RecipesPage() {
           </div>
         ))}
       </div>
+      </>)}
     </div>
   );
 }
