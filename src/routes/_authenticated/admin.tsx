@@ -138,8 +138,14 @@ function AdminPage() {
   };
 
   const pathText = () => path(cur).map((p) => p.name).join(" › ");
+  /** Produkte aus Nachbarkategorien (gleiche Oberkategorie), damit nichts doppelt vorgeschlagen wird. */
+  const siblingNames = () => {
+    const parent = cur ? deptById.get(cur)?.parent_id : null;
+    const sib = new Set((d?.depts ?? []).filter((x) => x.parent_id === parent && x.id !== cur).map((x) => x.id));
+    return (d?.prods ?? []).filter((x) => sib.has(x.department_id)).map((x) => x.name);
+  };
   const loadSuggestions = async (typed: string[]) => {
-    const r = await suggest({ data: { path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: typed.slice(0, 400) } });
+    const r = await suggest({ data: { path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: [...typed, ...siblingNames()].slice(0, 400) } });
     return r.items;
   };
 
