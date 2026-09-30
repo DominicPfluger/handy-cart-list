@@ -247,7 +247,6 @@ function ListPage() {
               <div className="mb-2 flex items-center gap-2">
                 <span className="text-base">{group.emoji}</span>
                 <h2 className="text-sm font-semibold text-foreground">{group.label}</h2>
-                <span className="text-xs text-muted-foreground">· {group.items.length}</span>
               </div>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
                 {group.items.map((item, index) => {
