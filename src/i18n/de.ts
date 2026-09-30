@@ -169,6 +169,8 @@ export const de = {
   "more.adminSub": "Produkte, Kategorien und Übersetzungen",
   "more.hiddenCategories": "Ausgeblendete Kategorien",
   "more.hiddenCategoriesHint": "Diese Kategorien sind nur auf diesem Gerät ausgeblendet.",
+  "more.hiddenProducts": "Ausgeblendete Produkte",
+  "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet.",
   "more.restore": "Wiederherstellen",
   "more.tagline": "Shoppi · Gemeinsam. Einfach. Einkaufen.",
   "more.justNow": "gerade eben",

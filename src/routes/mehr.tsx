@@ -12,6 +12,7 @@ import {
 import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState } from "react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
+import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 
@@ -45,6 +46,8 @@ function MorePage() {
   const hiddenIds = useHiddenDepartments();
   const catalog = useCatalog();
   const hiddenCategories = catalog.departments.filter((department) => hiddenIds.includes(department.id));
+  const hiddenProductIds = useHiddenProducts();
+  const hiddenProducts = catalog.products.filter((product) => hiddenProductIds.includes(product.id));
   useEffect(() => setChoice(getExplicitLocale() ?? "auto"), [locale]);
 
   return (
@@ -180,6 +183,21 @@ function MorePage() {
               <div key={department.id} className="flex items-center justify-between gap-3 py-2.5">
                 <span className="min-w-0 text-sm text-foreground">{department.name}</span>
                 <Button variant="ghost" size="sm" onClick={() => restoreDepartment(department.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {hiddenProducts.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-foreground">{t("more.hiddenProducts")}</h2>
+          <p className="text-sm text-muted-foreground">{t("more.hiddenProductsHint")}</p>
+          <div className="divide-y divide-border border-y border-border">
+            {hiddenProducts.map((product) => (
+              <div key={product.id} className="flex items-center justify-between gap-3 py-2.5">
+                <span className="min-w-0 text-sm text-foreground">{product.name}</span>
+                <Button variant="ghost" size="sm" onClick={() => restoreProduct(product.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
               </div>
             ))}
           </div>
