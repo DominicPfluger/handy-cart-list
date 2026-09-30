@@ -164,7 +164,7 @@ export const rankProducts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({
     path: z.string().max(300),
-    criterion: z.enum(["popularity", "alphabetical", "price"]).default("popularity"),
+    criterion: z.enum(["popularity", "alphabetical", "price", "similarity"]).default("popularity"),
     groups: z.array(z.array(z.string().max(120)).max(300)).max(40),
   }).parse(d))
   .handler(async ({ data, context }) => {
@@ -174,6 +174,7 @@ export const rankProducts = createServerFn({ method: "POST" })
       popularity: "nach Relevanz: am häufigsten gekaufte Klassiker zuerst, Spezialitäten und Nischenprodukte zuletzt",
       alphabetical: "alphabetisch",
       price: "nach typischem Preis, günstig zuerst",
+      similarity: "nach Ähnlichkeit: Produkte derselben Sorte oder Art direkt hintereinander gruppieren (z. B. alle Apfelsorten, alle Vollkorn-Varianten), innerhalb einer Gruppe die bekannteren zuerst",
     }[data.criterion];
     const r = await aiJson<{ groups: string[][] }>(
       `Sortiere die Produkte einer Einkaufslisten-Kategorie ${crit}. Jede Gruppe wird separat sortiert, Gruppenreihenfolge bleibt. ` +
