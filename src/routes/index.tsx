@@ -24,6 +24,7 @@ import { ListManager, shareList } from "../components/list-manager";
 import { relocalizeQuantity } from "../lib/units";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
+import { toast } from "sonner";
 
 
 export const Route = createFileRoute("/")({
@@ -45,6 +46,7 @@ function ListPage() {
   const {
     items, hydrated, toggleItem, removeItem, clearChecked,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
+    templates, signedIn, saveAsTemplate, createFromTemplate, deleteTemplate, inviteLinkFor,
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
@@ -164,11 +166,20 @@ function ListPage() {
         onClose={() => setManagerOpen(false)}
         lists={lists}
         activeId={activeList.id}
+        templates={templates}
+        signedIn={signedIn}
         onSelect={setActiveListId}
         onCreate={createList}
         onRename={renameList}
         onDelete={deleteList}
         onReorder={reorderLists}
+        onSaveAsTemplate={saveAsTemplate}
+        onCreateFromTemplate={(templateId) => {
+          createFromTemplate(templateId);
+          toast.success(t("lm.templateCreated"));
+        }}
+        onDeleteTemplate={deleteTemplate}
+        inviteLinkFor={inviteLinkFor}
       />
 
       {/* List switcher */}

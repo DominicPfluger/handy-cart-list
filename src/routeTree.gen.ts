@@ -15,10 +15,12 @@ import { Route as AbteilungenRouteImport } from './routes/abteilungen'
 import { Route as AktivitaetenRouteImport } from './routes/aktivitaeten'
 import { Route as AngeboteRouteImport } from './routes/angebote'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BeitretenRouteImport } from './routes/beitreten'
 import { Route as FavoritenRouteImport } from './routes/favoriten'
 import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
 import { Route as ScannerRouteImport } from './routes/scanner'
+import { Route as VorratRouteImport } from './routes/vorrat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
 const IndexRoute = IndexRouteImport.update({
@@ -50,6 +52,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BeitretenRoute = BeitretenRouteImport.update({
+  id: '/beitreten',
+  path: '/beitreten',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FavoritenRoute = FavoritenRouteImport.update({
   id: '/favoriten',
   path: '/favoriten',
@@ -70,6 +77,11 @@ const ScannerRoute = ScannerRouteImport.update({
   path: '/scanner',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VorratRoute = VorratRouteImport.update({
+  id: '/vorrat',
+  path: '/vorrat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -82,10 +94,12 @@ export interface FileRoutesByFullPath {
   '/aktivitaeten': typeof AktivitaetenRoute
   '/angebote': typeof AngeboteRoute
   '/auth': typeof AuthRoute
+  '/beitreten': typeof BeitretenRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
   '/scanner': typeof ScannerRoute
+  '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesByTo {
@@ -94,10 +108,12 @@ export interface FileRoutesByTo {
   '/aktivitaeten': typeof AktivitaetenRoute
   '/angebote': typeof AngeboteRoute
   '/auth': typeof AuthRoute
+  '/beitreten': typeof BeitretenRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
   '/scanner': typeof ScannerRoute
+  '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRoutesById {
@@ -108,10 +124,12 @@ export interface FileRoutesById {
   '/aktivitaeten': typeof AktivitaetenRoute
   '/angebote': typeof AngeboteRoute
   '/auth': typeof AuthRoute
+  '/beitreten': typeof BeitretenRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
   '/scanner': typeof ScannerRoute
+  '/vorrat': typeof VorratRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
 }
 export interface FileRouteTypes {
@@ -122,10 +140,12 @@ export interface FileRouteTypes {
     | '/aktivitaeten'
     | '/angebote'
     | '/auth'
+    | '/beitreten'
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
     | '/scanner'
+    | '/vorrat'
     | '/admin'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -134,10 +154,12 @@ export interface FileRouteTypes {
     | '/aktivitaeten'
     | '/angebote'
     | '/auth'
+    | '/beitreten'
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
     | '/scanner'
+    | '/vorrat'
     | '/admin'
   id:
     | '__root__'
@@ -147,10 +169,12 @@ export interface FileRouteTypes {
     | '/aktivitaeten'
     | '/angebote'
     | '/auth'
+    | '/beitreten'
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
     | '/scanner'
+    | '/vorrat'
     | '/_authenticated/admin'
   fileRoutesById: FileRoutesById
 }
@@ -161,10 +185,12 @@ export interface RootRouteChildren {
   AktivitaetenRoute: typeof AktivitaetenRoute
   AngeboteRoute: typeof AngeboteRoute
   AuthRoute: typeof AuthRoute
+  BeitretenRoute: typeof BeitretenRoute
   FavoritenRoute: typeof FavoritenRoute
   MehrRoute: typeof MehrRoute
   RezepteRoute: typeof RezepteRoute
   ScannerRoute: typeof ScannerRoute
+  VorratRoute: typeof VorratRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -211,6 +237,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/beitreten': {
+      id: '/beitreten'
+      path: '/beitreten'
+      fullPath: '/beitreten'
+      preLoaderRoute: typeof BeitretenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/favoriten': {
       id: '/favoriten'
       path: '/favoriten'
@@ -237,6 +270,13 @@ declare module '@tanstack/react-router' {
       path: '/scanner'
       fullPath: '/scanner'
       preLoaderRoute: typeof ScannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vorrat': {
+      id: '/vorrat'
+      path: '/vorrat'
+      fullPath: '/vorrat'
+      preLoaderRoute: typeof VorratRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/admin': {
@@ -267,10 +307,12 @@ const rootRouteChildren: RootRouteChildren = {
   AktivitaetenRoute: AktivitaetenRoute,
   AngeboteRoute: AngeboteRoute,
   AuthRoute: AuthRoute,
+  BeitretenRoute: BeitretenRoute,
   FavoritenRoute: FavoritenRoute,
   MehrRoute: MehrRoute,
   RezepteRoute: RezepteRoute,
   ScannerRoute: ScannerRoute,
+  VorratRoute: VorratRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

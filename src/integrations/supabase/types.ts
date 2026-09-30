@@ -91,6 +91,157 @@ export type Database = {
           },
         ]
       }
+      list_items: {
+        Row: {
+          added_by: string | null
+          added_by_name: string | null
+          checked: boolean
+          checked_by_name: string | null
+          created_at: string
+          emoji: string | null
+          group_emoji: string | null
+          group_label: string | null
+          id: string
+          image_url: string | null
+          list_id: string
+          name: string
+          note: string | null
+          organic: boolean
+          product_id: string | null
+          quantity: string
+          sort_order: number
+          unit: string | null
+          updated_at: string
+        }
+        Insert: {
+          added_by?: string | null
+          added_by_name?: string | null
+          checked?: boolean
+          checked_by_name?: string | null
+          created_at?: string
+          emoji?: string | null
+          group_emoji?: string | null
+          group_label?: string | null
+          id?: string
+          image_url?: string | null
+          list_id: string
+          name: string
+          note?: string | null
+          organic?: boolean
+          product_id?: string | null
+          quantity?: string
+          sort_order?: number
+          unit?: string | null
+          updated_at?: string
+        }
+        Update: {
+          added_by?: string | null
+          added_by_name?: string | null
+          checked?: boolean
+          checked_by_name?: string | null
+          created_at?: string
+          emoji?: string | null
+          group_emoji?: string | null
+          group_label?: string | null
+          id?: string
+          image_url?: string | null
+          list_id?: string
+          name?: string
+          note?: string | null
+          organic?: boolean
+          product_id?: string | null
+          quantity?: string
+          sort_order?: number
+          unit?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "list_items_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "shopping_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      list_members: {
+        Row: {
+          display_name: string | null
+          id: string
+          joined_at: string
+          list_id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          display_name?: string | null
+          id?: string
+          joined_at?: string
+          list_id: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          display_name?: string | null
+          id?: string
+          joined_at?: string
+          list_id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "list_members_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "shopping_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pantry_items: {
+        Row: {
+          added_at: string
+          emoji: string | null
+          id: string
+          image_url: string | null
+          name: string
+          organic: boolean
+          product_id: string | null
+          quantity: string
+          unit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          added_at?: string
+          emoji?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          organic?: boolean
+          product_id?: string | null
+          quantity?: string
+          unit?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          added_at?: string
+          emoji?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          organic?: boolean
+          product_id?: string | null
+          quantity?: string
+          unit?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       product_headings: {
         Row: {
           before_product_id: string
@@ -189,6 +340,39 @@ export type Database = {
           },
         ]
       }
+      shopping_lists: {
+        Row: {
+          created_at: string
+          id: string
+          invite_code: string | null
+          is_template: boolean
+          name: string
+          owner_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          invite_code?: string | null
+          is_template?: boolean
+          name?: string
+          owner_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          invite_code?: string | null
+          is_template?: boolean
+          name?: string
+          owner_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -212,6 +396,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_access_list: {
+        Args: { _list_id: string; _user_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -219,6 +407,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_list_member: {
+        Args: { _list_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_list_owner: {
+        Args: { _list_id: string; _user_id: string }
+        Returns: boolean
+      }
+      join_list_by_invite: { Args: { _code: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

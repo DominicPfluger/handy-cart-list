@@ -4,6 +4,7 @@ import { getUnits, formatQuantity, type UnitId } from "../lib/units";
 import { useT } from "../i18n";
 
 import { useShoppingList } from "../hooks/use-shopping-list";
+import { usePantry } from "../hooks/use-pantry";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
 import {
@@ -38,6 +39,8 @@ export function CatalogProductDialog({
   onOpenChange,
 }: CatalogProductDialogProps) {
   const { addCatalogItem } = useShoppingList();
+  const pantry = usePantry();
+  const pantryEntry = product ? pantry.isInPantry(product.id) : undefined;
   const { t, locale } = useT();
   const [quantity, setQuantity] = useState("1");
   const [unit, setUnit] = useState<UnitId>("stueck");
@@ -224,6 +227,12 @@ export function CatalogProductDialog({
             className="h-11 rounded-xl bg-card"
           />
         </div>
+
+        {pantryEntry && (
+          <p className="rounded-xl bg-primary-soft/30 px-3 py-2 text-xs text-muted-foreground">
+            🏠 {t("pantry.inPantry", { qty: pantryEntry.quantity })}
+          </p>
+        )}
 
         <DialogFooter className="mt-2">
           <Button

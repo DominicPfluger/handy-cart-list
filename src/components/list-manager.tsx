@@ -27,11 +27,17 @@ interface Props {
   onClose: () => void;
   lists: ShoppingList[];
   activeId: string;
+  templates: ShoppingList[];
+  signedIn: boolean;
   onSelect: (id: string) => void;
   onCreate: (name: string) => void;
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
   onReorder: (fromId: string, toId: string) => void;
+  onSaveAsTemplate: (id: string) => void;
+  onCreateFromTemplate: (templateId: string) => void;
+  onDeleteTemplate: (templateId: string) => void;
+  inviteLinkFor: (listId: string) => string | null;
 }
 
 export async function shareList(list: ShoppingList) {
@@ -42,20 +48,33 @@ export async function shareList(list: ShoppingList) {
   openShareSheet({ title: list.name, text });
 }
 
+function shareInviteLink(link: string, listName: string) {
+  const text = `${translate(getLocale(), "lm.inviteHint")}\n${link}`;
+  openShareSheet({ title: listName, text });
+}
+
 function Row({
   list,
   active,
   canDelete,
+  signedIn,
+  inviteLink,
   onSelect,
   onRename,
   onDelete,
+  onSaveAsTemplate,
+  onShareInvite,
 }: {
   list: ShoppingList;
   active: boolean;
   canDelete: boolean;
+  signedIn: boolean;
+  inviteLink: string | null;
   onSelect: () => void;
   onRename: (name: string) => void;
   onDelete: () => void;
+  onSaveAsTemplate: () => void;
+  onShareInvite: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: list.id });
   const { t } = useT();
@@ -129,12 +148,35 @@ function Row({
           <path d="M13.5 6.5l4 4" />
         </svg>
       </button>
+      {signedIn && inviteLink ? (
+        <button
+          onClick={onShareInvite}
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
+          aria-label={t("lm.invite")}
+        >
+          <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" />
+            <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" />
+          </svg>
+        </button>
+      ) : (
+        <button
+          onClick={() => shareList(list)}
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
+          aria-label={t("lm.share")}
+        >
+          <ShareIcon className="h-[18px] w-[18px]" />
+        </button>
+      )}
       <button
-        onClick={() => shareList(list)}
+        onClick={onSaveAsTemplate}
         className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
-        aria-label={t("lm.share")}
+        aria-label={t("lm.saveAsTemplate")}
       >
-        <ShareIcon className="h-[18px] w-[18px]" />
+        <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="5" y="3" width="14" height="18" rx="2" />
+          <path d="M9 7h6M9 11h6M9 15h3" />
+        </svg>
       </button>
       <button
         onClick={() => {
@@ -154,7 +196,7 @@ function Row({
 }
 
 export function ListManager(props: Props) {
-  const { open, onClose, lists, activeId } = props;
+  const { open, onClose, lists, activeId, templates, signedIn } = props;
   const { t } = useT();
   const [newName, setNewName] = useState("");
   const sensors = useSensors(
@@ -174,6 +216,18 @@ export function ListManager(props: Props) {
     props.onCreate(newName);
     setNewName("");
     onClose();
+  };
+
+  const copyInvite = (listId: string) => {
+    const link = props.inviteLinkFor(listId);
+    if (!link) {
+      toast.error(t("common.error"));
+      return;
+    }
+    navigator.clipboard
+      .writeText(link)
+      .then(() => toast.success(t("lm.inviteCopied")))
+      .catch(() => shareInviteLink(link, lists.find((l) => l.id === listId)?.name ?? ""));
   };
 
   return (
@@ -199,12 +253,16 @@ export function ListManager(props: Props) {
                   list={l}
                   active={l.id === activeId}
                   canDelete={lists.length > 1}
+                  signedIn={signedIn}
+                  inviteLink={props.inviteLinkFor(l.id)}
                   onSelect={() => {
                     props.onSelect(l.id);
                     onClose();
                   }}
                   onRename={(n) => props.onRename(l.id, n)}
                   onDelete={() => props.onDelete(l.id)}
+                  onSaveAsTemplate={() => props.onSaveAsTemplate(l.id)}
+                  onShareInvite={() => copyInvite(l.id)}
                 />
               ))}
             </div>
@@ -227,6 +285,41 @@ export function ListManager(props: Props) {
             <PlusIcon className="h-4 w-4" /> {t("lm.create")}
           </button>
         </div>
+
+        {templates.length > 0 && (
+          <div className="mt-5">
+            <h3 className="mb-1 text-sm font-semibold text-muted-foreground">{t("lm.templates")}</h3>
+            <p className="mb-2 text-xs text-muted-foreground">{t("lm.templatesHint")}</p>
+            <div className="space-y-2">
+              {templates.map((tpl) => (
+                <div key={tpl.id} className="flex items-center gap-2 rounded-2xl border border-dashed border-border bg-card px-3 py-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-medium text-foreground">{tpl.name}</p>
+                    <p className="text-xs text-muted-foreground">{t("rk.ingredientsN", { n: tpl.items.length })}</p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      props.onCreateFromTemplate(tpl.id);
+                      onClose();
+                    }}
+                    className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
+                  >
+                    <PlusIcon className="h-3.5 w-3.5" /> {t("lm.create")}
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (confirm(t("lm.deleteTemplateConfirm", { name: tpl.name }))) props.onDeleteTemplate(tpl.id);
+                    }}
+                    className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-coral active:bg-muted"
+                    aria-label={t("lm.deleteTemplate")}
+                  >
+                    <TrashIcon className="h-[18px] w-[18px]" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
