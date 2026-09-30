@@ -526,11 +526,11 @@ function useCloudLists(
     createdAt: 0,
   };
 
-  const replaceItemLocally = useCallback((newItem: ListItem) => {
+  const replaceItemLocally = useCallback((tmpId: string, newItem: ListItem) => {
     setCloudLists((prev) =>
       prev.map((l) =>
         l.id === activeListId
-          ? { ...l, items: l.items.map((it) => (it.id === newItem.id || (newItem.id.startsWith("tmp-") && it.id === newItem.id.slice(4)) ? newItem : it)) }
+          ? { ...l, items: l.items.map((it) => (it.id === tmpId ? newItem : it)) }
           : l
       )
     );
@@ -710,7 +710,7 @@ function useCloudLists(
       })
         .then((res) => {
           const row = (res.items as CloudRow[])[0];
-          if (row) replaceItemLocally(rowToItem(row));
+          if (row) replaceItemLocally(item.id, rowToItem(row));
         })
         .catch(() => toast.error(t("cloud.error")));
     },
@@ -746,7 +746,7 @@ function useCloudLists(
       })
         .then((res) => {
           const row = (res.items as CloudRow[])[0];
-          if (row) replaceItemLocally(rowToItem(row));
+          if (row) replaceItemLocally(item.id, rowToItem(row));
         })
         .catch(() => toast.error(t("cloud.error")));
     },
