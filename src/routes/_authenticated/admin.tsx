@@ -359,14 +359,14 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
 function Row(p: {
   emoji: string; name: string; sub: string; active: boolean; disabled: boolean;
   onOpen?: () => void; onEdit: () => void; onUp: () => void; onDown: () => void;
-  dragging?: boolean; onDragStart?: () => void; onDragOver?: (e: React.DragEvent) => void; onDrop?: () => void; onDragEnd?: () => void;
+  dragging?: boolean; onDragStart?: () => void; onDragOver?: (e: React.DragEvent) => void; onDrop?: (e: React.DragEvent) => void; onDragEnd?: () => void;
 }) {
   return (
     <div
       draggable={Boolean(p.onDragStart)}
       onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; p.onDragStart?.(); }}
       onDragOver={p.onDragOver}
-      onDrop={(e) => { e.preventDefault(); p.onDrop?.(); }}
+      onDrop={(e) => { e.preventDefault(); p.onDrop?.(e); }}
       onDragEnd={p.onDragEnd}
       className={`flex items-center gap-2 rounded-lg border px-2 py-1.5 ${p.dragging ? "opacity-40" : ""} ${p.active ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}
     >
