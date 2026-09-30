@@ -235,6 +235,9 @@
     "rk.recent": "Recently created recipes",
     "rk.onlyFavorites": "Favorites only",
     "rk.popular": "Popular recipes",
+    "rk.showAllRecent": "Show all recently created recipes",
+    "rk.showAllPopular": "Show all popular recipes",
+    "rk.showLess": "Show less",
     "rk.ingredientsN": "{n} ingredients"
   },
   "en-GB": {
@@ -473,6 +476,9 @@
     "rk.recent": "Recently created recipes",
     "rk.onlyFavorites": "Favourites only",
     "rk.popular": "Popular recipes",
+    "rk.showAllRecent": "Show all recently created recipes",
+    "rk.showAllPopular": "Show all popular recipes",
+    "rk.showLess": "Show less",
     "rk.ingredientsN": "{n} ingredients"
   },
   "en-CA": {
@@ -711,6 +717,9 @@
     "rk.recent": "Recently created recipes",
     "rk.onlyFavorites": "Favorites only",
     "rk.popular": "Popular recipes",
+    "rk.showAllRecent": "Show all recently created recipes",
+    "rk.showAllPopular": "Show all popular recipes",
+    "rk.showLess": "Show less",
     "rk.ingredientsN": "{n} ingredients"
   },
   "es-ES": {
@@ -949,6 +958,9 @@
     "rk.recent": "Recetas creadas recientemente",
     "rk.onlyFavorites": "Solo favoritos",
     "rk.popular": "Recetas populares",
+    "rk.showAllRecent": "Mostrar todas las recetas creadas recientemente",
+    "rk.showAllPopular": "Mostrar todas las recetas populares",
+    "rk.showLess": "Mostrar menos",
     "rk.ingredientsN": "{n} ingredientes"
   },
   "es-MX": {
@@ -1187,6 +1199,9 @@
     "rk.recent": "Recetas creadas recientemente",
     "rk.onlyFavorites": "Solo favoritos",
     "rk.popular": "Recetas populares",
+    "rk.showAllRecent": "Mostrar todas las recetas creadas recientemente",
+    "rk.showAllPopular": "Mostrar todas las recetas populares",
+    "rk.showLess": "Mostrar menos",
     "rk.ingredientsN": "{n} ingredientes"
   },
   "fr-FR": {
@@ -1425,6 +1440,9 @@
     "rk.recent": "Recettes récemment créées",
     "rk.onlyFavorites": "Favoris uniquement",
     "rk.popular": "Recettes populaires",
+    "rk.showAllRecent": "Afficher toutes les recettes récemment créées",
+    "rk.showAllPopular": "Afficher toutes les recettes populaires",
+    "rk.showLess": "Afficher moins",
     "rk.ingredientsN": "{n} ingrédients"
   },
   "fr-CA": {
@@ -1663,6 +1681,9 @@
     "rk.recent": "Recettes récemment créées",
     "rk.onlyFavorites": "Favoris uniquement",
     "rk.popular": "Recettes populaires",
+    "rk.showAllRecent": "Afficher toutes les recettes récemment créées",
+    "rk.showAllPopular": "Afficher toutes les recettes populaires",
+    "rk.showLess": "Afficher moins",
     "rk.ingredientsN": "{n} ingrédients"
   },
   "it-IT": {
@@ -1901,6 +1922,9 @@
     "rk.recent": "Ricette create di recente",
     "rk.onlyFavorites": "Solo preferiti",
     "rk.popular": "Ricette popolari",
+    "rk.showAllRecent": "Mostra tutte le ricette create di recente",
+    "rk.showAllPopular": "Mostra tutte le ricette popolari",
+    "rk.showLess": "Mostra meno",
     "rk.ingredientsN": "{n} ingredienti"
   },
   "it-CH": {
@@ -2139,6 +2163,9 @@
     "rk.recent": "Ricette create di recente",
     "rk.onlyFavorites": "Solo preferiti",
     "rk.popular": "Ricette popolari",
+    "rk.showAllRecent": "Mostra tutte le ricette create di recente",
+    "rk.showAllPopular": "Mostra tutte le ricette popolari",
+    "rk.showLess": "Mostra meno",
     "rk.ingredientsN": "{n} ingredienti"
   },
   "pt-PT": {
@@ -2377,6 +2404,9 @@
     "rk.recent": "Receitas criadas recentemente",
     "rk.onlyFavorites": "Só favoritos",
     "rk.popular": "Receitas populares",
+    "rk.showAllRecent": "Mostrar todas as receitas criadas recentemente",
+    "rk.showAllPopular": "Mostrar todas as receitas populares",
+    "rk.showLess": "Mostrar menos",
     "rk.ingredientsN": "{n} ingredientes"
   },
   "pt-BR": {
@@ -2615,6 +2645,9 @@
     "rk.recent": "Receitas criadas recentemente",
     "rk.onlyFavorites": "Só favoritos",
     "rk.popular": "Receitas populares",
+    "rk.showAllRecent": "Mostrar todas as receitas criadas recentemente",
+    "rk.showAllPopular": "Mostrar todas as receitas populares",
+    "rk.showLess": "Mostrar menos",
     "rk.ingredientsN": "{n} ingredientes"
   },
   "nl-NL": {
@@ -2853,6 +2886,9 @@
     "rk.recent": "Recent gemaakte recepten",
     "rk.onlyFavorites": "Alleen favorieten",
     "rk.popular": "Populaire recepten",
+    "rk.showAllRecent": "Alle recent gemaakte recepten tonen",
+    "rk.showAllPopular": "Alle populaire recepten tonen",
+    "rk.showLess": "Minder tonen",
     "rk.ingredientsN": "{n} ingrediënten"
   },
   "nl-BE": {
@@ -3091,6 +3127,9 @@
     "rk.recent": "Recent gemaakte recepten",
     "rk.onlyFavorites": "Alleen favorieten",
     "rk.popular": "Populaire recepten",
+    "rk.showAllRecent": "Alle recent gemaakte recepten tonen",
+    "rk.showAllPopular": "Alle populaire recepten tonen",
+    "rk.showLess": "Minder tonen",
     "rk.ingredientsN": "{n} ingrediënten"
   }
 }
