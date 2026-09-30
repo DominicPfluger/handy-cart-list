@@ -7,7 +7,7 @@ export const DIETS = [
 ] as const;
 export type Diet = (typeof DIETS)[number];
 
-/** Icon je Ernährungsform (Chips zeigen nur das Icon, Name per Tooltip). */
+/** Icon je Ernährungsform (Chips zeigen Icon + lokalisierte Bezeichnung). */
 export const DIET_EMOJI: Record<Diet, string> = {
   kosher: "✡️",
   halal: "☪️",

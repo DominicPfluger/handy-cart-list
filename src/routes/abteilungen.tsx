@@ -332,12 +332,11 @@ function DepartmentsPage() {
                   key={d}
                   type="button"
                   aria-pressed={on}
-                  aria-label={t(`diet.${d}`)}
-                  title={t(`diet.${d}`)}
                   onClick={() => toggleDiet(d)}
-                  className={`flex h-9 w-9 items-center justify-center rounded-full border text-lg leading-none ${on ? "border-primary bg-primary/15" : "border-border bg-background"}`}
+                  className={`flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-medium leading-none ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-foreground"}`}
                 >
-                  {DIET_EMOJI[d]}
+                  <span className="text-base leading-none">{DIET_EMOJI[d]}</span>
+                  {t(`diet.${d}`)}
                 </button>
               );
             })}
