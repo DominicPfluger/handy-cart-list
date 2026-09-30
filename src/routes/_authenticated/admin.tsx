@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAdmin, translateMissing, saveHeading, deleteHeading } from "@/lib/admin.functions";
+import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts } from "@/lib/admin.functions";
 import { LOCALES } from "@/i18n";
 import { getUnits } from "@/lib/units";
 import { Button } from "@/components/ui/button";
@@ -61,6 +61,9 @@ function AdminPage() {
   const translate = useServerFn(translateMissing);
   const saveH = useServerFn(saveHeading);
   const delH = useServerFn(deleteHeading);
+  const suggest = useServerFn(suggestProducts);
+  const rank = useServerFn(rankProducts);
+  const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price">("popularity");
   const admin = useQuery({ queryKey: ["admin-check"], queryFn: () => check() });
   const q = useQuery({ queryKey: ["admin-catalog"], queryFn: loadAll, enabled: Boolean(admin.data?.isAdmin) });
   const [cur, setCur] = useState<string | null>(null);
@@ -68,7 +71,7 @@ function AdminPage() {
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [adding, setAdding] = useState<Kind | null>(null);
-  const [bulk, setBulk] = useState(false);
+  const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
 
   const d = q.data;
   const deptById = useMemo(() => new Map((d?.depts ?? []).map((x) => [x.id, x])), [d]);
@@ -132,6 +135,42 @@ function AdminPage() {
     const h = d?.heads.find((x) => x.id === headingId);
     if (!h || h.before_product_id === beforeProductId) return;
     run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), "Überschrift verschoben");
+  };
+
+  const pathText = () => path(cur).map((p) => p.name).join(" › ");
+  const loadSuggestions = async (typed: string[]) => {
+    const r = await suggest({ data: { path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: typed.slice(0, 400) } });
+    return r.items;
+  };
+
+  /** Produkte nach Kriterium sortieren; Überschriften-Gruppen bleiben erhalten. */
+  const sortProducts = () => {
+    if (!cur || products.length < 2) return;
+    const label = { popularity: "Relevanz", alphabetical: "Alphabet", price: "Preis" }[sortBy];
+    if (!confirm(`Produkte dieser Kategorie nach ${label} sortieren? Die Reihenfolge gilt für alle Nutzer. Überschriften-Gruppen bleiben erhalten.`)) return;
+    const anchors = new Set(headings.map((h) => h.before_product_id));
+    const groups: (typeof products)[] = [];
+    products.forEach((p, i) => { if (i === 0 || anchors.has(p.id)) groups.push([]); groups[groups.length - 1]!.push(p); });
+    run(async () => {
+      let ordered: (typeof products)[];
+      if (sortBy === "alphabetical") {
+        ordered = groups.map((g) => [...g].sort((a, b) => a.name.localeCompare(b.name, "de")));
+      } else {
+        const r = await rank({ data: { path: pathText(), criterion: sortBy, groups: groups.map((g) => g.map((p) => p.name)) } });
+        ordered = groups.map((g, gi) => {
+          const pool = [...g];
+          return r.groups[gi]!.map((n) => pool.splice(pool.findIndex((p) => p.name === n), 1)[0]!).concat(pool);
+        });
+      }
+      const flat = ordered.flat();
+      await Promise.all(flat.map((x, i) => must(supabase.from("products").update({ sort_order: i + 1 }).eq("id", x.id))));
+      // Überschriften an das neue erste Produkt ihrer Gruppe hängen
+      await Promise.all(groups.map((g, gi) => {
+        const h = headings.find((x) => x.before_product_id === g[0]!.id);
+        const first = ordered[gi]![0]!;
+        return h && first.id !== h.before_product_id ? saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: first.id } }) : null;
+      }));
+    }, `Nach ${label} sortiert`);
   };
 
   const remove = (s: NonNullable<Sel>, name: string) => {
@@ -225,7 +264,8 @@ function AdminPage() {
           <div className="flex flex-wrap gap-2">
             <Button size="sm" variant="outline" onClick={() => setAdding("department")}>+ Kategorie</Button>
             {cur && <Button size="sm" variant="outline" onClick={() => setAdding("product")}>+ Produkt</Button>}
-            {cur && <Button size="sm" variant="outline" onClick={() => setBulk(true)}>+ Mehrere Produkte</Button>}
+            {cur && <Button size="sm" variant="outline" onClick={() => setBulk("plain")}>+ Mehrere Produkte</Button>}
+            {cur && <Button size="sm" variant="outline" onClick={() => setBulk("suggest")}>✨ Vorschläge</Button>}
             {cur && products.length > 0 && <Button size="sm" variant="outline" onClick={() => setAdding("heading")}>+ Überschrift</Button>}
           </div>
 
@@ -248,7 +288,7 @@ function AdminPage() {
           )}
 
           {bulk && (
-            <BulkAddForm onCancel={() => setBulk(false)}
+            <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} onCancel={() => setBulk(false)}
               onSubmit={(names, emoji, qty, unit) => run(async () => {
                 const rows = names.map((name, i) => ({ department_id: cur!, name, emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: products.length + i + 1 }));
                 const r = await supabase.from("products").insert(rows).select("id");
@@ -277,7 +317,20 @@ function AdminPage() {
 
           {cur && (
             <section className="space-y-1">
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Produkte</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Produkte</h2>
+                {products.length > 1 && (
+                  <div className="ml-auto flex items-center gap-1">
+                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label="Sortierkriterium"
+                      className="h-8 rounded-lg border border-input bg-background px-2 text-xs">
+                      <option value="popularity">Relevanz (Beliebtheit)</option>
+                      <option value="price">Preis (günstig zuerst)</option>
+                      <option value="alphabetical">Alphabetisch</option>
+                    </select>
+                    <Button size="sm" variant="outline" className="h-8" disabled={busy} onClick={sortProducts}>Sortieren</Button>
+                  </div>
+                )}
+              </div>
               {products.length === 0 && <p className="text-sm text-muted-foreground">Keine Produkte in dieser Kategorie.</p>}
               {products.map((p, i) => {
                 const h = headingBefore.get(p.id);
@@ -454,8 +507,31 @@ function AddForm({ kind, products, onSubmit, onCancel }: { kind: Kind; products:
   );
 }
 
-function BulkAddForm({ onSubmit, onCancel }: { onSubmit: (names: string[], emoji: string, qty: number, unit: string) => void; onCancel: () => void }) {
+type Suggestion = { name: string; emoji: string; reason: string };
+
+function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
+  onSubmit: (names: string[], emoji: string, qty: number, unit: string) => void; onCancel: () => void;
+  onSuggest: (typed: string[]) => Promise<Suggestion[]>; autoSuggest?: boolean;
+}) {
   const [text, setText] = useState("");
+  const [sugs, setSugs] = useState<Suggestion[] | null>(null);
+  const [picked, setPicked] = useState<Set<string>>(new Set());
+  const [loadingS, setLoadingS] = useState(false);
+  const fetchS = async () => {
+    setLoadingS(true);
+    try {
+      const typed = text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const r = await onSuggest(typed);
+      setSugs(r); setPicked(new Set(r.map((x) => x.name)));
+    } catch (e) { toast.error((e as Error).message); }
+    finally { setLoadingS(false); }
+  };
+  useEffect(() => { if (autoSuggest) void fetchS(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const takeOver = () => {
+    const add = (sugs ?? []).filter((x) => picked.has(x.name)).map((x) => x.name);
+    setText((t) => [...t.split("\n").map((l) => l.trim()).filter(Boolean), ...add].join("\n"));
+    setSugs(null);
+  };
   const [emoji, setEmoji] = useState("");
   const [qty, setQty] = useState("1");
   const [unit, setUnit] = useState("stueck");
@@ -471,6 +547,29 @@ function BulkAddForm({ onSubmit, onCancel }: { onSubmit: (names: string[], emoji
         onChange={(e) => setText(e.target.value)}
         className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
       />
+      <div className="space-y-2 rounded-lg bg-muted/50 p-2">
+        <Button type="button" size="sm" variant="outline" className="w-full" disabled={loadingS} onClick={fetchS}>
+          {loadingS ? "Suche fehlende Produkte …" : "✨ Fehlende relevante Produkte vorschlagen"}
+        </Button>
+        {sugs && sugs.length === 0 && <p className="text-xs text-muted-foreground">Keine weiteren Vorschläge — die Kategorie wirkt vollständig.</p>}
+        {sugs && sugs.length > 0 && (
+          <>
+            <ul className="space-y-1">
+              {sugs.map((x) => (
+                <li key={x.name}>
+                  <label className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={picked.has(x.name)}
+                      onChange={(e) => setPicked((s) => { const n = new Set(s); if (e.target.checked) n.add(x.name); else n.delete(x.name); return n; })} />
+                    <span>{x.emoji}</span><span>{x.name}</span>
+                    <span className="ml-auto truncate text-xs text-muted-foreground">{x.reason}</span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <Button type="button" size="sm" className="w-full" disabled={picked.size === 0} onClick={takeOver}>{picked.size} Vorschläge in die Liste übernehmen</Button>
+          </>
+        )}
+      </div>
       <div className="grid grid-cols-[4rem_1fr_1fr] gap-2">
         <Input placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} />
         <Input inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} />
