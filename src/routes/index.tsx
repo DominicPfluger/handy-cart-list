@@ -134,6 +134,8 @@ function ListPage() {
         const oa = pa?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         const ob = pb?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         if (oa !== ob) return oa - ob;
+        // Gleichstand: alphabetisch wie in der Abteilungsansicht
+        if (pa && pb) return pa.name.localeCompare(pb.name, getLocale());
         return a.addedAt - b.addedAt;
       });
     }
