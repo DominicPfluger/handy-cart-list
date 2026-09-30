@@ -65,47 +65,47 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     },
   });
 
-  const [deptRes, prodRes, headRes] = await Promise.all([
+  // Alle Seiten (je 1000 Zeilen) parallel statt nacheinander laden – deutlich schneller.
+  const PAGE = 1000;
+  async function fetchAll(table: string, columns: string, orders: string[]) {
+    const head = await supabase.from(table).select("id", { count: "exact", head: true });
+    if (head.error) return { data: null as any[] | null, error: head.error };
+    const pages = Math.max(1, Math.ceil((head.count ?? 0) / PAGE) + 1);
+    const results = await Promise.all(
+      Array.from({ length: pages }, (_, i) => {
+        let q = supabase.from(table).select(columns);
+        for (const o of orders) q = q.order(o, { ascending: true });
+        return q.range(i * PAGE, i * PAGE + PAGE - 1);
+      }),
+    );
+    const all: any[] = [];
+    for (const res of results) {
+      if (res.error) return { data: null, error: res.error };
+      all.push(...((res.data as any[]) ?? []));
+    }
+    return { data: all, error: null };
+  }
+
+  const [deptRes, prodRes, headRes, trRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
       .order("sort_order", { ascending: true }),
-    (async () => {
-      // Produkte seitenweise laden (Limit 1000 Zeilen je Abfrage)
-      const all: any[] = [];
-      for (let from = 0; ; from += 1000) {
-        const res = await supabase
-          .from("products")
-          .select(
-            "id, department_id, name, emoji, image_path, default_quantity, default_unit, organic_available, variants, excluded_diets, sort_order",
-          )
-          .order("sort_order", { ascending: true })
-          .order("id", { ascending: true })
-          .range(from, from + 999);
-        if (res.error) return { data: null, error: res.error };
-        all.push(...(res.data ?? []));
-        if (!res.data || res.data.length < 1000) break;
-      }
-      return { data: all, error: null };
-    })(),
+    fetchAll(
+      "products",
+      "id, department_id, name, emoji, image_path, default_quantity, default_unit, organic_available, variants, excluded_diets, sort_order",
+      ["sort_order", "id"],
+    ),
     supabase.from("product_headings").select("id, department_id, before_product_id, name"),
+    fetchAll("catalog_translations", "entity_id, locale, name", ["id"]),
   ]);
 
-  // Übersetzungen seitenweise laden (Limit 1000 Zeilen je Abfrage)
+  if (trRes.error) throw new Error(trRes.error.message);
   const names = new Map<string, Record<string, string>>();
-  for (let from = 0; ; from += 1000) {
-    const { data, error } = await supabase
-      .from("catalog_translations")
-      .select("entity_id, locale, name")
-      .order("id")
-      .range(from, from + 999);
-    if (error) throw new Error(error.message);
-    for (const row of data ?? []) {
-      const entry = names.get(row.entity_id) ?? {};
-      entry[row.locale] = row.name;
-      names.set(row.entity_id, entry);
-    }
-    if (!data || data.length < 1000) break;
+  for (const row of trRes.data ?? []) {
+    const entry = names.get(row.entity_id) ?? {};
+    entry[row.locale] = row.name;
+    names.set(row.entity_id, entry);
   }
 
   if (deptRes.error) throw new Error(deptRes.error.message);
