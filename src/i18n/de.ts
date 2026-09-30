@@ -63,6 +63,7 @@ export const de = {
   "rename.reset": "Original wiederherstellen",
   "rename.save": "Speichern",
   "rename.delete": "Eigenen Eintrag löschen",
+  "rename.deleteCatalog": "Aus dem Katalog entfernen",
   "add.category": "Kategorie hinzufügen",
   "add.product": "Produkt hinzufügen",
   "add.categoryTitle": "Neue Kategorie",

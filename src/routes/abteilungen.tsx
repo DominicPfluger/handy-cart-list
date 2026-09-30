@@ -9,6 +9,7 @@ import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon, TrashIcon } from "
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../components/ui/alert-dialog";
 import { deleteCustomEntry, isCustomId } from "../hooks/use-custom-catalog";
 import { hideDepartment, useHiddenDepartments } from "../hooks/use-hidden-departments";
+import { useHiddenProducts } from "../hooks/use-hidden-products";
 import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dialog";
 import { useCustomNames } from "../hooks/use-custom-names";
@@ -60,6 +61,7 @@ function DepartmentThumb({ department }: { department: CatalogDepartment }) {
 function DepartmentsPage() {
   const data = useCatalog();
   const hiddenIds = useHiddenDepartments();
+  const hiddenProductIds = useHiddenProducts();
   const diets = useDietFilter();
   const [dietOpen, setDietOpen] = useState(false);
   const deptIds = useMemo(() => new Set(data.departments.map((d) => d.id)), [data.departments]);
@@ -81,8 +83,8 @@ function DepartmentsPage() {
   }, [hiddenIds, orderedDepartments]);
   const departments = useMemo(() => orderedDepartments.filter((d) => !removedIds.has(d.id)), [orderedDepartments, removedIds]);
   const products = useMemo(
-    () => orderedProducts.filter((p) => !removedIds.has(p.departmentId) && (!diets.length || !p.excludedDiets.some((d) => (diets as string[]).includes(d)))),
-    [orderedProducts, diets, removedIds],
+    () => orderedProducts.filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId) && (!diets.length || !p.excludedDiets.some((d) => (diets as string[]).includes(d)))),
+    [orderedProducts, diets, removedIds, hiddenProductIds],
   );
   // Kategorien, deren Produkte durch den Filter alle wegfallen, ausblenden
   const hiddenDepts = useMemo(() => {
@@ -114,8 +116,8 @@ function DepartmentsPage() {
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
   const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
   const customNames = useCustomNames();
-  const openRename = (e: CatalogDepartment | CatalogProduct) =>
-    setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames });
+  const openRename = (e: CatalogDepartment | CatalogProduct, kind: "product" | "department") =>
+    setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames, kind });
 
   const current = departments.find((department) => department.id === currentId) ?? null;
   useEffect(() => {
@@ -361,7 +363,7 @@ function DepartmentsPage() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={() => { if (index === breadcrumbs.length - 1) openRename(department); else openDepartment(department.id); }}
+                onClick={() => { if (index === breadcrumbs.length - 1) openRename(department, "department"); else openDepartment(department.id); }}
                 aria-label={index === breadcrumbs.length - 1 ? t("rename.action", { name: department.name }) : undefined}
                 data-drop="crumb"
                 data-id={department.id}
@@ -449,7 +451,7 @@ function DepartmentsPage() {
                     <ProductThumb product={product} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <button type="button" onClick={() => openRename(product)} aria-label={t("rename.action", { name: product.name })} className="inline-flex text-left text-sm font-semibold text-foreground">
+                    <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} className="inline-flex text-left text-sm font-semibold text-foreground">
                       <span>{product.name}</span>
                     </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">

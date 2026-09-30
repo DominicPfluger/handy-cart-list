@@ -4,9 +4,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "./ui/input";
 import { setCustomName } from "../hooks/use-custom-names";
 import { deleteCustomEntry, isCustomId } from "../hooks/use-custom-catalog";
+import { hideProduct } from "../hooks/use-hidden-products";
 import { useT } from "../i18n";
 
-export type RenameTarget = { id: string; name: string; originalName: string; isCustom: boolean };
+export type RenameTarget = { id: string; name: string; originalName: string; isCustom: boolean; kind?: "product" | "department" };
 
 export function RenameDialog({ target, onClose }: { target: RenameTarget | null; onClose: () => void }) {
   const { t } = useT();
@@ -34,6 +35,9 @@ export function RenameDialog({ target, onClose }: { target: RenameTarget | null;
         <DialogFooter className="gap-2 sm:gap-2">
           {target && isCustomId(target.id) && (
             <Button variant="outline" className="text-destructive" onClick={() => { deleteCustomEntry(target.id); setCustomName(target.id, null); onClose(); }}>{t("rename.delete")}</Button>
+          )}
+          {target && target.kind === "product" && !isCustomId(target.id) && (
+            <Button variant="outline" className="text-destructive" onClick={() => { hideProduct(target.id); setCustomName(target.id, null); onClose(); }}>{t("rename.deleteCatalog")}</Button>
           )}
           {target?.isCustom && !isCustomId(target.id) && (
             <Button variant="outline" onClick={() => { setCustomName(target.id, null); onClose(); }}>{t("rename.reset")}</Button>

@@ -239,7 +239,10 @@
     "rk.showAllPopular": "Show all popular recipes",
     "rk.showLess": "Show less",
     "rk.ingredientsN": "{n} ingredients",
-    "rk.recipeTitle": "Title for your recipe"
+    "rk.recipeTitle": "Title for your recipe",
+    "rename.deleteCatalog": "Remove from catalog",
+    "more.hiddenProducts": "Hidden products",
+    "more.hiddenProductsHint": "These products are hidden on this device only."
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -481,7 +484,10 @@
     "rk.showAllPopular": "Show all popular recipes",
     "rk.showLess": "Show less",
     "rk.ingredientsN": "{n} ingredients",
-    "rk.recipeTitle": "Title for your recipe"
+    "rk.recipeTitle": "Title for your recipe",
+    "rename.deleteCatalog": "Remove from catalogue",
+    "more.hiddenProducts": "Hidden products",
+    "more.hiddenProductsHint": "These products are hidden on this device only."
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -723,7 +729,10 @@
     "rk.showAllPopular": "Show all popular recipes",
     "rk.showLess": "Show less",
     "rk.ingredientsN": "{n} ingredients",
-    "rk.recipeTitle": "Title for your recipe"
+    "rk.recipeTitle": "Title for your recipe",
+    "rename.deleteCatalog": "Remove from catalog",
+    "more.hiddenProducts": "Hidden products",
+    "more.hiddenProductsHint": "These products are hidden on this device only."
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -965,7 +974,10 @@
     "rk.showAllPopular": "Mostrar todas las recetas populares",
     "rk.showLess": "Mostrar menos",
     "rk.ingredientsN": "{n} ingredientes",
-    "rk.recipeTitle": "Título para tu receta"
+    "rk.recipeTitle": "Título para tu receta",
+    "rename.deleteCatalog": "Eliminar del catálogo",
+    "more.hiddenProducts": "Productos ocultos",
+    "more.hiddenProductsHint": "Estos productos están ocultos solo en este dispositivo."
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -1207,7 +1219,10 @@
     "rk.showAllPopular": "Mostrar todas las recetas populares",
     "rk.showLess": "Mostrar menos",
     "rk.ingredientsN": "{n} ingredientes",
-    "rk.recipeTitle": "Título para tu receta"
+    "rk.recipeTitle": "Título para tu receta",
+    "rename.deleteCatalog": "Eliminar del catálogo",
+    "more.hiddenProducts": "Productos ocultos",
+    "more.hiddenProductsHint": "Estos productos están ocultos solo en este dispositivo."
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -1449,7 +1464,10 @@
     "rk.showAllPopular": "Afficher toutes les recettes populaires",
     "rk.showLess": "Afficher moins",
     "rk.ingredientsN": "{n} ingrédients",
-    "rk.recipeTitle": "Titre de votre recette"
+    "rk.recipeTitle": "Titre de votre recette",
+    "rename.deleteCatalog": "Retirer du catalogue",
+    "more.hiddenProducts": "Produits masqués",
+    "more.hiddenProductsHint": "Ces produits sont masqués uniquement sur cet appareil."
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -1691,7 +1709,10 @@
     "rk.showAllPopular": "Afficher toutes les recettes populaires",
     "rk.showLess": "Afficher moins",
     "rk.ingredientsN": "{n} ingrédients",
-    "rk.recipeTitle": "Titre de votre recette"
+    "rk.recipeTitle": "Titre de votre recette",
+    "rename.deleteCatalog": "Retirer du catalogue",
+    "more.hiddenProducts": "Produits masqués",
+    "more.hiddenProductsHint": "Ces produits sont masqués uniquement sur cet appareil."
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -1933,7 +1954,10 @@
     "rk.showAllPopular": "Mostra tutte le ricette popolari",
     "rk.showLess": "Mostra meno",
     "rk.ingredientsN": "{n} ingredienti",
-    "rk.recipeTitle": "Titolo per la tua ricetta"
+    "rk.recipeTitle": "Titolo per la tua ricetta",
+    "rename.deleteCatalog": "Rimuovi dal catalogo",
+    "more.hiddenProducts": "Prodotti nascosti",
+    "more.hiddenProductsHint": "Questi prodotti sono nascosti solo su questo dispositivo."
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -2175,7 +2199,10 @@
     "rk.showAllPopular": "Mostra tutte le ricette popolari",
     "rk.showLess": "Mostra meno",
     "rk.ingredientsN": "{n} ingredienti",
-    "rk.recipeTitle": "Titolo per la tua ricetta"
+    "rk.recipeTitle": "Titolo per la tua ricetta",
+    "rename.deleteCatalog": "Rimuovi dal catalogo",
+    "more.hiddenProducts": "Prodotti nascosti",
+    "more.hiddenProductsHint": "Questi prodotti sono nascosti solo su questo dispositivo."
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -2417,7 +2444,10 @@
     "rk.showAllPopular": "Mostrar todas as receitas populares",
     "rk.showLess": "Mostrar menos",
     "rk.ingredientsN": "{n} ingredientes",
-    "rk.recipeTitle": "Título para a sua receita"
+    "rk.recipeTitle": "Título para a sua receita",
+    "rename.deleteCatalog": "Remover do catálogo",
+    "more.hiddenProducts": "Produtos ocultos",
+    "more.hiddenProductsHint": "Estes produtos estão ocultos apenas neste dispositivo."
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -2659,7 +2689,10 @@
     "rk.showAllPopular": "Mostrar todas as receitas populares",
     "rk.showLess": "Mostrar menos",
     "rk.ingredientsN": "{n} ingredientes",
-    "rk.recipeTitle": "Título para a sua receita"
+    "rk.recipeTitle": "Título para a sua receita",
+    "rename.deleteCatalog": "Remover do catálogo",
+    "more.hiddenProducts": "Produtos ocultos",
+    "more.hiddenProductsHint": "Estes produtos estão ocultos apenas neste dispositivo."
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -2901,7 +2934,10 @@
     "rk.showAllPopular": "Alle populaire recepten tonen",
     "rk.showLess": "Minder tonen",
     "rk.ingredientsN": "{n} ingrediënten",
-    "rk.recipeTitle": "Titel voor je recept"
+    "rk.recipeTitle": "Titel voor je recept",
+    "rename.deleteCatalog": "Uit catalogus verwijderen",
+    "more.hiddenProducts": "Verborgen producten",
+    "more.hiddenProductsHint": "Deze producten zijn alleen op dit apparaat verborgen."
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -3143,6 +3179,19 @@
     "rk.showAllPopular": "Alle populaire recepten tonen",
     "rk.showLess": "Minder tonen",
     "rk.ingredientsN": "{n} ingrediënten",
-    "rk.recipeTitle": "Titel voor je recept"
+    "rk.recipeTitle": "Titel voor je recept",
+    "rename.deleteCatalog": "Uit catalogus verwijderen",
+    "more.hiddenProducts": "Verborgen producten",
+    "more.hiddenProductsHint": "Deze producten zijn alleen op dit apparaat verborgen."
+  },
+  "de-AT": {
+    "rename.deleteCatalog": "Aus dem Katalog entfernen",
+    "more.hiddenProducts": "Ausgeblendete Produkte",
+    "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet."
+  },
+  "de-CH": {
+    "rename.deleteCatalog": "Aus dem Katalog entfernen",
+    "more.hiddenProducts": "Ausgeblendete Produkte",
+    "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet."
   }
 }
