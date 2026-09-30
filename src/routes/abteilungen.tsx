@@ -284,7 +284,10 @@ function DepartmentsPage() {
     toast.success(t("common.addedToList", { name: product.name }));
   };
 
-  const shownProducts = normalizedQuery ? searchResults : directProducts;
+  const shownProducts = useMemo(
+    () => (normalizedQuery ? searchResults : [...directProducts].sort(compareByName)),
+    [normalizedQuery, searchResults, directProducts],
+  );
 
   return (
     <div className="space-y-5">
