@@ -175,15 +175,20 @@ function ScannerView() {
     }
   }, [handleCode]);
 
+  // Kamera starten, sobald das Videoelement sichtbar ist (initial + nach "Erneut scannen").
+  const [scanSession, setScanSession] = useState(0);
   useEffect(() => {
     startScanner();
     return () => stopCamera();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [scanSession]);
 
   const rescan = () => {
     setManualCode("");
-    startScanner();
+    stopCamera();
+    busyRef.current = false;
+    setPhase({ kind: "scanning" });
+    setScanSession((n) => n + 1);
   };
 
   const matches = useMemo(() => {
