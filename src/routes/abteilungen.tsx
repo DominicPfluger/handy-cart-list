@@ -507,6 +507,7 @@ function DepartmentsPage() {
                   </Button>
                   </div>
                 </div>
+                </Fragment>
               );
             })}
           </div>
