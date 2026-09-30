@@ -117,7 +117,13 @@ function AdminPage() {
     run(() => Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), "Reihenfolge gespeichert");
   };
 
-  const [drag, setDrag] = useState<{ kind: "department" | "product"; index: number } | null>(null);
+  const [drag, setDrag] = useState<{ kind: "department" | "product" | "heading"; index: number; id?: string } | null>(null);
+
+  const moveHeading = (headingId: string, beforeProductId: string) => {
+    const h = d?.heads.find((x) => x.id === headingId);
+    if (!h || h.before_product_id === beforeProductId) return;
+    run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), "Überschrift verschoben");
+  };
 
   const remove = (s: NonNullable<Sel>, name: string) => {
     if (!confirm(`„${name}“ endgültig für alle Nutzer löschen?`)) return;
