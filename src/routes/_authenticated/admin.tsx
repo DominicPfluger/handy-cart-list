@@ -277,7 +277,11 @@ function AdminPage() {
                       dragging={drag?.kind === "product" && drag.index === i}
                       onDragStart={() => setDrag({ kind: "product", index: i })}
                       onDragOver={(e) => e.preventDefault()}
-                      onDrop={() => { if (drag?.kind === "product") reorder("product", products, drag.index, i); setDrag(null); }}
+                      onDrop={() => {
+                        if (drag?.kind === "product") reorder("product", products, drag.index, i);
+                        else if (drag?.kind === "heading" && drag.id) moveHeading(drag.id, p.id);
+                        setDrag(null);
+                      }}
                       onDragEnd={() => setDrag(null)}
                       onEdit={() => setSel({ kind: "product", id: p.id })}
                       onUp={() => move("product", products, i, -1)} onDown={() => move("product", products, i, 1)} disabled={busy} />
