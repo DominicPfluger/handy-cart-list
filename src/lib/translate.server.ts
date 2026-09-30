@@ -98,3 +98,53 @@ export async function translateNames(names: Record<string, string>, locale: stri
   for (const it of parsed.items) if (keys.includes(it.key) && it.name.trim()) out[it.key] = it.name.trim();
   return out;
 }
+
+/** Ruft das KI-Modell mit JSON-Schema auf und liefert das geparste Objekt. */
+export async function aiJson<T>(instructions: string, input: string, name: string, schema: Record<string, unknown>): Promise<T> {
+  const apiKey = process.env["LOVABLE_API_KEY"];
+  if (!apiKey) throw new Error("KI-Schlüssel fehlt");
+  const res = await fetch("https://ai.gateway.lovable.dev/v1/responses", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Lovable-API-Key": apiKey, "X-Lovable-AIG-SDK": "fetch" },
+    body: JSON.stringify({
+      model: "openai/gpt-6-astra",
+      stream: true,
+      store: false,
+      reasoning: { effort: "low" },
+      instructions,
+      input: [{ role: "user", content: [{ type: "input_text", text: input }] }],
+      text: { format: { type: "json_schema", name, strict: true, schema } },
+    }),
+  });
+  if (!res.ok || !res.body) {
+    const body = await res.text().catch(() => "");
+    throw new Error(res.status === 402 ? "KI-Guthaben aufgebraucht" : res.status === 429 ? "KI ausgelastet, bitte gleich nochmal" : `KI-Fehler ${res.status}: ${body.slice(0, 200)}`);
+  }
+  // SSE lesen und Text sammeln
+  const reader = res.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let text = "";
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+    for (const line of lines) {
+      if (!line.startsWith("data:")) continue;
+      const payload = line.slice(5).trim();
+      if (!payload || payload === "[DONE]") continue;
+      try {
+        const evt = JSON.parse(payload) as { type?: string; delta?: string; error?: { message?: string } };
+        if (evt.type === "response.output_text.delta" && evt.delta) text += evt.delta;
+        if (evt.type === "error" || evt.type === "response.failed") throw new Error(evt.error?.message ?? "KI-Fehler");
+      } catch (e) {
+        if (e instanceof SyntaxError) continue;
+        throw e;
+      }
+    }
+  }
+  if (!text) throw new Error("Leere KI-Antwort");
+  return JSON.parse(text) as T;
+}
