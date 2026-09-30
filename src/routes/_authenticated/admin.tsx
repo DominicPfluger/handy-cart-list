@@ -117,7 +117,13 @@ function AdminPage() {
     run(() => Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), "Reihenfolge gespeichert");
   };
 
-  const [drag, setDrag] = useState<{ kind: "department" | "product"; index: number } | null>(null);
+  const [drag, setDrag] = useState<{ kind: "department" | "product" | "heading"; index: number; id?: string } | null>(null);
+
+  const moveHeading = (headingId: string, beforeProductId: string) => {
+    const h = d?.heads.find((x) => x.id === headingId);
+    if (!h || h.before_product_id === beforeProductId) return;
+    run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), "Überschrift verschoben");
+  };
 
   const remove = (s: NonNullable<Sel>, name: string) => {
     if (!confirm(`„${name}“ endgültig für alle Nutzer löschen?`)) return;
@@ -257,16 +263,25 @@ function AdminPage() {
                 return (
                   <div key={p.id} className="space-y-1">
                     {h && (
-                      <button onClick={() => setSel({ kind: "heading", id: h.id })}
-                        className={`mt-2 block w-full rounded-lg px-2 py-1 text-left text-sm font-bold text-foreground ${sel?.id === h.id ? "bg-primary-soft" : ""}`}>
+                      <div
+                        draggable
+                        onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; setDrag({ kind: "heading", index: i, id: h.id }); }}
+                        onDragEnd={() => setDrag(null)}
+                        onClick={() => setSel({ kind: "heading", id: h.id })}
+                        className={`mt-2 flex cursor-grab items-center gap-2 rounded-lg px-2 py-1 text-left text-sm font-bold text-foreground ${drag?.kind === "heading" && drag.id === h.id ? "opacity-40" : ""} ${sel?.id === h.id ? "bg-primary-soft" : ""}`}>
+                        <span className="touch-none select-none text-muted-foreground" aria-label="Ziehen">⠿</span>
                         {h.name}
-                      </button>
+                      </div>
                     )}
                     <Row emoji={p.emoji ?? "•"} name={p.name} sub={`${p.default_quantity} ${p.default_unit}`} active={sel?.id === p.id}
                       dragging={drag?.kind === "product" && drag.index === i}
                       onDragStart={() => setDrag({ kind: "product", index: i })}
                       onDragOver={(e) => e.preventDefault()}
-                      onDrop={() => { if (drag?.kind === "product") reorder("product", products, drag.index, i); setDrag(null); }}
+                      onDrop={() => {
+                        if (drag?.kind === "product") reorder("product", products, drag.index, i);
+                        else if (drag?.kind === "heading" && drag.id) moveHeading(drag.id, p.id);
+                        setDrag(null);
+                      }}
                       onDragEnd={() => setDrag(null)}
                       onEdit={() => setSel({ kind: "product", id: p.id })}
                       onUp={() => move("product", products, i, -1)} onDown={() => move("product", products, i, 1)} disabled={busy} />
