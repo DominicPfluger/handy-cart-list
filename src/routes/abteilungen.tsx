@@ -143,14 +143,13 @@ function DepartmentsPage() {
   const childDepartments = childrenOf(departments, currentId).filter((d) => !hiddenDepts.has(d.id));
   const directProducts = currentId ? productsOf(products, currentId) : [];
   const normalizedQuery = query.trim().toLocaleLowerCase();
-  const searchResults = useMemo(
-    () => normalizedQuery
-      ? products
-          .filter((product) => matchesProductSearch(product.name, normalizedQuery))
-          .sort(compareByName)
-      : [],
-    [products, normalizedQuery],
-  );
+  const searchResults = useMemo(() => {
+    if (!normalizedQuery) return [];
+    const order = new Map(orderedProducts.map((p, i) => [p.id, i]));
+    return products
+      .filter((product) => matchesProductSearch(product.name, normalizedQuery))
+      .sort((a, b) => (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER));
+  }, [products, orderedProducts, normalizedQuery]);
 
   const groupFor = (product: CatalogProduct) =>
     departments.find((department) => department.id === product.departmentId) ?? current;
