@@ -1,9 +1,12 @@
 # Roadmap
 
 ## In Arbeit
-- [ ] Smarte Vorschläge: häufig gekaufte Produkte beim Listen-Erstellen vorschlagen (Basis: lokaler Einkaufsverlauf)
-- [ ] Einkaufsverlauf & Statistiken: „Einkauf abschliessen" archiviert abgehakte Einträge; Verlauf-Seite unter Mehr mit Statistiken
-- [ ] Spracheingabe: Mikrofon-Button, gesprochene Zutaten werden Katalog-produkten zugeordnet und hinzugefügt
+- (keine)
 
 ## Blockiert / wartet
 - (keine)
+
+## Erledigt
+- Smarte Vorschläge: häufig gekaufte Produkte als Chips in der Listenansicht (Basis: lokaler Einkaufsverlauf)
+- Einkaufsverlauf & Statistiken: „Einkauf abschliessen" archiviert abgehakte Einträge; Verlauf-Seite `/verlauf` unter Mehr
+- Spracheingabe: Mikrofon-Button in der Abteilungs-Suche, Treffer werden zum Katalog zugeordnet und hinzugefügt
