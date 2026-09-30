@@ -19,6 +19,7 @@ import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 
 export const Route = createFileRoute("/mehr")({
+  ssr: false,
   loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
   head: () => ({
     meta: [

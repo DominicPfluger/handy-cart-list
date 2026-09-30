@@ -39,6 +39,7 @@ import { saveHeading } from "../lib/admin.functions";
 
 
 export const Route = createFileRoute("/abteilungen")({
+  ssr: false,
   loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
   head: () => ({
     meta: [

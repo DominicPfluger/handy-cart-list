@@ -4,6 +4,7 @@ import { RecipeBuilder } from "../components/recipe-builder";
 import { catalogQueryOptions } from "../lib/catalog-query";
 
 export const Route = createFileRoute("/rezepte")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Shoppi — Rezept-Kreator" },
