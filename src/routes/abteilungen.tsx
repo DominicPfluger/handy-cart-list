@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
 import { toast } from "sonner";
@@ -19,6 +19,7 @@ import {
   useCatalog,
   childrenOf,
   compareByName,
+  letterOf,
   matchesProductSearch,
   originalName,
   pathTo,
@@ -283,7 +284,10 @@ function DepartmentsPage() {
     toast.success(t("common.addedToList", { name: product.name }));
   };
 
-  const shownProducts = normalizedQuery ? searchResults : directProducts;
+  const shownProducts = useMemo(
+    () => (normalizedQuery ? searchResults : [...directProducts].sort(compareByName)),
+    [normalizedQuery, searchResults, directProducts],
+  );
 
   return (
     <div className="space-y-5">
@@ -426,15 +430,20 @@ function DepartmentsPage() {
           <div className="mb-3 flex items-end justify-between gap-3">
             <h2 className="text-base font-semibold text-foreground">{normalizedQuery ? t("common.searchResults") : t("dept.products")}</h2>
           </div>
-          <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
-            {shownProducts.map((product) => {
+          <div className="overflow-hidden rounded-xl border border-border bg-card">
+            {shownProducts.map((product, productIndex) => {
+              const letter = letterOf(product.name);
+              const prevLetter = productIndex > 0 ? letterOf(shownProducts[productIndex - 1]!.name) : null;
               const group = groupFor(product);
               const favorite = isFavorite(product.id);
               const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
               const draggable = !normalizedQuery;
               return (
+                <Fragment key={product.id}>
+                {letter !== prevLetter && (
+                  <div className="bg-primary-soft/40 px-3 py-1.5 text-sm font-bold text-primary">{letter}</div>
+                )}
                 <div
-                  key={product.id}
                   data-drop={draggable ? "product" : undefined}
                   data-id={product.id}
                   onPointerDown={draggable ? (e) => startPress(e, product, "product") : undefined}
@@ -498,6 +507,7 @@ function DepartmentsPage() {
                   </Button>
                   </div>
                 </div>
+                </Fragment>
               );
             })}
           </div>
