@@ -1,25 +1,28 @@
 // ============= Vorrat (Pantry) =============
 import { useMemo, useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { catalogQueryOptions } from "@/lib/catalog-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useCatalog } from "@/lib/catalog-query";
 import { getUnits } from "@/lib/units";
 import { useT } from "@/i18n";
 import { usePantry } from "@/hooks/use-pantry";
 import { useAuthUser } from "@/hooks/use-auth-user";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { BackLink } from "@/components/back-link";
+import { ProductEmoji } from "@/components/product-emoji";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/vorrat")({
-  head: () => ({ meta: [{ title: "Vorrat – Shoppi" }] }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions()),
+  head: () => ({
+    meta: [
+      { title: "Shoppi — Vorrat" },
+      { name: "description", content: "Verwalte, was zuhause da ist." },
+    ],
+  }),
   component: VorratPage,
 });
 
-function ProductAvatar({ emoji, imageUrl, size = 36 }: { emoji?: string | null | undefined; imageUrl?: string | null | undefined; size?: number }) {
+function Avatar({ emoji, imageUrl, size = 34 }: { emoji?: string | null | undefined; imageUrl?: string | null | undefined; size?: number }) {
   if (imageUrl) {
     return (
       <img
@@ -31,11 +34,7 @@ function ProductAvatar({ emoji, imageUrl, size = 36 }: { emoji?: string | null |
       />
     );
   }
-  return (
-    <span className="shrink-0 text-center leading-none" style={{ width: size, height: size, fontSize: size * 0.62 }}>
-      {emoji || "📦"}
-    </span>
-  );
+  return <ProductEmoji emoji={emoji} fallback="📦" className="shrink-0 text-2xl leading-none" />;
 }
 
 function VorratPage() {
@@ -44,11 +43,11 @@ function VorratPage() {
   const pantry = usePantry();
   const [query, setQuery] = useState("");
   const [adding, setAdding] = useState(false);
-  const { data: catalog } = useQuery(catalogQueryOptions());
+  const catalog = useCatalog();
 
   const q = query.trim().toLowerCase();
   const matches = useMemo(() => {
-    if (!catalog || q.length < 2) return [];
+    if (q.length < 2) return [];
     return catalog.products
       .filter((p) => p.name.toLowerCase().includes(q))
       .slice(0, 24);
@@ -57,6 +56,12 @@ function VorratPage() {
   const unitLabel = (unitId?: string | undefined) => {
     if (!unitId) return "";
     return getUnits(locale).find((u) => u.id === unitId)?.short ?? "";
+  };
+
+  const finishAdd = () => {
+    toast.success(t("pantry.added"));
+    setQuery("");
+    setTimeout(() => setAdding(false), 400);
   };
 
   const addProduct = (p: (typeof catalog.products)[number]) => {
@@ -71,9 +76,7 @@ function VorratPage() {
       emoji: p.emoji,
       imageUrl: p.imageUrl,
     });
-    toast.success(t("pantry.added"));
-    setQuery("");
-    setTimeout(() => setAdding(false), 400);
+    finishAdd();
   };
 
   const addCustom = () => {
@@ -81,23 +84,23 @@ function VorratPage() {
     if (!name || adding) return;
     setAdding(true);
     pantry.add({ name, quantity: "1", unit: "stueck" });
-    toast.success(t("pantry.added"));
-    setQuery("");
-    setTimeout(() => setAdding(false), 400);
+    finishAdd();
   };
 
   return (
-    <main className="min-h-[100dvh] bg-background pb-24">
-      <header className="sticky top-0 z-20 border-b bg-background/95 px-4 py-3 backdrop-blur">
-        <BackLink />
-        <h1 className="text-xl font-bold">{t("pantry.title")}</h1>
-        <p className="text-sm text-muted-foreground">{t("pantry.desc")}</p>
+    <div className="space-y-5">
+      <div>
+        <Link to="/" className="text-sm text-primary underline-offset-2 hover:underline">
+          ← {t("common.back")}
+        </Link>
+        <h1 className="mt-2 text-2xl font-bold tracking-tight text-foreground">{t("pantry.title")}</h1>
+        <p className="mt-1 text-sm text-muted-foreground">{t("pantry.desc")}</p>
         {!user && pantry.hydrated && (
           <p className="mt-1 text-xs text-muted-foreground">{t("pantry.localOnly")}</p>
         )}
-      </header>
+      </div>
 
-      <section className="px-4 pt-4">
+      <section className="space-y-2">
         <Input
           type="text"
           value={query}
@@ -106,11 +109,11 @@ function VorratPage() {
           className="h-11 rounded-xl bg-card"
         />
         {q.length >= 2 && (
-          <ul className="mt-2 divide-y overflow-hidden rounded-xl border bg-card">
+          <ul className="divide-y overflow-hidden rounded-2xl border border-border bg-card">
             {matches.map((p) => (
               <li key={p.id} className="flex items-center gap-3 px-3 py-2">
-                <ProductAvatar emoji={p.emoji} imageUrl={p.imageUrl} />
-                <span className="min-w-0 flex-1 truncate text-sm">{p.name}</span>
+                <Avatar emoji={p.emoji} imageUrl={p.imageUrl} />
+                <span className="min-w-0 flex-1 truncate text-sm text-foreground">{p.name}</span>
                 <Button
                   type="button"
                   variant="outline"
@@ -123,15 +126,14 @@ function VorratPage() {
                 </Button>
               </li>
             ))}
-            {matches.length === 0 && (
+            {matches.length === 0 ? (
               <li className="flex items-center justify-between gap-3 px-3 py-2">
                 <span className="text-sm text-muted-foreground">{t("pantry.noMatch")}</span>
                 <Button type="button" variant="outline" size="sm" className="h-8 rounded-lg" onClick={addCustom} disabled={adding}>
                   {t("pantry.addCustom")}
                 </Button>
               </li>
-            )}
-            {matches.length > 0 && (
+            ) : (
               <li>
                 <button
                   type="button"
@@ -147,23 +149,23 @@ function VorratPage() {
         )}
       </section>
 
-      <section className="px-4 pt-4">
-        <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
+      <section className="space-y-2">
+        <h2 className="text-sm font-semibold text-muted-foreground">
           {t("pantry.items", { n: pantry.items.length })}
         </h2>
         {pantry.hydrated && pantry.items.length === 0 ? (
-          <p className="rounded-xl bg-card px-4 py-6 text-center text-sm text-muted-foreground">
+          <p className="rounded-2xl border border-border bg-card px-4 py-6 text-center text-sm text-muted-foreground">
             {t("pantry.empty")}
           </p>
         ) : (
-          <ul className="divide-y overflow-hidden rounded-xl border bg-card">
+          <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
             {pantry.items.map((item) => (
               <li key={item.id} className="flex items-center gap-3 px-3 py-2">
-                <ProductAvatar emoji={item.emoji} imageUrl={item.imageUrl} size={32} />
+                <Avatar emoji={item.emoji} imageUrl={item.imageUrl} size={30} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">
+                  <p className="truncate text-sm font-medium text-foreground">
                     {item.name}
-                    {item.organic ? ` ${t("common.organicShort")}` : ""}
+                    {item.organic ? ` · ${t("pantry.organicSuffix")}` : ""}
                   </p>
                 </div>
                 <div className="flex items-center gap-1">
@@ -193,7 +195,6 @@ function VorratPage() {
           </ul>
         )}
       </section>
-    </main>
+    </div>
   );
 }
-

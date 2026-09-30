@@ -1,6 +1,6 @@
 // ============= Per Einladungscode einer Liste beitreten =============
 import { useEffect, useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -9,7 +9,6 @@ import { useAuthUser } from "@/hooks/use-auth-user";
 import { useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { BackLink } from "@/components/back-link";
 
 const PENDING_JOIN_KEY = "shoppi:pending-join";
 
@@ -80,11 +79,13 @@ function BeitretenPage() {
   }, [user, normalized]);
 
   return (
-    <main className="min-h-[100dvh] bg-background">
-      <header className="sticky top-0 z-20 border-b bg-background/95 px-4 py-3 backdrop-blur">
-        <BackLink />
-        <h1 className="text-xl font-bold">{t("join.title")}</h1>
-      </header>
+    <div className="space-y-5">
+      <div>
+        <Link to="/" className="text-sm text-primary underline-offset-2 hover:underline">
+          ← {t("common.back")}
+        </Link>
+        <h1 className="mt-2 text-2xl font-bold tracking-tight text-foreground">{t("join.title")}</h1>
+      </div>
       <section className="mx-auto max-w-md px-4 pt-8">
         {!user ? (
           <div className="space-y-4 rounded-2xl border bg-card p-5 text-center">
