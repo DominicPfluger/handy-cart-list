@@ -442,9 +442,13 @@ function useCloudLists(
           localStorage.setItem(MIGRATED_KEY, "1");
           const importable = localRef.current.localListsRef.current;
           const listsToImport = importable.filter((l) => l.items.length > 0 && !l.isTemplate);
-          const templatesToImport = (localRef.current.localListsRef.current as ShoppingList[]).filter(
-            (l) => l.isTemplate && l.items.length > 0
-          );
+          let templatesToImport: ShoppingList[] = [];
+          try {
+            const savedTpl = localStorage.getItem(TPL_KEY);
+            if (savedTpl) templatesToImport = (JSON.parse(savedTpl) as ShoppingList[]).filter((l) => l.items.length > 0);
+          } catch {
+            /* ignore */
+          }
           if ((listsToImport.length > 0 || templatesToImport.length > 0) && mapped.length === 0) {
             await migrateCloudLists({
               data: {
@@ -489,7 +493,7 @@ function useCloudLists(
 
   // Erstladen + Live-Synchronisation
   useEffect(() => {
-    let cancelled = false;
+    if (!user) return;
     fetchCloud();
     const channel = supabase
       .channel("shoppi-lists")
@@ -498,13 +502,11 @@ function useCloudLists(
       .on("postgres_changes", { event: "*", schema: "public", table: "list_members" }, scheduleReload)
       .subscribe();
     return () => {
-      cancelled = true;
-      void cancelled;
       supabase.removeChannel(channel);
       if (reloadTimer.current) clearTimeout(reloadTimer.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.id]);
+  }, [user?.id]);
 
   // Aktive Liste merken
   useEffect(() => {
