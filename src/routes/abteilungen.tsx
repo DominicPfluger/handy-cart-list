@@ -598,7 +598,7 @@ function DepartmentsPage() {
       <Link to="/scanner" className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
         <ScanIcon className="h-5 w-5" />
         {t("dept.scan")}
-      </button>
+      </Link>
 
       {normalizedQuery && shownProducts.length === 0 && (
         <div className="py-12 text-center">
