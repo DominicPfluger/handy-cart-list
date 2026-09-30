@@ -128,3 +128,66 @@ export const deleteHeading = createServerFn({ method: "POST" })
     await context.supabase.from("catalog_translations").delete().eq("entity_id", data.id);
     return { ok: true };
   });
+
+const ctxSchema = z.object({
+  path: z.string().max(300),
+  existing: z.array(z.string().max(120)).max(400),
+  exclude: z.array(z.string().max(120)).max(400).default([]),
+});
+
+/** KI-Vorschläge für fehlende, relevante Produkte einer Kategorie. */
+export const suggestProducts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => ctxSchema.parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { aiJson } = await import("./translate.server");
+    const r = await aiJson<{ items: Array<{ name: string; emoji: string; reason: string }> }>(
+      "Du kuratierst den Katalog einer deutschsprachigen Einkaufslisten-App (Schweiz/Deutschland/Österreich). " +
+        "Schlage 8–15 relevante Produkte vor, die in der genannten Kategorie FEHLEN und die Kundinnen im Supermarkt typischerweise kaufen. " +
+        "Keine Duplikate, keine Synonyme bereits vorhandener Einträge, keine Einträge aus der Ausschlussliste, kein 'Beliebige'-Präfix. " +
+        "Deutsche Namen (de-DE), kurz, wie im Regal. Sortiert nach Relevanz. emoji: ein passendes Emoji. reason: max. 6 Wörter.",
+      JSON.stringify({ kategorie: data.path, vorhanden: data.existing, ausschliessen: data.exclude }),
+      "suggestions",
+      {
+        type: "object", additionalProperties: false, required: ["items"],
+        properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "emoji", "reason"],
+          properties: { name: { type: "string" }, emoji: { type: "string" }, reason: { type: "string" } } } } },
+      },
+    );
+    const have = new Set([...data.existing, ...data.exclude].map((n) => n.toLowerCase()));
+    return { items: r.items.filter((x) => x.name.trim() && !have.has(x.name.trim().toLowerCase())).map((x) => ({ ...x, name: x.name.trim() })) };
+  });
+
+/** KI-Relevanz-Sortierung: pro Gruppe (Überschrift) die Namen nach Relevanz ordnen. */
+export const rankProducts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({
+    path: z.string().max(300),
+    criterion: z.enum(["popularity", "alphabetical", "price"]).default("popularity"),
+    groups: z.array(z.array(z.string().max(120)).max(300)).max(40),
+  }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { aiJson } = await import("./translate.server");
+    const crit = {
+      popularity: "nach Relevanz: am häufigsten gekaufte Klassiker zuerst, Spezialitäten und Nischenprodukte zuletzt",
+      alphabetical: "alphabetisch",
+      price: "nach typischem Preis, günstig zuerst",
+    }[data.criterion];
+    const r = await aiJson<{ groups: string[][] }>(
+      `Sortiere die Produkte einer Einkaufslisten-Kategorie ${crit}. Jede Gruppe wird separat sortiert, Gruppenreihenfolge bleibt. ` +
+        "Gib exakt dieselben Namen zurück (keine hinzufügen, keine entfernen, nicht umschreiben).",
+      JSON.stringify({ kategorie: data.path, gruppen: data.groups }),
+      "ranking",
+      { type: "object", additionalProperties: false, required: ["groups"],
+        properties: { groups: { type: "array", items: { type: "array", items: { type: "string" } } } } },
+    );
+    // Absicherung: nur bekannte Namen, fehlende hinten anhängen
+    return {
+      groups: data.groups.map((g, i) => {
+        const out = (r.groups[i] ?? []).filter((n, k, a) => g.includes(n) && a.indexOf(n) === k);
+        return [...out, ...g.filter((n) => !out.includes(n))];
+      }),
+    };
+  });
