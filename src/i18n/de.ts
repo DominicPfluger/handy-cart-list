@@ -256,9 +256,9 @@ export const de = {
   "rk.open": "Öffnen",
   "rk.cancel": "Abbrechen",
   "rk.deleteList": "Liste löschen",
-  "rk.recent": "Neu erstellte Rezepte",
+  "rk.recent": "Neue Rezept-Kreationen",
   "rk.onlyFavorites": "Nur Favoriten",
-  "rk.popular": "Beliebte Rezepte",
+  "rk.popular": "Beliebte Rezept-Kreationen",
   "rk.ingredientsN": "{n} Zutaten",
 } as const;
 
