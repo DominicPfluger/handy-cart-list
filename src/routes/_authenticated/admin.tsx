@@ -266,9 +266,18 @@ function AdminPage() {
                       <div
                         draggable
                         onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; setDrag({ kind: "heading", index: i, id: h.id }); }}
+                        onDragOver={(e) => { if (drag?.kind === "product") e.preventDefault(); }}
+                        onDrop={(e) => {
+                          if (drag?.kind === "product") {
+                            e.preventDefault();
+                            // Produkt direkt unter diese Überschrift setzen
+                            reorder("product", products, drag.index, i);
+                          }
+                          setDrag(null);
+                        }}
                         onDragEnd={() => setDrag(null)}
                         onClick={() => setSel({ kind: "heading", id: h.id })}
-                        className={`mt-2 flex cursor-grab items-center gap-2 rounded-lg px-2 py-1 text-left text-sm font-bold text-foreground ${drag?.kind === "heading" && drag.id === h.id ? "opacity-40" : ""} ${sel?.id === h.id ? "bg-primary-soft" : ""}`}>
+                        className={`mt-2 flex cursor-grab items-center gap-2 rounded-lg px-2 py-1 text-left text-sm font-bold text-foreground ${drag?.kind === "heading" && drag.id === h.id ? "opacity-40" : ""} ${drag?.kind === "product" ? "border border-dashed border-primary/60 bg-primary-soft/30" : ""} ${sel?.id === h.id ? "bg-primary-soft" : ""}`}>
                         <span className="touch-none select-none text-muted-foreground" aria-label="Ziehen">⠿</span>
                         {h.name}
                       </div>
