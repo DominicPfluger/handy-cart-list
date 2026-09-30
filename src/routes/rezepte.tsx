@@ -1,8 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { LeafIcon } from "../components/icons";
-import { useState } from "react";
 import { useT } from "../i18n";
-import type { MessageKey } from "../i18n/de";
 import { RecipeBuilder } from "../components/recipe-builder";
 import { catalogQueryOptions } from "../lib/catalog-query";
 
