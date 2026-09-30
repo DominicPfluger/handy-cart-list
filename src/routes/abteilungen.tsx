@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
 import { toast } from "sonner";
@@ -18,6 +18,7 @@ import {
   catalogQueryOptions,
   useCatalog,
   childrenOf,
+  compareByName,
   matchesProductSearch,
   originalName,
   pathTo,
@@ -134,7 +135,7 @@ function DepartmentsPage() {
     () => normalizedQuery
       ? products
           .filter((product) => matchesProductSearch(product.name, normalizedQuery))
-          .sort((a, b) => a.sortOrder - b.sortOrder)
+          .sort(compareByName)
       : [],
     [products, normalizedQuery],
   );
@@ -425,15 +426,15 @@ function DepartmentsPage() {
           <div className="mb-3 flex items-end justify-between gap-3">
             <h2 className="text-base font-semibold text-foreground">{normalizedQuery ? t("common.searchResults") : t("dept.products")}</h2>
           </div>
-          <div className="overflow-hidden rounded-xl border border-border bg-card">
-            {shownProducts.map((product, productIndex) => {
+          <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
+            {shownProducts.map((product) => {
               const group = groupFor(product);
               const favorite = isFavorite(product.id);
               const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
               const draggable = !normalizedQuery;
               return (
-                <Fragment key={product.id}>
                 <div
+                  key={product.id}
                   data-drop={draggable ? "product" : undefined}
                   data-id={product.id}
                   onPointerDown={draggable ? (e) => startPress(e, product, "product") : undefined}
@@ -497,7 +498,6 @@ function DepartmentsPage() {
                   </Button>
                   </div>
                 </div>
-                </Fragment>
               );
             })}
           </div>
@@ -510,10 +510,10 @@ function DepartmentsPage() {
       )}
       <AddEntryDialog target={addTarget} onClose={() => setAddTarget(null)} />
 
-      <Link to="/scanner" className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
+      <button className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
         <ScanIcon className="h-5 w-5" />
         {t("dept.scan")}
-      </Link>
+      </button>
 
       {normalizedQuery && shownProducts.length === 0 && (
         <div className="py-12 text-center">

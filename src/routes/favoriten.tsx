@@ -10,6 +10,7 @@ import { useShoppingList, type FavoriteProduct } from "../hooks/use-shopping-lis
 import {
   catalogQueryOptions,
   useCatalog,
+  compareByName,
   matchesProductSearch,
   type CatalogDepartment,
   type CatalogProduct,
@@ -203,7 +204,7 @@ function FavoritesPage() {
       if (!matchesProductSearch(product.name, normalizedQuery)) continue;
       rows.push({ product, favorite: fav });
     }
-    return rows.sort((a, b) => a.product.sortOrder - b.product.sortOrder);
+    return rows.sort((a, b) => compareByName(a.product, b.product));
   }, [normalizedQuery, favorites, productById]);
 
   const categoryLabel = (product: CatalogProduct, fallback: string | undefined): string => {

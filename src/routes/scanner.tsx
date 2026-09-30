@@ -175,20 +175,15 @@ function ScannerView() {
     }
   }, [handleCode]);
 
-  // Kamera starten, sobald das Videoelement sichtbar ist (initial + nach "Erneut scannen").
-  const [scanSession, setScanSession] = useState(0);
   useEffect(() => {
     startScanner();
     return () => stopCamera();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [scanSession]);
+  }, []);
 
   const rescan = () => {
     setManualCode("");
-    stopCamera();
-    busyRef.current = false;
-    setPhase({ kind: "scanning" });
-    setScanSession((n) => n + 1);
+    startScanner();
   };
 
   const matches = useMemo(() => {
@@ -248,9 +243,6 @@ function ScannerView() {
           </div>
           <p className="text-sm font-semibold text-foreground">{t("scan.cameraError")}</p>
           <p className="mt-1 text-xs text-muted-foreground">{t("scan.cameraErrorSub")}</p>
-          <button onClick={rescan} className="mt-3 rounded-xl border border-border px-4 py-2 text-sm font-semibold text-foreground active:bg-muted">
-            {t("scan.rescan")}
-          </button>
         </div>
       )}
 
