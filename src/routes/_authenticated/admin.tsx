@@ -269,11 +269,11 @@ function AdminPage() {
               await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: patch.before ?? h.before_product_id, ...(patch.name && patch.name !== h.name ? { name: patch.name } : {}) } });
             } else {
               const upd: Record<string, unknown> = {};
-              if (patch.name) upd.name = patch.name;
-              if (patch.emoji !== undefined) upd.emoji = patch.emoji || null;
+              if (patch.name) upd['name'] = patch.name;
+              if (patch.emoji !== undefined) upd['emoji'] = patch.emoji || null;
               if (patch.parent !== undefined) upd[sel.kind === "product" ? "department_id" : "parent_id"] = patch.parent || null;
-              if (patch.qty !== undefined) upd.default_quantity = patch.qty;
-              if (patch.unit) upd.default_unit = patch.unit;
+              if (patch.qty !== undefined) upd['default_quantity'] = patch.qty;
+              if (patch.unit) upd['default_unit'] = patch.unit;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
             }
           })}
