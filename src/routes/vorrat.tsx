@@ -39,7 +39,7 @@ function ProductAvatar({ emoji, imageUrl, size = 36 }: { emoji?: string | null |
 }
 
 function VorratPage() {
-  const t = useT();
+  const { t, locale } = useT();
   const user = useAuthUser();
   const pantry = usePantry();
   const [query, setQuery] = useState("");
@@ -56,7 +56,7 @@ function VorratPage() {
 
   const unitLabel = (unitId?: string | undefined) => {
     if (!unitId) return "";
-    return getUnits(t.locale).find((u) => u.id === unitId)?.short ?? "";
+    return getUnits(locale).find((u) => u.id === unitId)?.short ?? "";
   };
 
   const addProduct = (p: (typeof catalog.products)[number]) => {
@@ -92,7 +92,9 @@ function VorratPage() {
         <BackLink />
         <h1 className="text-xl font-bold">{t("pantry.title")}</h1>
         <p className="text-sm text-muted-foreground">{t("pantry.desc")}</p>
-        {!user && hydratedNote(pantry.hydrated)}
+        {!user && pantry.hydrated && (
+          <p className="mt-1 text-xs text-muted-foreground">{t("pantry.localOnly")}</p>
+        )}
       </header>
 
       <section className="px-4 pt-4">
