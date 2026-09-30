@@ -245,6 +245,64 @@ export const joinCloudByCode = createServerFn({ method: "POST" })
     return { ok: true as const, listId, listName: (list as Row | null)?.name ?? "" };
   });
 
+export const migrateCloudLists = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        lists: z
+          .array(
+            z.object({
+              name: z.string().min(1).max(120),
+              isTemplate: z.boolean().optional(),
+              items: z.array(itemSchema),
+            })
+          )
+          .max(50),
+      })
+      .parse(data)
+  )
+  .handler(async ({ context, data }) => {
+    const sb = context.supabase as unknown as Sb;
+    let created = 0;
+    for (const l of data.lists) {
+      const { data: list, error } = await sb
+        .from("shopping_lists")
+        .insert({
+          owner_id: context.userId,
+          name: l.name,
+          is_template: l.isTemplate ?? false,
+          invite_code: makeInviteCode(),
+        })
+        .select()
+        .single();
+      if (error) throw new Error(error.message);
+      if (l.items.length) {
+        const { error: itemError } = await sb.from("list_items").insert(
+          l.items.map((it, i) => ({
+            list_id: list.id,
+            product_id: it.productId ?? null,
+            name: it.name,
+            quantity: it.quantity ?? "",
+            unit: it.unit ?? null,
+            organic: it.organic ?? false,
+            emoji: it.emoji ?? null,
+            image_url: it.imageUrl ?? null,
+            group_label: it.groupLabel ?? null,
+            group_emoji: it.groupEmoji ?? null,
+            note: it.note ?? null,
+            added_by: context.userId,
+            added_by_name: it.addedByName ?? null,
+            sort_order: i,
+          }))
+        );
+        if (itemError) throw new Error(itemError.message);
+      }
+      created++;
+    }
+    return { created };
+  });
+
 export const leaveCloudList = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: unknown) => z.object({ listId: z.string().uuid() }).parse(data))

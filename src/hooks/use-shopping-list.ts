@@ -864,7 +864,7 @@ export function useShoppingList() {
     );
   }, []);
 
-  const cloud = useCloudLists(user as AuthUser, local, logActivity);
+  const cloud = useCloudLists(user, local, logActivity);
 
   const isFavorite = useCallback(
     (productId: string) => favorites.some((f) => f.productId === productId),
@@ -989,12 +989,14 @@ export function useShoppingList() {
     (templateId: string) => {
       const tpl = localTemplates.find((l) => l.id === templateId);
       if (!tpl) return;
-      const id = local.createList(tpl.name);
-      local.setItems((prev) => prev); // aktive Liste = neu erstellt
-      setTimeout(() => {
-        local.setItems(() => tpl.items.map((i) => ({ ...i, id: `i${Date.now()}${Math.round(Math.random() * 1000)}`, checked: false })));
-      }, 0);
-      void id;
+      local.createListFromItems(
+        tpl.name,
+        tpl.items.map((i) => ({
+          ...i,
+          id: `i${Date.now()}${Math.round(Math.random() * 1000)}`,
+          checked: false,
+        }))
+      );
     },
     [localTemplates, local]
   );
