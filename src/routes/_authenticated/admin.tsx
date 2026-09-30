@@ -247,6 +247,17 @@ function AdminPage() {
               }, "Angelegt & übersetzt")} />
           )}
 
+          {bulk && (
+            <BulkAddForm onCancel={() => setBulk(null as unknown as boolean) || setBulk(false)}
+              onSubmit={(names, emoji, qty, unit) => run(async () => {
+                const rows = names.map((name, i) => ({ department_id: cur!, name, emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: products.length + i + 1 }));
+                const r = await supabase.from("products").insert(rows).select("id");
+                if (r.error) throw new Error(r.error.message);
+                await translateIds((r.data ?? []).map((x) => x.id as string));
+                setBulk(false);
+              }, "Angelegt & übersetzt")} />
+          )}
+
           {children.length > 0 && (
             <section className="space-y-1">
               <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Kategorien</h2>
