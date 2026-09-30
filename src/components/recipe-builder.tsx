@@ -293,6 +293,15 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
       <div className="flex items-center justify-between gap-2">
         <button onClick={() => setTplId(null)} className="text-xs font-semibold text-primary">← {t("rk.back")}</button>
         <div className="flex gap-2">
+          <button
+            onClick={toggleOnlyFav}
+            aria-pressed={onlyFav}
+            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+              onlyFav ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
+            }`}
+          >
+            ♥ {t("rk.onlyFavorites")}
+          </button>
           <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-foreground">
             {t("rk.reset")}
           </button>
