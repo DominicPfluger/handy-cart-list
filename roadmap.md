@@ -1,13 +1,9 @@
-- [x] Backzutaten-Unterkategorie mit 13 Artikeln ergänzen und prüfen.
-- [x] Drei Büroartikel-Unterkategorien mit 21 Artikeln ergänzen; Paketklebeband verschieben und prüfen.
-- [x] Namen für die unterstützten Sprachvarianten ergänzen und prüfen.
-- [x] Körperpflege zwischen Süsses und Haushalt einordnen.
-- [x] Apotheke & Drogerie als neue Abteilung ergänzen und lokalisieren.
-- [x] 23 gewünschte Lamm-Artikel und alle sieben vorgeschlagenen Ergänzungen einordnen, übersetzen und prüfen.
-- [x] Wild nach Geflügel einordnen; Reh (8), Wildschwein (7) und Hirsch (15) samt Übersetzungen ergänzen und in der App prüfen.
-- [x] Kategorien in der Abteilungsansicht lokal entfernen, bestätigen und unter Mehr wiederherstellen; mobil prüfen.
-- [x] 28 TK-Fertiggerichte in TK-Fertiggerichte anlegen, übersetzen und prüfen (Gemüse-Lasagne nach Lasagne).
-- [x] Bild „Puten“ der Geflügel-Kategorie zuweisen (komprimiert, geprüft).
-- [x] Bild „Blüten & Stängelgemüse“ der Kategorie Blüten & Stängelgemüse zuweisen (komprimiert, geprüft).
-- [x] Auf der Rezept-Kreator-Hauptseite beliebte und neue Rezept-Kreationen anzeigen und Öffnen prüfen.
-- [x] Fertigsuppen mit 23 Artikeln füllen (Tomatensuppe bis Tom-Kha-Suppe, nach Relevanz sortiert, 16 Sprachversionen, Diät-Ausschlüsse).
+# Roadmap
+
+## In Arbeit
+- [ ] Gemeinsame Listen live: Cloud-Tabellen (Listen, Einträge, Mitglieder), Server-Fns, Realtime-Abos, Migrate der lokalen Listen
+- [ ] Mehrere Listen & Vorlagen: Listen-Verwaltung (anlegen/umbenennen/löschen), Vorlagen-Listen mit 1-Tipp-Kopie
+- [ ] Vorratsverwaltung (Pantry): Vorrat pflegen, beim Listen-Erstellen nur Fehlendes vorschlagen
+
+## Blockiert / wartet
+- (keine)
