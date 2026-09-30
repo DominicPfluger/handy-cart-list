@@ -31,6 +31,7 @@ import { formatQuantity } from "../lib/units";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
+import { VoiceInputButton } from "../components/voice-input";
 import { useIsAdmin } from "../hooks/use-is-admin";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -332,6 +333,27 @@ function DepartmentsPage() {
     toast.success(t("common.addedToList", { name: product.name }));
   };
 
+  /** Gesprochene Zutaten im Katalog finden und hinzufügen. */
+  const handleVoiceResult = (text: string) => {
+    const tokens = text
+      .split(/[,;+]|\s+und\s+|\s+plus\s+/i)
+      .map((s) => s.trim())
+      .filter((s) => s.length >= 2);
+    let added = 0;
+    for (const token of tokens) {
+      const q = token.toLocaleLowerCase();
+      const product =
+        products.find((p) => p.name.toLocaleLowerCase() === q) ??
+        products.find((p) => matchesProductSearch(p.name, q));
+      if (product) {
+        quickAdd(product, groupFor(product));
+        added += 1;
+      }
+    }
+    if (added > 0) toast.success(t("voice.added", { n: added }));
+    else toast.error(t("voice.noMatch"));
+  };
+
   const shownProducts = normalizedQuery ? searchResults : directProducts;
 
   return (
@@ -358,6 +380,10 @@ function DepartmentsPage() {
           placeholder={t("dept.search")}
           aria-label={t("dept.search")}
           className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+        />
+        <VoiceInputButton
+          onResult={handleVoiceResult}
+          className="shrink-0 rounded-lg p-2 text-primary transition active:bg-muted"
         />
         <button
           type="button"

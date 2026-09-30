@@ -328,6 +328,25 @@ export const de = {
   "rk.showAllPopular": "Alle beliebten Rezept-Kreationen anzeigen",
   "rk.showLess": "Weniger anzeigen",
   "rk.ingredientsN": "{n} Zutaten",
+
+  "hist.title": "Einkaufsverlauf",
+  "hist.subtitle": "Was gekauft wurde und wie oft.",
+  "hist.finish": "Einkauf abschließen ({n})",
+  "hist.archived": "{n} Artikel im Verlauf gespeichert",
+  "hist.empty": "Noch keine abgeschlossenen Einkäufe.",
+  "hist.purchases": "Einkäufe",
+  "hist.itemsTotal": "Artikel",
+  "hist.topProducts": "Am häufigsten gekauft",
+  "hist.recent": "Letzte Einkäufe",
+  "hist.times": "{n}×",
+  "hist.clear": "Verlauf löschen",
+  "hist.clearConfirm": "Den gesamten Einkaufsverlauf löschen?",
+  "sugg.title": "Häufig bei dir",
+  "voice.add": "Spracheingabe",
+  "voice.listening": "Ich höre zu …",
+  "voice.notSupported": "Spracheingabe wird von diesem Browser nicht unterstützt.",
+  "voice.added": "{n} Produkte hinzugefügt",
+  "voice.noMatch": "Keine passenden Produkte erkannt",
 } as const;
 
 export type MessageKey = keyof typeof de;

@@ -1,9 +1,12 @@
 # Roadmap
 
 ## In Arbeit
-- [ ] Gemeinsame Listen live: Cloud-Tabellen (Listen, Einträge, Mitglieder), Server-Fns, Realtime-Abos, Migrate der lokalen Listen
-- [ ] Mehrere Listen & Vorlagen: Listen-Verwaltung (anlegen/umbenennen/löschen), Vorlagen-Listen mit 1-Tipp-Kopie
-- [ ] Vorratsverwaltung (Pantry): Vorrat pflegen, beim Listen-Erstellen nur Fehlendes vorschlagen
+- (keine)
 
 ## Blockiert / wartet
 - (keine)
+
+## Erledigt
+- Smarte Vorschläge: häufig gekaufte Produkte als Chips in der Listenansicht (Basis: lokaler Einkaufsverlauf)
+- Einkaufsverlauf & Statistiken: „Einkauf abschliessen" archiviert abgehakte Einträge; Verlauf-Seite `/verlauf` unter Mehr
+- Spracheingabe: Mikrofon-Button in der Abteilungs-Suche, Treffer werden zum Katalog zugeordnet und hinzugefügt
