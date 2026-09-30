@@ -7,6 +7,25 @@ export const DIETS = [
 ] as const;
 export type Diet = (typeof DIETS)[number];
 
+/** Icon je Ernährungsform (Chips zeigen nur das Icon, Name per Tooltip). */
+export const DIET_EMOJI: Record<Diet, string> = {
+  kosher: "✡️",
+  halal: "☪️",
+  vegetarian: "🥕",
+  vegan: "🌱",
+  gluten_free: "🌾",
+  lactose_free: "🥛",
+  fructose_free: "🍎",
+  sugar_free: "🍬",
+  keto: "🥑",
+  paleo: "🍖",
+  low_carb: "🍚",
+  low_fat: "🥒",
+  high_protein: "🥩",
+  low_calorie: "⚖️",
+  clean_eating: "🥗",
+};
+
 const KEY = "shoppi:diet-filter";
 const EMPTY: Diet[] = [];
 let cache: Diet[] | null = null;
