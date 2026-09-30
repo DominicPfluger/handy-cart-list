@@ -231,7 +231,10 @@
     "dept.removeConfirm": "Remove",
     "more.hiddenCategories": "Hidden categories",
     "more.hiddenCategoriesHint": "These categories are hidden only on this device.",
-    "more.restore": "Restore"
+    "more.restore": "Restore",
+    "rk.recent": "Recently created recipes",
+    "rk.popular": "Popular recipes",
+    "rk.ingredientsN": "{n} ingredients"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -465,7 +468,10 @@
     "dept.removeConfirm": "Remove",
     "more.hiddenCategories": "Hidden categories",
     "more.hiddenCategoriesHint": "These categories are hidden only on this device.",
-    "more.restore": "Restore"
+    "more.restore": "Restore",
+    "rk.recent": "Recently created recipes",
+    "rk.popular": "Popular recipes",
+    "rk.ingredientsN": "{n} ingredients"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -699,7 +705,10 @@
     "dept.removeConfirm": "Remove",
     "more.hiddenCategories": "Hidden categories",
     "more.hiddenCategoriesHint": "These categories are hidden only on this device.",
-    "more.restore": "Restore"
+    "more.restore": "Restore",
+    "rk.recent": "Recently created recipes",
+    "rk.popular": "Popular recipes",
+    "rk.ingredientsN": "{n} ingredients"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -933,7 +942,10 @@
     "dept.removeConfirm": "Quitar",
     "more.hiddenCategories": "Categorías ocultas",
     "more.hiddenCategoriesHint": "Estas categorías están ocultas solo en este dispositivo.",
-    "more.restore": "Restaurar"
+    "more.restore": "Restaurar",
+    "rk.recent": "Recetas creadas recientemente",
+    "rk.popular": "Recetas populares",
+    "rk.ingredientsN": "{n} ingredientes"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -1167,7 +1179,10 @@
     "dept.removeConfirm": "Quitar",
     "more.hiddenCategories": "Categorías ocultas",
     "more.hiddenCategoriesHint": "Estas categorías están ocultas solo en este dispositivo.",
-    "more.restore": "Restaurar"
+    "more.restore": "Restaurar",
+    "rk.recent": "Recetas creadas recientemente",
+    "rk.popular": "Recetas populares",
+    "rk.ingredientsN": "{n} ingredientes"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -1401,7 +1416,10 @@
     "dept.removeConfirm": "Retirer",
     "more.hiddenCategories": "Catégories masquées",
     "more.hiddenCategoriesHint": "Ces catégories sont masquées uniquement sur cet appareil.",
-    "more.restore": "Restaurer"
+    "more.restore": "Restaurer",
+    "rk.recent": "Recettes récemment créées",
+    "rk.popular": "Recettes populaires",
+    "rk.ingredientsN": "{n} ingrédients"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -1635,7 +1653,10 @@
     "dept.removeConfirm": "Retirer",
     "more.hiddenCategories": "Catégories masquées",
     "more.hiddenCategoriesHint": "Ces catégories sont masquées uniquement sur cet appareil.",
-    "more.restore": "Restaurer"
+    "more.restore": "Restaurer",
+    "rk.recent": "Recettes récemment créées",
+    "rk.popular": "Recettes populaires",
+    "rk.ingredientsN": "{n} ingrédients"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -1869,7 +1890,10 @@
     "dept.removeConfirm": "Rimuovi",
     "more.hiddenCategories": "Categorie nascoste",
     "more.hiddenCategoriesHint": "Queste categorie sono nascoste solo su questo dispositivo.",
-    "more.restore": "Ripristina"
+    "more.restore": "Ripristina",
+    "rk.recent": "Ricette create di recente",
+    "rk.popular": "Ricette popolari",
+    "rk.ingredientsN": "{n} ingredienti"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -2103,7 +2127,10 @@
     "dept.removeConfirm": "Rimuovi",
     "more.hiddenCategories": "Categorie nascoste",
     "more.hiddenCategoriesHint": "Queste categorie sono nascoste solo su questo dispositivo.",
-    "more.restore": "Ripristina"
+    "more.restore": "Ripristina",
+    "rk.recent": "Ricette create di recente",
+    "rk.popular": "Ricette popolari",
+    "rk.ingredientsN": "{n} ingredienti"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -2337,7 +2364,10 @@
     "dept.removeConfirm": "Remover",
     "more.hiddenCategories": "Categorias ocultas",
     "more.hiddenCategoriesHint": "Estas categorias estão ocultas apenas neste dispositivo.",
-    "more.restore": "Restaurar"
+    "more.restore": "Restaurar",
+    "rk.recent": "Receitas criadas recentemente",
+    "rk.popular": "Receitas populares",
+    "rk.ingredientsN": "{n} ingredientes"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -2571,7 +2601,10 @@
     "dept.removeConfirm": "Remover",
     "more.hiddenCategories": "Categorias ocultas",
     "more.hiddenCategoriesHint": "Estas categorias estão ocultas apenas neste dispositivo.",
-    "more.restore": "Restaurar"
+    "more.restore": "Restaurar",
+    "rk.recent": "Receitas criadas recentemente",
+    "rk.popular": "Receitas populares",
+    "rk.ingredientsN": "{n} ingredientes"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -2805,7 +2838,10 @@
     "dept.removeConfirm": "Verwijderen",
     "more.hiddenCategories": "Verborgen categorieën",
     "more.hiddenCategoriesHint": "Deze categorieën zijn alleen op dit toestel verborgen.",
-    "more.restore": "Herstellen"
+    "more.restore": "Herstellen",
+    "rk.recent": "Recent gemaakte recepten",
+    "rk.popular": "Populaire recepten",
+    "rk.ingredientsN": "{n} ingrediënten"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -3039,6 +3075,9 @@
     "dept.removeConfirm": "Verwijderen",
     "more.hiddenCategories": "Verborgen categorieën",
     "more.hiddenCategoriesHint": "Deze categorieën zijn alleen op dit toestel verborgen.",
-    "more.restore": "Herstellen"
+    "more.restore": "Herstellen",
+    "rk.recent": "Recent gemaakte recepten",
+    "rk.popular": "Populaire recepten",
+    "rk.ingredientsN": "{n} ingrediënten"
   }
 }
