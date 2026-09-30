@@ -48,10 +48,30 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const steps = useMemo(
     () => (tpl?.steps ?? []).map((s) => ({
       ...s,
-      products: s.ingredients.map((n) => byBase.get(n)).filter((p): p is CatalogProduct => !!p),
+      products: s.ingredients
+        .map((n) => byBase.get(n))
+        .filter((p): p is CatalogProduct => !!p)
+        .filter((p) => !onlyFav || favIds.has(p.id)),
     })),
-    [tpl, byBase],
+    [tpl, byBase, onlyFav, favIds],
   );
+
+  const toggleOnlyFav = () => {
+    setOnlyFav((v) => {
+      const next = !v;
+      if (next) {
+        setPicks((prev) => {
+          const pruned: Picks = {};
+          for (const [k, ids] of Object.entries(prev)) {
+            const kept = ids.filter((id) => favIds.has(id));
+            if (kept.length) pruned[k] = kept;
+          }
+          return pruned;
+        });
+      }
+      return next;
+    });
+  };
 
   const popular = useMemo(() => {
     if (!tpl) return [];
