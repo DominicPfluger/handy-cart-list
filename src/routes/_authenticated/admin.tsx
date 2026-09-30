@@ -106,10 +106,18 @@ function AdminPage() {
   const move = (kind: "department" | "product", list: { id: string }[], idx: number, dir: -1 | 1) => {
     const j = idx + dir;
     if (j < 0 || j >= list.length) return;
+    reorder(kind, list, idx, j);
+  };
+
+  const reorder = (kind: "department" | "product", list: { id: string }[], from: number, to: number) => {
+    if (from === to || from < 0 || from >= list.length) return;
     const next = [...list];
-    [next[idx], next[j]] = [next[j]!, next[idx]!];
+    const [item] = next.splice(from, 1);
+    next.splice(Math.max(0, Math.min(to, next.length)), 0, item!);
     run(() => Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), "Reihenfolge gespeichert");
   };
+
+  const [drag, setDrag] = useState<{ kind: "department" | "product"; index: number } | null>(null);
 
   const remove = (s: NonNullable<Sel>, name: string) => {
     if (!confirm(`„${name}“ endgültig für alle Nutzer löschen?`)) return;
@@ -228,6 +236,11 @@ function AdminPage() {
               <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Kategorien</h2>
               {children.map((c, i) => (
                 <Row key={c.id} emoji={c.emoji ?? "📁"} name={c.name} active={sel?.id === c.id}
+                  dragging={drag?.kind === "department" && drag.index === i}
+                  onDragStart={() => setDrag({ kind: "department", index: i })}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => { if (drag?.kind === "department") reorder("department", children, drag.index, i); setDrag(null); }}
+                  onDragEnd={() => setDrag(null)}
                   sub={`${d!.depts.filter((x) => x.parent_id === c.id).length} Unterkat. · ${d!.prods.filter((x) => x.department_id === c.id).length} Produkte`}
                   onOpen={() => { setCur(c.id); setSel(null); }} onEdit={() => setSel({ kind: "department", id: c.id })}
                   onUp={() => move("department", children, i, -1)} onDown={() => move("department", children, i, 1)} disabled={busy} />
@@ -250,6 +263,11 @@ function AdminPage() {
                       </button>
                     )}
                     <Row emoji={p.emoji ?? "•"} name={p.name} sub={`${p.default_quantity} ${p.default_unit}`} active={sel?.id === p.id}
+                      dragging={drag?.kind === "product" && drag.index === i}
+                      onDragStart={() => setDrag({ kind: "product", index: i })}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={() => { if (drag?.kind === "product") reorder("product", products, drag.index, i); setDrag(null); }}
+                      onDragEnd={() => setDrag(null)}
                       onEdit={() => setSel({ kind: "product", id: p.id })}
                       onUp={() => move("product", products, i, -1)} onDown={() => move("product", products, i, 1)} disabled={busy} />
                   </div>
@@ -306,9 +324,21 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
   );
 }
 
-function Row(p: { emoji: string; name: string; sub: string; active: boolean; disabled: boolean; onOpen?: () => void; onEdit: () => void; onUp: () => void; onDown: () => void }) {
+function Row(p: {
+  emoji: string; name: string; sub: string; active: boolean; disabled: boolean;
+  onOpen?: () => void; onEdit: () => void; onUp: () => void; onDown: () => void;
+  dragging?: boolean; onDragStart?: () => void; onDragOver?: (e: React.DragEvent) => void; onDrop?: () => void; onDragEnd?: () => void;
+}) {
   return (
-    <div className={`flex items-center gap-2 rounded-lg border px-2 py-1.5 ${p.active ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}>
+    <div
+      draggable={Boolean(p.onDragStart)}
+      onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; p.onDragStart?.(); }}
+      onDragOver={p.onDragOver}
+      onDrop={(e) => { e.preventDefault(); p.onDrop?.(); }}
+      onDragEnd={p.onDragEnd}
+      className={`flex items-center gap-2 rounded-lg border px-2 py-1.5 ${p.dragging ? "opacity-40" : ""} ${p.active ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}
+    >
+      {p.onDragStart && <span className="cursor-grab touch-none select-none text-muted-foreground" aria-label="Ziehen">⠿</span>}
       <button className="flex min-w-0 flex-1 items-center gap-2 text-left" onClick={p.onOpen ?? p.onEdit}>
         <span className="text-lg">{p.emoji}</span>
         <span className="min-w-0">
