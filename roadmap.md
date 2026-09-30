@@ -10,3 +10,4 @@
 - [x] Bild „Puten“ der Geflügel-Kategorie zuweisen (komprimiert, geprüft).
 - [x] Bild „Blüten & Stängelgemüse“ der Kategorie Blüten & Stängelgemüse zuweisen (komprimiert, geprüft).
 - [x] Auf der Rezept-Kreator-Hauptseite beliebte und neue Rezept-Kreationen anzeigen und Öffnen prüfen.
+- [x] Fertigsuppen mit 23 Artikeln füllen (Tomatensuppe bis Tom-Kha-Suppe, nach Relevanz sortiert, 16 Sprachversionen, Diät-Ausschlüsse).
