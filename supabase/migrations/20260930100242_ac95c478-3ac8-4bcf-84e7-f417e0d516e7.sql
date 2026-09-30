@@ -1,0 +1,1 @@
+UPDATE public.departments SET sort_order = 2, updated_at = now() WHERE id = '1360793d-98b0-4a63-8646-91c051ed994e';
