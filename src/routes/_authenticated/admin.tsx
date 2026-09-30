@@ -236,6 +236,11 @@ function AdminPage() {
               <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Kategorien</h2>
               {children.map((c, i) => (
                 <Row key={c.id} emoji={c.emoji ?? "📁"} name={c.name} active={sel?.id === c.id}
+                  dragging={drag?.kind === "department" && drag.index === i}
+                  onDragStart={() => setDrag({ kind: "department", index: i })}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => { if (drag?.kind === "department") reorder("department", children, drag.index, i); setDrag(null); }}
+                  onDragEnd={() => setDrag(null)}
                   sub={`${d!.depts.filter((x) => x.parent_id === c.id).length} Unterkat. · ${d!.prods.filter((x) => x.department_id === c.id).length} Produkte`}
                   onOpen={() => { setCur(c.id); setSel(null); }} onEdit={() => setSel({ kind: "department", id: c.id })}
                   onUp={() => move("department", children, i, -1)} onDown={() => move("department", children, i, 1)} disabled={busy} />
@@ -258,6 +263,11 @@ function AdminPage() {
                       </button>
                     )}
                     <Row emoji={p.emoji ?? "•"} name={p.name} sub={`${p.default_quantity} ${p.default_unit}`} active={sel?.id === p.id}
+                      dragging={drag?.kind === "product" && drag.index === i}
+                      onDragStart={() => setDrag({ kind: "product", index: i })}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={() => { if (drag?.kind === "product") reorder("product", products, drag.index, i); setDrag(null); }}
+                      onDragEnd={() => setDrag(null)}
                       onEdit={() => setSel({ kind: "product", id: p.id })}
                       onUp={() => move("product", products, i, -1)} onDown={() => move("product", products, i, 1)} disabled={busy} />
                   </div>
