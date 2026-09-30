@@ -19,6 +19,40 @@ export type RecipeTemplate = {
   steps: RecipeStep[];
 };
 
+/** Beliebte Kombinationen je Vorlage (stepKey -> deutsche baseNames). */
+export const POPULAR_RECIPES: Record<RecipeTemplate["id"], Record<string, string[]>[]> = {
+  muesli: [
+    { base: ["Haferflocken"], liquid: ["Milch"], fruit: ["Bananen", "Heidelbeeren"], topping: ["Honig"] },
+    { base: ["Granola"], liquid: ["Joghurt"], fruit: ["Erdbeeren", "Himbeeren"], topping: ["Mandeln"] },
+    { base: ["Dinkelflocken"], liquid: ["Hafermilch"], fruit: ["Äpfel"], topping: ["Walnüsse", "Rosinen"] },
+  ],
+  smoothie: [
+    { liquid: ["Milch"], fruit: ["Bananen", "Erdbeeren"] },
+    { liquid: ["Orangensaft"], fruit: ["Mango", "Ananas"] },
+    { liquid: ["Mandelmilch"], fruit: ["Bananen"], green: ["Babyspinat", "Avocado"], extra: ["Datteln"] },
+  ],
+  salat: [
+    { base: ["Kopfsalat"], veg: ["Tomaten", "Salatgurke"], protein: ["Feta"], dressing: ["Olivenöl", "Balsamico"] },
+    { base: ["Rucola"], veg: ["Cherrytomaten"], protein: ["Mozzarella"], herb: ["Basilikum"], dressing: ["Olivenöl"] },
+    { base: ["Eisbergsalat"], veg: ["Zuckermais", "Paprika"], protein: ["Thunfisch", "Eier"], dressing: ["Zitronen"] },
+  ],
+  pizza: [
+    { dough: ["Pizzateig"], sauce: ["Passierte Tomaten"], cheese: ["Mozzarella"], topping: ["Salami"], finish: ["Basilikum"] },
+    { dough: ["Pizzateig"], sauce: ["Passierte Tomaten"], cheese: ["Mozzarella"], topping: ["Schinken", "Champignons"], finish: ["Oregano"] },
+    { dough: ["Pizzateig"], sauce: ["Tomaten"], cheese: ["Mozzarella"], topping: ["Paprika", "Zucchini", "Schwarze Oliven"] },
+  ],
+  pfanne: [
+    { base: ["Reis"], protein: ["Hähnchenbrust"], veg: ["Paprika", "Zuckererbsen"], aroma: ["Sojasauce", "Ingwer"] },
+    { base: ["Nudeln"], protein: ["Tofu"], veg: ["Pak Choi", "Babymais"], aroma: ["Knoblauch", "Chilischoten"] },
+    { base: ["Kartoffeln"], protein: ["Eier"], veg: ["Zucchini"], aroma: ["Zwiebeln"] },
+  ],
+  menu: [
+    { starter: ["Bruschetta"], main: ["Lachs", "Kartoffeln"], side: ["Grüne Bohnen"], dessert: ["Panna Cotta"] },
+    { starter: ["Crostini"], main: ["Hähnchenbrust", "Reis"], side: ["Karotten"], dessert: ["Tiramisu"] },
+  ],
+  dessert: [],
+};
+
 export const RECIPE_TEMPLATES: RecipeTemplate[] = [
   { id: "muesli", emoji: "🥣", color: "oklch(0.93 0.05 80)", steps: [
     { key: "base", label: "Basis", min: 1, max: 2, ingredients: ["Haferflocken", "Dinkelflocken", "Cornflakes", "Granola"] },
