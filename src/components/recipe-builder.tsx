@@ -212,13 +212,18 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           </Button>
         );
       })}
+      {recent.length > 5 && (
+        <button onClick={() => setShowAllRecent((v) => !v)} className="w-full py-1 text-sm font-semibold text-primary">
+          {showAllRecent ? t("rk.showLess") : t("rk.showAllRecent")}
+        </button>
+      )}
     </section>
   );
 
   const popularView = visiblePopular.length > 0 && (
     <section className="space-y-2">
       <h2 className="text-lg font-bold text-foreground">⭐ {t("rk.popular")}</h2>
-      {visiblePopular.map((r) => (
+      {popularShown.map((r) => (
         <Button
           key={r.key}
           onClick={() => openRecipe(r.template.id, r.picks)}
@@ -233,6 +238,11 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           </span>
         </Button>
       ))}
+      {visiblePopular.length > 5 && (
+        <button onClick={() => setShowAllPopular((v) => !v)} className="w-full py-1 text-sm font-semibold text-primary">
+          {showAllPopular ? t("rk.showLess") : t("rk.showAllPopular")}
+        </button>
+      )}
     </section>
   );
 
