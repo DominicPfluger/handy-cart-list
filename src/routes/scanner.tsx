@@ -248,6 +248,9 @@ function ScannerView() {
           </div>
           <p className="text-sm font-semibold text-foreground">{t("scan.cameraError")}</p>
           <p className="mt-1 text-xs text-muted-foreground">{t("scan.cameraErrorSub")}</p>
+          <button onClick={rescan} className="mt-3 rounded-xl border border-border px-4 py-2 text-sm font-semibold text-foreground active:bg-muted">
+            {t("scan.rescan")}
+          </button>
         </div>
       )}
 
