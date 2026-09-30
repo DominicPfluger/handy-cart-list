@@ -9,4 +9,4 @@
 - [x] 28 TK-Fertiggerichte in TK-Fertiggerichte anlegen, übersetzen und prüfen (Gemüse-Lasagne nach Lasagne).
 - [x] Bild „Puten“ der Geflügel-Kategorie zuweisen (komprimiert, geprüft).
 - [x] Bild „Blüten & Stängelgemüse“ der Kategorie Blüten & Stängelgemüse zuweisen (komprimiert, geprüft).
-- [ ] Auf der Rezept-Kreator-Hauptseite beliebte und neue Rezept-Kreationen anzeigen und Öffnen prüfen.
+- [x] Auf der Rezept-Kreator-Hauptseite beliebte und neue Rezept-Kreationen anzeigen und Öffnen prüfen.
