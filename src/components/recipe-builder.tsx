@@ -24,7 +24,7 @@ function shuffle<T>(a: T[]) {
 export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: string | null) => void } = {}) {
   const { t } = useT();
   const catalog = useCatalog();
-  const { addCatalogItem } = useShoppingList();
+  const { addCatalogItem, favorites } = useShoppingList();
   const [tplId, setTplIdRaw] = useState<RecipeTemplate["id"] | null>(null);
   const setTplId = (id: RecipeTemplate["id"] | null) => { setTplIdRaw(id); onTemplateChange?.(id); };
   const [picks, setPicks] = useState<Picks>({});
@@ -33,6 +33,9 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const [savedMsg, setSavedMsg] = useState(false);
   const [newName, setNewName] = useState("");
   const collections = useRecipeCollections();
+  const [onlyFav, setOnlyFav] = useState(false);
+
+  const favIds = useMemo(() => new Set(favorites.map((f) => f.productId)), [favorites]);
 
   const byBase = useMemo(() => {
     const m = new Map<string, CatalogProduct>();
@@ -45,10 +48,30 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const steps = useMemo(
     () => (tpl?.steps ?? []).map((s) => ({
       ...s,
-      products: s.ingredients.map((n) => byBase.get(n)).filter((p): p is CatalogProduct => !!p),
+      products: s.ingredients
+        .map((n) => byBase.get(n))
+        .filter((p): p is CatalogProduct => !!p)
+        .filter((p) => !onlyFav || favIds.has(p.id)),
     })),
-    [tpl, byBase],
+    [tpl, byBase, onlyFav, favIds],
   );
+
+  const toggleOnlyFav = () => {
+    setOnlyFav((v) => {
+      const next = !v;
+      if (next) {
+        setPicks((prev) => {
+          const pruned: Picks = {};
+          for (const [k, ids] of Object.entries(prev)) {
+            const kept = ids.filter((id) => favIds.has(id));
+            if (kept.length) pruned[k] = kept;
+          }
+          return pruned;
+        });
+      }
+      return next;
+    });
+  };
 
   const popular = useMemo(() => {
     if (!tpl) return [];
@@ -270,6 +293,15 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
       <div className="flex items-center justify-between gap-2">
         <button onClick={() => setTplId(null)} className="text-xs font-semibold text-primary">← {t("rk.back")}</button>
         <div className="flex gap-2">
+          <button
+            onClick={toggleOnlyFav}
+            aria-pressed={onlyFav}
+            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+              onlyFav ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
+            }`}
+          >
+            ♥ {t("rk.onlyFavorites")}
+          </button>
           <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-foreground">
             {t("rk.reset")}
           </button>

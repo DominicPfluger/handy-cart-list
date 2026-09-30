@@ -233,6 +233,7 @@
     "more.hiddenCategoriesHint": "These categories are hidden only on this device.",
     "more.restore": "Restore",
     "rk.recent": "Recently created recipes",
+    "rk.onlyFavorites": "Favorites only",
     "rk.popular": "Popular recipes",
     "rk.ingredientsN": "{n} ingredients"
   },
@@ -470,6 +471,7 @@
     "more.hiddenCategoriesHint": "These categories are hidden only on this device.",
     "more.restore": "Restore",
     "rk.recent": "Recently created recipes",
+    "rk.onlyFavorites": "Favourites only",
     "rk.popular": "Popular recipes",
     "rk.ingredientsN": "{n} ingredients"
   },
@@ -707,6 +709,7 @@
     "more.hiddenCategoriesHint": "These categories are hidden only on this device.",
     "more.restore": "Restore",
     "rk.recent": "Recently created recipes",
+    "rk.onlyFavorites": "Favorites only",
     "rk.popular": "Popular recipes",
     "rk.ingredientsN": "{n} ingredients"
   },
@@ -944,6 +947,7 @@
     "more.hiddenCategoriesHint": "Estas categorías están ocultas solo en este dispositivo.",
     "more.restore": "Restaurar",
     "rk.recent": "Recetas creadas recientemente",
+    "rk.onlyFavorites": "Solo favoritos",
     "rk.popular": "Recetas populares",
     "rk.ingredientsN": "{n} ingredientes"
   },
@@ -1181,6 +1185,7 @@
     "more.hiddenCategoriesHint": "Estas categorías están ocultas solo en este dispositivo.",
     "more.restore": "Restaurar",
     "rk.recent": "Recetas creadas recientemente",
+    "rk.onlyFavorites": "Solo favoritos",
     "rk.popular": "Recetas populares",
     "rk.ingredientsN": "{n} ingredientes"
   },
@@ -1418,6 +1423,7 @@
     "more.hiddenCategoriesHint": "Ces catégories sont masquées uniquement sur cet appareil.",
     "more.restore": "Restaurer",
     "rk.recent": "Recettes récemment créées",
+    "rk.onlyFavorites": "Favoris uniquement",
     "rk.popular": "Recettes populaires",
     "rk.ingredientsN": "{n} ingrédients"
   },
@@ -1655,6 +1661,7 @@
     "more.hiddenCategoriesHint": "Ces catégories sont masquées uniquement sur cet appareil.",
     "more.restore": "Restaurer",
     "rk.recent": "Recettes récemment créées",
+    "rk.onlyFavorites": "Favoris uniquement",
     "rk.popular": "Recettes populaires",
     "rk.ingredientsN": "{n} ingrédients"
   },
@@ -1892,6 +1899,7 @@
     "more.hiddenCategoriesHint": "Queste categorie sono nascoste solo su questo dispositivo.",
     "more.restore": "Ripristina",
     "rk.recent": "Ricette create di recente",
+    "rk.onlyFavorites": "Solo preferiti",
     "rk.popular": "Ricette popolari",
     "rk.ingredientsN": "{n} ingredienti"
   },
@@ -2129,6 +2137,7 @@
     "more.hiddenCategoriesHint": "Queste categorie sono nascoste solo su questo dispositivo.",
     "more.restore": "Ripristina",
     "rk.recent": "Ricette create di recente",
+    "rk.onlyFavorites": "Solo preferiti",
     "rk.popular": "Ricette popolari",
     "rk.ingredientsN": "{n} ingredienti"
   },
@@ -2366,6 +2375,7 @@
     "more.hiddenCategoriesHint": "Estas categorias estão ocultas apenas neste dispositivo.",
     "more.restore": "Restaurar",
     "rk.recent": "Receitas criadas recentemente",
+    "rk.onlyFavorites": "Só favoritos",
     "rk.popular": "Receitas populares",
     "rk.ingredientsN": "{n} ingredientes"
   },
@@ -2603,6 +2613,7 @@
     "more.hiddenCategoriesHint": "Estas categorias estão ocultas apenas neste dispositivo.",
     "more.restore": "Restaurar",
     "rk.recent": "Receitas criadas recentemente",
+    "rk.onlyFavorites": "Só favoritos",
     "rk.popular": "Receitas populares",
     "rk.ingredientsN": "{n} ingredientes"
   },
@@ -2840,6 +2851,7 @@
     "more.hiddenCategoriesHint": "Deze categorieën zijn alleen op dit toestel verborgen.",
     "more.restore": "Herstellen",
     "rk.recent": "Recent gemaakte recepten",
+    "rk.onlyFavorites": "Alleen favorieten",
     "rk.popular": "Populaire recepten",
     "rk.ingredientsN": "{n} ingrediënten"
   },
@@ -3077,6 +3089,7 @@
     "more.hiddenCategoriesHint": "Deze categorieën zijn alleen op dit toestel verborgen.",
     "more.restore": "Herstellen",
     "rk.recent": "Recent gemaakte recepten",
+    "rk.onlyFavorites": "Alleen favorieten",
     "rk.popular": "Populaire recepten",
     "rk.ingredientsN": "{n} ingrediënten"
   }
