@@ -146,9 +146,12 @@ export function useShoppingList() {
           setLists(
             parsed.map((l) => ({
               ...l,
-              items: l.items.map((it) =>
-                isButterProduct(it.name) && !it.emoji ? { ...it, emoji: "🧈" } : it
-              ),
+              items: l.items.map((it) => {
+                if (isButterProduct(it.name) && !it.emoji) return { ...it, emoji: "🧈" };
+                // Altes Pilz-Emoji (Fliegenpilz) auf braunes Speisepilz-Emoji umstellen
+                if (it.emoji === "🍄") return { ...it, emoji: "🍄‍🟫" };
+                return it;
+              }),
             }))
           );
         }
