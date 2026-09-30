@@ -4,7 +4,7 @@ import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /** Die neuen Tabellen sind (noch) nicht Teil der generierten DB-Typen. */
-type Row = Record<string, any>;
+type Row = any;
 type Sb = { from: (table: string) => any };
 
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
