@@ -18,13 +18,15 @@ export function ProductEmoji({
   if (emoji && MUSHROOM_SET.has(emoji)) {
     return (
       <span aria-hidden="true" className={`inline-flex items-center justify-center leading-none ${className}`}>
-        <img src={MUSHROOM_ICON} alt="" draggable={false} className="h-[1em] w-[1em] object-contain" />
+        <span className="inline-flex items-center justify-center leading-none text-[0.7em]">
+          <img src={MUSHROOM_ICON} alt="" draggable={false} className="h-[1em] w-[1em] object-contain" />
+        </span>
       </span>
     );
   }
   return (
     <span aria-hidden="true" className={className}>
-      {emoji ?? fallback}
+      <span className="leading-none text-[0.7em]">{emoji ?? fallback}</span>
     </span>
   );
 }
