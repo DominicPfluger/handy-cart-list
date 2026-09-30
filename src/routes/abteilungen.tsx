@@ -548,7 +548,7 @@ function DepartmentsPage() {
             </Button>
           )}
           {!normalizedQuery && currentId && isAdmin && directProducts.length > 0 && (
-            <Button type="button" variant="outline" onClick={() => setHeadingTarget({ departmentId: currentId, products: directProducts })} className="mt-2 w-full rounded-xl font-bold">
+            <Button type="button" variant="outline" onClick={() => setHeadingTarget({ departmentId: currentId, products: directProducts })} className="mt-2 w-full rounded-xl">
               <PlusIcon className="h-4 w-4" /> {t("heading.add")}
             </Button>
           )}
