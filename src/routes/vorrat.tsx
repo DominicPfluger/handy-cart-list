@@ -197,8 +197,3 @@ function VorratPage() {
   );
 }
 
-function hydratedNote(hydrated: boolean) {
-  const { t } = useT();
-  if (!hydrated) return null;
-  return <p className="mt-1 text-xs text-muted-foreground">{t("pantry.localOnly")}</p>;
-}
