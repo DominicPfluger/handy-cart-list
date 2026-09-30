@@ -48,7 +48,7 @@ export const getMyLists = createServerFn({ method: "GET" })
       : { data: [] as Row[] };
     const { data: userData } = await context.supabase.auth.getUser();
     const email = userData?.user?.email ?? "";
-    const displayName = String(userData?.user?.user_metadata?.name ?? email.split("@")[0] ?? "Ich").trim();
+    const displayName = String((userData?.user?.user_metadata?.["name"] as string | undefined) ?? email.split("@")[0] ?? "Ich").trim();
     return {
       lists: listsRes.data ?? [],
       items: items ?? [],
