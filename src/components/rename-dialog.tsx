@@ -45,10 +45,10 @@ export function RenameDialog({ target, onClose }: { target: RenameTarget | null;
         </form>
         <DialogFooter className="gap-2 sm:gap-2">
           {target && isCustomId(target.id) && (
-            <Button variant="outline" className="text-destructive" onClick={() => { deleteCustomEntry(target.id); setCustomName(target.id, null); onClose(); }}>{t("rename.delete")}</Button>
+            <Button variant="outline" className="text-destructive" onClick={() => setConfirmRemove(true)}>{t("rename.delete")}</Button>
           )}
           {target && target.kind === "product" && !isCustomId(target.id) && (
-            <Button variant="outline" className="text-destructive" onClick={() => { hideProduct(target.id); setCustomName(target.id, null); onClose(); }}>{t("rename.deleteCatalog")}</Button>
+            <Button variant="outline" className="text-destructive" onClick={() => setConfirmRemove(true)}>{t("rename.deleteCatalog")}</Button>
           )}
           {target?.isCustom && !isCustomId(target.id) && (
             <Button variant="outline" onClick={() => { setCustomName(target.id, null); onClose(); }}>{t("rename.reset")}</Button>
@@ -56,6 +56,18 @@ export function RenameDialog({ target, onClose }: { target: RenameTarget | null;
           <Button onClick={save} disabled={!value.trim()}>{t("rename.save")}</Button>
         </DialogFooter>
       </DialogContent>
+      <AlertDialog open={confirmRemove} onOpenChange={setConfirmRemove}>
+        <AlertDialogContent className="max-w-[400px] rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("rename.confirmRemoveTitle", { name: target?.name ?? "" })}</AlertDialogTitle>
+            <AlertDialogDescription>{t(target && isCustomId(target.id) ? "rename.confirmRemoveCustom" : "rename.confirmRemoveCatalog")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("rename.confirmCancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={remove}>{t("rename.confirmRemove")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 }
