@@ -1,0 +1,1 @@
+UPDATE public.departments SET emoji = '🫘', updated_at = now() WHERE id = 'd4e5f601-1111-4a11-8a11-0000000000d1';
