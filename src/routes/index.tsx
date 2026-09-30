@@ -20,6 +20,7 @@ import {
 import { ListManager, shareList } from "../components/list-manager";
 import { relocalizeQuantity } from "../lib/units";
 import { useT } from "../i18n";
+import { ProductEmoji } from "../components/product-emoji";
 
 
 export const Route = createFileRoute("/")({
@@ -245,7 +246,7 @@ function ListPage() {
                       {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
                     <div className="grid h-10 w-10 shrink-0 select-none place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl">
-                      {item.emoji ?? "🛒"}
+                      <ProductEmoji emoji={item.emoji} />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className={`break-words text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>

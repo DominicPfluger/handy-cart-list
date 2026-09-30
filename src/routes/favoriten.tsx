@@ -17,6 +17,7 @@ import {
 } from "../lib/catalog-query";
 import { formatQuantity } from "../lib/units";
 import { useT } from "../i18n";
+import { ProductEmoji } from "../components/product-emoji";
 
 
 export const Route = createFileRoute("/favoriten")({
@@ -63,7 +64,7 @@ function toCatalogProduct(favorite: FavoriteProduct): CatalogProduct {
 }
 
 function ProductThumb({ product }: { product: CatalogProduct }) {
-  return <span className="text-3xl" aria-hidden="true">{product.emoji ?? "🛒"}</span>;
+  return <ProductEmoji emoji={product.emoji} className="text-3xl" />;
 }
 
 function FavoritesPage() {

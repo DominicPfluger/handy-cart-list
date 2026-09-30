@@ -7,6 +7,7 @@ import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { formatQuantity } from "../lib/units";
 import { useT } from "../i18n";
 import { ScanIcon } from "../components/icons";
+import { ProductEmoji } from "../components/product-emoji";
 
 export const Route = createFileRoute("/scanner")({
   head: () => ({
@@ -291,7 +292,7 @@ function ScannerView() {
                     onClick={() => addProduct(product)}
                     className="flex w-full items-center gap-3 px-4 py-3 text-left transition active:bg-muted"
                   >
-                    <span className="text-xl" aria-hidden="true">{product.emoji ?? "🛒"}</span>
+                    <ProductEmoji emoji={product.emoji} className="text-xl" />
                     <span className="min-w-0 flex-1 truncate text-sm font-semibold text-foreground">
                       {product.name}
                     </span>
