@@ -32,9 +32,19 @@ export interface CatalogProduct {
   names: Record<string, string>;
 }
 
+export interface CatalogHeading {
+  id: string;
+  departmentId: string;
+  beforeProductId: string;
+  name: string;
+  baseName: string;
+  names: Record<string, string>;
+}
+
 export interface Catalog {
   departments: CatalogDepartment[];
   products: CatalogProduct[];
+  headings: CatalogHeading[];
 }
 
 export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Promise<Catalog> => {
@@ -55,7 +65,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     },
   });
 
-  const [deptRes, prodRes] = await Promise.all([
+  const [deptRes, prodRes, headRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
@@ -78,6 +88,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       }
       return { data: all, error: null };
     })(),
+    supabase.from("product_headings").select("id, department_id, before_product_id, name"),
   ]);
 
   // Übersetzungen seitenweise laden (Limit 1000 Zeilen je Abfrage)
@@ -145,6 +156,14 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       sortOrder: (r["sort_order"] as number) ?? 0,
       baseName: r["name"] as string,
       names: names.get(r["id"] as string) ?? {},
+    })),
+    headings: ((headRes.data ?? []) as Array<Record<string, string>>).map((r) => ({
+      id: r["id"]!,
+      departmentId: r["department_id"]!,
+      beforeProductId: r["before_product_id"]!,
+      name: r["name"]!,
+      baseName: r["name"]!,
+      names: names.get(r["id"]!) ?? {},
     })),
   };
 });

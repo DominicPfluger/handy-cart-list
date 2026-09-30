@@ -91,6 +91,48 @@ export type Database = {
           },
         ]
       }
+      product_headings: {
+        Row: {
+          before_product_id: string
+          created_at: string
+          department_id: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          before_product_id: string
+          created_at?: string
+          department_id: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          before_product_id?: string
+          created_at?: string
+          department_id?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_headings_before_product_id_fkey"
+            columns: ["before_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_headings_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           created_at: string

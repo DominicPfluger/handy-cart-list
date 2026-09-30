@@ -67,3 +67,64 @@ export const translateMissing = createServerFn({ method: "POST" })
     );
     return { written, remaining };
   });
+
+/** Überschrift in einer Kategorie anlegen/ändern (nur Admins); Name wird in alle Sprachen übersetzt. */
+export const saveHeading = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({
+      id: z.string().uuid().optional(),
+      departmentId: z.string().uuid(),
+      beforeProductId: z.string().uuid(),
+      name: z.string().trim().min(1).max(80).optional(),
+    }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    let id = data.id;
+    if (id) {
+      const patch: { department_id: string; before_product_id: string; name?: string } = { department_id: data.departmentId, before_product_id: data.beforeProductId };
+      if (data.name) patch.name = data.name;
+      const { error } = await sb.from("product_headings").update(patch).eq("id", id);
+      if (error) throw new Error(error.message);
+    } else {
+      if (!data.name) throw new Error("Name fehlt");
+      const { data: row, error } = await sb
+        .from("product_headings")
+        .insert({ department_id: data.departmentId, before_product_id: data.beforeProductId, name: data.name })
+        .select("id")
+        .single();
+      if (error) throw new Error(error.message);
+      id = row.id as string;
+    }
+    if (data.name) {
+      const { translateNames } = await import("./translate.server");
+      const name = data.name;
+      const { data: manual } = await sb.from("catalog_translations").select("locale").eq("entity_id", id).eq("is_manual", true);
+      const skip = new Set(((manual ?? []) as Array<{ locale: string }>).map((m) => m.locale));
+      const rows = (
+        await Promise.all(
+          TRANSLATED_LOCALES.filter((l) => !skip.has(l)).map(async (locale) => {
+            try {
+              const r = await translateNames({ [id!]: name }, locale);
+              return r[id!] ? [{ entity_type: "heading", entity_id: id!, locale, name: r[id!]!, is_manual: false }] : [];
+            } catch { return []; }
+          }),
+        )
+      ).flat();
+      if (rows.length) await sb.from("catalog_translations").upsert(rows, { onConflict: "entity_type,entity_id,locale" });
+    }
+    return { id };
+  });
+
+export const deleteHeading = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase.from("product_headings").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    await context.supabase.from("catalog_translations").delete().eq("entity_id", data.id);
+    return { ok: true };
+  });

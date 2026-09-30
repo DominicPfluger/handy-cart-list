@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useMemo } from "react";
+import { Fragment, useState, useMemo } from "react";
 import {
   useShoppingList,
   getCategory,
@@ -10,6 +10,7 @@ import { useProductOrder } from "../hooks/use-product-order";
 import {
   catalogQueryOptions,
   useCatalog,
+  headingByProduct,
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import { getLocale } from "../i18n";
@@ -151,6 +152,7 @@ function ListPage() {
   }
 
 
+  const headingOf = useMemo(() => headingByProduct(data.products, data.headings), [data.products, data.headings]);
   const doneCount = items.filter((i) => i.checked).length;
   const total = items.length;
   const progress = total > 0 ? (doneCount / total) * 100 : 0;
@@ -237,9 +239,14 @@ function ListPage() {
                 <span className="text-xs text-muted-foreground">· {group.items.length}</span>
               </div>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-                {group.items.map((item) => (
+                {group.items.map((item, index) => {
+                  const h = group.items.length > 5 && !item.checked && item.productId ? headingOf.get(item.productId) : undefined;
+                  const prev = group.items[index - 1];
+                  const showH = h && (prev?.productId ? headingOf.get(prev.productId) : undefined) !== h;
+                  return (
+                  <Fragment key={item.id}>
+                  {showH && <div className="bg-muted/50 px-4 pb-1.5 pt-3 text-sm font-bold text-foreground">{h.name}</div>}
                   <div
-                    key={item.id}
                     className="relative flex items-center gap-3 py-3 pl-4 pr-4"
                   >
                     <button
@@ -277,7 +284,9 @@ function ListPage() {
                       <TrashIcon className="h-5 w-5" />
                     </button>
                   </div>
-                ))}
+                  </Fragment>
+                  );
+                })}
               </div>
             </div>
           );

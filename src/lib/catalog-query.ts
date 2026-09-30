@@ -1,7 +1,7 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { getLocale, pickName, useLocale } from "../i18n";
-import { getCatalog, type Catalog, type CatalogDepartment, type CatalogProduct } from "./catalog.functions";
+import { getCatalog, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
 
@@ -39,11 +39,29 @@ export function useCatalog(): Catalog {
         ...p,
         name: custom[p.id] ?? pickName(p.names, locale, p.baseName),
       })),
+      headings: (data.headings ?? []).map((h) => ({ ...h, name: pickName(h.names, locale, h.baseName) })),
     };
   }, [data, locale, custom, own]);
 }
 
-export type { Catalog, CatalogDepartment, CatalogProduct };
+export type { Catalog, CatalogDepartment, CatalogHeading, CatalogProduct };
+
+/** Überschrift, unter der ein Produkt steht (letzte Überschrift davor in der Katalogreihenfolge seiner Kategorie). */
+export function headingByProduct(products: CatalogProduct[], headings: CatalogHeading[]): Map<string, CatalogHeading> {
+  const out = new Map<string, CatalogHeading>();
+  if (!headings.length) return out;
+  const before = new Map(headings.map((h) => [h.beforeProductId, h]));
+  const byDept = new Map<string, CatalogProduct[]>();
+  for (const p of products) byDept.set(p.departmentId, [...(byDept.get(p.departmentId) ?? []), p]);
+  for (const [, list] of byDept) {
+    let current: CatalogHeading | undefined;
+    for (const p of list.sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name, getLocale()))) {
+      current = before.get(p.id) ?? current;
+      if (current) out.set(p.id, current);
+    }
+  }
+  return out;
+}
 
 export function childrenOf(departments: CatalogDepartment[], parentId: string | null) {
   return departments
