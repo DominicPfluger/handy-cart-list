@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
 import { Input } from "./ui/input";
 import { setCustomName } from "../hooks/use-custom-names";
 import { deleteCustomEntry, isCustomId } from "../hooks/use-custom-catalog";
@@ -12,7 +13,17 @@ export type RenameTarget = { id: string; name: string; originalName: string; isC
 export function RenameDialog({ target, onClose }: { target: RenameTarget | null; onClose: () => void }) {
   const { t } = useT();
   const [value, setValue] = useState("");
+  const [confirmRemove, setConfirmRemove] = useState(false);
   useEffect(() => setValue(target?.name ?? ""), [target]);
+
+  const remove = () => {
+    if (!target) return;
+    if (isCustomId(target.id)) deleteCustomEntry(target.id);
+    else hideProduct(target.id);
+    setCustomName(target.id, null);
+    setConfirmRemove(false);
+    onClose();
+  };
 
   const save = () => {
     if (!target) return;
