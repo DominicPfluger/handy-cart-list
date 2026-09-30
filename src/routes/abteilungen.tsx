@@ -381,7 +381,7 @@ function DepartmentsPage() {
             {childDepartments.map((department) => {
               const dropKind = drag?.target?.id === department.id ? drag.target.kind : null;
               return (
-              <div key={department.id} className="relative min-w-0">
+              <div key={department.id} className="group relative min-w-0">
               <Button
                 type="button"
                 variant="ghost"
@@ -405,7 +405,7 @@ function DepartmentsPage() {
                   <span className="shrink-0 text-lg text-primary" aria-hidden="true">›</span>
                 </span>
               </Button>
-              <Button type="button" variant="ghost" size="icon" aria-label={t("dept.remove", { name: department.name })} title={t("dept.remove", { name: department.name })} onClick={() => setRemoveTarget(department)} className="absolute right-1 top-1 z-10 h-9 w-9 bg-card/90 text-muted-foreground hover:text-destructive">
+              <Button type="button" variant="ghost" size="icon" aria-label={t("dept.remove", { name: department.name })} title={t("dept.remove", { name: department.name })} onClick={() => setRemoveTarget(department)} className="absolute right-1 top-1 z-10 h-9 w-9 bg-card/90 text-muted-foreground transition-opacity hover:text-destructive focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
                 <TrashIcon className="h-4 w-4" />
               </Button>
               </div>
