@@ -23,7 +23,6 @@ import {
   matchesProductSearch,
   originalName,
   pathTo,
-  headingByProduct,
   productsOf,
   type CatalogDepartment,
   type CatalogProduct,
@@ -125,7 +124,7 @@ function DepartmentsPage() {
   const isAdmin = useIsAdmin();
   const queryClient = useQueryClient();
   const saveHeadingFn = useServerFn(saveHeading);
-  const headingOf = useMemo(() => headingByProduct(data.products, data.headings), [data.products, data.headings]);
+  const headingBefore = useMemo(() => new Map(data.headings.map((h) => [h.beforeProductId, h])), [data.headings]);
   const customNames = useCustomNames();
   const openRename = (e: CatalogDepartment | CatalogProduct, kind: "product" | "department") =>
     setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames, kind });
@@ -173,6 +172,11 @@ function DepartmentsPage() {
     if (drop === "crumb") return dragged.what === "heading" ? null : { kind: "into", id };
     if (id === dragged.id) return null;
     const r = el.getBoundingClientRect();
+    if (drop === "heading") {
+      // Auf Überschrift ablegen → direkt unter die Überschrift (nach dem Anker-Produkt)
+      if (dragged.what !== "product") return null;
+      return { kind: "after", id };
+    }
     if (drop === "product") {
       if (dragged.what === "dept") return null;
       const fy = (y - r.top) / r.height;
@@ -206,13 +210,33 @@ function DepartmentsPage() {
     if (p && Math.hypot(event.clientX - p.x, event.clientY - p.y) > 8) cancelPress();
   };
 
+  const startDragNow = (event: React.PointerEvent, entry: { id: string; name: string }, what: "product" | "heading") => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    event.stopPropagation();
+    cancelPress();
+    setDrag({ what, id: entry.id, name: entry.name, x: event.clientX, y: event.clientY, target: null });
+  };
+
   useEffect(() => {
     if (!drag) return;
+    let lastY = drag.y;
     const onMove = (e: PointerEvent) => {
       const d = dragRef.current;
       if (!d) return;
+      lastY = e.clientY;
       setDrag({ ...d, x: e.clientX, y: e.clientY, target: findTarget(e.clientX, e.clientY, d) });
     };
+    // Automatisches Scrollen am oberen/unteren Rand
+    const scrollTimer = window.setInterval(() => {
+      const edge = 80;
+      const h = window.innerHeight;
+      const dy = lastY < edge ? -Math.ceil((edge - lastY) / 6) : lastY > h - edge ? Math.ceil((lastY - (h - edge)) / 6) : 0;
+      if (!dy) return;
+      window.scrollBy(0, dy);
+      const d = dragRef.current;
+      if (d) setDrag({ ...d, target: findTarget(d.x, d.y, d) });
+    }, 16);
     const onUp = () => {
       const d = dragRef.current;
       setDrag(null);
@@ -270,6 +294,7 @@ function DepartmentsPage() {
     window.addEventListener("pointercancel", onUp);
     window.addEventListener("touchmove", block, { passive: false });
     return () => {
+      window.clearInterval(scrollTimer);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
@@ -453,23 +478,28 @@ function DepartmentsPage() {
           </div>
           <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
             {shownProducts.map((product, index) => {
-              const heading = !normalizedQuery ? headingOf.get(product.id) : undefined;
-              const showHeading = heading && headingOf.get(shownProducts[index - 1]?.id ?? "") !== heading;
+              // Überschrift steht immer direkt vor ihrem Anker-Produkt (auch nach lokaler Umsortierung)
+              const heading = !normalizedQuery ? headingBefore.get(product.id) : undefined;
+              const showHeading = !!heading;
+              void index;
               const group = groupFor(product);
               const favorite = isFavorite(product.id);
               const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
               const draggable = !normalizedQuery;
+              const headingDrop = drag?.what === "product" && heading && drag.target?.id === heading.beforeProductId && drag.target.kind === "after" && drag.id !== heading.beforeProductId;
               return (
                 <Fragment key={product.id}>
                 {showHeading && heading && (
                   <div
+                    data-drop={draggable ? "heading" : undefined}
+                    data-id={heading.beforeProductId}
                     onPointerDown={isAdmin ? (e) => startPress(e, heading, "heading") : undefined}
                     onPointerMove={isAdmin ? pressMove : undefined}
                     onPointerUp={isAdmin ? cancelPress : undefined}
                     onPointerLeave={isAdmin ? cancelPress : undefined}
                     onContextMenu={isAdmin ? (e) => e.preventDefault() : undefined}
                     onClick={() => { if (isAdmin && !suppressClick.current) setHeadingTarget({ departmentId: heading.departmentId, products: directProducts, heading }); }}
-                    className={`select-none bg-muted/50 px-3 pb-1.5 pt-3 text-sm font-bold text-foreground ${isAdmin ? "cursor-pointer" : ""} ${drag?.what === "heading" && drag.id === heading.id ? "opacity-40" : ""}`}
+                    className={`select-none bg-muted/50 px-3 pb-1.5 pt-3 text-sm font-bold text-foreground ${isAdmin ? "cursor-pointer" : ""} ${drag?.what === "heading" && drag.id === heading.id ? "opacity-40" : ""} ${headingDrop ? "ring-2 ring-inset ring-primary" : ""}`}
                   >
                     {heading.name}
                   </div>
@@ -483,8 +513,17 @@ function DepartmentsPage() {
                   onPointerLeave={draggable ? cancelPress : undefined}
                   onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
                   onClickCapture={(e) => { if (suppressClick.current) { e.stopPropagation(); e.preventDefault(); } }}
-                  className={`flex min-h-20 select-none items-center gap-3 px-3 py-2.5 ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" ? "!border-b-2 !border-b-primary" : ""}`}
+                  className={`flex min-h-20 select-none items-center gap-3 px-3 py-2.5 ${draggable ? "pl-1" : ""} ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" && !headingDrop ? "!border-b-2 !border-b-primary" : ""}`}
                 >
+                  {draggable && (
+                    <span
+                      aria-hidden="true"
+                      onPointerDown={(e) => startDragNow(e, product, "product")}
+                      className="grid h-14 w-6 shrink-0 cursor-grab touch-none place-items-center text-lg leading-none text-muted-foreground active:cursor-grabbing"
+                    >
+                      ⠿
+                    </span>
+                  )}
                   <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25">
                     <ProductThumb product={product} />
                   </div>
