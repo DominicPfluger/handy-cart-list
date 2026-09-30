@@ -84,3 +84,9 @@ export function matchesProductSearch(name: string, normalizedQuery: string): boo
 export function compareByName(a: { name: string }, b: { name: string }) {
   return a.name.localeCompare(b.name, getLocale());
 }
+
+/** Erster Buchstabe für fette Buchstaben-Gruppen (A–Z, sonst #). */
+export function letterOf(name: string) {
+  const ch = name.trim().toLocaleUpperCase(getLocale()).charAt(0);
+  return /\p{L}/u.test(ch) ? ch : "#";
+}

@@ -19,6 +19,7 @@ import {
   useCatalog,
   childrenOf,
   compareByName,
+  letterOf,
   matchesProductSearch,
   originalName,
   pathTo,
