@@ -595,7 +595,7 @@ function DepartmentsPage() {
       <AddEntryDialog target={addTarget} onClose={() => setAddTarget(null)} />
       <HeadingDialog target={headingTarget} onClose={() => setHeadingTarget(null)} />
 
-      <button className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
+      <button type="button" onClick={() => navigate({ to: "/scanner" })} className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-primary/30 bg-primary-soft/30 py-3 text-sm font-semibold text-primary transition active:scale-[0.98]">
         <ScanIcon className="h-5 w-5" />
         {t("dept.scan")}
       </button>
