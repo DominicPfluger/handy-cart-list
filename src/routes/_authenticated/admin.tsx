@@ -253,7 +253,7 @@ function AdminPage() {
                   dragging={drag?.kind === "department" && drag.index === i}
                   onDragStart={() => setDrag({ kind: "department", index: i })}
                   onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => { if (drag?.kind === "department") reorder("department", children, drag.index, i); setDrag(null); }}
+                  onDrop={(e) => { if (drag?.kind === "department") reorder("department", children, drag.index, dropIndex(e, i)); setDrag(null); }}
                   onDragEnd={() => setDrag(null)}
                   sub={`${d!.depts.filter((x) => x.parent_id === c.id).length} Unterkat. · ${d!.prods.filter((x) => x.department_id === c.id).length} Produkte`}
                   onOpen={() => { setCur(c.id); setSel(null); }} onEdit={() => setSel({ kind: "department", id: c.id })}
@@ -294,8 +294,8 @@ function AdminPage() {
                       dragging={drag?.kind === "product" && drag.index === i}
                       onDragStart={() => setDrag({ kind: "product", index: i })}
                       onDragOver={(e) => e.preventDefault()}
-                      onDrop={() => {
-                        if (drag?.kind === "product") reorder("product", products, drag.index, i);
+                      onDrop={(e) => {
+                        if (drag?.kind === "product") reorder("product", products, drag.index, dropIndex(e, i));
                         else if (drag?.kind === "heading" && drag.id) moveHeading(drag.id, p.id);
                         setDrag(null);
                       }}
