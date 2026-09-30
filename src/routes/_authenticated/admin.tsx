@@ -68,6 +68,7 @@ function AdminPage() {
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [adding, setAdding] = useState<Kind | null>(null);
+  const [bulk, setBulk] = useState(false);
 
   const d = q.data;
   const deptById = useMemo(() => new Map((d?.depts ?? []).map((x) => [x.id, x])), [d]);
@@ -224,6 +225,7 @@ function AdminPage() {
           <div className="flex flex-wrap gap-2">
             <Button size="sm" variant="outline" onClick={() => setAdding("department")}>+ Kategorie</Button>
             {cur && <Button size="sm" variant="outline" onClick={() => setAdding("product")}>+ Produkt</Button>}
+            {cur && <Button size="sm" variant="outline" onClick={() => setBulk(true)}>+ Mehrere Produkte</Button>}
             {cur && products.length > 0 && <Button size="sm" variant="outline" onClick={() => setAdding("heading")}>+ Überschrift</Button>}
           </div>
 
