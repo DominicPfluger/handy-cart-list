@@ -64,13 +64,17 @@ function ListPage() {
   };
   const { departments } = useDepartmentOrder(data.departments);
 
+  const deptIds = useMemo(() => new Set(departments.map((d) => d.id)), [departments]);
+  // Persönliche (nur lokal gespeicherte) Artikel-Anordnung übernehmen — analog Abteilungsansicht.
+  const { products: orderedProducts } = useProductOrder(data.products, deptIds);
+
   const deptById = useMemo(
     () => new Map(departments.map((d) => [d.id, d])),
     [departments],
   );
   const productById = useMemo(
-    () => new Map(data.products.map((p) => [p.id, p])),
-    [data.products],
+    () => new Map(orderedProducts.map((p) => [p.id, p])),
+    [orderedProducts],
   );
 
   /** Kategoriepfad (Wurzel → ... → Blatt) eines Produkts. */
