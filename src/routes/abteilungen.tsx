@@ -19,7 +19,6 @@ import {
   useCatalog,
   childrenOf,
   compareByName,
-  letterOf,
   matchesProductSearch,
   originalName,
   pathTo,
@@ -432,17 +431,12 @@ function DepartmentsPage() {
           </div>
           <div className="overflow-hidden rounded-xl border border-border bg-card">
             {shownProducts.map((product, productIndex) => {
-              const letter = letterOf(product.name);
-              const prevLetter = productIndex > 0 ? letterOf(shownProducts[productIndex - 1]!.name) : null;
               const group = groupFor(product);
               const favorite = isFavorite(product.id);
               const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
               const draggable = !normalizedQuery;
               return (
                 <Fragment key={product.id}>
-                {letter !== prevLetter && (
-                  <div className="bg-primary-soft/40 px-3 py-1.5 text-sm font-bold text-primary">{letter}</div>
-                )}
                 <div
                   data-drop={draggable ? "product" : undefined}
                   data-id={product.id}
