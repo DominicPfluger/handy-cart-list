@@ -433,7 +433,7 @@ function DepartmentsPage() {
           <div className="overflow-hidden rounded-xl border border-border bg-card">
             {shownProducts.map((product, productIndex) => {
               const letter = letterOf(product.name);
-              const prevLetter = productIndex > 0 ? letterOf(shownProducts[productIndex - 1].name) : null;
+              const prevLetter = productIndex > 0 ? letterOf(shownProducts[productIndex - 1]!.name) : null;
               const group = groupFor(product);
               const favorite = isFavorite(product.id);
               const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
