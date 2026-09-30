@@ -295,6 +295,7 @@ function DepartmentsPage() {
     window.addEventListener("pointercancel", onUp);
     window.addEventListener("touchmove", block, { passive: false });
     return () => {
+      window.clearInterval(scrollTimer);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       window.removeEventListener("pointercancel", onUp);
