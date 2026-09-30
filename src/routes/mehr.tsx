@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import {
   PeopleIcon,
@@ -40,8 +41,35 @@ const AVATAR_COLORS = [
 ];
 
 function MorePage() {
-  const { members } = useShoppingList();
+  const { members, signedIn, activeList, inviteLinkFor } = useShoppingList();
   const { t, locale } = useT();
+  const navigate = useNavigate();
+  const invite = async () => {
+    if (!signedIn) {
+      navigate({ to: "/auth" });
+      return;
+    }
+    const link = inviteLinkFor(activeList.id);
+    if (!link) {
+      toast.error(t("join.needSignIn"));
+      return;
+    }
+    const text = `${t("lm.inviteHint")}\n${link}`;
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: activeList.name, text, url: link });
+        return;
+      } catch (e) {
+        if ((e as Error).name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(link);
+      toast.success(t("lm.inviteCopied"));
+    } catch {
+      window.prompt(t("lm.inviteCopy"), link);
+    }
+  };
   const [choice, setChoice] = useState<string>("auto");
   const hiddenIds = useHiddenDepartments();
   const catalog = useCatalog();
@@ -76,15 +104,19 @@ function MorePage() {
               <span className="text-xs font-medium text-foreground">{m}</span>
             </div>
           ))}
-          <div className="flex flex-col items-center gap-1.5">
+          <button type="button" onClick={invite} className="flex flex-col items-center gap-1.5">
             <div className="grid h-14 w-14 place-items-center rounded-full border-2 border-dashed border-primary/40 text-primary">
               <PlusIcon className="h-6 w-6" />
             </div>
             <span className="text-xs text-muted-foreground">{t("more.invite")}</span>
-          </div>
+          </button>
         </div>
 
-        <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition active:scale-[0.98]">
+        <p className="text-xs text-muted-foreground">
+          {signedIn ? `„${activeList.name}“ – ${t("lm.inviteHint")}` : t("join.needSignIn")}
+        </p>
+
+        <button type="button" onClick={invite} className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition active:scale-[0.98]">
           <ShareIcon className="h-4 w-4" /> {t("more.invitePeople")}
         </button>
       </section>
