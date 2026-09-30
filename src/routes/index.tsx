@@ -6,11 +6,13 @@ import {
   type ListItem,
 } from "../hooks/use-shopping-list";
 import { useDepartmentOrder } from "../hooks/use-department-order";
+import { useProductOrder } from "../hooks/use-product-order";
 import {
   catalogQueryOptions,
   useCatalog,
   type CatalogDepartment,
 } from "../lib/catalog-query";
+import { getLocale } from "../i18n";
 import {
   CheckIcon,
   TrashIcon,
