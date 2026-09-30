@@ -7,5 +7,5 @@
 - [x] Wild nach Geflügel einordnen; Reh (8), Wildschwein (7) und Hirsch (15) samt Übersetzungen ergänzen und in der App prüfen.
 - [x] Kategorien in der Abteilungsansicht lokal entfernen, bestätigen und unter Mehr wiederherstellen; mobil prüfen.
 - [x] 28 TK-Fertiggerichte in TK-Fertiggerichte anlegen, übersetzen und prüfen (Gemüse-Lasagne nach Lasagne).
-- [ ] Bild „Puten“ der passenden Geflügel-Kategorie zuweisen (offen).
-- [ ] Bild „Blüten & Stängelgemüse“ der Kategorie Blüten & Stängelgemüse zuweisen (offen).
+- [x] Bild „Puten“ der Geflügel-Kategorie zuweisen (komprimiert, geprüft).
+- [x] Bild „Blüten & Stängelgemüse“ der Kategorie Blüten & Stängelgemüse zuweisen (komprimiert, geprüft).
