@@ -79,8 +79,3 @@ export function matchesProductSearch(name: string, normalizedQuery: string): boo
     ? normalized.includes(normalizedQuery)
     : normalized.startsWith(normalizedQuery);
 }
-
-/** Alphabetische Sortierung der Suchtreffer (deutsche Regeln). */
-export function compareByName(a: { name: string }, b: { name: string }) {
-  return a.name.localeCompare(b.name, getLocale());
-}

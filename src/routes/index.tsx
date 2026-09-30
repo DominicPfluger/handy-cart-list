@@ -12,7 +12,6 @@ import {
   useCatalog,
   type CatalogDepartment,
 } from "../lib/catalog-query";
-import { getLocale } from "../i18n";
 import {
   CheckIcon,
   TrashIcon,
@@ -134,8 +133,6 @@ function ListPage() {
         const oa = pa?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         const ob = pb?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         if (oa !== ob) return oa - ob;
-        // Gleichstand: alphabetisch wie in der Abteilungsansicht
-        if (pa && pb) return pa.name.localeCompare(pb.name, getLocale());
         return a.addedAt - b.addedAt;
       });
     }
@@ -272,10 +269,8 @@ function ListPage() {
 
       <div className="space-y-6">
         {grouped.map((group) => {
-          // Offene Einträge alphabetisch, erledigte darunter
-          const open = group.items
-            .filter((i) => !i.checked)
-            .sort((a, b) => displayName(a).localeCompare(displayName(b), getLocale()));
+          // Offene Einträge in Katalogreihenfolge, erledigte darunter
+          const open = group.items.filter((i) => !i.checked);
           const checkedItems = group.items.filter((i) => i.checked);
           return (
             <div key={group.key}>
