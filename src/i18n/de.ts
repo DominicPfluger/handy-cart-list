@@ -247,6 +247,7 @@ export const de = {
   "rk.nothing": "Wähle Zutaten, um dein Rezept zu sehen.",
   "rk.save": "Rezept speichern",
   "rk.saveTo": "In Liste speichern",
+  "rk.recipeTitle": "Titel für dein Rezept",
   "rk.newCollection": "Neue Liste",
   "rk.collectionPh": "z. B. Wochenplan, Lieblingsrezepte",
   "rk.create": "Erstellen",

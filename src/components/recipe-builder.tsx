@@ -33,6 +33,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const [saveOpen, setSaveOpen] = useState(false);
   const [savedMsg, setSavedMsg] = useState(false);
   const [newName, setNewName] = useState("");
+  const [customTitle, setCustomTitle] = useState("");
   const collections = useRecipeCollections();
   const [onlyFav, setOnlyFav] = useState(false);
   const [showAllRecent, setShowAllRecent] = useState(false);
@@ -157,9 +158,10 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
 
   const doSave = (collectionId: string) => {
     if (!tpl) return;
-    saveRecipe(collectionId, { title, templateId: tpl.id, picks });
+    saveRecipe(collectionId, { title: customTitle.trim() || title, templateId: tpl.id, picks });
     setSaveOpen(false);
     setNewName("");
+    setCustomTitle("");
     setSavedMsg(true);
   };
 
@@ -167,6 +169,12 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     <div className="fixed inset-0 z-[60] flex items-end justify-center bg-foreground/40" onClick={() => setSaveOpen(false)}>
       <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
         <h3 className="text-base font-bold text-foreground">{t("rk.saveTo")}</h3>
+        <input
+          value={customTitle}
+          onChange={(e) => setCustomTitle(e.target.value)}
+          placeholder={t("rk.recipeTitle")}
+          className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
+        />
         {collections.map((c) => (
           <button key={c.id} onClick={() => doSave(c.id)} className="flex w-full items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 text-left text-sm font-semibold text-foreground">
             <span>📒 {c.name}</span><span className="text-xs text-muted-foreground">{c.recipes.length}</span>
@@ -391,7 +399,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
               {added ? `✓ ${t("rk.added")}` : t("rk.addAll", { n: chosen.length })}
             </button>
             <button
-              onClick={() => { setSavedMsg(false); setSaveOpen(true); }}
+              onClick={() => { setSavedMsg(false); setCustomTitle(title); setSaveOpen(true); }}
               className="mt-2 w-full rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition active:scale-[0.98]"
             >
               {savedMsg ? `✓ ${t("rk.saved")}` : `📒 ${t("rk.save")}`}

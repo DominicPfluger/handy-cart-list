@@ -238,7 +238,8 @@
     "rk.showAllRecent": "Show all recently created recipes",
     "rk.showAllPopular": "Show all popular recipes",
     "rk.showLess": "Show less",
-    "rk.ingredientsN": "{n} ingredients"
+    "rk.ingredientsN": "{n} ingredients",
+    "rk.recipeTitle": "Title for your recipe"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -479,7 +480,8 @@
     "rk.showAllRecent": "Show all recently created recipes",
     "rk.showAllPopular": "Show all popular recipes",
     "rk.showLess": "Show less",
-    "rk.ingredientsN": "{n} ingredients"
+    "rk.ingredientsN": "{n} ingredients",
+    "rk.recipeTitle": "Title for your recipe"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -720,7 +722,8 @@
     "rk.showAllRecent": "Show all recently created recipes",
     "rk.showAllPopular": "Show all popular recipes",
     "rk.showLess": "Show less",
-    "rk.ingredientsN": "{n} ingredients"
+    "rk.ingredientsN": "{n} ingredients",
+    "rk.recipeTitle": "Title for your recipe"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -961,7 +964,8 @@
     "rk.showAllRecent": "Mostrar todas las recetas creadas recientemente",
     "rk.showAllPopular": "Mostrar todas las recetas populares",
     "rk.showLess": "Mostrar menos",
-    "rk.ingredientsN": "{n} ingredientes"
+    "rk.ingredientsN": "{n} ingredientes",
+    "rk.recipeTitle": "Título para tu receta"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -1202,7 +1206,8 @@
     "rk.showAllRecent": "Mostrar todas las recetas creadas recientemente",
     "rk.showAllPopular": "Mostrar todas las recetas populares",
     "rk.showLess": "Mostrar menos",
-    "rk.ingredientsN": "{n} ingredientes"
+    "rk.ingredientsN": "{n} ingredientes",
+    "rk.recipeTitle": "Título para tu receta"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -1443,7 +1448,8 @@
     "rk.showAllRecent": "Afficher toutes les recettes récemment créées",
     "rk.showAllPopular": "Afficher toutes les recettes populaires",
     "rk.showLess": "Afficher moins",
-    "rk.ingredientsN": "{n} ingrédients"
+    "rk.ingredientsN": "{n} ingrédients",
+    "rk.recipeTitle": "Titre de votre recette"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -1684,7 +1690,8 @@
     "rk.showAllRecent": "Afficher toutes les recettes récemment créées",
     "rk.showAllPopular": "Afficher toutes les recettes populaires",
     "rk.showLess": "Afficher moins",
-    "rk.ingredientsN": "{n} ingrédients"
+    "rk.ingredientsN": "{n} ingrédients",
+    "rk.recipeTitle": "Titre de votre recette"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -1925,7 +1932,8 @@
     "rk.showAllRecent": "Mostra tutte le ricette create di recente",
     "rk.showAllPopular": "Mostra tutte le ricette popolari",
     "rk.showLess": "Mostra meno",
-    "rk.ingredientsN": "{n} ingredienti"
+    "rk.ingredientsN": "{n} ingredienti",
+    "rk.recipeTitle": "Titolo per la tua ricetta"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -2166,7 +2174,8 @@
     "rk.showAllRecent": "Mostra tutte le ricette create di recente",
     "rk.showAllPopular": "Mostra tutte le ricette popolari",
     "rk.showLess": "Mostra meno",
-    "rk.ingredientsN": "{n} ingredienti"
+    "rk.ingredientsN": "{n} ingredienti",
+    "rk.recipeTitle": "Titolo per la tua ricetta"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -2407,7 +2416,8 @@
     "rk.showAllRecent": "Mostrar todas as receitas criadas recentemente",
     "rk.showAllPopular": "Mostrar todas as receitas populares",
     "rk.showLess": "Mostrar menos",
-    "rk.ingredientsN": "{n} ingredientes"
+    "rk.ingredientsN": "{n} ingredientes",
+    "rk.recipeTitle": "Título para a sua receita"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -2648,7 +2658,8 @@
     "rk.showAllRecent": "Mostrar todas as receitas criadas recentemente",
     "rk.showAllPopular": "Mostrar todas as receitas populares",
     "rk.showLess": "Mostrar menos",
-    "rk.ingredientsN": "{n} ingredientes"
+    "rk.ingredientsN": "{n} ingredientes",
+    "rk.recipeTitle": "Título para a sua receita"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -2889,7 +2900,8 @@
     "rk.showAllRecent": "Alle recent gemaakte recepten tonen",
     "rk.showAllPopular": "Alle populaire recepten tonen",
     "rk.showLess": "Minder tonen",
-    "rk.ingredientsN": "{n} ingrediënten"
+    "rk.ingredientsN": "{n} ingrediënten",
+    "rk.recipeTitle": "Titel voor je recept"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -3130,6 +3142,7 @@
     "rk.showAllRecent": "Alle recent gemaakte recepten tonen",
     "rk.showAllPopular": "Alle populaire recepten tonen",
     "rk.showLess": "Minder tonen",
-    "rk.ingredientsN": "{n} ingrediënten"
+    "rk.ingredientsN": "{n} ingrediënten",
+    "rk.recipeTitle": "Titel voor je recept"
   }
 }
