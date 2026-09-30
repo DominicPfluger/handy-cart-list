@@ -1,0 +1,1 @@
+- ProductEmoji never renders 🍄/🍄‍🟫 directly; swaps them for an edible-mushroom SVG. Why: 🍄 is fly agaric; 🍄‍🟫 splits on older devices.
