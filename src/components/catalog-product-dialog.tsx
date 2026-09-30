@@ -228,6 +228,12 @@ export function CatalogProductDialog({
           />
         </div>
 
+        {pantryEntry && (
+          <p className="rounded-xl bg-primary-soft/30 px-3 py-2 text-xs text-muted-foreground">
+            🏠 {t("pantry.inPantry", { qty: pantryEntry.quantity })}
+          </p>
+        )}
+
         <DialogFooter className="mt-2">
           <Button
             type="button"
