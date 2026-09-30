@@ -173,6 +173,11 @@ function DepartmentsPage() {
     if (drop === "crumb") return dragged.what === "heading" ? null : { kind: "into", id };
     if (id === dragged.id) return null;
     const r = el.getBoundingClientRect();
+    if (drop === "heading") {
+      // Auf Überschrift ablegen → direkt unter die Überschrift (nach dem Anker-Produkt)
+      if (dragged.what !== "product") return null;
+      return { kind: "after", id };
+    }
     if (drop === "product") {
       if (dragged.what === "dept") return null;
       const fy = (y - r.top) / r.height;
@@ -206,13 +211,33 @@ function DepartmentsPage() {
     if (p && Math.hypot(event.clientX - p.x, event.clientY - p.y) > 8) cancelPress();
   };
 
+  const startDragNow = (event: React.PointerEvent, entry: { id: string; name: string }, what: "product" | "heading") => {
+    if (event.button !== 0) return;
+    event.preventDefault();
+    event.stopPropagation();
+    cancelPress();
+    setDrag({ what, id: entry.id, name: entry.name, x: event.clientX, y: event.clientY, target: null });
+  };
+
   useEffect(() => {
     if (!drag) return;
+    let lastY = drag.y;
     const onMove = (e: PointerEvent) => {
       const d = dragRef.current;
       if (!d) return;
+      lastY = e.clientY;
       setDrag({ ...d, x: e.clientX, y: e.clientY, target: findTarget(e.clientX, e.clientY, d) });
     };
+    // Automatisches Scrollen am oberen/unteren Rand
+    const scrollTimer = window.setInterval(() => {
+      const edge = 80;
+      const h = window.innerHeight;
+      const dy = lastY < edge ? -Math.ceil((edge - lastY) / 6) : lastY > h - edge ? Math.ceil((lastY - (h - edge)) / 6) : 0;
+      if (!dy) return;
+      window.scrollBy(0, dy);
+      const d = dragRef.current;
+      if (d) setDrag({ ...d, target: findTarget(d.x, d.y, d) });
+    }, 16);
     const onUp = () => {
       const d = dragRef.current;
       setDrag(null);
