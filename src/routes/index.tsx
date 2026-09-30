@@ -21,7 +21,8 @@ import {
   ShareIcon,
 } from "../components/icons";
 import { ListManager, shareList } from "../components/list-manager";
-import { relocalizeQuantity } from "../lib/units";
+import { formatQuantity, relocalizeQuantity } from "../lib/units";
+import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
 import { toast } from "sonner";
@@ -44,7 +45,7 @@ export const Route = createFileRoute("/")({
 
 function ListPage() {
   const {
-    items, hydrated, toggleItem, removeItem, clearChecked,
+    items, hydrated, toggleItem, removeItem, clearChecked, addItem, addCatalogItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
     templates, signedIn, saveAsTemplate, createFromTemplate, deleteTemplate, inviteLinkFor,
   } = useShoppingList();
@@ -158,6 +159,47 @@ function ListPage() {
   const doneCount = items.filter((i) => i.checked).length;
   const total = items.length;
   const progress = total > 0 ? (doneCount / total) * 100 : 0;
+
+  // ---- Smarte Vorschläge (aus dem Einkaufsverlauf) & Einkauf abschliessen ----
+  const { addPurchase, stats } = usePurchaseHistory();
+  const inList = useMemo(
+    () => new Set(items.map((i) => i.productId ?? i.name.toLowerCase())),
+    [items],
+  );
+  const suggestions = useMemo(
+    () => stats.top.filter((s) => !inList.has(s.productId ?? s.name.toLowerCase())).slice(0, 6),
+    [stats.top, inList],
+  );
+  const addSuggestion = (s: { name: string; productId?: string; emoji?: string }) => {
+    const product = s.productId ? productById.get(s.productId) : undefined;
+    if (product) {
+      const group = product.departmentId ? deptById.get(product.departmentId) : undefined;
+      addCatalogItem({
+        productId: product.id,
+        name: product.name,
+        quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
+        unit: product.defaultUnit,
+        organic: false,
+        emoji: product.emoji,
+        imageUrl: product.imageUrl,
+        groupLabel: group?.name,
+        groupEmoji: group?.emoji ?? undefined,
+      });
+    } else {
+      addItem(s.name, "1", "sonstiges");
+    }
+    toast.success(t("common.addedToList", { name: s.name }));
+  };
+  const finishShopping = () => {
+    const bought = items.filter((i) => i.checked);
+    if (bought.length === 0) return;
+    addPurchase(
+      activeList.name,
+      bought.map((i) => ({ name: displayName(i), productId: i.productId, emoji: i.emoji, quantity: i.quantity || undefined })),
+    );
+    clearChecked();
+    toast.success(t("hist.archived", { n: bought.length }));
+  };
 
   return (
     <div className="space-y-5">
@@ -303,13 +345,33 @@ function ListPage() {
         })}
       </div>
 
-      {/* Clear checked */}
+      {/* Smarte Vorschläge aus dem Einkaufsverlauf */}
+      {suggestions.length > 0 && (
+        <section>
+          <h2 className="mb-2 text-sm font-semibold text-foreground">✨ {t("sugg.title")}</h2>
+          <div className="flex flex-wrap gap-2">
+            {suggestions.map((s) => (
+              <button
+                key={s.productId ?? s.name}
+                onClick={() => addSuggestion(s)}
+                className="flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary-soft/40 px-3 py-1.5 text-xs font-medium text-foreground transition active:scale-95"
+              >
+                <ProductEmoji emoji={s.emoji} />
+                <span>{s.name}</span>
+                <PlusIcon className="h-3 w-3 text-primary" />
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Einkauf abschliessen: archiviert abgehakte Artikel im Verlauf */}
       {doneCount > 0 && (
         <button
-          onClick={clearChecked}
-          className="w-full rounded-xl bg-muted py-3 text-sm font-semibold text-muted-foreground transition active:scale-[0.98]"
+          onClick={finishShopping}
+          className="w-full rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition active:scale-[0.98]"
         >
-          {t("list.clearChecked", { n: doneCount })}
+          {t("hist.finish", { n: doneCount })}
         </button>
       )}
     </div>

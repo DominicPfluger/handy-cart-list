@@ -9,6 +9,7 @@ import {
   ScanIcon,
   ShareIcon,
   PlusIcon,
+  HistoryIcon,
 } from "../components/icons";
 import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState } from "react";
@@ -193,6 +194,16 @@ function MorePage() {
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-foreground">{t("more.activity")}</p>
             <p className="truncate text-xs text-muted-foreground">{t("more.activitySub")}</p>
+          </div>
+          <span className="text-muted-foreground">›</span>
+        </Link>
+        <Link to="/verlauf" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+            <HistoryIcon className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground">{t("hist.title")}</p>
+            <p className="truncate text-xs text-muted-foreground">{t("hist.subtitle")}</p>
           </div>
           <span className="text-muted-foreground">›</span>
         </Link>
