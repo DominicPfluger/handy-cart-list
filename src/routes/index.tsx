@@ -10,7 +10,6 @@ import { useProductOrder } from "../hooks/use-product-order";
 import {
   catalogQueryOptions,
   useCatalog,
-  letterOf,
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import { getLocale } from "../i18n";
@@ -273,18 +272,11 @@ function ListPage() {
 
       <div className="space-y-6">
         {grouped.map((group) => {
-          // Offene Einträge alphabetisch mit fetten Buchstaben-Gruppen (A, B, C …)
+          // Offene Einträge alphabetisch, erledigte darunter
           const open = group.items
             .filter((i) => !i.checked)
             .sort((a, b) => displayName(a).localeCompare(displayName(b), getLocale()));
           const checkedItems = group.items.filter((i) => i.checked);
-          const lettered: { letter: string; items: ListItem[] }[] = [];
-          for (const it of open) {
-            const letter = letterOf(displayName(it));
-            const last = lettered[lettered.length - 1];
-            if (last && last.letter === letter) last.items.push(it);
-            else lettered.push({ letter, items: [it] });
-          }
           return (
             <div key={group.key}>
               <div className="mb-2 flex items-center gap-2">
@@ -293,14 +285,9 @@ function ListPage() {
                 <span className="text-xs text-muted-foreground">· {group.items.length}</span>
               </div>
               <div className="rounded-2xl border border-border bg-card">
-                {lettered.map((letterGroup) => (
-                  <div key={`${letterGroup.letter}-${letterGroup.items[0]?.id ?? ""}`}>
-                    <div className="px-4 pb-1 pt-3 text-sm font-bold text-primary">{letterGroup.letter}</div>
-                    <div className="divide-y divide-border">
-                      {letterGroup.items.map(renderItem)}
-                    </div>
-                  </div>
-                ))}
+                <div className="divide-y divide-border">
+                  {open.map(renderItem)}
+                </div>
                 {checkedItems.length > 0 && (
                   <div className="divide-y divide-border">
                     {checkedItems.map(renderItem)}
