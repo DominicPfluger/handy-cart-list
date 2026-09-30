@@ -63,7 +63,7 @@ function AdminPage() {
   const delH = useServerFn(deleteHeading);
   const suggest = useServerFn(suggestProducts);
   const rank = useServerFn(rankProducts);
-  const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price">("popularity");
+  const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity">("popularity");
   const admin = useQuery({ queryKey: ["admin-check"], queryFn: () => check() });
   const q = useQuery({ queryKey: ["admin-catalog"], queryFn: loadAll, enabled: Boolean(admin.data?.isAdmin) });
   const [cur, setCur] = useState<string | null>(null);
@@ -152,7 +152,7 @@ function AdminPage() {
   /** Produkte nach Kriterium sortieren; Überschriften-Gruppen bleiben erhalten. */
   const sortProducts = () => {
     if (!cur || products.length < 2) return;
-    const label = { popularity: "Relevanz", alphabetical: "Alphabet", price: "Preis" }[sortBy];
+    const label = { popularity: "Relevanz", alphabetical: "Alphabet", price: "Preis", similarity: "Ähnlichkeit" }[sortBy];
     if (!confirm(`Produkte dieser Kategorie nach ${label} sortieren? Die Reihenfolge gilt für alle Nutzer. Überschriften-Gruppen bleiben erhalten.`)) return;
     const anchors = new Set(headings.map((h) => h.before_product_id));
     const groups: (typeof products)[] = [];
@@ -332,6 +332,7 @@ function AdminPage() {
                       <option value="popularity">Relevanz (Beliebtheit)</option>
                       <option value="price">Preis (günstig zuerst)</option>
                       <option value="alphabetical">Alphabetisch</option>
+                      <option value="similarity">Ähnlichkeit (gleiche Sorten)</option>
                     </select>
                     <Button size="sm" variant="outline" className="h-8" disabled={busy} onClick={sortProducts}>Sortieren</Button>
                   </div>
