@@ -13,7 +13,7 @@ import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dialog";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useShoppingList } from "../hooks/use-shopping-list";
-import { DIETS, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
+import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
 import {
   catalogQueryOptions,
   useCatalog,
@@ -332,10 +332,12 @@ function DepartmentsPage() {
                   key={d}
                   type="button"
                   aria-pressed={on}
+                  aria-label={t(`diet.${d}`)}
+                  title={t(`diet.${d}`)}
                   onClick={() => toggleDiet(d)}
-                  className={`rounded-full border px-3 py-1.5 text-xs font-medium ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground"}`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-full border text-lg leading-none ${on ? "border-primary bg-primary/15" : "border-border bg-background"}`}
                 >
-                  {t(`diet.${d}`)}
+                  {DIET_EMOJI[d]}
                 </button>
               );
             })}
