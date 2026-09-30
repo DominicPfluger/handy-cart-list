@@ -14,3 +14,4 @@
 - Shared catalog category removal is a device-only hidden-ID list applied in the departments view, with restoration in More; custom categories use local deletion. Why: personal removals must not change the shared catalog or existing lists/favorites.
 - Diet filter: products.excluded_diets (text[], AI-classified, non-food left empty); selection stored device-only in localStorage (use-diet-filter). Why: simple exclusion list, no per-user backend state.
 - Recipe builder templates live in src/lib/recipe-templates.ts, ingredients referenced by German catalog baseName (missing ones hidden). Why: user will curate ingredient lists manually later without schema changes.
+- Mushroom emojis (🍄, 🍄‍🟫) are never rendered directly: ProductEmoji (src/components/product-emoji.tsx) swaps them for a single edible-mushroom SVG icon, because 🍄 is the poisonous fly agaric and 🍄‍🟫 breaks into two glyphs on older devices. Why: user requirement for list icons.
