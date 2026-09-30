@@ -501,7 +501,7 @@ function useCloudLists(
     if (!user) return;
     fetchCloud();
     const channel = supabase
-      .channel("shoppi-lists")
+      .channel(`shoppi-lists-${crypto.randomUUID()}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "list_items" }, scheduleReload)
       .on("postgres_changes", { event: "*", schema: "public", table: "shopping_lists" }, scheduleReload)
       .on("postgres_changes", { event: "*", schema: "public", table: "list_members" }, scheduleReload)
