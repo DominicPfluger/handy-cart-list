@@ -273,11 +273,11 @@ function AdminPage() {
                     {h && (
                       <div
                         draggable
-                        onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; setDrag({ kind: "heading", index: i, id: h.id }); }}
+                        onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; e.dataTransfer.setData("text/plain", h.id); setDrag({ kind: "heading", index: i, id: h.id }); }}
                         onDragOver={(e) => { if (drag?.kind === "product") e.preventDefault(); }}
                         onDrop={(e) => {
+                          e.preventDefault();
                           if (drag?.kind === "product") {
-                            e.preventDefault();
                             // Produkt direkt unter diese Überschrift setzen
                             reorder("product", products, drag.index, i);
                           }
@@ -361,16 +361,37 @@ function Row(p: {
   onOpen?: () => void; onEdit: () => void; onUp: () => void; onDown: () => void;
   dragging?: boolean; onDragStart?: () => void; onDragOver?: (e: React.DragEvent) => void; onDrop?: (e: React.DragEvent) => void; onDragEnd?: () => void;
 }) {
+  const [over, setOver] = useState<"top" | "bottom" | null>(null);
   return (
     <div
-      draggable={Boolean(p.onDragStart)}
-      onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; p.onDragStart?.(); }}
-      onDragOver={p.onDragOver}
-      onDrop={(e) => { e.preventDefault(); p.onDrop?.(e); }}
-      onDragEnd={p.onDragEnd}
-      className={`flex items-center gap-2 rounded-lg border px-2 py-1.5 ${p.dragging ? "opacity-40" : ""} ${p.active ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}
+      onDragOver={(e) => {
+        p.onDragOver?.(e);
+        if (!p.onDrop) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        const r = e.currentTarget.getBoundingClientRect();
+        setOver(e.clientY > r.top + r.height / 2 ? "bottom" : "top");
+      }}
+      onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOver(null); }}
+      onDrop={(e) => { e.preventDefault(); e.stopPropagation(); setOver(null); p.onDrop?.(e); }}
+      className={`relative flex items-center gap-2 rounded-lg border px-2 py-1.5 ${p.dragging ? "opacity-40" : ""} ${p.active ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}
     >
-      {p.onDragStart && <span className="cursor-grab touch-none select-none text-muted-foreground" aria-label="Ziehen">⠿</span>}
+      {over && <span className={`pointer-events-none absolute inset-x-1 h-0.5 rounded bg-primary ${over === "top" ? "-top-1" : "-bottom-1"}`} />}
+      {p.onDragStart && (
+        <span
+          draggable
+          onDragStart={(e) => {
+            e.dataTransfer.effectAllowed = "move";
+            e.dataTransfer.setData("text/plain", p.name); // Firefox startet Drag nur mit setData
+            const row = e.currentTarget.parentElement;
+            if (row) e.dataTransfer.setDragImage(row, 16, row.offsetHeight / 2);
+            p.onDragStart?.();
+          }}
+          onDragEnd={() => { setOver(null); p.onDragEnd?.(); }}
+          className="-my-1.5 -ml-2 cursor-grab select-none px-2 py-1.5 text-lg text-muted-foreground active:cursor-grabbing"
+          aria-label="Ziehen"
+        >⠿</span>
+      )}
       <button className="flex min-w-0 flex-1 items-center gap-2 text-left" onClick={p.onOpen ?? p.onEdit}>
         <span className="text-lg">{p.emoji}</span>
         <span className="min-w-0">
