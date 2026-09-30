@@ -96,7 +96,7 @@ export interface ShoppingList {
   items: ListItem[];
   createdAt: number;
   /** Cloud-Liste: Vorlage? */
-  isTemplate?: boolean;
+  isTemplate?: boolean | undefined;
   /** Cloud-Liste: Einladungscode für gemeinsames Bearbeiten */
   inviteCode?: string | null;
   /** Cloud-Liste: gehört diese Liste dem angemeldeten Nutzer? */

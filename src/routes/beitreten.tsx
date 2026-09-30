@@ -23,7 +23,7 @@ export const Route = createFileRoute("/beitreten")({
 });
 
 function BeitretenPage() {
-  const t = useT();
+  const { t } = useT();
   const user = useAuthUser();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
