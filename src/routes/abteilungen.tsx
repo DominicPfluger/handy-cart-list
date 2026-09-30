@@ -349,24 +349,34 @@ function DepartmentsPage() {
         <p className="mt-1 text-sm text-muted-foreground">{t("dept.subtitle")}</p>
       </div>
 
-      <div className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
-        <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
-        <input
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder={t("dept.search")}
-          aria-label={t("dept.search")}
-          className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-        />
-        <button
-          type="button"
-          onClick={() => setDietOpen((v) => !v)}
-          aria-expanded={dietOpen}
-          className={`shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+      <div className="flex items-center gap-2">
+        <div className="flex h-12 min-w-0 flex-1 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
+          <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t("dept.search")}
+            aria-label={t("dept.search")}
+            className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+          />
+          <button
+            type="button"
+            onClick={() => setDietOpen((v) => !v)}
+            aria-expanded={dietOpen}
+            className={`shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+          >
+            🥗 {t("diet.filter")}{diets.length ? ` · ${diets.length}` : ""}
+          </button>
+        </div>
+        <Link
+          to="/scanner"
+          aria-label={t("scan.title")}
+          title={t("scan.title")}
+          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-border bg-card text-foreground shadow-sm"
         >
-          🥗 {t("diet.filter")}{diets.length ? ` · ${diets.length}` : ""}
-        </button>
+          <ScanIcon className="h-5 w-5" />
+        </Link>
       </div>
 
       {dietOpen && (
