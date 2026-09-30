@@ -257,6 +257,7 @@ export const de = {
   "rk.cancel": "Abbrechen",
   "rk.deleteList": "Liste löschen",
   "rk.recent": "Neu erstellte Rezepte",
+  "rk.onlyFavorites": "Nur Favoriten",
   "rk.popular": "Beliebte Rezepte",
   "rk.ingredientsN": "{n} Zutaten",
 } as const;
