@@ -1,51 +1,51 @@
 # Neue Produkte in TK-Fertiggerichte
 
 ## Aktueller Stand (geprüft)
-- Kategorie **TK-Fertiggerichte** (unter Tiefkühlprodukte) ist leer.
-- Keines der 14 Produkte existiert bereits als Fertiggericht (nur Zutaten wie Lasagneplatten, Paella-Reis, Pad-Thai-Nudeln in anderen Kategorien — diese bleiben unberührt).
+- Die Kategorie **TK-Fertiggerichte** (unter Tiefkühlprodukte) ist leer.
+- Keines der Gerichte gibt es bisher als Fertiggericht. Es gibt nur Zutaten in anderen Kategorien, z. B. Lasagneplatten, Paella-Reis und Pad-Thai-Nudeln. Diese bleiben unverändert.
 
-## Geplante Änderung (Datenbank, keine Schema-Änderung)
-
-14 Produkte werden in TK-Fertiggerichte angelegt (Einheit „Stück", Menge 1, Katalogsortierung wie in der Tabelle):
+## Neue Artikel in dieser Reihenfolge (28)
 
 1. Beliebiges Tiefkühl-Fertiggericht
 2. Lasagne
-3. Cannelloni
-4. Hähnchen-Sahne-Geschnetzelts
-5. Hähnchen-Curry
-6. Asia-Nudelpfanne
-7. Pad Thai
-8. Jambalaya
-9. Bami Goreng
-10. Nasi Goreng
-11. Enchiladas
-12. Massaman-Curry
-13. Moussaka
-14. Paella
+3. Gemüse-Lasagne
+4. Cannelloni
+5. Hähnchen-Sahne-Geschnetzeltes (Tippfehler „Geschnetzelts" korrigiert)
+6. Hähnchen-Curry
+7. Asia-Nudelpfanne
+8. Pad Thai
+9. Jambalaya
+10. Bami Goreng
+11. Nasi Goreng
+12. Enchiladas
+13. Massaman-Curry
+14. Moussaka
+15. Paella
+16. Chili con Carne
+17. Königsberger Klopse mit Reis
+18. Köttbullar mit Sauce
+19. Schwäbische Maultaschen
+20. Kartoffelgratin
+21. Tikka Masala mit Reis
+22. Süss-Sauer-Hähnchen mit Reis (in der Schweiz mit ss, sonst „Süß")
+23. Gyoza
+24. Frühlingsrollen
+25. Ofen-Schupfnudeln mit Kraut
+26. Gemüse-Reis-Pfanne
+27. Cevapcici mit Reis
+28. Falafel-Teller
 
-Für jedes Produkt:
-- Übersetzungen für alle 16 Sprachen (de-DE/AT/CH, en-US/GB/CA, es-ES/MX, fr-FR/CA, it-IT/CH, nl-NL/BE, pt-PT/BR)
-- Diät-Ausschlüsse wie bei den übrigen Tiefkühlgerichten: Fleischgerichte (Lasagne, Cannelloni, Enchiladas, Moussaka) schließen vegetarisch/vegan sowie halal/kosher aus; Hähnchen- und Reisgerichte schließen vegetarisch/vegan aus; alles schließt glutenfrei aus. „Beliebiges Tiefkühl-Fertiggericht" folgt dem Muster von „Beliebige Tiefkühlpizza".
-
-## Vorschläge für fehlende, relevante Produkte (Auswahl, mind. 10)
-
-1. Spaghetti Bolognese
-2. Chili con Carne
-3. Königsberger Klopse mit Reis
-4. Köttbullar mit Sauce
-5. Schwäbische Maultaschen
-6. Kartoffelgratin
-7. Gemüse-Lasagne
-8. Tikka Masala mit Reis
-9. Süß-Sauer-Hähnchen mit Reis
-10. Gyoza (Teigtaschen)
-11. Frühlingsrollen
-12. Ofen-Schupfnudeln mit Kraut? / Gemüse-Reis-Pfanne
-13. Cevapcici mit Reis
-14. Falafel-Teller
-
-→ Sag Bescheid, welche davon ich zusätzlich anlegen soll (oder „alle").
+Für jeden Artikel gilt:
+- Einheit „Stück", Menge 1.
+- Übersetzungen in alle 16 Sprachen, mit regionalen Varianten (z. B. „ss" in der Schweiz).
+- Diät-Ausschlüsse nach dem Muster der übrigen Tiefkühlgerichte:
+  - Gerichte mit Fleisch oder Fisch: nicht vegetarisch und nicht vegan. Bei Schweinefleisch zusätzlich nicht halal und nicht koscher.
+  - Gerichte mit Sahne oder Käse: nicht laktosefrei.
+  - Gerichte mit Nudeln oder Teig: nicht glutenfrei.
+  - Vegetarische Gerichte (Gemüse-Lasagne, Kartoffelgratin, Gemüse-Reis-Pfanne, Falafel-Teller, Frühlingsrollen) bleiben vegetarisch.
+  - „Beliebiges Tiefkühl-Fertiggericht" folgt dem Muster von „Beliebige Tiefkühlpizza".
 
 ## Umsetzung
-- Einmalige Datenänderung über das Datenbank-Tool (Einfügen der Artikel + Übersetzungen), danach sind die Artikel in der App unter Tiefkühlprodukte → TK-Fertiggerichte sichtbar.
-- Keine Änderung am Code; bestehende Listen, Favoriten und Filter bleiben unverändert, die neuen Artikel erscheinen im Diät-Filter automatisch.
+- Die Artikel und ihre Übersetzungen werden einmalig in den Katalog eingetragen. Danach stehen sie unter Tiefkühlprodukte → TK-Fertiggerichte.
+- Der Code bleibt unverändert. Der Diät-Filter berücksichtigt die neuen Artikel automatisch.
+- Nach dem Eintragen prüfe ich, ob alle 28 Artikel und 448 Übersetzungen vollständig sind.
