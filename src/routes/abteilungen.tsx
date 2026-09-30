@@ -23,7 +23,6 @@ import {
   matchesProductSearch,
   originalName,
   pathTo,
-  headingByProduct,
   productsOf,
   type CatalogDepartment,
   type CatalogProduct,
@@ -125,7 +124,7 @@ function DepartmentsPage() {
   const isAdmin = useIsAdmin();
   const queryClient = useQueryClient();
   const saveHeadingFn = useServerFn(saveHeading);
-  const headingOf = useMemo(() => headingByProduct(data.products, data.headings), [data.products, data.headings]);
+  const headingBefore = useMemo(() => new Map(data.headings.map((h) => [h.beforeProductId, h])), [data.headings]);
   const customNames = useCustomNames();
   const openRename = (e: CatalogDepartment | CatalogProduct, kind: "product" | "department") =>
     setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames, kind });
@@ -518,8 +517,7 @@ function DepartmentsPage() {
                 >
                   {draggable && (
                     <span
-                      aria-label={t("common.move", { name: product.name })}
-                      title={t("common.move", { name: product.name })}
+                      aria-hidden="true"
                       onPointerDown={(e) => startDragNow(e, product, "product")}
                       className="grid h-14 w-6 shrink-0 cursor-grab touch-none place-items-center text-lg leading-none text-muted-foreground active:cursor-grabbing"
                     >
