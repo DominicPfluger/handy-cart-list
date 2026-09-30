@@ -21,6 +21,7 @@ import { ProductEmoji } from "../components/product-emoji";
 
 
 export const Route = createFileRoute("/favoriten")({
+  ssr: false,
   loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
   head: () => ({
     meta: [

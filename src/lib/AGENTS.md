@@ -1,0 +1,1 @@
+- Recipe templates (recipe-templates.ts) reference ingredients by German catalog baseName; missing ones hidden. Why: user curates lists manually without schema changes.

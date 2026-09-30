@@ -10,6 +10,7 @@ import { ScanIcon } from "../components/icons";
 import { ProductEmoji } from "../components/product-emoji";
 
 export const Route = createFileRoute("/scanner")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Shoppi — Barcode-Scanner" },

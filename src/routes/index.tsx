@@ -29,6 +29,7 @@ import { toast } from "sonner";
 
 
 export const Route = createFileRoute("/")({
+  ssr: false,
   loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
   head: () => ({
     meta: [
