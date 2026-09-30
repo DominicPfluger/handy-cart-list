@@ -48,9 +48,8 @@ export async function shareList(list: ShoppingList) {
   openShareSheet({ title: list.name, text });
 }
 
-async function shareInviteLink(link: string, listName: string) {
-  const { t } = { t: (k: Parameters<typeof translate>[1]) => translate(getLocale(), k) };
-  const text = `${t("lm.inviteHint")}\n${link}`;
+function shareInviteLink(link: string, listName: string) {
+  const text = `${translate(getLocale(), "lm.inviteHint")}\n${link}`;
   openShareSheet({ title: listName, text });
 }
 
