@@ -170,7 +170,7 @@ function ListPage() {
     () => stats.top.filter((s) => !inList.has(s.productId ?? s.name.toLowerCase())).slice(0, 6),
     [stats.top, inList],
   );
-  const addSuggestion = (s: { name: string; productId?: string; emoji?: string }) => {
+  const addSuggestion = (s: { name: string; productId?: string | undefined; emoji?: string | undefined }) => {
     const product = s.productId ? productById.get(s.productId) : undefined;
     if (product) {
       const group = product.departmentId ? deptById.get(product.departmentId) : undefined;
