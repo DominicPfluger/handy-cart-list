@@ -106,10 +106,18 @@ function AdminPage() {
   const move = (kind: "department" | "product", list: { id: string }[], idx: number, dir: -1 | 1) => {
     const j = idx + dir;
     if (j < 0 || j >= list.length) return;
+    reorder(kind, list, idx, j);
+  };
+
+  const reorder = (kind: "department" | "product", list: { id: string }[], from: number, to: number) => {
+    if (from === to || from < 0 || from >= list.length) return;
     const next = [...list];
-    [next[idx], next[j]] = [next[j]!, next[idx]!];
+    const [item] = next.splice(from, 1);
+    next.splice(Math.max(0, Math.min(to, next.length)), 0, item!);
     run(() => Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), "Reihenfolge gespeichert");
   };
+
+  const [drag, setDrag] = useState<{ kind: "department" | "product"; index: number } | null>(null);
 
   const remove = (s: NonNullable<Sel>, name: string) => {
     if (!confirm(`„${name}“ endgültig für alle Nutzer löschen?`)) return;
