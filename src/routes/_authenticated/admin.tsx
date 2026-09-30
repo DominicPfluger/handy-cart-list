@@ -257,10 +257,15 @@ function AdminPage() {
                 return (
                   <div key={p.id} className="space-y-1">
                     {h && (
-                      <button onClick={() => setSel({ kind: "heading", id: h.id })}
-                        className={`mt-2 block w-full rounded-lg px-2 py-1 text-left text-sm font-bold text-foreground ${sel?.id === h.id ? "bg-primary-soft" : ""}`}>
+                      <div
+                        draggable
+                        onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; setDrag({ kind: "heading", index: i, id: h.id }); }}
+                        onDragEnd={() => setDrag(null)}
+                        onClick={() => setSel({ kind: "heading", id: h.id })}
+                        className={`mt-2 flex cursor-grab items-center gap-2 rounded-lg px-2 py-1 text-left text-sm font-bold text-foreground ${drag?.kind === "heading" && drag.id === h.id ? "opacity-40" : ""} ${sel?.id === h.id ? "bg-primary-soft" : ""}`}>
+                        <span className="touch-none select-none text-muted-foreground" aria-label="Ziehen">⠿</span>
                         {h.name}
-                      </button>
+                      </div>
                     )}
                     <Row emoji={p.emoji ?? "•"} name={p.name} sub={`${p.default_quantity} ${p.default_unit}`} active={sel?.id === p.id}
                       dragging={drag?.kind === "product" && drag.index === i}
