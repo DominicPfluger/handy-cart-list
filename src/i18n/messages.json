@@ -242,7 +242,14 @@
     "rk.recipeTitle": "Title for your recipe",
     "rename.deleteCatalog": "Remove from catalog",
     "more.hiddenProducts": "Hidden products",
-    "more.hiddenProductsHint": "These products are hidden on this device only."
+    "more.hiddenProductsHint": "These products are hidden on this device only.",
+    "heading.add": "Add heading",
+    "heading.title": "New heading",
+    "heading.edit": "Edit heading",
+    "heading.before": "Placed above product",
+    "heading.hint": "Visible to everyone. Long-press and drag onto a product to move it.",
+    "heading.delete": "Delete",
+    "heading.saved": "Heading saved"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -487,7 +494,14 @@
     "rk.recipeTitle": "Title for your recipe",
     "rename.deleteCatalog": "Remove from catalogue",
     "more.hiddenProducts": "Hidden products",
-    "more.hiddenProductsHint": "These products are hidden on this device only."
+    "more.hiddenProductsHint": "These products are hidden on this device only.",
+    "heading.add": "Add heading",
+    "heading.title": "New heading",
+    "heading.edit": "Edit heading",
+    "heading.before": "Placed above product",
+    "heading.hint": "Visible to everyone. Long-press and drag onto a product to move it.",
+    "heading.delete": "Delete",
+    "heading.saved": "Heading saved"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -732,7 +746,14 @@
     "rk.recipeTitle": "Title for your recipe",
     "rename.deleteCatalog": "Remove from catalog",
     "more.hiddenProducts": "Hidden products",
-    "more.hiddenProductsHint": "These products are hidden on this device only."
+    "more.hiddenProductsHint": "These products are hidden on this device only.",
+    "heading.add": "Add heading",
+    "heading.title": "New heading",
+    "heading.edit": "Edit heading",
+    "heading.before": "Placed above product",
+    "heading.hint": "Visible to everyone. Long-press and drag onto a product to move it.",
+    "heading.delete": "Delete",
+    "heading.saved": "Heading saved"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -977,7 +998,14 @@
     "rk.recipeTitle": "Título para tu receta",
     "rename.deleteCatalog": "Eliminar del catálogo",
     "more.hiddenProducts": "Productos ocultos",
-    "more.hiddenProductsHint": "Estos productos están ocultos solo en este dispositivo."
+    "more.hiddenProductsHint": "Estos productos están ocultos solo en este dispositivo.",
+    "heading.add": "Añadir encabezado",
+    "heading.title": "Nuevo encabezado",
+    "heading.edit": "Editar encabezado",
+    "heading.before": "Encima del producto",
+    "heading.hint": "Visible para todos. Mantén pulsado y arrastra sobre un producto para moverlo.",
+    "heading.delete": "Eliminar",
+    "heading.saved": "Encabezado guardado"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -1222,7 +1250,14 @@
     "rk.recipeTitle": "Título para tu receta",
     "rename.deleteCatalog": "Eliminar del catálogo",
     "more.hiddenProducts": "Productos ocultos",
-    "more.hiddenProductsHint": "Estos productos están ocultos solo en este dispositivo."
+    "more.hiddenProductsHint": "Estos productos están ocultos solo en este dispositivo.",
+    "heading.add": "Añadir encabezado",
+    "heading.title": "Nuevo encabezado",
+    "heading.edit": "Editar encabezado",
+    "heading.before": "Encima del producto",
+    "heading.hint": "Visible para todos. Mantén pulsado y arrastra sobre un producto para moverlo.",
+    "heading.delete": "Eliminar",
+    "heading.saved": "Encabezado guardado"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -1467,7 +1502,14 @@
     "rk.recipeTitle": "Titre de votre recette",
     "rename.deleteCatalog": "Retirer du catalogue",
     "more.hiddenProducts": "Produits masqués",
-    "more.hiddenProductsHint": "Ces produits sont masqués uniquement sur cet appareil."
+    "more.hiddenProductsHint": "Ces produits sont masqués uniquement sur cet appareil.",
+    "heading.add": "Ajouter un titre",
+    "heading.title": "Nouveau titre",
+    "heading.edit": "Modifier le titre",
+    "heading.before": "Au-dessus du produit",
+    "heading.hint": "Visible par tous. Appuyez longuement et glissez sur un produit pour le déplacer.",
+    "heading.delete": "Supprimer",
+    "heading.saved": "Titre enregistré"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -1712,7 +1754,14 @@
     "rk.recipeTitle": "Titre de votre recette",
     "rename.deleteCatalog": "Retirer du catalogue",
     "more.hiddenProducts": "Produits masqués",
-    "more.hiddenProductsHint": "Ces produits sont masqués uniquement sur cet appareil."
+    "more.hiddenProductsHint": "Ces produits sont masqués uniquement sur cet appareil.",
+    "heading.add": "Ajouter un titre",
+    "heading.title": "Nouveau titre",
+    "heading.edit": "Modifier le titre",
+    "heading.before": "Au-dessus du produit",
+    "heading.hint": "Visible par tous. Appuyez longuement et glissez sur un produit pour le déplacer.",
+    "heading.delete": "Supprimer",
+    "heading.saved": "Titre enregistré"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -1957,7 +2006,14 @@
     "rk.recipeTitle": "Titolo per la tua ricetta",
     "rename.deleteCatalog": "Rimuovi dal catalogo",
     "more.hiddenProducts": "Prodotti nascosti",
-    "more.hiddenProductsHint": "Questi prodotti sono nascosti solo su questo dispositivo."
+    "more.hiddenProductsHint": "Questi prodotti sono nascosti solo su questo dispositivo.",
+    "heading.add": "Aggiungi titolo",
+    "heading.title": "Nuovo titolo",
+    "heading.edit": "Modifica titolo",
+    "heading.before": "Sopra il prodotto",
+    "heading.hint": "Visibile a tutti. Tieni premuto e trascina su un prodotto per spostarlo.",
+    "heading.delete": "Elimina",
+    "heading.saved": "Titolo salvato"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -2202,7 +2258,14 @@
     "rk.recipeTitle": "Titolo per la tua ricetta",
     "rename.deleteCatalog": "Rimuovi dal catalogo",
     "more.hiddenProducts": "Prodotti nascosti",
-    "more.hiddenProductsHint": "Questi prodotti sono nascosti solo su questo dispositivo."
+    "more.hiddenProductsHint": "Questi prodotti sono nascosti solo su questo dispositivo.",
+    "heading.add": "Aggiungi titolo",
+    "heading.title": "Nuovo titolo",
+    "heading.edit": "Modifica titolo",
+    "heading.before": "Sopra il prodotto",
+    "heading.hint": "Visibile a tutti. Tieni premuto e trascina su un prodotto per spostarlo.",
+    "heading.delete": "Elimina",
+    "heading.saved": "Titolo salvato"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -2447,7 +2510,14 @@
     "rk.recipeTitle": "Título para a sua receita",
     "rename.deleteCatalog": "Remover do catálogo",
     "more.hiddenProducts": "Produtos ocultos",
-    "more.hiddenProductsHint": "Estes produtos estão ocultos apenas neste dispositivo."
+    "more.hiddenProductsHint": "Estes produtos estão ocultos apenas neste dispositivo.",
+    "heading.add": "Adicionar título",
+    "heading.title": "Novo título",
+    "heading.edit": "Editar título",
+    "heading.before": "Acima do produto",
+    "heading.hint": "Visível para todos. Mantenha premido e arraste para um produto para mover.",
+    "heading.delete": "Eliminar",
+    "heading.saved": "Título guardado"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -2692,7 +2762,14 @@
     "rk.recipeTitle": "Título para a sua receita",
     "rename.deleteCatalog": "Remover do catálogo",
     "more.hiddenProducts": "Produtos ocultos",
-    "more.hiddenProductsHint": "Estes produtos estão ocultos apenas neste dispositivo."
+    "more.hiddenProductsHint": "Estes produtos estão ocultos apenas neste dispositivo.",
+    "heading.add": "Adicionar título",
+    "heading.title": "Novo título",
+    "heading.edit": "Editar título",
+    "heading.before": "Acima do produto",
+    "heading.hint": "Visível para todos. Mantenha premido e arraste para um produto para mover.",
+    "heading.delete": "Eliminar",
+    "heading.saved": "Título guardado"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -2937,7 +3014,14 @@
     "rk.recipeTitle": "Titel voor je recept",
     "rename.deleteCatalog": "Uit catalogus verwijderen",
     "more.hiddenProducts": "Verborgen producten",
-    "more.hiddenProductsHint": "Deze producten zijn alleen op dit apparaat verborgen."
+    "more.hiddenProductsHint": "Deze producten zijn alleen op dit apparaat verborgen.",
+    "heading.add": "Kop toevoegen",
+    "heading.title": "Nieuwe kop",
+    "heading.edit": "Kop bewerken",
+    "heading.before": "Boven product",
+    "heading.hint": "Zichtbaar voor iedereen. Lang indrukken en naar een product slepen om te verplaatsen.",
+    "heading.delete": "Verwijderen",
+    "heading.saved": "Kop opgeslagen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -3182,16 +3266,37 @@
     "rk.recipeTitle": "Titel voor je recept",
     "rename.deleteCatalog": "Uit catalogus verwijderen",
     "more.hiddenProducts": "Verborgen producten",
-    "more.hiddenProductsHint": "Deze producten zijn alleen op dit apparaat verborgen."
+    "more.hiddenProductsHint": "Deze producten zijn alleen op dit apparaat verborgen.",
+    "heading.add": "Kop toevoegen",
+    "heading.title": "Nieuwe kop",
+    "heading.edit": "Kop bewerken",
+    "heading.before": "Boven product",
+    "heading.hint": "Zichtbaar voor iedereen. Lang indrukken en naar een product slepen om te verplaatsen.",
+    "heading.delete": "Verwijderen",
+    "heading.saved": "Kop opgeslagen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
     "more.hiddenProducts": "Ausgeblendete Produkte",
-    "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet."
+    "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet.",
+    "heading.add": "Überschrift hinzufügen",
+    "heading.title": "Neue Überschrift",
+    "heading.edit": "Überschrift bearbeiten",
+    "heading.before": "Steht über Produkt",
+    "heading.hint": "Für alle sichtbar. Lange drücken und auf ein Produkt ziehen, um sie zu verschieben.",
+    "heading.delete": "Löschen",
+    "heading.saved": "Überschrift gespeichert"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
     "more.hiddenProducts": "Ausgeblendete Produkte",
-    "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet."
+    "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet.",
+    "heading.add": "Überschrift hinzufügen",
+    "heading.title": "Neue Überschrift",
+    "heading.edit": "Überschrift bearbeiten",
+    "heading.before": "Steht über Produkt",
+    "heading.hint": "Für alle sichtbar. Lange drücken und auf ein Produkt ziehen, um sie zu verschieben.",
+    "heading.delete": "Löschen",
+    "heading.saved": "Überschrift gespeichert"
   }
 }

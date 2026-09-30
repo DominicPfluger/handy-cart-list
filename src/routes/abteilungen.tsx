@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
 import { toast } from "sonner";
@@ -468,7 +468,7 @@ function DepartmentsPage() {
               const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
               const draggable = !normalizedQuery;
               return (
-                <div key={product.id} className="contents">
+                <Fragment key={product.id}>
                 {showHeading && heading && (
                   <div
                     onPointerDown={isAdmin ? (e) => startPress(e, heading, "heading") : undefined}
@@ -546,7 +546,7 @@ function DepartmentsPage() {
                   </Button>
                   </div>
                 </div>
-                </div>
+                </Fragment>
               );
             })}
           </div>
