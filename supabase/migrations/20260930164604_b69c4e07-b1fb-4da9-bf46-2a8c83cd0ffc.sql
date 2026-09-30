@@ -1,0 +1,2 @@
+ALTER TABLE public.catalog_translations DROP CONSTRAINT IF EXISTS catalog_translations_entity_type_check;
+ALTER TABLE public.catalog_translations ADD CONSTRAINT catalog_translations_entity_type_check CHECK (entity_type IN ('department','product','heading'));
