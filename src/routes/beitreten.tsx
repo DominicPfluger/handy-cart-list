@@ -86,7 +86,7 @@ function BeitretenPage() {
         </Link>
         <h1 className="mt-2 text-2xl font-bold tracking-tight text-foreground">{t("join.title")}</h1>
       </div>
-      <section className="mx-auto max-w-md px-4 pt-8">
+      <section className="mx-auto max-w-md space-y-4 pt-2">
         {!user ? (
           <div className="space-y-4 rounded-2xl border bg-card p-5 text-center">
             <p className="text-sm text-muted-foreground">
@@ -126,6 +126,6 @@ function BeitretenPage() {
           </div>
         )}
       </section>
-    </main>
+    </div>
   );
 }
