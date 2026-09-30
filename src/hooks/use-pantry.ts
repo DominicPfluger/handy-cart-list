@@ -90,7 +90,7 @@ export function usePantry() {
     if (!user) return;
     loadCloud();
     const channel = supabase
-      .channel("shoppi-pantry")
+      .channel(`shoppi-pantry-${crypto.randomUUID()}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "pantry_items" }, () => {
         loadCloud();
       })
