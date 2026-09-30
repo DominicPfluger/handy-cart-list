@@ -479,23 +479,28 @@ function DepartmentsPage() {
           </div>
           <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
             {shownProducts.map((product, index) => {
-              const heading = !normalizedQuery ? headingOf.get(product.id) : undefined;
-              const showHeading = heading && headingOf.get(shownProducts[index - 1]?.id ?? "") !== heading;
+              // Überschrift steht immer direkt vor ihrem Anker-Produkt (auch nach lokaler Umsortierung)
+              const heading = !normalizedQuery ? headingBefore.get(product.id) : undefined;
+              const showHeading = !!heading;
+              void index;
               const group = groupFor(product);
               const favorite = isFavorite(product.id);
               const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
               const draggable = !normalizedQuery;
+              const headingDrop = drag?.what === "product" && heading && drag.target?.id === heading.beforeProductId && drag.target.kind === "after" && drag.id !== heading.beforeProductId;
               return (
                 <Fragment key={product.id}>
                 {showHeading && heading && (
                   <div
+                    data-drop={draggable ? "heading" : undefined}
+                    data-id={heading.beforeProductId}
                     onPointerDown={isAdmin ? (e) => startPress(e, heading, "heading") : undefined}
                     onPointerMove={isAdmin ? pressMove : undefined}
                     onPointerUp={isAdmin ? cancelPress : undefined}
                     onPointerLeave={isAdmin ? cancelPress : undefined}
                     onContextMenu={isAdmin ? (e) => e.preventDefault() : undefined}
                     onClick={() => { if (isAdmin && !suppressClick.current) setHeadingTarget({ departmentId: heading.departmentId, products: directProducts, heading }); }}
-                    className={`select-none bg-muted/50 px-3 pb-1.5 pt-3 text-sm font-bold text-foreground ${isAdmin ? "cursor-pointer" : ""} ${drag?.what === "heading" && drag.id === heading.id ? "opacity-40" : ""}`}
+                    className={`select-none bg-muted/50 px-3 pb-1.5 pt-3 text-sm font-bold text-foreground ${isAdmin ? "cursor-pointer" : ""} ${drag?.what === "heading" && drag.id === heading.id ? "opacity-40" : ""} ${headingDrop ? "ring-2 ring-inset ring-primary" : ""}`}
                   >
                     {heading.name}
                   </div>
@@ -509,8 +514,18 @@ function DepartmentsPage() {
                   onPointerLeave={draggable ? cancelPress : undefined}
                   onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
                   onClickCapture={(e) => { if (suppressClick.current) { e.stopPropagation(); e.preventDefault(); } }}
-                  className={`flex min-h-20 select-none items-center gap-3 px-3 py-2.5 ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" ? "!border-b-2 !border-b-primary" : ""}`}
+                  className={`flex min-h-20 select-none items-center gap-3 px-3 py-2.5 ${draggable ? "pl-1" : ""} ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" && !headingDrop ? "!border-b-2 !border-b-primary" : ""}`}
                 >
+                  {draggable && (
+                    <span
+                      aria-label={t("common.move", { name: product.name })}
+                      title={t("common.move", { name: product.name })}
+                      onPointerDown={(e) => startDragNow(e, product, "product")}
+                      className="grid h-14 w-6 shrink-0 cursor-grab touch-none place-items-center text-lg leading-none text-muted-foreground active:cursor-grabbing"
+                    >
+                      ⠿
+                    </span>
+                  )}
                   <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25">
                     <ProductThumb product={product} />
                   </div>
