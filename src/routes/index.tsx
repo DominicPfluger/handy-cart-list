@@ -10,6 +10,7 @@ import { useProductOrder } from "../hooks/use-product-order";
 import {
   catalogQueryOptions,
   useCatalog,
+  letterOf,
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import { getLocale } from "../i18n";
@@ -149,6 +150,49 @@ function ListPage() {
     const leaf = p?.departmentId ? deptById.get(p.departmentId) : undefined;
     return { tree: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER };
   }
+
+  const renderItem = (item: ListItem) => (
+    <div
+      key={item.id}
+      className="relative flex items-center gap-3 py-3 pl-4 pr-4"
+    >
+      <button
+        onClick={() => toggleItem(item.id)}
+        className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
+          item.checked
+            ? "border-primary bg-primary text-primary-foreground"
+            : "border-muted-foreground/30 bg-transparent"
+        }`}
+        aria-label={item.checked ? t("list.uncheck") : t("list.check")}
+      >
+        {item.checked && <CheckIcon className="h-4 w-4" />}
+      </button>
+      <div className="grid h-10 w-10 shrink-0 select-none place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl">
+        <ProductEmoji emoji={item.emoji} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className={`break-words text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
+          {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
+        </p>
+        <p className="break-words text-xs text-muted-foreground">
+          {item.quantity ? relocalizeQuantity(item.quantity, item.unit) : "—"} · {t("list.by", { name: item.addedBy })}
+        </p>
+        {item.note && (
+          <p className="break-words text-xs italic text-muted-foreground/80">
+            📝 {item.note}
+          </p>
+        )}
+      </div>
+      <button
+        onClick={() => removeItem(item.id)}
+        className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-coral transition active:scale-90"
+        aria-label={t("list.remove")}
+      >
+        <TrashIcon className="h-5 w-5" />
+      </button>
+    </div>
+  );
+
 
 
   const doneCount = items.filter((i) => i.checked).length;
