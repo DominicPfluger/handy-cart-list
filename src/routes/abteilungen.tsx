@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
@@ -312,6 +312,14 @@ function DepartmentsPage() {
           aria-label={t("dept.search")}
           className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
         />
+        <Link
+          to="/scanner"
+          aria-label={t("scan.title")}
+          title={t("scan.title")}
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-muted text-foreground transition active:bg-muted/70"
+        >
+          <ScanIcon className="h-5 w-5" />
+        </Link>
         <button
           type="button"
           onClick={() => setDietOpen((v) => !v)}
