@@ -35,6 +35,8 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const [newName, setNewName] = useState("");
   const collections = useRecipeCollections();
   const [onlyFav, setOnlyFav] = useState(false);
+  const [showAllRecent, setShowAllRecent] = useState(false);
+  const [showAllPopular, setShowAllPopular] = useState(false);
 
   const favIds = useMemo(() => new Set(favorites.map((f) => f.productId)), [favorites]);
 
@@ -97,10 +99,11 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     () => collections
       .flatMap((c) => c.recipes.map((r) => ({ ...r, collectionId: c.id })))
       .filter((r) => !tpl || r.templateId === tpl.id)
-      .sort((a, b) => b.savedAt - a.savedAt)
-      .slice(0, 5),
+      .sort((a, b) => b.savedAt - a.savedAt),
     [collections, tpl],
   );
+  const recentShown = showAllRecent ? recent : recent.slice(0, 5);
+  const popularShown = showAllPopular ? visiblePopular : visiblePopular.slice(0, 5);
 
   const openRecipe = (id: RecipeTemplate["id"], p: Picks) => {
     setTplId(id); setPicks(p); setAdded(false); setSavedMsg(false);
@@ -192,7 +195,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     <section className="space-y-2">
       <h2 className="text-lg font-bold text-foreground">🆕 {t("rk.recent")}</h2>
       {recent.length === 0 && <p className="text-sm text-muted-foreground">{t("rk.emptyCollection")}</p>}
-      {recent.map((r) => {
+      {recentShown.map((r) => {
         const rt = RECIPE_TEMPLATES.find((x) => x.id === r.templateId);
         return (
           <Button
@@ -209,13 +212,18 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           </Button>
         );
       })}
+      {recent.length > 5 && (
+        <button onClick={() => setShowAllRecent((v) => !v)} className="w-full py-1 text-sm font-semibold text-primary">
+          {showAllRecent ? t("rk.showLess") : t("rk.showAllRecent")}
+        </button>
+      )}
     </section>
   );
 
   const popularView = visiblePopular.length > 0 && (
     <section className="space-y-2">
       <h2 className="text-lg font-bold text-foreground">⭐ {t("rk.popular")}</h2>
-      {visiblePopular.map((r) => (
+      {popularShown.map((r) => (
         <Button
           key={r.key}
           onClick={() => openRecipe(r.template.id, r.picks)}
@@ -230,6 +238,11 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           </span>
         </Button>
       ))}
+      {visiblePopular.length > 5 && (
+        <button onClick={() => setShowAllPopular((v) => !v)} className="w-full py-1 text-sm font-semibold text-primary">
+          {showAllPopular ? t("rk.showLess") : t("rk.showAllPopular")}
+        </button>
+      )}
     </section>
   );
 
