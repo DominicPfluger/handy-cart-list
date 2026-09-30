@@ -307,7 +307,7 @@ function useLocalLists(): LocalListsApi {
 // Cloud-Modus (angemeldet): Live-Sync über die Cloud
 // ============================================================
 
-type CloudRow = Record<string, any>;
+type CloudRow = any;
 
 function rowToItem(r: CloudRow): ListItem {
   return {
@@ -357,6 +357,11 @@ interface CloudListsApi {
   deleteList: (id: string) => void;
   reorderLists: (fromId: string, toId: string) => void;
   setItems: (fn: (prev: ListItem[]) => ListItem[]) => void;
+  addItem: (name: string, quantity: string, category: ListItem["category"], user_?: string) => void;
+  addCatalogItem: (input: AddCatalogItemInput, user_?: string) => void;
+  toggleItem: (id: string) => void;
+  removeItem: (id: string) => void;
+  clearChecked: () => void;
   saveAsTemplate: (id: string) => void;
   createFromTemplate: (templateId: string) => void;
   joinByCode: (code: string) => Promise<boolean>;
@@ -678,7 +683,7 @@ function useCloudLists(
     try {
       const res = await joinCloudByCode({ data: { code } });
       if (!res.ok) {
-        toast.error(t("join.invalid"));
+        toast.error(t("join.error"));
         return false;
       }
       toast.success(t("join.okList", { name: res.listName }));
@@ -864,7 +869,7 @@ export function useShoppingList() {
     );
   }, []);
 
-  const cloud = useCloudLists(user, local, logActivity);
+  const cloud = useCloudLists(user ?? null, local, logActivity);
 
   const isFavorite = useCallback(
     (productId: string) => favorites.some((f) => f.productId === productId),

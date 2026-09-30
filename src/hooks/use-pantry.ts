@@ -33,7 +33,7 @@ export interface AddPantryInput {
   imageUrl?: string | null | undefined;
 }
 
-type CloudRow = Record<string, any>;
+type CloudRow = any;
 
 function rowToPantryItem(r: CloudRow): PantryItem {
   return {
