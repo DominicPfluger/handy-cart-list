@@ -110,11 +110,19 @@ function AdminPage() {
   };
 
   const reorder = (kind: "department" | "product", list: { id: string }[], from: number, to: number) => {
-    if (from === to || from < 0 || from >= list.length) return;
+    if (from < 0 || from >= list.length) return;
     const next = [...list];
     const [item] = next.splice(from, 1);
-    next.splice(Math.max(0, Math.min(to, next.length)), 0, item!);
+    const at = Math.max(0, Math.min(to > from ? to - 1 : to, next.length));
+    if (at === from) return;
+    next.splice(at, 0, item!);
     run(() => Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), "Reihenfolge gespeichert");
+  };
+
+  /** Zielindex beim Ablegen auf einer Zeile: obere Hälfte = davor, untere Hälfte = danach. */
+  const dropIndex = (e: React.DragEvent, i: number) => {
+    const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    return e.clientY > r.top + r.height / 2 ? i + 1 : i;
   };
 
   const [drag, setDrag] = useState<{ kind: "department" | "product" | "heading"; index: number; id?: string } | null>(null);
@@ -245,7 +253,7 @@ function AdminPage() {
                   dragging={drag?.kind === "department" && drag.index === i}
                   onDragStart={() => setDrag({ kind: "department", index: i })}
                   onDragOver={(e) => e.preventDefault()}
-                  onDrop={() => { if (drag?.kind === "department") reorder("department", children, drag.index, i); setDrag(null); }}
+                  onDrop={(e) => { if (drag?.kind === "department") reorder("department", children, drag.index, dropIndex(e, i)); setDrag(null); }}
                   onDragEnd={() => setDrag(null)}
                   sub={`${d!.depts.filter((x) => x.parent_id === c.id).length} Unterkat. · ${d!.prods.filter((x) => x.department_id === c.id).length} Produkte`}
                   onOpen={() => { setCur(c.id); setSel(null); }} onEdit={() => setSel({ kind: "department", id: c.id })}
@@ -286,8 +294,8 @@ function AdminPage() {
                       dragging={drag?.kind === "product" && drag.index === i}
                       onDragStart={() => setDrag({ kind: "product", index: i })}
                       onDragOver={(e) => e.preventDefault()}
-                      onDrop={() => {
-                        if (drag?.kind === "product") reorder("product", products, drag.index, i);
+                      onDrop={(e) => {
+                        if (drag?.kind === "product") reorder("product", products, drag.index, dropIndex(e, i));
                         else if (drag?.kind === "heading" && drag.id) moveHeading(drag.id, p.id);
                         setDrag(null);
                       }}
@@ -351,14 +359,14 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
 function Row(p: {
   emoji: string; name: string; sub: string; active: boolean; disabled: boolean;
   onOpen?: () => void; onEdit: () => void; onUp: () => void; onDown: () => void;
-  dragging?: boolean; onDragStart?: () => void; onDragOver?: (e: React.DragEvent) => void; onDrop?: () => void; onDragEnd?: () => void;
+  dragging?: boolean; onDragStart?: () => void; onDragOver?: (e: React.DragEvent) => void; onDrop?: (e: React.DragEvent) => void; onDragEnd?: () => void;
 }) {
   return (
     <div
       draggable={Boolean(p.onDragStart)}
       onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; p.onDragStart?.(); }}
       onDragOver={p.onDragOver}
-      onDrop={(e) => { e.preventDefault(); p.onDrop?.(); }}
+      onDrop={(e) => { e.preventDefault(); p.onDrop?.(e); }}
       onDragEnd={p.onDragEnd}
       className={`flex items-center gap-2 rounded-lg border px-2 py-1.5 ${p.dragging ? "opacity-40" : ""} ${p.active ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}
     >
