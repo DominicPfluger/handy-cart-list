@@ -6,11 +6,13 @@ import {
   type ListItem,
 } from "../hooks/use-shopping-list";
 import { useDepartmentOrder } from "../hooks/use-department-order";
+import { useProductOrder } from "../hooks/use-product-order";
 import {
   catalogQueryOptions,
   useCatalog,
   type CatalogDepartment,
 } from "../lib/catalog-query";
+import { getLocale } from "../i18n";
 import {
   CheckIcon,
   TrashIcon,
@@ -62,13 +64,17 @@ function ListPage() {
   };
   const { departments } = useDepartmentOrder(data.departments);
 
+  const deptIds = useMemo(() => new Set(departments.map((d) => d.id)), [departments]);
+  // Persönliche (nur lokal gespeicherte) Artikel-Anordnung übernehmen — analog Abteilungsansicht.
+  const { products: orderedProducts } = useProductOrder(data.products, deptIds);
+
   const deptById = useMemo(
     () => new Map(departments.map((d) => [d.id, d])),
     [departments],
   );
   const productById = useMemo(
-    () => new Map(data.products.map((p) => [p.id, p])),
-    [data.products],
+    () => new Map(orderedProducts.map((p) => [p.id, p])),
+    [orderedProducts],
   );
 
   /** Kategoriepfad (Wurzel → ... → Blatt) eines Produkts. */
@@ -128,6 +134,8 @@ function ListPage() {
         const oa = pa?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         const ob = pb?.sortOrder ?? Number.MAX_SAFE_INTEGER;
         if (oa !== ob) return oa - ob;
+        // Gleichstand: alphabetisch wie in der Abteilungsansicht
+        if (pa && pb) return pa.name.localeCompare(pb.name, getLocale());
         return a.addedAt - b.addedAt;
       });
     }
