@@ -164,6 +164,7 @@ interface LocalListsApi {
   activeList: ShoppingList;
   setActiveListId: (id: string) => void;
   createList: (name: string, isTemplate?: boolean) => string;
+  createListFromItems: (name: string, items: ListItem[]) => string;
   renameList: (id: string, name: string) => void;
   deleteList: (id: string) => void;
   reorderLists: (fromId: string, toId: string) => void;
@@ -248,6 +249,18 @@ function useLocalLists(): LocalListsApi {
     return list.id;
   }, []);
 
+  const createListFromItems = useCallback((name: string, items: ListItem[]) => {
+    const list: ShoppingList = {
+      id: `l${Date.now()}`,
+      name: name.trim() || "Neue Liste",
+      items,
+      createdAt: Date.now(),
+    };
+    setLists((prev) => [...prev, list]);
+    setActiveListId(list.id);
+    return list.id;
+  }, []);
+
   const renameList = useCallback((id: string, name: string) => {
     const n = name.trim();
     if (!n) return;
@@ -280,6 +293,7 @@ function useLocalLists(): LocalListsApi {
     activeList,
     setActiveListId,
     createList,
+    createListFromItems,
     renameList,
     deleteList,
     reorderLists,
@@ -350,7 +364,7 @@ interface CloudListsApi {
 }
 
 function useCloudLists(
-  user: AuthUser,
+  user: AuthUser | null,
   local: LocalListsApi,
   logActivity: (user: string, action: string, item: string) => void
 ): CloudListsApi {
