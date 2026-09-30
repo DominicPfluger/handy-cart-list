@@ -77,6 +77,20 @@ export function usePurchaseHistory() {
         freq.set(key, entry);
       }
     }
+    // Katalog-Einträge (productId) und manuell getippte gleiche Namen zusammenführen
+    const byName = new Map<string, ProductFrequency>();
+    for (const entry of freq.values()) {
+      if (entry.productId) byName.set(entry.name.toLowerCase(), entry);
+    }
+    for (const [key, entry] of [...freq.entries()]) {
+      if (entry.productId) continue;
+      const match = byName.get(entry.name.toLowerCase());
+      if (match && match !== entry) {
+        match.count += entry.count;
+        if (!match.emoji) match.emoji = entry.emoji;
+        freq.delete(key);
+      }
+    }
     const top = [...freq.values()].sort((a, b) => b.count - a.count);
     return { purchases: history.length, itemCount, top };
   }, [history]);
