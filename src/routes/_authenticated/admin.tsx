@@ -276,8 +276,8 @@ function AdminPage() {
                         onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; e.dataTransfer.setData("text/plain", h.id); setDrag({ kind: "heading", index: i, id: h.id }); }}
                         onDragOver={(e) => { if (drag?.kind === "product") e.preventDefault(); }}
                         onDrop={(e) => {
+                          e.preventDefault();
                           if (drag?.kind === "product") {
-                            e.preventDefault();
                             // Produkt direkt unter diese Überschrift setzen
                             reorder("product", products, drag.index, i);
                           }
