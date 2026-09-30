@@ -35,6 +35,8 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const [newName, setNewName] = useState("");
   const collections = useRecipeCollections();
   const [onlyFav, setOnlyFav] = useState(false);
+  const [showAllRecent, setShowAllRecent] = useState(false);
+  const [showAllPopular, setShowAllPopular] = useState(false);
 
   const favIds = useMemo(() => new Set(favorites.map((f) => f.productId)), [favorites]);
 
@@ -97,10 +99,11 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     () => collections
       .flatMap((c) => c.recipes.map((r) => ({ ...r, collectionId: c.id })))
       .filter((r) => !tpl || r.templateId === tpl.id)
-      .sort((a, b) => b.savedAt - a.savedAt)
-      .slice(0, 5),
+      .sort((a, b) => b.savedAt - a.savedAt),
     [collections, tpl],
   );
+  const recentShown = showAllRecent ? recent : recent.slice(0, 5);
+  const popularShown = showAllPopular ? visiblePopular : visiblePopular.slice(0, 5);
 
   const openRecipe = (id: RecipeTemplate["id"], p: Picks) => {
     setTplId(id); setPicks(p); setAdded(false); setSavedMsg(false);
