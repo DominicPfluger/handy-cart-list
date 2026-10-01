@@ -5,6 +5,7 @@ import { useT, useLocale, setLocale, LOCALES, type Locale } from "../../i18n";
 import type { MessageKey } from "../../i18n/de";
 import { RECIPE_TEMPLATES } from "../../lib/recipe-templates";
 import { fetchFeed, fetchCommunity } from "../../lib/recipes-api";
+import { APP_STORE_URL, GOOGLE_PLAY_URL } from "../../lib/app-version";
 import { RecipePhoto } from "../recipe-photo";
 import appIcon from "@/assets/app-icon.png.asset.json";
 import mockupList from "@/assets/landing/mockup-list.png";
@@ -130,7 +131,21 @@ export function LandingPage({ onEnterApp }: { onEnterApp: () => void }) {
           <span className="grid mx-auto h-12 w-12 place-items-center rounded-2xl bg-primary-soft/40 text-2xl" aria-hidden="true">📲</span>
           <h2 className="mt-3 text-xl font-bold text-foreground">{t("land.installTitle")}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{t("land.installDesc")}</p>
-          <ol className="mx-auto mt-4 max-w-md space-y-2 text-left text-sm text-muted-foreground">
+          <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <StoreButton
+              href={APP_STORE_URL}
+              label={t("land.storeAppStore")}
+              soon={t("land.storeSoon")}
+              icon={<AppleIcon />}
+            />
+            <StoreButton
+              href={GOOGLE_PLAY_URL}
+              label={t("land.storeGooglePlay")}
+              soon={t("land.storeSoon")}
+              icon={<PlayIcon />}
+            />
+          </div>
+          <ol className="mx-auto mt-5 max-w-md space-y-2 text-left text-sm text-muted-foreground">
             <li className="flex gap-2"><span aria-hidden="true"></span><span>{t("land.installIos")}</span></li>
             <li className="flex gap-2"><span aria-hidden="true"></span><span>{t("land.installAndroid")}</span></li>
           </ol>
@@ -276,6 +291,55 @@ export function LandingPage({ onEnterApp }: { onEnterApp: () => void }) {
         <p className="mt-4 text-xs text-muted-foreground">{t("more.copyright")}</p>
       </footer>
     </div>
+  );
+}
+
+function StoreButton({ href, label, soon, icon }: { href: string; label: string; soon: string; icon: React.ReactNode }) {
+  const inner = (
+    <>
+      <span aria-hidden="true">{icon}</span>
+      <span className="flex flex-col items-center leading-tight">
+        <span>{label}</span>
+        {!href && <span className="text-xs font-normal text-muted-foreground">{soon}</span>}
+      </span>
+    </>
+  );
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 rounded-2xl border border-border bg-background px-5 py-3 text-sm font-semibold text-foreground transition hover:border-primary/50 active:scale-[0.98]"
+      >
+        {inner}
+      </a>
+    );
+  }
+  return (
+    <span
+      aria-disabled="true"
+      title={soon}
+      className="inline-flex cursor-not-allowed items-center gap-2 rounded-2xl border border-border bg-background px-5 py-3 text-sm font-semibold text-muted-foreground opacity-70"
+    >
+      {inner}
+    </span>
+  );
+}
+
+function AppleIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08ZM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25Z" />
+    </svg>
+  );
+}
+
+function PlayIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M3.6 1.8c-.36.2-.6.6-.6 1.1v18.2c0 .5.24.9.6 1.1l10.1-10.2L3.6 1.8Zm11.5 8.9 2.9-2.9-11-6.2 8.1 9.1Zm0 2.6-8.1 9.1 11-6.2-2.9-2.9Zm4.6-3.9-2.6-1.5-3.1 3.1 3.1 3.1 2.6-1.5c1.1-.7 1.1-2.4 0-3.1Z" />
+    </svg>
   );
 }
 
