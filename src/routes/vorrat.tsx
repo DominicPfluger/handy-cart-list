@@ -18,6 +18,10 @@ export const Route = createFileRoute("/vorrat")({
     meta: [
       { title: "Shoppi — Vorrat" },
       { name: "description", content: "Verwalte, was zuhause da ist." },
+      { property: "og:title", content: "Shoppi — Vorrat" },
+      { property: "og:description", content: "Verwalte, was zuhause da ist." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: VorratPage,
