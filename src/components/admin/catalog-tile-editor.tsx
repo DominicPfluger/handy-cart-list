@@ -8,6 +8,7 @@ import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { generateImageFor, listProductImages } from "@/lib/product-media.functions";
+import { suggestCategoryProducts } from "@/lib/admin.functions";
 import { formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -40,6 +41,7 @@ export function CatalogTileEditor(p: {
   const [target, setTarget] = useState<Target>(null);
   const [drag, setDrag] = useState<Drag>(null);
   const [over, setOver] = useState<string | null>(null);
+  const [suggesting, setSuggesting] = useState(false);
   const moved = useRef(false);
   const deptById = useMemo(() => new Map(p.depts.map((d) => [d.id, d])), [p.depts]);
 
@@ -184,8 +186,16 @@ export function CatalogTileEditor(p: {
               <span className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-dashed border-border text-xl">+</span>{T("tile.newProd")}
             </button>
           )}
+          {editMode && (
+            <button type="button" onClick={() => setSuggesting(true)}
+              className="flex w-full items-center gap-3 px-3 py-3 text-sm font-semibold text-primary">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-soft text-xl">✨</span>{T("tile.suggest")}
+            </button>
+          )}
         </div>
       )}
+
+      {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
 
       {drag && moved.current && (
         <div className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card px-3 py-2 text-2xl shadow-lg" style={{ left: drag.x, top: drag.y }}>{drag.label}</div>

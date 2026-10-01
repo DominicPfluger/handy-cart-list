@@ -902,7 +902,16 @@
     "loc.deleteConfirm": "Delete language “{name}” with all translations?",
     "tile.pickImage": "Choose image",
     "tile.pickEmpty": "No images found",
-    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)"
+    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1807,7 +1816,16 @@
     "loc.deleteConfirm": "Delete language “{name}” with all translations?",
     "tile.pickImage": "Choose image",
     "tile.pickEmpty": "No images found",
-    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)"
+    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2712,7 +2730,16 @@
     "loc.deleteConfirm": "Delete language “{name}” with all translations?",
     "tile.pickImage": "Choose image",
     "tile.pickEmpty": "No images found",
-    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)"
+    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3617,7 +3644,16 @@
     "loc.deleteConfirm": "¿Eliminar el idioma «{name}» con todas sus traducciones?",
     "tile.pickImage": "Elegir imagen",
     "tile.pickEmpty": "Sin imágenes",
-    "tile.aiHint": "Palabras clave para la imagen IA (p. ej. rojo, en rodajas)"
+    "tile.aiHint": "Palabras clave para la imagen IA (p. ej. rojo, en rodajas)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4522,7 +4558,16 @@
     "loc.deleteConfirm": "¿Eliminar el idioma «{name}» con todas sus traducciones?",
     "tile.pickImage": "Elegir imagen",
     "tile.pickEmpty": "Sin imágenes",
-    "tile.aiHint": "Palabras clave para la imagen IA (p. ej. rojo, en rodajas)"
+    "tile.aiHint": "Palabras clave para la imagen IA (p. ej. rojo, en rodajas)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5427,7 +5472,16 @@
     "loc.deleteConfirm": "Supprimer la langue « {name} » et toutes ses traductions ?",
     "tile.pickImage": "Choisir une image",
     "tile.pickEmpty": "Aucune image",
-    "tile.aiHint": "Mots-clés pour l'image IA (p. ex. rouge, en tranches)"
+    "tile.aiHint": "Mots-clés pour l'image IA (p. ex. rouge, en tranches)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6332,7 +6386,16 @@
     "loc.deleteConfirm": "Supprimer la langue « {name} » et toutes ses traductions ?",
     "tile.pickImage": "Choisir une image",
     "tile.pickEmpty": "Aucune image",
-    "tile.aiHint": "Mots-clés pour l'image IA (p. ex. rouge, en tranches)"
+    "tile.aiHint": "Mots-clés pour l'image IA (p. ex. rouge, en tranches)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7237,7 +7300,16 @@
     "loc.deleteConfirm": "Eliminare la lingua «{name}» con tutte le traduzioni?",
     "tile.pickImage": "Scegli immagine",
     "tile.pickEmpty": "Nessuna immagine",
-    "tile.aiHint": "Parole chiave per l'immagine IA (es. rosso, a fette)"
+    "tile.aiHint": "Parole chiave per l'immagine IA (es. rosso, a fette)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8142,7 +8214,16 @@
     "loc.deleteConfirm": "Eliminare la lingua «{name}» con tutte le traduzioni?",
     "tile.pickImage": "Scegli immagine",
     "tile.pickEmpty": "Nessuna immagine",
-    "tile.aiHint": "Parole chiave per l'immagine IA (es. rosso, a fette)"
+    "tile.aiHint": "Parole chiave per l'immagine IA (es. rosso, a fette)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9047,7 +9128,16 @@
     "loc.deleteConfirm": "Eliminar o idioma «{name}» com todas as traduções?",
     "tile.pickImage": "Escolher imagem",
     "tile.pickEmpty": "Nenhuma imagem",
-    "tile.aiHint": "Palavras-chave para a imagem IA (ex.: vermelho, às fatias)"
+    "tile.aiHint": "Palavras-chave para a imagem IA (ex.: vermelho, às fatias)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -9952,7 +10042,16 @@
     "loc.deleteConfirm": "Eliminar o idioma «{name}» com todas as traduções?",
     "tile.pickImage": "Escolher imagem",
     "tile.pickEmpty": "Nenhuma imagem",
-    "tile.aiHint": "Palavras-chave para a imagem IA (ex.: vermelho, em fatias)"
+    "tile.aiHint": "Palavras-chave para a imagem IA (ex.: vermelho, em fatias)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -10857,7 +10956,16 @@
     "loc.deleteConfirm": "Taal „{name}” met alle vertalingen verwijderen?",
     "tile.pickImage": "Afbeelding kiezen",
     "tile.pickEmpty": "Geen afbeeldingen",
-    "tile.aiHint": "Trefwoorden voor de AI-afbeelding (bv. rood, in plakjes)"
+    "tile.aiHint": "Trefwoorden voor de AI-afbeelding (bv. rood, in plakjes)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -11762,7 +11870,16 @@
     "loc.deleteConfirm": "Taal „{name}” met alle vertalingen verwijderen?",
     "tile.pickImage": "Afbeelding kiezen",
     "tile.pickEmpty": "Geen afbeeldingen",
-    "tile.aiHint": "Trefwoorden voor de AI-afbeelding (bv. rood, in plakjes)"
+    "tile.aiHint": "Trefwoorden voor de AI-afbeelding (bv. rood, in plakjes)",
+    "tile.suggest": "✨ Suggest missing products",
+    "tile.suggestKeywords": "Keywords (optional), e.g. Italian, organic",
+    "tile.suggestGo": "Get suggestions",
+    "tile.suggestAgain": "Suggest again",
+    "tile.suggestBusy": "AI is finding products …",
+    "tile.suggestEmpty": "No missing products found",
+    "tile.suggestLink": "link",
+    "tile.suggestCreate": "Create selected ({n})",
+    "tile.suggestDone": "{n} products created"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12129,7 +12246,16 @@
     "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?",
     "tile.pickImage": "Bild auswählen",
     "tile.pickEmpty": "Keine Bilder gefunden",
-    "tile.aiHint": "Stichworte fürs KI-Bild (z. B. rot, in Scheiben)"
+    "tile.aiHint": "Stichworte fürs KI-Bild (z. B. rot, in Scheiben)",
+    "tile.suggest": "✨ Fehlende Produkte vorschlagen",
+    "tile.suggestKeywords": "Stichworte (optional), z. B. italienisch, Bio",
+    "tile.suggestGo": "Vorschläge holen",
+    "tile.suggestAgain": "Neu vorschlagen",
+    "tile.suggestBusy": "KI sucht Produkte …",
+    "tile.suggestEmpty": "Keine fehlenden Produkte gefunden",
+    "tile.suggestLink": "verknüpfen",
+    "tile.suggestCreate": "Ausgewählte anlegen ({n})",
+    "tile.suggestDone": "{n} Produkte angelegt"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12496,6 +12622,15 @@
     "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?",
     "tile.pickImage": "Bild auswählen",
     "tile.pickEmpty": "Keine Bilder gefunden",
-    "tile.aiHint": "Stichworte fürs KI-Bild (z. B. rot, in Scheiben)"
+    "tile.aiHint": "Stichworte fürs KI-Bild (z. B. rot, in Scheiben)",
+    "tile.suggest": "✨ Fehlende Produkte vorschlagen",
+    "tile.suggestKeywords": "Stichworte (optional), z. B. italienisch, Bio",
+    "tile.suggestGo": "Vorschläge holen",
+    "tile.suggestAgain": "Neu vorschlagen",
+    "tile.suggestBusy": "KI sucht Produkte …",
+    "tile.suggestEmpty": "Keine fehlenden Produkte gefunden",
+    "tile.suggestLink": "verknüpfen",
+    "tile.suggestCreate": "Ausgewählte anlegen ({n})",
+    "tile.suggestDone": "{n} Produkte angelegt"
   }
 }
