@@ -31,7 +31,7 @@ import {
   type CatalogProduct,
 } from "../lib/catalog-query";
 import { formatQuantity } from "../lib/units";
-import { useT } from "../i18n";
+import { getLocale, useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
 import { VoiceInputButton } from "../components/voice-input";
@@ -43,7 +43,7 @@ import { saveHeading } from "../lib/admin.functions";
 
 export const Route = createFileRoute("/abteilungen")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
   head: () => ({
     meta: [
       { title: "Shoppi — Abteilungen" },

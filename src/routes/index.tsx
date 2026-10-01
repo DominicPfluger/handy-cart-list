@@ -35,7 +35,7 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
   head: () => ({
     meta: [
       { title: "Shoppi — Unsere Einkaufsliste" },
@@ -46,6 +46,11 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
+  pendingComponent: () => (
+    <div className="flex items-center justify-center py-20" role="status" aria-label="Laden">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+    </div>
+  ),
   component: ListPage,
 });
 
@@ -214,10 +219,12 @@ function ListPage() {
       />
 
       {/* List switcher */}
-      <div className="-mx-5 flex gap-2 overflow-x-auto px-5 no-scrollbar">
+      <div className="-mx-5 flex gap-2 overflow-x-auto px-5 no-scrollbar" role="tablist" aria-label={t("list.lists")}>
         {lists.map((l) => (
           <button
             key={l.id}
+            role="tab"
+            aria-selected={l.id === activeList.id}
             onClick={() => setActiveListId(l.id)}
             className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-semibold transition ${
               l.id === activeList.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"

@@ -608,7 +608,12 @@
     "adm.marketOrderHint": "Market relevance {m}: moving and sorting apply to this market only.",
     "adm.marketUnavailable": "not in market",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "only {m}"
+    "adm.scopeMarket": "only {m}",
+    "common.undo": "Undo",
+    "list.itemRemoved": "{name} removed",
+    "list.checkedCleared": "{n} checked items removed",
+    "cloud.queued": "Saved offline – will sync when you're back online",
+    "cloud.queueFlushed": "{n} changes synced"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1219,7 +1224,12 @@
     "adm.marketOrderHint": "Market relevance {m}: moving and sorting apply to this market only.",
     "adm.marketUnavailable": "not in market",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "only {m}"
+    "adm.scopeMarket": "only {m}",
+    "common.undo": "Undo",
+    "list.itemRemoved": "{name} removed",
+    "list.checkedCleared": "{n} checked items removed",
+    "cloud.queued": "Saved offline – will sync when you're back online",
+    "cloud.queueFlushed": "{n} changes synced"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1830,7 +1840,12 @@
     "adm.marketOrderHint": "Market relevance {m}: moving and sorting apply to this market only.",
     "adm.marketUnavailable": "not in market",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "only {m}"
+    "adm.scopeMarket": "only {m}",
+    "common.undo": "Undo",
+    "list.itemRemoved": "{name} removed",
+    "list.checkedCleared": "{n} checked items removed",
+    "cloud.queued": "Saved offline – will sync when you're back online",
+    "cloud.queueFlushed": "{n} changes synced"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2441,7 +2456,12 @@
     "adm.marketOrderHint": "Relevancia de mercado {m}: mover y ordenar solo afecta a este mercado.",
     "adm.marketUnavailable": "no en el mercado",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "solo {m}"
+    "adm.scopeMarket": "solo {m}",
+    "common.undo": "Deshacer",
+    "list.itemRemoved": "{name} eliminado",
+    "list.checkedCleared": "{n} artículos marcados eliminados",
+    "cloud.queued": "Guardado sin conexión – se sincronizará cuando vuelvas a estar en línea",
+    "cloud.queueFlushed": "{n} cambios sincronizados"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3052,7 +3072,12 @@
     "adm.marketOrderHint": "Relevancia de mercado {m}: mover y ordenar solo afecta a este mercado.",
     "adm.marketUnavailable": "no en el mercado",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "solo {m}"
+    "adm.scopeMarket": "solo {m}",
+    "common.undo": "Deshacer",
+    "list.itemRemoved": "{name} eliminado",
+    "list.checkedCleared": "{n} artículos marcados eliminados",
+    "cloud.queued": "Guardado sin conexión – se sincronizará cuando vuelvas a estar en línea",
+    "cloud.queueFlushed": "{n} cambios sincronizados"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3663,7 +3688,12 @@
     "adm.marketOrderHint": "Pertinence marché {m} : déplacer et trier ne s’appliquent qu’à ce marché.",
     "adm.marketUnavailable": "absent du marché",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "seulement {m}"
+    "adm.scopeMarket": "seulement {m}",
+    "common.undo": "Annuler",
+    "list.itemRemoved": "{name} supprimé",
+    "list.checkedCleared": "{n} articles cochés supprimés",
+    "cloud.queued": "Enregistré hors ligne – synchronisation dès que tu es de nouveau en ligne",
+    "cloud.queueFlushed": "{n} modifications synchronisées"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4274,7 +4304,12 @@
     "adm.marketOrderHint": "Pertinence marché {m} : déplacer et trier ne s’appliquent qu’à ce marché.",
     "adm.marketUnavailable": "absent du marché",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "seulement {m}"
+    "adm.scopeMarket": "seulement {m}",
+    "common.undo": "Annuler",
+    "list.itemRemoved": "{name} supprimé",
+    "list.checkedCleared": "{n} articles cochés supprimés",
+    "cloud.queued": "Enregistré hors ligne – synchronisation dès que tu es de nouveau en ligne",
+    "cloud.queueFlushed": "{n} modifications synchronisées"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4885,7 +4920,12 @@
     "adm.marketOrderHint": "Rilevanza mercato {m}: spostare e ordinare vale solo per questo mercato.",
     "adm.marketUnavailable": "non nel mercato",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "solo {m}"
+    "adm.scopeMarket": "solo {m}",
+    "common.undo": "Annulla",
+    "list.itemRemoved": "{name} rimosso",
+    "list.checkedCleared": "{n} articoli spuntati rimossi",
+    "cloud.queued": "Salvato offline – verrà sincronizzato quando torni online",
+    "cloud.queueFlushed": "{n} modifiche sincronizzate"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -5496,7 +5536,12 @@
     "adm.marketOrderHint": "Rilevanza mercato {m}: spostare e ordinare vale solo per questo mercato.",
     "adm.marketUnavailable": "non nel mercato",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "solo {m}"
+    "adm.scopeMarket": "solo {m}",
+    "common.undo": "Annulla",
+    "list.itemRemoved": "{name} rimosso",
+    "list.checkedCleared": "{n} articoli spuntati rimossi",
+    "cloud.queued": "Salvato offline – verrà sincronizzato quando torni online",
+    "cloud.queueFlushed": "{n} modifiche sincronizzate"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6107,7 +6152,12 @@
     "adm.marketOrderHint": "Relevância de mercado {m}: mover e ordenar aplica-se só a este mercado.",
     "adm.marketUnavailable": "fora do mercado",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "só {m}"
+    "adm.scopeMarket": "só {m}",
+    "common.undo": "Desfazer",
+    "list.itemRemoved": "{name} removido",
+    "list.checkedCleared": "{n} itens marcados removidos",
+    "cloud.queued": "Guardado offline – será sincronizado quando voltares a estar online",
+    "cloud.queueFlushed": "{n} alterações sincronizadas"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -6718,7 +6768,12 @@
     "adm.marketOrderHint": "Relevância de mercado {m}: mover e ordenar aplica-se só a este mercado.",
     "adm.marketUnavailable": "fora do mercado",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "só {m}"
+    "adm.scopeMarket": "só {m}",
+    "common.undo": "Desfazer",
+    "list.itemRemoved": "{name} removido",
+    "list.checkedCleared": "{n} itens marcados removidos",
+    "cloud.queued": "Guardado offline – será sincronizado quando voltares a estar online",
+    "cloud.queueFlushed": "{n} alterações sincronizadas"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -7329,7 +7384,12 @@
     "adm.marketOrderHint": "Marktrelevantie {m}: verplaatsen en sorteren geldt alleen voor deze markt.",
     "adm.marketUnavailable": "niet in markt",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "alleen {m}"
+    "adm.scopeMarket": "alleen {m}",
+    "common.undo": "Ongedaan maken",
+    "list.itemRemoved": "{name} verwijderd",
+    "list.checkedCleared": "{n} afgevinkte artikelen verwijderd",
+    "cloud.queued": "Offline opgeslagen – wordt gesynchroniseerd zodra je weer online bent",
+    "cloud.queueFlushed": "{n} wijzigingen gesynchroniseerd"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -7940,7 +8000,12 @@
     "adm.marketOrderHint": "Marktrelevantie {m}: verplaatsen en sorteren geldt alleen voor deze markt.",
     "adm.marketUnavailable": "niet in markt",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "alleen {m}"
+    "adm.scopeMarket": "alleen {m}",
+    "common.undo": "Ongedaan maken",
+    "list.itemRemoved": "{name} verwijderd",
+    "list.checkedCleared": "{n} afgevinkte artikelen verwijderd",
+    "cloud.queued": "Offline opgeslagen – wordt gesynchroniseerd zodra je weer online bent",
+    "cloud.queueFlushed": "{n} wijzigingen gesynchroniseerd"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8102,7 +8167,12 @@
     "mk.adminAdded": "Markt-Admin zugewiesen",
     "mk.noAdmins": "Noch keine Markt-Admins",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "only {m}"
+    "adm.scopeMarket": "only {m}",
+    "common.undo": "Rückgängig",
+    "list.itemRemoved": "{name} entfernt",
+    "list.checkedCleared": "{n} abgehakte Artikel entfernt",
+    "cloud.queued": "Offline gespeichert – wird synchronisiert, sobald du wieder online bist",
+    "cloud.queueFlushed": "{n} Änderungen nachsynchronisiert"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8264,6 +8334,11 @@
     "mk.adminAdded": "Markt-Admin zugewiesen",
     "mk.noAdmins": "Noch keine Markt-Admins",
     "adm.scopeGlobal": "🌍 global",
-    "adm.scopeMarket": "only {m}"
+    "adm.scopeMarket": "only {m}",
+    "common.undo": "Rückgängig",
+    "list.itemRemoved": "{name} entfernt",
+    "list.checkedCleared": "{n} abgehakte Artikel entfernt",
+    "cloud.queued": "Offline gespeichert – wird synchronisiert, sobald du wieder online bist",
+    "cloud.queueFlushed": "{n} Änderungen nachsynchronisiert"
   }
 }

@@ -11,7 +11,7 @@ import {
   PlusIcon,
   HistoryIcon,
 } from "../components/icons";
-import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18n";
+import { LOCALES, getExplicitLocale, getLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState, type ReactNode } from "react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
@@ -25,7 +25,7 @@ import { Button } from "../components/ui/button";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
   head: () => ({
     meta: [
       { title: "Shoppi — Mehr" },

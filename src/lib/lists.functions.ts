@@ -31,6 +31,26 @@ const itemSchema = z.object({
   addedByName: z.string().max(80).nullish(),
 });
 
+/** Baut die Datenbank-Zeile für einen Listeneintrag (an allen Einfüge-Stellen identisch). */
+function toItemRow(it: z.infer<typeof itemSchema>, listId: string, userId: string, index: number) {
+  return {
+    list_id: listId,
+    product_id: it.productId ?? null,
+    name: it.name,
+    quantity: it.quantity ?? "",
+    unit: it.unit ?? null,
+    organic: it.organic ?? false,
+    emoji: it.emoji ?? null,
+    image_url: it.imageUrl ?? null,
+    group_label: it.groupLabel ?? null,
+    group_emoji: it.groupEmoji ?? null,
+    note: it.note ?? null,
+    added_by: userId,
+    added_by_name: it.addedByName ?? null,
+    sort_order: index,
+  };
+}
+
 // =============== Listen ===============
 
 export const getMyLists = createServerFn({ method: "GET" })
@@ -86,24 +106,7 @@ export const createCloudList = createServerFn({ method: "POST" })
     if (data.items?.length) {
       const { data: inserted, error: itemError } = await sb
         .from("list_items")
-        .insert(
-          data.items.map((it, i) => ({
-            list_id: list.id,
-            product_id: it.productId ?? null,
-            name: it.name,
-            quantity: it.quantity ?? "",
-            unit: it.unit ?? null,
-            organic: it.organic ?? false,
-            emoji: it.emoji ?? null,
-            image_url: it.imageUrl ?? null,
-            group_label: it.groupLabel ?? null,
-            group_emoji: it.groupEmoji ?? null,
-            note: it.note ?? null,
-            added_by: context.userId,
-            added_by_name: it.addedByName ?? null,
-            sort_order: i,
-          }))
-        )
+        .insert(data.items.map((it, i) => toItemRow(it, list.id, context.userId, i)))
         .select();
       if (itemError) throw new Error(itemError.message);
       itemRows = inserted ?? [];
@@ -161,24 +164,7 @@ export const addCloudItems = createServerFn({ method: "POST" })
     const sb = context.supabase as unknown as Sb;
     const { data: rows, error } = await sb
       .from("list_items")
-      .insert(
-        data.items.map((it, i) => ({
-          list_id: data.listId,
-          product_id: it.productId ?? null,
-          name: it.name,
-          quantity: it.quantity ?? "",
-          unit: it.unit ?? null,
-          organic: it.organic ?? false,
-          emoji: it.emoji ?? null,
-          image_url: it.imageUrl ?? null,
-          group_label: it.groupLabel ?? null,
-          group_emoji: it.groupEmoji ?? null,
-          note: it.note ?? null,
-          added_by: context.userId,
-          added_by_name: it.addedByName ?? null,
-          sort_order: i,
-        }))
-      )
+      .insert(data.items.map((it, i) => toItemRow(it, data.listId, context.userId, i)))
       .select();
     if (error) throw new Error(error.message);
     return { items: rows ?? [] };
@@ -283,22 +269,7 @@ export const migrateCloudLists = createServerFn({ method: "POST" })
       if (error) throw new Error(error.message);
       if (l.items.length) {
         const { error: itemError } = await sb.from("list_items").insert(
-          l.items.map((it, i) => ({
-            list_id: list.id,
-            product_id: it.productId ?? null,
-            name: it.name,
-            quantity: it.quantity ?? "",
-            unit: it.unit ?? null,
-            organic: it.organic ?? false,
-            emoji: it.emoji ?? null,
-            image_url: it.imageUrl ?? null,
-            group_label: it.groupLabel ?? null,
-            group_emoji: it.groupEmoji ?? null,
-            note: it.note ?? null,
-            added_by: context.userId,
-            added_by_name: it.addedByName ?? null,
-            sort_order: i,
-          }))
+          l.items.map((it, i) => toItemRow(it, list.id, context.userId, i))
         );
         if (itemError) throw new Error(itemError.message);
       }

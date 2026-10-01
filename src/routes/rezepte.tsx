@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useT } from "../i18n";
+import { getLocale, useT } from "../i18n";
 import { RecipeBuilder } from "../components/recipe-builder";
 import { catalogQueryOptions } from "../lib/catalog-query";
 
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/rezepte")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
   component: RecipesPage,
 });
 

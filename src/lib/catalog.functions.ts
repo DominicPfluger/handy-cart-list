@@ -7,6 +7,8 @@ export interface CatalogDepartment {
   name: string;
   emoji: string | null;
   color: string | null;
+  /** Pfad im Bild-Speicher; signierte Adresse via getCatalogImageUrls */
+  imagePath?: string | null;
   imageUrl: string | null;
   sortOrder: number;
   /** Deutscher Ausgangsname */
@@ -20,6 +22,8 @@ export interface CatalogProduct {
   departmentId: string;
   name: string;
   emoji: string | null;
+  /** Pfad im Bild-Speicher; signierte Adresse via getCatalogImageUrls */
+  imagePath?: string | null;
   imageUrl: string | null;
   defaultQuantity: number;
   defaultUnit: string;
@@ -103,11 +107,10 @@ export interface Catalog {
   productAliases: ProductAlias[];
 }
 
-export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Promise<Catalog> => {
+function publicClient() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
   const url = process.env["SUPABASE_URL"]!;
-
-  const supabase = createClient(url, key, {
+  return createClient(url, key, {
     auth: { persistSession: false, autoRefreshToken: false },
     global: {
       fetch: (input, init) => {
@@ -120,16 +123,45 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       },
     },
   });
+}
+
+/** Nur die signierten Bild-Adressen (leichtgewichtig; wird häufiger erneuert als der Katalog). */
+export const getCatalogImageUrls = createServerFn({ method: "GET" }).handler(async (): Promise<Record<string, string>> => {
+  const supabase = publicClient();
+  const [deptRes, prodRes] = await Promise.all([
+    supabase.from("departments").select("image_path").not("image_path", "is", null),
+    supabase.from("products").select("image_path").not("image_path", "is", null),
+  ]);
+  const paths = [
+    ...((deptRes.data ?? []) as Array<{ image_path: string | null }>).map((r) => r.image_path),
+    ...((prodRes.data ?? []) as Array<{ image_path: string | null }>).map((r) => r.image_path),
+  ].filter((p): p is string => Boolean(p));
+  const out: Record<string, string> = {};
+  if (paths.length > 0) {
+    const { data } = await supabase.storage.from("catalog-images").createSignedUrls([...new Set(paths)], 60 * 60);
+    for (const entry of data ?? []) {
+      if (entry.path && entry.signedUrl) out[entry.path] = entry.signedUrl;
+    }
+  }
+  return out;
+});
+
+export const getCatalog = createServerFn({ method: "GET" })
+  .inputValidator((data: unknown) => (data ?? {}) as { locale?: string })
+  .handler(async ({ data: input }): Promise<Catalog> => {
+  const locale = typeof input?.locale === "string" && input.locale ? input.locale : null;
+  const supabase = publicClient();
 
   // Alle Seiten (je 1000 Zeilen) parallel statt nacheinander laden – deutlich schneller.
   const PAGE = 1000;
-  async function fetchAll(table: string, columns: string, orders: string[]) {
+  async function fetchAll(table: string, columns: string, orders: string[], localeCol?: string) {
     const head = await supabase.from(table).select("id", { count: "exact", head: true });
     if (head.error) return { data: null as any[] | null, error: head.error };
     const pages = Math.max(1, Math.ceil((head.count ?? 0) / PAGE) + 1);
     const results = await Promise.all(
       Array.from({ length: pages }, (_, i) => {
         let q = supabase.from(table).select(columns);
+        if (localeCol && locale) q = q.eq(localeCol, locale);
         for (const o of orders) q = q.order(o, { ascending: true });
         return q.range(i * PAGE, i * PAGE + PAGE - 1);
       }),
@@ -153,7 +185,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       ["sort_order", "id"],
     ),
     supabase.from("product_headings").select("id, department_id, before_product_id, name"),
-    fetchAll("catalog_translations", "entity_id, locale, name", ["id"]),
+    fetchAll("catalog_translations", "entity_id, locale, name", ["id"], "locale"),
     supabase.from("cuisines").select("id, name, emoji, sort_order").order("sort_order", { ascending: true }),
     fetchAll("product_cuisines", "product_id, cuisine_id", ["id"]),
     fetchAll("product_brands", "product_id, name, locales, sort_order", ["sort_order", "id"]),
@@ -163,7 +195,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     fetchAll("product_aliases", "product_id, department_id, sort_order", ["sort_order", "id"]),
     fetchAll("product_market_exclusions", "product_id, market", ["id"]),
     fetchAll("product_market_order", "product_id, market, sort_order", ["id"]),
-    fetchAll("variant_translations", "product_id, variant, locale, name", ["id"]),
+    fetchAll("variant_translations", "product_id, variant, locale, name", ["id"], "locale"),
   ]);
   const variantNames = new Map<string, Record<string, Record<string, string>>>();
   for (const r of (vtRes.data ?? []) as Array<{ product_id: string; variant: string; locale: string; name: string }>) {
@@ -200,22 +232,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
   const deptRows = (deptRes.data ?? []) as Array<Record<string, unknown>>;
   const prodRows = (prodRes.data ?? []) as Array<Record<string, unknown>>;
 
-  // Signed URLs for any uploaded images (bucket is private).
-  const paths = [
-    ...deptRows.map((r) => r["image_path"] as string | null),
-    ...prodRows.map((r) => r["image_path"] as string | null),
-  ].filter((p): p is string => Boolean(p));
-
-  const signed = new Map<string, string>();
-  if (paths.length > 0) {
-    const { data } = await supabase.storage
-      .from("catalog-images")
-      .createSignedUrls([...new Set(paths)], 60 * 60);
-    for (const entry of data ?? []) {
-      if (entry.path && entry.signedUrl) signed.set(entry.path, entry.signedUrl);
-    }
-  }
-
+  // Bilder: nur den Pfad liefern; signierte Adressen holt getCatalogImageUrls separat.
   return {
     departments: deptRows.map((r) => ({
       id: r["id"] as string,
@@ -223,7 +240,8 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       name: r["name"] as string,
       emoji: (r["emoji"] as string | null) ?? null,
       color: (r["color"] as string | null) ?? null,
-      imageUrl: signed.get(r["image_path"] as string) ?? null,
+      imagePath: (r["image_path"] as string | null) ?? null,
+      imageUrl: null,
       sortOrder: (r["sort_order"] as number) ?? 0,
       baseName: r["name"] as string,
       names: names.get(r["id"] as string) ?? {},
@@ -233,7 +251,8 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       departmentId: r["department_id"] as string,
       name: r["name"] as string,
       emoji: (r["emoji"] as string | null) ?? null,
-      imageUrl: signed.get(r["image_path"] as string) ?? null,
+      imagePath: (r["image_path"] as string | null) ?? null,
+      imageUrl: null,
       defaultQuantity: Number(r["default_quantity"] ?? 1),
       defaultUnit: (r["default_unit"] as string) ?? "stueck",
       organicAvailable: (r["organic_available"] as boolean) ?? true,
