@@ -338,7 +338,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
 
   if (!tpl) {
     return (
-      <div className="space-y-5">
+      <div className="space-y-5" id="rk-generator">
       <section className="space-y-3">
         <div>
           <h2 className="text-lg font-bold text-foreground">{t("rk.title")}</h2>
@@ -359,8 +359,8 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           ))}
         </div>
       </section>
-       {collectionsView}
-       <FavoritesRow />
+       <div id="rk-lists">{collectionsView}</div>
+        <FavoritesRow />
        {popularView}
        {recentView}
        </div>

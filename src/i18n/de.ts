@@ -208,6 +208,12 @@ export const de = {
   "more.dAgo": "vor {n} Tg.",
 
   "rec.subtitle": "Inspiration finden & Zutaten übernehmen",
+  "rec.entryGenTitle": "Rezept-Generator",
+  "rec.entryGenDesc": "Inspiere dich, lass deiner Kreativität freien Lauf und stelle ganz einfach intuitiv dein Rezept aus deinen Lieblings-Zutaten zusammen.",
+  "rec.entryInspTitle": "Rezept-Inspirationen",
+  "rec.entryInspDesc": "Hier findest du beliebte und hochbewertete Rezepte, die von der Community geteilt werden. Auf Wunsch mit deinen Lieblingszutaten.",
+  "rec.entryListsTitle": "Rezept-Listen",
+  "rec.entryListsDesc": "Hier befinden sich deine selbst erstellten und von der Community übernommenen Rezepte. Übersichtlich sortiert anhand Beliebtheit, Bewertung und Aktualität.",
   "rec.season": "Saisonal im September",
   "rec.seasonSub": "Kürbis, Äpfel & Pflaumen sind jetzt besonders frisch",
   "rec.ingredients": "Zutaten",
