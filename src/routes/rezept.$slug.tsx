@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useT } from "../i18n";
+import { useT, translate } from "../i18n";
 import { getRecipeBySlug } from "../lib/recipes.functions";
 import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
 import { useAuthUser } from "../hooks/use-auth-user";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { useRecipeCollections, saveToFolder, createCollection } from "../hooks/use-saved-recipes";
 import { useIsAdmin } from "../hooks/use-is-admin";
+import { useSpeakLocale } from "../hooks/use-speak-locale";
+import { useSpeakRate } from "../hooks/use-speak-rate";
+import { speakQuantity } from "../lib/speech-units";
+import { speakSentences, missingVoice } from "../components/speak-list-button";
 import {
   addComment, deleteComment, fetchComments, fetchFeed, myRating, rateRecipe, shareLink,
 } from "../lib/recipes-api";
@@ -62,6 +66,9 @@ function RecipePage() {
   const [comment, setComment] = useState("");
   const [added, setAdded] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
+  const [rate] = useSpeakRate();
+  const [speakLocale] = useSpeakLocale();
 
   // Namen ggf. aus dem Katalog ergänzen (z. B. bei übernommenen Altrezepten)
   const { data: names } = useQuery({
