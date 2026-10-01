@@ -109,6 +109,9 @@ export const de = {
   "fav.none": "Keine Favoriten gefunden.",
   "fav.emptyTitle": "Noch keine Favoriten",
   "fav.emptyHint": "Tippe bei einem Produkt auf das Herz.",
+  "fav.toList": "Alle {count} Favoriten in neue Liste",
+  "fav.toListDone": "{count} Einträge in neue Liste übernommen",
+  "fav.newListName": "Favoriten",
 
   "list.lists": "Listen",
   "list.share": "Liste teilen",

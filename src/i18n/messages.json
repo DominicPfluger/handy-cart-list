@@ -480,7 +480,10 @@
     "adm.brandAll": "All countries",
     "adm.brandMarkets": "Select countries",
     "adm.brandNone": "No new brands found",
-    "adm.brandDelete": "Delete brand “{name}”?"
+    "adm.brandDelete": "Delete brand “{name}”?",
+    "fav.toList": "Add all {count} favorites to a new list",
+    "fav.toListDone": "{count} items added to a new list",
+    "fav.newListName": "Favorites"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -963,7 +966,10 @@
     "adm.brandAll": "All countries",
     "adm.brandMarkets": "Select countries",
     "adm.brandNone": "No new brands found",
-    "adm.brandDelete": "Delete brand “{name}”?"
+    "adm.brandDelete": "Delete brand “{name}”?",
+    "fav.toList": "Add all {count} favourites to a new list",
+    "fav.toListDone": "{count} items added to a new list",
+    "fav.newListName": "Favourites"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1446,7 +1452,10 @@
     "adm.brandAll": "All countries",
     "adm.brandMarkets": "Select countries",
     "adm.brandNone": "No new brands found",
-    "adm.brandDelete": "Delete brand “{name}”?"
+    "adm.brandDelete": "Delete brand “{name}”?",
+    "fav.toList": "Add all {count} favorites to a new list",
+    "fav.toListDone": "{count} items added to a new list",
+    "fav.newListName": "Favorites"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -1929,7 +1938,10 @@
     "adm.brandAll": "Todos los países",
     "adm.brandMarkets": "Seleccionar países",
     "adm.brandNone": "No se han encontrado marcas nuevas",
-    "adm.brandDelete": "¿Eliminar la marca «{name}»?"
+    "adm.brandDelete": "¿Eliminar la marca «{name}»?",
+    "fav.toList": "Añadir los {count} favoritos a una lista nueva",
+    "fav.toListDone": "{count} artículos añadidos a una lista nueva",
+    "fav.newListName": "Favoritos"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2412,7 +2424,10 @@
     "adm.brandAll": "Todos los países",
     "adm.brandMarkets": "Seleccionar países",
     "adm.brandNone": "No se encontraron marcas nuevas",
-    "adm.brandDelete": "¿Eliminar la marca “{name}”?"
+    "adm.brandDelete": "¿Eliminar la marca “{name}”?",
+    "fav.toList": "Agregar los {count} favoritos a una lista nueva",
+    "fav.toListDone": "{count} artículos agregados a una lista nueva",
+    "fav.newListName": "Favoritos"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -2895,7 +2910,10 @@
     "adm.brandAll": "Tous les pays",
     "adm.brandMarkets": "Sélectionner des pays",
     "adm.brandNone": "Aucune nouvelle marque trouvée",
-    "adm.brandDelete": "Supprimer la marque « {name} » ?"
+    "adm.brandDelete": "Supprimer la marque « {name} » ?",
+    "fav.toList": "Ajouter les {count} favoris à une nouvelle liste",
+    "fav.toListDone": "{count} articles ajoutés à une nouvelle liste",
+    "fav.newListName": "Favoris"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3378,7 +3396,10 @@
     "adm.brandAll": "Tous les pays",
     "adm.brandMarkets": "Sélectionner des pays",
     "adm.brandNone": "Aucune nouvelle marque trouvée",
-    "adm.brandDelete": "Supprimer la marque « {name} »?"
+    "adm.brandDelete": "Supprimer la marque « {name} »?",
+    "fav.toList": "Ajouter les {count} favoris à une nouvelle liste",
+    "fav.toListDone": "{count} articles ajoutés à une nouvelle liste",
+    "fav.newListName": "Favoris"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -3861,7 +3882,10 @@
     "adm.brandAll": "Tutti i paesi",
     "adm.brandMarkets": "Seleziona paesi",
     "adm.brandNone": "Nessuna nuova marca trovata",
-    "adm.brandDelete": "Eliminare la marca «{name}»?"
+    "adm.brandDelete": "Eliminare la marca «{name}»?",
+    "fav.toList": "Aggiungi tutti i {count} preferiti a una nuova lista",
+    "fav.toListDone": "{count} articoli aggiunti a una nuova lista",
+    "fav.newListName": "Preferiti"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4344,7 +4368,10 @@
     "adm.brandAll": "Tutti i paesi",
     "adm.brandMarkets": "Seleziona paesi",
     "adm.brandNone": "Nessuna nuova marca trovata",
-    "adm.brandDelete": "Eliminare la marca «{name}»?"
+    "adm.brandDelete": "Eliminare la marca «{name}»?",
+    "fav.toList": "Aggiungi tutti i {count} preferiti a una nuova lista",
+    "fav.toListDone": "{count} articoli aggiunti a una nuova lista",
+    "fav.newListName": "Preferiti"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -4827,7 +4854,10 @@
     "adm.brandAll": "Todos os países",
     "adm.brandMarkets": "Selecionar países",
     "adm.brandNone": "Não foram encontradas novas marcas",
-    "adm.brandDelete": "Eliminar a marca «{name}»?"
+    "adm.brandDelete": "Eliminar a marca «{name}»?",
+    "fav.toList": "Adicionar os {count} favoritos a uma nova lista",
+    "fav.toListDone": "{count} artigos adicionados a uma nova lista",
+    "fav.newListName": "Favoritos"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5310,7 +5340,10 @@
     "adm.brandAll": "Todos os países",
     "adm.brandMarkets": "Selecionar países",
     "adm.brandNone": "Nenhuma nova marca encontrada",
-    "adm.brandDelete": "Excluir a marca “{name}”?"
+    "adm.brandDelete": "Excluir a marca “{name}”?",
+    "fav.toList": "Adicionar os {count} favoritos a uma nova lista",
+    "fav.toListDone": "{count} itens adicionados a uma nova lista",
+    "fav.newListName": "Favoritos"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -5793,7 +5826,10 @@
     "adm.brandAll": "Alle landen",
     "adm.brandMarkets": "Landen selecteren",
     "adm.brandNone": "Geen nieuwe merken gevonden",
-    "adm.brandDelete": "Merk ‘{name}’ verwijderen?"
+    "adm.brandDelete": "Merk ‘{name}’ verwijderen?",
+    "fav.toList": "Alle {count} favorieten naar een nieuwe lijst",
+    "fav.toListDone": "{count} artikelen naar een nieuwe lijst overgezet",
+    "fav.newListName": "Favorieten"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6276,7 +6312,10 @@
     "adm.brandAll": "Alle landen",
     "adm.brandMarkets": "Landen selecteren",
     "adm.brandNone": "Geen nieuwe merken gevonden",
-    "adm.brandDelete": "Merk ‘{name}’ verwijderen?"
+    "adm.brandDelete": "Merk ‘{name}’ verwijderen?",
+    "fav.toList": "Alle {count} favorieten naar een nieuwe lijst",
+    "fav.toListDone": "{count} artikelen naar een nieuwe lijst overgezet",
+    "fav.newListName": "Favorieten"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6317,7 +6356,10 @@
     "adm.brandAll": "Alle Länder",
     "adm.brandMarkets": "Länder wählen",
     "adm.brandNone": "Keine neuen Marken gefunden",
-    "adm.brandDelete": "Marke „{name}\" löschen?"
+    "adm.brandDelete": "Marke „{name}\" löschen?",
+    "fav.toList": "Alle {count} Favoriten in neue Liste",
+    "fav.toListDone": "{count} Einträge in neue Liste übernommen",
+    "fav.newListName": "Favoriten"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6358,6 +6400,9 @@
     "adm.brandAll": "Alle Länder",
     "adm.brandMarkets": "Länder wählen",
     "adm.brandNone": "Keine neuen Marken gefunden",
-    "adm.brandDelete": "Marke „{name}\" löschen?"
+    "adm.brandDelete": "Marke „{name}\" löschen?",
+    "fav.toList": "Alle {count} Favoriten in neue Liste",
+    "fav.toListDone": "{count} Einträge in neue Liste übernommen",
+    "fav.newListName": "Favoriten"
   }
 }
