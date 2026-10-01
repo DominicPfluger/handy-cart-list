@@ -344,7 +344,7 @@ function ListPage() {
                       const color = (colorDept ? deptColor(colorDept, deptById) : undefined) ?? deptColorByLabel(group.label);
                       return (
                     <div
-                      className={`grid h-9 w-9 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-lg ${color ? "" : "bg-primary-soft/25"}`}
+                      className={`grid h-8 w-8 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-base ${color ? "" : "bg-primary-soft/25"}`}
                       style={color ? { backgroundColor: color } : undefined}
                     >
                        <ProductEmoji emoji={item.emoji} />
