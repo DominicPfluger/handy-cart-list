@@ -6,14 +6,14 @@ Eine Kategorie (z. B. „Milchgetränke") hat weiterhin genau einen festen Platz
 ## Was du bekommst
 
 **Abteilungsansicht**
-- Die Alias-Kategorie erscheint in der zusätzlichen Oberkategorie als normale Kachel (gleiches Bild, Name, Emoji), mit kleinem Verknüpfungs-Symbol.
+- Die Alias-Kategorie erscheint in der zusätzlichen Oberkategorie als normale Kachel (gleiches Bild, Name, Emoji) – ohne zusätzliches Symbol, nicht vom Original unterscheidbar.
 - Antippen öffnet dieselbe Kategorie mit denselben Produkten und Unterkategorien.
 - Filter (Ernährungsform, Länderküche) und lokales Ausblenden wirken wie beim Original. Leere Aliase werden ausgeblendet.
 - Suche zeigt Produkte nicht doppelt.
 
 **Admin-Panel**
 - Im Kategorie-Editor neuer Bereich „Auch anzeigen unter…": eine oder mehrere weitere Oberkategorien auswählen, entfernen.
-- In der Kategorienliste erscheinen Aliase an ihrer Zusatzposition mit Verknüpfungs-Symbol; per ▲▼ / Drag & Drop sortierbar und per Klick entfernbar (das Original bleibt).
+- In der Kategorienliste erscheinen Aliase an ihrer Zusatzposition (dezent als „Alias" beschriftet, ohne Symbol); per ▲▼ / Drag & Drop sortierbar und per Klick entfernbar (das Original bleibt).
 - Löschen des Originals entfernt automatisch alle Aliase.
 - Schutz: eine Kategorie kann nicht als Alias in sich selbst oder in einer eigenen Unterkategorie liegen.
 
