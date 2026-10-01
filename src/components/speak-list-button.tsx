@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useT } from "../i18n";
+import { useSpeakRate } from "../hooks/use-speak-rate";
 
 export interface SpeakGroup {
   label: string;
@@ -10,6 +11,7 @@ export interface SpeakGroup {
 export function SpeakListButton({ title, groups }: { title: string; groups: SpeakGroup[] }) {
   const { t, locale } = useT();
   const [speaking, setSpeaking] = useState(false);
+  const [rate] = useSpeakRate();
 
   useEffect(() => () => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
@@ -37,7 +39,7 @@ export function SpeakListButton({ title, groups }: { title: string; groups: Spea
       const u = new SpeechSynthesisUtterance(text);
       u.lang = locale;
       if (voice) u.voice = voice;
-      u.rate = 0.95;
+      u.rate = rate;
       if (i === sentences.length - 1) {
         u.onend = () => setSpeaking(false);
         u.onerror = () => setSpeaking(false);

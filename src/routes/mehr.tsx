@@ -15,6 +15,7 @@ import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18
 import { useEffect, useState } from "react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
+import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 
@@ -269,6 +270,7 @@ function MorePage() {
             <span className="text-muted-foreground">›</span>
           </button>
         ))}
+        <SpeakRateRow />
       </section>
 
       {hiddenProducts.length > 0 && (
