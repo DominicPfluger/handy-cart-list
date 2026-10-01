@@ -104,3 +104,28 @@ export async function shareLink(slug: string, title: string): Promise<"shared" |
   await navigator.clipboard?.writeText(url);
   return "copied";
 }
+
+export type CommunityRecipe = {
+  id: string; owner_id: string; title: string; template_id: string; items: RecipeItem[];
+  share_slug: string | null; author_name: string | null; created_at: string; is_public: boolean;
+};
+
+/** Alle öffentlichen Rezepte (neueste zuerst), optional nur von einer Person. */
+export async function fetchCommunity(authorId?: string): Promise<CommunityRecipe[]> {
+  let q = supabase.from("recipes")
+    .select("id, owner_id, title, template_id, items, share_slug, author_name, created_at, is_public")
+    .eq("is_public", true).order("created_at", { ascending: false }).limit(300);
+  if (authorId) q = q.eq("owner_id", authorId);
+  const { data, error } = await q;
+  if (error) throw error;
+  return (data ?? []).map((r) => ({ ...r, items: (r.items as unknown as RecipeItem[]) ?? [] }));
+}
+
+/** Eigene Rezepte (privat + öffentlich). */
+export async function fetchMyRecipes(userId: string): Promise<CommunityRecipe[]> {
+  const { data, error } = await supabase.from("recipes")
+    .select("id, owner_id, title, template_id, items, share_slug, author_name, created_at, is_public")
+    .eq("owner_id", userId).order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []).map((r) => ({ ...r, items: (r.items as unknown as RecipeItem[]) ?? [] }));
+}
