@@ -3,7 +3,7 @@
     "nav.departments": "Departments",
     "nav.favorites": "Favorites",
     "nav.lists": "Lists",
-    "nav.recipes": "Recipe Creator",
+    "nav.recipes": "Recipes",
     "nav.more": "More",
     "common.organic": "Organic",
     "common.cancel": "Cancel",
@@ -613,13 +613,14 @@
     "list.itemRemoved": "{name} removed",
     "list.checkedCleared": "{n} checked items removed",
     "cloud.queued": "Saved offline – will sync when you're back online",
-    "cloud.queueFlushed": "{n} changes synced"
+    "cloud.queueFlushed": "{n} changes synced",
+    "recipes.title": "Recipe Generator"
   },
   "en-GB": {
     "nav.departments": "Departments",
     "nav.favorites": "Favourites",
     "nav.lists": "Lists",
-    "nav.recipes": "Recipe Creator",
+    "nav.recipes": "Recipes",
     "nav.more": "More",
     "common.organic": "Organic",
     "common.cancel": "Cancel",
@@ -1229,13 +1230,14 @@
     "list.itemRemoved": "{name} removed",
     "list.checkedCleared": "{n} checked items removed",
     "cloud.queued": "Saved offline – will sync when you're back online",
-    "cloud.queueFlushed": "{n} changes synced"
+    "cloud.queueFlushed": "{n} changes synced",
+    "recipes.title": "Recipe Generator"
   },
   "en-CA": {
     "nav.departments": "Aisles",
     "nav.favorites": "Favourites",
     "nav.lists": "Lists",
-    "nav.recipes": "Recipe Creator",
+    "nav.recipes": "Recipes",
     "nav.more": "More",
     "common.organic": "Organic",
     "common.cancel": "Cancel",
@@ -1845,13 +1847,14 @@
     "list.itemRemoved": "{name} removed",
     "list.checkedCleared": "{n} checked items removed",
     "cloud.queued": "Saved offline – will sync when you're back online",
-    "cloud.queueFlushed": "{n} changes synced"
+    "cloud.queueFlushed": "{n} changes synced",
+    "recipes.title": "Recipe Generator"
   },
   "es-ES": {
     "nav.departments": "Secciones",
     "nav.favorites": "Favoritos",
     "nav.lists": "Listas",
-    "nav.recipes": "Creador de recetas",
+    "nav.recipes": "Recetas",
     "nav.more": "Más",
     "common.organic": "Bio",
     "common.cancel": "Cancelar",
@@ -2461,13 +2464,14 @@
     "list.itemRemoved": "{name} eliminado",
     "list.checkedCleared": "{n} artículos marcados eliminados",
     "cloud.queued": "Guardado sin conexión – se sincronizará cuando vuelvas a estar en línea",
-    "cloud.queueFlushed": "{n} cambios sincronizados"
+    "cloud.queueFlushed": "{n} cambios sincronizados",
+    "recipes.title": "Generador de recetas"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
     "nav.favorites": "Favoritos",
     "nav.lists": "Listas",
-    "nav.recipes": "Creador de Recetas",
+    "nav.recipes": "Recetas",
     "nav.more": "Más",
     "common.organic": "Orgánico",
     "common.cancel": "Cancelar",
@@ -3077,13 +3081,14 @@
     "list.itemRemoved": "{name} eliminado",
     "list.checkedCleared": "{n} artículos marcados eliminados",
     "cloud.queued": "Guardado sin conexión – se sincronizará cuando vuelvas a estar en línea",
-    "cloud.queueFlushed": "{n} cambios sincronizados"
+    "cloud.queueFlushed": "{n} cambios sincronizados",
+    "recipes.title": "Generador de recetas"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
     "nav.favorites": "Favoris",
     "nav.lists": "Listes",
-    "nav.recipes": "Créateur de recettes",
+    "nav.recipes": "Recettes",
     "nav.more": "Plus",
     "common.organic": "Bio",
     "common.cancel": "Annuler",
@@ -3693,13 +3698,14 @@
     "list.itemRemoved": "{name} supprimé",
     "list.checkedCleared": "{n} articles cochés supprimés",
     "cloud.queued": "Enregistré hors ligne – synchronisation dès que tu es de nouveau en ligne",
-    "cloud.queueFlushed": "{n} modifications synchronisées"
+    "cloud.queueFlushed": "{n} modifications synchronisées",
+    "recipes.title": "Générateur de recettes"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
     "nav.favorites": "Favoris",
     "nav.lists": "Listes",
-    "nav.recipes": "Créateur de recettes",
+    "nav.recipes": "Recettes",
     "nav.more": "Plus",
     "common.organic": "Bio",
     "common.cancel": "Annuler",
@@ -4309,13 +4315,14 @@
     "list.itemRemoved": "{name} supprimé",
     "list.checkedCleared": "{n} articles cochés supprimés",
     "cloud.queued": "Enregistré hors ligne – synchronisation dès que tu es de nouveau en ligne",
-    "cloud.queueFlushed": "{n} modifications synchronisées"
+    "cloud.queueFlushed": "{n} modifications synchronisées",
+    "recipes.title": "Générateur de recettes"
   },
   "it-IT": {
     "nav.departments": "Reparti",
     "nav.favorites": "Preferiti",
     "nav.lists": "Liste",
-    "nav.recipes": "Creatore ricette",
+    "nav.recipes": "Ricette",
     "nav.more": "Altro",
     "common.organic": "Bio",
     "common.cancel": "Annulla",
@@ -4925,13 +4932,14 @@
     "list.itemRemoved": "{name} rimosso",
     "list.checkedCleared": "{n} articoli spuntati rimossi",
     "cloud.queued": "Salvato offline – verrà sincronizzato quando torni online",
-    "cloud.queueFlushed": "{n} modifiche sincronizzate"
+    "cloud.queueFlushed": "{n} modifiche sincronizzate",
+    "recipes.title": "Generatore di ricette"
   },
   "it-CH": {
     "nav.departments": "Reparti",
     "nav.favorites": "Preferiti",
     "nav.lists": "Liste",
-    "nav.recipes": "Crea Ricette",
+    "nav.recipes": "Ricette",
     "nav.more": "Altro",
     "common.organic": "Bio",
     "common.cancel": "Annulla",
@@ -5541,13 +5549,14 @@
     "list.itemRemoved": "{name} rimosso",
     "list.checkedCleared": "{n} articoli spuntati rimossi",
     "cloud.queued": "Salvato offline – verrà sincronizzato quando torni online",
-    "cloud.queueFlushed": "{n} modifiche sincronizzate"
+    "cloud.queueFlushed": "{n} modifiche sincronizzate",
+    "recipes.title": "Generatore di ricette"
   },
   "pt-PT": {
     "nav.departments": "Secções",
     "nav.favorites": "Favoritos",
     "nav.lists": "Listas",
-    "nav.recipes": "Criador de Receitas",
+    "nav.recipes": "Receitas",
     "nav.more": "Mais",
     "common.organic": "Biológico",
     "common.cancel": "Cancelar",
@@ -6157,13 +6166,14 @@
     "list.itemRemoved": "{name} removido",
     "list.checkedCleared": "{n} itens marcados removidos",
     "cloud.queued": "Guardado offline – será sincronizado quando voltares a estar online",
-    "cloud.queueFlushed": "{n} alterações sincronizadas"
+    "cloud.queueFlushed": "{n} alterações sincronizadas",
+    "recipes.title": "Gerador de receitas"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
     "nav.favorites": "Favoritos",
     "nav.lists": "Listas",
-    "nav.recipes": "Criador de Receitas",
+    "nav.recipes": "Receitas",
     "nav.more": "Mais",
     "common.organic": "Orgânico",
     "common.cancel": "Cancelar",
@@ -6773,13 +6783,14 @@
     "list.itemRemoved": "{name} removido",
     "list.checkedCleared": "{n} itens marcados removidos",
     "cloud.queued": "Guardado offline – será sincronizado quando voltares a estar online",
-    "cloud.queueFlushed": "{n} alterações sincronizadas"
+    "cloud.queueFlushed": "{n} alterações sincronizadas",
+    "recipes.title": "Gerador de receitas"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
     "nav.favorites": "Favorieten",
     "nav.lists": "Lijsten",
-    "nav.recipes": "Receptenmaker",
+    "nav.recipes": "Recepten",
     "nav.more": "Meer",
     "common.organic": "Bio",
     "common.cancel": "Annuleren",
@@ -7389,13 +7400,14 @@
     "list.itemRemoved": "{name} verwijderd",
     "list.checkedCleared": "{n} afgevinkte artikelen verwijderd",
     "cloud.queued": "Offline opgeslagen – wordt gesynchroniseerd zodra je weer online bent",
-    "cloud.queueFlushed": "{n} wijzigingen gesynchroniseerd"
+    "cloud.queueFlushed": "{n} wijzigingen gesynchroniseerd",
+    "recipes.title": "Receptengenerator"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
     "nav.favorites": "Favorieten",
     "nav.lists": "Lijsten",
-    "nav.recipes": "Receptenmaker",
+    "nav.recipes": "Recepten",
     "nav.more": "Meer",
     "common.organic": "Bio",
     "common.cancel": "Annuleren",
@@ -8005,7 +8017,8 @@
     "list.itemRemoved": "{name} verwijderd",
     "list.checkedCleared": "{n} afgevinkte artikelen verwijderd",
     "cloud.queued": "Offline opgeslagen – wordt gesynchroniseerd zodra je weer online bent",
-    "cloud.queueFlushed": "{n} wijzigingen gesynchroniseerd"
+    "cloud.queueFlushed": "{n} wijzigingen gesynchroniseerd",
+    "recipes.title": "Receptengenerator"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8172,7 +8185,9 @@
     "list.itemRemoved": "{name} entfernt",
     "list.checkedCleared": "{n} abgehakte Artikel entfernt",
     "cloud.queued": "Offline gespeichert – wird synchronisiert, sobald du wieder online bist",
-    "cloud.queueFlushed": "{n} Änderungen nachsynchronisiert"
+    "cloud.queueFlushed": "{n} Änderungen nachsynchronisiert",
+    "nav.recipes": "Rezepte",
+    "recipes.title": "Rezept-Generator"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8339,6 +8354,8 @@
     "list.itemRemoved": "{name} entfernt",
     "list.checkedCleared": "{n} abgehakte Artikel entfernt",
     "cloud.queued": "Offline gespeichert – wird synchronisiert, sobald du wieder online bist",
-    "cloud.queueFlushed": "{n} Änderungen nachsynchronisiert"
+    "cloud.queueFlushed": "{n} Änderungen nachsynchronisiert",
+    "nav.recipes": "Rezepte",
+    "recipes.title": "Rezept-Generator"
   }
 }
