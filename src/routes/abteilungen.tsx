@@ -694,6 +694,7 @@ function DepartmentsPage() {
                   >
                     <PlusIcon className="h-3.5 w-3.5" />
                   </Button>
+                  <span aria-hidden className="w-1.5 shrink-0" />
                   </div>
                 </div>
                 </Fragment>
