@@ -87,6 +87,28 @@ const TARGETS: Target[] = [
       ),
   },
   {
+    id: "sms",
+    label: "SMS",
+    bg: "#546E7A",
+    run: (p) => {
+      window.location.href = `sms:?&body=${encodeURIComponent(p.text)}`;
+    },
+  },
+  {
+    id: "threema",
+    label: "Threema",
+    bg: "#1F9E9E",
+    iconPath: siThreema.path,
+    run: (p) => {
+      const mobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+      if (mobile) {
+        window.location.href = `threema://compose?text=${encodeURIComponent(p.text)}`;
+        return;
+      }
+      return copyAndOpen(p, "https://threema.id/", "Threema");
+    },
+  },
+  {
     id: "signal",
     label: "Signal",
     bg: "#3B45FD",
