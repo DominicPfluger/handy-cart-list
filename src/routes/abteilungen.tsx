@@ -650,7 +650,7 @@ function DepartmentsPage() {
                     onPointerLeave={draggable ? cancelPress : undefined}
                     onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
                     onClick={() => { if (!suppressClick.current) navigate({ to: "/produkt/$id", params: { id: product.id } }); }}
-                    className="grid h-12 w-12 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-lg bg-primary-soft/25"
+                    className={`grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25 ${draggable ? "cursor-grab touch-none" : "cursor-pointer"}`}
                   >
                     <ProductThumb product={product} />
                   </button>
