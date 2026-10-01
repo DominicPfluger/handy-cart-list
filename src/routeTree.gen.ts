@@ -24,6 +24,7 @@ import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
 import { Route as ScannerRouteImport } from './routes/scanner'
+import { Route as StartRouteImport } from './routes/start'
 import { Route as VerlaufRouteImport } from './routes/verlauf'
 import { Route as VorratRouteImport } from './routes/vorrat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -110,6 +111,11 @@ const ScannerRoute = ScannerRouteImport.update({
   path: '/scanner',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StartRoute = StartRouteImport.update({
+  id: '/start',
+  path: '/start',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerlaufRoute = VerlaufRouteImport.update({
   id: '/verlauf',
   path: '/verlauf',
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRouteWithChildren
   '/scanner': typeof ScannerRoute
+  '/start': typeof StartRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -209,6 +216,7 @@ export interface FileRoutesByTo {
   '/impressum': typeof ImpressumRoute
   '/mehr': typeof MehrRoute
   '/scanner': typeof ScannerRoute
+  '/start': typeof StartRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -238,6 +246,7 @@ export interface FileRoutesById {
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRouteWithChildren
   '/scanner': typeof ScannerRoute
+  '/start': typeof StartRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -267,6 +276,7 @@ export interface FileRouteTypes {
     | '/mehr'
     | '/rezepte'
     | '/scanner'
+    | '/start'
     | '/verlauf'
     | '/vorrat'
     | '/admin'
@@ -293,6 +303,7 @@ export interface FileRouteTypes {
     | '/impressum'
     | '/mehr'
     | '/scanner'
+    | '/start'
     | '/verlauf'
     | '/vorrat'
     | '/admin'
@@ -321,6 +332,7 @@ export interface FileRouteTypes {
     | '/mehr'
     | '/rezepte'
     | '/scanner'
+    | '/start'
     | '/verlauf'
     | '/vorrat'
     | '/_authenticated/admin'
@@ -350,6 +362,7 @@ export interface RootRouteChildren {
   MehrRoute: typeof MehrRoute
   RezepteRoute: typeof RezepteRouteWithChildren
   ScannerRoute: typeof ScannerRoute
+  StartRoute: typeof StartRoute
   VerlaufRoute: typeof VerlaufRoute
   VorratRoute: typeof VorratRoute
   ProduktIdRoute: typeof ProduktIdRoute
@@ -461,6 +474,13 @@ declare module '@tanstack/react-router' {
       path: '/scanner'
       fullPath: '/scanner'
       preLoaderRoute: typeof ScannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/start': {
+      id: '/start'
+      path: '/start'
+      fullPath: '/start'
+      preLoaderRoute: typeof StartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verlauf': {
@@ -591,6 +611,7 @@ const rootRouteChildren: RootRouteChildren = {
   MehrRoute: MehrRoute,
   RezepteRoute: RezepteRouteWithChildren,
   ScannerRoute: ScannerRoute,
+  StartRoute: StartRoute,
   VerlaufRoute: VerlaufRoute,
   VorratRoute: VorratRoute,
   ProduktIdRoute: ProduktIdRoute,
