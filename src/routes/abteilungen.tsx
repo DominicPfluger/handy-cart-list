@@ -570,7 +570,7 @@ function DepartmentsPage() {
                   <DepartmentThumb department={department} />
                 </span>
                 <span className="relative flex min-h-14 w-full items-center justify-center gap-2 px-10 py-2">
-                  <span className="min-w-0 text-center whitespace-normal text-xs font-normal leading-4 text-foreground">{department.name}</span>
+                  <span className="min-w-0 text-center whitespace-normal text-[13px] font-bold leading-4 text-foreground">{department.name}</span>
                   <span className="absolute right-3 top-1/2 -translate-y-1/2 shrink-0 text-lg text-primary" aria-hidden="true">›</span>
                 </span>
               </Button>
