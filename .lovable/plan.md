@@ -1,34 +1,27 @@
-# App-Info am Ende der „Mehr"-Seite
+# Rezept-Generator auf eigener Seite + „Alle Märkte“ immer anzeigen
 
 ## Ziel
-Am unteren Ende der Seite „Mehr" erscheint ein zentrierter App-Info-Block:
-- grünes Shoppi-App-Icon (rund, ca. 64 px — dasselbe Bild wie im Splashscreen)
-- App-Name „Shoppi"
-- Claim/Tagline (lokalisiert, z. B. „Gemeinsam.Einfach.Einkaufen.")
-- Versionsnummer, z. B. „Version 1.0.0"
-- Copyright, z. B. „© 2026 Shoppi"
+1. Der Rezept-Generator lebt wieder ausschliesslich auf seiner eigenen Seite `/rezepte/generator`. Die Rezepte-Hauptseite zeigt nur noch die Kacheln.
+2. Der Schalter „Alle Märkte anzeigen“ auf „Mehr“ bleibt immer sichtbar (Entscheidung des Nutzers), unabhängig davon, ob es marktspezifische Produkte gibt.
 
-Der bisherige kleine Tagline-Fuss am Seitenende (Zeilen 330–333 in mehr.tsx) entfällt — er geht im neuen Block auf.
+## Änderungen
 
-## Umsetzung
+### 1. Rezepte-Hauptseite (`src/routes/rezepte.index.tsx`)
+- `<RecipeBuilder mode="generator" />` entfernen.
+- Kachel „🧑‍🍳 Rezept-Generator“ wieder zu `RECIPE_ENTRIES` hinzufügen (an erster Stelle, Link auf `/rezepte/generator`, vorhandene Texte `rec.entryGenTitle` / `rec.entryGenDesc`).
+- Reihenfolge der Kacheln: Rezept-Generator → Rezept-Listen → Rezept-Inspirationen.
 
-1. **Versionsnummer zentral pflegen**
-   - `APP_VERSION = "1.0.0"` als Konstante in `src/lib/app-version.ts` (ein Ort für künftige Updates; Versionsnummern/Claim bleiben bewusst unübersetzt).
+### 2. Generator-Seite (`src/routes/rezepte.generator.tsx`)
+- Bleibt unverändert: eigene Seite mit Rücklink „← Rezepte“, Kategorietitel, Filtern, Zutaten und Speichern — inklusive Öffnen von Community-Rezepten über `?recipe=`.
 
-2. **App-Info-Block in `src/routes/mehr.tsx`**
-   - Neuer Abschnitt ganz unten (nach dem „Nachhaltigkeit"-Block bzw. den versteckten Kategorien):
-     ```text
-     [Icon]  (img aus src/assets/app-icon.png.asset.json, rund)
-     Shoppi            (font-semibold)
-     <lokalisierter Claim>
-     Version 1.0.0     (klein, gedämpft)
-     © 2026 Shoppi     (klein, gedämpft)
-     ```
-   - Alles zentriert, Abstand `pt-6`, Styles über bestehende Tokens (`text-muted-foreground` usw., keine harten Farben).
-   - Der bestehende Tagline-Fuss (`more.tagline`) wird entfernt; der Claim im App-Info-Block nutzt denselben Schlüssel.
+### 3. „Alle Märkte anzeigen“ (`src/routes/mehr.tsx`)
+- Die zuvor eingebaute Bedingung (nur einblenden, wenn fremde Produkte existieren) wieder entfernen: `AllMarketsRow` rendert den Schalter immer.
+- Nicht mehr benötigte Importe aufräumen (`useQuery`, `useMemo`, `useLocale`, `marketOf` aus mehr.tsx), falls sonst ungenutzt.
 
-3. **Copyright lokalisiert**
-   - Neuer Schlüssel `more.copyright` in `src/i18n/de.ts` + `messages.json` für alle 16 Sprachen („© 2026 Shoppi. Alle Rechte vorbehalten." usw.). Version ohne Übersetzung („Version 1.0.0" versteht jeder Markt).
+### 4. Aufräumen
+- `roadmap.md`: erledigte Punkte abhaken, offene Klärung zu „Alle Märkte“ als entschieden markieren.
 
-4. **Prüfen**
-   - Build fehlerfrei; Vorschau: Block erscheint ganz unten auf „Mehr", kein doppelter Tagline-Fuss.
+## Technische Details
+- Keine neuen Übersetzungen nötig — alle Schlüssel (`rec.entryGenTitle`, `rec.entryGenDesc`, `more.allMarkets`, …) existieren bereits in allen 16 Sprachen.
+- Keine Datenbank- oder Backend-Änderungen.
+- Verifikation: Build-Log prüfen, Vorschau-Test (Rezepte-Seite zeigt nur Kacheln; Generator-Kachel öffnet `/rezepte/generator`; „Mehr“ zeigt den Märkte-Schalter immer).
