@@ -836,7 +836,16 @@
     "price.reference": "Reference price",
     "rs.speak": "Read recipe",
     "rs.speakStop": "Stop reading",
-    "rs.speakIngredients": "Ingredients"
+    "rs.speakIngredients": "Ingredients",
+    "media.title": "AI images & reference prices",
+    "media.hint": "Creates an AI image per product and estimated store prices (guide values) for the selected market. Runs in batches — tap again as needed.",
+    "media.market": "Market",
+    "media.status": "{total} products · {noImage} without image · {priced} priced in this market",
+    "media.genImages": "Generate 5 images",
+    "media.genPrices": "Estimate 50 prices",
+    "media.working": "Working …",
+    "media.imgDone": "{n} images generated",
+    "media.priceDone": "{n} prices saved"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1675,7 +1684,16 @@
     "price.reference": "Reference price",
     "rs.speak": "Read recipe",
     "rs.speakStop": "Stop reading",
-    "rs.speakIngredients": "Ingredients"
+    "rs.speakIngredients": "Ingredients",
+    "media.title": "AI images & reference prices",
+    "media.hint": "Creates an AI image per product and estimated shop prices (guide values) for the selected market. Runs in batches — tap again as needed.",
+    "media.market": "Market",
+    "media.status": "{total} products · {noImage} without image · {priced} priced in this market",
+    "media.genImages": "Generate 5 images",
+    "media.genPrices": "Estimate 50 prices",
+    "media.working": "Working …",
+    "media.imgDone": "{n} images generated",
+    "media.priceDone": "{n} prices saved"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2514,7 +2532,16 @@
     "price.reference": "Reference price",
     "rs.speak": "Read recipe",
     "rs.speakStop": "Stop reading",
-    "rs.speakIngredients": "Ingredients"
+    "rs.speakIngredients": "Ingredients",
+    "media.title": "AI images & reference prices",
+    "media.hint": "Creates an AI image per product and estimated store prices (guide values) for the selected market. Runs in batches — tap again as needed.",
+    "media.market": "Market",
+    "media.status": "{total} products · {noImage} without image · {priced} priced in this market",
+    "media.genImages": "Generate 5 images",
+    "media.genPrices": "Estimate 50 prices",
+    "media.working": "Working …",
+    "media.imgDone": "{n} images generated",
+    "media.priceDone": "{n} prices saved"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3353,7 +3380,16 @@
     "price.reference": "Precio orientativo",
     "rs.speak": "Leer receta",
     "rs.speakStop": "Detener lectura",
-    "rs.speakIngredients": "Ingredientes"
+    "rs.speakIngredients": "Ingredientes",
+    "media.title": "Imágenes IA y precios de referencia",
+    "media.hint": "Crea una imagen IA por producto y precios estimados (orientativos) para el mercado elegido. Por lotes — pulsa de nuevo si hace falta.",
+    "media.market": "Mercado",
+    "media.status": "{total} productos · {noImage} sin imagen · {priced} con precio en este mercado",
+    "media.genImages": "Generar 5 imágenes",
+    "media.genPrices": "Estimar 50 precios",
+    "media.working": "En curso …",
+    "media.imgDone": "{n} imágenes generadas",
+    "media.priceDone": "{n} precios guardados"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4192,7 +4228,16 @@
     "price.reference": "Precio orientativo",
     "rs.speak": "Leer receta",
     "rs.speakStop": "Detener lectura",
-    "rs.speakIngredients": "Ingredientes"
+    "rs.speakIngredients": "Ingredientes",
+    "media.title": "Imágenes IA y precios de referencia",
+    "media.hint": "Crea una imagen IA por producto y precios estimados (orientativos) para el mercado elegido. Por lotes — toca de nuevo si hace falta.",
+    "media.market": "Mercado",
+    "media.status": "{total} productos · {noImage} sin imagen · {priced} con precio en este mercado",
+    "media.genImages": "Generar 5 imágenes",
+    "media.genPrices": "Estimar 50 precios",
+    "media.working": "En curso …",
+    "media.imgDone": "{n} imágenes generadas",
+    "media.priceDone": "{n} precios guardados"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5031,7 +5076,16 @@
     "price.reference": "Prix indicatif",
     "rs.speak": "Lire la recette",
     "rs.speakStop": "Arrêter la lecture",
-    "rs.speakIngredients": "Ingrédients"
+    "rs.speakIngredients": "Ingrédients",
+    "media.title": "Images IA et prix indicatifs",
+    "media.hint": "Crée une image IA par produit et des prix estimés (indicatifs) pour le marché choisi. Par lots — retapez si besoin.",
+    "media.market": "Marché",
+    "media.status": "{total} produits · {noImage} sans image · {priced} avec prix sur ce marché",
+    "media.genImages": "Générer 5 images",
+    "media.genPrices": "Estimer 50 prix",
+    "media.working": "En cours …",
+    "media.imgDone": "{n} images générées",
+    "media.priceDone": "{n} prix enregistrés"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -5870,7 +5924,16 @@
     "price.reference": "Prix indicatif",
     "rs.speak": "Lire la recette",
     "rs.speakStop": "Arrêter la lecture",
-    "rs.speakIngredients": "Ingrédients"
+    "rs.speakIngredients": "Ingrédients",
+    "media.title": "Images IA et prix indicatifs",
+    "media.hint": "Crée une image IA par produit et des prix estimés (indicatifs) pour le marché choisi. Par lots — retapez au besoin.",
+    "media.market": "Marché",
+    "media.status": "{total} produits · {noImage} sans image · {priced} avec prix sur ce marché",
+    "media.genImages": "Générer 5 images",
+    "media.genPrices": "Estimer 50 prix",
+    "media.working": "En cours …",
+    "media.imgDone": "{n} images générées",
+    "media.priceDone": "{n} prix enregistrés"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -6709,7 +6772,16 @@
     "price.reference": "Prezzo indicativo",
     "rs.speak": "Leggi la ricetta",
     "rs.speakStop": "Interrompi la lettura",
-    "rs.speakIngredients": "Ingredienti"
+    "rs.speakIngredients": "Ingredienti",
+    "media.title": "Immagini IA e prezzi indicativi",
+    "media.hint": "Crea un'immagine IA per prodotto e prezzi stimati (indicativi) per il mercato scelto. A lotti — tocca di nuovo se serve.",
+    "media.market": "Mercato",
+    "media.status": "{total} prodotti · {noImage} senza immagine · {priced} con prezzo in questo mercato",
+    "media.genImages": "Genera 5 immagini",
+    "media.genPrices": "Stima 50 prezzi",
+    "media.working": "In corso …",
+    "media.imgDone": "{n} immagini generate",
+    "media.priceDone": "{n} prezzi salvati"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -7548,7 +7620,16 @@
     "price.reference": "Prezzo indicativo",
     "rs.speak": "Leggi la ricetta",
     "rs.speakStop": "Interrompi la lettura",
-    "rs.speakIngredients": "Ingredienti"
+    "rs.speakIngredients": "Ingredienti",
+    "media.title": "Immagini IA e prezzi indicativi",
+    "media.hint": "Crea un'immagine IA per prodotto e prezzi stimati (indicativi) per il mercato scelto. A lotti — tocca di nuovo se serve.",
+    "media.market": "Mercato",
+    "media.status": "{total} prodotti · {noImage} senza immagine · {priced} con prezzo in questo mercato",
+    "media.genImages": "Genera 5 immagini",
+    "media.genPrices": "Stima 50 prezzi",
+    "media.working": "In corso …",
+    "media.imgDone": "{n} immagini generate",
+    "media.priceDone": "{n} prezzi salvati"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -8387,7 +8468,16 @@
     "price.reference": "Preço de referência",
     "rs.speak": "Ler receita",
     "rs.speakStop": "Parar leitura",
-    "rs.speakIngredients": "Ingredientes"
+    "rs.speakIngredients": "Ingredientes",
+    "media.title": "Imagens IA e preços de referência",
+    "media.hint": "Cria uma imagem IA por produto e preços estimados (orientativos) para o mercado escolhido. Em lotes — toca novamente se precisares.",
+    "media.market": "Mercado",
+    "media.status": "{total} produtos · {noImage} sem imagem · {priced} com preço neste mercado",
+    "media.genImages": "Gerar 5 imagens",
+    "media.genPrices": "Estimar 50 preços",
+    "media.working": "A trabalhar …",
+    "media.imgDone": "{n} imagens geradas",
+    "media.priceDone": "{n} preços guardados"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -9226,7 +9316,16 @@
     "price.reference": "Preço de referência",
     "rs.speak": "Ler receita",
     "rs.speakStop": "Parar leitura",
-    "rs.speakIngredients": "Ingredientes"
+    "rs.speakIngredients": "Ingredientes",
+    "media.title": "Imagens IA e preços de referência",
+    "media.hint": "Cria uma imagem IA por produto e preços estimados (orientativos) para o mercado escolhido. Em lotes — toque de novo se precisar.",
+    "media.market": "Mercado",
+    "media.status": "{total} produtos · {noImage} sem imagem · {priced} com preço neste mercado",
+    "media.genImages": "Gerar 5 imagens",
+    "media.genPrices": "Estimar 50 preços",
+    "media.working": "Trabalhando …",
+    "media.imgDone": "{n} imagens geradas",
+    "media.priceDone": "{n} preços salvos"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -10065,7 +10164,16 @@
     "price.reference": "Richtprijs",
     "rs.speak": "Recept voorlezen",
     "rs.speakStop": "Voorlezen stoppen",
-    "rs.speakIngredients": "Ingrediënten"
+    "rs.speakIngredients": "Ingrediënten",
+    "media.title": "AI-afbeeldingen & richtprijzen",
+    "media.hint": "Maakt per product een AI-afbeelding en geschatte winkelprijzen (richtwaarden) voor de gekozen markt. In batches — tik opnieuw indien nodig.",
+    "media.market": "Markt",
+    "media.status": "{total} producten · {noImage} zonder afbeelding · {priced} met prijs in deze markt",
+    "media.genImages": "5 afbeeldingen maken",
+    "media.genPrices": "50 prijzen schatten",
+    "media.working": "Bezig …",
+    "media.imgDone": "{n} afbeeldingen gemaakt",
+    "media.priceDone": "{n} prijzen opgeslagen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -10904,7 +11012,16 @@
     "price.reference": "Richtprijs",
     "rs.speak": "Recept voorlezen",
     "rs.speakStop": "Voorlezen stoppen",
-    "rs.speakIngredients": "Ingrediënten"
+    "rs.speakIngredients": "Ingrediënten",
+    "media.title": "AI-afbeeldingen & richtprijzen",
+    "media.hint": "Maakt per product een AI-afbeelding en geschatte winkelprijzen (richtwaarden) voor de gekozen markt. In batches — tik opnieuw indien nodig.",
+    "media.market": "Markt",
+    "media.status": "{total} producten · {noImage} zonder afbeelding · {priced} met prijs in deze markt",
+    "media.genImages": "5 afbeeldingen maken",
+    "media.genPrices": "50 prijzen schatten",
+    "media.working": "Bezig …",
+    "media.imgDone": "{n} afbeeldingen gemaakt",
+    "media.priceDone": "{n} prijzen opgeslagen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -11205,7 +11322,16 @@
     "price.reference": "Richtpreis",
     "rs.speak": "Rezept vorlesen",
     "rs.speakStop": "Vorlesen stoppen",
-    "rs.speakIngredients": "Zutaten"
+    "rs.speakIngredients": "Zutaten",
+    "media.title": "KI-Bilder & Richtpreise",
+    "media.hint": "Erzeugt pro Produkt ein KI-Bild und geschätzte Ladenpreise (Richtwerte) für den gewählten Markt. Läuft stapelweise — bei Bedarf mehrmals tippen.",
+    "media.market": "Markt",
+    "media.status": "{total} Produkte · {noImage} ohne Bild · {priced} mit Preis in diesem Markt",
+    "media.genImages": "5 Bilder erzeugen",
+    "media.genPrices": "50 Preise schätzen",
+    "media.working": "Läuft …",
+    "media.imgDone": "{n} Bilder erzeugt",
+    "media.priceDone": "{n} Preise gespeichert"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -11506,6 +11632,15 @@
     "price.reference": "Richtpreis",
     "rs.speak": "Rezept vorlesen",
     "rs.speakStop": "Vorlesen stoppen",
-    "rs.speakIngredients": "Zutaten"
+    "rs.speakIngredients": "Zutaten",
+    "media.title": "KI-Bilder & Richtpreise",
+    "media.hint": "Erzeugt pro Produkt ein KI-Bild und geschätzte Ladenpreise (Richtwerte) für den gewählten Markt. Läuft stapelweise — bei Bedarf mehrmals tippen.",
+    "media.market": "Markt",
+    "media.status": "{total} Produkte · {noImage} ohne Bild · {priced} mit Preis in diesem Markt",
+    "media.genImages": "5 Bilder erzeugen",
+    "media.genPrices": "50 Preise schätzen",
+    "media.working": "Läuft …",
+    "media.imgDone": "{n} Bilder erzeugt",
+    "media.priceDone": "{n} Preise gespeichert"
   }
 }
