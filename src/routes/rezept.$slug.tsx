@@ -120,7 +120,7 @@ function RecipePage() {
         return `${qty}${i.name}`.trim();
       }),
     ];
-    speakSentences(sentences, speakLocale, rate, () => setSpeaking(false));
+    speakSentences(sentences, speakLocale, speakRate, () => setSpeaking(false));
     setSpeaking(true);
   };
 
