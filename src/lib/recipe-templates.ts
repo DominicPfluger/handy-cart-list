@@ -13,7 +13,7 @@ export type RecipeStep = {
 };
 
 export type RecipeTemplate = {
-  id: "muesli" | "smoothie" | "salat" | "pizza" | "pfanne" | "menu" | "dessert";
+  id: "muesli" | "smoothie" | "salat" | "pizza" | "pfanne" | "menu" | "dessert" | "sandwich";
   emoji: string;
   color: string;
   steps: RecipeStep[];
@@ -53,6 +53,11 @@ export const POPULAR_RECIPES: Record<RecipeTemplate["id"], Record<string, string
   dessert: [
     { base: ["Mascarpone"], fruit: ["Erdbeeren"], sweet: ["Vanillezucker"], crunch: ["Kekse"] },
     { base: ["Joghurt"], fruit: ["Mango", "Maracuja / Passionsfrucht"], sweet: ["Honig"], crunch: ["Granola"] },
+  ],
+  sandwich: [
+    { bread: ["Vollkornbrot"], spread: ["Doppelrahmfrischkäse"], protein: ["Schinken"], cheese: ["Emmentaler"], veg: ["Tomaten", "Eisbergsalat"] },
+    { bread: ["Ciabatta"], spread: ["Mayonnaise"], protein: ["Hähnchenbrust"], veg: ["Rucola", "Tomaten"], extra: ["Avocado"] },
+    { bread: ["Baguette"], spread: ["Senf"], protein: ["Salami"], cheese: ["Gouda"], veg: ["Salatgurke", "Rote Zwiebeln"] },
   ],
 };
 
@@ -102,5 +107,13 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "fruit", label: "Früchte", min: 0, max: 2, ingredients: ["Erdbeeren", "Himbeeren", "Mango", "Maracuja / Passionsfrucht", "Feigen"] },
     { key: "sweet", label: "Süsse", min: 0, max: 2, ingredients: ["Honig", "Zucker", "Vanillezucker", "Schokolade"] },
     { key: "crunch", label: "Crunch", min: 0, max: 1, ingredients: ["Kekse", "Mandeln", "Granola"] },
+  ] },
+  { id: "sandwich", emoji: "🥪", color: "oklch(0.93 0.06 95)", steps: [
+    { key: "bread", label: "Brot", min: 1, max: 1, ingredients: ["Vollkornbrot", "Ciabatta", "Baguette"] },
+    { key: "spread", label: "Aufstrich", min: 0, max: 2, ingredients: ["Doppelrahmfrischkäse", "Mayonnaise", "Senf"] },
+    { key: "protein", label: "Belag", min: 0, max: 2, ingredients: ["Schinken", "Salami", "Hähnchenbrust", "Putenbrust", "Thunfisch"] },
+    { key: "cheese", label: "Käse", min: 0, max: 2, ingredients: ["Gouda", "Emmentaler", "Butterkäse"] },
+    { key: "veg", label: "Gemüse", min: 0, max: 4, ingredients: ["Tomaten", "Salatgurke", "Eisbergsalat", "Rucola", "Paprika", "Rote Zwiebeln"] },
+    { key: "extra", label: "Extra", min: 0, max: 2, ingredients: ["Freilandeier", "Avocado", "Zwiebeln"] },
   ] },
 ];
