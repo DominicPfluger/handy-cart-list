@@ -13,6 +13,7 @@ import {
 } from "../components/icons";
 import { LOCALES, getExplicitLocale, getLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState, type ReactNode } from "react";
+import { EyeOff } from "lucide-react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
@@ -96,6 +97,7 @@ function MorePage() {
   const hiddenCategories = catalog.departments.filter((department) => hiddenIds.includes(department.id));
   const hiddenProductIds = useHiddenProducts();
   const hiddenProducts = catalog.products.filter((product) => hiddenProductIds.includes(product.id));
+  const [hiddenOpen, setHiddenOpen] = useState(false);
   useEffect(() => setChoice(getExplicitLocale() ?? "auto"), [locale]);
 
   return (
