@@ -99,6 +99,10 @@ function AdminPage() {
   const [adding, setAdding] = useState<Kind | null>(null);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
   const [view, setView] = useState<"list" | "tiles">("list");
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: view === "tiles" }));
+    return () => window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: false }));
+  }, [view]);
   const refPrices = useReferencePrices();
 
   const d = q.data;

@@ -123,6 +123,14 @@ const NAV_ITEMS = [
 function BottomNav() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const { t } = useT();
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    const onTiles = (e: Event) => setHidden((e as CustomEvent<boolean>).detail === true);
+    window.addEventListener("shoppi:admin-tiles", onTiles);
+    return () => window.removeEventListener("shoppi:admin-tiles", onTiles);
+  }, []);
+
+  if (hidden) return null;
 
   return (
     <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-[440px] -translate-x-1/2 border-t border-border bg-card/95 backdrop-blur-lg pb-[env(safe-area-inset-bottom)]">
