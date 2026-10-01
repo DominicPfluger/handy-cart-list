@@ -1092,6 +1092,17 @@ export type Database = {
         | "kiste"
         | "kanister"
         | "buendel"
+        | "portion"
+        | "sack"
+        | "eimer"
+        | "becher"
+        | "tube"
+        | "netz"
+        | "palette"
+        | "tablett"
+        | "rolle"
+        | "blister"
+        | "sixpack"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1243,6 +1254,17 @@ export const Constants = {
         "kiste",
         "kanister",
         "buendel",
+        "portion",
+        "sack",
+        "eimer",
+        "becher",
+        "tube",
+        "netz",
+        "palette",
+        "tablett",
+        "rolle",
+        "blister",
+        "sixpack",
       ],
     },
   },
