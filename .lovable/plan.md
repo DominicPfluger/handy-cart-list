@@ -18,7 +18,7 @@
 - Umbenennungen gelten nur lokal auf dem Geraet (wie bisher bei Produkten). Globale Namensaenderungen bleiben dem Admin-Panel vorbehalten.
 
 ## Technische Umsetzung
-- `src/routes/abteilungen.tsx`: Stift-Button (PencilIcon aus `src/components/icons.tsx`, falls vorhanden, sonst neues Icon) neben dem Trash-Button auf der Kategorie-Kachel; Klick ruft `openRename(department, "department")` auf.
+- `src/routes/abteilungen.tsx`: Stift-Button auf der Kategorie-Kachel mit derselben Sichtbarkeitsklasse wie der Papierkorb-Button (`[@media(hover:hover)]:opacity-0 group-hover:opacity-100`); Klick ruft `openRename(department, "department")` auf.
 - `src/components/rename-dialog.tsx`: keine Aenderung noetig — unterstuetzt `kind: "department"` bereits.
 - i18n: vorhandene Schluessel (`rename.*`) werden wiederverwendet; kein neuer Text noetig.
 - Keine Datenbankaenderung.
