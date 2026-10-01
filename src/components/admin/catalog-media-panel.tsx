@@ -12,8 +12,8 @@ import { flagOf } from "@/lib/catalog-query";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
-/** KI-Bilder und KI-Richtpreise für den Katalog erzeugen (stapelweise), in getrennten Containern. */
-export function CatalogMediaPanel() {
+/** KI-Bilder und KI-Richtpreise für den Katalog erzeugen (stapelweise); section wählt den Tab-Inhalt. */
+export function CatalogMediaPanel({ section }: { section: "images" | "prices" }) {
   const qc = useQueryClient();
   const statusFn = useServerFn(catalogMediaStatus);
   const genImages = useServerFn(generateProductImages);
@@ -88,6 +88,7 @@ export function CatalogMediaPanel() {
   const s = status.data;
   return (
     <>
+      {section === "images" && (
       <section className="mt-8 rounded-2xl border border-border bg-card p-4">
         <h2 className="text-base font-semibold">{T("media.imgTitle")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{T("media.imgHint")}</p>
@@ -125,8 +126,10 @@ export function CatalogMediaPanel() {
 
         <ImageGallery />
       </section>
+      )}
 
-      <section className="mt-4 rounded-2xl border border-border bg-card p-4">
+      {section === "prices" && (
+      <section className="mt-8 rounded-2xl border border-border bg-card p-4">
         <h2 className="text-base font-semibold">{T("media.priceTitle")}</h2>
         <p className="mt-1 text-sm text-muted-foreground">{T("media.priceHint")}</p>
 
@@ -163,6 +166,7 @@ export function CatalogMediaPanel() {
           </Button>
         </div>
       </section>
+      )}
     </>
   );
 }
