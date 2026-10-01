@@ -42,6 +42,8 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [pickerStep, setPickerStep] = useState<string | null>(null);
   const [pickerDept, setPickerDept] = useState<string | null>(null);
   const [pickerSel, setPickerSel] = useState<Set<string>>(new Set());
+  const [dragRow, setDragRow] = useState<string | null>(null);
+  const [dropAt, setDropAt] = useState<{ id: string; pos: "top" | "bottom" } | null>(null);
   const sortFn = useServerFn(sortRecipeIngredients);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
@@ -102,6 +104,25 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       if (e1) throw new Error(e1.message);
       const { error: e2 } = await supabase.from("recipe_ingredients").update({ sort_order: a.sort_order }).eq("id", b.id);
       if (e2) throw new Error(e2.message);
+    });
+
+  /** Zutat per Drag & Drop vor/hinter eine andere Zutat desselben Schritts setzen. */
+  const dropRow = (stepKey: string, dragId: string, targetId: string, pos: "top" | "bottom") =>
+    run(async () => {
+      const list = assignedFor(stepKey);
+      const from = list.findIndex((r) => r.id === dragId);
+      if (from < 0 || dragId === targetId) return;
+      const next = [...list];
+      const [item] = next.splice(from, 1);
+      let to = next.findIndex((r) => r.id === targetId);
+      if (to < 0) return;
+      if (pos === "bottom") to += 1;
+      next.splice(to, 0, item!);
+      for (let k = 0; k < next.length; k++) {
+        if (next[k]!.sort_order === k + 1) continue;
+        const { error } = await supabase.from("recipe_ingredients").update({ sort_order: k + 1 }).eq("id", next[k]!.id);
+        if (error) throw new Error(error.message);
+      }
     });
 
   const sortStep = (stepKey: string, stepLabel: string, criterion: "popularity" | "relevance") => {
