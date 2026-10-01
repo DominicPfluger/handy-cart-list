@@ -6,6 +6,7 @@ import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { POPULAR_RECIPES, RECIPE_TEMPLATES, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
+import { setCuisines, toggleCuisine, useCuisineFilter } from "../hooks/use-cuisine-filter";
 import { formatQuantity } from "../lib/units";
 import { ProductEmoji } from "./product-emoji";
 import { Button } from "./ui/button";
@@ -51,6 +52,8 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
   const [busy, setBusy] = useState(false);
   const [onlyFav, setOnlyFav] = useState(false);
   const diets = useDietFilter();
+  const cuisineSel = useCuisineFilter();
+  const cuisines = useMemo(() => cuisineSel.filter((id) => catalog.cuisines.some((c) => c.id === id)), [cuisineSel, catalog.cuisines]);
   const [showAllRecent, setShowAllRecent] = useState(false);
   const [showAllPopular, setShowAllPopular] = useState(false);
 
@@ -63,6 +66,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
   const [dietOpen, setDietOpen] = useState(false);
+  const [cuisineOpen, setCuisineOpen] = useState(false);
   const PAGE = 12;
   const THRESHOLD = 18;
 
@@ -87,11 +91,12 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
           if (picked.includes(p.id)) return true; // gewählte Zutaten bleiben sichtbar
           if (onlyFav && !favIds.has(p.id)) return false;
           if (diets.length && p.excludedDiets.some((d) => (diets as string[]).includes(d))) return false;
+          if (cuisines.length && !p.cuisineIds.some((c) => cuisines.includes(c))) return false;
           return true;
         }),
       };
     }),
-    [tpl, byBase, onlyFav, favIds, diets, picks, catalog.recipeIngredients, catalog.products],
+    [tpl, byBase, onlyFav, favIds, diets, cuisines, picks, catalog.recipeIngredients, catalog.products],
   );
 
   const toggleOnlyFav = () => {
