@@ -16,3 +16,4 @@
 - Cuisine filter uses `cuisines` + `product_cuisines` (admin-managed in /admin, AI-prefilled); selection device-local. Why: editable many-to-many.
 - Brands: `product_brands` (locales = market codes like CH/DE, empty = all), filtered via `brandsFor`; chosen brand is appended to the list item name ("Name · Marke"). Why: works identically for cloud and local lists without extra plumbing.
 - Recipe creator groups ingredients by admin-managed `recipe_groups` (2 levels, via recipe_ingredients.group_id), not departments. Why: user wants curated recipe categories independent of the store catalog.
+- Alias categories: `department_aliases` (department_id, parent_id) show a department additionally under another parent; products live only in the original. Why: one source of truth, no duplicated products.
