@@ -272,6 +272,30 @@ export type Database = {
           },
         ]
       }
+      market_admins: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          market: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          market: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          market?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       pantry_items: {
         Row: {
           added_at: string
@@ -472,6 +496,70 @@ export type Database = {
           },
         ]
       }
+      product_market_exclusions: {
+        Row: {
+          created_at: string
+          id: string
+          market: string
+          product_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          market: string
+          product_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          market?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_market_exclusions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_market_order: {
+        Row: {
+          created_at: string
+          id: string
+          market: string
+          product_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          market: string
+          product_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          market?: string
+          product_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_market_order_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           created_at: string
@@ -482,6 +570,7 @@ export type Database = {
           excluded_diets: string[]
           id: string
           image_path: string | null
+          markets: string[]
           name: string
           organic_available: boolean
           sort_order: number
@@ -497,6 +586,7 @@ export type Database = {
           excluded_diets?: string[]
           id?: string
           image_path?: string | null
+          markets?: string[]
           name: string
           organic_available?: boolean
           sort_order?: number
@@ -512,6 +602,7 @@ export type Database = {
           excluded_diets?: string[]
           id?: string
           image_path?: string | null
+          markets?: string[]
           name?: string
           organic_available?: boolean
           sort_order?: number
@@ -711,6 +802,14 @@ export type Database = {
       }
       is_list_owner: {
         Args: { _list_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_market_admin: {
+        Args: { _market: string; _user_id: string }
+        Returns: boolean
+      }
+      is_market_product_admin: {
+        Args: { _product_id: string; _user_id: string }
         Returns: boolean
       }
       join_list_by_invite: { Args: { _code: string }; Returns: string }
