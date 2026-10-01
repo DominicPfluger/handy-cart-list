@@ -1,17 +1,27 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { getLocale, useT } from "../i18n";
 import { RecipeBuilder } from "../components/recipe-builder";
 import { RecipeFeed } from "../components/recipe-feed";
+import { CommunitySection } from "../components/community-section";
 import { catalogQueryOptions } from "../lib/catalog-query";
+
+const searchSchema = z.object({
+  tab: fallback(z.string(), "all").default("all"),
+  author: fallback(z.string(), "").default(""),
+  name: fallback(z.string(), "").default(""),
+});
 
 export const Route = createFileRoute("/rezepte/inspirationen")({
   ssr: false,
+  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: "Shoppi — Rezept-Inspirationen" },
-      { name: "description", content: "Beliebte und hoch bewertete Rezepte aus der Community." },
+      { name: "description", content: "Beliebte und hoch bewertete Rezepte aus der Community — durchsuchen, filtern und eigene Rezepte teilen." },
       { property: "og:title", content: "Shoppi — Rezept-Inspirationen" },
-      { property: "og:description", content: "Beliebte und hoch bewertete Rezepte aus der Community." },
+      { property: "og:description", content: "Beliebte und hoch bewertete Rezepte aus der Community — durchsuchen, filtern und eigene Rezepte teilen." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -30,6 +40,11 @@ function Page() {
       </div>
       <RecipeFeed />
       <RecipeBuilder mode="inspiration" />
+      <div className="space-y-1 border-t border-border pt-5">
+        <h2 className="text-xl font-bold tracking-tight text-foreground">🌍 {t("cm.title")}</h2>
+        <p className="text-sm text-muted-foreground">{t("cm.subtitle")}</p>
+      </div>
+      <CommunitySection />
     </div>
   );
 }
