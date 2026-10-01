@@ -18,7 +18,8 @@ export function CatalogMediaPanel() {
   const genImages = useServerFn(generateProductImages);
   const genPrices = useServerFn(generateReferencePrices);
   const [market, setMarket] = useState(getLocale().split("-")[1] ?? "CH");
-  const [busy, setBusy] = useState<"img" | "price" | null>(null);
+  const [busy, setBusy] = useState<"img" | "price" | "allImg" | null>(null);
+  const [allProgress, setAllProgress] = useState<{ done: number; total: number } | null>(null);
 
   const status = useQuery({
     queryKey: ["catalog-media-status", market],
@@ -36,6 +37,33 @@ export function CatalogMediaPanel() {
       toast.error(e instanceof Error ? e.message : String(e));
     } finally {
       setBusy(null);
+      refresh();
+    }
+  };
+
+  const runAllImages = async () => {
+    setBusy("allImg");
+    let totalDone = 0;
+    const total = status.data?.noImage ?? 0;
+    setAllProgress({ done: 0, total });
+    try {
+      for (;;) {
+        const r = await genImages({ data: { limit: 10 } });
+        totalDone += r.done;
+        setAllProgress({ done: totalDone, total });
+        if (r.errors.length > 0) {
+          toast.error(r.errors[0]!);
+          break;
+        }
+        if (r.done === 0 || r.attempted === 0) break;
+        refresh();
+      }
+      toast.success(T("media.allDone", { n: totalDone }));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+      setAllProgress(null);
       refresh();
     }
   };
@@ -83,6 +111,11 @@ export function CatalogMediaPanel() {
       <div className="mt-3 flex flex-wrap gap-2">
         <Button size="sm" disabled={busy !== null || !s || s.noImage === 0} onClick={runImages}>
           {busy === "img" ? T("media.working") : T("media.genImages")}
+        </Button>
+        <Button size="sm" variant="secondary" disabled={busy !== null || !s || s.noImage === 0} onClick={runAllImages}>
+          {busy === "allImg"
+            ? T("media.allProgress", { done: allProgress?.done ?? 0, total: allProgress?.total ?? 0 })
+            : T("media.genAllImages")}
         </Button>
         <Button size="sm" variant="secondary" disabled={busy !== null} onClick={runPrices}>
           {busy === "price" ? T("media.working") : T("media.genPrices")}
