@@ -263,3 +263,19 @@ export const suggestCuisineProducts = createServerFn({ method: "POST" })
     );
     return { ids: (r.picks ?? []).map((i) => data.candidates[i]?.id).filter((x): x is string => Boolean(x)) };
   });
+
+export const suggestBrands = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ products: z.array(z.object({ id: z.string(), name: z.string().max(120), path: z.string().max(200) })).min(1).max(60) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { aiJson } = await import("./translate.server");
+    const list = data.products.map((p, i) => ({ i, name: p.name, kategorie: p.path }));
+    const r = await aiJson<{ items: { i: number; brands: { name: string; markets: string[] }[] }[] }>(
+      `Du bist Experte für Supermarkt-Sortimente. Nenne für jedes Produkt die 0–5 bekanntesten, verbreiteten Handelsmarken, unter denen Kunden das Produkt kennen (z. B. Schoko-Haselnuss-Creme → Nutella; Kokos-Schoko-Riegel → Bounty; Papiertaschentücher → Tempo). Nur echte, im Supermarkt erhältliche Marken, keine Eigenmarken von Händlern. Generische Frischware (Obst, Gemüse, Fleisch, Brot) und Produkte ohne prägende Marke → leere Liste. markets: Ländercodes aus DE, AT, CH, US, GB, CA, ES, MX, FR, IT, PT, BR, NL, BE, in denen die Marke verbreitet ist; leeres Array wenn praktisch überall erhältlich.`,
+      JSON.stringify(list),
+      "brands",
+      { type: "object", additionalProperties: false, required: ["items"], properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["i", "brands"], properties: { i: { type: "integer" }, brands: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "markets"], properties: { name: { type: "string" }, markets: { type: "array", items: { type: "string" } } } } } } } } } },
+    );
+    return { items: (r.items ?? []).map((it) => ({ productId: data.products[it.i]?.id ?? "", brands: it.brands })).filter((x) => x.productId) };
+  });
