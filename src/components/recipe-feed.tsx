@@ -6,6 +6,17 @@ import { fetchFeed, type FeedOrder, type FeedRecipe } from "../lib/recipes-api";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import type { MessageKey } from "../i18n/de";
 
+export function SectionTitle({ emoji, bg, children }: { emoji: string; bg: string; children: React.ReactNode }) {
+  return (
+    <h2 className="flex items-center gap-3 text-lg font-bold text-foreground">
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl text-xl" style={{ background: bg }} aria-hidden="true">
+        {emoji}
+      </span>
+      {children}
+    </h2>
+  );
+}
+
 function Card({ r, badge }: { r: FeedRecipe; badge: string }) {
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === r.template_id);
   return (
