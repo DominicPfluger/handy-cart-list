@@ -7,7 +7,7 @@ import { RECIPE_TEMPLATES } from "../../lib/recipe-templates";
 import { fetchFeed, fetchCommunity } from "../../lib/recipes-api";
 import { APP_STORE_URL, GOOGLE_PLAY_URL } from "../../lib/app-version";
 import { RecipePhoto } from "../recipe-photo";
-import appIcon from "@/assets/app-icon.png.asset.json";
+import appIcon from "@/assets/splash-logo.png.asset.json";
 import mockupList from "@/assets/landing/mockup-list.png";
 import mockupDepartments from "@/assets/landing/mockup-departments.png";
 import mockupRecipes from "@/assets/landing/mockup-recipes.png";

@@ -27,7 +27,7 @@ import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 import { MemberAvatar } from "../components/member-avatar";
 import { openShareSheet } from "../components/share-sheet";
-import appIcon from "../assets/app-icon.png.asset.json";
+import appIcon from "@/assets/splash-logo.png.asset.json";
 import { APP_VERSION } from "../lib/app-version";
 
 export const Route = createFileRoute("/mehr")({
