@@ -41,6 +41,20 @@ function RecipesPage() {
         </p>
       </div>
 
+      <Link
+        key={GENERATOR_ENTRY.id}
+        to={GENERATOR_ENTRY.to}
+        className="flex w-full items-start gap-3 rounded-2xl border border-border bg-card p-4 text-left transition active:scale-[0.98]"
+      >
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-2xl" style={{ background: GENERATOR_ENTRY.bg }} aria-hidden="true">
+          {GENERATOR_ENTRY.icon}
+        </span>
+        <span className="min-w-0">
+          <span className="block text-sm font-bold text-foreground">{t(GENERATOR_ENTRY.titleKey)}</span>
+          <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">{t(GENERATOR_ENTRY.descKey)}</span>
+        </span>
+      </Link>
+
       <div className="grid grid-cols-4 gap-2">
         {RECIPE_TEMPLATES.map((x) => (
           <Link
