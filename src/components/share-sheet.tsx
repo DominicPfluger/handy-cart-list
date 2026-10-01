@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { siWhatsapp, siTelegram, siSignal, siMessenger, siDiscord } from "simple-icons";
+import { siWhatsapp, siTelegram, siSignal, siMessenger, siDiscord, siThreema } from "simple-icons";
 import { getLocale, translate, useT } from "../i18n";
 
 export const SHARE_EVENT = "shoppi:share";
@@ -34,6 +34,17 @@ function MailIcon() {
     <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <rect width="20" height="16" x="2" y="4" rx="2" />
       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </svg>
+  );
+}
+
+function SmsIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" />
+      <path d="M8 12h.01" />
+      <path d="M12 12h.01" />
+      <path d="M16 12h.01" />
     </svg>
   );
 }
@@ -74,6 +85,28 @@ const TARGETS: Target[] = [
         "_blank",
         "noopener"
       ),
+  },
+  {
+    id: "sms",
+    label: "SMS",
+    bg: "#546E7A",
+    run: (p) => {
+      window.location.href = `sms:?&body=${encodeURIComponent(p.text)}`;
+    },
+  },
+  {
+    id: "threema",
+    label: "Threema",
+    bg: "#1F9E9E",
+    iconPath: siThreema.path,
+    run: (p) => {
+      const mobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+      if (mobile) {
+        window.location.href = `threema://compose?text=${encodeURIComponent(p.text)}`;
+        return;
+      }
+      return copyAndOpen(p, "https://threema.id/", "Threema");
+    },
   },
   {
     id: "signal",
@@ -158,9 +191,9 @@ export function ShareSheet() {
                 className="flex h-12 w-12 items-center justify-center rounded-full text-primary-foreground"
                 style={{ backgroundColor: target.bg }}
               >
-                {target.iconPath ? <BrandIcon path={target.iconPath} /> : <MailIcon />}
+                {target.iconPath ? <BrandIcon path={target.iconPath} /> : target.id === "sms" ? <SmsIcon /> : <MailIcon />}
               </span>
-              <span className="text-xs font-medium">{target.id === "email" ? t("share.email") : target.label}</span>
+              <span className="text-xs font-medium">{target.id === "email" ? t("share.email") : target.id === "sms" ? t("inv.sms") : target.label}</span>
             </button>
           ))}
         </div>
