@@ -450,14 +450,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
         </section>
       )}
 
-      {user && chosen.length > 0 && (
-        <button
-          onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setSaveOpen(true); }}
-          className="w-full rounded-2xl bg-primary px-4 py-4 text-lg font-bold text-primary-foreground shadow-md transition active:scale-[0.98]"
-        >
-          {savedMsg ? `✓ ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
-        </button>
-      )}
 
       {mode !== "generator" && (
         <div className="flex items-center gap-3">
@@ -531,29 +523,29 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
                 <li key={p.id}>• {p.name} — {formatQuantity(p.defaultQuantity, p.defaultUnit)}</li>
               ))}
             </ul>
+            {user && (
+              <button
+                onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setSaveOpen(true); }}
+                className="mt-3 w-full rounded-2xl bg-primary px-4 py-4 text-lg font-bold text-primary-foreground shadow-md transition active:scale-[0.98]"
+              >
+                {savedMsg ? `✓ ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
+              </button>
+            )}
             <button
               onClick={addAll}
               disabled={added}
-              className="mt-3 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition active:scale-[0.98] disabled:opacity-60"
+              className="mt-2 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition active:scale-[0.98] disabled:opacity-60"
             >
               {added ? `✓ ${t("rk.added")}` : t("rk.addAll", { n: chosen.length })}
             </button>
             {user ? (
-              <div className="mt-2 flex gap-2">
-                <button
-                  onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setSaveOpen(true); }}
-                  className="flex-1 rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition active:scale-[0.98]"
-                >
-                  {savedMsg ? `✓ ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
-                </button>
-                <button
-                  onClick={() => void doShare()}
-                  disabled={busy}
-                  className="rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition active:scale-[0.98] disabled:opacity-60"
-                >
-                  🔗 {t("rs.share")}
-                </button>
-              </div>
+              <button
+                onClick={() => void doShare()}
+                disabled={busy}
+                className="mt-2 w-full rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition active:scale-[0.98] disabled:opacity-60"
+              >
+                🔗 {t("rs.share")}
+              </button>
             ) : user === null ? (
               <Link to="/auth" className="mt-2 block w-full rounded-full border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary">
                 {t("rs.signInToSave")}
