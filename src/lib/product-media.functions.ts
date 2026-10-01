@@ -12,7 +12,7 @@ const CURRENCIES: Record<string, string> = {
   GB: "GBP", US: "USD", CA: "CAD", MX: "MXN", BR: "BRL",
 };
 
-/** Status: wie viele Produkte noch Bild bzw. Richtpreis (für einen Markt) brauchen. */
+/** Status: wie viele Produkte noch Bild bzw. Richtpreis (je Markt, global) brauchen. */
 export const catalogMediaStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ market: z.string().length(2).default("CH") }).parse(d))
@@ -21,8 +21,14 @@ export const catalogMediaStatus = createServerFn({ method: "GET" })
     const sb = context.supabase;
     const { count: noImage } = await sb.from("products").select("id", { count: "exact", head: true }).is("image_path", null);
     const { count: total } = await sb.from("products").select("id", { count: "exact", head: true });
-    const { count: priced } = await sb.from("product_reference_prices").select("id", { count: "exact", head: true }).eq("market", data.market);
-    return { total: total ?? 0, noImage: noImage ?? 0, priced: priced ?? 0 };
+    const marketEntries = await Promise.all(
+      Object.keys(CURRENCIES).map(async (m) => {
+        const { count } = await sb.from("product_reference_prices").select("id", { count: "exact", head: true }).eq("market", m);
+        return [m, count ?? 0] as const;
+      }),
+    );
+    const markets = Object.fromEntries(marketEntries) as Record<string, number>;
+    return { total: total ?? 0, noImage: noImage ?? 0, priced: markets[data.market] ?? 0, markets };
   });
 
 /** Erzeugt KI-Bilder für die nächsten `limit` Produkte ohne Bild und speichert sie im Katalog-Speicher. */
