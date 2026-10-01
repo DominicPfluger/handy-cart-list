@@ -2711,7 +2711,8 @@
     "loc.continue": "Continue translating",
     "loc.deleteConfirm": "Delete language “{name}” with all translations?",
     "tile.pickImage": "Choose image",
-    "tile.pickEmpty": "No images found"
+    "tile.pickEmpty": "No images found",
+    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)"
   },
   "es-ES": {
     "nav.departments": "Secciones",
