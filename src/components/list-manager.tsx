@@ -139,26 +139,6 @@ function Row({
           <path d="M13.5 6.5l4 4" />
         </svg>
       </button>
-      {signedIn && inviteLink ? (
-        <button
-          onClick={onShareInvite}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
-          aria-label={t("lm.invite")}
-        >
-          <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" />
-            <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" />
-          </svg>
-        </button>
-      ) : (
-        <button
-          onClick={() => shareList(list)}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
-          aria-label={t("lm.share")}
-        >
-          <ShareIcon className="h-[18px] w-[18px]" />
-        </button>
-      )}
       <button
         onClick={onSaveAsTemplate}
         className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
