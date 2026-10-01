@@ -81,6 +81,14 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "herb", label: "Kräuter", min: 0, max: 2, ingredients: ["Petersilie", "Basilikum", "Schnittlauch", "Dill"] },
     { key: "dressing", label: "Dressing", min: 1, max: 2, ingredients: ["Olivenöl", "Balsamico", "Zitronen", "Senf"] },
   ] },
+  { id: "sandwich", emoji: "🥪", color: "oklch(0.93 0.06 95)", steps: [
+    { key: "bread", label: "Brot", min: 1, max: 1, ingredients: ["Vollkornbrot", "Ciabatta", "Baguette"] },
+    { key: "spread", label: "Aufstrich", min: 0, max: 2, ingredients: ["Doppelrahmfrischkäse", "Mayonnaise", "Senf"] },
+    { key: "protein", label: "Belag", min: 0, max: 2, ingredients: ["Schinken", "Salami", "Hähnchenbrust", "Putenbrust", "Thunfisch"] },
+    { key: "cheese", label: "Käse", min: 0, max: 2, ingredients: ["Gouda", "Emmentaler", "Butterkäse"] },
+    { key: "veg", label: "Gemüse", min: 0, max: 4, ingredients: ["Tomaten", "Salatgurke", "Eisbergsalat", "Rucola", "Paprika", "Rote Zwiebeln"] },
+    { key: "extra", label: "Extra", min: 0, max: 2, ingredients: ["Freilandeier", "Avocado", "Zwiebeln"] },
+  ] },
   { id: "pizza", emoji: "🍕", color: "oklch(0.92 0.07 40)", steps: [
     { key: "dough", label: "Teig", min: 1, max: 1, ingredients: ["Pizzateig", "Mehl", "Hefe"] },
     { key: "sauce", label: "Sauce", min: 1, max: 1, ingredients: ["Tomaten", "Passierte Tomaten", "Crème fraîche"] },
@@ -107,13 +115,5 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "fruit", label: "Früchte", min: 0, max: 2, ingredients: ["Erdbeeren", "Himbeeren", "Mango", "Maracuja / Passionsfrucht", "Feigen"] },
     { key: "sweet", label: "Süsse", min: 0, max: 2, ingredients: ["Honig", "Zucker", "Vanillezucker", "Schokolade"] },
     { key: "crunch", label: "Crunch", min: 0, max: 1, ingredients: ["Kekse", "Mandeln", "Granola"] },
-  ] },
-  { id: "sandwich", emoji: "🥪", color: "oklch(0.93 0.06 95)", steps: [
-    { key: "bread", label: "Brot", min: 1, max: 1, ingredients: ["Vollkornbrot", "Ciabatta", "Baguette"] },
-    { key: "spread", label: "Aufstrich", min: 0, max: 2, ingredients: ["Doppelrahmfrischkäse", "Mayonnaise", "Senf"] },
-    { key: "protein", label: "Belag", min: 0, max: 2, ingredients: ["Schinken", "Salami", "Hähnchenbrust", "Putenbrust", "Thunfisch"] },
-    { key: "cheese", label: "Käse", min: 0, max: 2, ingredients: ["Gouda", "Emmentaler", "Butterkäse"] },
-    { key: "veg", label: "Gemüse", min: 0, max: 4, ingredients: ["Tomaten", "Salatgurke", "Eisbergsalat", "Rucola", "Paprika", "Rote Zwiebeln"] },
-    { key: "extra", label: "Extra", min: 0, max: 2, ingredients: ["Freilandeier", "Avocado", "Zwiebeln"] },
   ] },
 ];
