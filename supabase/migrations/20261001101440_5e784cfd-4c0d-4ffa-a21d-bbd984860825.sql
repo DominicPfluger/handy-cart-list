@@ -1,0 +1,11 @@
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'portion';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'sack';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'eimer';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'becher';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'tube';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'netz';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'palette';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'tablett';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'rolle';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'blister';
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'sixpack';
