@@ -694,7 +694,7 @@ function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) 
 
 type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[]; variants?: string[] };
 
-const COMMON_VARIANTS = ["Bio", "Vollkorn", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
+const COMMON_VARIANTS = ["Bio", "Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
 
 function Editor(p: {
