@@ -1,0 +1,1 @@
+UPDATE public.cuisines SET emoji = '🥘' WHERE id = '6d57d78a-15b6-4869-917e-8deb7e4a6cc3' AND name = 'Balkanküche';
