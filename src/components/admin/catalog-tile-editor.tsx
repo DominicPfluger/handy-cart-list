@@ -253,7 +253,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           {item && (
             <div className="flex flex-wrap gap-2">
               <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
-              {!isDept && <Button size="sm" variant="outline" onClick={() => p.run(() => genImg({ data: { id: item.id } }), T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>}
+              <Button size="sm" variant="outline" onClick={() => p.run(() => genImg({ data: { id: item.id, kind: isDept ? "department" : "product" } }), T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
               <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
               <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
             </div>
