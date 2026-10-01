@@ -253,23 +253,7 @@ function MorePage() {
           </div>
           <span className="text-muted-foreground">›</span>
         </Link>
-        {[
-          { Icon: BellIcon, label: t("more.reminders"), sub: t("more.remindersSub") },
-        ].map((row) => (
-          <button
-            key={row.label}
-            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted"
-          >
-            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
-              <row.Icon className="h-5 w-5" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-foreground">{row.label}</p>
-              <p className="truncate text-xs text-muted-foreground">{row.sub}</p>
-            </div>
-            <span className="text-muted-foreground">›</span>
-          </button>
-        ))}
+        <NotificationSettingsRow />
         <SpeakRateRow />
       </section>
 
