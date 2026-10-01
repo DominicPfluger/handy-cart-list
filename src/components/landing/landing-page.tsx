@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useT, useLocale, setLocale, LOCALES, type Locale } from "../../i18n";
+import { useT, useLocale, setLocale, useAllLocales, type Locale } from "../../i18n";
 import type { MessageKey } from "../../i18n/de";
 import { RECIPE_TEMPLATES } from "../../lib/recipe-templates";
 import { fetchFeed, fetchCommunity } from "../../lib/recipes-api";
@@ -68,7 +68,7 @@ export function LandingPage({ onEnterApp }: { onEnterApp: () => void }) {
             onChange={(e) => setLocale(e.target.value as Locale)}
             className="rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground outline-none"
           >
-            {LOCALES.map((l) => (
+            {allLocs.map((l) => (
               <option key={l.id} value={l.id}>{l.flag} {l.label}</option>
             ))}
           </select>

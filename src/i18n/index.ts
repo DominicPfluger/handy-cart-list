@@ -159,9 +159,11 @@ export function useLocale(): Locale {
 
 export function useT() {
   const locale = useLocale();
+  const version = useSyncExternalStore(subscribe, getVersion, () => 0);
   const t = useCallback(
     (key: MessageKey, vars?: Record<string, string | number>) => translate(locale, key, vars),
-    [locale],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [locale, version],
   );
   return { t, locale };
 }
