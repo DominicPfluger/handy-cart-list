@@ -74,6 +74,8 @@ async function loadAll() {
   return { depts, prods, heads, tr, order, excl };
 }
 
+type AdminData = Awaited<ReturnType<typeof loadAll>>;
+
 const TABLE = { department: "departments", product: "products" } as const;
 
 function AdminPage() {
@@ -99,6 +101,8 @@ function AdminPage() {
   const [adding, setAdding] = useState<Kind | null>(null);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
   const [view, setView] = useState<"list" | "tiles">("list");
+  /** Aktiver Admin-Bereich (Tabs). */
+  const [tab, setTab] = useState<"catalog" | "media" | "import" | "languages" | "markets" | "recipes" | "more">("catalog");
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: view === "tiles" }));
     return () => {
@@ -313,6 +317,16 @@ function AdminPage() {
         <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
       </div>
 
+      <div className="flex gap-1.5 overflow-x-auto pb-1" role="tablist" aria-label={T("adm.title")}>
+        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["import", "adm.tab.import"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["recipes", "adm.tab.recipes"], ["more", "adm.tab.more"]] as const).map(([id, key]) => (
+          <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
+            className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
+            {T(key)}
+          </button>
+        ))}
+      </div>
+
+      {tab === "catalog" && (<>
       <div className="grid grid-cols-3 gap-2 text-center">
         <Stat label={T("adm.categories")} value={d?.depts.length} />
         <Stat label={T("adm.products")} value={d?.prods.length} />
@@ -532,23 +546,33 @@ function AdminPage() {
         />
       )}
 
-      {d && <ImportPanel depts={d.depts} prods={d.prods} />}
-      {d && <LocaleAdminPanel />}
-      {d && <CatalogMediaPanel />}
+      </>)}
 
-      <MarketAdmin markets={MARKETS} />
-      <MarketAdminsManager />
+      {tab === "import" && <LoadingGate d={d}><ImportPanel depts={d!.depts} prods={d!.prods} /></LoadingGate>}
+      {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
+      {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel /></LoadingGate>}
 
-      {d && <RecipeAdmin depts={d.depts} prods={d.prods} />}
+      {tab === "markets" && (<>
+        <MarketAdmin markets={MARKETS} />
+        <MarketAdminsManager />
+      </>)}
 
-      {d && <CuisineAdmin depts={d.depts} prods={d.prods} />}
+      {tab === "recipes" && <LoadingGate d={d}><RecipeAdmin depts={d!.depts} prods={d!.prods} /><CuisineAdmin depts={d!.depts} prods={d!.prods} /></LoadingGate>}
 
-      <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
+      {tab === "more" && (
+        <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
 
-        <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>
-      </Link>
+          <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>
+        </Link>
+      )}
     </div>
   );
+}
+
+/** Zeigt den Bereich erst, wenn der Katalog geladen ist; vorher einen Ladetext. */
+function LoadingGate({ d, children }: { d: AdminData | undefined; children: React.ReactNode }) {
+  if (!d) return <p className="pt-2 text-sm text-muted-foreground">{T("adm.loadingCatalog")}</p>;
+  return <>{children}</>;
 }
 
 function Stat({ label, value }: { label: string; value: number | undefined }) {

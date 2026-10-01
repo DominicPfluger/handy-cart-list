@@ -912,7 +912,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Reference price in {market} (optional)"
+    "tile.price": "Reference price in {market} (optional)",
+    "adm.tab.catalog": "Catalog",
+    "adm.tab.media": "Images & Prices",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Languages",
+    "adm.tab.markets": "Markets",
+    "adm.tab.recipes": "Recipes & Cuisines",
+    "adm.tab.more": "More"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1827,7 +1834,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Reference price in {market} (optional)"
+    "tile.price": "Reference price in {market} (optional)",
+    "adm.tab.catalog": "Catalog",
+    "adm.tab.media": "Images & Prices",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Languages",
+    "adm.tab.markets": "Markets",
+    "adm.tab.recipes": "Recipes & Cuisines",
+    "adm.tab.more": "More"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2742,7 +2756,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Reference price in {market} (optional)"
+    "tile.price": "Reference price in {market} (optional)",
+    "adm.tab.catalog": "Catalog",
+    "adm.tab.media": "Images & Prices",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Languages",
+    "adm.tab.markets": "Markets",
+    "adm.tab.recipes": "Recipes & Cuisines",
+    "adm.tab.more": "More"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3657,7 +3678,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Precio orientativo en {market} (opcional)"
+    "tile.price": "Precio orientativo en {market} (opcional)",
+    "adm.tab.catalog": "Catálogo",
+    "adm.tab.media": "Imágenes y precios",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Idiomas",
+    "adm.tab.markets": "Mercados",
+    "adm.tab.recipes": "Recetas y cocinas",
+    "adm.tab.more": "Más"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4572,7 +4600,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Precio orientativo en {market} (opcional)"
+    "tile.price": "Precio orientativo en {market} (opcional)",
+    "adm.tab.catalog": "Catálogo",
+    "adm.tab.media": "Imágenes y precios",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Idiomas",
+    "adm.tab.markets": "Mercados",
+    "adm.tab.recipes": "Recetas y cocinas",
+    "adm.tab.more": "Más"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5487,7 +5522,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Prix indicatif en {market} (facultatif)"
+    "tile.price": "Prix indicatif en {market} (facultatif)",
+    "adm.tab.catalog": "Catalogue",
+    "adm.tab.media": "Images et prix",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Langues",
+    "adm.tab.markets": "Marchés",
+    "adm.tab.recipes": "Recettes et cuisines",
+    "adm.tab.more": "Plus"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6402,7 +6444,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Prix indicatif en {market} (facultatif)"
+    "tile.price": "Prix indicatif en {market} (facultatif)",
+    "adm.tab.catalog": "Catalogue",
+    "adm.tab.media": "Images et prix",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Langues",
+    "adm.tab.markets": "Marchés",
+    "adm.tab.recipes": "Recettes et cuisines",
+    "adm.tab.more": "Plus"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7317,7 +7366,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Prezzo indicativo in {market} (facoltativo)"
+    "tile.price": "Prezzo indicativo in {market} (facoltativo)",
+    "adm.tab.catalog": "Catalogo",
+    "adm.tab.media": "Immagini e prezzi",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Lingue",
+    "adm.tab.markets": "Mercati",
+    "adm.tab.recipes": "Ricette e cucine",
+    "adm.tab.more": "Altro"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8232,7 +8288,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Prezzo indicativo in {market} (facoltativo)"
+    "tile.price": "Prezzo indicativo in {market} (facoltativo)",
+    "adm.tab.catalog": "Catalogo",
+    "adm.tab.media": "Immagini e prezzi",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Lingue",
+    "adm.tab.markets": "Mercati",
+    "adm.tab.recipes": "Ricette e cucine",
+    "adm.tab.more": "Altro"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9147,7 +9210,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Preço de referência em {market} (opcional)"
+    "tile.price": "Preço de referência em {market} (opcional)",
+    "adm.tab.catalog": "Catálogo",
+    "adm.tab.media": "Imagens e preços",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Idiomas",
+    "adm.tab.markets": "Mercados",
+    "adm.tab.recipes": "Receitas e cozinhas",
+    "adm.tab.more": "Mais"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10062,7 +10132,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Preço de referência em {market} (opcional)"
+    "tile.price": "Preço de referência em {market} (opcional)",
+    "adm.tab.catalog": "Catálogo",
+    "adm.tab.media": "Imagens e preços",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Idiomas",
+    "adm.tab.markets": "Mercados",
+    "adm.tab.recipes": "Receitas e cozinhas",
+    "adm.tab.more": "Mais"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -10977,7 +11054,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Richtprijs in {market} (optioneel)"
+    "tile.price": "Richtprijs in {market} (optioneel)",
+    "adm.tab.catalog": "Catalogus",
+    "adm.tab.media": "Afbeeldingen & prijzen",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Talen",
+    "adm.tab.markets": "Markten",
+    "adm.tab.recipes": "Recepten & keukens",
+    "adm.tab.more": "Meer"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -11892,7 +11976,14 @@
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
     "tile.suggestDone": "{n} products created",
-    "tile.price": "Richtprijs in {market} (optioneel)"
+    "tile.price": "Richtprijs in {market} (optioneel)",
+    "adm.tab.catalog": "Catalogus",
+    "adm.tab.media": "Afbeeldingen & prijzen",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Talen",
+    "adm.tab.markets": "Markten",
+    "adm.tab.recipes": "Recepten & keukens",
+    "adm.tab.more": "Meer"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12269,7 +12360,14 @@
     "tile.suggestLink": "verknüpfen",
     "tile.suggestCreate": "Ausgewählte anlegen ({n})",
     "tile.suggestDone": "{n} Produkte angelegt",
-    "tile.price": "Richtpreis in {market} (optional)"
+    "tile.price": "Richtpreis in {market} (optional)",
+    "adm.tab.catalog": "Katalog",
+    "adm.tab.media": "Bilder & Preise",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Sprachen",
+    "adm.tab.markets": "Märkte",
+    "adm.tab.recipes": "Rezepte & Küchen",
+    "adm.tab.more": "Mehr"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12646,6 +12744,13 @@
     "tile.suggestLink": "verknüpfen",
     "tile.suggestCreate": "Ausgewählte anlegen ({n})",
     "tile.suggestDone": "{n} Produkte angelegt",
-    "tile.price": "Richtpreis in {market} (optional)"
+    "tile.price": "Richtpreis in {market} (optional)",
+    "adm.tab.catalog": "Katalog",
+    "adm.tab.media": "Bilder & Preise",
+    "adm.tab.import": "Import",
+    "adm.tab.languages": "Sprachen",
+    "adm.tab.markets": "Märkte",
+    "adm.tab.recipes": "Rezepte & Küchen",
+    "adm.tab.more": "Mehr"
   }
 }
