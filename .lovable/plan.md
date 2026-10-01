@@ -1,20 +1,20 @@
-# „Mit deinen Lieblingszutaten" wie „Beliebte Rezept-Kreationen" darstellen
+# Gleiche Icons im Einladen- und Teilen-Dialog
+
+## Ausgangslage
+- Der **Teilen-Dialog** (`src/components/share-sheet.tsx`) verwendet echte Marken-Icons: WhatsApp, Telegram, Signal, Messenger, Discord, Threema (aus `simple-icons`) plus eigene Icons für SMS und E-Mail.
+- Der **Einladen-Dialog** (`src/routes/mehr.tsx`) zeigt für dieselben Dienste nur generische Emojis: 💬 (WhatsApp), ✈️ (Telegram), 🔒 (Threema), 📱 (SMS), ✉️ (E-Mail).
 
 ## Ziel
-Der Bereich „♥ Mit deinen Lieblingszutaten" zeigt heute nur Community-Rezepte, die zufällig deine Favoriten enthalten (oft leer). Neu zeigt er – genau wie „⭐ Beliebt" – fertige Zutaten-Kombinationen, die direkt im Rezept-Generator öffnen.
+Der Einladen-Dialog zeigt exakt dieselben Marken-Icons wie der Teilen-Dialog.
 
-## So sieht es aus
-- Gleiche Karte wie bei „Beliebt": farbiges Kategorie-Symbol links, darüber die Kategorie (z. B. „Smoothie"), als Titel die ersten 3 Zutaten, rechts „5 Zutaten".
-- Tippen öffnet den Generator mit diesen Zutaten vorausgewählt.
-- Pro Kategorie eine Kreation, die so viele deiner Favoriten wie möglich enthält; zuerst 5, darunter „Alle anzeigen".
-- Ohne Favoriten erscheint der bisherige Hinweis („Markiere Produkte als Favorit …").
-- Ernährungsform-Filter wird berücksichtigt.
-- Auf der Inspirationen-Seite und im geöffneten Generator gleich.
-
-## Wie die Kreationen entstehen
-Für jede Rezept-Kategorie und jeden Schritt (z. B. Früchte, Flüssigkeit) werden deine Favoriten bevorzugt, die zu diesem Schritt passen. Schritte ohne passenden Favoriten werden mit der beliebten Standard-Kombination aufgefüllt. Kategorien ganz ohne Favoriten-Treffer werden ausgelassen. Ergebnis sortiert nach Anzahl Favoriten-Treffer.
+## Umsetzung
+1. **Icons gemeinsam nutzbar machen:** Die Icon-Bausteine (`BrandIcon`, `MailIcon`, `SmsIcon`) aus `share-sheet.tsx` in ein gemeinsames Modul `src/components/share-icons.tsx` verschieben (Export), damit beide Dialoge dieselbe Quelle verwenden. `share-sheet.tsx` importiert sie von dort.
+2. **Einladen-Dialog umbauen (`src/routes/mehr.tsx`):**
+   - Emoji-Kacheln durch die Marken-Icons ersetzen: WhatsApp, Telegram, Threema je mit `BrandIcon` + dem passenden `simple-icons`-Pfad; SMS mit `SmsIcon`, E-Mail mit `MailIcon`.
+   - Kachel-Stil (runde 14×14-Fläche, `bg-primary-soft/50`) bleibt gleich; Icons in `text-primary` wie im Teilen-Dialog.
+   - „Link kopieren" (🔗) und „Mehr" (Teilen-Symbol) bleiben unverändert.
+3. **Prüfung:** Build-Log kontrollieren; in der Vorschau Einladen-Dialog (Mehr → Gemeinsam → Einladen) und Teilen-Dialog öffnen und die Icons nebeneinander vergleichen.
 
 ## Technische Details
-- `recipe-builder.tsx`: neues `favoriteCombos` (useMemo) aus `favorites` × Templates × Schritten (gleiche dbIds-Logik wie `popular`, max. Auswahl pro Schritt respektiert, Diät-Filter angewendet); neue `favoritesView` im Stil von `popularView` (SectionTitle ♥ #FBE7EA, LIST_CARD_CLASS, ListCardBody, Badge „♥ n · m Zutaten").
-- `FavoritesRow` (Community-Abfrage) wird an diesen Stellen ersetzt; Funktion in `recipe-feed.tsx` entfernt, falls nicht mehr genutzt.
-- Neue Texte (`rk.favMatch`, `rk.showAllFav`) in de.ts + 15 Sprachen.
+- Betroffene Dateien: `src/components/share-icons.tsx` (neu), `src/components/share-sheet.tsx`, `src/routes/mehr.tsx`.
+- Keine neuen Abhängigkeiten (`simple-icons` ist bereits installiert), keine Übersetzungen nötig, keine Datenbankänderung.
