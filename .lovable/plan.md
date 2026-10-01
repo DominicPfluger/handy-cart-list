@@ -24,8 +24,19 @@ Jedes Katalogprodukt erhält eine Preiskategorie in fünf Stufen: **billig, gün
 - Die fünf Stufen-Namen werden in alle 16 Sprachen übersetzt (de.ts + messages.json).
 - Produkte ohne Kategorie zeigen nichts an.
 
-### 5. Erstbefüllung
-- Die KI schätzt für alle bestehenden Produkte eine passende Preiskategorie (z. B. Discounter-Grundware → billig/günstig, Trüffel → exquisit). Admins können danach einzeln korrigieren.
+### 5. Automatische Zuordnung per KI
+- Die KI ordnet alle bestehenden Produkte einmalig zu. Neue Produkte (manuell oder über Vorschläge angelegt) bekommen beim Speichern automatisch eine Kategorie, wenn keine gewählt wurde.
+- Im Katalog-Verwalten gibt es zusätzlich den Knopf „Preise neu einschätzen“ für eine Kategorie.
+- Manuell gesetzte Kategorien werden von der KI nie überschrieben.
+
+**Kriterien der KI** – sie vergleicht mit anderen Produkten derselben Kategorie (nicht über alles hinweg):
+- Typischer Ladenpreis pro üblicher Packung bzw. pro kg/Liter
+- Produktart: Grundnahrungsmittel/Eigenmarke eher günstig, Spezialität/Delikatesse eher teuer
+- Herkunft und Seltenheit (z. B. Importware, Saisonware, Trüffel, Kaviar)
+- Verarbeitung und Qualität (z. B. gereift, handgemacht, Bio-Sorte)
+- Grundlage ist der Schweizer Markt; die Einteilung gilt für alle Märkte gleich
+
+**Stufen** (innerhalb der eigenen Kategorie): billig = günstigste ~10 %, günstig = unterdurchschnittlich, preiswert = Durchschnitt, teuer = überdurchschnittlich, exquisit = Luxus/Spitzenklasse.
 
 ## Technische Details
 - Migration: `ALTER TABLE products ADD COLUMN price_category text` + Kommentar; bestehende GRANTs/RLS bleiben.
