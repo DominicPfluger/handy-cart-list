@@ -19,6 +19,7 @@ import { Route as BeitretenRouteImport } from './routes/beitreten'
 import { Route as CommunityRouteImport } from './routes/community'
 import { Route as DatenschutzRouteImport } from './routes/datenschutz'
 import { Route as FavoritenRouteImport } from './routes/favoriten'
+import { Route as FeedbackRouteImport } from './routes/feedback'
 import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
@@ -26,6 +27,7 @@ import { Route as ScannerRouteImport } from './routes/scanner'
 import { Route as VerlaufRouteImport } from './routes/verlauf'
 import { Route as VorratRouteImport } from './routes/vorrat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedFeedbackAdminRouteImport } from './routes/_authenticated/feedback-admin'
 import { Route as AuthenticatedVorleseTexteRouteImport } from './routes/_authenticated/vorlese-texte'
 import { Route as ProduktIdRouteImport } from './routes/produkt.$id'
 import { Route as RezeptSlugRouteImport } from './routes/rezept.$slug'
@@ -83,6 +85,11 @@ const FavoritenRoute = FavoritenRouteImport.update({
   path: '/favoriten',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FeedbackRoute = FeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ImpressumRoute = ImpressumRouteImport.update({
   id: '/impressum',
   path: '/impressum',
@@ -118,6 +125,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFeedbackAdminRoute =
+  AuthenticatedFeedbackAdminRouteImport.update({
+    id: '/feedback-admin',
+    path: '/feedback-admin',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedVorleseTexteRoute =
   AuthenticatedVorleseTexteRouteImport.update({
     id: '/vorlese-texte',
@@ -165,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/community': typeof CommunityRoute
   '/datenschutz': typeof DatenschutzRoute
   '/favoriten': typeof FavoritenRoute
+  '/feedback': typeof FeedbackRoute
   '/impressum': typeof ImpressumRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRouteWithChildren
@@ -172,6 +186,7 @@ export interface FileRoutesByFullPath {
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/feedback-admin': typeof AuthenticatedFeedbackAdminRoute
   '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
   '/produkt/$id': typeof ProduktIdRoute
   '/rezept/$slug': typeof RezeptSlugRoute
@@ -190,12 +205,14 @@ export interface FileRoutesByTo {
   '/community': typeof CommunityRoute
   '/datenschutz': typeof DatenschutzRoute
   '/favoriten': typeof FavoritenRoute
+  '/feedback': typeof FeedbackRoute
   '/impressum': typeof ImpressumRoute
   '/mehr': typeof MehrRoute
   '/scanner': typeof ScannerRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/feedback-admin': typeof AuthenticatedFeedbackAdminRoute
   '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
   '/produkt/$id': typeof ProduktIdRoute
   '/rezept/$slug': typeof RezeptSlugRoute
@@ -216,6 +233,7 @@ export interface FileRoutesById {
   '/community': typeof CommunityRoute
   '/datenschutz': typeof DatenschutzRoute
   '/favoriten': typeof FavoritenRoute
+  '/feedback': typeof FeedbackRoute
   '/impressum': typeof ImpressumRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRouteWithChildren
@@ -223,6 +241,7 @@ export interface FileRoutesById {
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/feedback-admin': typeof AuthenticatedFeedbackAdminRoute
   '/_authenticated/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
   '/produkt/$id': typeof ProduktIdRoute
   '/rezept/$slug': typeof RezeptSlugRoute
@@ -243,6 +262,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/datenschutz'
     | '/favoriten'
+    | '/feedback'
     | '/impressum'
     | '/mehr'
     | '/rezepte'
@@ -250,6 +270,7 @@ export interface FileRouteTypes {
     | '/verlauf'
     | '/vorrat'
     | '/admin'
+    | '/feedback-admin'
     | '/vorlese-texte'
     | '/produkt/$id'
     | '/rezept/$slug'
@@ -268,12 +289,14 @@ export interface FileRouteTypes {
     | '/community'
     | '/datenschutz'
     | '/favoriten'
+    | '/feedback'
     | '/impressum'
     | '/mehr'
     | '/scanner'
     | '/verlauf'
     | '/vorrat'
     | '/admin'
+    | '/feedback-admin'
     | '/vorlese-texte'
     | '/produkt/$id'
     | '/rezept/$slug'
@@ -293,6 +316,7 @@ export interface FileRouteTypes {
     | '/community'
     | '/datenschutz'
     | '/favoriten'
+    | '/feedback'
     | '/impressum'
     | '/mehr'
     | '/rezepte'
@@ -300,6 +324,7 @@ export interface FileRouteTypes {
     | '/verlauf'
     | '/vorrat'
     | '/_authenticated/admin'
+    | '/_authenticated/feedback-admin'
     | '/_authenticated/vorlese-texte'
     | '/produkt/$id'
     | '/rezept/$slug'
@@ -320,6 +345,7 @@ export interface RootRouteChildren {
   CommunityRoute: typeof CommunityRoute
   DatenschutzRoute: typeof DatenschutzRoute
   FavoritenRoute: typeof FavoritenRoute
+  FeedbackRoute: typeof FeedbackRoute
   ImpressumRoute: typeof ImpressumRoute
   MehrRoute: typeof MehrRoute
   RezepteRoute: typeof RezepteRouteWithChildren
@@ -402,6 +428,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FavoritenRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/feedback': {
+      id: '/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof FeedbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/impressum': {
       id: '/impressum'
       path: '/impressum'
@@ -449,6 +482,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/feedback-admin': {
+      id: '/_authenticated/feedback-admin'
+      path: '/feedback-admin'
+      fullPath: '/feedback-admin'
+      preLoaderRoute: typeof AuthenticatedFeedbackAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/vorlese-texte': {
@@ -505,11 +545,13 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedFeedbackAdminRoute: typeof AuthenticatedFeedbackAdminRoute
   AuthenticatedVorleseTexteRoute: typeof AuthenticatedVorleseTexteRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedFeedbackAdminRoute: AuthenticatedFeedbackAdminRoute,
   AuthenticatedVorleseTexteRoute: AuthenticatedVorleseTexteRoute,
 }
 
@@ -544,6 +586,7 @@ const rootRouteChildren: RootRouteChildren = {
   CommunityRoute: CommunityRoute,
   DatenschutzRoute: DatenschutzRoute,
   FavoritenRoute: FavoritenRoute,
+  FeedbackRoute: FeedbackRoute,
   ImpressumRoute: ImpressumRoute,
   MehrRoute: MehrRoute,
   RezepteRoute: RezepteRouteWithChildren,

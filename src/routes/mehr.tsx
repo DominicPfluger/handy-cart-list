@@ -1,4 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import {
@@ -27,7 +29,7 @@ import { MemberAvatar } from "../components/member-avatar";
 import { siWhatsapp, siTelegram, siThreema } from "simple-icons";
 import { BrandIcon, MailIcon, SmsIcon } from "../components/share-icons";
 import appIcon from "../assets/app-icon.png.asset.json";
-import { APP_VERSION, FEEDBACK_EMAIL } from "../lib/app-version";
+import { APP_VERSION } from "../lib/app-version";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
@@ -314,6 +316,19 @@ function MorePage() {
             <span className="text-muted-foreground">›</span>
           </Link>
         )}
+        {isAdmin && (
+          <Link to="/feedback-admin" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+              <span className="text-lg" aria-hidden="true">✉</span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground">{t("fb.inbox")}</p>
+              <p className="truncate text-xs text-muted-foreground">{t("fb.inboxSub")}</p>
+            </div>
+            <FeedbackBadge />
+            <span className="text-muted-foreground">›</span>
+          </Link>
+        )}
       </section>
 
       {hiddenCategories.length > 0 && (
@@ -342,7 +357,7 @@ function MorePage() {
           <span className="text-muted-foreground" aria-hidden="true">·</span>
           <Link to="/datenschutz" className="text-primary underline-offset-2 hover:underline">{t("more.privacy")}</Link>
           <span className="text-muted-foreground" aria-hidden="true">·</span>
-          <a href={`mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent("Shoppi Feedback")}`} className="text-primary underline-offset-2 hover:underline">{t("more.feedback")}</a>
+          <Link to="/feedback" className="text-primary underline-offset-2 hover:underline">{t("more.feedback")}</Link>
         </nav>
       </footer>
     </div>
@@ -516,4 +531,16 @@ function AllMarketsRow() {
   const { t } = useT();
   const on = useAllMarkets();
   return <NotificationToggle icon="🌍" label={t("more.allMarkets")} sub={t("more.allMarketsSub")} checked={on} onChange={setAllMarkets} />;
+}
+
+function FeedbackBadge() {
+  const { data: count = 0 } = useQuery({
+    queryKey: ["feedback-messages", "unread"],
+    queryFn: async () => {
+      const { count } = await supabase.from("feedback_messages").select("id", { count: "exact", head: true }).eq("status", "neu");
+      return count ?? 0;
+    },
+  });
+  if (!count) return null;
+  return <span className="rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">{count}</span>;
 }
