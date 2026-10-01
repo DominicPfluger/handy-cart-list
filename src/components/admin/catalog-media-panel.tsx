@@ -90,19 +90,26 @@ export function CatalogMediaPanel() {
       <h2 className="text-base font-semibold">{T("media.title")}</h2>
       <p className="mt-1 text-sm text-muted-foreground">{T("media.hint")}</p>
 
-      <div className="mt-3 flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">{T("media.market")}</span>
-        <select
-          value={market}
-          onChange={(e) => setMarket(e.target.value)}
-          className="rounded-lg border border-border bg-background px-2 py-1.5 text-sm"
-        >
-          {MARKETS.map((m) => (
-            <option key={m} value={m}>
-              {flagOf(m)} {m}
-            </option>
-          ))}
-        </select>
+      <p className="mt-3 text-sm text-muted-foreground">{T("media.market")}</p>
+      <div className="mt-1.5 grid grid-cols-4 gap-1.5 sm:grid-cols-7">
+        {MARKETS.map((m) => {
+          const priced = s?.markets?.[m] ?? 0;
+          const active = m === market;
+          return (
+            <button
+              key={m}
+              type="button"
+              onClick={() => setMarket(m)}
+              className={`flex flex-col items-center rounded-xl border px-1 py-1.5 text-center transition-colors ${
+                active ? "border-primary bg-primary/10" : "border-border bg-background hover:bg-muted/50"
+              }`}
+            >
+              <span className="text-base leading-none">{flagOf(m)}</span>
+              <span className={`text-[11px] font-semibold leading-tight ${active ? "text-primary" : ""}`}>{m}</span>
+              <span className="text-[10px] leading-tight text-muted-foreground">{priced}</span>
+            </button>
+          );
+        })}
       </div>
 
       {s && (
