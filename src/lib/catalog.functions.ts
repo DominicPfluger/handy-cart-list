@@ -120,7 +120,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     return { data: all, error: null };
   }
 
-  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes] = await Promise.all([
+  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
