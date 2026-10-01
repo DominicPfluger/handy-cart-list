@@ -26,6 +26,7 @@ const ROOT_COLORS: Record<string, string> = {
   "Kleidung & Textilien": "var(--cat-kleidung)",
   "Küchenutensilien": "var(--cat-kuechenutensilien)",
   "Autozubehör": "var(--cat-auto)",
+  "Party-Artikel": "var(--cat-party)",
 };
 
 /** Wurzelkategorie einer Kategorie ermitteln (steigt den parentId-Baum hinauf). */
