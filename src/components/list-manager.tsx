@@ -189,18 +189,6 @@ export function ListManager(props: Props) {
     onClose();
   };
 
-  const copyInvite = (listId: string) => {
-    const link = props.inviteLinkFor(listId);
-    if (!link) {
-      toast.error(t("common.error"));
-      return;
-    }
-    navigator.clipboard
-      .writeText(link)
-      .then(() => toast.success(t("lm.inviteCopied")))
-      .catch(() => shareInviteLink(link, lists.find((l) => l.id === listId)?.name ?? ""));
-  };
-
   return (
     <div className="fixed inset-0 z-[70] flex items-end justify-center bg-foreground/30" onClick={onClose}>
       <div
@@ -224,8 +212,6 @@ export function ListManager(props: Props) {
                   list={l}
                   active={l.id === activeId}
                   canDelete={lists.length > 1}
-                  signedIn={signedIn}
-                  inviteLink={props.inviteLinkFor(l.id)}
                   onSelect={() => {
                     props.onSelect(l.id);
                     onClose();
