@@ -239,7 +239,7 @@ function MorePage() {
               <p className="text-sm font-semibold text-foreground">{t("more.hiddenProducts")}</p>
               <p className="truncate text-xs text-muted-foreground">{t("more.hiddenProductsHint")}</p>
             </div>
-            <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{hiddenProducts.length}</span>
+            {hiddenProducts.length > 0 && <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{hiddenProducts.length}</span>}
             <span className="text-muted-foreground" aria-hidden="true">{hiddenOpen ? "▴" : "▾"}</span>
           </button>
           {hiddenOpen && (
