@@ -99,6 +99,8 @@ function AdminPage() {
   const [adding, setAdding] = useState<Kind | null>(null);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
   const [view, setView] = useState<"list" | "tiles">("list");
+  /** Aktiver Admin-Bereich (Tabs). */
+  const [tab, setTab] = useState<"catalog" | "media" | "import" | "languages" | "markets" | "recipes" | "more">("catalog");
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: view === "tiles" }));
     return () => {
