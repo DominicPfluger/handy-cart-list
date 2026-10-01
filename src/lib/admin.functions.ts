@@ -427,3 +427,37 @@ export const translateMarketProduct = createServerFn({ method: "POST" })
     if (rows.length) await sb.from("catalog_translations").upsert(rows, { onConflict: "entity_type,entity_id,locale" });
     return { written: rows.length };
   });
+
+/** Varianten eines Produkts (oder aller Produkte) in alle Sprachen übersetzen; vorhandene Übersetzungen bleiben. */
+export const translateVariants = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ productId: z.string().uuid().optional() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const sb = context.supabase;
+    const { data: main } = await sb.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    if (!main) {
+      if (!data.productId) throw new Error("Kein Admin-Zugriff");
+      const { data: ok } = await sb.rpc("is_market_product_admin", { _product_id: data.productId, _user_id: context.userId });
+      if (!ok) throw new Error("Kein Zugriff");
+    }
+    let q = sb.from("products").select("id, variants").not("variants", "eq", "{}");
+    if (data.productId) q = q.eq("id", data.productId);
+    const { data: prods } = await q;
+    const { data: existing } = await sb.from("variant_translations").select("product_id, variant, locale");
+    const have = new Set(((existing ?? []) as Array<{ product_id: string; variant: string; locale: string }>).map((r) => `${r.product_id}|${r.variant}|${r.locale}`));
+    const unique = [...new Set(((prods ?? []) as Array<{ variants: string[] }>).flatMap((p) => p.variants ?? []))];
+    if (!unique.length) return { written: 0 };
+    const { translateNames } = await import("./translate.server");
+    const src = Object.fromEntries(unique.map((v, i) => [`v${i}`, v]));
+    let written = 0;
+    await Promise.all(TRANSLATED_LOCALES.map(async (locale) => {
+      let r: Record<string, string> = {};
+      try { r = await translateNames(src, locale); } catch { return; }
+      const map = new Map(unique.map((v, i) => [v, r[`v${i}`]]));
+      const rows = ((prods ?? []) as Array<{ id: string; variants: string[] }>).flatMap((p) => (p.variants ?? [])
+        .filter((v) => map.get(v) && !have.has(`${p.id}|${v}|${locale}`))
+        .map((v) => ({ product_id: p.id, variant: v, locale, name: map.get(v)!, is_manual: false })));
+      if (rows.length) { const { error } = await sb.from("variant_translations").upsert(rows, { onConflict: "product_id,variant,locale", ignoreDuplicates: true }); if (!error) written += rows.length; }
+    }));
+    return { written };
+  });

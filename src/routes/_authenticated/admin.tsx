@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts } from "@/lib/admin.functions";
+import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants } from "@/lib/admin.functions";
 import { LOCALES, getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
@@ -78,6 +78,7 @@ function AdminPage() {
   const saveH = useServerFn(saveHeading);
   const delH = useServerFn(deleteHeading);
   const suggest = useServerFn(suggestProducts);
+  const trVariants = useServerFn(translateVariants);
   const rank = useServerFn(rankProducts);
   const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity">("popularity");
   /** "" = globale Reihenfolge, sonst Marktcode (z. B. CH) für marktspezifische Relevanz. */
@@ -466,6 +467,7 @@ function AdminPage() {
               if (patch.diets) upd['excluded_diets'] = patch.diets;
               if (patch.variants) upd['variants'] = patch.variants;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
+              if (sel.kind === "product" && patch.variants) void trVariants({ data: { productId: sel.id } }).catch(() => {});
             }
           })}
           onTr={(locale, value, prev) => {

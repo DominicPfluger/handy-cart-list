@@ -52,7 +52,7 @@ export function useCatalog(): Catalog {
     }));
     const ownProducts: CatalogProduct[] = own.products.map((p, i) => ({
       id: p.id, departmentId: p.departmentId, name: p.name, emoji: p.emoji, imageUrl: null,
-      defaultQuantity: p.defaultQuantity, defaultUnit: p.defaultUnit, organicAvailable: true, variants: [], excludedDiets: [], cuisineIds: [], brands: [],
+      defaultQuantity: p.defaultQuantity, defaultUnit: p.defaultUnit, organicAvailable: true, variants: [], variantNames: {}, excludedDiets: [], cuisineIds: [], brands: [],
       sortOrder: 10000 + i, baseName: p.name, names: {},
     }));
     return {
