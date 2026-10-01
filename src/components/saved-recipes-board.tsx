@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
 import {
   DndContext, DragOverlay, KeyboardSensor, PointerSensor, TouchSensor, closestCorners,
   useDroppable, useSensor, useSensors, type DragEndEvent, type DragOverEvent, type DragStartEvent,
@@ -73,7 +74,7 @@ function Row({ r, userId, draggable, onOpen }: { r: SavedRecipe; userId: string;
       ) : r.shareSlug ? (
         <Link to="/rezept/$slug" params={{ slug: r.shareSlug }} aria-label={t("rs.open")} className="px-1 text-sm">↗</Link>
       ) : null}
-      <button onClick={() => void remove()} aria-label={t("rs.deleteRecipe")} className="px-2 text-sm text-muted-foreground">✕</button>
+      <button onClick={() => void remove()} aria-label={t("rs.deleteRecipe")} className="px-2 text-muted-foreground transition active:text-destructive"><Trash2 size={16} /></button>
     </div>
   );
 }
@@ -81,14 +82,40 @@ function Row({ r, userId, draggable, onOpen }: { r: SavedRecipe; userId: string;
 function Folder({ c, children }: { c: RecipeCollection; children: React.ReactNode }) {
   const { t } = useT();
   const { setNodeRef, isOver } = useDroppable({ id: `folder:${c.id}` });
+  const [editing, setEditing] = useState(false);
+  const [val, setVal] = useState(c.name);
+
+  const commit = () => {
+    setEditing(false);
+    if (val.trim() && val.trim() !== c.name) void renameCollection(c.id, val.trim());
+    else setVal(c.name);
+  };
+
   return (
     <div ref={setNodeRef} className={`space-y-2 rounded-2xl border bg-card p-3 ${isOver ? "border-primary" : "border-border"}`}>
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold text-foreground">📁 {c.name}</p>
-        <div className="flex gap-3">
-          <button onClick={() => { const n = window.prompt(t("rs.renameFolder"), c.name); if (n) void renameCollection(c.id, n); }} className="text-xs text-muted-foreground">{t("rs.rename")}</button>
-          <button onClick={() => { if (window.confirm(t("rs.confirmDeleteFolder"))) void deleteCollection(c.id); }} className="text-xs text-muted-foreground">{t("rk.deleteList")}</button>
-        </div>
+      <div className="flex items-center justify-between gap-2">
+        {editing ? (
+          <input
+            autoFocus
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            onBlur={commit}
+            onKeyDown={(e) => { if (e.key === "Enter") commit(); if (e.key === "Escape") { setVal(c.name); setEditing(false); } }}
+            aria-label={t("rs.renameFolder")}
+            className="min-w-0 flex-1 rounded-md border border-primary bg-background px-2 py-1 text-sm font-semibold text-foreground outline-none"
+          />
+        ) : (
+          <button onClick={() => { setVal(c.name); setEditing(true); }} title={t("rs.tapToRename")} className="min-w-0 flex-1 truncate text-left text-sm font-semibold text-foreground">
+            📁 {c.name}
+          </button>
+        )}
+        <button
+          onClick={() => { if (window.confirm(t("rs.confirmDeleteFolder"))) void deleteCollection(c.id); }}
+          aria-label={t("rk.deleteList")}
+          className="shrink-0 px-1 text-muted-foreground transition active:text-destructive"
+        >
+          <Trash2 size={16} />
+        </button>
       </div>
       {children}
     </div>
