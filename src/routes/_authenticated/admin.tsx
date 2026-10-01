@@ -295,7 +295,6 @@ function AdminPage() {
         {busy ? T("adm.working") : T("adm.trMissing")}
       </Button>
 
-      {d && <RecipeAdmin depts={d.depts} prods={d.prods} />}
 
       <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
 
