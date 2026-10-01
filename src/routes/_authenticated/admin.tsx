@@ -724,8 +724,8 @@ function Editor(p: {
   const title = T(`adm.edit.${sel.kind}` as MessageKey);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
-      <div className="max-h-[88dvh] w-full max-w-[440px] space-y-3 overflow-y-auto rounded-t-3xl bg-background p-5 pb-[calc(2rem+env(safe-area-inset-bottom))]" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[60] flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
+      <div className="max-h-[88dvh] w-full max-w-[440px] space-y-3 overflow-y-auto rounded-t-3xl bg-background p-5 pb-[calc(5rem+env(safe-area-inset-bottom))]" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-foreground">{title}</h2>
           <button onClick={p.onClose} className="text-muted-foreground" aria-label={T("adm.close")}>✕</button>
