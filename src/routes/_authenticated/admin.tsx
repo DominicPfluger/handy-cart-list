@@ -102,7 +102,7 @@ function AdminPage() {
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
   const [view, setView] = useState<"list" | "tiles">("list");
   /** Aktiver Admin-Bereich (Tabs). */
-  const [tab, setTab] = useState<"catalog" | "media" | "import" | "languages" | "markets" | "recipes" | "more">("catalog");
+  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "markets" | "recipes" | "languages" | "more">("catalog");
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: view === "tiles" }));
     return () => {
@@ -318,7 +318,7 @@ function AdminPage() {
       </div>
 
       <div className="flex gap-1.5 overflow-x-auto pb-1" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["import", "adm.tab.import"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["recipes", "adm.tab.recipes"], ["more", "adm.tab.more"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["markets", "adm.tab.markets"], ["recipes", "adm.tab.recipes"], ["languages", "adm.tab.languages"], ["more", "adm.tab.more"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
             {T(key)}
@@ -548,9 +548,9 @@ function AdminPage() {
 
       </>)}
 
+      {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel section="images" /></LoadingGate>}
+      {tab === "prices" && <LoadingGate d={d}><CatalogMediaPanel section="prices" /></LoadingGate>}
       {tab === "import" && <LoadingGate d={d}><ImportPanel depts={d!.depts} prods={d!.prods} /></LoadingGate>}
-      {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
-      {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel /></LoadingGate>}
 
       {tab === "markets" && (<>
         <MarketAdmin markets={MARKETS} />
@@ -558,6 +558,7 @@ function AdminPage() {
       </>)}
 
       {tab === "recipes" && <LoadingGate d={d}><RecipeAdmin depts={d!.depts} prods={d!.prods} /><CuisineAdmin depts={d!.depts} prods={d!.prods} /></LoadingGate>}
+      {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
 
       {tab === "more" && (
         <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
