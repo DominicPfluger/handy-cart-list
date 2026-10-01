@@ -555,10 +555,7 @@ function AdminPage() {
         <MarketAdminsManager />
       </>)}
 
-      {tab === "recipes" && d && (<>
-        <RecipeAdmin depts={d.depts} prods={d.prods} />
-        <CuisineAdmin depts={d.depts} prods={d.prods} />
-      </>)}
+      {tab === "recipes" && <LoadingGate d={d}><RecipeAdmin depts={d!.depts} prods={d!.prods} /><CuisineAdmin depts={d!.depts} prods={d!.prods} /></LoadingGate>}
 
       {tab === "more" && (
         <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
