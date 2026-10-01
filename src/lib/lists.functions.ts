@@ -194,6 +194,8 @@ export const updateCloudItem = createServerFn({ method: "POST" })
         quantity: z.string().max(80).optional(),
         note: z.string().max(500).nullish(),
         checkedByName: z.string().max(80).nullish(),
+        groupLabel: z.string().max(120).nullish(),
+        groupEmoji: z.string().max(20).nullish(),
       })
       .parse(data)
   )
@@ -206,6 +208,8 @@ export const updateCloudItem = createServerFn({ method: "POST" })
     }
     if (data.quantity !== undefined) patch.quantity = data.quantity;
     if (data.note !== undefined) patch.note = data.note;
+    if (data.groupLabel !== undefined) patch.group_label = data.groupLabel;
+    if (data.groupEmoji !== undefined) patch.group_emoji = data.groupEmoji;
     const { error } = await sb.from("list_items").update(patch).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
