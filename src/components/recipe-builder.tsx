@@ -468,6 +468,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
       </div>
     </section>
     {popularView}
+    <FavoritesRow />
     {recentView}
     {collectionsView}
     {saveDialog}
