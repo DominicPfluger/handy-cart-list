@@ -31,7 +31,7 @@ export const de = {
   "adm.brandAll": "Alle Länder",
   "adm.brandMarkets": "Länder wählen",
   "adm.brandNone": "Keine neuen Marken gefunden",
-  "adm.brandDelete": "Marke „{name}" löschen?",
+  "adm.brandDelete": "Marke „{name}“ löschen?",
   "cuisine.hint": "Es werden nur Zutaten angezeigt, die in der gewählten Küche typisch sind.",
   "diet.title": "Nach Ernährungsform filtern",
   "diet.hint": "Nicht passende Zutaten werden ausgeblendet.",
