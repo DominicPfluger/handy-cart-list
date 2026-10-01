@@ -32,7 +32,7 @@ function shuffle<T>(a: T[]) {
   return r;
 }
 
-export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipeId }: { onTemplateChange?: (id: string | null) => void; mode?: "generator" | "lists" | "inspiration"; loadRecipeId?: string | undefined } = {}) {
+export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipeId, initialTemplateId }: { onTemplateChange?: (id: string | null) => void; mode?: "generator" | "lists" | "inspiration"; loadRecipeId?: string | undefined; initialTemplateId?: RecipeTemplate["id"] } = {}) {
   const { t } = useT();
   const catalog = useCatalog();
   const { addCatalogItem, favorites } = useShoppingList();
