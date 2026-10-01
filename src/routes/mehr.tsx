@@ -257,23 +257,40 @@ function MorePage() {
           <span className="text-muted-foreground">›</span>
         </Link>
         <NotificationSettingsRow />
+        <div>
+          <button
+            type="button"
+            onClick={() => setHiddenOpen((open) => !open)}
+            aria-expanded={hiddenOpen}
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted"
+          >
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+              <EyeOff className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground">{t("more.hiddenProducts")}</p>
+              <p className="truncate text-xs text-muted-foreground">{t("more.hiddenProductsHint")}</p>
+            </div>
+            <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{hiddenProducts.length}</span>
+            <span className="text-muted-foreground" aria-hidden="true">{hiddenOpen ? "▴" : "▾"}</span>
+          </button>
+          {hiddenOpen && (
+            <div className="divide-y divide-border border-t border-border">
+              {hiddenProducts.length === 0 ? (
+                <p className="px-4 py-3 text-sm text-muted-foreground">{t("more.hiddenProductsEmpty")}</p>
+              ) : (
+                hiddenProducts.map((product) => (
+                  <div key={product.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                    <span className="min-w-0 text-sm text-foreground">{product.name}</span>
+                    <Button variant="ghost" size="sm" onClick={() => restoreProduct(product.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
         <AllMarketsRow />
       </section>
-
-      {hiddenProducts.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="text-base font-semibold text-foreground">{t("more.hiddenProducts")}</h2>
-          <p className="text-sm text-muted-foreground">{t("more.hiddenProductsHint")}</p>
-          <div className="divide-y divide-border border-y border-border">
-            {hiddenProducts.map((product) => (
-              <div key={product.id} className="flex items-center justify-between gap-3 py-2.5">
-                <span className="min-w-0 text-sm text-foreground">{product.name}</span>
-                <Button variant="ghost" size="sm" onClick={() => restoreProduct(product.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         {[
