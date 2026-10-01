@@ -17,3 +17,4 @@
 - Recipe creator shows a flat admin-curated ingredient list per step (recipe_ingredients.sort_order, first 20 + expand); recipe_groups unused. Why: simpler choice, admin controls ranking.
 - Aliases: `department_aliases`/`product_aliases` show items in extra places; data lives once; list category = list_items.group_label. Why: single source of truth.
 - Read-aloud: own language (default de-DE) + admin templates in `speech_texts`. Why: mother tongue regardless of UI.
+- Recipe folders nest via recipe_folders.parent_id (DB trigger blocks cycles); deleting a folder moves its recipes and subfolders up one level. Why: themed sorting without data loss.
