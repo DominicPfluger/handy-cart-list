@@ -718,8 +718,12 @@ function Editor(p: {
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
   const addVariant = (v: string) => {
-    const val = v.trim();
-    if (val && !variants.some((x) => x.toLowerCase() === val.toLowerCase())) setVariants((x) => [...x, val]);
+    const vals = v.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+    setVariants((x) => {
+      const next = [...x];
+      for (const val of vals) if (!next.some((y) => y.toLowerCase() === val.toLowerCase())) next.push(val);
+      return next;
+    });
     setVariantInput("");
   };
   const tr = data.tr.get(sel.id) ?? {};
@@ -791,12 +795,14 @@ function Editor(p: {
                 ))}
               </div>
             )}
-            <div className="flex gap-2">
-              <Input
+            <div className="flex items-start gap-2">
+              <textarea
                 value={variantInput}
+                rows={3}
                 placeholder={T("adm.variantPlaceholder")}
                 onChange={(e) => setVariantInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addVariant(variantInput); } }}
+                onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); addVariant(variantInput); } }}
+                className="min-h-[72px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               />
               <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
             </div>
