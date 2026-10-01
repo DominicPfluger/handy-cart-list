@@ -358,11 +358,11 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           >
             ♥ {t("rk.onlyFavorites")}
           </button>
-          <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-foreground">
-            {t("rk.reset")}
-          </button>
           <button onClick={surprise} className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground">
             {t("rk.surprise")}
+          </button>
+          <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-foreground">
+            {t("rk.reset")}
           </button>
         </div>
       </div>
