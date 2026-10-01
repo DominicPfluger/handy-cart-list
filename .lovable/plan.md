@@ -13,6 +13,13 @@ Ein Produkt (z. B. „Kaffeerahm") hat weiterhin genau einen festen Platz im Kat
 - Hat ein Produkt Aliase, erscheint ein neues Feld „Auf der Liste unter…" mit allen Kategorien, in denen es vorkommt (Original + Aliase).
 - Vorausgewählt ist die Kategorie, aus der du das Produkt gerade geöffnet hast. Bei der Suche ist es die Original-Kategorie.
 - Der Eintrag wird auf der Einkaufsliste unter der gewählten Kategorie gruppiert. Das funktioniert für lokale und geteilte Listen gleich.
+- Die App merkt sich deine Wahl pro Produkt, nur auf diesem Gerät („bevorzugte Kategorie").
+
+**Schnell hinzufügen und Favoriten in neue Liste**
+- Hier gibt es keinen Dialog. Das Produkt landet unter deiner bevorzugten Kategorie, sonst unter der Original-Kategorie.
+- Beim Favorisieren wird die Kategorie mitgespeichert, aus der du das Produkt markiert hast. „Alle Favoriten in neue Liste" nutzt diese Kategorie.
+- Auf der Einkaufsliste kannst du einen Eintrag nachträglich in eine andere seiner Kategorien verschieben: Eintrag antippen und dann „Kategorie ändern".
+
 
 **Admin-Panel**
 - Im Produkt-Editor neuer Bereich „Auch anzeigen in…": weitere Kategorien wählen, mit ✕ entfernen.
