@@ -18,6 +18,7 @@ import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
+import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -640,6 +641,7 @@ function Editor(p: {
   const [qty, setQty] = useState(String(prod?.default_quantity ?? 1));
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [before, setBefore] = useState(head?.before_product_id ?? "");
+  const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
   const tr = data.tr.get(sel.id) ?? {};
   const title = T(`adm.edit.${sel.kind}` as MessageKey);
 
@@ -667,6 +669,28 @@ function Editor(p: {
             <UnitSelect value={unit} onChange={setUnit} />
           </div>
         )}
+        {prod && (
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-foreground">{T("adm.diets")}</h3>
+            <div className="flex flex-wrap gap-1.5">
+              {DIETS.map((diet) => {
+                const on = diets.includes(diet);
+                return (
+                  <button
+                    key={diet}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => setDiets((x) => (on ? x.filter((v) => v !== diet) : [...x, diet]))}
+                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}
+                  >
+                    {DIET_EMOJI[diet]} {T(`diet.${diet}` as MessageKey)}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-muted-foreground">{T("adm.dietsHint")}</p>
+          </div>
+        )}
         {head && (
           <select value={before} onChange={(e) => setBefore(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
             {p.products.map((x) => <option key={x.id} value={x.id}>{T("adm.above", { name: x.name })}</option>)}
@@ -676,7 +700,7 @@ function Editor(p: {
           <Button className="flex-1" disabled={p.busy || !name.trim()} onClick={() => p.onSave({
             name: name.trim(), emoji, before,
             ...(sel.kind !== "heading" ? { parent } : {}),
-            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit } : {}),
+            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, diets } : {}),
           })}>{T("adm.save")}</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
