@@ -257,7 +257,6 @@ function MorePage() {
             </div>
           )}
         </div>
-        <AllMarketsRow />
       </section>
 
 
@@ -302,6 +301,7 @@ function MorePage() {
             </select>
           </div>
         </label>
+        <AllMarketsRow />
         <SpeakLocaleRow />
         <SpeakRateRow />
         {isAdmin && (
