@@ -236,6 +236,9 @@ function AdminPage() {
         <h1 className="text-2xl font-bold text-foreground">{T("adm.title")}</h1>
         <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
       </div>
+      <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
+        <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>
+      </Link>
 
       <div className="grid grid-cols-3 gap-2 text-center">
         <Stat label={T("adm.categories")} value={d?.depts.length} />
