@@ -1,4 +1,4 @@
-import appIcon from "@/assets/app-icon.png.asset.json";
+import splashLogo from "@/assets/splash-logo.png.asset.json";
 
 /** Branded start screen with loading bar, shown while the app loads. */
 export function SplashScreen() {
