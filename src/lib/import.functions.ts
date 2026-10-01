@@ -1,7 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { TRANSLATED_LOCALES } from "@/i18n";
+import { TRANSLATED_LOCALES as BUILTIN_LOCALES } from "@/i18n";
+
+/** Eingebaute + im Admin angelegte Zielsprachen. */
+async function targetLocales(sb: any): Promise<string[]> {
+  const { data } = await sb.from("app_locales").select("id");
+  return [...new Set([...BUILTIN_LOCALES, ...((data ?? []) as Array<{ id: string }>).map((r) => r.id)])];
+}
 
 async function assertAdmin(context: { supabase: any; userId: string }) {
   const { data, error } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
@@ -62,7 +68,7 @@ export const acceptImportCandidates = createServerFn({ method: "POST" })
     if (created.length) {
       const { translateNames } = await import("./translate.server");
       const names = Object.fromEntries(created.map((p) => [p.id, p.name]));
-      await Promise.all(TRANSLATED_LOCALES.map(async (locale) => {
+      await Promise.all((await targetLocales(context.supabase)).map(async (locale) => {
         try {
           const r = await translateNames(names, locale);
           const rows = created.filter((p) => r[p.id]).map((p) => ({ entity_type: "product", entity_id: p.id, locale, name: r[p.id]!, is_manual: false }));

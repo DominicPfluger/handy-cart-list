@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      app_locales: {
+        Row: {
+          created_at: string
+          flag: string
+          id: string
+          label: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          flag?: string
+          id: string
+          label: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          flag?: string
+          id?: string
+          label?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       catalog_translations: {
         Row: {
           created_at: string
@@ -1227,6 +1251,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      ui_translations: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          locale: string
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          locale: string
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          locale?: string
+          text?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ui_translations_locale_fkey"
+            columns: ["locale"]
+            isOneToOne: false
+            referencedRelation: "app_locales"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {

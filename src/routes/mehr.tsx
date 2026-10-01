@@ -13,7 +13,7 @@ import {
   PlusIcon,
   HistoryIcon,
 } from "../components/icons";
-import { LOCALES, getExplicitLocale, getLocale, setLocale, useT, type Locale } from "../i18n";
+import { useAllLocales, getExplicitLocale, getLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState, type ReactNode } from "react";
 import { EyeOff } from "lucide-react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
@@ -49,6 +49,7 @@ export const Route = createFileRoute("/mehr")({
 
 
 function MorePage() {
+  const allLocs = useAllLocales();
   const { members, signedIn, activeList, inviteLinkFor } = useShoppingList();
   const { t, locale } = useT();
   const navigate = useNavigate();
@@ -236,7 +237,7 @@ function MorePage() {
               className="mt-1 w-full rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary"
             >
               <option value="auto">{t("lang.auto")}</option>
-              {LOCALES.map((l) => (
+              {allLocs.map((l) => (
                 <option key={l.id} value={l.id}>{l.flag} {l.label}</option>
               ))}
             </select>
@@ -308,6 +309,7 @@ function MorePage() {
 }
 
 function SpeakLocaleRow() {
+  const allLocs = useAllLocales();
   const { t } = useT();
   const [, setLoc, loc] = useSpeakLocale();
   return (
@@ -325,7 +327,7 @@ function SpeakLocaleRow() {
           className="mt-2 w-full rounded-lg border border-border bg-background px-2 py-1.5 text-sm text-foreground"
         >
           <option value="app">🌐 {t("speak.followApp")}</option>
-          {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
+          {allLocs.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
         </select>
       </div>
     </div>

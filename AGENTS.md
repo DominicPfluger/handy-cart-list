@@ -22,3 +22,4 @@
 ## Landingpage
 - Erster Besuch auf `/` zeigt die Landingpage (`src/components/landing/landing-page.tsx`, Flag `shoppi:landing-seen` via `src/lib/landing.ts`); danach direkt die Einkaufsliste. Die Website-Variante liegt auf `/start` mit eigenem head(). Warum: öffentliche Seite unter der künftigen Domain, App-Entscheid bleibt geräte-lokal.
 - Admin tile view (catalog-tile-editor.tsx) reuses admin.tsx data + save/reorder/remove callbacks. Why: one write path for list and tile editing.
+- Admin-created locales live in app_locales + ui_translations, loaded at runtime by src/i18n; server translation targets = built-in + app_locales (targetLocales). Why: add languages without redeploy.
