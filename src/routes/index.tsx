@@ -48,7 +48,7 @@ export const Route = createFileRoute("/")({
 
 function ListPage() {
   const {
-    items, hydrated, toggleItem, removeItem, clearChecked, addItem,
+    items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
     templates, saveAsTemplate, createFromTemplate, deleteTemplate,
   } = useShoppingList();

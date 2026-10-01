@@ -4,6 +4,7 @@ import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
+import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { Button } from "../components/ui/button";
 import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon, TrashIcon } from "../components/icons";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../components/ui/alert-dialog";
@@ -25,6 +26,7 @@ import {
   matchesProductSearch,
   originalName,
   productsOf,
+  productsIn,
   type CatalogDepartment,
   type CatalogProduct,
 } from "../lib/catalog-query";
@@ -120,6 +122,7 @@ function DepartmentsPage() {
   }, [departments, orderedProducts, products, diets.length, cuisines.length]);
   const { t } = useT();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
+  const { preferred: preferredDept } = usePreferredDept();
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
   const [query, setQuery] = useState("");
@@ -174,7 +177,8 @@ function DepartmentsPage() {
       .sort((a, b) => a.sortOrder - b.sortOrder)
       .filter((d) => !hiddenDepts.has(d.id));
   })();
-  const directProducts = currentId ? productsOf(products, currentId) : [];
+  const directProducts = currentId ? productsIn(products, data.productAliases ?? [], currentId) : [];
+  const aliasProductIds = new Set(directProducts.filter((p) => p.departmentId !== currentId).map((p) => p.id));
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const searchResults = useMemo(() => {
     if (!normalizedQuery) return [];
@@ -187,8 +191,16 @@ function DepartmentsPage() {
   const matchedBrand = (product: CatalogProduct) =>
     matchesProductSearch(product.name, normalizedQuery) ? undefined : brandsFor(product).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
 
-  const groupFor = (product: CatalogProduct) =>
-    departments.find((department) => department.id === product.departmentId) ?? current;
+  const groupFor = (product: CatalogProduct) => {
+    // Alias-Produkt in der aktuellen Kategorie → aktuelle Kategorie; Suche/Spracheingabe → bevorzugte Kategorie
+    if (!normalizedQuery && currentId && aliasProductIds.has(product.id)) return departments.find((d) => d.id === currentId) ?? current;
+    const pref = preferredDept[product.id];
+    if (pref && (pref === product.departmentId || (data.productAliases ?? []).some((a) => a.productId === product.id && a.departmentId === pref))) {
+      const d = departments.find((x) => x.id === pref);
+      if (d) return d;
+    }
+    return departments.find((department) => department.id === product.departmentId) ?? current;
+  };
 
   // ---- Drag & Drop für Kategorien und Artikel (langes Drücken) ----
   type DropTarget = { kind: "before" | "after" | "into"; id: string | null };
@@ -591,7 +603,7 @@ function DepartmentsPage() {
               const group = groupFor(product);
               const favorite = isFavorite(product.id);
               const pt = drag?.what === "product" && drag.target?.id === product.id ? drag.target.kind : null;
-              const draggable = !normalizedQuery;
+              const draggable = !normalizedQuery && !aliasProductIds.has(product.id);
               const headingDrop = drag?.what === "product" && heading && drag.target?.id === heading.beforeProductId && drag.target.kind === "after" && drag.id !== heading.beforeProductId;
               return (
                 <Fragment key={product.id}>
@@ -748,6 +760,7 @@ function DepartmentsPage() {
         product={selectedProduct}
         groupLabel={selectedProduct ? groupFor(selectedProduct)?.name : undefined}
         groupEmoji={selectedProduct ? groupFor(selectedProduct)?.emoji : undefined}
+        initialDepartmentId={selectedProduct ? groupFor(selectedProduct)?.id : undefined}
         initialBrand={selectedBrand}
         onOpenChange={(open) => { if (!open) setSelectedProduct(null); }}
       />
