@@ -37,7 +37,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 type Kind = "department" | "product" | "heading";
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; excluded_diets: string[]; variants: string[] };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; excluded_diets: string[]; variants: string[]; markets: string[] };
 type Head = { id: string; name: string; department_id: string; before_product_id: string };
 type Tr = { entity_id: string; locale: string; name: string; is_manual: boolean };
 type Sel = { kind: Kind; id: string } | null;
@@ -53,15 +53,19 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
 }
 
 async function loadAll() {
-  const [depts, prods, heads, trs] = await Promise.all([
+  const [depts, prods, heads, trs, mo, mx] = await Promise.all([
     paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path").order("sort_order").order("id").range(a, b)),
-    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets, variants").order("sort_order").order("id").range(a, b) as never),
+    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets, variants, markets").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
     paged<Tr>((a, b) => supabase.from("catalog_translations").select("entity_id, locale, name, is_manual").order("id").range(a, b)),
+    paged<{ product_id: string; market: string; sort_order: number }>((a, b) => supabase.from("product_market_order").select("product_id, market, sort_order").order("id").range(a, b)),
+    paged<{ product_id: string; market: string }>((a, b) => supabase.from("product_market_exclusions").select("product_id, market").order("id").range(a, b)),
   ]);
   const tr = new Map<string, Record<string, Tr>>();
   for (const t of trs) tr.set(t.entity_id, { ...(tr.get(t.entity_id) ?? {}), [t.locale]: t });
-  return { depts, prods, heads, tr };
+  const order = new Map(mo.map((o) => [`${o.product_id}|${o.market}`, o.sort_order]));
+  const excl = new Set(mx.map((o) => `${o.product_id}|${o.market}`));
+  return { depts, prods, heads, tr, order, excl };
 }
 
 const TABLE = { department: "departments", product: "products" } as const;
@@ -75,6 +79,8 @@ function AdminPage() {
   const suggest = useServerFn(suggestProducts);
   const rank = useServerFn(rankProducts);
   const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity">("popularity");
+  /** "" = globale Reihenfolge, sonst Marktcode (z. B. CH) für marktspezifische Relevanz. */
+  const [mk, setMk] = useState<string>("");
   const admin = useQuery({ queryKey: ["admin-check"], queryFn: () => check() });
   const q = useQuery({ queryKey: ["admin-catalog"], queryFn: loadAll, enabled: Boolean(admin.data?.isAdmin) });
   const [cur, setCur] = useState<string | null>(null);
@@ -93,7 +99,22 @@ function AdminPage() {
     return out;
   };
   const children = (d?.depts ?? []).filter((x) => x.parent_id === cur);
-  const products = (d?.prods ?? []).filter((x) => x.department_id === cur);
+  const products = useMemo(() => {
+    const base = (d?.prods ?? []).filter((x) => x.department_id === cur);
+    if (!mk || !d) return base;
+    const avail = base.filter((p) => (p.markets.length === 0 || p.markets.includes(mk)) && !d.excl.has(`${p.id}|${mk}`));
+    const rest = base.filter((p) => !avail.includes(p));
+    const pos = (p: Prod) => d.order.get(`${p.id}|${mk}`);
+    avail.sort((a, b) => {
+      const pa = pos(a), pb = pos(b);
+      if (pa != null && pb != null) return pa - pb;
+      if (pa != null) return -1;
+      if (pb != null) return 1;
+      return a.sort_order - b.sort_order;
+    });
+    return [...avail, ...rest];
+  }, [d, cur, mk]);
+  const unavailable = (p: Prod) => Boolean(mk && d && ((p.markets.length > 0 && !p.markets.includes(mk)) || d.excl.has(`${p.id}|${mk}`)));
   const headings = (d?.heads ?? []).filter((x) => x.department_id === cur);
 
   const refresh = async () => {
@@ -131,7 +152,19 @@ function AdminPage() {
     const at = Math.max(0, Math.min(to > from ? to - 1 : to, next.length));
     if (at === from) return;
     next.splice(at, 0, item!);
-    run(() => Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), T("adm.orderSaved"));
+    run(() => kind === "product" ? saveOrder(next) : Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), T("adm.orderSaved"));
+  };
+
+  /** Produkt-Reihenfolge speichern: global in products, sonst pro Markt in product_market_order. */
+  const saveOrder = async (list: { id: string }[]) => {
+    if (!mk) {
+      await Promise.all(list.map((x, i) => must(supabase.from("products").update({ sort_order: i + 1 }).eq("id", x.id))));
+      return;
+    }
+    await must(supabase.from("product_market_order").upsert(
+      list.map((x, i) => ({ product_id: x.id, market: mk, sort_order: i + 1 })),
+      { onConflict: "product_id,market" },
+    ));
   };
 
   /** Zielindex beim Ablegen auf einer Zeile: obere Hälfte = davor, untere Hälfte = danach. */
@@ -180,7 +213,8 @@ function AdminPage() {
         });
       }
       const flat = ordered.flat();
-      await Promise.all(flat.map((x, i) => must(supabase.from("products").update({ sort_order: i + 1 }).eq("id", x.id))));
+      await saveOrder(flat);
+      if (mk) return;
       // Überschriften an das neue erste Produkt ihrer Gruppe hängen
       await Promise.all(groups.map((g, gi) => {
         const h = headings.find((x) => x.before_product_id === g[0]!.id);
@@ -348,8 +382,13 @@ function AdminPage() {
 
           {cur && (
             <section className="space-y-1">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{T("adm.products")}</h2>
+                <select value={mk} onChange={(e) => setMk(e.target.value)} aria-label={T("adm.marketOrder")}
+                  className="h-8 rounded-lg border border-input bg-background px-2 text-xs">
+                  <option value="">{T("adm.marketGlobal")}</option>
+                  {MARKETS.map((m) => <option key={m} value={m}>{flagOf(m)} {m}</option>)}
+                </select>
                 {products.length > 1 && (
                   <div className="ml-auto flex items-center gap-1">
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label={T("adm.sortBy")}
@@ -363,6 +402,7 @@ function AdminPage() {
                   </div>
                 )}
               </div>
+              {mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
               {products.length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noProducts")}</p>}
               {products.map((p, i) => {
                 const h = headingBefore.get(p.id);
