@@ -489,5 +489,5 @@ function NotificationSettingsRow() {
 function AllMarketsRow() {
   const { t } = useT();
   const on = useAllMarkets();
-  return <NotificationToggle label={t("more.allMarkets")} sub={t("more.allMarketsSub")} checked={on} onChange={setAllMarkets} />;
+  return <NotificationToggle icon="🌍" label={t("more.allMarkets")} sub={t("more.allMarketsSub")} checked={on} onChange={setAllMarkets} />;
 }
