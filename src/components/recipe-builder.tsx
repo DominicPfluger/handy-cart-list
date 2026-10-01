@@ -72,6 +72,38 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const THRESHOLD = 18;
 
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
+
+  // Ein gespeichertes/geteiltes Rezept in den Generator laden (Klick auf Community-Karte).
+  const loadedRecipe = useQuery({
+    queryKey: ["recipe-load", loadRecipeId],
+    queryFn: () => fetchRecipe(loadRecipeId!),
+    enabled: !!loadRecipeId,
+  });
+  const [loadedId, setLoadedId] = useState<string | null>(null);
+  useEffect(() => {
+    const r = loadedRecipe.data;
+    if (!r || loadedId === r.id || catalog.products.length === 0) return;
+    const template = RECIPE_TEMPLATES.find((x) => x.id === r.template_id);
+    if (!template) return;
+    const next: Picks = {};
+    for (const item of r.items) {
+      const step = template.steps.find((s) => {
+        const dbIds = catalog.recipeIngredients
+          .filter((ri) => ri.templateId === template.id && ri.stepKey === s.key)
+          .map((ri) => ri.productId);
+        if (dbIds.length > 0) return dbIds.includes(item.productId);
+        const p = catalog.products.find((x) => x.id === item.productId);
+        return !!p && s.ingredients.includes(p.baseName);
+      });
+      if (!step) continue;
+      (next[step.key] ??= []).push(item.productId);
+    }
+    setTplId(template.id);
+    setPicks(next);
+    setCustomTitle(r.title);
+    setCustomDesc(r.description ?? "");
+    setLoadedId(r.id);
+  }, [loadedRecipe.data, loadedId, catalog.products, catalog.recipeIngredients]);
   const steps = useMemo(
     () => (tpl?.steps ?? []).map((s) => {
       // Zutaten aus dem Backend (Admin-gepflegt); Fallback: feste Liste aus dem Code.
