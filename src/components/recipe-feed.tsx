@@ -55,20 +55,26 @@ function Row({ title, order, ids, empty }: { title: string; order: FeedOrder; id
   );
 }
 
-export function RecipeFeed() {
+export function FavoritesRow() {
   const { t } = useT();
   const { favorites } = useShoppingList();
   const favIds = favorites.map((f) => f.productId);
   return (
+    <Row
+      title={`♥ ${t("rs.withFavorites")}`}
+      order="favorites"
+      ids={favIds}
+      empty={favIds.length ? t("rs.emptyFeed") : t("rs.noFavorites")}
+    />
+  );
+}
+
+export function RecipeFeed() {
+  const { t } = useT();
+  return (
     <div className="space-y-5">
       <Row title={`★ ${t("rs.topRated")}`} order="rating" empty={t("rs.emptyFeed")} />
       <Row title={`📁 ${t("rs.mostSaved")}`} order="saves" empty={t("rs.emptyFeed")} />
-      <Row
-        title={`♥ ${t("rs.withFavorites")}`}
-        order="favorites"
-        ids={favIds}
-        empty={favIds.length ? t("rs.emptyFeed") : t("rs.noFavorites")}
-      />
     </div>
   );
 }
