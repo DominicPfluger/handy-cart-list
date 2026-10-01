@@ -25,11 +25,17 @@ export function missingVoice(locale: string): boolean {
   return voices.length > 0 && !findVoice(locale);
 }
 
+/** Kürzel, die die deutsche Sprachausgabe ausschreiben soll. */
+function expandAbbreviations(text: string, locale: string): string {
+  if (!locale.toLowerCase().startsWith("de")) return text;
+  return text.replace(/\bStk\.?/g, "Stück");
+}
+
 export function speakSentences(sentences: string[], locale: string, rate: number, onDone?: () => void) {
   const synth = window.speechSynthesis;
   const voice = findVoice(locale);
   synth.cancel();
-  const list = sentences.filter((s) => s.trim());
+  const list = sentences.filter((s) => s.trim()).map((s) => expandAbbreviations(s, locale));
   list.forEach((text, i) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = locale;
