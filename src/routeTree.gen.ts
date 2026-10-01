@@ -17,7 +17,9 @@ import { Route as AngeboteRouteImport } from './routes/angebote'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BeitretenRouteImport } from './routes/beitreten'
 import { Route as CommunityRouteImport } from './routes/community'
+import { Route as DatenschutzRouteImport } from './routes/datenschutz'
 import { Route as FavoritenRouteImport } from './routes/favoriten'
+import { Route as ImpressumRouteImport } from './routes/impressum'
 import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
 import { Route as ScannerRouteImport } from './routes/scanner'
@@ -71,9 +73,19 @@ const CommunityRoute = CommunityRouteImport.update({
   path: '/community',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DatenschutzRoute = DatenschutzRouteImport.update({
+  id: '/datenschutz',
+  path: '/datenschutz',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FavoritenRoute = FavoritenRouteImport.update({
   id: '/favoriten',
   path: '/favoriten',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImpressumRoute = ImpressumRouteImport.update({
+  id: '/impressum',
+  path: '/impressum',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MehrRoute = MehrRouteImport.update({
@@ -151,7 +163,9 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/beitreten': typeof BeitretenRoute
   '/community': typeof CommunityRoute
+  '/datenschutz': typeof DatenschutzRoute
   '/favoriten': typeof FavoritenRoute
+  '/impressum': typeof ImpressumRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRouteWithChildren
   '/scanner': typeof ScannerRoute
@@ -174,7 +188,9 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/beitreten': typeof BeitretenRoute
   '/community': typeof CommunityRoute
+  '/datenschutz': typeof DatenschutzRoute
   '/favoriten': typeof FavoritenRoute
+  '/impressum': typeof ImpressumRoute
   '/mehr': typeof MehrRoute
   '/scanner': typeof ScannerRoute
   '/verlauf': typeof VerlaufRoute
@@ -198,7 +214,9 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/beitreten': typeof BeitretenRoute
   '/community': typeof CommunityRoute
+  '/datenschutz': typeof DatenschutzRoute
   '/favoriten': typeof FavoritenRoute
+  '/impressum': typeof ImpressumRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRouteWithChildren
   '/scanner': typeof ScannerRoute
@@ -223,7 +241,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beitreten'
     | '/community'
+    | '/datenschutz'
     | '/favoriten'
+    | '/impressum'
     | '/mehr'
     | '/rezepte'
     | '/scanner'
@@ -246,7 +266,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beitreten'
     | '/community'
+    | '/datenschutz'
     | '/favoriten'
+    | '/impressum'
     | '/mehr'
     | '/scanner'
     | '/verlauf'
@@ -269,7 +291,9 @@ export interface FileRouteTypes {
     | '/auth'
     | '/beitreten'
     | '/community'
+    | '/datenschutz'
     | '/favoriten'
+    | '/impressum'
     | '/mehr'
     | '/rezepte'
     | '/scanner'
@@ -294,7 +318,9 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   BeitretenRoute: typeof BeitretenRoute
   CommunityRoute: typeof CommunityRoute
+  DatenschutzRoute: typeof DatenschutzRoute
   FavoritenRoute: typeof FavoritenRoute
+  ImpressumRoute: typeof ImpressumRoute
   MehrRoute: typeof MehrRoute
   RezepteRoute: typeof RezepteRouteWithChildren
   ScannerRoute: typeof ScannerRoute
@@ -362,11 +388,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CommunityRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/datenschutz': {
+      id: '/datenschutz'
+      path: '/datenschutz'
+      fullPath: '/datenschutz'
+      preLoaderRoute: typeof DatenschutzRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/favoriten': {
       id: '/favoriten'
       path: '/favoriten'
       fullPath: '/favoriten'
       preLoaderRoute: typeof FavoritenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/impressum': {
+      id: '/impressum'
+      path: '/impressum'
+      fullPath: '/impressum'
+      preLoaderRoute: typeof ImpressumRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mehr': {
@@ -502,7 +542,9 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   BeitretenRoute: BeitretenRoute,
   CommunityRoute: CommunityRoute,
+  DatenschutzRoute: DatenschutzRoute,
   FavoritenRoute: FavoritenRoute,
+  ImpressumRoute: ImpressumRoute,
   MehrRoute: MehrRoute,
   RezepteRoute: RezepteRouteWithChildren,
   ScannerRoute: ScannerRoute,
