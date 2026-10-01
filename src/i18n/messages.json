@@ -920,7 +920,9 @@
     "adm.tab.languages": "Languages",
     "adm.tab.markets": "Markets",
     "adm.tab.recipes": "Recipes & Cuisines",
-    "adm.tab.more": "More"
+    "adm.tab.more": "More",
+    "loc.suggest": "Suggestions",
+    "loc.suggestHint": "Tap to add and translate the language."
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1843,7 +1845,9 @@
     "adm.tab.languages": "Languages",
     "adm.tab.markets": "Markets",
     "adm.tab.recipes": "Recipes & Cuisines",
-    "adm.tab.more": "More"
+    "adm.tab.more": "More",
+    "loc.suggest": "Suggestions",
+    "loc.suggestHint": "Tap to add and translate the language."
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2766,7 +2770,9 @@
     "adm.tab.languages": "Languages",
     "adm.tab.markets": "Markets",
     "adm.tab.recipes": "Recipes & Cuisines",
-    "adm.tab.more": "More"
+    "adm.tab.more": "More",
+    "loc.suggest": "Suggestions",
+    "loc.suggestHint": "Tap to add and translate the language."
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3689,7 +3695,9 @@
     "adm.tab.languages": "Idiomas",
     "adm.tab.markets": "Mercados",
     "adm.tab.recipes": "Recetas y cocinas",
-    "adm.tab.more": "Más"
+    "adm.tab.more": "Más",
+    "loc.suggest": "Sugerencias",
+    "loc.suggestHint": "Toca para añadir y traducir el idioma."
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4612,7 +4620,9 @@
     "adm.tab.languages": "Idiomas",
     "adm.tab.markets": "Mercados",
     "adm.tab.recipes": "Recetas y cocinas",
-    "adm.tab.more": "Más"
+    "adm.tab.more": "Más",
+    "loc.suggest": "Sugerencias",
+    "loc.suggestHint": "Toca para añadir y traducir el idioma."
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5535,7 +5545,9 @@
     "adm.tab.languages": "Langues",
     "adm.tab.markets": "Marchés",
     "adm.tab.recipes": "Recettes et cuisines",
-    "adm.tab.more": "Plus"
+    "adm.tab.more": "Plus",
+    "loc.suggest": "Suggestions",
+    "loc.suggestHint": "Touchez pour ajouter et traduire la langue."
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6458,7 +6470,9 @@
     "adm.tab.languages": "Langues",
     "adm.tab.markets": "Marchés",
     "adm.tab.recipes": "Recettes et cuisines",
-    "adm.tab.more": "Plus"
+    "adm.tab.more": "Plus",
+    "loc.suggest": "Suggestions",
+    "loc.suggestHint": "Touchez pour ajouter et traduire la langue."
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7381,7 +7395,9 @@
     "adm.tab.languages": "Lingue",
     "adm.tab.markets": "Mercati",
     "adm.tab.recipes": "Ricette e cucine",
-    "adm.tab.more": "Altro"
+    "adm.tab.more": "Altro",
+    "loc.suggest": "Suggerimenti",
+    "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua."
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8304,7 +8320,9 @@
     "adm.tab.languages": "Lingue",
     "adm.tab.markets": "Mercati",
     "adm.tab.recipes": "Ricette e cucine",
-    "adm.tab.more": "Altro"
+    "adm.tab.more": "Altro",
+    "loc.suggest": "Suggerimenti",
+    "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua."
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9227,7 +9245,9 @@
     "adm.tab.languages": "Idiomas",
     "adm.tab.markets": "Mercados",
     "adm.tab.recipes": "Receitas e cozinhas",
-    "adm.tab.more": "Mais"
+    "adm.tab.more": "Mais",
+    "loc.suggest": "Sugestões",
+    "loc.suggestHint": "Toque para adicionar e traduzir o idioma."
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10150,7 +10170,9 @@
     "adm.tab.languages": "Idiomas",
     "adm.tab.markets": "Mercados",
     "adm.tab.recipes": "Receitas e cozinhas",
-    "adm.tab.more": "Mais"
+    "adm.tab.more": "Mais",
+    "loc.suggest": "Sugestões",
+    "loc.suggestHint": "Toque para adicionar e traduzir o idioma."
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11073,7 +11095,9 @@
     "adm.tab.languages": "Talen",
     "adm.tab.markets": "Markten",
     "adm.tab.recipes": "Recepten & keukens",
-    "adm.tab.more": "Meer"
+    "adm.tab.more": "Meer",
+    "loc.suggest": "Suggesties",
+    "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen."
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -11996,7 +12020,9 @@
     "adm.tab.languages": "Talen",
     "adm.tab.markets": "Markten",
     "adm.tab.recipes": "Recepten & keukens",
-    "adm.tab.more": "Meer"
+    "adm.tab.more": "Meer",
+    "loc.suggest": "Suggesties",
+    "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen."
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12381,7 +12407,9 @@
     "adm.tab.languages": "Sprachen",
     "adm.tab.markets": "Märkte",
     "adm.tab.recipes": "Rezepte & Küchen",
-    "adm.tab.more": "Mehr"
+    "adm.tab.more": "Mehr",
+    "loc.suggest": "Vorschläge",
+    "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen."
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12766,6 +12794,8 @@
     "adm.tab.languages": "Sprachen",
     "adm.tab.markets": "Märkte",
     "adm.tab.recipes": "Rezepte & Küchen",
-    "adm.tab.more": "Mehr"
+    "adm.tab.more": "Mehr",
+    "loc.suggest": "Vorschläge",
+    "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen."
   }
 }
