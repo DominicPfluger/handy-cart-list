@@ -1,4 +1,4 @@
-import appIcon from "@/assets/app-icon.png.asset.json";
+import splashLogo from "@/assets/splash-logo.png.asset.json";
 
 /** Branded start screen with loading bar, shown while the app loads. */
 export function SplashScreen() {
@@ -11,7 +11,7 @@ export function SplashScreen() {
     >
       <div className="flex flex-col items-center gap-3">
         <img
-          src={appIcon.url}
+          src={splashLogo.url}
           alt="Shoppi"
           className="h-24 w-24 rounded-3xl shadow-lg shadow-primary/30"
         />
