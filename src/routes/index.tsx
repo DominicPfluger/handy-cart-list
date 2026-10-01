@@ -33,6 +33,7 @@ import { unitShort } from "../lib/units";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
+import { deptColor } from "../lib/dept-colors";
 import { toast } from "sonner";
 
 
@@ -337,7 +338,10 @@ function ListPage() {
                     >
                       {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
-                    <div className="grid h-10 w-10 shrink-0 select-none place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl">
+                    <div
+                      className={`grid h-9 w-9 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-lg ${group.root ? "" : "bg-primary-soft/25"}`}
+                      style={group.root ? { backgroundColor: deptColor(group.root, deptById) ?? undefined } : undefined}
+                    >
                       <ProductEmoji emoji={item.emoji} />
                     </div>
                     <div className="min-w-0 flex-1">
