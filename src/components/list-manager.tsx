@@ -19,7 +19,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
 import type { ShoppingList } from "../hooks/use-shopping-list";
-import { PlusIcon, ShareIcon, TrashIcon, CheckIcon } from "./icons";
+import { PlusIcon, TrashIcon, CheckIcon } from "./icons";
 import { getLocale, translate, useT } from "../i18n";
 
 interface Props {
@@ -48,10 +48,6 @@ export async function shareList(list: ShoppingList) {
   openShareSheet({ title: list.name, text });
 }
 
-function shareInviteLink(link: string, listName: string) {
-  const text = `${translate(getLocale(), "lm.inviteHint")}\n${link}`;
-  openShareSheet({ title: listName, text });
-}
 
 function Row({
   list,
