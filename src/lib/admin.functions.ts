@@ -176,9 +176,13 @@ export const rankProducts = createServerFn({ method: "POST" })
     path: z.string().max(300),
     criterion: z.enum(["popularity", "alphabetical", "price", "similarity"]).default("popularity"),
     groups: z.array(z.array(z.string().max(120)).max(300)).max(40),
+    market: z.string().regex(/^[A-Z]{2}$/).optional(),
   }).parse(d))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context);
+    if (data.market) {
+      const { data: ok } = await context.supabase.rpc("is_market_admin", { _user_id: context.userId, _market: data.market });
+      if (!ok) await assertAdmin(context);
+    } else await assertAdmin(context);
     const { aiJson } = await import("./translate.server");
     const crit = {
       popularity: "nach Relevanz: am häufigsten gekaufte Klassiker zuerst, Spezialitäten und Nischenprodukte zuletzt",
@@ -187,7 +191,7 @@ export const rankProducts = createServerFn({ method: "POST" })
       similarity: "nach Ähnlichkeit: Produkte derselben Sorte oder Art direkt hintereinander gruppieren (z. B. alle Apfelsorten, alle Vollkorn-Varianten), innerhalb einer Gruppe die bekannteren zuerst",
     }[data.criterion];
     const r = await aiJson<{ groups: string[][] }>(
-      `Sortiere die Produkte einer Einkaufslisten-Kategorie ${crit}. Jede Gruppe wird separat sortiert, Gruppenreihenfolge bleibt. ` +
+      `Sortiere die Produkte einer Einkaufslisten-Kategorie ${crit}${data.market ? ` – bezogen auf Kaufgewohnheiten und Supermarkt-Sortiment im Land mit ISO-Code ${data.market}` : ""}. Jede Gruppe wird separat sortiert, Gruppenreihenfolge bleibt. ` +
         "Gib exakt dieselben Namen zurück (keine hinzufügen, keine entfernen, nicht umschreiben).",
       JSON.stringify({ kategorie: data.path, gruppen: data.groups }),
       "ranking",
