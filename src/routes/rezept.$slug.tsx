@@ -67,7 +67,7 @@ function RecipePage() {
   const [added, setAdded] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
   const [speaking, setSpeaking] = useState(false);
-  const [rate] = useSpeakRate();
+  const [speakRate] = useSpeakRate();
   const [speakLocale] = useSpeakLocale();
 
   // Namen ggf. aus dem Katalog ergänzen (z. B. bei übernommenen Altrezepten)
