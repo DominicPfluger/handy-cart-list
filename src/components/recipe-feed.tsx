@@ -18,19 +18,40 @@ export function SectionTitle({ emoji, bg, children }: { emoji: string; bg: strin
   );
 }
 
+/** Einheitliche Rezept-Karte (untereinander) für alle Inspirationen-Bereiche. */
+export function ListCardBody({ photo, emoji, color, kicker, title, sub, badge }: {
+  photo?: string | null | undefined; emoji?: string | undefined; color?: string | undefined; kicker?: string | undefined; title: string; sub?: string | null | undefined; badge?: string | undefined;
+}) {
+  return (
+    <>
+      <RecipePhoto path={photo ?? null} emoji={emoji} color={color} className="h-16 w-16 shrink-0 rounded-xl" />
+      <span className="min-w-0 flex-1 text-left">
+        {kicker ? <span className="block text-xs text-primary">{kicker}</span> : null}
+        <span className="line-clamp-2 block text-sm font-semibold text-foreground">{title}</span>
+        {sub ? <span className="line-clamp-1 block text-xs text-muted-foreground">{sub}</span> : null}
+        {badge ? <span className="block text-xs text-muted-foreground">{badge}</span> : null}
+      </span>
+    </>
+  );
+}
+export const LIST_CARD_CLASS = "flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 transition active:scale-[0.99]";
+
 function Card({ r, badge }: { r: FeedRecipe; badge: string }) {
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === r.template_id);
   return (
-    <Link
-      to="/rezept/$slug"
-      params={{ slug: r.share_slug ?? "" }}
-      className="flex w-full shrink-0 snap-start flex-col gap-2 rounded-2xl border border-border bg-card p-3 transition active:scale-[0.98]"
-    >
-      <RecipePhoto path={r.image_path} emoji={tpl?.emoji} color={tpl?.color} className="h-32 w-full rounded-xl" />
-      <span className="line-clamp-2 text-sm font-semibold text-foreground">{r.title}</span>
-      {r.description ? <span className="line-clamp-2 text-xs text-muted-foreground">{r.description}</span> : null}
-      <span className="mt-auto text-xs text-muted-foreground">{badge}</span>
+    <Link to="/rezept/$slug" params={{ slug: r.share_slug ?? "" }} className={LIST_CARD_CLASS}>
+      <ListCardBody photo={r.image_path} emoji={tpl?.emoji} color={tpl?.color} title={r.title} sub={r.description} badge={badge} />
     </Link>
+  );
+}
+
+export function ShowMoreToggle({ total, all, onToggle }: { total: number; all: boolean; onToggle: () => void }) {
+  const { t } = useT();
+  if (total <= 5) return null;
+  return (
+    <button onClick={onToggle} className="w-full py-1 text-sm font-semibold text-primary">
+      {all ? t("rk.showLess") : t("rs.showAll", { n: total })}
+    </button>
   );
 }
 
@@ -42,6 +63,7 @@ function Row({ title, emoji, bg, order, ids, empty }: { title: string; emoji: st
     staleTime: 60_000,
   });
   const list = (data ?? []).filter((r) => r.share_slug);
+  const [all, setAll] = useState(false);
   return (
     <section className="space-y-2">
       <SectionTitle emoji={emoji} bg={bg}>{title}</SectionTitle>
@@ -50,8 +72,8 @@ function Row({ title, emoji, bg, order, ids, empty }: { title: string; emoji: st
       ) : list.length === 0 ? (
         <p className="text-sm text-muted-foreground">{empty}</p>
       ) : (
-        <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
-          {list.map((r) => (
+        <div className="space-y-2">
+          {(all ? list : list.slice(0, 5)).map((r) => (
             <Card
               key={r.id}
               r={r}
