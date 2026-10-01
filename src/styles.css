@@ -102,3 +102,15 @@
   50% { transform: translateX(60%); }
   100% { transform: translateX(220%); }
 }
+
+/* Rezept-Einstiege: kurzer grüner Rahmen, wenn ein Bereich über die Einstiegs-Kacheln angesprungen wird */
+.rk-entry-flash {
+  animation: rk-entry-flash 1.6s ease;
+}
+@keyframes rk-entry-flash {
+  0%, 60% { box-shadow: 0 0 0 3px var(--primary, #2E7D32); }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+[id^="rk-"] {
+  scroll-margin-top: 0.75rem;
+}
