@@ -18,6 +18,7 @@ import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products"
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useNotificationSettings } from "../hooks/use-notification-settings";
+import { useIsAdmin } from "../hooks/use-is-admin";
 import { setAllMarkets, useAllMarkets } from "../hooks/use-all-markets";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
@@ -50,6 +51,7 @@ function MorePage() {
   const { members, signedIn, activeList, inviteLinkFor } = useShoppingList();
   const { t, locale } = useT();
   const navigate = useNavigate();
+  const isAdmin = useIsAdmin();
   const [inviteOpen, setInviteOpen] = useState(false);
   const inviteLink = signedIn ? inviteLinkFor(activeList.id) : null;
   const invite = () => {
