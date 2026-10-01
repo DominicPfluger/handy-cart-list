@@ -358,11 +358,11 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           ))}
         </div>
       </section>
+       {collectionsView}
        {popularView}
        <FavoritesRow />
        {recentView}
-      {collectionsView}
-      </div>
+       </div>
     );
   }
 
@@ -489,10 +489,10 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
         )}
       </div>
     </section>
+    {collectionsView}
     {popularView}
     <FavoritesRow />
     {recentView}
-    {collectionsView}
     {saveDialog}
     </div>
   );
