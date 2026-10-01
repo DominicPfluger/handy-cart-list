@@ -1,0 +1,1 @@
+ALTER TABLE public.recipe_saves ADD COLUMN custom_title text, ADD COLUMN sort_order integer NOT NULL DEFAULT 0;

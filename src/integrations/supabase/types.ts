@@ -802,23 +802,29 @@ export type Database = {
       recipe_saves: {
         Row: {
           created_at: string
+          custom_title: string | null
           folder_id: string | null
           id: string
           recipe_id: string
+          sort_order: number
           user_id: string
         }
         Insert: {
           created_at?: string
+          custom_title?: string | null
           folder_id?: string | null
           id?: string
           recipe_id: string
+          sort_order?: number
           user_id: string
         }
         Update: {
           created_at?: string
+          custom_title?: string | null
           folder_id?: string | null
           id?: string
           recipe_id?: string
+          sort_order?: number
           user_id?: string
         }
         Relationships: [
