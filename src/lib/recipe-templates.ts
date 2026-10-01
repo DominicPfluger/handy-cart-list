@@ -37,9 +37,9 @@ export const POPULAR_RECIPES: Record<RecipeTemplate["id"], Record<string, string
     { base: ["Eisbergsalat"], veg: ["Zuckermais", "Paprika"], protein: ["Thunfisch", "Eier"], dressing: ["Zitronen"] },
   ],
   pizza: [
-    { dough: ["Pizzateig"], sauce: ["Passierte Tomaten"], cheese: ["Mozzarella"], topping: ["Salami"], finish: ["Basilikum"] },
-    { dough: ["Pizzateig"], sauce: ["Passierte Tomaten"], cheese: ["Mozzarella"], topping: ["Schinken", "Champignons"], finish: ["Oregano"] },
-    { dough: ["Pizzateig"], sauce: ["Tomaten"], cheese: ["Mozzarella"], topping: ["Paprika", "Zucchini", "Schwarze Oliven"] },
+    { dough: ["Pizzateig"], sauce: ["Passierte Tomaten"], cheese: ["Mozzarella"], meat: ["Salami"], finish: ["Basilikum"] },
+    { dough: ["Pizzateig"], sauce: ["Passierte Tomaten"], cheese: ["Mozzarella"], meat: ["Schinken"], vegtop: ["Braune Champignons"], finish: ["Oregano"] },
+    { dough: ["Pizzateig"], sauce: ["Tomaten"], cheese: ["Mozzarella"], vegtop: ["Paprika", "Zucchini", "Schwarze Oliven"] },
   ],
   pfanne: [
     { base: ["Reis"], protein: ["Hähnchenbrust"], veg: ["Paprika", "Zuckererbsen"], sauce: ["Sojasauce"], aroma: ["Ingwer"] },
@@ -93,7 +93,9 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "dough", label: "Teig", min: 1, max: 3, ingredients: ["Pizzateig", "Mehl", "Hefe"] },
     { key: "sauce", label: "Sauce", min: 1, max: 3, ingredients: ["Tomaten", "Passierte Tomaten", "Crème fraîche"] },
     { key: "cheese", label: "Käse", min: 1, max: 2, ingredients: ["Mozzarella", "Parmigiano Reggiano", "Grana Padano", "Provolone"] },
-    { key: "topping", label: "Belag", min: 1, max: 4, ingredients: ["Salami", "Schinken", "Paprika", "Champignons", "Schwarze Oliven", "Zucchini", "Ananas"] },
+    { key: "meat", label: "Fleisch", min: 0, max: 3, ingredients: ["Salami", "Schinken", "Schweinsspeck frisch", "Rindshackfleisch"] },
+    { key: "seafood", label: "Fisch & Meeresfrüchte", min: 0, max: 3, ingredients: ["Thunfisch", "Scampi", "Sardellen", "Meeresfrüchte-Mischung", "Tintenfischringe"] },
+    { key: "vegtop", label: "Gemüse & Früchte", min: 1, max: 4, ingredients: ["Paprika", "Braune Champignons", "Schwarze Oliven", "Zucchini", "Rote Zwiebeln", "Cherrytomaten", "Artischockenherzen", "Ananas"] },
     { key: "finish", label: "Kräuter & Gewürze", min: 0, max: 4, ingredients: ["Basilikum", "Oregano", "Olivenöl", "Petersilie", "Rosmarin", "Thymian", "Chilischoten", "Knoblauch"] },
   ] },
   { id: "pfanne", emoji: "🍳", color: "oklch(0.92 0.06 60)", steps: [
