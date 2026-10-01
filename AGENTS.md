@@ -14,6 +14,6 @@
 - Diet filter: products.excluded_diets. Cuisine filter: `cuisines`+`product_cuisines`. Why: simple, editable.
 - Catalog routes `ssr: false`. Why: SSR-embedded catalog caused 'aborted' blank screens.
 - Brands: `product_brands` (locales = market codes); chosen brand appended as "Name · Marke". Why: same for cloud/local lists.
-- Recipe creator groups by admin `recipe_groups` (recipe_ingredients.group_id). Why: curated, independent of store.
+- Recipe creator shows a flat admin-curated ingredient list per step (recipe_ingredients.sort_order, first 20 + expand); recipe_groups unused. Why: simpler choice, admin controls ranking.
 - Aliases: `department_aliases`/`product_aliases` show items in extra places; data lives once; list category = list_items.group_label. Why: single source of truth.
 - Read-aloud: own language (default de-DE) + admin templates in `speech_texts`. Why: mother tongue regardless of UI.
