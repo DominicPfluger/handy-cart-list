@@ -338,9 +338,14 @@ function ListPage() {
                     >
                       {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
+                    {(() => {
+                      // Farbe: über die Wurzelkategorie, sonst über den Gruppennamen (z. B. ältere Einträge mit eigenem Gruppenlabel)
+                      const colorDept = group.root ?? departments.find((d) => d.name === group.label || d.baseName === group.label);
+                      const color = colorDept ? deptColor(colorDept, deptById) : undefined;
+                      return (
                     <div
-                      className={`grid h-9 w-9 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-lg ${group.root ? "" : "bg-primary-soft/25"}`}
-                      style={group.root ? { backgroundColor: deptColor(group.root, deptById) ?? undefined } : undefined}
+                      className={`grid h-9 w-9 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-lg ${color ? "" : "bg-primary-soft/25"}`}
+                      style={color ? { backgroundColor: color } : undefined}
                     >
                       <ProductEmoji emoji={item.emoji} />
                     </div>
