@@ -190,7 +190,7 @@ function AdminPage() {
     return (d?.prods ?? []).filter((x) => sib.has(x.department_id)).map((x) => x.name);
   };
   const loadSuggestions = async (typed: string[]) => {
-    const r = await suggest({ data: { path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: [...typed, ...siblingNames()].slice(0, 400) } });
+    const r = await suggest({ data: { path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: [...typed, ...siblingNames()].slice(0, 400), ...(mk ? { market: mk } : {}) } });
     return r.items;
   };
 
@@ -352,9 +352,9 @@ function AdminPage() {
           )}
 
           {bulk && (
-            <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} onCancel={() => setBulk(false)}
-              onSubmit={(names, emoji, qty, unit) => run(async () => {
-                const rows = names.map((name, i) => ({ department_id: cur!, name, emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: products.length + i + 1 }));
+            <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
+              onSubmit={(names, emoji, qty, unit, mkOnly) => run(async () => {
+                const rows = names.map((name, i) => ({ department_id: cur!, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: products.length + i + 1 }));
                 const r = await supabase.from("products").insert(rows).select("id");
                 if (r.error) throw new Error(r.error.message);
                 await translateIds((r.data ?? []).map((x) => x.id as string));
@@ -593,12 +593,13 @@ function AddForm({ kind, products, onSubmit, onCancel }: { kind: Kind; products:
   );
 }
 
-type Suggestion = { name: string; emoji: string; reason: string };
+type Suggestion = { name: string; emoji: string; reason: string; scope: "global" | "market" };
 
-function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
-  onSubmit: (names: string[], emoji: string, qty: number, unit: string) => void; onCancel: () => void;
-  onSuggest: (typed: string[]) => Promise<Suggestion[]>; autoSuggest?: boolean;
+function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market }: {
+  onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>) => void; onCancel: () => void;
+  onSuggest: (typed: string[]) => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string;
 }) {
+  const [mkOnly, setMkOnly] = useState<Set<string>>(new Set());
   const [text, setText] = useState("");
   const [sugs, setSugs] = useState<Suggestion[] | null>(null);
   const [picked, setPicked] = useState<Set<string>>(new Set());
@@ -609,6 +610,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
       const typed = text.split("\n").map((l) => l.trim()).filter(Boolean);
       const r = await onSuggest(typed);
       setSugs(r); setPicked(new Set(r.map((x) => x.name)));
+      setMkOnly((s) => { const n = new Set(s); r.forEach((x) => { if (x.scope === "market") n.add(x.name); }); return n; });
     } catch (e) { toast.error((e as Error).message); }
     finally { setLoadingS(false); }
   };
@@ -648,6 +650,12 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
                       onChange={(e) => setPicked((s) => { const n = new Set(s); if (e.target.checked) n.add(x.name); else n.delete(x.name); return n; })} />
                     <span>{x.emoji}</span><span>{x.name}</span>
                     <span className="ml-auto truncate text-xs text-muted-foreground">{x.reason}</span>
+                    {market && (
+                      <button type="button" className="shrink-0 rounded-full border px-2 text-xs"
+                        onClick={(e) => { e.preventDefault(); setMkOnly((s) => { const n = new Set(s); if (n.has(x.name)) n.delete(x.name); else n.add(x.name); return n; }); }}>
+                        {mkOnly.has(x.name) ? T("adm.scopeMarket", { m: `${flagOf(market)} ${market}` }) : T("adm.scopeGlobal")}
+                      </button>
+                    )}
                   </label>
                 </li>
               ))}
@@ -663,7 +671,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
       </div>
       <p className="text-xs text-muted-foreground">{T("adm.detected", { n: names.length })}</p>
       <div className="flex gap-2">
-        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit)}>
+        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit, mkOnly)}>
           {T("adm.createN", { n: names.length })}
         </Button>
         <Button variant="ghost" onClick={onCancel}>{T("adm.cancel")}</Button>

@@ -134,6 +134,7 @@ const ctxSchema = z.object({
   path: z.string().max(300),
   existing: z.array(z.string().max(120)).max(400),
   exclude: z.array(z.string().max(120)).max(400).default([]),
+  market: z.string().regex(/^[A-Z]{2}$/).optional(),
 });
 
 /** KI-Vorschläge für fehlende, relevante Produkte einer Kategorie. */
@@ -141,10 +142,18 @@ export const suggestProducts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => ctxSchema.parse(d))
   .handler(async ({ data, context }) => {
-    await assertAdmin(context);
+    if (data.market) {
+      const { data: a } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+      const { data: m } = a ? { data: true } : await context.supabase.rpc("is_market_admin", { _user_id: context.userId, _market: data.market });
+      if (!m) throw new Error("Kein Admin-Zugriff");
+    } else await assertAdmin(context);
     const { aiJson } = await import("./translate.server");
-    const r = await aiJson<{ items: Array<{ name: string; emoji: string; reason: string }> }>(
-      "Du kuratierst den Katalog einer deutschsprachigen Einkaufslisten-App (Schweiz/Deutschland/Österreich). " +
+    const mkText = data.market
+      ? `Zielmarkt: Land mit ISO-Code ${data.market}. Schlage Produkte vor, die in Supermärkten DIESES Landes typisch und relevant sind, sortiert nach Relevanz in diesem Land (lokale Spezialitäten und Marken-Klassiker eingeschlossen). ` +
+        "scope: 'market', wenn das Produkt typisch nur für diesen Markt ist, sonst 'global'. "
+      : "scope: immer 'global'. ";
+    const r = await aiJson<{ items: Array<{ name: string; emoji: string; reason: string; scope: "global" | "market" }> }>(
+      mkText + "Du kuratierst den Katalog einer deutschsprachigen Einkaufslisten-App (Schweiz/Deutschland/Österreich). " +
         "Schlage 8–15 relevante Produkte vor, die in der genannten Kategorie FEHLEN und die Kundinnen im Supermarkt typischerweise kaufen. " +
         "Keine Duplikate, keine Synonyme bereits vorhandener Einträge, keine Einträge aus der Ausschlussliste, kein 'Beliebige'-Präfix. " +
         "Deutsche Namen (de-DE), kurz, wie im Regal. Sortiert nach Relevanz. emoji: ein passendes Emoji. reason: max. 6 Wörter.",
@@ -152,12 +161,12 @@ export const suggestProducts = createServerFn({ method: "POST" })
       "suggestions",
       {
         type: "object", additionalProperties: false, required: ["items"],
-        properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "emoji", "reason"],
-          properties: { name: { type: "string" }, emoji: { type: "string" }, reason: { type: "string" } } } } },
+        properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "emoji", "reason", "scope"],
+          properties: { name: { type: "string" }, emoji: { type: "string" }, reason: { type: "string" }, scope: { type: "string", enum: ["global", "market"] } } } } },
       },
     );
     const have = new Set([...data.existing, ...data.exclude].map((n) => n.toLowerCase()));
-    return { items: r.items.filter((x) => x.name.trim() && !have.has(x.name.trim().toLowerCase())).map((x) => ({ ...x, name: x.name.trim() })) };
+    return { items: r.items.filter((x) => x.name.trim() && !have.has(x.name.trim().toLowerCase())).map((x) => ({ ...x, name: x.name.trim(), scope: data.market && x.scope === "market" ? "market" as const : "global" as const })) };
   });
 
 /** KI-Relevanz-Sortierung: pro Gruppe (Überschrift) die Namen nach Relevanz ordnen. */

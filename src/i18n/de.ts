@@ -463,6 +463,8 @@ export const de = {
   "adm.marketGlobal": "🌍 Global",
   "adm.marketOrderHint": "Marktrelevanz {m}: Verschieben und Sortieren gelten nur für diesen Markt.",
   "adm.marketUnavailable": "nicht im Markt",
+  "adm.scopeGlobal": "🌍 global",
+  "adm.scopeMarket": "nur {m}",
   "adm.opt.popularity": "Relevanz (Beliebtheit)",
   "adm.opt.price": "Preis (günstig zuerst)",
   "adm.opt.alphabetical": "Alphabetisch",
