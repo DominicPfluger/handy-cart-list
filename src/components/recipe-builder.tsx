@@ -50,14 +50,21 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
 
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
   const steps = useMemo(
-    () => (tpl?.steps ?? []).map((s) => ({
-      ...s,
-      products: s.ingredients
-        .map((n) => byBase.get(n))
-        .filter((p): p is CatalogProduct => !!p)
-        .filter((p) => !onlyFav || favIds.has(p.id)),
-    })),
-    [tpl, byBase, onlyFav, favIds],
+    () => (tpl?.steps ?? []).map((s) => {
+      // Zutaten aus dem Backend (Admin-gepflegt); Fallback: feste Liste aus dem Code.
+      const dbIds = catalog.recipeIngredients
+        .filter((r) => r.templateId === tpl!.id && r.stepKey === s.key)
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .map((r) => r.productId);
+      const fromDb = dbIds
+        .map((id) => catalog.products.find((p) => p.id === id))
+        .filter((p): p is CatalogProduct => !!p);
+      const base = fromDb.length > 0
+        ? fromDb
+        : s.ingredients.map((n) => byBase.get(n)).filter((p): p is CatalogProduct => !!p);
+      return { ...s, products: base.filter((p) => !onlyFav || favIds.has(p.id)) };
+    }),
+    [tpl, byBase, onlyFav, favIds, catalog.recipeIngredients, catalog.products],
   );
 
   const toggleOnlyFav = () => {
