@@ -47,7 +47,7 @@ async function load(userId: string) {
 }
 
 /** Einmalige Übernahme der früheren Geräte-Sammlungen. */
-async function migrateLegacy(userId: string, authorName?: string) {
+async function migrateLegacy(userId: string, authorName?: string | undefined) {
   let legacy: Array<{ name: string; recipes: Array<{ title: string; templateId: string; picks: Record<string, string[]> }> }> = [];
   try { legacy = JSON.parse(localStorage.getItem(LEGACY_KEY) ?? "[]"); } catch { legacy = []; }
   if (!legacy.length) return;
@@ -65,7 +65,7 @@ async function migrateLegacy(userId: string, authorName?: string) {
   try { localStorage.removeItem(LEGACY_KEY); } catch { /* ignore */ }
 }
 
-let current: { id: string; name?: string } | null = null;
+let current: { id: string; name?: string | undefined } | null = null;
 export async function refreshCollections() {
   if (current) await load(current.id);
 }

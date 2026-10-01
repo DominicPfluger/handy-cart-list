@@ -12,9 +12,9 @@ export type FeedOrder = "rating" | "saves" | "favorites";
 
 export async function fetchFeed(order: FeedOrder, productIds?: string[], limit = 10): Promise<FeedRecipe[]> {
   if (order === "favorites" && (!productIds || productIds.length === 0)) return [];
-  const { data, error } = await supabase.rpc("recipe_feed", {
-    _order: order, _product_ids: order === "favorites" ? productIds! : undefined, _limit: limit,
-  });
+  const args: { _order: string; _limit: number; _product_ids?: string[] } = { _order: order, _limit: limit };
+  if (order === "favorites" && productIds) args._product_ids = productIds;
+  const { data, error } = await supabase.rpc("recipe_feed", args);
   if (error) throw error;
   return (data ?? []).map((r) => ({
     ...r,
@@ -33,8 +33,8 @@ export function makeSlug() {
 }
 
 export async function createRecipe(input: {
-  ownerId: string; authorName?: string; title: string; templateId: string;
-  picks: Record<string, string[]>; items: RecipeItem[]; isPublic?: boolean;
+  ownerId: string; authorName?: string | undefined; title: string; templateId: string;
+  picks: Record<string, string[]>; items: RecipeItem[]; isPublic?: boolean | undefined;
 }) {
   const { data, error } = await supabase.from("recipes").insert({
     owner_id: input.ownerId,
