@@ -347,8 +347,10 @@ function ListPage() {
                       className={`grid h-9 w-9 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-lg ${color ? "" : "bg-primary-soft/25"}`}
                       style={color ? { backgroundColor: color } : undefined}
                     >
-                      <ProductEmoji emoji={item.emoji} />
+                       <ProductEmoji emoji={item.emoji} />
                     </div>
+                      );
+                    })()}
                     <div className="min-w-0 flex-1">
                       <p className={`break-words text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
                         {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
