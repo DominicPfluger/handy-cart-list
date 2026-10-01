@@ -497,7 +497,10 @@
     "speak.stop": "Stop reading",
     "speak.empty": "The list is empty.",
     "speak.unsupported": "Speech output is not supported on this device.",
-    "speak.intro": "{name}. {count} items open."
+    "speak.intro": "{name}. {count} items open.",
+    "adm.fromCatalog": "+ From catalog",
+    "adm.selectAll": "Select all",
+    "adm.selectNone": "Select none"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -997,7 +1000,10 @@
     "speak.stop": "Stop reading",
     "speak.empty": "The list is empty.",
     "speak.unsupported": "Speech output is not supported on this device.",
-    "speak.intro": "{name}. {count} items open."
+    "speak.intro": "{name}. {count} items open.",
+    "adm.fromCatalog": "+ From catalog",
+    "adm.selectAll": "Select all",
+    "adm.selectNone": "Select none"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1497,7 +1503,10 @@
     "speak.stop": "Stop reading",
     "speak.empty": "The list is empty.",
     "speak.unsupported": "Speech output is not supported on this device.",
-    "speak.intro": "{name}. {count} items open."
+    "speak.intro": "{name}. {count} items open.",
+    "adm.fromCatalog": "+ From catalog",
+    "adm.selectAll": "Select all",
+    "adm.selectNone": "Select none"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -1997,7 +2006,10 @@
     "speak.stop": "Detener lectura",
     "speak.empty": "La lista está vacía.",
     "speak.unsupported": "Este dispositivo no admite la lectura en voz alta.",
-    "speak.intro": "{name}. {count} artículos pendientes."
+    "speak.intro": "{name}. {count} artículos pendientes.",
+    "adm.fromCatalog": "+ Del catálogo",
+    "adm.selectAll": "Seleccionar todo",
+    "adm.selectNone": "Ninguno"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2497,7 +2509,10 @@
     "speak.stop": "Detener lectura",
     "speak.empty": "La lista está vacía.",
     "speak.unsupported": "Este dispositivo no admite la lectura en voz alta.",
-    "speak.intro": "{name}. {count} artículos pendientes."
+    "speak.intro": "{name}. {count} artículos pendientes.",
+    "adm.fromCatalog": "+ Del catálogo",
+    "adm.selectAll": "Seleccionar todo",
+    "adm.selectNone": "Ninguno"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -2997,7 +3012,10 @@
     "speak.stop": "Arrêter la lecture",
     "speak.empty": "La liste est vide.",
     "speak.unsupported": "La lecture vocale n'est pas prise en charge sur cet appareil.",
-    "speak.intro": "{name}. {count} articles restants."
+    "speak.intro": "{name}. {count} articles restants.",
+    "adm.fromCatalog": "+ Depuis le catalogue",
+    "adm.selectAll": "Tout sélectionner",
+    "adm.selectNone": "Tout désélectionner"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3497,7 +3515,10 @@
     "speak.stop": "Arrêter la lecture",
     "speak.empty": "La liste est vide.",
     "speak.unsupported": "La lecture vocale n'est pas prise en charge sur cet appareil.",
-    "speak.intro": "{name}. {count} articles restants."
+    "speak.intro": "{name}. {count} articles restants.",
+    "adm.fromCatalog": "+ Depuis le catalogue",
+    "adm.selectAll": "Tout sélectionner",
+    "adm.selectNone": "Tout désélectionner"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -3997,7 +4018,10 @@
     "speak.stop": "Interrompi lettura",
     "speak.empty": "La lista è vuota.",
     "speak.unsupported": "La lettura vocale non è supportata su questo dispositivo.",
-    "speak.intro": "{name}. {count} articoli da prendere."
+    "speak.intro": "{name}. {count} articoli da prendere.",
+    "adm.fromCatalog": "+ Dal catalogo",
+    "adm.selectAll": "Seleziona tutto",
+    "adm.selectNone": "Deseleziona tutto"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4497,7 +4521,10 @@
     "speak.stop": "Interrompi lettura",
     "speak.empty": "La lista è vuota.",
     "speak.unsupported": "La lettura vocale non è supportata su questo dispositivo.",
-    "speak.intro": "{name}. {count} articoli da prendere."
+    "speak.intro": "{name}. {count} articoli da prendere.",
+    "adm.fromCatalog": "+ Dal catalogo",
+    "adm.selectAll": "Seleziona tutto",
+    "adm.selectNone": "Deseleziona tutto"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -4997,7 +5024,10 @@
     "speak.stop": "Parar leitura",
     "speak.empty": "A lista está vazia.",
     "speak.unsupported": "A leitura em voz alta não é suportada neste dispositivo.",
-    "speak.intro": "{name}. {count} itens em aberto."
+    "speak.intro": "{name}. {count} itens em aberto.",
+    "adm.fromCatalog": "+ Do catálogo",
+    "adm.selectAll": "Selecionar tudo",
+    "adm.selectNone": "Nenhum"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5497,7 +5527,10 @@
     "speak.stop": "Parar leitura",
     "speak.empty": "A lista está vazia.",
     "speak.unsupported": "A leitura em voz alta não é suportada neste dispositivo.",
-    "speak.intro": "{name}. {count} itens em aberto."
+    "speak.intro": "{name}. {count} itens em aberto.",
+    "adm.fromCatalog": "+ Do catálogo",
+    "adm.selectAll": "Selecionar tudo",
+    "adm.selectNone": "Nenhum"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -5997,7 +6030,10 @@
     "speak.stop": "Voorlezen stoppen",
     "speak.empty": "De lijst is leeg.",
     "speak.unsupported": "Voorlezen wordt op dit apparaat niet ondersteund.",
-    "speak.intro": "{name}. {count} artikelen open."
+    "speak.intro": "{name}. {count} artikelen open.",
+    "adm.fromCatalog": "+ Uit catalogus",
+    "adm.selectAll": "Alles selecteren",
+    "adm.selectNone": "Niets selecteren"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6497,7 +6533,10 @@
     "speak.stop": "Voorlezen stoppen",
     "speak.empty": "De lijst is leeg.",
     "speak.unsupported": "Voorlezen wordt op dit apparaat niet ondersteund.",
-    "speak.intro": "{name}. {count} artikelen open."
+    "speak.intro": "{name}. {count} artikelen open.",
+    "adm.fromCatalog": "+ Uit catalogus",
+    "adm.selectAll": "Alles selecteren",
+    "adm.selectNone": "Niets selecteren"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",

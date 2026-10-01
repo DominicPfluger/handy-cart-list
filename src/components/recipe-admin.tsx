@@ -11,8 +11,8 @@ import type { MessageKey } from "@/i18n/de";
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
 type Row = { id: string; template_id: string; step_key: string; product_id: string; sort_order: number };
-type Dept = { id: string; name: string; parent_id: string | null };
-type Prod = { id: string; name: string; department_id: string; emoji: string | null };
+type Dept = { id: string; name: string; parent_id: string | null; emoji?: string | null; sort_order?: number };
+type Prod = { id: string; name: string; department_id: string; emoji: string | null; sort_order?: number };
 
 async function loadRecipeIngredients() {
   const rows: Row[] = [];
@@ -37,6 +37,9 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [tplId, setTplId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
+  const [pickerStep, setPickerStep] = useState<string | null>(null);
+  const [pickerDept, setPickerDept] = useState<string | null>(null);
+  const [pickerSel, setPickerSel] = useState<Set<string>>(new Set());
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
   const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
@@ -98,6 +101,43 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       if (e2) throw new Error(e2.message);
     });
 
+  const openPicker = (stepKey: string) => {
+    setPickerStep(stepKey);
+    setPickerDept(null);
+    setPickerSel(new Set(assignedFor(stepKey).map((r) => r.product_id)));
+  };
+  const togglePick = (id: string) =>
+    setPickerSel((x) => { const n = new Set(x); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  const childDepts = depts
+    .filter((d) => (d.parent_id ?? null) === pickerDept)
+    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+  const deptProds = pickerDept
+    ? prods.filter((p) => p.department_id === pickerDept).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+    : [];
+  const applyPicker = (stepKey: string) =>
+    run(async () => {
+      const assigned = assignedFor(stepKey);
+      const had = new Set(assigned.map((r) => r.product_id));
+      const add = [...pickerSel].filter((id) => !had.has(id));
+      const remove = [...had].filter((id) => !pickerSel.has(id));
+      let max = Math.max(0, ...assigned.map((r) => r.sort_order));
+      if (add.length) {
+        const { error } = await supabase.from("recipe_ingredients").upsert(
+          add.map((product_id) => ({ template_id: tplId!, step_key: stepKey, product_id, sort_order: ++max })),
+          { onConflict: "template_id,step_key,product_id" },
+        );
+        if (error) throw new Error(error.message);
+      }
+      if (remove.length) {
+        const { error } = await supabase.from("recipe_ingredients").delete()
+          .eq("template_id", tplId!).eq("step_key", stepKey).in("product_id", remove);
+        if (error) throw new Error(error.message);
+      }
+      setPickerStep(null);
+    });
+
+
+
   if (!open) {
     return (
       <Button variant="outline" className="w-full rounded-xl" onClick={() => setOpen(true)}>
@@ -117,7 +157,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
         {RECIPE_TEMPLATES.map((x) => (
           <button
             key={x.id}
-            onClick={() => { setTplId(x.id); setSearch(""); }}
+            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); }}
             aria-pressed={tplId === x.id}
             className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}
           >
@@ -170,6 +210,43 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                         <span className="hidden sm:block truncate text-[10px] text-muted-foreground">{path(p.department_id)}</span>
                       </label>
                     ))}
+                  </div>
+                )}
+                {pickerStep !== s.key ? (
+                  <button type="button" onClick={() => openPicker(s.key)} className="text-xs font-medium text-primary">
+                    {T("adm.fromCatalog")}
+                  </button>
+                ) : (
+                  <div className="space-y-1.5 rounded-lg border border-primary/40 bg-background p-2">
+                    <div className="flex items-center gap-2 text-xs">
+                      {pickerDept && (
+                        <button type="button" onClick={() => setPickerDept(deptById.get(pickerDept)?.parent_id ?? null)} className="px-1 text-muted-foreground">←</button>
+                      )}
+                      <span className="min-w-0 flex-1 truncate font-semibold text-foreground">{pickerDept ? path(pickerDept) : T("adm.fromCatalog")}</span>
+                    </div>
+                    <div className="max-h-72 space-y-0.5 overflow-y-auto">
+                      {childDepts.map((d) => (
+                        <button key={d.id} type="button" onClick={() => setPickerDept(d.id)} className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left text-xs text-foreground hover:bg-accent/40">
+                          <span className="truncate">{d.emoji} {d.name}</span><span className="text-muted-foreground">›</span>
+                        </button>
+                      ))}
+                      {deptProds.map((p) => (
+                        <label key={p.id} className="flex items-center gap-2 rounded-lg px-2 py-1 text-xs hover:bg-accent/40">
+                          <input type="checkbox" checked={pickerSel.has(p.id)} onChange={() => togglePick(p.id)} className="accent-primary" />
+                          <span className="min-w-0 flex-1 truncate text-foreground">{p.emoji} {p.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                    {deptProds.length > 0 && (
+                      <div className="flex gap-3 text-xs">
+                        <button type="button" onClick={() => setPickerSel((x) => new Set([...x, ...deptProds.map((p) => p.id)]))} className="text-primary">{T("adm.selectAll")}</button>
+                        <button type="button" onClick={() => setPickerSel((x) => { const n = new Set(x); deptProds.forEach((p) => n.delete(p.id)); return n; })} className="text-primary">{T("adm.selectNone")}</button>
+                      </div>
+                    )}
+                    <div className="flex justify-end gap-2">
+                      <Button size="sm" variant="ghost" onClick={() => setPickerStep(null)}>{T("adm.cancel")}</Button>
+                      <Button size="sm" disabled={busy} onClick={() => applyPicker(s.key)}>{T("adm.apply")} ({pickerSel.size})</Button>
+                    </div>
                   </div>
                 )}
               </div>
