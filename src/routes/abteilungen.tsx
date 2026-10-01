@@ -390,9 +390,11 @@ function DepartmentsPage() {
           type="button"
           onClick={() => setDietOpen((v) => !v)}
           aria-expanded={dietOpen}
-          className={`shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+          aria-label={t("diet.filter")}
+          title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
+          className={`shrink-0 rounded-lg px-2 py-1.5 text-base leading-none ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
         >
-          🥗 {t("diet.filter")}{diets.length ? ` · ${diets.length}` : ""}
+          🥗
         </button>
       </div>
 
