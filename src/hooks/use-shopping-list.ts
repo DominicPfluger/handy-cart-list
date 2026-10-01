@@ -866,6 +866,7 @@ function useCloudLists(
     addItem,
     addCatalogItem,
     toggleItem,
+    setItemGroup,
     removeItem,
     clearChecked,
   };
