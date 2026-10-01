@@ -119,6 +119,7 @@ function ListPage() {
     label: string;
     emoji: string;
     order: number;
+    root?: CatalogDepartment;
     items: ListItem[];
   }
 
@@ -137,6 +138,7 @@ function ListPage() {
           label: root?.name ?? it.groupLabel ?? getCategory(it.category).label,
           emoji: root?.emoji ?? it.groupEmoji ?? getCategory(it.category).emoji,
           order: root ? root.sortOrder : Number.MAX_SAFE_INTEGER,
+          root,
           items: [],
         };
         map.set(key, group);
@@ -239,9 +241,18 @@ function ListPage() {
           </button>
           <SpeakListButton
             title={activeList.name}
-            groups={grouped.map((g) => ({
-              label: g.label,
-              items: g.items.filter((i) => !i.checked).map((i) => `${i.quantity ? relocalizeQuantity(i.quantity, i.unit) + " " : ""}${displayName(i)}`),
+            groups={(sl) => grouped.map((g) => ({
+              label: g.root ? pickName(g.root.names, sl, g.root.baseName) : g.label,
+              items: g.items.filter((i) => !i.checked).map((i) => {
+                const product = i.productId ? productById.get(i.productId) : undefined;
+                let name = displayName(i);
+                if (product) {
+                  const k = i.name.indexOf(" · ");
+                  const base = pickName(product.names, sl, product.baseName);
+                  name = stripAnyPrefix(k >= 0 ? base + i.name.slice(k) : base);
+                }
+                return `${i.quantity ? relocalizeQuantity(i.quantity, i.unit) + " " : ""}${name}`;
+              }),
             }))}
           />
           <ExportListButton
