@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { translate, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
+import { MemberAvatar } from "../components/member-avatar";
 
 export const Route = createFileRoute("/aktivitaeten")({
   head: () => ({
@@ -28,13 +29,6 @@ function timeAgo(ts: number, locale: string): string {
   const d = Math.floor(h / 24);
   return t("more.dAgo", d);
 }
-
-const AVATAR_COLORS = [
-  "oklch(0.52 0.155 144)",
-  "oklch(0.75 0.16 47)",
-  "oklch(0.62 0.18 280)",
-  "oklch(0.55 0.13 210)",
-];
 
 function ActivityPage() {
   const { members, activity } = useShoppingList();
