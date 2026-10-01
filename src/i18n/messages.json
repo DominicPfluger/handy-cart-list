@@ -483,7 +483,9 @@
     "adm.brandDelete": "Delete brand “{name}”?",
     "fav.toList": "Add all {count} favorites to a new list",
     "fav.toListDone": "{count} items added to a new list",
-    "fav.newListName": "Favorites"
+    "fav.newListName": "Favorites",
+    "fav.listNameTitle": "New list from favorites",
+    "fav.listNamePlaceholder": "Name of the shopping list"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -969,7 +971,9 @@
     "adm.brandDelete": "Delete brand “{name}”?",
     "fav.toList": "Add all {count} favourites to a new list",
     "fav.toListDone": "{count} items added to a new list",
-    "fav.newListName": "Favourites"
+    "fav.newListName": "Favourites",
+    "fav.listNameTitle": "New list from favourites",
+    "fav.listNamePlaceholder": "Name of the shopping list"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1455,7 +1459,9 @@
     "adm.brandDelete": "Delete brand “{name}”?",
     "fav.toList": "Add all {count} favorites to a new list",
     "fav.toListDone": "{count} items added to a new list",
-    "fav.newListName": "Favorites"
+    "fav.newListName": "Favorites",
+    "fav.listNameTitle": "New list from favorites",
+    "fav.listNamePlaceholder": "Name of the shopping list"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -1941,7 +1947,9 @@
     "adm.brandDelete": "¿Eliminar la marca «{name}»?",
     "fav.toList": "Añadir los {count} favoritos a una lista nueva",
     "fav.toListDone": "{count} artículos añadidos a una lista nueva",
-    "fav.newListName": "Favoritos"
+    "fav.newListName": "Favoritos",
+    "fav.listNameTitle": "Nueva lista desde favoritos",
+    "fav.listNamePlaceholder": "Nombre de la lista de la compra"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2427,7 +2435,9 @@
     "adm.brandDelete": "¿Eliminar la marca “{name}”?",
     "fav.toList": "Agregar los {count} favoritos a una lista nueva",
     "fav.toListDone": "{count} artículos agregados a una lista nueva",
-    "fav.newListName": "Favoritos"
+    "fav.newListName": "Favoritos",
+    "fav.listNameTitle": "Nueva lista desde favoritos",
+    "fav.listNamePlaceholder": "Nombre de la lista de compras"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -2913,7 +2923,9 @@
     "adm.brandDelete": "Supprimer la marque « {name} » ?",
     "fav.toList": "Ajouter les {count} favoris à une nouvelle liste",
     "fav.toListDone": "{count} articles ajoutés à une nouvelle liste",
-    "fav.newListName": "Favoris"
+    "fav.newListName": "Favoris",
+    "fav.listNameTitle": "Nouvelle liste à partir des favoris",
+    "fav.listNamePlaceholder": "Nom de la liste de courses"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3399,7 +3411,9 @@
     "adm.brandDelete": "Supprimer la marque « {name} »?",
     "fav.toList": "Ajouter les {count} favoris à une nouvelle liste",
     "fav.toListDone": "{count} articles ajoutés à une nouvelle liste",
-    "fav.newListName": "Favoris"
+    "fav.newListName": "Favoris",
+    "fav.listNameTitle": "Nouvelle liste à partir des favoris",
+    "fav.listNamePlaceholder": "Nom de la liste d'épicerie"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -3885,7 +3899,9 @@
     "adm.brandDelete": "Eliminare la marca «{name}»?",
     "fav.toList": "Aggiungi tutti i {count} preferiti a una nuova lista",
     "fav.toListDone": "{count} articoli aggiunti a una nuova lista",
-    "fav.newListName": "Preferiti"
+    "fav.newListName": "Preferiti",
+    "fav.listNameTitle": "Nuova lista dai preferiti",
+    "fav.listNamePlaceholder": "Nome della lista della spesa"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4371,7 +4387,9 @@
     "adm.brandDelete": "Eliminare la marca «{name}»?",
     "fav.toList": "Aggiungi tutti i {count} preferiti a una nuova lista",
     "fav.toListDone": "{count} articoli aggiunti a una nuova lista",
-    "fav.newListName": "Preferiti"
+    "fav.newListName": "Preferiti",
+    "fav.listNameTitle": "Nuova lista dai preferiti",
+    "fav.listNamePlaceholder": "Nome della lista della spesa"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -4857,7 +4875,9 @@
     "adm.brandDelete": "Eliminar a marca «{name}»?",
     "fav.toList": "Adicionar os {count} favoritos a uma nova lista",
     "fav.toListDone": "{count} artigos adicionados a uma nova lista",
-    "fav.newListName": "Favoritos"
+    "fav.newListName": "Favoritos",
+    "fav.listNameTitle": "Nova lista a partir dos favoritos",
+    "fav.listNamePlaceholder": "Nome da lista de compras"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5343,7 +5363,9 @@
     "adm.brandDelete": "Excluir a marca “{name}”?",
     "fav.toList": "Adicionar os {count} favoritos a uma nova lista",
     "fav.toListDone": "{count} itens adicionados a uma nova lista",
-    "fav.newListName": "Favoritos"
+    "fav.newListName": "Favoritos",
+    "fav.listNameTitle": "Nova lista a partir dos favoritos",
+    "fav.listNamePlaceholder": "Nome da lista de compras"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -5829,7 +5851,9 @@
     "adm.brandDelete": "Merk ‘{name}’ verwijderen?",
     "fav.toList": "Alle {count} favorieten naar een nieuwe lijst",
     "fav.toListDone": "{count} artikelen naar een nieuwe lijst overgezet",
-    "fav.newListName": "Favorieten"
+    "fav.newListName": "Favorieten",
+    "fav.listNameTitle": "Nieuwe lijst vanuit favorieten",
+    "fav.listNamePlaceholder": "Naam van de boodschappenlijst"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6315,7 +6339,9 @@
     "adm.brandDelete": "Merk ‘{name}’ verwijderen?",
     "fav.toList": "Alle {count} favorieten naar een nieuwe lijst",
     "fav.toListDone": "{count} artikelen naar een nieuwe lijst overgezet",
-    "fav.newListName": "Favorieten"
+    "fav.newListName": "Favorieten",
+    "fav.listNameTitle": "Nieuwe lijst vanuit favorieten",
+    "fav.listNamePlaceholder": "Naam van de boodschappenlijst"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6359,7 +6385,9 @@
     "adm.brandDelete": "Marke „{name}\" löschen?",
     "fav.toList": "Alle {count} Favoriten in neue Liste",
     "fav.toListDone": "{count} Einträge in neue Liste übernommen",
-    "fav.newListName": "Favoriten"
+    "fav.newListName": "Favoriten",
+    "fav.listNameTitle": "Neue Liste aus Favoriten",
+    "fav.listNamePlaceholder": "Name der Einkaufsliste"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6403,6 +6431,8 @@
     "adm.brandDelete": "Marke „{name}\" löschen?",
     "fav.toList": "Alle {count} Favoriten in neue Liste",
     "fav.toListDone": "{count} Einträge in neue Liste übernommen",
-    "fav.newListName": "Favoriten"
+    "fav.newListName": "Favoriten",
+    "fav.listNameTitle": "Neue Liste aus Favoriten",
+    "fav.listNamePlaceholder": "Name der Einkaufsliste"
   }
 }
