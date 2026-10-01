@@ -9,7 +9,7 @@ import { formatQuantity } from "../lib/units";
 import { ProductEmoji } from "./product-emoji";
 import { Button } from "./ui/button";
 import {
-  createCollection, saveToFolder, useRecipeCollections,
+  createCollection, saveToFolder, useRecipeCollections, flattenTree, folderPath,
 } from "../hooks/use-saved-recipes";
 import { useAuthUser } from "../hooks/use-auth-user";
 import { createRecipe, publishRecipe, shareLink, type RecipeItem } from "../lib/recipes-api";
@@ -270,9 +270,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
             </button>
           ))}
         </div>
-        {collections.map((c) => (
-          <button key={c.id} onClick={() => doSave(c.id)} className="flex w-full items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 text-left text-sm font-semibold text-foreground">
-            <span>📁 {c.name}</span><span className="text-xs text-muted-foreground">{c.recipes.length}</span>
+        {flattenTree(collections).map(({ c }) => (
+          <button key={c.id} onClick={() => doSave(c.id)} className="flex w-full items-center justify-between gap-2 rounded-2xl border border-border bg-card px-4 py-3 text-left text-sm font-semibold text-foreground">
+            <span className="min-w-0 truncate">📁 {folderPath(collections, c.id)}</span><span className="text-xs text-muted-foreground">{c.recipes.length}</span>
           </button>
         ))}
         <div className="flex gap-2">
