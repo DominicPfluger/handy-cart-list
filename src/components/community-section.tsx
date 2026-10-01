@@ -140,9 +140,7 @@ function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
 
   return (
     <div className="rounded-2xl border border-border bg-card p-3">
-      {r.is_public && r.share_slug ? (
-        <Link to="/rezept/$slug" params={{ slug: r.share_slug }} className="flex items-center gap-3">{body}</Link>
-      ) : <div className="flex items-center gap-3">{body}</div>}
+      <Link to="/rezepte/generator" search={{ recipe: r.id }} className="flex items-center gap-3">{body}</Link>
       <div className="mt-2 flex items-center justify-between gap-2 text-xs text-muted-foreground">
         {mine ? (
           <>
