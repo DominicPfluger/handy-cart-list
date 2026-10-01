@@ -254,6 +254,8 @@ export const de = {
   "speak.empty": "Die Liste ist leer.",
   "speak.unsupported": "Sprachausgabe wird auf diesem Gerät nicht unterstützt.",
   "speak.intro": "{name}. {count} offene Artikel.",
+  "speak.rate": "Vorlese-Geschwindigkeit",
+  "speak.rateSub": "Wie schnell die Liste vorgelesen wird",
   "inv.more": "Weitere…",
   "inv.sms": "SMS",
   "inv.email": "E-Mail",

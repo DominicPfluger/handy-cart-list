@@ -15,6 +15,7 @@ import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18
 import { useEffect, useState } from "react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
+import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 
@@ -269,6 +270,7 @@ function MorePage() {
             <span className="text-muted-foreground">›</span>
           </button>
         ))}
+        <SpeakRateRow />
       </section>
 
       {hiddenProducts.length > 0 && (
@@ -324,6 +326,43 @@ function MorePage() {
       <p className="pb-2 text-center text-xs text-muted-foreground">
         {t("more.tagline")}
       </p>
+    </div>
+  );
+}
+
+function SpeakRateRow() {
+  const { t } = useT();
+  const [rate, setRate] = useSpeakRate();
+  return (
+    <div className="flex w-full items-center gap-3 px-4 py-3.5">
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+        <span className="text-lg" aria-hidden="true">🔊</span>
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold text-foreground">{t("speak.rate")}</p>
+        <p className="truncate text-xs text-muted-foreground">{t("speak.rateSub")}</p>
+        <div className="mt-2 flex items-center gap-3">
+          <span className="text-xs text-muted-foreground" aria-hidden="true">🐢</span>
+          <input
+            type="range"
+            min={0.5}
+            max={1.5}
+            step={0.05}
+            value={rate}
+            onChange={(e) => setRate(Number(e.target.value))}
+            aria-label={t("speak.rate")}
+            className="w-full accent-primary"
+          />
+          <span className="text-xs text-muted-foreground" aria-hidden="true">🐇</span>
+          <button
+            type="button"
+            onClick={() => setRate(DEFAULT_SPEAK_RATE)}
+            className="shrink-0 rounded-lg border border-border px-2 py-1 text-xs font-medium text-foreground"
+          >
+            {rate.toFixed(2)}×
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
