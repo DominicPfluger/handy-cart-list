@@ -466,6 +466,7 @@ function AdminPage() {
               if (patch.diets) upd['excluded_diets'] = patch.diets;
               if (patch.variants) upd['variants'] = patch.variants;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
+              if (sel.kind === "product" && patch.variants) void trVariants({ data: { productId: sel.id } }).catch(() => {});
             }
           })}
           onTr={(locale, value, prev) => {

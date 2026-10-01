@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { brandsFor, departmentIdsOf, pathTo, useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { getUnits, formatQuantity, type UnitId } from "../lib/units";
-import { useT } from "../i18n";
+import { useT, pickName } from "../i18n";
 
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { usePantry } from "../hooks/use-pantry";
@@ -91,6 +91,8 @@ export function CatalogProductDialog({
     setCustomInput("");
   };
 
+  const vName = (v: string) => pickName(product?.variantNames?.[v], locale, v);
+
   const amount = Number(quantity.replace(",", "."));
   const validAmount = Number.isFinite(amount) && amount > 0;
 
@@ -98,7 +100,7 @@ export function CatalogProductDialog({
     if (!product || !validAmount) return;
     const pending = customInput.trim();
     const sorts = pending && !selected.includes(pending) ? [...selected, pending] : selected;
-    const base = sorts.length ? sorts.map((v) => `${product.name} · ${v}`) : [product.name];
+    const base = sorts.length ? sorts.map((v) => `${product.name} · ${vName(v)}`) : [product.name];
     const names = brand ? base.map((n) => `${n} · ${brand}`) : base;
     for (const name of names) addCatalogItem({
       productId: product.id,
@@ -223,7 +225,7 @@ export function CatalogProductDialog({
                             : "border-border bg-card text-foreground"
                         }`}
                       >
-                        {v}
+                        {vName(v)}
                       </button>
                     );
                   })}

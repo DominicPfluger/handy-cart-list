@@ -59,7 +59,7 @@ function toCatalogProduct(favorite: FavoriteProduct): CatalogProduct {
     defaultQuantity: favorite.defaultQuantity,
     defaultUnit: favorite.defaultUnit,
     organicAvailable: favorite.organicAvailable,
-    variants: [], excludedDiets: [], cuisineIds: [], brands: [],
+    variants: [], variantNames: {}, excludedDiets: [], cuisineIds: [], brands: [],
     sortOrder: 0,
     baseName: favorite.name,
     names: {},
