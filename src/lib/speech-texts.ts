@@ -31,9 +31,11 @@ export function defaultSpeechText(locale: string, key: SpeechKey): string {
   }
 }
 
-export function resolveSpeechText(rows: SpeechTextRow[] | undefined, locale: string, key: SpeechKey): string {
+export function resolveSpeechText(rows: SpeechTextRow[] | undefined, locale: string, key: SpeechKey, count?: number): string {
   const custom = rows?.find((r) => r.locale === locale && r.key === key)?.text?.trim();
-  return custom ? custom : defaultSpeechText(locale, key);
+  if (custom) return custom;
+  if (key === "intro" && count === 1) return translate(locale, "speak.introOne");
+  return defaultSpeechText(locale, key);
 }
 
 export function fillSpeech(tpl: string, vars: Record<string, string | number>): string {

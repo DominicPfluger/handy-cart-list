@@ -24,6 +24,7 @@ import {
 import { ListManager, shareList } from "../components/list-manager";
 import { relocalizeQuantity } from "../lib/units";
 import { SpeakListButton } from "../components/speak-list-button";
+import { speakQuantity } from "../lib/speech-units";
 import { ExportListButton } from "../components/export-list-sheet";
 import { unitShort } from "../lib/units";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
@@ -251,7 +252,7 @@ function ListPage() {
                   const base = pickName(product.names, sl, product.baseName);
                   name = stripAnyPrefix(k >= 0 ? base + i.name.slice(k) : base);
                 }
-                return `${i.quantity ? relocalizeQuantity(i.quantity, i.unit) + " " : ""}${name}`;
+                return `${i.quantity ? speakQuantity(i.quantity, i.unit, sl) + " " : ""}${name}`;
               }),
             }))}
           />

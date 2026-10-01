@@ -319,7 +319,7 @@ function MorePage() {
 
 function SpeakLocaleRow() {
   const { t } = useT();
-  const [loc, setLoc] = useSpeakLocale();
+  const [, setLoc, loc] = useSpeakLocale();
   return (
     <div className="flex w-full items-center gap-3 px-4 py-3.5">
       <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
@@ -330,10 +330,11 @@ function SpeakLocaleRow() {
         <p className="truncate text-xs text-muted-foreground">{t("speak.localeSub")}</p>
         <select
           value={loc}
-          onChange={(e) => setLoc(e.target.value as Locale)}
+          onChange={(e) => setLoc(e.target.value as Locale | "app")}
           aria-label={t("speak.locale")}
           className="mt-2 w-full rounded-lg border border-border bg-background px-2 py-1.5 text-sm text-foreground"
         >
+          <option value="app">🌐 {t("speak.followApp")}</option>
           {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
         </select>
       </div>

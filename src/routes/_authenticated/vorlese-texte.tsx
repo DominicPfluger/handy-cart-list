@@ -3,11 +3,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { LOCALES, useT, type Locale } from "@/i18n";
+import { LOCALES, translate, useT, type Locale } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { useSpeakLocale } from "@/hooks/use-speak-locale";
 import { useSpeakRate } from "@/hooks/use-speak-rate";
-import { speakSentences } from "@/components/speak-list-button";
+import { speakSentences, missingVoice } from "@/components/speak-list-button";
 import {
   SPEECH_KEYS, defaultSpeechText, fillSpeech, speechTextsQueryKey, useSpeechTexts, type SpeechKey,
 } from "@/lib/speech-texts";
@@ -74,6 +74,7 @@ function SpeechTextsPage() {
 
   const preview = () => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) { toast.error(t("speak.unsupported")); return; }
+    if (missingVoice(locale)) toast.warning(translate(locale, "speak.noVoice"));
     const name = t("stx.sampleList");
     speakSentences([
       fillSpeech(effective("intro"), { name, count: 3 }),
@@ -92,7 +93,7 @@ function SpeechTextsPage() {
       <label className="block text-sm font-semibold text-foreground">
         {t("speak.locale")}
         <select value={locale} onChange={(e) => setLocale(e.target.value as Locale)} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
-          {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
+          {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}{rows?.some((r) => r.locale === l.id) ? ` · ✎ ${t("stx.custom")}` : ""}</option>)}
         </select>
       </label>
 
