@@ -157,7 +157,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
         {RECIPE_TEMPLATES.map((x) => (
           <button
             key={x.id}
-            onClick={() => { setTplId(x.id); setSearch(""); }}
+            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); }}
             aria-pressed={tplId === x.id}
             className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}
           >
