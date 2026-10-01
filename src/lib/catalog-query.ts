@@ -34,7 +34,7 @@ export function useCatalog(): Catalog {
     }));
     const ownProducts: CatalogProduct[] = own.products.map((p, i) => ({
       id: p.id, departmentId: p.departmentId, name: p.name, emoji: p.emoji, imageUrl: null,
-      defaultQuantity: p.defaultQuantity, defaultUnit: p.defaultUnit, organicAvailable: true, variants: [], excludedDiets: [], cuisineIds: [],
+      defaultQuantity: p.defaultQuantity, defaultUnit: p.defaultUnit, organicAvailable: true, variants: [], excludedDiets: [], cuisineIds: [], brands: [],
       sortOrder: 10000 + i, baseName: p.name, names: {},
     }));
     return {
@@ -106,4 +106,10 @@ export function matchesProductSearch(name: string, normalizedQuery: string): boo
 /** Alphabetische Sortierung der Suchtreffer (deutsche Regeln). */
 export function compareByName(a: { name: string }, b: { name: string }) {
   return a.name.localeCompare(b.name, getLocale());
+}
+
+/** Marken eines Produkts, die im Markt der gewählten Sprachvariante verbreitet sind. */
+export function brandsFor(product: Pick<CatalogProduct, "brands">, locale: string = getLocale()): string[] {
+  const market = locale.split("-")[1] ?? "";
+  return (product.brands ?? []).filter((b) => !b.markets.length || b.markets.includes(market)).map((b) => b.name);
 }

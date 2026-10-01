@@ -29,6 +29,8 @@ export interface CatalogProduct {
   excludedDiets: string[];
   /** Länderküchen, in denen das Produkt typisch ist */
   cuisineIds: string[];
+  /** Verbreitete Handelsmarken; markets leer = alle Länder (Ländercodes wie CH, DE) */
+  brands: { name: string; markets: string[] }[];
   sortOrder: number;
   baseName: string;
   names: Record<string, string>;
@@ -98,7 +100,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     return { data: all, error: null };
   }
 
-  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes] = await Promise.all([
+  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
@@ -112,7 +114,14 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     fetchAll("catalog_translations", "entity_id, locale, name", ["id"]),
     supabase.from("cuisines").select("id, name, emoji, sort_order").order("sort_order", { ascending: true }),
     fetchAll("product_cuisines", "product_id, cuisine_id", ["id"]),
+    fetchAll("product_brands", "product_id, name, locales, sort_order", ["sort_order", "id"]),
   ]);
+  const brandsByProduct = new Map<string, { name: string; markets: string[] }[]>();
+  for (const r of (brRes.data ?? []) as Array<{ product_id: string; name: string; locales: string[] | null }>) {
+    const list = brandsByProduct.get(r.product_id) ?? [];
+    list.push({ name: r.name, markets: r.locales ?? [] });
+    brandsByProduct.set(r.product_id, list);
+  }
   const cuisineIdsByProduct = new Map<string, string[]>();
   for (const r of (pcRes.data ?? []) as Array<{ product_id: string; cuisine_id: string }>) {
     cuisineIdsByProduct.set(r.product_id, [...(cuisineIdsByProduct.get(r.product_id) ?? []), r.cuisine_id]);
@@ -172,6 +181,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       variants: (r["variants"] as string[] | null) ?? [],
       excludedDiets: (r["excluded_diets"] as string[] | null) ?? [],
       cuisineIds: cuisineIdsByProduct.get(r["id"] as string) ?? [],
+      brands: brandsByProduct.get(r["id"] as string) ?? [],
       sortOrder: (r["sort_order"] as number) ?? 0,
       baseName: r["name"] as string,
       names: names.get(r["id"] as string) ?? {},

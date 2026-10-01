@@ -472,7 +472,15 @@
     "adm.apply": "Apply",
     "adm.assignedList": "Assigned ({n})",
     "adm.remove": "Remove",
-    "adm.allCuisines": "All Cuisines"
+    "adm.allCuisines": "All Cuisines",
+    "brand.title": "Brand (optional)",
+    "adm.brands": "Brands",
+    "adm.brandSuggest": "Suggest brands",
+    "adm.brandAdd": "New brand…",
+    "adm.brandAll": "All countries",
+    "adm.brandMarkets": "Select countries",
+    "adm.brandNone": "No new brands found",
+    "adm.brandDelete": "Delete brand “{name}”?"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -947,7 +955,15 @@
     "adm.apply": "Apply",
     "adm.assignedList": "Assigned ({n})",
     "adm.remove": "Remove",
-    "adm.allCuisines": "All Cuisines"
+    "adm.allCuisines": "All Cuisines",
+    "brand.title": "Brand (optional)",
+    "adm.brands": "Brands",
+    "adm.brandSuggest": "Suggest brands",
+    "adm.brandAdd": "New brand…",
+    "adm.brandAll": "All countries",
+    "adm.brandMarkets": "Select countries",
+    "adm.brandNone": "No new brands found",
+    "adm.brandDelete": "Delete brand “{name}”?"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1422,7 +1438,15 @@
     "adm.apply": "Apply",
     "adm.assignedList": "Assigned ({n})",
     "adm.remove": "Remove",
-    "adm.allCuisines": "All Cuisines"
+    "adm.allCuisines": "All Cuisines",
+    "brand.title": "Brand (optional)",
+    "adm.brands": "Brands",
+    "adm.brandSuggest": "Suggest brands",
+    "adm.brandAdd": "New brand…",
+    "adm.brandAll": "All countries",
+    "adm.brandMarkets": "Select countries",
+    "adm.brandNone": "No new brands found",
+    "adm.brandDelete": "Delete brand “{name}”?"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -1897,7 +1921,15 @@
     "adm.apply": "Aplicar",
     "adm.assignedList": "Asignado ({n})",
     "adm.remove": "Quitar",
-    "adm.allCuisines": "Todas las cocinas"
+    "adm.allCuisines": "Todas las cocinas",
+    "brand.title": "Marca (opcional)",
+    "adm.brands": "Marcas",
+    "adm.brandSuggest": "Sugerir marcas",
+    "adm.brandAdd": "Nueva marca…",
+    "adm.brandAll": "Todos los países",
+    "adm.brandMarkets": "Seleccionar países",
+    "adm.brandNone": "No se han encontrado marcas nuevas",
+    "adm.brandDelete": "¿Eliminar la marca «{name}»?"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2372,7 +2404,15 @@
     "adm.apply": "Aplicar",
     "adm.assignedList": "Asignado ({n})",
     "adm.remove": "Eliminar",
-    "adm.allCuisines": "Todas las cocinas"
+    "adm.allCuisines": "Todas las cocinas",
+    "brand.title": "Marca (opcional)",
+    "adm.brands": "Marcas",
+    "adm.brandSuggest": "Sugerir marcas",
+    "adm.brandAdd": "Nueva marca…",
+    "adm.brandAll": "Todos los países",
+    "adm.brandMarkets": "Seleccionar países",
+    "adm.brandNone": "No se encontraron marcas nuevas",
+    "adm.brandDelete": "¿Eliminar la marca “{name}”?"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -2847,7 +2887,15 @@
     "adm.apply": "Appliquer",
     "adm.assignedList": "Assigné ({n})",
     "adm.remove": "Supprimer",
-    "adm.allCuisines": "Toutes les cuisines"
+    "adm.allCuisines": "Toutes les cuisines",
+    "brand.title": "Marque (facultatif)",
+    "adm.brands": "Marques",
+    "adm.brandSuggest": "Suggérer des marques",
+    "adm.brandAdd": "Nouvelle marque…",
+    "adm.brandAll": "Tous les pays",
+    "adm.brandMarkets": "Sélectionner des pays",
+    "adm.brandNone": "Aucune nouvelle marque trouvée",
+    "adm.brandDelete": "Supprimer la marque « {name} » ?"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3322,7 +3370,15 @@
     "adm.apply": "Appliquer",
     "adm.assignedList": "Attribué ({n})",
     "adm.remove": "Enlever",
-    "adm.allCuisines": "Toutes les cuisines"
+    "adm.allCuisines": "Toutes les cuisines",
+    "brand.title": "Marque (facultatif)",
+    "adm.brands": "Marques",
+    "adm.brandSuggest": "Suggérer des marques",
+    "adm.brandAdd": "Nouvelle marque…",
+    "adm.brandAll": "Tous les pays",
+    "adm.brandMarkets": "Sélectionner des pays",
+    "adm.brandNone": "Aucune nouvelle marque trouvée",
+    "adm.brandDelete": "Supprimer la marque « {name} »?"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -3797,7 +3853,15 @@
     "adm.apply": "Applica",
     "adm.assignedList": "Assegnato ({n})",
     "adm.remove": "Rimuovi",
-    "adm.allCuisines": "Tutte le cucine"
+    "adm.allCuisines": "Tutte le cucine",
+    "brand.title": "Marca (facoltativa)",
+    "adm.brands": "Marche",
+    "adm.brandSuggest": "Suggerisci marche",
+    "adm.brandAdd": "Nuova marca…",
+    "adm.brandAll": "Tutti i paesi",
+    "adm.brandMarkets": "Seleziona paesi",
+    "adm.brandNone": "Nessuna nuova marca trovata",
+    "adm.brandDelete": "Eliminare la marca «{name}»?"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4272,7 +4336,15 @@
     "adm.apply": "Applica",
     "adm.assignedList": "Assegnato ({n})",
     "adm.remove": "Rimuovi",
-    "adm.allCuisines": "Tutte le cucine"
+    "adm.allCuisines": "Tutte le cucine",
+    "brand.title": "Marca (facoltativa)",
+    "adm.brands": "Marche",
+    "adm.brandSuggest": "Suggerisci marche",
+    "adm.brandAdd": "Nuova marca…",
+    "adm.brandAll": "Tutti i paesi",
+    "adm.brandMarkets": "Seleziona paesi",
+    "adm.brandNone": "Nessuna nuova marca trovata",
+    "adm.brandDelete": "Eliminare la marca «{name}»?"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -4747,7 +4819,15 @@
     "adm.apply": "Aplicar",
     "adm.assignedList": "Atribuídos ({n})",
     "adm.remove": "Remover",
-    "adm.allCuisines": "Todas as Culinárias"
+    "adm.allCuisines": "Todas as Culinárias",
+    "brand.title": "Marca (opcional)",
+    "adm.brands": "Marcas",
+    "adm.brandSuggest": "Sugerir marcas",
+    "adm.brandAdd": "Nova marca…",
+    "adm.brandAll": "Todos os países",
+    "adm.brandMarkets": "Selecionar países",
+    "adm.brandNone": "Não foram encontradas novas marcas",
+    "adm.brandDelete": "Eliminar a marca «{name}»?"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5222,7 +5302,15 @@
     "adm.apply": "Aplicar",
     "adm.assignedList": "Atribuídos ({n})",
     "adm.remove": "Remover",
-    "adm.allCuisines": "Todas as culinárias"
+    "adm.allCuisines": "Todas as culinárias",
+    "brand.title": "Marca (opcional)",
+    "adm.brands": "Marcas",
+    "adm.brandSuggest": "Sugerir marcas",
+    "adm.brandAdd": "Nova marca…",
+    "adm.brandAll": "Todos os países",
+    "adm.brandMarkets": "Selecionar países",
+    "adm.brandNone": "Nenhuma nova marca encontrada",
+    "adm.brandDelete": "Excluir a marca “{name}”?"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -5697,7 +5785,15 @@
     "adm.apply": "Toepassen",
     "adm.assignedList": "Toegewezen ({n})",
     "adm.remove": "Verwijderen",
-    "adm.allCuisines": "Alle keukens"
+    "adm.allCuisines": "Alle keukens",
+    "brand.title": "Merk (optioneel)",
+    "adm.brands": "Merken",
+    "adm.brandSuggest": "Merken voorstellen",
+    "adm.brandAdd": "Nieuw merk…",
+    "adm.brandAll": "Alle landen",
+    "adm.brandMarkets": "Landen selecteren",
+    "adm.brandNone": "Geen nieuwe merken gevonden",
+    "adm.brandDelete": "Merk ‘{name}’ verwijderen?"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6172,7 +6268,15 @@
     "adm.apply": "Toepassen",
     "adm.assignedList": "Toegewezen ({n})",
     "adm.remove": "Verwijderen",
-    "adm.allCuisines": "Alle keukens"
+    "adm.allCuisines": "Alle keukens",
+    "brand.title": "Merk (optioneel)",
+    "adm.brands": "Merken",
+    "adm.brandSuggest": "Merken voorstellen",
+    "adm.brandAdd": "Nieuw merk…",
+    "adm.brandAll": "Alle landen",
+    "adm.brandMarkets": "Landen selecteren",
+    "adm.brandNone": "Geen nieuwe merken gevonden",
+    "adm.brandDelete": "Merk ‘{name}’ verwijderen?"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6205,7 +6309,15 @@
     "voice.noMatch": "Keine passenden Produkte erkannt",
     "cuisine.filter": "Länderküche",
     "cuisine.title": "Nach Länderküche filtern",
-    "cuisine.hint": "Es werden nur Zutaten angezeigt, die in der gewählten Küche typisch sind."
+    "cuisine.hint": "Es werden nur Zutaten angezeigt, die in der gewählten Küche typisch sind.",
+    "brand.title": "Marke (optional)",
+    "adm.brands": "Marken",
+    "adm.brandSuggest": "Marken vorschlagen",
+    "adm.brandAdd": "Neue Marke…",
+    "adm.brandAll": "Alle Länder",
+    "adm.brandMarkets": "Länder wählen",
+    "adm.brandNone": "Keine neuen Marken gefunden",
+    "adm.brandDelete": "Marke „{name}\" löschen?"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6238,6 +6350,14 @@
     "voice.noMatch": "Keine passenden Produkte erkannt",
     "cuisine.filter": "Länderküche",
     "cuisine.title": "Nach Länderküche filtern",
-    "cuisine.hint": "Es werden nur Zutaten angezeigt, die in der gewählten Küche typisch sind."
+    "cuisine.hint": "Es werden nur Zutaten angezeigt, die in der gewählten Küche typisch sind.",
+    "brand.title": "Marke (optional)",
+    "adm.brands": "Marken",
+    "adm.brandSuggest": "Marken vorschlagen",
+    "adm.brandAdd": "Neue Marke…",
+    "adm.brandAll": "Alle Länder",
+    "adm.brandMarkets": "Länder wählen",
+    "adm.brandNone": "Keine neuen Marken gefunden",
+    "adm.brandDelete": "Marke „{name}\" löschen?"
   }
 }

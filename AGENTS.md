@@ -14,3 +14,4 @@
 - Diet filter uses products.excluded_diets (text[], AI-classified, empty for non-food). Why: simple exclusion list.
 - Catalog-using routes use `ssr: false`; catalog loads in browser. Why: SSR embedded ~2.4 MB catalog per page, causing 'aborted' blank screens.
 - Cuisine filter uses `cuisines` + `product_cuisines` (admin-managed in /admin, AI-prefilled); selection device-local. Why: editable many-to-many.
+- Brands: `product_brands` (locales = market codes like CH/DE, empty = all), filtered via `brandsFor`; chosen brand is appended to the list item name ("Name · Marke"). Why: works identically for cloud and local lists without extra plumbing.

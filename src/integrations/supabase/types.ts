@@ -122,6 +122,7 @@ export type Database = {
         Row: {
           added_by: string | null
           added_by_name: string | null
+          brand: string | null
           checked: boolean
           checked_by_name: string | null
           created_at: string
@@ -143,6 +144,7 @@ export type Database = {
         Insert: {
           added_by?: string | null
           added_by_name?: string | null
+          brand?: string | null
           checked?: boolean
           checked_by_name?: string | null
           created_at?: string
@@ -164,6 +166,7 @@ export type Database = {
         Update: {
           added_by?: string | null
           added_by_name?: string | null
+          brand?: string | null
           checked?: boolean
           checked_by_name?: string | null
           created_at?: string
@@ -268,6 +271,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      product_brands: {
+        Row: {
+          created_at: string
+          id: string
+          locales: string[]
+          name: string
+          product_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          locales?: string[]
+          name: string
+          product_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          locales?: string[]
+          name?: string
+          product_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_brands_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_cuisines: {
         Row: {

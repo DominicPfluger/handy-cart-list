@@ -13,6 +13,7 @@ import { getUnits } from "@/lib/units";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
+import { ProductBrandEditor } from "@/components/brand-admin";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -666,6 +667,7 @@ function Editor(p: {
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
         {prod && <ProductCuisinePicker productId={prod.id} />}
+        {prod && <ProductBrandEditor key={prod.id} productId={prod.id} productName={prod.name} path={data.depts.find((x) => x.id === prod.department_id)?.name ?? ""} />}
 
         <div className="flex items-center justify-between pt-2">
           <h3 className="text-sm font-semibold text-foreground">{T("adm.languages")}</h3>
