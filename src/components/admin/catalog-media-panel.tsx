@@ -20,6 +20,7 @@ export function CatalogMediaPanel() {
   const [market, setMarket] = useState(getLocale().split("-")[1] ?? "CH");
   const [busy, setBusy] = useState<"img" | "price" | "allImg" | null>(null);
   const [allProgress, setAllProgress] = useState<{ done: number; total: number } | null>(null);
+  const [generated, setGenerated] = useState<Array<{ id: string; name: string; url: string | null }>>([]);
 
   const status = useQuery({
     queryKey: ["catalog-media-status", market],
@@ -32,6 +33,7 @@ export function CatalogMediaPanel() {
     try {
       const r = await genImages({ data: { limit: 5 } });
       if (r.errors.length > 0) toast.error(r.errors[0]!);
+      setGenerated((g) => [...r.items, ...g].slice(0, 60));
       toast.success(T("media.imgDone", { n: r.done }));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
@@ -48,9 +50,10 @@ export function CatalogMediaPanel() {
     setAllProgress({ done: 0, total });
     try {
       for (;;) {
-        const r = await genImages({ data: { limit: 10 } });
+        const r = await genImages({ data: { limit: 5 } });
         totalDone += r.done;
         setAllProgress({ done: totalDone, total });
+        setGenerated((g) => [...r.items, ...g].slice(0, 60));
         if (r.errors.length > 0) {
           toast.error(r.errors[0]!);
           break;
@@ -121,6 +124,20 @@ export function CatalogMediaPanel() {
           {busy === "price" ? T("media.working") : T("media.genPrices")}
         </Button>
       </div>
+      {generated.length > 0 && (
+        <div className="mt-4 grid grid-cols-5 gap-2">
+          {generated.map((g) => (
+            <figure key={g.id} className="overflow-hidden rounded-xl border border-border bg-background">
+              {g.url ? (
+                <img src={g.url} alt={g.name} className="aspect-square w-full object-cover" loading="lazy" />
+              ) : (
+                <div className="aspect-square w-full bg-muted" />
+              )}
+              <figcaption className="truncate px-1.5 py-1 text-center text-[11px] text-muted-foreground">{g.name}</figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
