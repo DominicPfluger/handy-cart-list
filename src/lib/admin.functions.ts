@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { (await targetLocales(context.supabase)) as BUILTIN_LOCALES } from "@/i18n";
+import { TRANSLATED_LOCALES as BUILTIN_LOCALES } from "@/i18n";
 
 /** Eingebaute + im Admin angelegte Zielsprachen. */
 async function targetLocales(sb: any): Promise<string[]> {
