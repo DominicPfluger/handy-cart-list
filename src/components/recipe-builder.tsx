@@ -15,7 +15,7 @@ import { createRecipe, publishRecipe, shareLink, type RecipeItem } from "../lib/
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { SavedRecipesBoard } from "./saved-recipes-board";
-import { FavoritesRow } from "./recipe-feed";
+import { FavoritesRow, SectionTitle } from "./recipe-feed";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
