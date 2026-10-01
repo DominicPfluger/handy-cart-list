@@ -209,6 +209,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [qty, setQty] = useState(prod?.default_quantity ?? 1);
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [hint, setHint] = useState("");
+  const [large, setLarge] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
   const table = isDept ? "departments" : "products";
@@ -259,7 +260,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
               </div>
               <Input aria-label={T("tile.aiHint")} placeholder={T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 rounded-xl text-sm" />
-              <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(() => genImg({ data: { id: item.id, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } }), T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
+              <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(async () => {
+                await genImg({ data: { id: item.id, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+                const { data } = await supabase.storage.from("catalog-images").createSignedUrl(`${table}/${item.id}.png`, 600);
+                if (data?.signedUrl) setLarge(data.signedUrl);
+              }, T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
             </div>
           )}
         </div>
@@ -281,6 +286,13 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           <Button className="h-11 flex-1 rounded-xl" onClick={() => void save()}>{T("tile.save")}</Button>
         </div>
       </div>
+      {large && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/70 p-6" onClick={() => setLarge(null)}>
+          <button type="button" aria-label={T("common.cancel")} onClick={() => setLarge(null)}
+            className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-background/90 text-xl text-foreground shadow">✕</button>
+          <img src={large} alt="" className="max-h-[85vh] w-auto max-w-full rounded-2xl object-contain shadow-2xl" />
+        </div>
+      )}
     </div>
   );
 }
