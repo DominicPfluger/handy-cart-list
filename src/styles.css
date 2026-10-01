@@ -95,3 +95,10 @@
   }
 }
 
+
+/* Splash screen loading bar */
+@keyframes splash-load {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(60%); }
+  100% { transform: translateX(220%); }
+}
