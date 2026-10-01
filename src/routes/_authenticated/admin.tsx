@@ -22,6 +22,7 @@ import { MarketAdmin, MarketAdminsManager, MARKETS } from "@/components/market-a
 import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 import { ImportPanel } from "@/components/admin/import-panel";
+import { CatalogMediaPanel } from "@/components/admin/catalog-media-panel";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -490,6 +491,7 @@ function AdminPage() {
       )}
 
       {d && <ImportPanel depts={d.depts} prods={d.prods} />}
+      {d && <CatalogMediaPanel />}
 
       <MarketAdmin markets={MARKETS} />
       <MarketAdminsManager />
