@@ -5,7 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts } from "@/lib/admin.functions";
-import { LOCALES, getLocale, translate, type MessageKey } from "@/i18n";
+import { LOCALES, getLocale, translate } from "@/i18n";
+import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 import { getUnits } from "@/lib/units";

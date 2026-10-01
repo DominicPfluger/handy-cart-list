@@ -6,7 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { saveCuisine, deleteCuisine, suggestCuisineProducts } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getLocale, translate, type MessageKey } from "@/i18n";
+import { getLocale, translate } from "@/i18n";
+import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
