@@ -27,7 +27,7 @@ import { MemberAvatar } from "../components/member-avatar";
 import { siWhatsapp, siTelegram, siThreema } from "simple-icons";
 import { BrandIcon, MailIcon, SmsIcon } from "../components/share-icons";
 import appIcon from "../assets/app-icon.png.asset.json";
-import { APP_VERSION, FEEDBACK_EMAIL } from "../lib/app-version";
+import { APP_VERSION } from "../lib/app-version";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
