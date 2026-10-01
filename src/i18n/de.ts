@@ -573,6 +573,7 @@ export const de = {
   "adm.assigned": "Zugewiesen",
   "rk.otherGroup": "Weitere",
   "rk.showAll": "Alle {count} anzeigen ▾",
+  "rk.showMore": "Weitere {count} anzeigen ▾",
   "adm.recipeSortBy": "Sortieren nach…",
   "adm.diets": "Nicht geeignet für:",
   "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet.",

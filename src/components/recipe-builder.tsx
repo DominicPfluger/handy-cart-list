@@ -55,8 +55,9 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     for (const p of catalog.products) if (!m.has(p.baseName)) m.set(p.baseName, p);
     return m;
   }, [catalog.products]);
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-  const LIMIT = 20;
+  const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
+  const PAGE = 12;
+  const THRESHOLD = 18;
 
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
   const steps = useMemo(
@@ -408,8 +409,11 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           ) : (
             (() => {
               const sel = picks[s.key] ?? [];
-              const open = !!expanded[s.key];
-              const shown = open ? s.products : [...s.products.slice(0, LIMIT), ...s.products.slice(LIMIT).filter((p) => sel.includes(p.id))];
+              const vis = visibleCount[s.key] ?? PAGE;
+              const shortList = s.products.length < THRESHOLD;
+              const open = shortList || vis >= s.products.length;
+              const shown = open ? s.products : [...s.products.slice(0, vis), ...s.products.slice(vis).filter((p) => sel.includes(p.id))];
+              const remaining = s.products.length - vis;
               return (
                 <div className="space-y-2">
                   <div className="flex flex-wrap gap-2">
@@ -428,14 +432,14 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
                       );
                     })}
                   </div>
-                  {s.products.length > LIMIT && (
+                  {!shortList && (
                     <button
                       type="button"
-                      onClick={() => setExpanded((x) => ({ ...x, [s.key]: !open }))}
+                      onClick={() => setVisibleCount((x) => ({ ...x, [s.key]: open ? PAGE : vis + PAGE }))}
                       className="text-xs font-medium text-primary"
                       aria-expanded={open}
                     >
-                      {open ? t("rk.showLess") : t("rk.showAll", { count: s.products.length })}
+                      {open ? t("rk.showLess") : t("rk.showMore", { count: Math.min(remaining, PAGE) })}
                     </button>
                   )}
                 </div>
