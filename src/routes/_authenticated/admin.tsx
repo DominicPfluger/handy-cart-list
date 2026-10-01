@@ -544,21 +544,28 @@ function AdminPage() {
         />
       )}
 
-      {d && <ImportPanel depts={d.depts} prods={d.prods} />}
-      {d && <LocaleAdminPanel />}
-      {d && <CatalogMediaPanel />}
+      </>)}
 
-      <MarketAdmin markets={MARKETS} />
-      <MarketAdminsManager />
+      {tab === "import" && d && <ImportPanel depts={d.depts} prods={d.prods} />}
+      {tab === "languages" && d && <LocaleAdminPanel />}
+      {tab === "media" && d && <CatalogMediaPanel />}
 
-      {d && <RecipeAdmin depts={d.depts} prods={d.prods} />}
+      {tab === "markets" && (<>
+        <MarketAdmin markets={MARKETS} />
+        <MarketAdminsManager />
+      </>)}
 
-      {d && <CuisineAdmin depts={d.depts} prods={d.prods} />}
+      {tab === "recipes" && d && (<>
+        <RecipeAdmin depts={d.depts} prods={d.prods} />
+        <CuisineAdmin depts={d.depts} prods={d.prods} />
+      </>)}
 
-      <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
+      {tab === "more" && (
+        <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
 
-        <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>
-      </Link>
+          <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>
+        </Link>
+      )}
     </div>
   );
 }
