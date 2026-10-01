@@ -1,0 +1,1 @@
+UPDATE public.products SET emoji = '💧', updated_at = now() WHERE department_id = '5df8e5a3-1903-4f4f-b8ce-db5c36dc73b5' AND (emoji IS NULL OR emoji <> '💧');
