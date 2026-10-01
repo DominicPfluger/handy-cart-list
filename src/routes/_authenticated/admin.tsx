@@ -169,6 +169,17 @@ function AdminPage() {
     const at = Math.max(0, Math.min(to > from ? to - 1 : to, next.length));
     if (at === from) return;
     next.splice(at, 0, item!);
+    // Sofort anzeigen – das Neuladen des ganzen Katalogs dauert einige Sekunden.
+    const pos = new Map(next.map((x, i) => [x.id, i + 1]));
+    const key = kind === "department" ? "depts" : "prods";
+    if (kind === "department" || !mk) {
+      qc.setQueryData(["admin-catalog"], (old: Record<string, unknown> | undefined) => {
+        if (!old) return old;
+        const arr = (old[key] as Array<{ id: string; sort_order: number }>).map((x) => (pos.has(x.id) ? { ...x, sort_order: pos.get(x.id)! } : x));
+        arr.sort((a, b) => a.sort_order - b.sort_order || (a.id < b.id ? -1 : 1));
+        return { ...old, [key]: arr };
+      });
+    }
     run(() => kind === "product" ? saveOrder(next) : Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), T("adm.orderSaved"));
   };
 
