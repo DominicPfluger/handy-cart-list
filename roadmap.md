@@ -1,5 +1,12 @@
 # Roadmap
 
+- [ ] Kategorien innerhalb des Rezept-Generator-Rahmens auf /rezepte
+- [ ] Push-Benachrichtigungen: Firebase-Connector verbinden (Web-Push)
+- [ ] Push: Migration push_subscriptions + pg_net-Trigger (Rezept veröffentlicht / Kommentar)
+- [ ] Push: Webhook-Route /api/public/webhooks/recipe-events (Secret, Matching alle Zutaten ⊆ Favoriten, FCM via Gateway)
+- [ ] Push: Client-Registrierung (src/lib/push.ts, Service Worker, Sync Favoriten + Schalter), Einstellungen auf „Mehr", i18n 16 Sprachen
+
+
 - [x] Lieblingsmengen auf Produkt-Detailseite (localStorage, Vorausfüllung im Hinzufügen-Dialog, i18n 16 Sprachen)
 - [x] Rezept-Generator: Speichern-Knopf unten im „Dein Rezept"-Kasten, gross grün; darunter „Zutaten zu Liste", dann Teilen — E2E verifiziert (nur 1 Speichern-Knopf, Reihenfolge korrekt)
 - [x] App-Info am Ende von „Mehr": Icon, Name, Claim, Version, Copyright + Links Impressum / Datenschutz / Feedback — in der Vorschau geprüft
