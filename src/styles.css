@@ -72,27 +72,27 @@
   --input: oklch(0.92 0.01 90);
   --ring: oklch(0.52 0.155 144);
 
-  /* Kategoriefarben (Hauptkategorien der Abteilungsansicht) */
-  --cat-frischmarkt: #DCF2E0;        /* Frisches Grün */
-  --cat-milch: #F6F1E7;              /* Cremeweiss */
-  --cat-fleisch: #F8E0DC;            /* Lachsrosa */
-  --cat-deli: #FCEBD8;               /* Apricot */
-  --cat-backwaren: #F9EFD2;          /* Goldgelb */
-  --cat-vorraete: #F3E5C8;           /* Honig/Ocker */
-  --cat-kochzutaten: #F5DFD3;        /* Terrakotta-Hell */
-  --cat-tiefkuehl: #DCEEF7;          /* Eisblau */
-  --cat-getraenke: #D9F0EC;          /* Aquamarin */
-  --cat-snacks: #FAE6D2;             /* Sand-Orange */
-  --cat-suess: #F9E0EC;              /* Bonbonrosa */
-  --cat-koerperpflege: #EAE4F5;      /* Lavendel */
-  --cat-haushalt: #DFF0F3;           /* Mintblau */
-  --cat-apotheke: #E2EFE6;           /* Salbeigrün */
-  --cat-tierbedarf: #F0E4D4;         /* Karamell */
-  --cat-buero: #E3E8EF;              /* Stahlblau-Grau */
-  --cat-tabak: #E8E2DC;              /* Graubraun */
-  --cat-kleidung: #E0E8F4;           /* Jeansblau-Hell */
-  --cat-kuechenutensilien: #F2E3D8;  /* Kupfer-Hell */
-  --cat-auto: #E4E6E9;               /* Anthrazit-Hell */
+  /* Kategoriefarben (Hauptkategorien der Abteilungsansicht) — hell, wenig gesättigt */
+  --cat-frischmarkt: #EDF8EF;        /* Frisches Grün */
+  --cat-milch: #FAF7F1;              /* Cremeweiss */
+  --cat-fleisch: #FBEEEC;            /* Lachsrosa */
+  --cat-deli: #FEF5EC;               /* Apricot */
+  --cat-backwaren: #FCF7E8;          /* Goldgelb */
+  --cat-vorraete: #F9F2E3;           /* Honig/Ocker */
+  --cat-kochzutaten: #FAEFE9;        /* Terrakotta-Hell */
+  --cat-tiefkuehl: #ECF5FA;          /* Eisblau */
+  --cat-getraenke: #EAF7F5;          /* Aquamarin */
+  --cat-snacks: #FCF2E8;             /* Sand-Orange */
+  --cat-suess: #FCEEF4;              /* Bonbonrosa */
+  --cat-koerperpflege: #F4F1FA;      /* Lavendel */
+  --cat-haushalt: #EEF7F9;           /* Mintblau */
+  --cat-apotheke: #F0F7F2;           /* Salbeigrün */
+  --cat-tierbedarf: #F7F1E9;         /* Karamell */
+  --cat-buero: #F0F3F7;              /* Stahlblau-Grau */
+  --cat-tabak: #F3F0ED;              /* Graubraun */
+  --cat-kleidung: #EFF3FA;           /* Jeansblau-Hell */
+  --cat-kuechenutensilien: #F8F0EB;  /* Kupfer-Hell */
+  --cat-auto: #F1F2F4;               /* Anthrazit-Hell */
 }
 
 @layer base {
