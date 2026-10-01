@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { siWhatsapp, siTelegram, siSignal, siMessenger, siDiscord } from "simple-icons";
+import { siWhatsapp, siTelegram, siSignal, siMessenger, siDiscord, siThreema } from "simple-icons";
 import { getLocale, translate, useT } from "../i18n";
 
 export const SHARE_EVENT = "shoppi:share";
