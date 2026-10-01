@@ -1,4 +1,4 @@
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { getLocale, useT } from "../i18n";
@@ -40,8 +40,7 @@ function Page() {
   return (
     <div className="space-y-5">
       <div>
-        <Link to="/rezepte" className="text-xs font-semibold text-primary">← {t("nav.recipes")}</Link>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-foreground">
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
           {shownTpl
             ? `${RECIPE_TEMPLATES.find((x) => x.id === shownTpl)?.emoji ?? ""} ${t(`rk.cat.${shownTpl}` as MessageKey)}`.trim()
             : t("rec.entryGenTitle")}
