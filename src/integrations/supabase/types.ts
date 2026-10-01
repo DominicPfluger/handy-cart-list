@@ -619,6 +619,68 @@ export type Database = {
           },
         ]
       }
+      recipe_comments: {
+        Row: {
+          author_name: string | null
+          body: string
+          created_at: string
+          id: string
+          recipe_id: string
+          user_id: string
+        }
+        Insert: {
+          author_name?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          recipe_id: string
+          user_id: string
+        }
+        Update: {
+          author_name?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          recipe_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_comments_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recipe_folders: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+          owner_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+          owner_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+          owner_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       recipe_groups: {
         Row: {
           created_at: string
@@ -701,6 +763,125 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      recipe_ratings: {
+        Row: {
+          created_at: string
+          id: string
+          recipe_id: string
+          stars: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          recipe_id: string
+          stars: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          recipe_id?: string
+          stars?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_ratings_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recipe_saves: {
+        Row: {
+          created_at: string
+          folder_id: string | null
+          id: string
+          recipe_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          folder_id?: string | null
+          id?: string
+          recipe_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          folder_id?: string | null
+          id?: string
+          recipe_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_saves_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "recipe_folders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_saves_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recipes: {
+        Row: {
+          author_name: string | null
+          created_at: string
+          id: string
+          is_public: boolean
+          items: Json
+          owner_id: string
+          picks: Json
+          product_ids: string[]
+          share_slug: string | null
+          template_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string | null
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          items?: Json
+          owner_id: string
+          picks?: Json
+          product_ids?: string[]
+          share_slug?: string | null
+          template_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string | null
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          items?: Json
+          owner_id?: string
+          picks?: Json
+          product_ids?: string[]
+          share_slug?: string | null
+          template_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       shopping_lists: {
         Row: {
@@ -854,6 +1035,23 @@ export type Database = {
         Returns: boolean
       }
       join_list_by_invite: { Args: { _code: string }; Returns: string }
+      recipe_feed: {
+        Args: { _limit?: number; _order?: string; _product_ids?: string[] }
+        Returns: {
+          author_name: string
+          avg_rating: number
+          created_at: string
+          id: string
+          items: Json
+          match_count: number
+          product_ids: string[]
+          rating_count: number
+          save_count: number
+          share_slug: string
+          template_id: string
+          title: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

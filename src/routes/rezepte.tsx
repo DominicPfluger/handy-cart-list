@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getLocale, useT } from "../i18n";
 import { RecipeBuilder } from "../components/recipe-builder";
+import { RecipeFeed } from "../components/recipe-feed";
 import { catalogQueryOptions } from "../lib/catalog-query";
 
 export const Route = createFileRoute("/rezepte")({
@@ -30,6 +31,7 @@ function RecipesPage() {
         </p>
       </div>
 
+      <RecipeFeed />
       <RecipeBuilder />
     </div>
   );
