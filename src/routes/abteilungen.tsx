@@ -24,7 +24,6 @@ import {
   brandsFor,
   matchesProductSearch,
   originalName,
-  pathTo,
   productsOf,
   type CatalogDepartment,
   type CatalogProduct,
