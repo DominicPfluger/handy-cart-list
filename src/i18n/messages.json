@@ -681,7 +681,13 @@
     "cm.ingredientsN": "{n} ingredients",
     "cm.open": "Open community",
     "rk.addPhoto": "📷 Add photo",
-    "rk.changePhoto": "Change photo"
+    "rk.changePhoto": "Change photo",
+    "pd.back": "Back",
+    "pd.notFound": "Product not found.",
+    "pd.quantity": "Quantity",
+    "pd.brands": "Brands",
+    "pd.variants": "Variants",
+    "pd.addToList": "Add to list"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1365,7 +1371,13 @@
     "cm.ingredientsN": "{n} ingredients",
     "cm.open": "Open community",
     "rk.addPhoto": "📷 Add photo",
-    "rk.changePhoto": "Change photo"
+    "rk.changePhoto": "Change photo",
+    "pd.back": "Back",
+    "pd.notFound": "Product not found.",
+    "pd.quantity": "Quantity",
+    "pd.brands": "Brands",
+    "pd.variants": "Variants",
+    "pd.addToList": "Add to list"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2049,7 +2061,13 @@
     "cm.ingredientsN": "{n} ingredients",
     "cm.open": "Open community",
     "rk.addPhoto": "📷 Add photo",
-    "rk.changePhoto": "Change photo"
+    "rk.changePhoto": "Change photo",
+    "pd.back": "Back",
+    "pd.notFound": "Product not found.",
+    "pd.quantity": "Quantity",
+    "pd.brands": "Brands",
+    "pd.variants": "Variants",
+    "pd.addToList": "Add to list"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2733,7 +2751,13 @@
     "cm.ingredientsN": "{n} ingredientes",
     "cm.open": "Abrir comunidad",
     "rk.addPhoto": "📷 Añadir foto",
-    "rk.changePhoto": "Cambiar foto"
+    "rk.changePhoto": "Cambiar foto",
+    "pd.back": "Volver",
+    "pd.notFound": "Producto no encontrado.",
+    "pd.quantity": "Cantidad",
+    "pd.brands": "Marcas",
+    "pd.variants": "Variantes",
+    "pd.addToList": "Añadir a la lista"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3417,7 +3441,13 @@
     "cm.ingredientsN": "{n} ingredientes",
     "cm.open": "Abrir comunidad",
     "rk.addPhoto": "📷 Añadir foto",
-    "rk.changePhoto": "Cambiar foto"
+    "rk.changePhoto": "Cambiar foto",
+    "pd.back": "Volver",
+    "pd.notFound": "Producto no encontrado.",
+    "pd.quantity": "Cantidad",
+    "pd.brands": "Marcas",
+    "pd.variants": "Variantes",
+    "pd.addToList": "Añadir a la lista"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -4101,7 +4131,13 @@
     "cm.ingredientsN": "{n} ingrédients",
     "cm.open": "Ouvrir la communauté",
     "rk.addPhoto": "📷 Ajouter une photo",
-    "rk.changePhoto": "Changer la photo"
+    "rk.changePhoto": "Changer la photo",
+    "pd.back": "Retour",
+    "pd.notFound": "Produit introuvable.",
+    "pd.quantity": "Quantité",
+    "pd.brands": "Marques",
+    "pd.variants": "Variantes",
+    "pd.addToList": "Ajouter à la liste"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4785,7 +4821,13 @@
     "cm.ingredientsN": "{n} ingrédients",
     "cm.open": "Ouvrir la communauté",
     "rk.addPhoto": "📷 Ajouter une photo",
-    "rk.changePhoto": "Changer la photo"
+    "rk.changePhoto": "Changer la photo",
+    "pd.back": "Retour",
+    "pd.notFound": "Produit introuvable.",
+    "pd.quantity": "Quantité",
+    "pd.brands": "Marques",
+    "pd.variants": "Variantes",
+    "pd.addToList": "Ajouter à la liste"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -5469,7 +5511,13 @@
     "cm.ingredientsN": "{n} ingredienti",
     "cm.open": "Apri community",
     "rk.addPhoto": "📷 Aggiungi foto",
-    "rk.changePhoto": "Cambia foto"
+    "rk.changePhoto": "Cambia foto",
+    "pd.back": "Indietro",
+    "pd.notFound": "Prodotto non trovato.",
+    "pd.quantity": "Quantità",
+    "pd.brands": "Marche",
+    "pd.variants": "Varianti",
+    "pd.addToList": "Aggiungi alla lista"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -6153,7 +6201,13 @@
     "cm.ingredientsN": "{n} ingredienti",
     "cm.open": "Apri community",
     "rk.addPhoto": "📷 Aggiungi foto",
-    "rk.changePhoto": "Cambia foto"
+    "rk.changePhoto": "Cambia foto",
+    "pd.back": "Indietro",
+    "pd.notFound": "Prodotto non trovato.",
+    "pd.quantity": "Quantità",
+    "pd.brands": "Marche",
+    "pd.variants": "Varianti",
+    "pd.addToList": "Aggiungi alla lista"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6837,7 +6891,13 @@
     "cm.ingredientsN": "{n} ingredientes",
     "cm.open": "Abrir comunidade",
     "rk.addPhoto": "📷 Adicionar foto",
-    "rk.changePhoto": "Alterar foto"
+    "rk.changePhoto": "Alterar foto",
+    "pd.back": "Voltar",
+    "pd.notFound": "Produto não encontrado.",
+    "pd.quantity": "Quantidade",
+    "pd.brands": "Marcas",
+    "pd.variants": "Variantes",
+    "pd.addToList": "Adicionar à lista"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -7521,7 +7581,13 @@
     "cm.ingredientsN": "{n} ingredientes",
     "cm.open": "Abrir comunidade",
     "rk.addPhoto": "📷 Adicionar foto",
-    "rk.changePhoto": "Alterar foto"
+    "rk.changePhoto": "Alterar foto",
+    "pd.back": "Voltar",
+    "pd.notFound": "Produto não encontrado.",
+    "pd.quantity": "Quantidade",
+    "pd.brands": "Marcas",
+    "pd.variants": "Variantes",
+    "pd.addToList": "Adicionar à lista"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -8205,7 +8271,13 @@
     "cm.ingredientsN": "{n} ingrediënten",
     "cm.open": "Community openen",
     "rk.addPhoto": "📷 Foto toevoegen",
-    "rk.changePhoto": "Foto wijzigen"
+    "rk.changePhoto": "Foto wijzigen",
+    "pd.back": "Terug",
+    "pd.notFound": "Product niet gevonden.",
+    "pd.quantity": "Hoeveelheid",
+    "pd.brands": "Merken",
+    "pd.variants": "Varianten",
+    "pd.addToList": "Aan lijst toevoegen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -8889,7 +8961,13 @@
     "cm.ingredientsN": "{n} ingrediënten",
     "cm.open": "Community openen",
     "rk.addPhoto": "📷 Foto toevoegen",
-    "rk.changePhoto": "Foto wijzigen"
+    "rk.changePhoto": "Foto wijzigen",
+    "pd.back": "Terug",
+    "pd.notFound": "Product niet gevonden.",
+    "pd.quantity": "Hoeveelheid",
+    "pd.brands": "Merken",
+    "pd.variants": "Varianten",
+    "pd.addToList": "Aan lijst toevoegen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9125,7 +9203,13 @@
     "cm.ingredientsN": "{n} Zutaten",
     "cm.open": "Community öffnen",
     "rk.addPhoto": "📷 Foto hinzufügen",
-    "rk.changePhoto": "Foto ändern"
+    "rk.changePhoto": "Foto ändern",
+    "pd.back": "Zurück",
+    "pd.notFound": "Produkt nicht gefunden.",
+    "pd.quantity": "Menge",
+    "pd.brands": "Marken",
+    "pd.variants": "Varianten",
+    "pd.addToList": "Zur Liste hinzufügen"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9361,6 +9445,12 @@
     "cm.ingredientsN": "{n} Zutaten",
     "cm.open": "Community öffnen",
     "rk.addPhoto": "📷 Foto hinzufügen",
-    "rk.changePhoto": "Foto ändern"
+    "rk.changePhoto": "Foto ändern",
+    "pd.back": "Zurück",
+    "pd.notFound": "Produkt nicht gefunden.",
+    "pd.quantity": "Menge",
+    "pd.brands": "Marken",
+    "pd.variants": "Varianten",
+    "pd.addToList": "Zur Liste hinzufügen"
   }
 }
