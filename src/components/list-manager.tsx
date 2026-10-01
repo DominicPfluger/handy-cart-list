@@ -28,7 +28,6 @@ interface Props {
   lists: ShoppingList[];
   activeId: string;
   templates: ShoppingList[];
-  signedIn: boolean;
   onSelect: (id: string) => void;
   onCreate: (name: string) => void;
   onRename: (id: string, name: string) => void;
@@ -37,7 +36,6 @@ interface Props {
   onSaveAsTemplate: (id: string) => void;
   onCreateFromTemplate: (templateId: string) => void;
   onDeleteTemplate: (templateId: string) => void;
-  inviteLinkFor: (listId: string) => string | null;
 }
 
 export async function shareList(list: ShoppingList) {
