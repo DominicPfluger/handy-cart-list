@@ -77,6 +77,8 @@ function FavoritesPage() {
   const { departments } = useDepartmentOrder(data.departments);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<FavRow | null>(null);
+  const [listNameOpen, setListNameOpen] = useState(false);
+  const [listName, setListName] = useState("");
 
   const deptById = useMemo(
     () => new Map(departments.map((d) => [d.id, d])),
@@ -244,8 +246,15 @@ function FavoritesPage() {
     });
   };
 
+  /** Öffnet den Dialog zur Namenseingabe für die neue Liste. */
+  const openTransferDialog = () => {
+    if (!favorites.length) return;
+    setListName(t("fav.newListName"));
+    setListNameOpen(true);
+  };
+
   /** Alle Favoriten (in angezeigter Reihenfolge) in eine neue Einkaufsliste übertragen. */
-  const transferAllToNewList = () => {
+  const transferAllToNewList = (name: string) => {
     const rows: FavRow[] = [
       ...sections.flatMap((s) => s.entries.map((e) => e.row)),
       ...[...looseFavorites].sort((a, b) => (favOrder[a.favorite.productId] ?? 1e9) - (favOrder[b.favorite.productId] ?? 1e9)),
