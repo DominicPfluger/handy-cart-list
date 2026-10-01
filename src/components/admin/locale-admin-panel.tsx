@@ -3,7 +3,33 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { listAppLocales, createAppLocale, deleteAppLocale, translateUiBatch, translateMissing } from "@/lib/admin.functions";
-import { loadExtraLocales, useT } from "@/i18n";
+import { loadExtraLocales, useT, LOCALES } from "@/i18n";
+
+/** Vorgeschlagene Lokalisierungen (bereits vorhandene werden ausgeblendet). */
+const SUGGESTED = [
+  { id: "fr-BE", label: "Français (Belgique)", flag: "🇧🇪" },
+  { id: "fr-CH", label: "Français (Suisse)", flag: "🇨🇭" },
+  { id: "de-LU", label: "Deutsch (Luxemburg)", flag: "🇱🇺" },
+  { id: "pl-PL", label: "Polski", flag: "🇵🇱" },
+  { id: "cs-CZ", label: "Čeština", flag: "🇨🇿" },
+  { id: "da-DK", label: "Dansk", flag: "🇩🇰" },
+  { id: "sv-SE", label: "Svenska", flag: "🇸🇪" },
+  { id: "nb-NO", label: "Norsk", flag: "🇳🇴" },
+  { id: "fi-FI", label: "Suomi", flag: "🇫🇮" },
+  { id: "hu-HU", label: "Magyar", flag: "🇭🇺" },
+  { id: "ro-RO", label: "Română", flag: "🇷🇴" },
+  { id: "el-GR", label: "Ελληνικά", flag: "🇬🇷" },
+  { id: "tr-TR", label: "Türkçe", flag: "🇹🇷" },
+  { id: "hr-HR", label: "Hrvatski", flag: "🇭🇷" },
+  { id: "sq-AL", label: "Shqip", flag: "🇦🇱" },
+  { id: "sr-RS", label: "Srpski", flag: "🇷🇸" },
+  { id: "uk-UA", label: "Українська", flag: "🇺🇦" },
+  { id: "es-AR", label: "Español (Argentina)", flag: "🇦🇷" },
+  { id: "en-AU", label: "English (Australia)", flag: "🇦🇺" },
+  { id: "en-IE", label: "English (Ireland)", flag: "🇮🇪" },
+  { id: "ja-JP", label: "日本語", flag: "🇯🇵" },
+  { id: "zh-CN", label: "中文", flag: "🇨🇳" },
+];
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -21,6 +47,8 @@ export function LocaleAdminPanel() {
   const [label, setLabel] = useState("");
   const [flag, setFlag] = useState("");
   const [progress, setProgress] = useState<string | null>(null);
+  const taken = new Set([...LOCALES.map((l) => l.id), ...(q.data ?? []).map((l) => l.id)]);
+  const suggestions = SUGGESTED.filter((s) => !taken.has(s.id));
 
   const translateAll = async (loc: string) => {
     let done = 0;
@@ -81,6 +109,22 @@ export function LocaleAdminPanel() {
         <Button className="h-11 w-full rounded-xl" disabled={Boolean(progress)} onClick={submit}>{t("loc.create")}</Button>
         {progress && <p className="text-sm font-semibold text-primary">{progress}</p>}
       </div>
+
+      {suggestions.length > 0 && (
+        <div className="space-y-1.5">
+          <h3 className="text-sm font-bold text-foreground">{t("loc.suggest")}</h3>
+          <p className="text-xs text-muted-foreground">{t("loc.suggestHint")}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {suggestions.map((s) => (
+              <button key={s.id} type="button" disabled={Boolean(progress)}
+                onClick={() => { if (confirm(`${s.flag} ${s.label} (${s.id}) – ${t("loc.create")}?`)) void run(s.id, () => create({ data: s })); }}
+                className="flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground hover:border-primary disabled:opacity-50">
+                <span>{s.flag}</span>{s.label}<span className="text-xs text-muted-foreground">{s.id}</span><span className="font-bold text-primary">+</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {(q.data ?? []).length > 0 && (
         <ul className="divide-y divide-border">
