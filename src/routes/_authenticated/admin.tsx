@@ -731,6 +731,22 @@ function Editor(p: {
               />
               <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
             </div>
+            <div className="flex flex-wrap gap-1.5">
+              {COMMON_VARIANTS.map((cv) => {
+                const on = variants.some((x) => x.toLowerCase() === cv.toLowerCase());
+                return (
+                  <button
+                    key={cv}
+                    type="button"
+                    disabled={on}
+                    onClick={() => addVariant(cv)}
+                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-muted-foreground line-through" : "border-border bg-background text-muted-foreground"}`}
+                  >
+                    {on ? "✓ " : "+ "}{cv}
+                  </button>
+                );
+              })}
+            </div>
             <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
           </div>
         )}
