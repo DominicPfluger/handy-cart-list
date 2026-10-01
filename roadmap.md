@@ -10,3 +10,4 @@
 - [x] „Alle Märkte anzeigen" bleibt immer sichtbar (Nutzer-Entscheid) — bedingte Einblendung in mehr.tsx wieder entfernt
 - [x] Rezept-Generator zurück auf eigene Seite /rezepte/generator; Rezepte-Hauptseite zeigt wieder nur Kacheln (Generator → Listen → Inspirationen)
 - [x] Feedback-Formular (Name, E-Mail, Betreff aus 7 Einträgen, Nachricht) + Admin-Posteingang
+- [x] Öffentliche Landingpage: /start mit Hero (Tagline „Gemeinsam.Einfach.Einkaufen."), Features, Mockups, Installationshinweis, beliebte/neue Rezepte, Generator, Community, Angebote, FAQ, Kontakt, Newsletter-Platzhalter, News, Footer — alle land.*-Texte in de.ts + messages.json (16 Sprachen); erster Besuch auf / zeigt die Landingpage (Flag „shoppi:landing-seen", src/lib/landing.ts), danach direkt die Liste; Footer-Link „Shoppi-Website" auf /start — E2E geprüft (Erstbesuch Landing, nach „App öffnen" Liste, Reload bleibt Liste, /start direkt)

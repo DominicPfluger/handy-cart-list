@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Fragment, useState, useMemo } from "react";
+import { Fragment, useEffect, useState, useMemo } from "react";
 import { SplashScreen } from "../components/splash-screen";
+import { LandingPage } from "@/components/landing/landing-page";
+import { shouldShowLanding, markLandingDone } from "@/lib/landing";
 import {
   useShoppingList,
   getCategory,
@@ -48,7 +50,7 @@ export const Route = createFileRoute("/")({
     ],
   }),
   pendingComponent: () => <SplashScreen />,
-  component: ListPage,
+  component: LandingGate,
 });
 
 function ListPage() {
@@ -398,4 +400,26 @@ function ListPage() {
       )}
     </div>
   );
+}
+
+// Erster Besuch: Landingpage zeigen, danach direkt die Einkaufsliste.
+function LandingGate() {
+  const [decided, setDecided] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setDecided(!shouldShowLanding());
+  }, []);
+
+  if (decided === null) return <SplashScreen />;
+  if (decided === false) {
+    return (
+      <LandingPage
+        onEnterApp={() => {
+          markLandingDone();
+          setDecided(true);
+        }}
+      />
+    );
+  }
+  return <ListPage />;
 }
