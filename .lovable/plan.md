@@ -8,7 +8,7 @@ Die Vorlage „Pfannengericht" im Rezept-Ersteller bekommt neue/umbenannte Schri
 2. Proteinquelle   (war: Protein, jetzt Mehrfachauswahl bis 2)
 3. Gemüse          (unverändert)
 4. Früchte         (NEU, optional, bis 2)
-5. Saucen          (NEU, optional, Mehrfachauswahl bis 2)
+5. Saucen          (NEU, optional, unbegrenzte Mehrfachauswahl)
 6. Würze           (unverändert)
 ```
 
