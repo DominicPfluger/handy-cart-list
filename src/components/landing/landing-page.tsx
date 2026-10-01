@@ -181,6 +181,7 @@ export function LandingPage({ onEnterApp }: { onEnterApp: () => void }) {
         </div>
         <Link
           to="/rezepte/generator"
+          search={{ cat: undefined, recipe: undefined }}
           className="mt-8 inline-flex rounded-2xl bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition hover:bg-primary/90 active:scale-[0.98]"
         >
           {t("land.genCta")}
