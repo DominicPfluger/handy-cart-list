@@ -655,6 +655,45 @@ export type Database = {
           },
         ]
       }
+      push_subscriptions: {
+        Row: {
+          created_at: string
+          device_token: string
+          favorite_product_ids: string[]
+          id: string
+          locale: string
+          notify_comments: boolean
+          notify_new_favorites: boolean
+          platform: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_token: string
+          favorite_product_ids?: string[]
+          id?: string
+          locale?: string
+          notify_comments?: boolean
+          notify_new_favorites?: boolean
+          platform?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device_token?: string
+          favorite_product_ids?: string[]
+          id?: string
+          locale?: string
+          notify_comments?: boolean
+          notify_new_favorites?: boolean
+          platform?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       recipe_comments: {
         Row: {
           author_name: string | null

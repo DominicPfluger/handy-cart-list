@@ -522,6 +522,20 @@ function NotificationSettingsRow() {
             disabled={!settings.enabled}
             onChange={(v) => update({ pantryHistory: v })}
           />
+          <NotificationToggle
+            label={t("notif.newFavRecipes")}
+            sub={t("notif.newFavRecipesSub")}
+            checked={settings.newFavoriteRecipes}
+            disabled={!settings.enabled}
+            onChange={(v) => update({ newFavoriteRecipes: v })}
+          />
+          <NotificationToggle
+            label={t("notif.recipeComments")}
+            sub={t("notif.recipeCommentsSub")}
+            checked={settings.recipeComments}
+            disabled={!settings.enabled}
+            onChange={(v) => update({ recipeComments: v })}
+          />
           <p className="px-4 py-2.5 text-xs text-muted-foreground">{t("notif.note")}</p>
         </div>
       ) : null}

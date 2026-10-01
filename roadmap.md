@@ -1,10 +1,10 @@
 # Roadmap
 
-- [ ] Kategorien innerhalb des Rezept-Generator-Rahmens auf /rezepte
-- [ ] Push-Benachrichtigungen: Firebase-Connector verbinden (Web-Push)
-- [ ] Push: Migration push_subscriptions + pg_net-Trigger (Rezept veröffentlicht / Kommentar)
-- [ ] Push: Webhook-Route /api/public/webhooks/recipe-events (Secret, Matching alle Zutaten ⊆ Favoriten, FCM via Gateway)
-- [ ] Push: Client-Registrierung (src/lib/push.ts, Service Worker, Sync Favoriten + Schalter), Einstellungen auf „Mehr", i18n 16 Sprachen
+- [x] Kategorien innerhalb des Rezept-Generator-Rahmens auf /rezepte
+- [ ] Push: Firebase-Connector verbinden (später konfigurieren — Nutzer-Entscheid; Versand ist erst danach aktiv, Vorbereitung steht)
+- [x] Push: Migration push_subscriptions + pg_net-Trigger (Rezept veröffentlicht / Kommentar) — Trigger in DB verifiziert; SECURITY DEFINER-Aufrufe entzogen
+- [x] Push: Webhook-Route /api/public/webhooks/recipe-events — getestet (401 ohne Secret, ok mit Secret); Matching: alle Zutaten ⊆ Favoriten, Autor ausgeschlossen; FCM via Gateway sobald Connector existiert, davor nur Protokoll
+- [x] Push: Einstellungen auf „Mehr" (2 neue Schalter: neue Rezepte mit Lieblingszutaten / Kommentare zu meinen Rezepten) + i18n 16 Sprachen; Client-Registrierung (src/lib/push.ts) folgt mit der Firebase-Anbindung
 
 
 - [x] Lieblingsmengen auf Produkt-Detailseite (localStorage, Vorausfüllung im Hinzufügen-Dialog, i18n 16 Sprachen)

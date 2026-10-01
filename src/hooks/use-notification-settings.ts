@@ -9,6 +9,8 @@ export interface NotificationSettings {
   shoppingTrip: boolean;
   reminders: boolean;
   pantryHistory: boolean;
+  newFavoriteRecipes: boolean;
+  recipeComments: boolean;
 }
 
 export const DEFAULT_NOTIFICATION_SETTINGS: NotificationSettings = {
@@ -17,6 +19,8 @@ export const DEFAULT_NOTIFICATION_SETTINGS: NotificationSettings = {
   shoppingTrip: true,
   reminders: true,
   pantryHistory: true,
+  newFavoriteRecipes: true,
+  recipeComments: true,
 };
 
 export function getNotificationSettings(): NotificationSettings {

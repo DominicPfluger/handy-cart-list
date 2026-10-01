@@ -36,6 +36,7 @@ import { Route as RezepteIndexRouteImport } from './routes/rezepte.index'
 import { Route as RezepteGeneratorRouteImport } from './routes/rezepte.generator'
 import { Route as RezepteInspirationenRouteImport } from './routes/rezepte.inspirationen'
 import { Route as RezepteListenRouteImport } from './routes/rezepte.listen'
+import { Route as ApiPublicWebhooksRecipeEventsRouteImport } from './routes/api/public/webhooks/recipe-events'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -173,6 +174,12 @@ const RezepteListenRoute = RezepteListenRouteImport.update({
   path: '/listen',
   getParentRoute: () => RezepteRoute,
 } as any)
+const ApiPublicWebhooksRecipeEventsRoute =
+  ApiPublicWebhooksRecipeEventsRouteImport.update({
+    id: '/api/public/webhooks/recipe-events',
+    path: '/api/public/webhooks/recipe-events',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -201,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
   '/rezepte/listen': typeof RezepteListenRoute
   '/rezepte/': typeof RezepteIndexRoute
+  '/api/public/webhooks/recipe-events': typeof ApiPublicWebhooksRecipeEventsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -228,6 +236,7 @@ export interface FileRoutesByTo {
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
   '/rezepte/listen': typeof RezepteListenRoute
   '/rezepte': typeof RezepteIndexRoute
+  '/api/public/webhooks/recipe-events': typeof ApiPublicWebhooksRecipeEventsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -258,6 +267,7 @@ export interface FileRoutesById {
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
   '/rezepte/listen': typeof RezepteListenRoute
   '/rezepte/': typeof RezepteIndexRoute
+  '/api/public/webhooks/recipe-events': typeof ApiPublicWebhooksRecipeEventsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -288,6 +298,7 @@ export interface FileRouteTypes {
     | '/rezepte/inspirationen'
     | '/rezepte/listen'
     | '/rezepte/'
+    | '/api/public/webhooks/recipe-events'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -315,6 +326,7 @@ export interface FileRouteTypes {
     | '/rezepte/inspirationen'
     | '/rezepte/listen'
     | '/rezepte'
+    | '/api/public/webhooks/recipe-events'
   id:
     | '__root__'
     | '/'
@@ -344,6 +356,7 @@ export interface FileRouteTypes {
     | '/rezepte/inspirationen'
     | '/rezepte/listen'
     | '/rezepte/'
+    | '/api/public/webhooks/recipe-events'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -367,6 +380,7 @@ export interface RootRouteChildren {
   VorratRoute: typeof VorratRoute
   ProduktIdRoute: typeof ProduktIdRoute
   RezeptSlugRoute: typeof RezeptSlugRoute
+  ApiPublicWebhooksRecipeEventsRoute: typeof ApiPublicWebhooksRecipeEventsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -560,6 +574,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RezepteListenRouteImport
       parentRoute: typeof RezepteRoute
     }
+    '/api/public/webhooks/recipe-events': {
+      id: '/api/public/webhooks/recipe-events'
+      path: '/api/public/webhooks/recipe-events'
+      fullPath: '/api/public/webhooks/recipe-events'
+      preLoaderRoute: typeof ApiPublicWebhooksRecipeEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -616,6 +637,7 @@ const rootRouteChildren: RootRouteChildren = {
   VorratRoute: VorratRoute,
   ProduktIdRoute: ProduktIdRoute,
   RezeptSlugRoute: RezeptSlugRoute,
+  ApiPublicWebhooksRecipeEventsRoute: ApiPublicWebhooksRecipeEventsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
