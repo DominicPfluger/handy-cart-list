@@ -131,3 +131,12 @@ export async function fetchMyRecipes(userId: string): Promise<CommunityRecipe[]>
   if (error) throw error;
   return (data ?? []).map((r) => ({ ...r, items: (r.items as unknown as RecipeItem[]) ?? [] }));
 }
+
+/** Einzelnes Rezept laden (eigenes oder öffentliches — RLS filtert). */
+export async function fetchRecipe(id: string): Promise<CommunityRecipe | null> {
+  const { data, error } = await supabase.from("recipes")
+    .select("id, owner_id, title, description, template_id, items, share_slug, author_name, created_at, is_public, image_path")
+    .eq("id", id).maybeSingle();
+  if (error) throw error;
+  return data ? { ...data, items: (data.items as unknown as RecipeItem[]) ?? [] } : null;
+}
