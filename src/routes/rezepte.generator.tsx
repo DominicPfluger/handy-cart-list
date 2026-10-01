@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
 import { getLocale, useT } from "../i18n";
@@ -13,6 +13,10 @@ export const Route = createFileRoute("/rezepte/generator")({
     recipe: z.string().optional().catch(undefined).parse(s["recipe"]),
     cat: z.string().optional().catch(undefined).parse(s["cat"]),
   }),
+  beforeLoad: ({ search }) => {
+    const s = search as { recipe?: string; cat?: string };
+    if (!s.cat && !s.recipe) throw redirect({ to: "/rezepte" });
+  },
   head: () => ({
     meta: [
       { title: "Shoppi — Rezept-Generator" },
