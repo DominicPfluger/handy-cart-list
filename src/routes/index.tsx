@@ -22,6 +22,7 @@ import {
 } from "../components/icons";
 import { ListManager, shareList } from "../components/list-manager";
 import { relocalizeQuantity } from "../lib/units";
+import { SpeakListButton } from "../components/speak-list-button";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
@@ -222,6 +223,13 @@ function ListPage() {
           <button onClick={() => setManagerOpen(true)} className="min-w-0 flex-1 text-left">
             <h1 className="truncate text-2xl font-bold tracking-tight text-foreground">{activeList.name}</h1>
           </button>
+          <SpeakListButton
+            title={activeList.name}
+            groups={grouped.map((g) => ({
+              label: g.label,
+              items: g.items.filter((i) => !i.checked).map((i) => `${i.quantity ? relocalizeQuantity(i.quantity, i.unit) + " " : ""}${displayName(i)}`),
+            }))}
+          />
           <button
             onClick={() => shareList({ ...activeList, items: activeList.items.map((i) => ({ ...i, name: displayName(i), quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : i.quantity })) })}
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
