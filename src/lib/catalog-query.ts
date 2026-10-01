@@ -26,7 +26,8 @@ export const catalogQueryOptions = (locale: string) =>
   queryOptions({
     queryKey: ["catalog", locale],
     queryFn: () => getCatalog({ data: { locale } }),
-    staleTime: 30 * 60 * 1000,
+    // Neue Kategorien und Produkte sollen nach kurzer Zeit auch in bereits geöffneten Apps erscheinen.
+    staleTime: 60 * 1000,
     // Loader uses ensureQueryData (fetchQuery = no retry by default). Retry so a
     // single interrupted request (reload/HMR during the large download) doesn't blank the page.
     retry: 3,
