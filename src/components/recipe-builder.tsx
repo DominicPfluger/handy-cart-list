@@ -348,7 +348,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
         <h2 className="text-lg font-bold text-foreground">{catName}</h2>
       </div>
 
-      {steps.map((s, i) => (
+      {steps.map((s) => (
         <div key={s.key} className="space-y-2">
           <p className="text-sm font-semibold text-foreground">
             {s.label}{" "}
