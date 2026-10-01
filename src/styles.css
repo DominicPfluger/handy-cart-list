@@ -93,6 +93,7 @@
   --cat-kleidung: #EFF3FA;           /* Jeansblau-Hell */
   --cat-kuechenutensilien: #F8F0EB;  /* Kupfer-Hell */
   --cat-auto: #F1F2F4;               /* Anthrazit-Hell */
+  --cat-party: #F8F0F8;              /* Festliches Fliederrosa */
   --cat-frischmarkt-strong: #D3EFD9;
   --cat-milch-strong: #F1E8D3;
   --cat-fleisch-strong: #F6D6D0;
@@ -113,6 +114,7 @@
   --cat-kleidung-strong: #D4E0F4;
   --cat-kuechenutensilien-strong: #EED9CC;
   --cat-auto-strong: #DCDFE4;
+  --cat-party-strong: #EBD8EA;
 }
 
 @layer base {

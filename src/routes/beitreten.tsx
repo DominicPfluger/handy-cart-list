@@ -17,7 +17,14 @@ const searchSchema = z.object({
 });
 
 export const Route = createFileRoute("/beitreten")({
-  head: () => ({ meta: [{ title: "Einkaufsliste beitreten – Shoppi" }] }),
+  head: () => ({ meta: [
+    { title: "Einkaufsliste beitreten – Shoppi" },
+    { name: "description", content: "Tritt einer geteilten Shoppi-Einkaufsliste mit einem Einladungscode bei." },
+    { property: "og:title", content: "Einkaufsliste beitreten – Shoppi" },
+    { property: "og:description", content: "Tritt einer geteilten Shoppi-Einkaufsliste mit einem Einladungscode bei." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   validateSearch: searchSchema,
   component: BeitretenPage,
 });
