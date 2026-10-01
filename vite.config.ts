@@ -56,7 +56,7 @@ export default defineConfig({
           ],
           navigateFallback: "/",
         },
-        devOptions: { enabled: false },
+        devOptions: { enabled: true },
       }),
     ],
   },
