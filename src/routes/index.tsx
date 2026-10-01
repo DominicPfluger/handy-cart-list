@@ -399,3 +399,25 @@ function ListPage() {
     </div>
   );
 }
+
+// Erster Besuch: Landingpage zeigen, danach direkt die Einkaufsliste.
+function LandingGate() {
+  const [decided, setDecided] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    setDecided(!shouldShowLanding());
+  }, []);
+
+  if (decided === null) return <SplashScreen />;
+  if (decided === false) {
+    return (
+      <LandingPage
+        onEnterApp={() => {
+          markLandingDone();
+          setDecided(true);
+        }}
+      />
+    );
+  }
+  return <ListPage />;
+}
