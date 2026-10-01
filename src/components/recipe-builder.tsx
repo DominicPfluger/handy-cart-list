@@ -39,6 +39,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const [saveOpen, setSaveOpen] = useState(false);
   const [savedMsg, setSavedMsg] = useState(false);
   const [newName, setNewName] = useState("");
+  const [makePublic, setMakePublic] = useState(false);
   const [customTitle, setCustomTitle] = useState("");
   const user = useAuthUser();
   const collections = useRecipeCollections(user);
@@ -184,8 +185,13 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     setBusy(true);
     try {
       const folderId = collectionId ?? (await createCollection(user.id, newName));
-      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: customTitle.trim() || title, templateId: tpl.id, picks, items: recipeItems() });
+      const recTitle = customTitle.trim() || title;
+      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic });
       await saveToFolder(user.id, rec.id, folderId);
+      if (makePublic && rec.share_slug) {
+        const how = await shareLink(rec.share_slug, recTitle);
+        if (how === "copied") toast.success(t("rs.linkCopied"));
+      }
       setSaveOpen(false);
       setNewName("");
       setCustomTitle("");
@@ -225,6 +231,21 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           placeholder={t("rk.recipeTitle")}
           className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
         />
+        <div role="radiogroup" aria-label={t("rs.visibility")} className="grid grid-cols-2 gap-2">
+          {([false, true] as const).map((pub) => (
+            <button
+              key={String(pub)}
+              type="button"
+              role="radio"
+              aria-checked={makePublic === pub}
+              onClick={() => setMakePublic(pub)}
+              className={`rounded-2xl border px-3 py-2 text-left transition ${makePublic === pub ? "border-primary bg-primary-soft/50" : "border-border bg-card"}`}
+            >
+              <span className="block text-sm font-semibold text-foreground">{t(pub ? "rs.public" : "rs.private")}</span>
+              <span className="block text-xs text-muted-foreground">{t(pub ? "rs.publicHint" : "rs.privateHint")}</span>
+            </button>
+          ))}
+        </div>
         {collections.map((c) => (
           <button key={c.id} onClick={() => doSave(c.id)} className="flex w-full items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 text-left text-sm font-semibold text-foreground">
             <span>📁 {c.name}</span><span className="text-xs text-muted-foreground">{c.recipes.length}</span>
