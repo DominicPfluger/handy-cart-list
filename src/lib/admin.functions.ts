@@ -440,12 +440,21 @@ export const translateVariants = createServerFn({ method: "POST" })
       const { data: ok } = await sb.rpc("is_market_product_admin", { _product_id: data.productId, _user_id: context.userId });
       if (!ok) throw new Error("Kein Zugriff");
     }
-    let q = sb.from("products").select("id, variants").not("variants", "eq", "{}");
+    let q = sb.from("products").select("id, variants");
     if (data.productId) q = q.eq("id", data.productId);
     const { data: prods } = await q;
-    const { data: existing } = await sb.from("variant_translations").select("product_id, variant, locale");
-    const have = new Set(((existing ?? []) as Array<{ product_id: string; variant: string; locale: string }>).map((r) => `${r.product_id}|${r.variant}|${r.locale}`));
-    const unique = [...new Set(((prods ?? []) as Array<{ variants: string[] }>).flatMap((p) => p.variants ?? []))];
+    const plist = (prods ?? []) as Array<{ id: string; variants: string[] }>;
+    let eq = sb.from("variant_translations").select("id, product_id, variant, locale, is_manual");
+    if (data.productId) eq = eq.eq("product_id", data.productId);
+    const { data: existing } = await eq;
+    const ex = (existing ?? []) as Array<{ id: string; product_id: string; variant: string; locale: string; is_manual: boolean }>;
+    // Übersetzungen entfernter Varianten löschen
+    const current = new Set(plist.flatMap((p) => (p.variants ?? []).map((v) => `${p.id}|${v}`)));
+    const stale = ex.filter((r) => !current.has(`${r.product_id}|${r.variant}`)).map((r) => r.id);
+    for (let i = 0; i < stale.length; i += 200) await sb.from("variant_translations").delete().in("id", stale.slice(i, i + 200));
+    // Manuelle Übersetzungen bleiben, automatische werden ersetzt
+    const manual = new Set(ex.filter((r) => r.is_manual).map((r) => `${r.product_id}|${r.variant}|${r.locale}`));
+    const unique = [...new Set(plist.flatMap((p) => p.variants ?? []))];
     if (!unique.length) return { written: 0 };
     const { translateNames } = await import("./translate.server");
     const src = Object.fromEntries(unique.map((v, i) => [`v${i}`, v]));
@@ -454,10 +463,10 @@ export const translateVariants = createServerFn({ method: "POST" })
       let r: Record<string, string> = {};
       try { r = await translateNames(src, locale); } catch { return; }
       const map = new Map(unique.map((v, i) => [v, r[`v${i}`]]));
-      const rows = ((prods ?? []) as Array<{ id: string; variants: string[] }>).flatMap((p) => (p.variants ?? [])
-        .filter((v) => map.get(v) && !have.has(`${p.id}|${v}|${locale}`))
+      const rows = plist.flatMap((p) => (p.variants ?? [])
+        .filter((v) => map.get(v) && !manual.has(`${p.id}|${v}|${locale}`))
         .map((v) => ({ product_id: p.id, variant: v, locale, name: map.get(v)!, is_manual: false })));
-      if (rows.length) { const { error } = await sb.from("variant_translations").upsert(rows, { onConflict: "product_id,variant,locale", ignoreDuplicates: true }); if (!error) written += rows.length; }
+      if (rows.length) { const { error } = await sb.from("variant_translations").upsert(rows, { onConflict: "product_id,variant,locale" }); if (!error) written += rows.length; }
     }));
     return { written };
   });
