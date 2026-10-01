@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useState, useMemo } from "react";
+import { SplashScreen } from "../components/splash-screen";
 import {
   useShoppingList,
   getCategory,
