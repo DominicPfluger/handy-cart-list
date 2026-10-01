@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { catalogMediaStatus, generateProductImages, generateReferencePrices } from "@/lib/product-media.functions";
+import { catalogMediaStatus, generateProductImages, generateReferencePrices, listProductImages } from "@/lib/product-media.functions";
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { MARKETS } from "@/components/market-admin";
 import { flagOf } from "@/lib/catalog-query";
 
@@ -160,6 +161,79 @@ export function CatalogMediaPanel() {
           </Button>
         </div>
       </section>
+
+      <ImageGallery />
     </>
+  );
+}
+
+/** Dauerhafte Galerie aller Produkte mit Bild — durchsuchbar, seitenweise. */
+function ImageGallery() {
+  const galleryFn = useServerFn(listProductImages);
+  const [q, setQ] = useState("");
+  const [page, setPage] = useState(0);
+  const perPage = 30;
+
+  const gallery = useQuery({
+    queryKey: ["catalog-image-gallery", q, page],
+    queryFn: () => galleryFn({ data: { q, page, perPage } }),
+    placeholderData: keepPreviousData,
+  });
+
+  const g = gallery.data;
+  const pages = g ? Math.max(1, Math.ceil(g.total / perPage)) : 1;
+
+  return (
+    <section className="mt-4 rounded-2xl border border-border bg-card p-4">
+      <h2 className="text-base font-semibold">{T("media.galleryTitle")}</h2>
+      <p className="mt-1 text-sm text-muted-foreground">{T("media.galleryHint")}</p>
+
+      <Input
+        value={q}
+        onChange={(e) => {
+          setQ(e.target.value);
+          setPage(0);
+        }}
+        placeholder={T("media.gallerySearch")}
+        className="mt-3"
+      />
+
+      {g && (
+        <p className="mt-3 text-sm text-muted-foreground">
+          {T("media.galleryCount", { n: g.total })}
+        </p>
+      )}
+
+      {g && g.items.length > 0 && (
+        <div className="mt-3 grid grid-cols-5 gap-2">
+          {g.items.map((it) => (
+            <figure key={it.id} className="overflow-hidden rounded-xl border border-border bg-background">
+              {it.url ? (
+                <img src={it.url} alt={it.name} className="aspect-square w-full object-cover" loading="lazy" />
+              ) : (
+                <div className="aspect-square w-full bg-muted" />
+              )}
+              <figcaption className="truncate px-1.5 py-1 text-center text-[11px] text-muted-foreground">{it.name}</figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+
+      {g && g.total === 0 && <p className="mt-3 text-sm text-muted-foreground">{T("media.galleryEmpty")}</p>}
+
+      {pages > 1 && (
+        <div className="mt-3 flex items-center justify-between">
+          <Button size="sm" variant="secondary" disabled={page === 0 || gallery.isFetching} onClick={() => setPage((p) => p - 1)}>
+            {T("media.galleryPrev")}
+          </Button>
+          <span className="text-sm text-muted-foreground">
+            {page + 1} / {pages}
+          </span>
+          <Button size="sm" variant="secondary" disabled={page >= pages - 1 || gallery.isFetching} onClick={() => setPage((p) => p + 1)}>
+            {T("media.galleryNext")}
+          </Button>
+        </div>
+      )}
+    </section>
   );
 }

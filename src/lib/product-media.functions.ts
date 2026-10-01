@@ -31,6 +31,35 @@ export const catalogMediaStatus = createServerFn({ method: "GET" })
     return { total: total ?? 0, noImage: noImage ?? 0, priced: markets[data.market] ?? 0, markets };
   });
 
+/** Dauerhafte Bildergalerie: alle Produkte mit Bild, durchsuchbar, seitenweise. */
+export const listProductImages = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({ q: z.string().default(""), page: z.number().int().min(0).default(0), perPage: z.number().int().min(1).max(60).default(30) }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = context.supabase;
+    const q = data.q.trim();
+    let query = sb
+      .from("products")
+      .select("id, name, image_path", { count: "exact" })
+      .not("image_path", "is", null)
+      .order("name")
+      .range(data.page * data.perPage, (data.page + 1) * data.perPage - 1);
+    if (q) query = query.ilike("name", `%${q}%`);
+    const { data: rows, count, error } = await query;
+    if (error) throw new Error(error.message);
+    const items = await Promise.all(
+      ((rows ?? []) as Array<{ id: string; name: string; image_path: string }>).map(async (p) => {
+        const signed = await supabaseAdmin.storage.from("catalog-images").createSignedUrl(p.image_path, 3600);
+        return { id: p.id, name: p.name, url: signed.data?.signedUrl ?? null };
+      }),
+    );
+    return { items, total: count ?? 0, page: data.page, perPage: data.perPage };
+  });
+
 /** Erzeugt KI-Bilder für die nächsten `limit` Produkte ohne Bild und speichert sie im Katalog-Speicher. */
 export const generateProductImages = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
