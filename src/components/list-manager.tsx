@@ -115,27 +115,21 @@ function Row({
           className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm outline-none focus:border-primary"
         />
       ) : (
-        <button onClick={onSelect} className="min-w-0 flex-1 text-left">
-          <p className="flex items-center gap-1.5 truncate text-sm font-semibold text-foreground">
+        <div className="min-w-0 flex-1 text-left">
+          <button
+            onClick={() => setEditing(true)}
+            aria-label={t("lm.rename")}
+            className="flex max-w-full items-center gap-1.5 truncate text-left text-sm font-semibold text-foreground"
+          >
             {active && <CheckIcon className="h-4 w-4 shrink-0 text-primary" />}
-            {list.name}
-          </p>
-          <p className="text-xs text-muted-foreground">
+            <span className="truncate">{list.name}</span>
+          </button>
+          <button onClick={onSelect} className="block w-full text-left text-xs text-muted-foreground">
             {t("lm.open", { open })}
-          </p>
-        </button>
+          </button>
+        </div>
       )}
 
-      <button
-        onClick={() => (editing ? save() : setEditing(true))}
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
-        aria-label={t("lm.rename")}
-      >
-        <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M4 20h4L19 9l-4-4L4 16v4z" />
-          <path d="M13.5 6.5l4 4" />
-        </svg>
-      </button>
       <button
         onClick={onSaveAsTemplate}
         className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
