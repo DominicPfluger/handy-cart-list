@@ -899,7 +899,9 @@
     "loc.invalid": "Please enter a code like pl-PL and a name",
     "loc.status": "App texts {ui}/{total} · Catalog {cat}",
     "loc.continue": "Continue translating",
-    "loc.deleteConfirm": "Delete language “{name}” with all translations?"
+    "loc.deleteConfirm": "Delete language “{name}” with all translations?",
+    "tile.pickImage": "Choose image",
+    "tile.pickEmpty": "No images found"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1801,7 +1803,9 @@
     "loc.invalid": "Please enter a code like pl-PL and a name",
     "loc.status": "App texts {ui}/{total} · Catalog {cat}",
     "loc.continue": "Continue translating",
-    "loc.deleteConfirm": "Delete language “{name}” with all translations?"
+    "loc.deleteConfirm": "Delete language “{name}” with all translations?",
+    "tile.pickImage": "Choose image",
+    "tile.pickEmpty": "No images found"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2703,7 +2707,9 @@
     "loc.invalid": "Please enter a code like pl-PL and a name",
     "loc.status": "App texts {ui}/{total} · Catalog {cat}",
     "loc.continue": "Continue translating",
-    "loc.deleteConfirm": "Delete language “{name}” with all translations?"
+    "loc.deleteConfirm": "Delete language “{name}” with all translations?",
+    "tile.pickImage": "Choose image",
+    "tile.pickEmpty": "No images found"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3605,7 +3611,9 @@
     "loc.invalid": "Introduce un código como pl-PL y un nombre",
     "loc.status": "Textos {ui}/{total} · Catálogo {cat}",
     "loc.continue": "Seguir traduciendo",
-    "loc.deleteConfirm": "¿Eliminar el idioma «{name}» con todas sus traducciones?"
+    "loc.deleteConfirm": "¿Eliminar el idioma «{name}» con todas sus traducciones?",
+    "tile.pickImage": "Elegir imagen",
+    "tile.pickEmpty": "Sin imágenes"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4507,7 +4515,9 @@
     "loc.invalid": "Introduce un código como pl-PL y un nombre",
     "loc.status": "Textos {ui}/{total} · Catálogo {cat}",
     "loc.continue": "Seguir traduciendo",
-    "loc.deleteConfirm": "¿Eliminar el idioma «{name}» con todas sus traducciones?"
+    "loc.deleteConfirm": "¿Eliminar el idioma «{name}» con todas sus traducciones?",
+    "tile.pickImage": "Elegir imagen",
+    "tile.pickEmpty": "Sin imágenes"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5409,7 +5419,9 @@
     "loc.invalid": "Saisissez un code comme pl-PL et un nom",
     "loc.status": "Textes {ui}/{total} · Catalogue {cat}",
     "loc.continue": "Continuer la traduction",
-    "loc.deleteConfirm": "Supprimer la langue « {name} » et toutes ses traductions ?"
+    "loc.deleteConfirm": "Supprimer la langue « {name} » et toutes ses traductions ?",
+    "tile.pickImage": "Choisir une image",
+    "tile.pickEmpty": "Aucune image"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6311,7 +6323,9 @@
     "loc.invalid": "Saisissez un code comme pl-PL et un nom",
     "loc.status": "Textes {ui}/{total} · Catalogue {cat}",
     "loc.continue": "Continuer la traduction",
-    "loc.deleteConfirm": "Supprimer la langue « {name} » et toutes ses traductions ?"
+    "loc.deleteConfirm": "Supprimer la langue « {name} » et toutes ses traductions ?",
+    "tile.pickImage": "Choisir une image",
+    "tile.pickEmpty": "Aucune image"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7213,7 +7227,9 @@
     "loc.invalid": "Inserisci un codice come pl-PL e un nome",
     "loc.status": "Testi {ui}/{total} · Catalogo {cat}",
     "loc.continue": "Continua a tradurre",
-    "loc.deleteConfirm": "Eliminare la lingua «{name}» con tutte le traduzioni?"
+    "loc.deleteConfirm": "Eliminare la lingua «{name}» con tutte le traduzioni?",
+    "tile.pickImage": "Scegli immagine",
+    "tile.pickEmpty": "Nessuna immagine"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8115,7 +8131,9 @@
     "loc.invalid": "Inserisci un codice come pl-PL e un nome",
     "loc.status": "Testi {ui}/{total} · Catalogo {cat}",
     "loc.continue": "Continua a tradurre",
-    "loc.deleteConfirm": "Eliminare la lingua «{name}» con tutte le traduzioni?"
+    "loc.deleteConfirm": "Eliminare la lingua «{name}» con tutte le traduzioni?",
+    "tile.pickImage": "Scegli immagine",
+    "tile.pickEmpty": "Nessuna immagine"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9017,7 +9035,9 @@
     "loc.invalid": "Introduza um código como pl-PL e um nome",
     "loc.status": "Textos {ui}/{total} · Catálogo {cat}",
     "loc.continue": "Continuar a traduzir",
-    "loc.deleteConfirm": "Eliminar o idioma «{name}» com todas as traduções?"
+    "loc.deleteConfirm": "Eliminar o idioma «{name}» com todas as traduções?",
+    "tile.pickImage": "Escolher imagem",
+    "tile.pickEmpty": "Nenhuma imagem"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -9919,7 +9939,9 @@
     "loc.invalid": "Introduza um código como pl-PL e um nome",
     "loc.status": "Textos {ui}/{total} · Catálogo {cat}",
     "loc.continue": "Continuar a traduzir",
-    "loc.deleteConfirm": "Eliminar o idioma «{name}» com todas as traduções?"
+    "loc.deleteConfirm": "Eliminar o idioma «{name}» com todas as traduções?",
+    "tile.pickImage": "Escolher imagem",
+    "tile.pickEmpty": "Nenhuma imagem"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -10821,7 +10843,9 @@
     "loc.invalid": "Voer een code zoals pl-PL en een naam in",
     "loc.status": "Teksten {ui}/{total} · Catalogus {cat}",
     "loc.continue": "Verder vertalen",
-    "loc.deleteConfirm": "Taal „{name}” met alle vertalingen verwijderen?"
+    "loc.deleteConfirm": "Taal „{name}” met alle vertalingen verwijderen?",
+    "tile.pickImage": "Afbeelding kiezen",
+    "tile.pickEmpty": "Geen afbeeldingen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -11723,7 +11747,9 @@
     "loc.invalid": "Voer een code zoals pl-PL en een naam in",
     "loc.status": "Teksten {ui}/{total} · Catalogus {cat}",
     "loc.continue": "Verder vertalen",
-    "loc.deleteConfirm": "Taal „{name}” met alle vertalingen verwijderen?"
+    "loc.deleteConfirm": "Taal „{name}” met alle vertalingen verwijderen?",
+    "tile.pickImage": "Afbeelding kiezen",
+    "tile.pickEmpty": "Geen afbeeldingen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12087,7 +12113,9 @@
     "loc.invalid": "Bitte Sprachcode wie pl-PL und eine Bezeichnung eingeben",
     "loc.status": "App-Texte {ui}/{total} · Katalog {cat}",
     "loc.continue": "Weiter übersetzen",
-    "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?"
+    "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?",
+    "tile.pickImage": "Bild auswählen",
+    "tile.pickEmpty": "Keine Bilder gefunden"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12451,6 +12479,8 @@
     "loc.invalid": "Bitte Sprachcode wie pl-PL und eine Bezeichnung eingeben",
     "loc.status": "App-Texte {ui}/{total} · Katalog {cat}",
     "loc.continue": "Weiter übersetzen",
-    "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?"
+    "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?",
+    "tile.pickImage": "Bild auswählen",
+    "tile.pickEmpty": "Keine Bilder gefunden"
   }
 }

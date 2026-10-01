@@ -7,7 +7,7 @@ import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
-import { generateImageFor } from "@/lib/product-media.functions";
+import { generateImageFor, listProductImages } from "@/lib/product-media.functions";
 import { formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -209,6 +209,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [qty, setQty] = useState(prod?.default_quantity ?? 1);
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const fileRef = useRef<HTMLInputElement>(null);
+  const [picking, setPicking] = useState(false);
   const table = isDept ? "departments" : "products";
 
   const save = () => p.run(async () => {
@@ -243,6 +244,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
       <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
+        {picking && item && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(() => p.must(supabase.from(table).update({ image_path: path }).eq("id", item.id))); }} />}
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
@@ -252,6 +254,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             <div className="flex flex-wrap gap-2">
               <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
               {!isDept && <Button size="sm" variant="outline" onClick={() => p.run(() => genImg({ data: { id: item.id } }), T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>}
+              <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
               <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
             </div>
           )}
@@ -273,6 +276,42 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           <Button variant="outline" className="h-11 rounded-xl" onClick={p.onClose}>{T("common.cancel")}</Button>
           <Button className="h-11 flex-1 rounded-xl" onClick={() => void save()}>{T("tile.save")}</Button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ImagePicker(p: { onClose: () => void; onPick: (path: string) => void }) {
+  const list = useServerFn(listProductImages);
+  const [q, setQ] = useState("");
+  const [page, setPage] = useState(0);
+  const r = useQuery({ queryKey: ["admin-image-picker", q, page], queryFn: () => list({ data: { q, page, perPage: 30 } }) });
+  const pages = r.data ? Math.max(1, Math.ceil(r.data.total / r.data.perPage)) : 1;
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40" onClick={(e) => { e.stopPropagation(); p.onClose(); }}>
+      <div className="flex max-h-[85vh] w-full max-w-[440px] flex-col gap-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-foreground">{T("tile.pickImage")}</h2>
+          <button aria-label={T("common.cancel")} onClick={p.onClose} className="text-xl text-muted-foreground">✕</button>
+        </div>
+        <Input placeholder="🔍" value={q} onChange={(e) => { setQ(e.target.value); setPage(0); }} className="h-11 rounded-xl" />
+        <div className="grid flex-1 grid-cols-3 gap-2 overflow-y-auto">
+          {r.data?.items.map((it) => (
+            <button key={it.id} onClick={() => p.onPick(it.path)} className="flex flex-col items-center gap-1 rounded-xl p-1 hover:bg-muted">
+              {it.url ? <img src={it.url} alt="" className="aspect-square w-full rounded-lg object-cover" /> : <div className="aspect-square w-full rounded-lg bg-muted" />}
+              <span className="line-clamp-2 text-center text-[11px] text-foreground">{it.name}</span>
+            </button>
+          ))}
+          {r.data && r.data.items.length === 0 && <p className="col-span-3 py-6 text-center text-sm text-muted-foreground">{T("tile.pickEmpty")}</p>}
+          {r.isLoading && <p className="col-span-3 py-6 text-center text-sm text-muted-foreground">…</p>}
+        </div>
+        {pages > 1 && (
+          <div className="flex items-center justify-between">
+            <Button size="sm" variant="outline" disabled={page === 0} onClick={() => setPage(page - 1)}>‹</Button>
+            <span className="text-sm text-muted-foreground">{page + 1} / {pages}</span>
+            <Button size="sm" variant="outline" disabled={page + 1 >= pages} onClick={() => setPage(page + 1)}>›</Button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -596,6 +596,8 @@ export const de = {
   "tile.qty": "Menge",
   "tile.unit": "Einheit",
   "tile.upload": "Bild hochladen",
+  "tile.pickImage": "Bild auswählen",
+  "tile.pickEmpty": "Keine Bilder gefunden",
   "tile.aiImage": "KI-Bild",
   "tile.imgDone": "Bild erzeugt",
   "tile.save": "Speichern",
