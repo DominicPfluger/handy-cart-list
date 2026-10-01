@@ -72,7 +72,7 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
   { id: "salat", emoji: "🥗", color: "oklch(0.92 0.06 135)", steps: [
     { key: "base", label: "Salatbasis", min: 1, max: 2, ingredients: ["Babyspinat", "Portulak", "Rucola", "Kopfsalat", "Eisbergsalat"] },
     { key: "veg", label: "Gemüse", min: 1, max: 4, ingredients: ["Tomaten", "Cherrytomaten", "Salatgurke", "Paprika", "Avocado", "Zuckermais"] },
-    { key: "protein", label: "Protein", min: 0, max: 2, ingredients: ["Eier", "Feta", "Mozzarella", "Thunfisch", "Hähnchenbrust"] },
+    { key: "protein", label: "Proteinquelle", min: 0, max: 2, ingredients: ["Eier", "Feta", "Mozzarella", "Thunfisch", "Hähnchenbrust"] },
     { key: "herb", label: "Kräuter", min: 0, max: 2, ingredients: ["Petersilie", "Basilikum", "Schnittlauch", "Dill"] },
     { key: "dressing", label: "Dressing", min: 1, max: 2, ingredients: ["Olivenöl", "Balsamico", "Zitronen", "Senf"] },
   ] },
