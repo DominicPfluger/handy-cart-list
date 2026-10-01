@@ -24,6 +24,7 @@ import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 import { ImportPanel } from "@/components/admin/import-panel";
 import { CatalogMediaPanel } from "@/components/admin/catalog-media-panel";
 import { CatalogTileEditor } from "@/components/admin/catalog-tile-editor";
+import { LocaleAdminPanel } from "@/components/admin/locale-admin-panel";
 import { useReferencePrices } from "@/hooks/use-reference-prices";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -515,6 +516,7 @@ function AdminPage() {
       )}
 
       {d && <ImportPanel depts={d.depts} prods={d.prods} />}
+      {d && <LocaleAdminPanel />}
       {d && <CatalogMediaPanel />}
 
       <MarketAdmin markets={MARKETS} />
