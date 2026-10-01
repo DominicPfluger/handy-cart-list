@@ -550,14 +550,14 @@ function AdminPage() {
 
       {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel section="images" /></LoadingGate>}
       {tab === "prices" && <LoadingGate d={d}><CatalogMediaPanel section="prices" /></LoadingGate>}
-      {tab === "import" && <LoadingGate d={d}><ImportPanel depts={d!.depts} prods={d!.prods} /></LoadingGate>}
+      {tab === "import" && (d ? <ImportPanel depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
 
       {tab === "markets" && (<>
         <MarketAdmin markets={MARKETS} />
         <MarketAdminsManager />
       </>)}
 
-      {tab === "recipes" && <LoadingGate d={d}><RecipeAdmin depts={d!.depts} prods={d!.prods} /><CuisineAdmin depts={d!.depts} prods={d!.prods} /></LoadingGate>}
+      {tab === "recipes" && (d ? <><RecipeAdmin depts={d.depts} prods={d.prods} /><CuisineAdmin depts={d.depts} prods={d.prods} /></> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
 
       {tab === "more" && (
