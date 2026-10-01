@@ -1,12 +1,17 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useIsAdmin } from "../hooks/use-is-admin";
+import { translateVariants } from "../lib/admin.functions";
 import { Button } from "../components/ui/button";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { ProductEmoji } from "../components/product-emoji";
 import { HeartIcon, PlusIcon } from "../components/icons";
 import { catalogQueryOptions, brandsFor } from "../lib/catalog-query";
-import { formatQuantity } from "../lib/units";
+import { formatQuantity, getUnits } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
 
@@ -34,6 +39,11 @@ function ProductPage() {
   const { data } = useSuspenseQuery(catalogQueryOptions(locale));
   const { isFavorite, toggleFavorite } = useShoppingList();
   const [adding, setAdding] = useState(false);
+  const isAdmin = useIsAdmin();
+  const qc = useQueryClient();
+  const trVariants = useServerFn(translateVariants);
+  const [newVariant, setNewVariant] = useState("");
+  const [saving, setSaving] = useState(false);
 
   const product = data.products.find((p) => p.id === id);
   if (!product) {
@@ -52,6 +62,24 @@ function ProductPage() {
   const favorite = isFavorite(product.id);
   const brands = brandsFor(product);
   const variantLabel = (v: string) => product.variantNames?.[v]?.[locale] ?? v;
+  const DB_UNITS = new Set(["stueck","gramm","kilogramm","milligramm","pfund","unzen","milliliter","deziliter","liter","gallone","tasse","glas","flasche","dose","beutel","packung","schachtel","box","karton","kiste","kanister","buendel"]);
+  const units = getUnits(locale).filter((u) => DB_UNITS.has(u.id));
+
+  const save = async (patch: { default_unit?: string; variants?: string[] }, translate = false) => {
+    setSaving(true);
+    const { error } = await supabase.from("products").update(patch as never).eq("id", product.id);
+    if (error) { setSaving(false); toast.error(t("cloud.error")); return; }
+    if (translate) { try { await trVariants({ data: { productId: product.id } }); } catch { /* optional */ } }
+    await qc.invalidateQueries({ queryKey: catalogQueryOptions(locale).queryKey });
+    setSaving(false);
+    toast.success(t("pd.saved"));
+  };
+  const addVariant = async () => {
+    const v = newVariant.trim();
+    if (!v || product.variants.includes(v)) return;
+    setNewVariant("");
+    await save({ variants: [...product.variants, v] }, true);
+  };
 
   return (
     <div className="mx-auto max-w-md px-4 pb-24 pt-4">
@@ -80,6 +108,20 @@ function ProductPage() {
           <dt className="text-muted-foreground">{t("pd.quantity")}</dt>
           <dd className="font-semibold text-foreground">{formatQuantity(product.defaultQuantity, product.defaultUnit)}</dd>
         </div>
+        <div className="flex items-center justify-between gap-4 text-sm">
+          <dt className="text-muted-foreground">{t("pd.unit")}</dt>
+          <dd>
+            <select
+              value={product.defaultUnit}
+              disabled={!isAdmin || saving}
+              aria-label={t("pd.unit")}
+              onChange={(e) => void save({ default_unit: e.target.value })}
+              className="rounded-lg border border-border bg-card px-2 py-1 text-sm font-semibold text-foreground disabled:opacity-80"
+            >
+              {units.map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+            </select>
+          </dd>
+        </div>
         {product.organicAvailable && (
           <div className="flex items-center justify-between text-sm">
             <dt className="text-muted-foreground">{t("common.organic")}</dt>
@@ -92,16 +134,30 @@ function ProductPage() {
             <dd className="text-right font-semibold text-foreground">{brands.join(", ")}</dd>
           </div>
         )}
-        {product.variants.length > 0 && (
+        {(product.variants.length > 0 || isAdmin) && (
           <div className="text-sm">
             <dt className="text-muted-foreground">{t("pd.variants")}</dt>
             <dd className="mt-1.5 flex flex-wrap gap-1.5">
               {product.variants.map((v) => (
                 <span key={v} className="rounded-full bg-primary-soft/25 px-2.5 py-1 text-xs font-medium text-foreground">
                   {variantLabel(v)}
+                  {isAdmin && (
+                    <button type="button" aria-label={t("pd.removeVariant", { name: variantLabel(v) })} disabled={saving}
+                      onClick={() => void save({ variants: product.variants.filter((x) => x !== v) })}
+                      className="ml-1.5 text-muted-foreground">×</button>
+                  )}
                 </span>
               ))}
             </dd>
+            {isAdmin && (
+              <form className="mt-2 flex gap-2" onSubmit={(e) => { e.preventDefault(); void addVariant(); }}>
+                <input value={newVariant} onChange={(e) => setNewVariant(e.target.value)} placeholder={t("pd.variantPh")} aria-label={t("pd.variantPh")}
+                  className="min-w-0 flex-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary" />
+                <button type="submit" disabled={!newVariant.trim() || saving} className="shrink-0 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50">
+                  {t("pd.addVariant")}
+                </button>
+              </form>
+            )}
           </div>
         )}
       </dl>
