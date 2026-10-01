@@ -24,6 +24,8 @@ import {
 import { ListManager, shareList } from "../components/list-manager";
 import { relocalizeQuantity } from "../lib/units";
 import { SpeakListButton } from "../components/speak-list-button";
+import { ExportListButton } from "../components/export-list-sheet";
+import { unitShort } from "../lib/units";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
@@ -240,6 +242,20 @@ function ListPage() {
             groups={grouped.map((g) => ({
               label: g.label,
               items: g.items.filter((i) => !i.checked).map((i) => `${i.quantity ? relocalizeQuantity(i.quantity, i.unit) + " " : ""}${displayName(i)}`),
+            }))}
+          />
+          <ExportListButton
+            title={activeList.name}
+            groups={grouped.map((g) => ({
+              label: g.label,
+              items: g.items.map((i) => ({
+                name: displayName(i),
+                quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : "",
+                unit: i.unit ? unitShort(i.unit) : "",
+                organic: !!i.organic,
+                note: i.note ?? "",
+                checked: i.checked,
+              })),
             }))}
           />
           <button
