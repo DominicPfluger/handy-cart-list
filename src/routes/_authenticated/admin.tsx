@@ -18,6 +18,7 @@ import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
+import { MarketAdmin, MarketAdminsManager, MARKETS } from "@/components/market-admin";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -220,6 +221,16 @@ function AdminPage() {
   }, [search, d]);
 
   if (admin.isLoading) return <p className="pt-6 text-sm text-muted-foreground">{T("adm.loading")}</p>;
+  if (!admin.data?.isAdmin && admin.data?.markets?.length)
+    return (
+      <div className="space-y-4 pb-10">
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="text-2xl font-bold text-foreground">{T("adm.title")}</h1>
+          <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
+        </div>
+        <MarketAdmin markets={admin.data.markets} />
+      </div>
+    );
   if (!admin.data?.isAdmin)
     return (
       <div className="space-y-3 pt-6">
@@ -434,6 +445,9 @@ function AdminPage() {
           onImageChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }}
         />
       )}
+
+      <MarketAdmin markets={MARKETS} />
+      <MarketAdminsManager />
 
       {d && <CuisineAdmin depts={d.depts} prods={d.prods} />}
 

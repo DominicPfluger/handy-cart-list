@@ -18,6 +18,7 @@ import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products"
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useNotificationSettings } from "../hooks/use-notification-settings";
+import { setAllMarkets, useAllMarkets } from "../hooks/use-all-markets";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 
@@ -258,6 +259,7 @@ function MorePage() {
           <span className="text-muted-foreground">›</span>
         </Link>
         <NotificationSettingsRow />
+        <AllMarketsRow />
       </section>
 
       {hiddenProducts.length > 0 && (
@@ -471,4 +473,10 @@ function NotificationSettingsRow() {
       ) : null}
     </div>
   );
+}
+
+function AllMarketsRow() {
+  const { t } = useT();
+  const on = useAllMarkets();
+  return <NotificationToggle label={t("more.allMarkets")} sub={t("more.allMarketsSub")} checked={on} onChange={setAllMarkets} />;
 }

@@ -570,6 +570,20 @@ export const de = {
   "adm.assignedList": "Zugewiesen ({n})",
   "adm.remove": "Entfernen",
   "adm.allCuisines": "Alle Küchen",
+  "more.allMarkets": "Alle Märkte anzeigen",
+  "more.allMarketsSub": "Ganzer Katalog inkl. Produkte anderer Länder (mit Flagge)",
+  "mk.title": "Markt-Katalog",
+  "mk.hint": "Marktprodukte anlegen, globale Produkte für diesen Markt ausblenden und Reihenfolge festlegen.",
+  "mk.pickCategory": "Kategorie wählen…",
+  "mk.newProduct": "Neues Marktprodukt",
+  "mk.added": "Marktprodukt angelegt",
+  "mk.rename": "Neuer Name",
+  "mk.confirmDelete": "„{name}“ löschen?",
+  "mk.show": "Einblenden",
+  "mk.hide": "Ausblenden",
+  "mk.admins": "Markt-Admins verwalten",
+  "mk.adminAdded": "Markt-Admin zugewiesen",
+  "mk.noAdmins": "Noch keine Markt-Admins",
 } as const;
 
 export type MessageKey = keyof typeof de;
