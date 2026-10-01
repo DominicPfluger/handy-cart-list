@@ -13,6 +13,7 @@ import { getUnits } from "@/lib/units";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
+import { RecipeAdmin } from "@/components/recipe-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -245,6 +246,7 @@ function AdminPage() {
       </Button>
 
       {d && <CuisineAdmin depts={d.depts} prods={d.prods} />}
+      {d && <RecipeAdmin depts={d.depts} prods={d.prods} />}
 
       <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
 
