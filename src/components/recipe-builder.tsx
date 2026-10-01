@@ -399,9 +399,10 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
             aria-expanded={dietOpen}
             aria-label={t("diet.filter")}
             title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
-            className={`shrink-0 rounded-lg px-0.5 py-1.5 text-base leading-none ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+            className={`flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${diets.length ? "bg-primary text-primary-foreground" : "border border-border bg-background text-foreground"}`}
           >
-            🥗
+            <span className="text-sm leading-none">🥗</span>
+            {t("diet.filter")}
           </button>
           <button
             onClick={toggleOnlyFav}
