@@ -10,9 +10,9 @@ import { SortableContext, arrayMove, sortableKeyboardCoordinates, useSortable, v
 import { CSS } from "@dnd-kit/utilities";
 import { useT } from "../i18n";
 import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
-import { publishRecipe, shareLink } from "../lib/recipes-api";
+import { publishRecipe, shareLink, unpublishRecipe } from "../lib/recipes-api";
 import {
-  applyLayout, createCollection, deleteCollection, deleteSavedWithUndo, renameCollection, renameSaved,
+  applyLayout, refreshCollections, createCollection, deleteCollection, deleteSavedWithUndo, renameCollection, renameSaved,
   type RecipeCollection, type SavedRecipe,
 } from "../hooks/use-saved-recipes";
 
@@ -68,6 +68,20 @@ function Row({ r, userId, draggable, onOpen }: { r: SavedRecipe; userId: string;
         <button onClick={() => { setVal(r.title); setEditing(true); }} title={t("rs.tapToRename")} className="min-w-0 flex-1 truncate text-left text-sm text-foreground">
           {r.title}
         </button>
+      )}
+      {r.isOwn && (
+        <button
+          onClick={() => void (async () => {
+            try {
+              if (r.isPublic) { await unpublishRecipe(r.recipeId); toast(t("cm.unpublished")); }
+              else { await publishRecipe(r.recipeId); toast.success(t("cm.published")); }
+              await refreshCollections();
+            } catch { toast.error(t("cloud.error")); }
+          })()}
+          aria-label={r.isPublic ? t("cm.unpublish") : t("cm.publish")}
+          title={r.isPublic ? t("cm.unpublish") : t("cm.publish")}
+          className="px-1 text-sm"
+        >{r.isPublic ? "🌍" : "🔒"}</button>
       )}
       {r.isOwn ? (
         <button onClick={() => void share()} aria-label={t("rs.share")} className="px-1 text-sm">🔗</button>
