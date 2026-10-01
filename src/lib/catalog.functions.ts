@@ -25,6 +25,8 @@ export interface CatalogProduct {
   defaultUnit: string;
   organicAvailable: boolean;
   variants: string[];
+  /** Übersetzte Varianten: Variante → { locale: Name } */
+  variantNames: Record<string, Record<string, string>>;
   /** Ernährungsformen, in denen das Produkt nicht erlaubt ist */
   excludedDiets: string[];
   /** Länderküchen, in denen das Produkt typisch ist */
@@ -140,7 +142,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     return { data: all, error: null };
   }
 
-  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes, daRes, paRes, exRes, moRes] = await Promise.all([
+  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes, daRes, paRes, exRes, moRes, vtRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
@@ -161,7 +163,14 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     fetchAll("product_aliases", "product_id, department_id, sort_order", ["sort_order", "id"]),
     fetchAll("product_market_exclusions", "product_id, market", ["id"]),
     fetchAll("product_market_order", "product_id, market, sort_order", ["id"]),
+    fetchAll("variant_translations", "product_id, variant, locale, name", ["id"]),
   ]);
+  const variantNames = new Map<string, Record<string, Record<string, string>>>();
+  for (const r of (vtRes.data ?? []) as Array<{ product_id: string; variant: string; locale: string; name: string }>) {
+    const m = variantNames.get(r.product_id) ?? {};
+    (m[r.variant] ??= {})[r.locale] = r.name;
+    variantNames.set(r.product_id, m);
+  }
   const excluded = new Map<string, string[]>();
   for (const r of (exRes.data ?? []) as Array<{ product_id: string; market: string }>) excluded.set(r.product_id, [...(excluded.get(r.product_id) ?? []), r.market]);
   const marketOrder = new Map<string, Record<string, number>>();
@@ -229,6 +238,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       defaultUnit: (r["default_unit"] as string) ?? "stueck",
       organicAvailable: (r["organic_available"] as boolean) ?? true,
       variants: (r["variants"] as string[] | null) ?? [],
+      variantNames: variantNames.get(r["id"] as string) ?? {},
       excludedDiets: (r["excluded_diets"] as string[] | null) ?? [],
       cuisineIds: cuisineIdsByProduct.get(r["id"] as string) ?? [],
       brands: brandsByProduct.get(r["id"] as string) ?? [],
