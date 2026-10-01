@@ -12,7 +12,7 @@ import { useT } from "../i18n";
 import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
 import { publishRecipe, shareLink } from "../lib/recipes-api";
 import {
-  applyLayout, deleteCollection, deleteSavedWithUndo, renameCollection, renameSaved,
+  applyLayout, createCollection, deleteCollection, deleteSavedWithUndo, renameCollection, renameSaved,
   type RecipeCollection, type SavedRecipe,
 } from "../hooks/use-saved-recipes";
 
@@ -127,6 +127,8 @@ export function SavedRecipesBoard({ collections, userId, filterTemplate, onOpen 
   const draggable = !filterTemplate;
   const [layout, setLayout] = useState<RecipeCollection[] | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [folderName, setFolderName] = useState("");
+  const [creating, setCreating] = useState(false);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 6 } }),
@@ -176,6 +178,28 @@ export function SavedRecipesBoard({ collections, userId, filterTemplate, onOpen 
     <section className="space-y-3">
       <h2 className="text-lg font-bold text-foreground">{t("rk.myRecipes")}</h2>
       {draggable && <p className="text-xs text-muted-foreground">{t("rs.boardHint")}</p>}
+      <form
+        className="flex gap-2"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          if (!folderName.trim() || creating) return;
+          setCreating(true);
+          try { await createCollection(userId, folderName); setFolderName(""); }
+          catch { toast.error(t("cloud.error")); }
+          finally { setCreating(false); }
+        }}
+      >
+        <input
+          value={folderName}
+          onChange={(e) => setFolderName(e.target.value)}
+          placeholder={t("rk.collectionPh")}
+          aria-label={t("rk.collectionPh")}
+          className="min-w-0 flex-1 rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
+        />
+        <button type="submit" disabled={!folderName.trim() || creating} className="shrink-0 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
+          {t("rs.newFolder")}
+        </button>
+      </form>
       <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={onStart} onDragOver={onOver} onDragEnd={onEnd} onDragCancel={() => { setActiveId(null); setLayout(null); }}>
         {shown.map((c) => (
           <Folder key={c.id} c={c}>
