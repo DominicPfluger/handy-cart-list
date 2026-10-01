@@ -620,7 +620,7 @@ function DepartmentsPage() {
                     onPointerLeave={isAdmin ? cancelPress : undefined}
                     onContextMenu={isAdmin ? (e) => e.preventDefault() : undefined}
                     onClick={() => { if (isAdmin && !suppressClick.current) setHeadingTarget({ departmentId: heading.departmentId, products: directProducts, heading }); }}
-                    className={`select-none bg-muted/50 px-3 pb-1.5 pt-3 text-sm font-bold text-foreground ${isAdmin ? "cursor-pointer" : ""} ${drag?.what === "heading" && drag.id === heading.id ? "opacity-40" : ""} ${headingDrop ? "ring-2 ring-inset ring-primary" : ""}`}
+                    className={`select-none bg-primary-soft/25 px-3 pb-1.5 pt-3 text-sm font-bold text-foreground ${isAdmin ? "cursor-pointer" : ""} ${drag?.what === "heading" && drag.id === heading.id ? "opacity-40" : ""} ${headingDrop ? "ring-2 ring-inset ring-primary" : ""}`}
                   >
                     {heading.name}
                   </div>
