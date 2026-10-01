@@ -153,9 +153,12 @@ function DepartmentsPage() {
     if (!normalizedQuery) return [];
     const order = new Map(orderedProducts.map((p, i) => [p.id, i]));
     return products
-      .filter((product) => matchesProductSearch(product.name, normalizedQuery))
+      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || brandsFor(product).some((b) => b.toLocaleLowerCase().includes(normalizedQuery)))
       .sort((a, b) => (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER));
   }, [products, orderedProducts, normalizedQuery]);
+
+  const matchedBrand = (product: CatalogProduct) =>
+    matchesProductSearch(product.name, normalizedQuery) ? undefined : brandsFor(product).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
 
   const groupFor = (product: CatalogProduct) =>
     departments.find((department) => department.id === product.departmentId) ?? current;
@@ -603,7 +606,7 @@ function DepartmentsPage() {
                       <span>{product.name}</span>
                     </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                      {normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
+                      {normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
@@ -641,7 +644,7 @@ function DepartmentsPage() {
                     type="button"
                     size="icon"
                     aria-label={t("common.addWithQty", { name: product.name })}
-                    onClick={() => setSelectedProduct(product)}
+                    onClick={() => { setSelectedBrand(normalizedQuery ? matchedBrand(product) : undefined); setSelectedProduct(product); }}
                     className="h-8 w-8 rounded-full shadow-none"
                   >
                     <PlusIcon className="h-3.5 w-3.5" />
@@ -713,6 +716,7 @@ function DepartmentsPage() {
         product={selectedProduct}
         groupLabel={selectedProduct ? groupFor(selectedProduct)?.name : undefined}
         groupEmoji={selectedProduct ? groupFor(selectedProduct)?.emoji : undefined}
+        initialBrand={selectedBrand}
         onOpenChange={(open) => { if (!open) setSelectedProduct(null); }}
       />
     </div>
