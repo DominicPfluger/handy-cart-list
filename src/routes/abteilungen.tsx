@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
@@ -133,6 +133,7 @@ function DepartmentsPage() {
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
   const isAdmin = useIsAdmin();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const saveHeadingFn = useServerFn(saveHeading);
   const headingBefore = useMemo(() => new Map(data.headings.map((h) => [h.beforeProductId, h])), [data.headings]);
   const customNames = useCustomNames();
