@@ -164,12 +164,28 @@ function RecipePage() {
       {r.imagePath && <RecipePhoto path={r.imagePath} className="h-56 w-full rounded-2xl" />}
       <div className="flex items-center gap-3">
         <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-3xl" style={{ background: tpl?.color }}>{tpl?.emoji ?? "🍽️"}</span>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h1 className="text-xl font-bold leading-tight text-foreground">{r.title}</h1>
           <p className="text-xs text-muted-foreground">
             {r.authorName ? `${t("rs.by")} ${r.authorName} · ` : ""}{new Date(r.createdAt).toLocaleDateString()}
           </p>
         </div>
+        <button
+          type="button"
+          onClick={toggleSpeak}
+          aria-label={speaking ? t("rs.speakStop") : t("rs.speak")}
+          aria-pressed={speaking}
+          title={speaking ? t("rs.speakStop") : t("rs.speak")}
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
+        >
+          {speaking ? (
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>
+          ) : (
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M11 5 6 9H2v6h4l5 4V5z" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /><path d="M19 5a10 10 0 0 1 0 14" />
+            </svg>
+          )}
+        </button>
       </div>
 
       {r.description && <p className="whitespace-pre-wrap text-sm text-foreground">{r.description}</p>}
