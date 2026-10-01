@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { addMarketAdmin, translateMarketProduct } from "@/lib/admin.functions";
+import { addMarketAdmin, rankProducts, translateMarketProduct } from "@/lib/admin.functions";
 import { LOCALES, getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { flagOf } from "@/lib/catalog-query";
@@ -73,6 +73,19 @@ export function MarketAdmin({ markets }: { markets: string[] }) {
   }
 
   const items = list.data ?? [];
+  const rank = useServerFn(rankProducts);
+  const sortRelevance = () => {
+    if (items.length < 2 || !confirm(T("mk.sortConfirm", { market }))) return;
+    void run(async () => {
+      const label = options.find((o) => o.id === dept)?.label ?? "";
+      const r = await rank({ data: { path: label, criterion: "popularity", groups: [items.map((p) => p.name)], market } });
+      const pool = [...items];
+      const next = (r.groups[0] ?? []).map((n) => { const k = pool.findIndex((p) => p.name === n); return k < 0 ? null : pool.splice(k, 1)[0]!; })
+        .filter((p): p is NonNullable<typeof p> => p !== null).concat(pool);
+      must(await supabase.from("product_market_order").upsert(next.map((p, k) => ({ product_id: p.id, market, sort_order: k + 1 })), { onConflict: "product_id,market" }));
+      toast.success(T("mk.sorted"));
+    });
+  };
   const move = (i: number, dir: -1 | 1) => run(async () => {
     const next = [...items];
     const j = i + dir;
@@ -115,6 +128,11 @@ export function MarketAdmin({ markets }: { markets: string[] }) {
             <Button type="submit" disabled={busy || !name.trim()}>+</Button>
           </form>
 
+          {items.length > 1 && (
+            <Button size="sm" variant="outline" className="w-full" disabled={busy} onClick={sortRelevance}>
+              ↕ {busy ? T("adm.working") : T("mk.sortRelevance")}
+            </Button>
+          )}
           {list.isLoading && <p className="text-sm text-muted-foreground">{T("adm.loading")}</p>}
           <ul className="divide-y divide-border rounded-lg border border-border">
             {items.map((p, i) => {

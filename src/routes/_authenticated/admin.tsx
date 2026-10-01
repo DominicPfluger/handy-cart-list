@@ -213,7 +213,7 @@ function AdminPage() {
       if (sortBy === "alphabetical") {
         ordered = groups.map((g) => [...g].sort((a, b) => a.name.localeCompare(b.name, "de")));
       } else {
-        const r = await rank({ data: { path: pathText(), criterion: sortBy, groups: groups.map((g) => g.map((p) => p.name)) } });
+        const r = await rank({ data: { path: pathText(), criterion: sortBy, groups: groups.map((g) => g.map((p) => p.name)), ...(mk ? { market: mk } : {}) } });
         ordered = groups.map((g, gi) => {
           const pool = [...g];
           return r.groups[gi]!.map((n) => pool.splice(pool.findIndex((p) => p.name === n), 1)[0]!).concat(pool);
