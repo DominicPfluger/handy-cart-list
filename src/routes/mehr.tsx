@@ -41,12 +41,6 @@ export const Route = createFileRoute("/mehr")({
 });
 
 
-const AVATAR_COLORS = [
-  "oklch(0.52 0.155 144)",
-  "oklch(0.75 0.16 47)",
-  "oklch(0.62 0.18 280)",
-  "oklch(0.55 0.13 210)",
-];
 
 function MorePage() {
   const { members, signedIn, activeList, inviteLinkFor } = useShoppingList();
