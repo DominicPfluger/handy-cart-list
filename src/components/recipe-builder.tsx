@@ -47,6 +47,21 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     return m;
   }, [catalog.products]);
   const deptById = useMemo(() => new Map(catalog.departments.map((d) => [d.id, d])), [catalog.departments]);
+  const rootDeptOf = useMemo(() => {
+    const cache = new Map<string, string>();
+    const resolve = (id: string): string => {
+      const hit = cache.get(id);
+      if (hit) return hit;
+      let cur = deptById.get(id);
+      let guard = 0;
+      while (cur?.parentId && guard++ < 10) cur = deptById.get(cur.parentId);
+      const root = cur?.id ?? id;
+      cache.set(id, root);
+      return root;
+    };
+    return resolve;
+  }, [deptById]);
+  const [openDept, setOpenDept] = useState<Record<string, string | null>>({}); // stepKey -> rootDeptId
 
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
   const steps = useMemo(
