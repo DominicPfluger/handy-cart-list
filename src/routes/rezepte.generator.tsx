@@ -1,6 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { getLocale, useT } from "../i18n";
+import type { MessageKey } from "../i18n/de";
 import { RecipeBuilder } from "../components/recipe-builder";
+import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
 import { catalogQueryOptions } from "../lib/catalog-query";
 
 export const Route = createFileRoute("/rezepte/generator")({
@@ -21,13 +24,19 @@ export const Route = createFileRoute("/rezepte/generator")({
 
 function Page() {
   const { t } = useT();
+  const [tplId, setTplId] = useState<string | null>(null);
   return (
     <div className="space-y-5">
       <div>
         <Link to="/rezepte" className="text-xs font-semibold text-primary">← {t("nav.recipes")}</Link>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-foreground">{t("rec.entryGenTitle")}</h1>
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-foreground">
+          {tplId
+            ? `${RECIPE_TEMPLATES.find((x) => x.id === tplId)?.emoji ?? ""} ${t(`rk.cat.${tplId}` as MessageKey)}`.trim()
+            : t("rec.entryGenTitle")}
+        </h1>
       </div>
-      <RecipeBuilder mode="generator" />
+      <RecipeBuilder mode="generator" onTemplateChange={setTplId} />
     </div>
   );
 }
+
