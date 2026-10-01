@@ -491,7 +491,10 @@ function AdminPage() {
 
       {d && <CuisineAdmin depts={d.depts} prods={d.prods} />}
 
+      {d && <RecipeAdmin depts={d.depts} prods={d.prods} />}
+
       <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
+
         <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>
       </Link>
     </div>
