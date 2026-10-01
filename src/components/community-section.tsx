@@ -132,7 +132,7 @@ function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-bold text-foreground">{r.title}</span>
         <span className="block truncate text-xs text-muted-foreground">
-          {r.items.slice(0, 4).map((i) => i.name).join(", ")}
+          {r.description || r.items.slice(0, 4).map((i) => i.name).join(", ")}
         </span>
       </span>
     </>

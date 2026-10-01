@@ -44,6 +44,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
   const [photo, setPhoto] = useState<File | null>(null);
   const photoUrl = useMemo(() => (photo ? URL.createObjectURL(photo) : null), [photo]);
   const [customTitle, setCustomTitle] = useState("");
+  const [customDesc, setCustomDesc] = useState("");
   const user = useAuthUser();
   const collections = useRecipeCollections(user);
   const [busy, setBusy] = useState(false);
@@ -190,8 +191,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
     try {
       const folderId = collectionId ?? (await createCollection(user.id, newName));
       const recTitle = customTitle.trim() || title;
+      const recDesc = customDesc.trim() || null;
       const imagePath = photo ? await uploadRecipeImage(user.id, photo) : null;
-      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic, imagePath });
+      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, description: recDesc, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic, imagePath });
       await saveToFolder(user.id, rec.id, folderId);
       if (makePublic && rec.share_slug) {
         const how = await shareLink(rec.share_slug, recTitle);
@@ -200,6 +202,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
       setSaveOpen(false);
       setNewName("");
       setCustomTitle("");
+      setCustomDesc("");
       setPhoto(null);
       setSavedMsg(true);
     } catch {
@@ -211,7 +214,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
     if (!tpl || !user || busy) return;
     setBusy(true);
     try {
-      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title, templateId: tpl.id, picks, items: recipeItems(), isPublic: true });
+      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title, description: customDesc.trim() || null, templateId: tpl.id, picks, items: recipeItems(), isPublic: true });
       const how = await shareLink(rec.share_slug!, title);
       if (how === "copied") toast.success(t("rs.linkCopied"));
     } catch {
@@ -236,6 +239,14 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
           onChange={(e) => setCustomTitle(e.target.value)}
           placeholder={t("rk.recipeTitle")}
           className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
+        />
+        <textarea
+          value={customDesc}
+          onChange={(e) => setCustomDesc(e.target.value)}
+          placeholder={t("rk.recipeDesc")}
+          rows={3}
+          maxLength={2000}
+          className="w-full resize-none rounded-2xl border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
         />
         <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-border bg-card p-2">
           {photoUrl
@@ -481,7 +492,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
             {user ? (
               <div className="mt-2 flex gap-2">
                 <button
-                  onClick={() => { setSavedMsg(false); setCustomTitle(title); setSaveOpen(true); }}
+                  onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setSaveOpen(true); }}
                   className="flex-1 rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition active:scale-[0.98]"
                 >
                   {savedMsg ? `✓ ${t("rk.saved")}` : `📁 ${t("rk.save")}`}

@@ -24,7 +24,7 @@ export const Route = createFileRoute("/rezept/$slug")({
   head: ({ loaderData }) => {
     const title = loaderData ? `${loaderData.title} — Shoppi Rezept` : "Shoppi Rezept";
     const desc = loaderData
-      ? `Zutaten: ${loaderData.items.map((i) => i.name).filter(Boolean).slice(0, 8).join(", ")}`
+      ? (loaderData.description || `Zutaten: ${loaderData.items.map((i) => i.name).filter(Boolean).slice(0, 8).join(", ")}`)
       : "Geteiltes Rezept auf Shoppi";
     return {
       meta: [
@@ -134,6 +134,8 @@ function RecipePage() {
           </p>
         </div>
       </div>
+
+      {r.description && <p className="whitespace-pre-wrap text-sm text-foreground">{r.description}</p>}
 
       <div className="flex items-center gap-3 text-sm">
         <span className="font-semibold text-foreground">★ {count ? avg.toFixed(1) : "–"}</span>
