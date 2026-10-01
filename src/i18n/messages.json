@@ -911,7 +911,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Reference price in {market} (optional)"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1825,7 +1826,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Reference price in {market} (optional)"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2739,7 +2741,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Reference price in {market} (optional)"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3653,7 +3656,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Precio orientativo en {market} (opcional)"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4567,7 +4571,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Precio orientativo en {market} (opcional)"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5481,7 +5486,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Prix indicatif en {market} (facultatif)"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6395,7 +6401,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Prix indicatif en {market} (facultatif)"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7309,7 +7316,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Prezzo indicativo in {market} (facoltativo)"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8223,7 +8231,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Prezzo indicativo in {market} (facoltativo)"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9137,7 +9146,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Preço de referência em {market} (opcional)"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10051,7 +10061,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Preço de referência em {market} (opcional)"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -10965,7 +10976,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Richtprijs in {market} (optioneel)"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -11879,7 +11891,8 @@
     "tile.suggestEmpty": "No missing products found",
     "tile.suggestLink": "link",
     "tile.suggestCreate": "Create selected ({n})",
-    "tile.suggestDone": "{n} products created"
+    "tile.suggestDone": "{n} products created",
+    "tile.price": "Richtprijs in {market} (optioneel)"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12255,7 +12268,8 @@
     "tile.suggestEmpty": "Keine fehlenden Produkte gefunden",
     "tile.suggestLink": "verknüpfen",
     "tile.suggestCreate": "Ausgewählte anlegen ({n})",
-    "tile.suggestDone": "{n} Produkte angelegt"
+    "tile.suggestDone": "{n} Produkte angelegt",
+    "tile.price": "Richtpreis in {market} (optional)"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12631,6 +12645,7 @@
     "tile.suggestEmpty": "Keine fehlenden Produkte gefunden",
     "tile.suggestLink": "verknüpfen",
     "tile.suggestCreate": "Ausgewählte anlegen ({n})",
-    "tile.suggestDone": "{n} Produkte angelegt"
+    "tile.suggestDone": "{n} Produkte angelegt",
+    "tile.price": "Richtpreis in {market} (optional)"
   }
 }

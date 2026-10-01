@@ -9,11 +9,13 @@ import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { generateImageFor, listProductImages } from "@/lib/product-media.functions";
 import { suggestCategoryProducts } from "@/lib/admin.functions";
-import { formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
+import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
+
+const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
 export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
 export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null };
@@ -222,11 +224,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [large, setLarge] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
+  const [newId, setNewId] = useState<string | null>(null);
+  const [price, setPrice] = useState("");
+  const effId = item?.id ?? newId ?? undefined;
   const table = isDept ? "departments" : "products";
 
   const save = () => p.run(async () => {
     if (!name.trim()) throw new Error(T("tile.nameRequired"));
     const base = { name: name.trim(), emoji: emoji.trim() || null };
+    let id = item?.id;
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
@@ -240,29 +246,36 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         ? await supabase.from("departments").insert({ ...base, parent_id: p.cur, sort_order: p.children.length + 1 }).select("id").single()
         : await supabase.from("products").insert({ ...base, department_id: p.cur!, default_quantity: qty, default_unit: unit as never, sort_order: p.products.length + 1 }).select("id").single();
       if (r.error) throw new Error(r.error.message);
-      await p.translateIds([r.data.id]);
+      id = r.data.id;
+      await p.translateIds([id]);
+      setNewId(id);
     }
-    p.onClose();
+    if (!isDept && id && price.trim() && !Number.isNaN(Number(price))) {
+      const market = currentMarket();
+      await p.must(supabase.from("product_reference_prices").upsert({ product_id: id, market, price: Number(price), currency: MARKET_CCY[market] ?? "EUR" }, { onConflict: "product_id,market" }));
+    }
+    // Bei neuen Einträgen offen lassen, damit gleich ein Bild ergänzt werden kann.
+    if (item) p.onClose();
   });
 
   const upload = (file: File) => p.run(async () => {
     const blob = await prepareCategoryImage(file);
-    const path = `${table}/${item!.id}.png`;
+    const path = `${table}/${effId!}.png`;
     const { error } = await supabase.storage.from("catalog-images").upload(path, blob, { contentType: "image/png", upsert: true });
     if (error) throw new Error(error.message);
-    await p.must(supabase.from(table).update({ image_path: path }).eq("id", item!.id));
+    await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId!));
   });
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
       <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
-        {picking && item && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(() => p.must(supabase.from(table).update({ image_path: path }).eq("id", item.id))); }} />}
+        {picking && effId && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(() => p.must(supabase.from(table).update({ image_path: path }).eq("id", effId))); }} />}
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
             {p.imgUrl ? <img src={p.imgUrl} alt="" className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
           </div>
-          {item && (
+          {effId && (
             <div className="flex flex-1 flex-col gap-2">
               <div className="flex flex-wrap gap-2">
                 <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
@@ -271,8 +284,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               </div>
               <Input aria-label={T("tile.aiHint")} placeholder={T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 rounded-xl text-sm" />
               <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(async () => {
-                await genImg({ data: { id: item.id, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
-                const { data } = await supabase.storage.from("catalog-images").createSignedUrl(`${table}/${item.id}.png`, 600);
+                await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+                const { data } = await supabase.storage.from("catalog-images").createSignedUrl(`${table}/${effId}.png`, 600);
                 if (data?.signedUrl) setLarge(data.signedUrl);
               }, T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
             </div>
@@ -289,6 +302,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
             </select>
           </div>
+        )}
+        {!isDept && (
+          <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 rounded-xl" />
         )}
         <div className="flex gap-2 pt-1">
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
