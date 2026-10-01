@@ -36,7 +36,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const { t } = useT();
   const catalog = useCatalog();
   const { addCatalogItem, favorites } = useShoppingList();
-  const [tplId, setTplIdRaw] = useState<RecipeTemplate["id"] | null>(null);
+  const [tplId, setTplIdRaw] = useState<RecipeTemplate["id"] | null>(initialTemplateId ?? null);
   const setTplId = (id: RecipeTemplate["id"] | null) => { setTplIdRaw(id); onTemplateChange?.(id); };
   const [picks, setPicks] = useState<Picks>({});
   const [added, setAdded] = useState(false);

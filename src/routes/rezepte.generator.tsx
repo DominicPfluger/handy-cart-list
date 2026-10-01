@@ -11,6 +11,7 @@ export const Route = createFileRoute("/rezepte/generator")({
   ssr: false,
   validateSearch: (s: Record<string, unknown>) => ({
     recipe: z.string().optional().catch(undefined).parse(s["recipe"]),
+    cat: z.string().optional().catch(undefined).parse(s["cat"]),
   }),
   head: () => ({
     meta: [
