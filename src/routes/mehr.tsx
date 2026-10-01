@@ -23,6 +23,8 @@ import { setAllMarkets, useAllMarkets } from "../hooks/use-all-markets";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 import { MemberAvatar } from "../components/member-avatar";
+import { siWhatsapp, siTelegram, siThreema } from "simple-icons";
+import { BrandIcon, MailIcon, SmsIcon } from "../components/share-icons";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
@@ -63,11 +65,11 @@ function MorePage() {
   const inviteText = inviteLink ? `„${activeList.name}“ – ${t("lm.inviteHint")}\n${inviteLink}` : "";
   const enc = encodeURIComponent(inviteText);
   const channels = [
-    { label: "WhatsApp", emoji: "💬", href: `https://wa.me/?text=${enc}` },
-    { label: "Telegram", emoji: "✈️", href: `https://t.me/share/url?url=${encodeURIComponent(inviteLink ?? "")}&text=${encodeURIComponent(`„${activeList.name}“ – ${t("lm.inviteHint")}`)}` },
-    { label: "Threema", emoji: "🔒", href: `threema://compose?text=${enc}` },
-    { label: t("inv.sms"), emoji: "📱", href: `sms:?&body=${enc}` },
-    { label: t("inv.email"), emoji: "✉️", href: `mailto:?subject=${encodeURIComponent(`Shoppi: ${activeList.name}`)}&body=${enc}` },
+    { label: "WhatsApp", icon: <BrandIcon path={siWhatsapp.path} />, href: `https://wa.me/?text=${enc}` },
+    { label: "Telegram", icon: <BrandIcon path={siTelegram.path} />, href: `https://t.me/share/url?url=${encodeURIComponent(inviteLink ?? "")}&text=${encodeURIComponent(`„${activeList.name}“ – ${t("lm.inviteHint")}`)}` },
+    { label: "Threema", icon: <BrandIcon path={siThreema.path} />, href: `threema://compose?text=${enc}` },
+    { label: t("inv.sms"), icon: <SmsIcon />, href: `sms:?&body=${enc}` },
+    { label: t("inv.email"), icon: <MailIcon />, href: `mailto:?subject=${encodeURIComponent(`Shoppi: ${activeList.name}`)}&body=${enc}` },
   ];
   const copyInvite = async () => {
     if (!inviteLink) return;
@@ -141,7 +143,7 @@ function MorePage() {
             <div className="grid grid-cols-4 gap-3">
               {channels.map((c) => (
                 <a key={c.label} href={c.href} target="_blank" rel="noopener noreferrer" onClick={() => setInviteOpen(false)} className="flex flex-col items-center gap-1.5">
-                  <span className="grid h-14 w-14 place-items-center rounded-full bg-primary-soft/50 text-2xl">{c.emoji}</span>
+                  <span className="grid h-14 w-14 place-items-center rounded-full bg-primary-soft/50 text-primary">{c.icon}</span>
                   <span className="text-xs text-foreground">{c.label}</span>
                 </a>
               ))}
