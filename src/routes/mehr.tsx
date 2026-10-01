@@ -174,6 +174,16 @@ function MorePage() {
 
       {/* Settings menu */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <Link to="/vorrat" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+            <span className="text-lg" aria-hidden="true">🏠</span>
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground">{t("pantry.title")}</p>
+            <p className="truncate text-xs text-muted-foreground">{t("pantry.desc")}</p>
+          </div>
+          <span className="text-muted-foreground">›</span>
+        </Link>
         <Link to="/angebote" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
             <span className="text-lg" aria-hidden="true">%</span>
@@ -191,16 +201,6 @@ function MorePage() {
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-foreground">{t("more.scanner")}</p>
             <p className="truncate text-xs text-muted-foreground">{t("more.scannerSub")}</p>
-          </div>
-          <span className="text-muted-foreground">›</span>
-        </Link>
-        <Link to="/vorrat" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
-            <span className="text-lg" aria-hidden="true">🏠</span>
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-foreground">{t("pantry.title")}</p>
-            <p className="truncate text-xs text-muted-foreground">{t("pantry.desc")}</p>
           </div>
           <span className="text-muted-foreground">›</span>
         </Link>
