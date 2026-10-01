@@ -780,6 +780,47 @@ export type Database = {
         }
         Relationships: []
       }
+      variant_translations: {
+        Row: {
+          created_at: string
+          id: string
+          is_manual: boolean
+          locale: string
+          name: string
+          product_id: string
+          updated_at: string
+          variant: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_manual?: boolean
+          locale: string
+          name: string
+          product_id: string
+          updated_at?: string
+          variant: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_manual?: boolean
+          locale?: string
+          name?: string
+          product_id?: string
+          updated_at?: string
+          variant?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "variant_translations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
