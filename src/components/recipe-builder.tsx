@@ -15,6 +15,7 @@ import { createRecipe, publishRecipe, shareLink, type RecipeItem } from "../lib/
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { SavedRecipesBoard } from "./saved-recipes-board";
+import { FavoritesRow } from "./recipe-feed";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -337,6 +338,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
         </div>
       </section>
        {popularView}
+       <FavoritesRow />
        {recentView}
       {collectionsView}
       </div>
@@ -467,6 +469,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
       </div>
     </section>
     {popularView}
+    <FavoritesRow />
     {recentView}
     {collectionsView}
     {saveDialog}
