@@ -119,7 +119,7 @@ function ListPage() {
     label: string;
     emoji: string;
     order: number;
-    root?: CatalogDepartment;
+    root?: CatalogDepartment | undefined;
     items: ListItem[];
   }
 

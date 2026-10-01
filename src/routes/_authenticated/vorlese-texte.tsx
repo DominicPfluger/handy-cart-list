@@ -73,7 +73,7 @@ function SpeechTextsPage() {
   };
 
   const preview = () => {
-    if (typeof window === "undefined" || !("speechSynthesis" in window)) return toast.error(t("speak.unsupported"));
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) { toast.error(t("speak.unsupported")); return; }
     const name = t("stx.sampleList");
     speakSentences([
       fillSpeech(effective("intro"), { name, count: 3 }),
