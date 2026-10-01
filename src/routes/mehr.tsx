@@ -11,9 +11,8 @@ import {
   PlusIcon,
   HistoryIcon,
 } from "../components/icons";
-import { LOCALES, getExplicitLocale, getLocale, setLocale, useLocale, useT, type Locale } from "../i18n";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { LOCALES, getExplicitLocale, getLocale, setLocale, useT, type Locale } from "../i18n";
+import { useEffect, useState, type ReactNode } from "react";
 import { EyeOff } from "lucide-react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
@@ -22,7 +21,7 @@ import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useNotificationSettings } from "../hooks/use-notification-settings";
 import { useIsAdmin } from "../hooks/use-is-admin";
 import { setAllMarkets, useAllMarkets } from "../hooks/use-all-markets";
-import { catalogQueryOptions, marketOf, useCatalog } from "../lib/catalog-query";
+import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 import { MemberAvatar } from "../components/member-avatar";
 import { siWhatsapp, siTelegram, siThreema } from "simple-icons";
@@ -513,17 +512,6 @@ function NotificationSettingsRow() {
 
 function AllMarketsRow() {
   const { t } = useT();
-  const locale = useLocale();
   const on = useAllMarkets();
-  const { data } = useQuery(catalogQueryOptions(locale));
-  // Nur einblenden, wenn der Markt der Sprachvariante nicht schon alles sieht:
-  // Es muss Produkte aus anderen Märkten oder Ausblendungen für diesen Markt geben.
-  const hasForeign = useMemo(() => {
-    const market = marketOf(locale);
-    return (data?.products ?? []).some(
-      (p) => (p.markets?.length && !p.markets.includes(market)) || (p.excludedMarkets ?? []).includes(market),
-    );
-  }, [data, locale]);
-  if (!hasForeign) return null;
   return <NotificationToggle icon="🌍" label={t("more.allMarkets")} sub={t("more.allMarketsSub")} checked={on} onChange={setAllMarkets} />;
 }
