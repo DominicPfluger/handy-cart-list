@@ -7,6 +7,7 @@ Ergebnis der Prüfung: **gut machbar**. Die App kennt bereits 14 Märkte (DE, AT
 - Marktspezifische Produkte (z. B. Rivella nur CH) erscheinen nur in diesem Markt.
 - Pro Markt gilt eine eigene Produktreihenfolge. Gibt es keine, wird die globale Reihenfolge verwendet.
 - Die Kategorien selbst bleiben global. Leere Kategorien werden im jeweiligen Markt ausgeblendet.
+- Unter „Mehr“ gibt es den Schalter **„Alle Märkte anzeigen“**. Ist er an, siehst du den gesamten Katalog mit den Produkten aller Märkte. Marktspezifische Produkte tragen dann eine kleine Länderflagge, z. B. 🇨🇭. Die Sortierung folgt weiterhin deinem eigenen Markt. Die Einstellung bleibt nur auf diesem Gerät gespeichert.
 
 ## Admin-Rollen
 - **Haupt-Admin** (du): Wie bisher darfst du alles. Zusätzlich vergibst du Markt-Admins und verwaltest alle Märkte.
