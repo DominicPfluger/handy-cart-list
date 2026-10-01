@@ -85,6 +85,8 @@ function AdminPage() {
   const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity">("popularity");
   /** "" = globale Reihenfolge, sonst Marktcode (z. B. CH) für marktspezifische Relevanz. */
   const [mk, setMk] = useState<string>("");
+  /** Anzeigesprache des Katalogs im Admin (nur Anzeige, Bearbeitung bleibt Deutsch). */
+  const [viewLoc, setViewLoc] = useState<string>("de-DE");
   const admin = useQuery({ queryKey: ["admin-check"], queryFn: () => check() });
   const q = useQuery({ queryKey: ["admin-catalog"], queryFn: loadAll, enabled: Boolean(admin.data?.isAdmin) });
   const [cur, setCur] = useState<string | null>(null);
@@ -185,6 +187,7 @@ function AdminPage() {
     run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), T("adm.headingMoved"));
   };
 
+  const nm = (id: string, base: string) => viewLoc === "de-DE" ? base : d?.tr.get(id)?.[viewLoc]?.name ?? base;
   const pathText = () => path(cur).map((p) => p.name).join(" › ");
   /** Produkte aus Nachbarkategorien (gleiche Oberkategorie), damit nichts doppelt vorgeschlagen wird. */
   const siblingNames = () => {
@@ -299,6 +302,10 @@ function AdminPage() {
       </Button>
 
 
+      <select aria-label={T("adm.viewLocale")} value={viewLoc} onChange={(e) => setViewLoc(e.target.value)} className="h-11 w-full rounded-xl border border-input bg-background px-3 text-sm">
+        {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {T("adm.viewLocale")}: {l.label}</option>)}
+      </select>
+
       <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
 
       {q.isLoading && <p className="text-sm text-muted-foreground">{T("adm.loadingCatalog")}</p>}
@@ -310,8 +317,8 @@ function AdminPage() {
             <button key={r.kind + r.id} onClick={() => { setCur(r.kind === "department" ? r.id : r.parent); setSel({ kind: r.kind, id: r.id }); setSearch(""); }}
               className="flex w-full items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-left text-sm">
               <span>{r.kind === "heading" ? "𝐇" : r.emoji ?? (r.kind === "department" ? "📁" : "•")}</span>
-              <span className={r.kind === "heading" ? "font-bold" : ""}>{r.name}</span>
-              <span className="ml-auto truncate text-xs text-muted-foreground">{path(r.parent).map((p) => p.name).join(" › ")}</span>
+              <span className={r.kind === "heading" ? "font-bold" : ""}>{nm(r.id, r.name)}</span>
+              <span className="ml-auto truncate text-xs text-muted-foreground">{path(r.parent).map((p) => nm(p.id, p.name)).join(" › ")}</span>
             </button>
           ))}
         </div>
@@ -322,7 +329,7 @@ function AdminPage() {
             {path(cur).map((p) => (
               <span key={p.id} className="flex items-center gap-1">
                 <span className="text-muted-foreground">›</span>
-                <button className="font-semibold text-primary" onClick={() => { setCur(p.id); setSel(null); }}>{p.name}</button>
+                <button className="font-semibold text-primary" onClick={() => { setCur(p.id); setSel(null); }}>{nm(p.id, p.name)}</button>
               </span>
             ))}
           </nav>
@@ -368,7 +375,7 @@ function AdminPage() {
             <section className="space-y-1">
               <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{T("adm.categories")}</h2>
               {children.map((c, i) => (
-                <Row key={c.id} emoji={c.emoji ?? "📁"} name={c.name} active={sel?.id === c.id}
+                <Row key={c.id} emoji={c.emoji ?? "📁"} name={nm(c.id, c.name)} active={sel?.id === c.id}
                   dragging={drag?.kind === "department" && drag.index === i}
                   onDragStart={() => setDrag({ kind: "department", index: i })}
                   onDragOver={(e) => e.preventDefault()}
@@ -428,10 +435,10 @@ function AdminPage() {
                         onClick={() => setSel({ kind: "heading", id: h.id })}
                         className={`mt-2 flex cursor-grab items-center gap-2 rounded-lg px-2 py-1 text-left text-sm font-bold text-foreground ${drag?.kind === "heading" && drag.id === h.id ? "opacity-40" : ""} ${drag?.kind === "product" ? "border border-dashed border-primary/60 bg-primary-soft/30" : ""} ${sel?.id === h.id ? "bg-primary-soft" : ""}`}>
                         <span className="touch-none select-none text-muted-foreground" aria-label={T("adm.drag")}>⠿</span>
-                        {h.name}
+                        {nm(h.id, h.name)}
                       </div>
                     )}
-                    <Row emoji={p.emoji ?? "•"} name={p.name} sub={`${p.default_quantity} ${p.default_unit}${unavailable(p) ? " · " + T("adm.marketUnavailable") : ""}`} active={sel?.id === p.id}
+                    <Row emoji={p.emoji ?? "•"} name={nm(p.id, p.name)} sub={`${p.default_quantity} ${p.default_unit}${unavailable(p) ? " · " + T("adm.marketUnavailable") : ""}`} active={sel?.id === p.id}
                       dragging={drag?.kind === "product" && drag.index === i}
                       onDragStart={() => setDrag({ kind: "product", index: i })}
                       onDragOver={(e) => e.preventDefault()}
