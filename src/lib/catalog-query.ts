@@ -8,8 +8,8 @@ import { useCustomCatalog } from "../hooks/use-custom-catalog";
 export const catalogQueryOptions = queryOptions({
   queryKey: ["catalog"],
   queryFn: () => getCatalog(),
-  staleTime: 30 * 1000,
-  refetchInterval: 45 * 60 * 1000, // renew signed image URLs before they expire
+  staleTime: 60 * 1000,
+  refetchInterval: 10 * 60 * 1000, // renew signed image URLs before they expire
   // Loader uses ensureQueryData (fetchQuery = no retry by default). Retry so a
   // single interrupted request (reload/HMR during the large download) doesn't blank the page.
   retry: 3,
@@ -115,7 +115,10 @@ export function compareByName(a: { name: string }, b: { name: string }) {
 /** Marken eines Produkts, die im Markt der gewählten Sprachvariante verbreitet sind. */
 export function brandsFor(product: Pick<CatalogProduct, "brands">, locale: string = getLocale()): string[] {
   const market = locale.split("-")[1] ?? "";
-  return (product.brands ?? []).filter((b) => !b.markets.length || b.markets.includes(market)).map((b) => b.name);
+  const all = product.brands ?? [];
+  const own = all.filter((b) => !b.markets.length || b.markets.includes(market)).map((b) => b.name);
+  // Fallback: keine Marken für den eigenen Markt hinterlegt → alle Marken zeigen statt gar keiner.
+  return own.length ? own : all.map((b) => b.name);
 }
 
 /** Produkte einer Kategorie inkl. Alias-Produkten (an ihrer Alias-Position). */
