@@ -187,6 +187,27 @@ export function CuisineAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] })
                     <Button size="sm" variant="outline" disabled={busy} onClick={() => { const ids = prods.filter((p) => descendants(deptId).has(p.department_id)).map((p) => p.id); run(() => unassign(ids, sel.id), T("adm.removed")); }}>{T("adm.removeAll")}</Button>
                   </div>
                 )}
+                {deptId && (() => {
+                  const ds = descendants(deptId);
+                  const list = prods.filter((p) => ds.has(p.department_id)).sort((a, b) => path(a.department_id).localeCompare(path(b.department_id), "de") || a.name.localeCompare(b.name, "de"));
+                  return (
+                    <ul className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2 lg:grid-cols-3">
+                      {list.map((p) => {
+                        const on = assigned.has(p.id);
+                        return (
+                          <li key={p.id}>
+                            <label className={`flex cursor-pointer items-center gap-2 rounded-lg border px-2 py-1.5 text-sm ${on ? "border-primary bg-primary/10" : "border-border bg-background"}`}>
+                              <input type="checkbox" className="h-4 w-4 accent-primary" checked={on} disabled={busy}
+                                onChange={() => run(() => (on ? unassign([p.id], sel.id) : assign([p.id], sel.id)))} />
+                              <span className="flex-1 truncate text-foreground">{p.name}</span>
+                              {p.department_id !== deptId && <span className="truncate text-[11px] text-muted-foreground">{deptById.get(p.department_id)?.name}</span>}
+                            </label>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  );
+                })()}
               </div>
 
               <div className="space-y-1.5">
