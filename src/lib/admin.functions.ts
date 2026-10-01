@@ -440,7 +440,7 @@ export const translateVariants = createServerFn({ method: "POST" })
       const { data: ok } = await sb.rpc("is_market_product_admin", { _product_id: data.productId, _user_id: context.userId });
       if (!ok) throw new Error("Kein Zugriff");
     }
-    let q = sb.from("products").select("id, variants").neq("variants", "{}");
+    let q = sb.from("products").select("id, variants").not("variants", "eq", "{}");
     if (data.productId) q = q.eq("id", data.productId);
     const { data: prods } = await q;
     const { data: existing } = await sb.from("variant_translations").select("product_id, variant, locale");
