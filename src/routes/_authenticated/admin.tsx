@@ -74,6 +74,8 @@ async function loadAll() {
   return { depts, prods, heads, tr, order, excl };
 }
 
+type AdminData = Awaited<ReturnType<typeof loadAll>>;
+
 const TABLE = { department: "departments", product: "products" } as const;
 
 function AdminPage() {
