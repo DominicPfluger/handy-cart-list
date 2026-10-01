@@ -23,6 +23,8 @@ import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 import { ImportPanel } from "@/components/admin/import-panel";
 import { CatalogMediaPanel } from "@/components/admin/catalog-media-panel";
+import { CatalogTileEditor } from "@/components/admin/catalog-tile-editor";
+import { useReferencePrices } from "@/hooks/use-reference-prices";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -40,7 +42,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 type Kind = "department" | "product" | "heading";
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; excluded_diets: string[]; variants: string[]; markets: string[] };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; excluded_diets: string[]; variants: string[]; markets: string[]; image_path: string | null };
 type Head = { id: string; name: string; department_id: string; before_product_id: string };
 type Tr = { entity_id: string; locale: string; name: string; is_manual: boolean };
 type Sel = { kind: Kind; id: string } | null;
@@ -58,7 +60,7 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
 async function loadAll() {
   const [depts, prods, heads, trs, mo, mx] = await Promise.all([
     paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path").order("sort_order").order("id").range(a, b)),
-    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets, variants, markets").order("sort_order").order("id").range(a, b) as never),
+    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets, variants, markets, image_path").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
     paged<Tr>((a, b) => supabase.from("catalog_translations").select("entity_id, locale, name, is_manual").order("id").range(a, b)),
     paged<{ product_id: string; market: string; sort_order: number }>((a, b) => supabase.from("product_market_order").select("product_id, market, sort_order").order("id").range(a, b)),
@@ -95,6 +97,8 @@ function AdminPage() {
   const [busy, setBusy] = useState(false);
   const [adding, setAdding] = useState<Kind | null>(null);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
+  const [view, setView] = useState<"list" | "tiles">("list");
+  const refPrices = useReferencePrices();
 
   const d = q.data;
   const deptById = useMemo(() => new Map((d?.depts ?? []).map((x) => [x.id, x])), [d]);
@@ -306,6 +310,15 @@ function AdminPage() {
         {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {T("adm.viewLocale")}: {l.label}</option>)}
       </select>
 
+      <div className="flex rounded-xl bg-muted p-1 text-sm font-semibold">
+        {(["list", "tiles"] as const).map((v) => (
+          <button key={v} type="button" onClick={() => setView(v)}
+            className={`flex-1 rounded-lg py-1.5 ${view === v ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}>
+            {v === "list" ? T("tile.viewList") : T("tile.viewTiles")}
+          </button>
+        ))}
+      </div>
+
       <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
 
       {q.isLoading && <p className="text-sm text-muted-foreground">{T("adm.loadingCatalog")}</p>}
@@ -322,6 +335,10 @@ function AdminPage() {
             </button>
           ))}
         </div>
+      ) : view === "tiles" && d ? (
+        <CatalogTileEditor depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={children} products={products}
+          path={path(cur)} nm={nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
+          reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)} />
       ) : (
         <>
           <nav className="flex flex-wrap items-center gap-1 text-sm">
