@@ -132,7 +132,7 @@ function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-bold text-foreground">{r.title}</span>
         <span className="block truncate text-xs text-muted-foreground">
-          {r.description || r.items.slice(0, 4).map((i) => i.name).join(", ")}
+          {[r.description, r.items.map((i) => i.name).join(", ")].filter(Boolean).join(" · ")}
         </span>
       </span>
     </>
@@ -162,7 +162,7 @@ function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
             <Link to="/rezepte/inspirationen" search={{ tab: "all", author: r.owner_id, name: r.author_name ?? "" }} className="font-semibold text-primary">
               👤 {r.author_name || t("cm.anon")}
             </Link>
-            <span>{t("cm.ingredientsN", { n: r.items.length })} · {date}</span>
+            <span>{date}</span>
           </>
         )}
       </div>
