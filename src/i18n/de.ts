@@ -22,6 +22,9 @@ export const de = {
   "common.retry": "Erneut versuchen",
 
   "diet.filter": "Ernährungsform",
+  "cuisine.filter": "Länderküche",
+  "cuisine.title": "Nach Länderküche filtern",
+  "cuisine.hint": "Es werden nur Zutaten angezeigt, die in der gewählten Küche typisch sind.",
   "diet.title": "Nach Ernährungsform filtern",
   "diet.hint": "Nicht passende Zutaten werden ausgeblendet.",
   "diet.reset": "Filter zurücksetzen",

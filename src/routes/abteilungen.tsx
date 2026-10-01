@@ -15,6 +15,7 @@ import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dia
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
+import { setCuisines, toggleCuisine, useCuisineFilter } from "../hooks/use-cuisine-filter";
 import {
   catalogQueryOptions,
   useCatalog,
@@ -71,6 +72,9 @@ function DepartmentsPage() {
   const hiddenProductIds = useHiddenProducts();
   const diets = useDietFilter();
   const [dietOpen, setDietOpen] = useState(false);
+  const cuisineSel = useCuisineFilter();
+  const cuisines = useMemo(() => cuisineSel.filter((id) => data.cuisines.some((c) => c.id === id)), [cuisineSel, data.cuisines]);
+  const [cuisineOpen, setCuisineOpen] = useState(false);
   const deptIds = useMemo(() => new Set(data.departments.map((d) => d.id)), [data.departments]);
   const { products: orderedProducts, move: moveProduct } = useProductOrder(data.products, deptIds);
   const { departments: orderedDepartments, move } = useDepartmentOrder(data.departments);
@@ -90,13 +94,13 @@ function DepartmentsPage() {
   }, [hiddenIds, orderedDepartments]);
   const departments = useMemo(() => orderedDepartments.filter((d) => !removedIds.has(d.id)), [orderedDepartments, removedIds]);
   const products = useMemo(
-    () => orderedProducts.filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId) && (!diets.length || !p.excludedDiets.some((d) => (diets as string[]).includes(d)))),
-    [orderedProducts, diets, removedIds, hiddenProductIds],
+    () => orderedProducts.filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId) && (!diets.length || !p.excludedDiets.some((d) => (diets as string[]).includes(d))) && (!cuisines.length || p.cuisineIds.some((c) => cuisines.includes(c)))),
+    [orderedProducts, diets, cuisines, removedIds, hiddenProductIds],
   );
   // Kategorien, deren Produkte durch den Filter alle wegfallen, ausblenden
   const hiddenDepts = useMemo(() => {
     const hidden = new Set<string>();
-    if (!diets.length) return hidden;
+    if (!diets.length && !cuisines.length) return hidden;
     const kids = new Map<string | null, string[]>();
     for (const d of departments) kids.set(d.parentId, [...(kids.get(d.parentId) ?? []), d.id]);
     const count = (list: CatalogProduct[]) => {
@@ -113,7 +117,7 @@ function DepartmentsPage() {
     };
     for (const r of kids.get(null) ?? []) walk(r);
     return hidden;
-  }, [departments, orderedProducts, products, diets.length]);
+  }, [departments, orderedProducts, products, diets.length, cuisines.length]);
   const { t } = useT();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const [currentId, setCurrentId] = useState<string | null>(null);
@@ -388,7 +392,7 @@ function DepartmentsPage() {
         />
         <button
           type="button"
-          onClick={() => setDietOpen((v) => !v)}
+          onClick={() => { setDietOpen((v) => !v); setCuisineOpen(false); }}
           aria-expanded={dietOpen}
           aria-label={t("diet.filter")}
           title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
@@ -396,7 +400,46 @@ function DepartmentsPage() {
         >
           🥗
         </button>
+        <button
+          type="button"
+          onClick={() => { setCuisineOpen((v) => !v); setDietOpen(false); }}
+          aria-expanded={cuisineOpen}
+          aria-label={t("cuisine.filter")}
+          title={`${t("cuisine.filter")}${cuisines.length ? ` · ${cuisines.length}` : ""}`}
+          className={`shrink-0 rounded-lg px-2 py-1.5 text-base leading-none ${cuisines.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+        >
+          🌍
+        </button>
       </div>
+
+      {cuisineOpen && (
+        <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
+          <div className="mb-1 text-sm font-semibold text-foreground">{t("cuisine.title")}</div>
+          <p className="mb-3 text-xs text-muted-foreground">{t("cuisine.hint")}</p>
+          <div className="flex flex-wrap gap-2">
+            {data.cuisines.map((c) => {
+              const on = cuisines.includes(c.id);
+              return (
+                <button
+                  key={c.id}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => toggleCuisine(c.id)}
+                  className={`flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-medium leading-none ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-foreground"}`}
+                >
+                  {c.emoji && <span className="text-base leading-none">{c.emoji}</span>}
+                  {c.name}
+                </button>
+              );
+            })}
+          </div>
+          {cuisines.length > 0 && (
+            <Button type="button" variant="ghost" size="sm" className="mt-2 px-2 text-primary" onClick={() => setCuisines([])}>
+              {t("diet.reset")}
+            </Button>
+          )}
+        </section>
+      )}
 
       {dietOpen && (
         <section className="rounded-xl border border-border bg-card p-3 shadow-sm">

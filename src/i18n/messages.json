@@ -267,7 +267,10 @@
     "voice.listening": "Listening...",
     "voice.notSupported": "Voice input is not supported by this browser.",
     "voice.added": "{n} products added",
-    "voice.noMatch": "No matching products recognized"
+    "voice.noMatch": "No matching products recognized",
+    "cuisine.filter": "Cuisine",
+    "cuisine.title": "Filter by cuisine",
+    "cuisine.hint": "Only ingredients typical of the selected cuisine are shown."
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -537,7 +540,10 @@
     "voice.listening": "Listening…",
     "voice.notSupported": "Voice input is not supported by this browser.",
     "voice.added": "{n} products added",
-    "voice.noMatch": "No matching products recognised"
+    "voice.noMatch": "No matching products recognised",
+    "cuisine.filter": "Cuisine",
+    "cuisine.title": "Filter by cuisine",
+    "cuisine.hint": "Only ingredients typical of the selected cuisine are shown."
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -807,7 +813,10 @@
     "voice.listening": "Listening...",
     "voice.notSupported": "Voice input is not supported by this browser.",
     "voice.added": "{n} products added",
-    "voice.noMatch": "No matching products recognized"
+    "voice.noMatch": "No matching products recognized",
+    "cuisine.filter": "Cuisine",
+    "cuisine.title": "Filter by cuisine",
+    "cuisine.hint": "Only ingredients typical of the selected cuisine are shown."
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -1077,7 +1086,10 @@
     "voice.listening": "Escuchando…",
     "voice.notSupported": "Este navegador no admite la entrada de voz.",
     "voice.added": "{n} productos añadidos",
-    "voice.noMatch": "No se han reconocido productos"
+    "voice.noMatch": "No se han reconocido productos",
+    "cuisine.filter": "Cocina",
+    "cuisine.title": "Filtrar por cocina",
+    "cuisine.hint": "Solo se muestran ingredientes típicos de la cocina elegida."
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -1347,7 +1359,10 @@
     "voice.listening": "Escuchando…",
     "voice.notSupported": "Este navegador no soporta dictado de voz.",
     "voice.added": "{n} productos agregados",
-    "voice.noMatch": "No se detectaron productos coincidentes"
+    "voice.noMatch": "No se detectaron productos coincidentes",
+    "cuisine.filter": "Cocina",
+    "cuisine.title": "Filtrar por cocina",
+    "cuisine.hint": "Solo se muestran ingredientes típicos de la cocina elegida."
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -1617,7 +1632,10 @@
     "voice.listening": "J'écoute…",
     "voice.notSupported": "La dictée vocale n'est pas supportée par ce navigateur.",
     "voice.added": "{n} produits ajoutés",
-    "voice.noMatch": "Aucun produit reconnu"
+    "voice.noMatch": "Aucun produit reconnu",
+    "cuisine.filter": "Cuisine",
+    "cuisine.title": "Filtrer par cuisine",
+    "cuisine.hint": "Seuls les ingrédients typiques de la cuisine choisie sont affichés."
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -1887,7 +1905,10 @@
     "voice.listening": "J'écoute...",
     "voice.notSupported": "L'entrée vocale n'est pas prise en charge par ce navigateur.",
     "voice.added": "{n} produits ajoutés",
-    "voice.noMatch": "Aucun produit reconnu"
+    "voice.noMatch": "Aucun produit reconnu",
+    "cuisine.filter": "Cuisine",
+    "cuisine.title": "Filtrer par cuisine",
+    "cuisine.hint": "Seuls les ingrédients typiques de la cuisine choisie sont affichés."
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -2157,7 +2178,10 @@
     "voice.listening": "Ti ascolto...",
     "voice.notSupported": "Il comando vocale non è supportato da questo browser.",
     "voice.added": "{n} prodotti aggiunti",
-    "voice.noMatch": "Nessun prodotto riconosciuto"
+    "voice.noMatch": "Nessun prodotto riconosciuto",
+    "cuisine.filter": "Cucina",
+    "cuisine.title": "Filtra per cucina",
+    "cuisine.hint": "Vengono mostrati solo gli ingredienti tipici della cucina scelta."
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -2427,7 +2451,10 @@
     "voice.listening": "Ti ascolto…",
     "voice.notSupported": "L'inserimento vocale non è supportato da questo browser.",
     "voice.added": "{n} prodotti aggiunti",
-    "voice.noMatch": "Nessun prodotto riconosciuto"
+    "voice.noMatch": "Nessun prodotto riconosciuto",
+    "cuisine.filter": "Cucina",
+    "cuisine.title": "Filtra per cucina",
+    "cuisine.hint": "Vengono mostrati solo gli ingredienti tipici della cucina scelta."
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -2697,7 +2724,10 @@
     "voice.listening": "A ouvir…",
     "voice.notSupported": "A entrada de voz não é suportada por este navegador.",
     "voice.added": "{n} produtos adicionados",
-    "voice.noMatch": "Nenhum produto correspondente detetado"
+    "voice.noMatch": "Nenhum produto correspondente detetado",
+    "cuisine.filter": "Cozinha",
+    "cuisine.title": "Filtrar por cozinha",
+    "cuisine.hint": "Só são mostrados ingredientes típicos da cozinha escolhida."
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -2967,7 +2997,10 @@
     "voice.listening": "Ouvindo...",
     "voice.notSupported": "A entrada por voz não é suportada neste navegador.",
     "voice.added": "{n} produtos adicionados",
-    "voice.noMatch": "Nenhum produto correspondente reconhecido"
+    "voice.noMatch": "Nenhum produto correspondente reconhecido",
+    "cuisine.filter": "Cozinha",
+    "cuisine.title": "Filtrar por cozinha",
+    "cuisine.hint": "Só são mostrados ingredientes típicos da cozinha escolhida."
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -3237,7 +3270,10 @@
     "voice.listening": "Ik luister …",
     "voice.notSupported": "Spraakinvoer wordt niet ondersteund door deze browser.",
     "voice.added": "{n} producten toegevoegd",
-    "voice.noMatch": "Geen passende producten herkend"
+    "voice.noMatch": "Geen passende producten herkend",
+    "cuisine.filter": "Keuken",
+    "cuisine.title": "Filteren op keuken",
+    "cuisine.hint": "Alleen ingrediënten die typisch zijn voor de gekozen keuken worden getoond."
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -3507,7 +3543,10 @@
     "voice.listening": "Ik luister …",
     "voice.notSupported": "Spraakinvoer wordt niet ondersteund door deze browser.",
     "voice.added": "{n} producten toegevoegd",
-    "voice.noMatch": "Geen passende producten herkend"
+    "voice.noMatch": "Geen passende producten herkend",
+    "cuisine.filter": "Keuken",
+    "cuisine.title": "Filteren op keuken",
+    "cuisine.hint": "Alleen ingrediënten die typisch zijn voor de gekozen keuken worden getoond."
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -3537,7 +3576,10 @@
     "voice.listening": "Ich höre zu …",
     "voice.notSupported": "Spracheingabe wird von diesem Browser nicht unterstützt.",
     "voice.added": "{n} Produkte hinzugefügt",
-    "voice.noMatch": "Keine passenden Produkte erkannt"
+    "voice.noMatch": "Keine passenden Produkte erkannt",
+    "cuisine.filter": "Länderküche",
+    "cuisine.title": "Nach Länderküche filtern",
+    "cuisine.hint": "Es werden nur Zutaten angezeigt, die in der gewählten Küche typisch sind."
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -3567,6 +3609,9 @@
     "voice.listening": "Ich höre zu …",
     "voice.notSupported": "Spracheingabe wird von diesem Browser nicht unterstützt.",
     "voice.added": "{n} Produkte hinzugefügt",
-    "voice.noMatch": "Keine passenden Produkte erkannt"
+    "voice.noMatch": "Keine passenden Produkte erkannt",
+    "cuisine.filter": "Länderküche",
+    "cuisine.title": "Nach Länderküche filtern",
+    "cuisine.hint": "Es werden nur Zutaten angezeigt, die in der gewählten Küche typisch sind."
   }
 }
