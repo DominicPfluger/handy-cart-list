@@ -18,7 +18,7 @@ Die Vorlage „Pfannengericht" im Rezept-Ersteller bekommt neue/umbenannte Schri
    - Schritt `base`: Label „Sättigungsbeilage" → „Stärkebeilage"
    - Schritt `protein`: Label „Protein" → „Proteinquelle", `max: 1` → `max: 2` (Mehrfachauswahl)
    - Neuer Schritt `fruit` („Früchte", min 0, max 2) nach `veg` — Zutaten z. B. Ananas, Mango, Äpfel, Zitronen
-   - Neuer Schritt `sauce` („Saucen", min 0, max 2) vor `aroma` — Zutaten z. B. Sojasauce, Teriyaki-Sauce, Sweet-Chili-Sauce, Kokosmilch, Crème fraîche
+   - Neuer Schritt `sauce` („Saucen", min 0, unbegrenzte Mehrfachauswahl) vor `aroma` — Zutaten z. B. Sojasauce, Teriyaki-Sauce, Sweet-Chili-Sauce, Kokosmilch, Crème fraîche
    - `POPULAR_RECIPES.pfanne` um passende Sauce-/Frucht-Angaben ergänzen
 
 2. **Datenbank (`recipe_ingredients`)**: Da die Zutaten-Auswahl inzwischen datenbankgesteuert ist, werden die umbenannten Schritte automatisch mit den bestehenden Zuordnungen weiterverwendet (Schlüssel bleiben gleich). Für die neuen Schritte `fruit` und `sauce` werden Start-Zuordnungen eingefügt; fehlende Katalogprodukte (z. B. Sojasauce, Teriyaki-Sauce, Sweet-Chili-Sauce) werden als Produkte im Katalog angelegt (mit Übersetzungen in alle 15 Sprachen), damit sie auch als normale Einkaufslisten-Artikel existieren.
