@@ -393,7 +393,7 @@ function DepartmentsPage() {
         />
         <VoiceInputButton
           onResult={handleVoiceResult}
-          className="shrink-0 rounded-lg p-2 text-primary transition active:bg-muted"
+          className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
         />
         <button
           type="button"
@@ -401,7 +401,7 @@ function DepartmentsPage() {
           aria-expanded={dietOpen}
           aria-label={t("diet.filter")}
           title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
-          className={`shrink-0 rounded-lg px-2 py-1.5 text-base leading-none ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+          className={`shrink-0 rounded-lg px-0.5 py-1.5 text-base leading-none ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
         >
           🥗
         </button>
@@ -411,7 +411,7 @@ function DepartmentsPage() {
           aria-expanded={cuisineOpen}
           aria-label={t("cuisine.filter")}
           title={`${t("cuisine.filter")}${cuisines.length ? ` · ${cuisines.length}` : ""}`}
-          className={`shrink-0 rounded-lg px-2 py-1.5 text-base leading-none ${cuisines.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+          className={`shrink-0 rounded-lg px-0.5 py-1.5 text-base leading-none ${cuisines.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
         >
           🌍
         </button>
