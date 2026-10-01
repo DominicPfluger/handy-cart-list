@@ -110,7 +110,7 @@ export const generateReferencePrices = createServerFn({ method: "POST" })
           unit_basis: e.unit_basis,
         };
       })
-      .filter(Boolean);
+      .filter((r): r is NonNullable<typeof r> => r !== null);
     if (rows.length > 0) {
       const { error } = await sb.from("product_reference_prices").upsert(rows, { onConflict: "product_id,market" });
       if (error) throw new Error(error.message);
