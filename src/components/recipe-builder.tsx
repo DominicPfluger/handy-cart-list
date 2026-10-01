@@ -410,7 +410,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     <div className="space-y-5">
     <section className="space-y-4">
       <div className="flex items-start justify-between gap-2">
-        <button onClick={() => setTplId(null)} className="shrink-0 pt-1.5 text-xs font-semibold text-primary">← {t("rk.back")}</button>
+        {mode === "generator"
+          ? <Link to="/rezepte" className="shrink-0 pt-1.5 text-xs font-semibold text-primary">← {t("rk.back")}</Link>
+          : <button onClick={() => setTplId(null)} className="shrink-0 pt-1.5 text-xs font-semibold text-primary">← {t("rk.back")}</button>}
         <div className="flex flex-wrap items-center justify-end gap-1.5">
           <button
             type="button"
