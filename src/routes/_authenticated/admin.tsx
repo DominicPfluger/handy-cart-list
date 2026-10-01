@@ -19,6 +19,7 @@ import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { MarketAdmin, MarketAdminsManager, MARKETS } from "@/components/market-admin";
+import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -428,7 +429,7 @@ function AdminPage() {
                         {h.name}
                       </div>
                     )}
-                    <Row emoji={p.emoji ?? "•"} name={p.name} sub={`${p.default_quantity} ${p.default_unit}`} active={sel?.id === p.id}
+                    <Row emoji={p.emoji ?? "•"} name={p.name} sub={`${p.default_quantity} ${p.default_unit}${unavailable(p) ? " · " + T("adm.marketUnavailable") : ""}`} active={sel?.id === p.id}
                       dragging={drag?.kind === "product" && drag.index === i}
                       onDragStart={() => setDrag({ kind: "product", index: i })}
                       onDragOver={(e) => e.preventDefault()}
