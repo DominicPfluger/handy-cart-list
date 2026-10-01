@@ -432,6 +432,7 @@ function AdminPage() {
             } else await translateIds([sel.id]);
           }, T("adm.retranslated"))}
           deptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
+          onImageChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }}
         />
       )}
     </div>
@@ -626,6 +627,7 @@ function Editor(p: {
   deptOptions: { id: string; label: string }[];
   onClose: () => void; onDelete: () => void; onSave: (patch: Patch) => void;
   onTr: (locale: string, v: string, prev?: string) => void; onRetranslate: () => void;
+  onImageChanged: () => void;
 }) {
   const { sel, data } = p;
   const dept = sel.kind === "department" ? data.depts.find((x) => x.id === sel.id) : undefined;
@@ -677,6 +679,7 @@ function Editor(p: {
           })}>{T("adm.save")}</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
+        {dept && <DeptImageEditor deptId={dept.id} imagePath={dept.image_path} onChanged={p.onImageChanged} />}
         {dept && <DeptAliasEditor dept={dept} depts={data.depts} options={p.deptOptions} />}
         {prod && <ProductAliasEditor product={prod} prods={data.prods} options={p.deptOptions} />}
         {prod && <ProductCuisinePicker productId={prod.id} />}
