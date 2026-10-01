@@ -114,6 +114,18 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const deptProds = pickerDept
     ? prods.filter((p) => p.department_id === pickerDept).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
     : [];
+  /** Alle Produkt-IDs einer Kategorie inkl. aller Unterkategorien. */
+  const deptProductIds = (deptId: string): string[] => {
+    const ids = prods.filter((p) => p.department_id === deptId).map((p) => p.id);
+    for (const child of depts.filter((d) => d.parent_id === deptId)) ids.push(...deptProductIds(child.id));
+    return ids;
+  };
+  const toggleDeptPick = (deptId: string, on: boolean) =>
+    setPickerSel((x) => {
+      const n = new Set(x);
+      for (const id of deptProductIds(deptId)) { if (on) n.add(id); else n.delete(id); }
+      return n;
+    });
   const applyPicker = (stepKey: string) =>
     run(async () => {
       const assigned = assignedFor(stepKey);
