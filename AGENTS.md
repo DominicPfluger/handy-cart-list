@@ -18,3 +18,4 @@
 - Recipe creator groups ingredients by admin-managed `recipe_groups` (2 levels, via recipe_ingredients.group_id), not departments. Why: user wants curated recipe categories independent of the store catalog.
 - Alias categories: `department_aliases` (department_id, parent_id) show a department additionally under another parent; products live only in the original. Why: one source of truth, no duplicated products.
 - Product aliases: `product_aliases` (product_id, department_id) show a product additionally in another category; chosen list category is stored as list_items.group_label and resolved against alias departments; preference per product is device-local (`shoppi:product-dept`). Why: no list schema change, works for local and cloud lists.
+- Read-aloud uses its own device-local language (shoppi:speak-locale, default de-DE) and admin-editable templates in speech_texts (locale,key). Why: users hear lists in their mother tongue regardless of UI language.
