@@ -9,14 +9,14 @@ import { formatQuantity } from "../lib/units";
 import { ProductEmoji } from "./product-emoji";
 import { Button } from "./ui/button";
 import {
-  createCollection, saveToFolder, useRecipeCollections,
+  createCollection, saveToFolder, useRecipeCollections, flattenTree, folderPath,
 } from "../hooks/use-saved-recipes";
 import { useAuthUser } from "../hooks/use-auth-user";
 import { createRecipe, publishRecipe, shareLink, type RecipeItem } from "../lib/recipes-api";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { SavedRecipesBoard } from "./saved-recipes-board";
-import { FavoritesRow, SectionTitle } from "./recipe-feed";
+import { FavoritesRow, SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -270,9 +270,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
             </button>
           ))}
         </div>
-        {collections.map((c) => (
-          <button key={c.id} onClick={() => doSave(c.id)} className="flex w-full items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 text-left text-sm font-semibold text-foreground">
-            <span>📁 {c.name}</span><span className="text-xs text-muted-foreground">{c.recipes.length}</span>
+        {flattenTree(collections).map(({ c }) => (
+          <button key={c.id} onClick={() => doSave(c.id)} className="flex w-full items-center justify-between gap-2 rounded-2xl border border-border bg-card px-4 py-3 text-left text-sm font-semibold text-foreground">
+            <span className="min-w-0 truncate">📁 {folderPath(collections, c.id)}</span><span className="text-xs text-muted-foreground">{c.recipes.length}</span>
           </button>
         ))}
         <div className="flex gap-2">
@@ -302,18 +302,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
       {recentShown.map((r) => {
         const rt = RECIPE_TEMPLATES.find((x) => x.id === r.templateId);
         return (
-          <Button
-            key={r.id}
-            onClick={() => rt && openRecipe(rt.id, r.picks)}
-            variant="outline"
-            className="h-auto w-full justify-start gap-3 whitespace-normal rounded-lg p-3 text-left transition active:scale-[0.99]"
-          >
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-xl" style={{ background: rt?.color }}>{rt?.emoji ?? "🍽️"}</span>
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-semibold text-foreground">{r.title}</span>
-              <span className="block text-xs text-muted-foreground">{new Date(r.savedAt).toLocaleDateString()}</span>
-            </span>
-          </Button>
+          <button key={r.id} onClick={() => rt && openRecipe(rt.id, r.picks)} className={LIST_CARD_CLASS}>
+            <ListCardBody emoji={rt?.emoji ?? "🍽️"} color={rt?.color} title={r.title} badge={new Date(r.savedAt).toLocaleDateString()} />
+          </button>
         );
       })}
       {recent.length > 5 && (
@@ -326,21 +317,17 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
 
   const popularView = visiblePopular.length > 0 && (
     <section className="space-y-2">
-      <h2 className="text-lg font-bold text-foreground">⭐ {t("rk.popular")}</h2>
+      <SectionTitle emoji="⭐" bg="#FFF3CD">{t("rk.popular")}</SectionTitle>
       {popularShown.map((r) => (
-        <Button
-          key={r.key}
-          onClick={() => openRecipe(r.template.id, r.picks)}
-          variant="outline"
-          className="h-auto w-full justify-start gap-3 whitespace-normal rounded-lg p-3 text-left transition active:scale-[0.99]"
-        >
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md text-xl" style={{ background: r.template.color }}>{r.template.emoji}</span>
-          <span className="min-w-0 flex-1">
-            {!tpl && <span className="block text-xs text-primary">{t(`rk.cat.${r.template.id}` as MessageKey)}</span>}
-            <span className="block truncate text-sm font-semibold text-foreground">{r.items.slice(0, 3).map((p) => p.name).join(", ")}{r.items.length > 3 ? " …" : ""}</span>
-            <span className="block text-xs text-muted-foreground">{t("rk.ingredientsN", { n: r.items.length })}</span>
-          </span>
-        </Button>
+        <button key={r.key} onClick={() => openRecipe(r.template.id, r.picks)} className={LIST_CARD_CLASS}>
+          <ListCardBody
+            emoji={r.template.emoji}
+            color={r.template.color}
+            kicker={!tpl ? t(`rk.cat.${r.template.id}` as MessageKey) : undefined}
+            title={`${r.items.slice(0, 3).map((p) => p.name).join(", ")}${r.items.length > 3 ? " …" : ""}`}
+            badge={t("rk.ingredientsN", { n: r.items.length })}
+          />
+        </button>
       ))}
       {visiblePopular.length > 5 && (
         <button onClick={() => setShowAllPopular((v) => !v)} className="w-full py-1 text-sm font-semibold text-primary">

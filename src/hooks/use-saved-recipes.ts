@@ -1,4 +1,4 @@
-// Persönliche Rezeptliste mit Ordnern (eine Ebene) — in der Cloud, pro Konto.
+// Persönliche Rezeptliste mit verschachtelten Ordnern — in der Cloud, pro Konto.
 import { useEffect, useSyncExternalStore } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { createRecipe, type RecipeItem } from "../lib/recipes-api";
@@ -17,7 +17,24 @@ export type SavedRecipe = {
   shareSlug: string | null;
   isOwn: boolean;
 };
-export type RecipeCollection = { id: string; name: string; recipes: SavedRecipe[] };
+export type RecipeCollection = { id: string; name: string; parentId: string | null; recipes: SavedRecipe[] };
+
+/** Ordner-Pfad, z. B. "Abendessen › Vegetarisch". */
+export function folderPath(cols: RecipeCollection[], id: string): string {
+  const parts: string[] = []; let cur = cols.find((c) => c.id === id); let guard = 0;
+  while (cur && guard++ < 50) { parts.unshift(cur.name); cur = cur.parentId ? cols.find((c) => c.id === cur!.parentId) : undefined; }
+  return parts.join(" › ");
+}
+/** Ordner in Baum-Reihenfolge mit Tiefe. */
+export function flattenTree(cols: RecipeCollection[]): Array<{ c: RecipeCollection; depth: number }> {
+  const ids = new Set(cols.map((c) => c.id));
+  const out: Array<{ c: RecipeCollection; depth: number }> = [];
+  const walk = (parent: string | null, depth: number) => {
+    for (const c of cols.filter((x) => (x.parentId && ids.has(x.parentId) ? x.parentId : null) === parent)) { out.push({ c, depth }); walk(c.id, depth + 1); }
+  };
+  walk(null, 0);
+  return out;
+}
 
 const LEGACY_KEY = "shoppi:recipe-collections";
 const EMPTY: RecipeCollection[] = [];
@@ -28,12 +45,12 @@ const emit = () => subs.forEach((f) => f());
 
 async function load(userId: string) {
   const [{ data: folders }, { data: saves }] = await Promise.all([
-    supabase.from("recipe_folders").select("id, name, sort_order").order("sort_order").order("created_at"),
+    supabase.from("recipe_folders").select("id, name, sort_order, parent_id").order("sort_order").order("created_at"),
     supabase.from("recipe_saves")
       .select("id, folder_id, created_at, custom_title, sort_order, recipe:recipes(id, owner_id, title, template_id, picks, is_public, share_slug)")
       .order("sort_order").order("created_at", { ascending: false }),
   ]);
-  const list: RecipeCollection[] = (folders ?? []).map((f) => ({ id: f.id, name: f.name, recipes: [] }));
+  const list: RecipeCollection[] = (folders ?? []).map((f) => ({ id: f.id, name: f.name, parentId: f.parent_id ?? null, recipes: [] }));
   for (const s of saves ?? []) {
     const r = s.recipe as unknown as { id: string; owner_id: string; title: string; template_id: string; picks: Record<string, string[]>; is_public: boolean; share_slug: string | null } | null;
     if (!r) continue;
@@ -83,9 +100,9 @@ export function useRecipeCollections(user: { id: string; name?: string | undefin
   return useSyncExternalStore((f) => { subs.add(f); return () => subs.delete(f); }, () => cache, () => EMPTY);
 }
 
-export async function createCollection(userId: string, name: string) {
+export async function createCollection(userId: string, name: string, parentId: string | null = null) {
   const { data, error } = await supabase.from("recipe_folders")
-    .insert({ owner_id: userId, name: name.trim() || "Meine Rezepte", sort_order: cache.length }).select("id").single();
+    .insert({ owner_id: userId, name: name.trim() || "Meine Rezepte", sort_order: cache.length, parent_id: parentId }).select("id").single();
   if (error) throw error;
   await refreshCollections();
   return data.id;
@@ -95,7 +112,18 @@ export async function renameCollection(id: string, name: string) {
   await supabase.from("recipe_folders").update({ name: name.trim() }).eq("id", id);
   await refreshCollections();
 }
+export async function moveCollection(id: string, parentId: string | null) {
+  const { error } = await supabase.from("recipe_folders").update({ parent_id: parentId }).eq("id", id);
+  if (error) throw error;
+  await refreshCollections();
+}
+/** Löscht einen Ordner; Rezepte und Unterordner wandern eine Ebene nach oben. */
 export async function deleteCollection(id: string) {
+  const f = cache.find((c) => c.id === id);
+  const parent = f?.parentId ?? null;
+  await supabase.from("recipe_folders").update({ parent_id: parent }).eq("parent_id", id);
+  const target = parent ?? cache.find((c) => c.id !== id && !c.parentId)?.id ?? null;
+  if (target) await supabase.from("recipe_saves").update({ folder_id: target }).eq("folder_id", id);
   await supabase.from("recipe_folders").delete().eq("id", id);
   await refreshCollections();
 }

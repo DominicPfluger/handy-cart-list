@@ -693,7 +693,14 @@
     "pd.saved": "Saved",
     "pd.variantPh": "New variant",
     "pd.addVariant": "+ Variant",
-    "pd.removeVariant": "Remove {name}"
+    "pd.removeVariant": "Remove {name}",
+    "rs.showAll": "Show all {n}",
+    "rk.addSubfolder": "Subfolder",
+    "rk.moveFolder": "Move folder to …",
+    "rk.topLevel": "Top level",
+    "rk.deleteFolderConfirm": "Delete folder? Its recipes and subfolders move up one level.",
+    "rs.expand": "Expand",
+    "rs.collapse": "Collapse"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1389,7 +1396,14 @@
     "pd.saved": "Saved",
     "pd.variantPh": "New variant",
     "pd.addVariant": "+ Variant",
-    "pd.removeVariant": "Remove {name}"
+    "pd.removeVariant": "Remove {name}",
+    "rs.showAll": "Show all {n}",
+    "rk.addSubfolder": "Subfolder",
+    "rk.moveFolder": "Move folder to …",
+    "rk.topLevel": "Top level",
+    "rk.deleteFolderConfirm": "Delete folder? Its recipes and subfolders move up one level.",
+    "rs.expand": "Expand",
+    "rs.collapse": "Collapse"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2085,7 +2099,14 @@
     "pd.saved": "Saved",
     "pd.variantPh": "New variant",
     "pd.addVariant": "+ Variant",
-    "pd.removeVariant": "Remove {name}"
+    "pd.removeVariant": "Remove {name}",
+    "rs.showAll": "Show all {n}",
+    "rk.addSubfolder": "Subfolder",
+    "rk.moveFolder": "Move folder to …",
+    "rk.topLevel": "Top level",
+    "rk.deleteFolderConfirm": "Delete folder? Its recipes and subfolders move up one level.",
+    "rs.expand": "Expand",
+    "rs.collapse": "Collapse"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2781,7 +2802,14 @@
     "pd.saved": "Guardado",
     "pd.variantPh": "Nueva variante",
     "pd.addVariant": "+ Variante",
-    "pd.removeVariant": "Quitar {name}"
+    "pd.removeVariant": "Quitar {name}",
+    "rs.showAll": "Ver los {n}",
+    "rk.addSubfolder": "Subcarpeta",
+    "rk.moveFolder": "Mover carpeta a …",
+    "rk.topLevel": "Nivel superior",
+    "rk.deleteFolderConfirm": "¿Eliminar carpeta? Sus recetas y subcarpetas suben un nivel.",
+    "rs.expand": "Expandir",
+    "rs.collapse": "Contraer"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3477,7 +3505,14 @@
     "pd.saved": "Guardado",
     "pd.variantPh": "Nueva variante",
     "pd.addVariant": "+ Variante",
-    "pd.removeVariant": "Quitar {name}"
+    "pd.removeVariant": "Quitar {name}",
+    "rs.showAll": "Ver los {n}",
+    "rk.addSubfolder": "Subcarpeta",
+    "rk.moveFolder": "Mover carpeta a …",
+    "rk.topLevel": "Nivel superior",
+    "rk.deleteFolderConfirm": "¿Eliminar carpeta? Sus recetas y subcarpetas suben un nivel.",
+    "rs.expand": "Expandir",
+    "rs.collapse": "Contraer"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -4173,7 +4208,14 @@
     "pd.saved": "Enregistré",
     "pd.variantPh": "Nouvelle variante",
     "pd.addVariant": "+ Variante",
-    "pd.removeVariant": "Retirer {name}"
+    "pd.removeVariant": "Retirer {name}",
+    "rs.showAll": "Tout afficher ({n})",
+    "rk.addSubfolder": "Sous-dossier",
+    "rk.moveFolder": "Déplacer le dossier vers …",
+    "rk.topLevel": "Niveau supérieur",
+    "rk.deleteFolderConfirm": "Supprimer le dossier ? Ses recettes et sous-dossiers remontent d’un niveau.",
+    "rs.expand": "Déplier",
+    "rs.collapse": "Replier"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4869,7 +4911,14 @@
     "pd.saved": "Enregistré",
     "pd.variantPh": "Nouvelle variante",
     "pd.addVariant": "+ Variante",
-    "pd.removeVariant": "Retirer {name}"
+    "pd.removeVariant": "Retirer {name}",
+    "rs.showAll": "Tout afficher ({n})",
+    "rk.addSubfolder": "Sous-dossier",
+    "rk.moveFolder": "Déplacer le dossier vers …",
+    "rk.topLevel": "Niveau supérieur",
+    "rk.deleteFolderConfirm": "Supprimer le dossier ? Ses recettes et sous-dossiers remontent d’un niveau.",
+    "rs.expand": "Déplier",
+    "rs.collapse": "Replier"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -5565,7 +5614,14 @@
     "pd.saved": "Salvato",
     "pd.variantPh": "Nuova variante",
     "pd.addVariant": "+ Variante",
-    "pd.removeVariant": "Rimuovi {name}"
+    "pd.removeVariant": "Rimuovi {name}",
+    "rs.showAll": "Mostra tutti ({n})",
+    "rk.addSubfolder": "Sottocartella",
+    "rk.moveFolder": "Sposta cartella in …",
+    "rk.topLevel": "Livello principale",
+    "rk.deleteFolderConfirm": "Eliminare la cartella? Ricette e sottocartelle salgono di un livello.",
+    "rs.expand": "Espandi",
+    "rs.collapse": "Comprimi"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -6261,7 +6317,14 @@
     "pd.saved": "Salvato",
     "pd.variantPh": "Nuova variante",
     "pd.addVariant": "+ Variante",
-    "pd.removeVariant": "Rimuovi {name}"
+    "pd.removeVariant": "Rimuovi {name}",
+    "rs.showAll": "Mostra tutti ({n})",
+    "rk.addSubfolder": "Sottocartella",
+    "rk.moveFolder": "Sposta cartella in …",
+    "rk.topLevel": "Livello principale",
+    "rk.deleteFolderConfirm": "Eliminare la cartella? Ricette e sottocartelle salgono di un livello.",
+    "rs.expand": "Espandi",
+    "rs.collapse": "Comprimi"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6957,7 +7020,14 @@
     "pd.saved": "Salvo",
     "pd.variantPh": "Nova variante",
     "pd.addVariant": "+ Variante",
-    "pd.removeVariant": "Remover {name}"
+    "pd.removeVariant": "Remover {name}",
+    "rs.showAll": "Mostrar todos ({n})",
+    "rk.addSubfolder": "Subpasta",
+    "rk.moveFolder": "Mover pasta para …",
+    "rk.topLevel": "Nível superior",
+    "rk.deleteFolderConfirm": "Excluir pasta? As receitas e subpastas sobem um nível.",
+    "rs.expand": "Expandir",
+    "rs.collapse": "Recolher"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -7653,7 +7723,14 @@
     "pd.saved": "Salvo",
     "pd.variantPh": "Nova variante",
     "pd.addVariant": "+ Variante",
-    "pd.removeVariant": "Remover {name}"
+    "pd.removeVariant": "Remover {name}",
+    "rs.showAll": "Mostrar todos ({n})",
+    "rk.addSubfolder": "Subpasta",
+    "rk.moveFolder": "Mover pasta para …",
+    "rk.topLevel": "Nível superior",
+    "rk.deleteFolderConfirm": "Excluir pasta? As receitas e subpastas sobem um nível.",
+    "rs.expand": "Expandir",
+    "rs.collapse": "Recolher"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -8349,7 +8426,14 @@
     "pd.saved": "Opgeslagen",
     "pd.variantPh": "Nieuwe variant",
     "pd.addVariant": "+ Variant",
-    "pd.removeVariant": "{name} verwijderen"
+    "pd.removeVariant": "{name} verwijderen",
+    "rs.showAll": "Alle {n} tonen",
+    "rk.addSubfolder": "Submap",
+    "rk.moveFolder": "Map verplaatsen naar …",
+    "rk.topLevel": "Hoogste niveau",
+    "rk.deleteFolderConfirm": "Map verwijderen? Recepten en submappen gaan één niveau omhoog.",
+    "rs.expand": "Uitklappen",
+    "rs.collapse": "Inklappen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -9045,7 +9129,14 @@
     "pd.saved": "Opgeslagen",
     "pd.variantPh": "Nieuwe variant",
     "pd.addVariant": "+ Variant",
-    "pd.removeVariant": "{name} verwijderen"
+    "pd.removeVariant": "{name} verwijderen",
+    "rs.showAll": "Alle {n} tonen",
+    "rk.addSubfolder": "Submap",
+    "rk.moveFolder": "Map verplaatsen naar …",
+    "rk.topLevel": "Hoogste niveau",
+    "rk.deleteFolderConfirm": "Map verwijderen? Recepten en submappen gaan één niveau omhoog.",
+    "rs.expand": "Uitklappen",
+    "rs.collapse": "Inklappen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9293,7 +9384,14 @@
     "pd.variantPh": "Neue Variante",
     "pd.addVariant": "+ Variante",
     "pd.removeVariant": "{name} entfernen",
-    "rk.recipeDesc": "Beschreibung hinzufügen (z. B. Zubereitung, Tipps …)"
+    "rk.recipeDesc": "Beschreibung hinzufügen (z. B. Zubereitung, Tipps …)",
+    "rs.showAll": "Alle {n} anzeigen",
+    "rk.addSubfolder": "Unterordner",
+    "rk.moveFolder": "Ordner verschieben nach …",
+    "rk.topLevel": "Oberste Ebene",
+    "rk.deleteFolderConfirm": "Ordner löschen? Rezepte und Unterordner wandern eine Ebene nach oben.",
+    "rs.expand": "Aufklappen",
+    "rs.collapse": "Zuklappen"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9541,6 +9639,13 @@
     "pd.variantPh": "Neue Variante",
     "pd.addVariant": "+ Variante",
     "pd.removeVariant": "{name} entfernen",
-    "rk.recipeDesc": "Beschreibung hinzufügen (z. B. Zubereitung, Tipps …)"
+    "rk.recipeDesc": "Beschreibung hinzufügen (z. B. Zubereitung, Tipps …)",
+    "rs.showAll": "Alle {n} anzeigen",
+    "rk.addSubfolder": "Unterordner",
+    "rk.moveFolder": "Ordner verschieben nach …",
+    "rk.topLevel": "Oberste Ebene",
+    "rk.deleteFolderConfirm": "Ordner löschen? Rezepte und Unterordner wandern eine Ebene nach oben.",
+    "rs.expand": "Aufklappen",
+    "rs.collapse": "Zuklappen"
   }
 }
