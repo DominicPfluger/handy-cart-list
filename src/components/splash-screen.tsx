@@ -1,4 +1,4 @@
-import { ShoppiLogo } from "./icons";
+import appIcon from "@/assets/app-icon.png.asset.json";
 
 /** Branded start screen with loading bar, shown while the app loads. */
 export function SplashScreen() {
@@ -10,12 +10,14 @@ export function SplashScreen() {
       aria-label="Shoppi lädt …"
     >
       <div className="flex flex-col items-center gap-3">
-        <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-primary shadow-lg shadow-primary/30">
-          <ShoppiLogo className="h-11 w-11 text-primary-foreground" />
-        </div>
+        <img
+          src={appIcon.url}
+          alt="Shoppi"
+          className="h-24 w-24 rounded-3xl shadow-lg shadow-primary/30"
+        />
         <div className="text-center">
           <p className="text-2xl font-bold tracking-tight text-foreground">Shoppi</p>
-          <p className="text-sm text-muted-foreground">Unsere Einkaufsliste</p>
+          <p className="text-sm text-muted-foreground">Einfach.Gemeinsam.Einkaufen.</p>
         </div>
       </div>
       <div className="h-1.5 w-40 overflow-hidden rounded-full bg-muted">
