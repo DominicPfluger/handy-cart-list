@@ -18,6 +18,7 @@ import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
+import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -35,7 +36,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 type Kind = "department" | "product" | "heading";
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; excluded_diets: string[] };
 type Head = { id: string; name: string; department_id: string; before_product_id: string };
 type Tr = { entity_id: string; locale: string; name: string; is_manual: boolean };
 type Sel = { kind: Kind; id: string } | null;
@@ -53,7 +54,7 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
 async function loadAll() {
   const [depts, prods, heads, trs] = await Promise.all([
     paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path").order("sort_order").order("id").range(a, b)),
-    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit").order("sort_order").order("id").range(a, b) as never),
+    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
     paged<Tr>((a, b) => supabase.from("catalog_translations").select("entity_id, locale, name, is_manual").order("id").range(a, b)),
   ]);
@@ -415,6 +416,7 @@ function AdminPage() {
               if (patch.parent !== undefined) upd[sel.kind === "product" ? "department_id" : "parent_id"] = patch.parent || null;
               if (patch.qty !== undefined) upd['default_quantity'] = patch.qty;
               if (patch.unit) upd['default_unit'] = patch.unit;
+              if (patch.diets) upd['excluded_diets'] = patch.diets;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
             }
           })}
@@ -620,7 +622,7 @@ function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) 
   );
 }
 
-type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string };
+type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[] };
 
 function Editor(p: {
   sel: NonNullable<Sel>; name: string; data: Awaited<ReturnType<typeof loadAll>>; products: Prod[]; busy: boolean;
@@ -639,6 +641,7 @@ function Editor(p: {
   const [qty, setQty] = useState(String(prod?.default_quantity ?? 1));
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [before, setBefore] = useState(head?.before_product_id ?? "");
+  const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
   const tr = data.tr.get(sel.id) ?? {};
   const title = T(`adm.edit.${sel.kind}` as MessageKey);
 
@@ -666,6 +669,28 @@ function Editor(p: {
             <UnitSelect value={unit} onChange={setUnit} />
           </div>
         )}
+        {prod && (
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-foreground">{T("adm.diets")}</h3>
+            <div className="flex flex-wrap gap-1.5">
+              {DIETS.map((diet) => {
+                const on = diets.includes(diet);
+                return (
+                  <button
+                    key={diet}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => setDiets((x) => (on ? x.filter((v) => v !== diet) : [...x, diet]))}
+                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}
+                  >
+                    {DIET_EMOJI[diet]} {T(`diet.${diet}` as MessageKey)}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-muted-foreground">{T("adm.dietsHint")}</p>
+          </div>
+        )}
         {head && (
           <select value={before} onChange={(e) => setBefore(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
             {p.products.map((x) => <option key={x.id} value={x.id}>{T("adm.above", { name: x.name })}</option>)}
@@ -675,7 +700,7 @@ function Editor(p: {
           <Button className="flex-1" disabled={p.busy || !name.trim()} onClick={() => p.onSave({
             name: name.trim(), emoji, before,
             ...(sel.kind !== "heading" ? { parent } : {}),
-            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit } : {}),
+            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, diets } : {}),
           })}>{T("adm.save")}</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>

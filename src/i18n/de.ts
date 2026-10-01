@@ -525,6 +525,8 @@ export const de = {
   "rk.otherGroup": "Weitere",
   "rk.showAll": "Alle {count} anzeigen ▾",
   "adm.recipeSortBy": "Sortieren nach…",
+  "adm.diets": "Nicht geeignet für:",
+  "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet.",
   "adm.recipeSortPopularity": "Beliebtheit",
   "adm.recipeSortRelevance": "Relevanz",
   "adm.recipeSortConfirm": "Reihenfolge dieses Schritts per KI neu sortieren? Gilt für alle Nutzer.",
