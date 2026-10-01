@@ -124,6 +124,20 @@ export function CatalogMediaPanel() {
           {busy === "price" ? T("media.working") : T("media.genPrices")}
         </Button>
       </div>
+      {generated.length > 0 && (
+        <div className="mt-4 grid grid-cols-5 gap-2">
+          {generated.map((g) => (
+            <figure key={g.id} className="overflow-hidden rounded-xl border border-border bg-background">
+              {g.url ? (
+                <img src={g.url} alt={g.name} className="aspect-square w-full object-cover" loading="lazy" />
+              ) : (
+                <div className="aspect-square w-full bg-muted" />
+              )}
+              <figcaption className="truncate px-1.5 py-1 text-center text-[11px] text-muted-foreground">{g.name}</figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
     </section>
   );
 }
