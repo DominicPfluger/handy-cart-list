@@ -45,6 +45,7 @@ export function useCatalog(): Catalog {
       })),
       headings: (data.headings ?? []).map((h) => ({ ...h, name: pickName(h.names, locale, h.baseName) })),
       cuisines: (data.cuisines ?? []).map((c) => ({ ...c, name: pickName(c.names, locale, c.baseName) })),
+      recipeIngredients: data.recipeIngredients ?? [],
     };
   }, [data, locale, custom, own]);
 }
