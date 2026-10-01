@@ -249,7 +249,6 @@ function AdminPage() {
         {busy ? T("adm.working") : T("adm.trMissing")}
       </Button>
 
-      {d && <CuisineAdmin depts={d.depts} prods={d.prods} />}
       {d && <RecipeAdmin depts={d.depts} prods={d.prods} />}
 
       <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
@@ -435,6 +434,8 @@ function AdminPage() {
           onImageChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }}
         />
       )}
+
+      {d && <CuisineAdmin depts={d.depts} prods={d.prods} />}
 
       <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
         <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>
