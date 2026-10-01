@@ -77,6 +77,8 @@ function FavoritesPage() {
   const { departments } = useDepartmentOrder(data.departments);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<FavRow | null>(null);
+  const [listNameOpen, setListNameOpen] = useState(false);
+  const [listName, setListName] = useState("");
 
   const deptById = useMemo(
     () => new Map(departments.map((d) => [d.id, d])),
@@ -244,8 +246,15 @@ function FavoritesPage() {
     });
   };
 
+  /** Öffnet den Dialog zur Namenseingabe für die neue Liste. */
+  const openTransferDialog = () => {
+    if (!favorites.length) return;
+    setListName(t("fav.newListName"));
+    setListNameOpen(true);
+  };
+
   /** Alle Favoriten (in angezeigter Reihenfolge) in eine neue Einkaufsliste übertragen. */
-  const transferAllToNewList = () => {
+  const transferAllToNewList = (name: string) => {
     const rows: FavRow[] = [
       ...sections.flatMap((s) => s.entries.map((e) => e.row)),
       ...[...looseFavorites].sort((a, b) => (favOrder[a.favorite.productId] ?? 1e9) - (favOrder[b.favorite.productId] ?? 1e9)),
@@ -269,7 +278,8 @@ function FavoritesPage() {
         productId: row.favorite.productId,
       };
     });
-    createListFromItems(t("fav.newListName"), items);
+    createListFromItems(name, items);
+    setListNameOpen(false);
     toast.success(t("fav.toListDone", { count: items.length }));
     navigate({ to: "/" });
   };
@@ -352,7 +362,7 @@ function FavoritesPage() {
       </div>
 
       {hydrated && favorites.length > 0 && (
-        <Button type="button" variant="outline" className="w-full" onClick={transferAllToNewList}>
+        <Button type="button" variant="outline" className="w-full" onClick={openTransferDialog}>
           {t("fav.toList", { count: favorites.length })}
         </Button>
       )}
@@ -421,6 +431,46 @@ function FavoritesPage() {
           <HeartIcon className="mx-auto h-12 w-12 text-primary-soft" />
           <p className="mt-4 text-sm font-semibold text-foreground">{t("fav.emptyTitle")}</p>
           <p className="mt-1 text-xs text-muted-foreground">{t("fav.emptyHint")}</p>
+        </div>
+      )}
+
+      {listNameOpen && (
+        <div className="fixed inset-0 z-[70] flex items-end justify-center bg-foreground/30" onClick={() => setListNameOpen(false)}>
+          <div
+            className="w-full max-w-[440px] rounded-t-3xl bg-background p-5 pb-[calc(2rem+env(safe-area-inset-bottom))]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-muted" />
+            <h2 className="mb-4 text-lg font-bold text-foreground">{t("fav.listNameTitle")}</h2>
+            <input
+              autoFocus
+              value={listName}
+              onChange={(e) => setListName(e.target.value.slice(0, 60))}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && listName.trim()) transferAllToNewList(listName.trim());
+              }}
+              onFocus={(e) => e.target.select()}
+              placeholder={t("fav.listNamePlaceholder")}
+              aria-label={t("fav.listNamePlaceholder")}
+              maxLength={60}
+              className="w-full rounded-xl border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
+            />
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setListNameOpen(false)}
+                className="flex-1 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground"
+              >
+                {t("common.cancel")}
+              </button>
+              <button
+                onClick={() => listName.trim() && transferAllToNewList(listName.trim())}
+                disabled={!listName.trim()}
+                className="flex-1 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+              >
+                {t("lm.create")}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 
