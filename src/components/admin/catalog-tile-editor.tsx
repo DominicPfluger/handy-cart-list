@@ -73,7 +73,7 @@ export function CatalogTileEditor(p: {
   };
   const dropAt = (x: number, y: number) => {
     const el = document.elementFromPoint(x, y)?.closest<HTMLElement>("[data-drop]");
-    return el ? { kind: el.dataset.drop!, id: el.dataset.id ?? "", index: Number(el.dataset.index ?? -1), el } : null;
+    return el ? { kind: el.dataset["drop"]!, id: el.dataset["id"] ?? "", index: Number(el.dataset["index"] ?? -1), el } : null;
   };
   const onMove = (e: React.PointerEvent) => {
     if (!drag) return;

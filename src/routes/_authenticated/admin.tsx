@@ -337,7 +337,7 @@ function AdminPage() {
         </div>
       ) : view === "tiles" && d ? (
         <CatalogTileEditor depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={children} products={products}
-          path={path(cur)} nm={nm} unavailable={unavailable} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
+          path={path(cur)} nm={nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
           reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)} />
       ) : (
         <>
