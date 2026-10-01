@@ -101,7 +101,7 @@ function RecipePage() {
 
   const addAll = () => {
     for (const i of items) {
-      addCatalogItem({ productId: i.productId, name: i.name, quantity: i.quantity || "1", unit: i.unit ?? undefined, organic: false, emoji: i.emoji ?? undefined });
+      addCatalogItem({ productId: i.productId, name: i.name, quantity: i.quantity || "1", unit: i.unit ?? "stueck", organic: false, emoji: i.emoji ?? undefined });
     }
     setAdded(true);
   };
