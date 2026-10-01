@@ -112,6 +112,8 @@ export const de = {
   "fav.toList": "Alle {count} Favoriten in neue Liste",
   "fav.toListDone": "{count} Einträge in neue Liste übernommen",
   "fav.newListName": "Favoriten",
+  "fav.listNameTitle": "Neue Liste aus Favoriten",
+  "fav.listNamePlaceholder": "Name der Einkaufsliste",
 
   "list.lists": "Listen",
   "list.share": "Liste teilen",
