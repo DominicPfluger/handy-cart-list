@@ -62,6 +62,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
     return m;
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
+  const [dietOpen, setDietOpen] = useState(false);
   const PAGE = 12;
   const THRESHOLD = 18;
 
@@ -389,54 +390,65 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
   return (
     <div className="space-y-5">
     <section className="space-y-4">
-      <div className="flex items-center justify-between gap-2">
-        <button onClick={() => setTplId(null)} className="text-xs font-semibold text-primary">← {t("rk.back")}</button>
-        <div className="flex gap-2">
+      <div className="flex items-start justify-between gap-2">
+        <button onClick={() => setTplId(null)} className="shrink-0 pt-1.5 text-xs font-semibold text-primary">← {t("rk.back")}</button>
+        <div className="flex flex-wrap items-center justify-end gap-1.5">
+          <button
+            type="button"
+            onClick={() => setDietOpen((v) => !v)}
+            aria-expanded={dietOpen}
+            aria-label={t("diet.filter")}
+            title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
+            className={`shrink-0 rounded-lg px-0.5 py-1.5 text-base leading-none ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+          >
+            🥗
+          </button>
           <button
             onClick={toggleOnlyFav}
             aria-pressed={onlyFav}
-            className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+            className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${
               onlyFav ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
             }`}
           >
             ♥ {t("rk.onlyFavorites")}
           </button>
-          <button onClick={surprise} className="rounded-full bg-accent px-3 py-1.5 text-xs font-semibold text-accent-foreground">
+          <button onClick={surprise} className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
             {t("rk.surprise")}
           </button>
-          <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-foreground">
+          <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-2.5 py-1 text-[11px] font-semibold leading-tight text-foreground">
             {t("rk.reset")}
           </button>
         </div>
       </div>
 
-      <div className="space-y-1.5">
-        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" role="group" aria-label={t("diet.filter")}>
-          {DIETS.map((d) => {
-            const on = diets.includes(d);
-            return (
-              <button
-                key={d}
-                type="button"
-                aria-pressed={on}
-                onClick={() => toggleDiet(d)}
-                className={`flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-medium leading-none ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-foreground"}`}
-              >
-                <span className="text-base leading-none">{DIET_EMOJI[d]}</span>
-                {t(`diet.${d}`)}
-              </button>
-            );
-          })}
-        </div>
-        {diets.length > 0 && (
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-xs text-muted-foreground">{t("diet.hint")}</p>
-            <button type="button" onClick={() => setDiets([])} className="shrink-0 text-xs font-medium text-primary">
+      {dietOpen && (
+        <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
+          <div className="mb-1 text-sm font-semibold text-foreground">{t("diet.title")}</div>
+          <p className="mb-3 text-xs text-muted-foreground">{t("diet.hint")}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {DIETS.map((d) => {
+              const on = diets.includes(d);
+              return (
+                <button
+                  key={d}
+                  type="button"
+                  aria-pressed={on}
+                  onClick={() => toggleDiet(d)}
+                  className={`flex h-8 items-center gap-1 rounded-full border px-2.5 text-[11px] font-medium leading-none ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-foreground"}`}
+                >
+                  <span className="text-sm leading-none">{DIET_EMOJI[d]}</span>
+                  {t(`diet.${d}`)}
+                </button>
+              );
+            })}
+          </div>
+          {diets.length > 0 && (
+            <button type="button" onClick={() => setDiets([])} className="mt-2 text-xs font-medium text-primary">
               {t("diet.reset")}
             </button>
-          </div>
-        )}
-      </div>
+          )}
+        </section>
+      )}
 
       {user && chosen.length > 0 && (
         <button
