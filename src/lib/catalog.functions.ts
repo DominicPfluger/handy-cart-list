@@ -31,6 +31,12 @@ export interface CatalogProduct {
   cuisineIds: string[];
   /** Verbreitete Handelsmarken; markets leer = alle Länder (Ländercodes wie CH, DE) */
   brands: { name: string; markets: string[] }[];
+  /** Leer = global; sonst nur in diesen Märkten (z. B. ["CH"]) */
+  markets?: string[];
+  /** Märkte, in denen das globale Produkt ausgeblendet ist */
+  excludedMarkets?: string[];
+  /** Sortierung je Markt (überschreibt sortOrder) */
+  marketOrder?: Record<string, number>;
   sortOrder: number;
   baseName: string;
   names: Record<string, string>;
@@ -134,14 +140,14 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     return { data: all, error: null };
   }
 
-  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes, daRes, paRes] = await Promise.all([
+  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes, daRes, paRes, exRes, moRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
       .order("sort_order", { ascending: true }),
     fetchAll(
       "products",
-      "id, department_id, name, emoji, image_path, default_quantity, default_unit, organic_available, variants, excluded_diets, sort_order",
+      "id, department_id, name, emoji, image_path, default_quantity, default_unit, organic_available, variants, excluded_diets, markets, sort_order",
       ["sort_order", "id"],
     ),
     supabase.from("product_headings").select("id, department_id, before_product_id, name"),
@@ -153,7 +159,13 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     supabase.from("recipe_groups").select("id, parent_id, name, emoji, sort_order").order("sort_order", { ascending: true }),
     supabase.from("department_aliases").select("department_id, parent_id, sort_order").order("sort_order", { ascending: true }),
     fetchAll("product_aliases", "product_id, department_id, sort_order", ["sort_order", "id"]),
+    fetchAll("product_market_exclusions", "product_id, market", ["id"]),
+    fetchAll("product_market_order", "product_id, market, sort_order", ["id"]),
   ]);
+  const excluded = new Map<string, string[]>();
+  for (const r of (exRes.data ?? []) as Array<{ product_id: string; market: string }>) excluded.set(r.product_id, [...(excluded.get(r.product_id) ?? []), r.market]);
+  const marketOrder = new Map<string, Record<string, number>>();
+  for (const r of (moRes.data ?? []) as Array<{ product_id: string; market: string; sort_order: number }>) marketOrder.set(r.product_id, { ...(marketOrder.get(r.product_id) ?? {}), [r.market]: r.sort_order });
   const brandsByProduct = new Map<string, { name: string; markets: string[] }[]>();
   for (const r of (brRes.data ?? []) as Array<{ product_id: string; name: string; locales: string[] | null }>) {
     const list = brandsByProduct.get(r.product_id) ?? [];
@@ -220,6 +232,9 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       excludedDiets: (r["excluded_diets"] as string[] | null) ?? [],
       cuisineIds: cuisineIdsByProduct.get(r["id"] as string) ?? [],
       brands: brandsByProduct.get(r["id"] as string) ?? [],
+      markets: (r["markets"] as string[] | null) ?? [],
+      excludedMarkets: excluded.get(r["id"] as string) ?? [],
+      marketOrder: marketOrder.get(r["id"] as string) ?? {},
       sortOrder: (r["sort_order"] as number) ?? 0,
       baseName: r["name"] as string,
       names: names.get(r["id"] as string) ?? {},

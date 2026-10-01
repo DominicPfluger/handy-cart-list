@@ -4,6 +4,22 @@ import { getLocale, pickName, useLocale } from "../i18n";
 import { getCatalog, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct, type CatalogCuisine } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
+import { useAllMarkets } from "../hooks/use-all-markets";
+
+/** Ländercode des Marktes aus der Sprachvariante (de-CH → CH). */
+export function marketOf(locale: string): string {
+  return locale.split("-")[1] ?? "";
+}
+
+export function flagOf(market: string): string {
+  return market.length === 2 ? String.fromCodePoint(...[...market.toUpperCase()].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65)) : "";
+}
+
+/** Ist das Produkt im Markt sichtbar? */
+export function inMarket(p: Pick<CatalogProduct, "markets" | "excludedMarkets">, market: string): boolean {
+  if (p.markets?.length && !p.markets.includes(market)) return false;
+  return !(p.excludedMarkets ?? []).includes(market);
+}
 
 export const catalogQueryOptions = queryOptions({
   queryKey: ["catalog"],
@@ -27,7 +43,9 @@ export function useCatalog(): Catalog {
   const locale = useLocale();
   const custom = useCustomNames();
   const own = useCustomCatalog();
+  const allMarkets = useAllMarkets();
   return useMemo(() => {
+    const market = marketOf(locale);
     const ownDepts: CatalogDepartment[] = own.departments.map((d, i) => ({
       id: d.id, parentId: d.parentId, name: d.name, emoji: d.emoji, color: null, imageUrl: null,
       sortOrder: 10000 + i, baseName: d.name, names: {},
@@ -39,10 +57,15 @@ export function useCatalog(): Catalog {
     }));
     return {
       departments: [...data.departments, ...ownDepts].map((d) => ({ ...d, name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
-      products: [...data.products, ...ownProducts].map((p) => ({
-        ...p,
-        name: custom[p.id] ?? pickName(p.names, locale, p.baseName),
-      })),
+      products: [...data.products.filter((p) => allMarkets || inMarket(p, market)), ...ownProducts].map((p) => {
+        const name = custom[p.id] ?? pickName(p.names, locale, p.baseName);
+        const foreign = p.markets?.length && !p.markets.includes(market);
+        return {
+          ...p,
+          sortOrder: p.marketOrder?.[market] ?? p.sortOrder,
+          name: foreign ? `${name} ${p.markets!.map(flagOf).join("")}` : name,
+        };
+      }),
       headings: (data.headings ?? []).map((h) => ({ ...h, name: pickName(h.names, locale, h.baseName) })),
       cuisines: (data.cuisines ?? []).map((c) => ({ ...c, name: pickName(c.names, locale, c.baseName) })),
       recipeIngredients: data.recipeIngredients ?? [],
@@ -50,7 +73,7 @@ export function useCatalog(): Catalog {
       productAliases: data.productAliases ?? [],
       recipeGroups: (data.recipeGroups ?? []).map((g) => ({ ...g, name: pickName(g.names, locale, g.baseName) })),
     };
-  }, [data, locale, custom, own]);
+  }, [data, locale, custom, own, allMarkets]);
 }
 
 export type { Catalog, CatalogCuisine, CatalogDepartment, CatalogHeading, CatalogProduct };
