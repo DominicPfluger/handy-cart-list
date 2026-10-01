@@ -6,11 +6,20 @@ import { RECIPE_TEMPLATES } from "@/lib/recipe-templates";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getLocale, translate } from "@/i18n";
+import { useServerFn } from "@tanstack/react-start";
+import { saveRecipeGroup, deleteRecipeGroup } from "@/lib/admin.functions";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
-type Row = { id: string; template_id: string; step_key: string; product_id: string; sort_order: number };
+type Row = { id: string; template_id: string; step_key: string; product_id: string; sort_order: number; group_id: string | null };
+type Grp = { id: string; parent_id: string | null; name: string; emoji: string | null; sort_order: number };
+
+async function loadGroups() {
+  const { data, error } = await supabase.from("recipe_groups").select("id, parent_id, name, emoji, sort_order").order("sort_order");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as Grp[];
+}
 type Dept = { id: string; name: string; parent_id: string | null; emoji?: string | null; sort_order?: number };
 type Prod = { id: string; name: string; department_id: string; emoji: string | null; sort_order?: number };
 
@@ -19,7 +28,7 @@ async function loadRecipeIngredients() {
   for (let f = 0; ; f += 1000) {
     const { data, error } = await supabase
       .from("recipe_ingredients")
-      .select("id, template_id, step_key, product_id, sort_order")
+      .select("id, template_id, step_key, product_id, sort_order, group_id")
       .order("sort_order")
       .range(f, f + 999);
     if (error) throw new Error(error.message);
@@ -40,6 +49,14 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [pickerStep, setPickerStep] = useState<string | null>(null);
   const [pickerDept, setPickerDept] = useState<string | null>(null);
   const [pickerSel, setPickerSel] = useState<Set<string>>(new Set());
+  const [pickerGroup, setPickerGroup] = useState<string>("");
+  const { data: groupsData } = useQuery({ queryKey: ["admin-recipe-groups"], queryFn: loadGroups });
+  const groups = groupsData ?? [];
+  const saveGroupFn = useServerFn(saveRecipeGroup);
+  const deleteGroupFn = useServerFn(deleteRecipeGroup);
+  const tops = groups.filter((g) => !g.parent_id).sort((a, b) => a.sort_order - b.sort_order);
+  const kidsOf = (id: string) => groups.filter((g) => g.parent_id === id).sort((a, b) => a.sort_order - b.sort_order);
+  const groupOptions = tops.flatMap((g) => [{ id: g.id, label: `${g.emoji ?? ""} ${g.name}`.trim() }, ...kidsOf(g.id).map((k) => ({ id: k.id, label: `— ${k.emoji ?? ""} ${k.name}`.replace("  ", " ") }))]);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
   const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
@@ -61,6 +78,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     try {
       await fn();
       await qc.invalidateQueries({ queryKey: ["admin-recipe-ingredients"] });
+      await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
       qc.invalidateQueries({ queryKey: ["catalog"] });
     } catch (e) {
       toast.error((e as Error).message);
@@ -101,9 +119,46 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       if (e2) throw new Error(e2.message);
     });
 
+  const setGroup = (rowId: string, groupId: string) =>
+    run(async () => {
+      const { error } = await supabase.from("recipe_ingredients").update({ group_id: groupId || null }).eq("id", rowId);
+      if (error) throw new Error(error.message);
+    });
+  const addGroup = (parentId: string | null) => {
+    const name = window.prompt(T(parentId ? "adm.recipeGroupSub" : "adm.recipeGroupNew").replace("+ ", ""))?.trim();
+    if (!name) return;
+    const emoji = window.prompt("Emoji", "")?.trim() || null;
+    const siblings = groups.filter((g) => (g.parent_id ?? null) === parentId);
+    run(() => saveGroupFn({ data: { name, emoji, parentId, sortOrder: Math.max(0, ...siblings.map((g) => g.sort_order)) + 1 } }));
+  };
+  const editGroup = (g: Grp) => {
+    const name = window.prompt(T("adm.recipeGroups"), g.name)?.trim();
+    if (!name) return;
+    const emoji = window.prompt("Emoji", g.emoji ?? "")?.trim() || null;
+    run(() => saveGroupFn({ data: { id: g.id, name, emoji } }));
+  };
+  const removeGroup = (g: Grp) => {
+    if (!window.confirm(T("adm.recipeGroupDelete", { name: g.name }))) return;
+    run(() => deleteGroupFn({ data: { id: g.id } }));
+  };
+  const moveGroup = (g: Grp, dir: -1 | 1) =>
+    run(async () => {
+      const sib = groups.filter((x) => (x.parent_id ?? null) === (g.parent_id ?? null)).sort((a, b) => a.sort_order - b.sort_order);
+      const i = sib.findIndex((x) => x.id === g.id);
+      const o = sib[i + dir];
+      if (!o) return;
+      const a = sib.map((x, k) => ({ id: x.id, so: k + 1 }));
+      a[i]!.so = i + dir + 1; a[i + dir]!.so = i + 1;
+      for (const x of a) {
+        const { error } = await supabase.from("recipe_groups").update({ sort_order: x.so }).eq("id", x.id);
+        if (error) throw new Error(error.message);
+      }
+    });
+
   const openPicker = (stepKey: string) => {
     setPickerStep(stepKey);
     setPickerDept(null);
+    setPickerGroup("");
     setPickerSel(new Set(assignedFor(stepKey).map((r) => r.product_id)));
   };
   const togglePick = (id: string) =>
@@ -135,7 +190,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       let max = Math.max(0, ...assigned.map((r) => r.sort_order));
       if (add.length) {
         const { error } = await supabase.from("recipe_ingredients").upsert(
-          add.map((product_id) => ({ template_id: tplId!, step_key: stepKey, product_id, sort_order: ++max })),
+          add.map((product_id) => ({ template_id: tplId!, step_key: stepKey, product_id, sort_order: ++max, group_id: pickerGroup || null })),
           { onConflict: "template_id,step_key,product_id" },
         );
         if (error) throw new Error(error.message);
@@ -178,6 +233,22 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
         ))}
       </div>
 
+      <div className="space-y-1 rounded-xl border border-border bg-background p-2">
+        <p className="text-xs font-semibold text-foreground">🗂️ {T("adm.recipeGroups")}</p>
+        {tops.map((g, gi) => (
+          <div key={g.id} className="space-y-0.5">
+            <GroupRow g={g} first={gi === 0} last={gi === tops.length - 1} busy={busy} onEdit={editGroup} onDelete={removeGroup} onMove={moveGroup} bold />
+            <div className="pl-5">
+              {kidsOf(g.id).map((k, ki, arr) => (
+                <GroupRow key={k.id} g={k} first={ki === 0} last={ki === arr.length - 1} busy={busy} onEdit={editGroup} onDelete={removeGroup} onMove={moveGroup} />
+              ))}
+              <button type="button" disabled={busy} onClick={() => addGroup(g.id)} className="text-[11px] text-primary">{T("adm.recipeGroupSub")}</button>
+            </div>
+          </div>
+        ))}
+        <button type="button" disabled={busy} onClick={() => addGroup(null)} className="text-xs font-medium text-primary">{T("adm.recipeGroupNew")}</button>
+      </div>
+
       {tpl && (
         <div className="space-y-4">
           <Input
@@ -205,7 +276,16 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                       <label key={r.id} className="flex items-center gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs">
                         <input type="checkbox" checked disabled={busy} onChange={() => toggle(s.key, r.product_id, false)} className="accent-primary" />
                         <span className="min-w-0 flex-1 truncate text-foreground">{p?.emoji} {p?.name ?? r.product_id}</span>
-                        <span className="hidden sm:block truncate text-[10px] text-muted-foreground">{p ? path(p.department_id) : ""}</span>
+                        <select
+                          value={r.group_id ?? ""}
+                          disabled={busy}
+                          onChange={(e) => setGroup(r.id, e.target.value)}
+                          className="max-w-[9rem] rounded-md border border-border bg-background px-1 py-0.5 text-[11px] text-foreground"
+                          aria-label={T("adm.recipeGroups")}
+                        >
+                          <option value="">{T("adm.recipeGroupNone")}</option>
+                          {groupOptions.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+                        </select>
                         <button type="button" disabled={busy || i === 0} onClick={() => move(s.key, r.product_id, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
                         <button type="button" disabled={busy || i === assigned.length - 1} onClick={() => move(s.key, r.product_id, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
                       </label>
@@ -270,6 +350,13 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                         <button type="button" onClick={() => setPickerSel((x) => { const n = new Set(x); deptProds.forEach((p) => n.delete(p.id)); return n; })} className="text-primary">{T("adm.selectNone")}</button>
                       </div>
                     )}
+                    <label className="flex items-center gap-2 text-xs text-foreground">
+                      {T("adm.recipeGroupTarget")}
+                      <select value={pickerGroup} onChange={(e) => setPickerGroup(e.target.value)} className="min-w-0 flex-1 rounded-md border border-border bg-background px-1 py-1 text-xs">
+                        <option value="">{T("adm.recipeGroupNone")}</option>
+                        {groupOptions.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+                      </select>
+                    </label>
                     <div className="flex justify-end gap-2">
                       <Button size="sm" variant="ghost" onClick={() => setPickerStep(null)}>{T("adm.cancel")}</Button>
                       <Button size="sm" disabled={busy} onClick={() => applyPicker(s.key)}>{T("adm.apply")} ({pickerSel.size})</Button>
@@ -282,5 +369,21 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
         </div>
       )}
     </section>
+  );
+}
+
+function GroupRow({ g, first, last, busy, bold, onEdit, onDelete, onMove }: {
+  g: Grp; first: boolean; last: boolean; busy: boolean; bold?: boolean;
+  onEdit: (g: Grp) => void; onDelete: (g: Grp) => void; onMove: (g: Grp, d: -1 | 1) => void;
+}) {
+  return (
+    <div className="flex items-center gap-1 text-xs">
+      <button type="button" onClick={() => onEdit(g)} className={`min-w-0 flex-1 truncate text-left text-foreground ${bold ? "font-semibold" : ""}`}>
+        {g.emoji} {g.name}
+      </button>
+      <button type="button" disabled={busy || first} onClick={() => onMove(g, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
+      <button type="button" disabled={busy || last} onClick={() => onMove(g, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
+      <button type="button" disabled={busy} onClick={() => onDelete(g)} className="px-1 text-destructive" aria-label="delete">🗑</button>
+    </div>
   );
 }

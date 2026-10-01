@@ -500,7 +500,14 @@
     "speak.intro": "{name}. {count} items open.",
     "adm.fromCatalog": "+ From catalog",
     "adm.selectAll": "Select all",
-    "adm.selectNone": "Select none"
+    "adm.selectNone": "Select none",
+    "rk.otherGroup": "Other",
+    "adm.recipeGroups": "Recipe categories",
+    "adm.recipeGroupNew": "+ Main category",
+    "adm.recipeGroupSub": "+ Subcategory",
+    "adm.recipeGroupNone": "— no category —",
+    "adm.recipeGroupTarget": "Target category",
+    "adm.recipeGroupDelete": "Delete category \"{name}\"? Subcategories are deleted too; ingredients move to \"Other\"."
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1003,7 +1010,14 @@
     "speak.intro": "{name}. {count} items open.",
     "adm.fromCatalog": "+ From catalog",
     "adm.selectAll": "Select all",
-    "adm.selectNone": "Select none"
+    "adm.selectNone": "Select none",
+    "rk.otherGroup": "Other",
+    "adm.recipeGroups": "Recipe categories",
+    "adm.recipeGroupNew": "+ Main category",
+    "adm.recipeGroupSub": "+ Subcategory",
+    "adm.recipeGroupNone": "— no category —",
+    "adm.recipeGroupTarget": "Target category",
+    "adm.recipeGroupDelete": "Delete category \"{name}\"? Subcategories are deleted too; ingredients move to \"Other\"."
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1506,7 +1520,14 @@
     "speak.intro": "{name}. {count} items open.",
     "adm.fromCatalog": "+ From catalog",
     "adm.selectAll": "Select all",
-    "adm.selectNone": "Select none"
+    "adm.selectNone": "Select none",
+    "rk.otherGroup": "Other",
+    "adm.recipeGroups": "Recipe categories",
+    "adm.recipeGroupNew": "+ Main category",
+    "adm.recipeGroupSub": "+ Subcategory",
+    "adm.recipeGroupNone": "— no category —",
+    "adm.recipeGroupTarget": "Target category",
+    "adm.recipeGroupDelete": "Delete category \"{name}\"? Subcategories are deleted too; ingredients move to \"Other\"."
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2009,7 +2030,14 @@
     "speak.intro": "{name}. {count} artículos pendientes.",
     "adm.fromCatalog": "+ Del catálogo",
     "adm.selectAll": "Seleccionar todo",
-    "adm.selectNone": "Ninguno"
+    "adm.selectNone": "Ninguno",
+    "rk.otherGroup": "Otros",
+    "adm.recipeGroups": "Categorías de recetas",
+    "adm.recipeGroupNew": "+ Categoría principal",
+    "adm.recipeGroupSub": "+ Subcategoría",
+    "adm.recipeGroupNone": "— sin categoría —",
+    "adm.recipeGroupTarget": "Categoría de destino",
+    "adm.recipeGroupDelete": "¿Eliminar la categoría «{name}»? Se eliminan también las subcategorías; los ingredientes pasan a «Otros»."
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2512,7 +2540,14 @@
     "speak.intro": "{name}. {count} artículos pendientes.",
     "adm.fromCatalog": "+ Del catálogo",
     "adm.selectAll": "Seleccionar todo",
-    "adm.selectNone": "Ninguno"
+    "adm.selectNone": "Ninguno",
+    "rk.otherGroup": "Otros",
+    "adm.recipeGroups": "Categorías de recetas",
+    "adm.recipeGroupNew": "+ Categoría principal",
+    "adm.recipeGroupSub": "+ Subcategoría",
+    "adm.recipeGroupNone": "— sin categoría —",
+    "adm.recipeGroupTarget": "Categoría de destino",
+    "adm.recipeGroupDelete": "¿Eliminar la categoría «{name}»? Se eliminan también las subcategorías; los ingredientes pasan a «Otros»."
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3015,7 +3050,14 @@
     "speak.intro": "{name}. {count} articles restants.",
     "adm.fromCatalog": "+ Depuis le catalogue",
     "adm.selectAll": "Tout sélectionner",
-    "adm.selectNone": "Tout désélectionner"
+    "adm.selectNone": "Tout désélectionner",
+    "rk.otherGroup": "Autres",
+    "adm.recipeGroups": "Catégories de recettes",
+    "adm.recipeGroupNew": "+ Catégorie principale",
+    "adm.recipeGroupSub": "+ Sous-catégorie",
+    "adm.recipeGroupNone": "— sans catégorie —",
+    "adm.recipeGroupTarget": "Catégorie cible",
+    "adm.recipeGroupDelete": "Supprimer la catégorie « {name} » ? Les sous-catégories sont aussi supprimées ; les ingrédients passent dans « Autres »."
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3518,7 +3560,14 @@
     "speak.intro": "{name}. {count} articles restants.",
     "adm.fromCatalog": "+ Depuis le catalogue",
     "adm.selectAll": "Tout sélectionner",
-    "adm.selectNone": "Tout désélectionner"
+    "adm.selectNone": "Tout désélectionner",
+    "rk.otherGroup": "Autres",
+    "adm.recipeGroups": "Catégories de recettes",
+    "adm.recipeGroupNew": "+ Catégorie principale",
+    "adm.recipeGroupSub": "+ Sous-catégorie",
+    "adm.recipeGroupNone": "— sans catégorie —",
+    "adm.recipeGroupTarget": "Catégorie cible",
+    "adm.recipeGroupDelete": "Supprimer la catégorie « {name} » ? Les sous-catégories sont aussi supprimées ; les ingrédients passent dans « Autres »."
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4021,7 +4070,14 @@
     "speak.intro": "{name}. {count} articoli da prendere.",
     "adm.fromCatalog": "+ Dal catalogo",
     "adm.selectAll": "Seleziona tutto",
-    "adm.selectNone": "Deseleziona tutto"
+    "adm.selectNone": "Deseleziona tutto",
+    "rk.otherGroup": "Altro",
+    "adm.recipeGroups": "Categorie di ricette",
+    "adm.recipeGroupNew": "+ Categoria principale",
+    "adm.recipeGroupSub": "+ Sottocategoria",
+    "adm.recipeGroupNone": "— senza categoria —",
+    "adm.recipeGroupTarget": "Categoria di destinazione",
+    "adm.recipeGroupDelete": "Eliminare la categoria «{name}»? Anche le sottocategorie vengono eliminate; gli ingredienti finiscono in «Altro»."
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4524,7 +4580,14 @@
     "speak.intro": "{name}. {count} articoli da prendere.",
     "adm.fromCatalog": "+ Dal catalogo",
     "adm.selectAll": "Seleziona tutto",
-    "adm.selectNone": "Deseleziona tutto"
+    "adm.selectNone": "Deseleziona tutto",
+    "rk.otherGroup": "Altro",
+    "adm.recipeGroups": "Categorie di ricette",
+    "adm.recipeGroupNew": "+ Categoria principale",
+    "adm.recipeGroupSub": "+ Sottocategoria",
+    "adm.recipeGroupNone": "— senza categoria —",
+    "adm.recipeGroupTarget": "Categoria di destinazione",
+    "adm.recipeGroupDelete": "Eliminare la categoria «{name}»? Anche le sottocategorie vengono eliminate; gli ingredienti finiscono in «Altro»."
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -5027,7 +5090,14 @@
     "speak.intro": "{name}. {count} itens em aberto.",
     "adm.fromCatalog": "+ Do catálogo",
     "adm.selectAll": "Selecionar tudo",
-    "adm.selectNone": "Nenhum"
+    "adm.selectNone": "Nenhum",
+    "rk.otherGroup": "Outros",
+    "adm.recipeGroups": "Categorias de receitas",
+    "adm.recipeGroupNew": "+ Categoria principal",
+    "adm.recipeGroupSub": "+ Subcategoria",
+    "adm.recipeGroupNone": "— sem categoria —",
+    "adm.recipeGroupTarget": "Categoria de destino",
+    "adm.recipeGroupDelete": "Eliminar a categoria «{name}»? As subcategorias também são eliminadas; os ingredientes passam para «Outros»."
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5530,7 +5600,14 @@
     "speak.intro": "{name}. {count} itens em aberto.",
     "adm.fromCatalog": "+ Do catálogo",
     "adm.selectAll": "Selecionar tudo",
-    "adm.selectNone": "Nenhum"
+    "adm.selectNone": "Nenhum",
+    "rk.otherGroup": "Outros",
+    "adm.recipeGroups": "Categorias de receitas",
+    "adm.recipeGroupNew": "+ Categoria principal",
+    "adm.recipeGroupSub": "+ Subcategoria",
+    "adm.recipeGroupNone": "— sem categoria —",
+    "adm.recipeGroupTarget": "Categoria de destino",
+    "adm.recipeGroupDelete": "Eliminar a categoria «{name}»? As subcategorias também são eliminadas; os ingredientes passam para «Outros»."
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -6033,7 +6110,14 @@
     "speak.intro": "{name}. {count} artikelen open.",
     "adm.fromCatalog": "+ Uit catalogus",
     "adm.selectAll": "Alles selecteren",
-    "adm.selectNone": "Niets selecteren"
+    "adm.selectNone": "Niets selecteren",
+    "rk.otherGroup": "Overige",
+    "adm.recipeGroups": "Receptcategorieën",
+    "adm.recipeGroupNew": "+ Hoofdcategorie",
+    "adm.recipeGroupSub": "+ Subcategorie",
+    "adm.recipeGroupNone": "— geen categorie —",
+    "adm.recipeGroupTarget": "Doelcategorie",
+    "adm.recipeGroupDelete": "Categorie \"{name}\" verwijderen? Subcategorieën worden ook verwijderd; ingrediënten gaan naar \"Overige\"."
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6536,7 +6620,14 @@
     "speak.intro": "{name}. {count} artikelen open.",
     "adm.fromCatalog": "+ Uit catalogus",
     "adm.selectAll": "Alles selecteren",
-    "adm.selectNone": "Niets selecteren"
+    "adm.selectNone": "Niets selecteren",
+    "rk.otherGroup": "Overige",
+    "adm.recipeGroups": "Receptcategorieën",
+    "adm.recipeGroupNew": "+ Hoofdcategorie",
+    "adm.recipeGroupSub": "+ Subcategorie",
+    "adm.recipeGroupNone": "— geen categorie —",
+    "adm.recipeGroupTarget": "Doelcategorie",
+    "adm.recipeGroupDelete": "Categorie \"{name}\" verwijderen? Subcategorieën worden ook verwijderd; ingrediënten gaan naar \"Overige\"."
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6593,7 +6684,14 @@
     "speak.stop": "Vorlesen stoppen",
     "speak.empty": "Die Liste ist leer.",
     "speak.unsupported": "Sprachausgabe wird auf diesem Gerät nicht unterstützt.",
-    "speak.intro": "{name}. {count} offene Artikel."
+    "speak.intro": "{name}. {count} offene Artikel.",
+    "rk.otherGroup": "Weitere",
+    "adm.recipeGroups": "Rezept-Kategorien",
+    "adm.recipeGroupNew": "+ Oberkategorie",
+    "adm.recipeGroupSub": "+ Unterkategorie",
+    "adm.recipeGroupNone": "— ohne Kategorie —",
+    "adm.recipeGroupTarget": "Ziel-Kategorie",
+    "adm.recipeGroupDelete": "Kategorie „{name}\" löschen? Unterkategorien werden mitgelöscht, Zutaten landen unter „Weitere\"."
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6650,6 +6748,13 @@
     "speak.stop": "Vorlesen stoppen",
     "speak.empty": "Die Liste ist leer.",
     "speak.unsupported": "Sprachausgabe wird auf diesem Gerät nicht unterstützt.",
-    "speak.intro": "{name}. {count} offene Artikel."
+    "speak.intro": "{name}. {count} offene Artikel.",
+    "rk.otherGroup": "Weitere",
+    "adm.recipeGroups": "Rezept-Kategorien",
+    "adm.recipeGroupNew": "+ Oberkategorie",
+    "adm.recipeGroupSub": "+ Unterkategorie",
+    "adm.recipeGroupNone": "— ohne Kategorie —",
+    "adm.recipeGroupTarget": "Ziel-Kategorie",
+    "adm.recipeGroupDelete": "Kategorie „{name}\" löschen? Unterkategorien werden mitgelöscht, Zutaten landen unter „Weitere\"."
   }
 }

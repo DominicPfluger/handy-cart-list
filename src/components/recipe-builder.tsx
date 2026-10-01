@@ -46,21 +46,13 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     for (const p of catalog.products) if (!m.has(p.baseName)) m.set(p.baseName, p);
     return m;
   }, [catalog.products]);
-  const deptById = useMemo(() => new Map(catalog.departments.map((d) => [d.id, d])), [catalog.departments]);
-  const rootDeptOf = useMemo(() => {
-    const cache = new Map<string, string>();
-    const resolve = (id: string): string => {
-      const hit = cache.get(id);
-      if (hit) return hit;
-      let cur = deptById.get(id);
-      let guard = 0;
-      while (cur?.parentId && guard++ < 10) cur = deptById.get(cur.parentId);
-      const root = cur?.id ?? id;
-      cache.set(id, root);
-      return root;
-    };
-    return resolve;
-  }, [deptById]);
+  const groupById = useMemo(() => new Map(catalog.recipeGroups.map((g) => [g.id, g])), [catalog.recipeGroups]);
+  const groupOfIng = useMemo(() => {
+    const m = new Map<string, string | null>();
+    for (const r of catalog.recipeIngredients) m.set(`${r.templateId}|${r.stepKey}|${r.productId}`, r.groupId);
+    return m;
+  }, [catalog.recipeIngredients]);
+  const NONE = "__none";
   const [openDept, setOpenDept] = useState<Record<string, string | null>>({}); // stepKey -> rootDeptId
 
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
@@ -165,7 +157,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
 
   const addAll = () => {
     for (const p of chosen) {
-      const g = deptById.get(p.departmentId);
+      const g = catalog.departments.find((d) => d.id === p.departmentId);
       addCatalogItem({
         productId: p.id,
         name: p.name,
@@ -385,16 +377,23 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
             <p className="text-xs text-muted-foreground">{t("rk.empty")}</p>
           ) : (
             (() => {
+              type G = { id: string; name: string; emoji: string | null; sortOrder: number };
+              const other: G = { id: NONE, name: t("rk.otherGroup"), emoji: null, sortOrder: 1e9 };
+              const subOf = new Map<string, string>();
               const byRoot = new Map<string, CatalogProduct[]>();
               for (const p of s.products) {
-                const root = rootDeptOf(p.departmentId);
+                const gid = groupOfIng.get(`${tpl.id}|${s.key}|${p.id}`) ?? null;
+                const g = gid ? groupById.get(gid) : undefined;
+                const root = g ? (g.parentId && groupById.has(g.parentId) ? g.parentId : g.id) : NONE;
+                subOf.set(p.id, g?.id ?? NONE);
                 const arr = byRoot.get(root) ?? [];
                 arr.push(p);
                 byRoot.set(root, arr);
               }
+              const gOf = (id: string): G => (id === NONE ? other : groupById.get(id) ?? other);
               const roots = [...byRoot.entries()]
-                .map(([id, ps]) => ({ dept: deptById.get(id), ps }))
-                .sort((a, b) => b.ps.length - a.ps.length);
+                .map(([id, ps]) => ({ dept: gOf(id), ps }))
+                .sort((a, b) => a.dept.sortOrder - b.dept.sortOrder);
               const openId = openDept[s.key] ?? null;
               const open = roots.find((r) => r.dept?.id === openId) ?? null;
               return (
@@ -420,12 +419,15 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
                       {(() => {
                         const bySub = new Map<string, CatalogProduct[]>();
                         for (const p of open.ps) {
-                          const arr = bySub.get(p.departmentId) ?? [];
+                          const k = subOf.get(p.id) ?? NONE;
+                          const arr = bySub.get(k) ?? [];
                           arr.push(p);
-                          bySub.set(p.departmentId, arr);
+                          bySub.set(k, arr);
                         }
-                        return [...bySub.entries()].map(([subId, ps]) => {
-                          const sub = deptById.get(subId);
+                        return [...bySub.entries()]
+                          .sort((a, b) => (a[0] === open.dept?.id ? -1 : b[0] === open.dept?.id ? 1 : gOf(a[0]).sortOrder - gOf(b[0]).sortOrder))
+                          .map(([subId, ps]) => {
+                          const sub = gOf(subId);
                           const isRoot = subId === open.dept?.id;
                           return (
                             <div key={subId} className="space-y-1.5">
