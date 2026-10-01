@@ -94,6 +94,36 @@ function RecipePage() {
     if (user) void myRating(r.id, user.id).then(setStars);
   }, [user?.id, r.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => () => {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
+  }, []);
+
+  const toggleSpeak = () => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) {
+      toast.error(t("speak.unsupported"));
+      return;
+    }
+    if (speaking) {
+      window.speechSynthesis.cancel();
+      setSpeaking(false);
+      return;
+    }
+    if (missingVoice(speakLocale)) toast.warning(translate(speakLocale, "speak.noVoice"));
+    const sentences = [
+      `${r.title}.`,
+      ...(r.description ? [r.description] : []),
+      translate(speakLocale, "rs.speakIngredients"),
+      ...items.map((i) => {
+        const qty = i.quantity
+          ? (i.unit ? `${speakQuantity(i.quantity, i.unit ?? undefined, speakLocale)} ` : `${i.quantity} `)
+          : "";
+        return `${qty}${i.name}`.trim();
+      }),
+    ];
+    speakSentences(sentences, speakLocale, rate, () => setSpeaking(false));
+    setSpeaking(true);
+  };
+
   const rate = async (n: number) => {
     if (!user) return;
     setStars(n);
