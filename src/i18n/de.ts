@@ -595,6 +595,7 @@ export const de = {
   "tile.emoji": "Emoji",
   "tile.qty": "Menge",
   "tile.unit": "Einheit",
+  "tile.price": "Richtpreis in {market} (optional)",
   "tile.upload": "Bild hochladen",
   "tile.pickImage": "Bild auswählen",
   "tile.pickEmpty": "Keine Bilder gefunden",
