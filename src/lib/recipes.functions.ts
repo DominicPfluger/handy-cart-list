@@ -5,7 +5,7 @@ import type { Database } from "@/integrations/supabase/types";
 export type PublicRecipe = {
   id: string; title: string; templateId: string; picks: Record<string, string[]>;
   items: Array<{ productId: string; name: string; emoji?: string | null; quantity: string; unit?: string | null }>;
-  authorName: string | null; createdAt: string; slug: string;
+  authorName: string | null; createdAt: string; slug: string; imagePath: string | null;
 };
 
 /** Öffentliches Rezept per Teilen-Link (nur is_public, anon-Leserechte). */
