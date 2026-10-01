@@ -42,9 +42,9 @@ export const POPULAR_RECIPES: Record<RecipeTemplate["id"], Record<string, string
     { dough: ["Pizzateig"], sauce: ["Tomaten"], cheese: ["Mozzarella"], topping: ["Paprika", "Zucchini", "Schwarze Oliven"] },
   ],
   pfanne: [
-    { base: ["Reis"], protein: ["Hähnchenbrust"], veg: ["Paprika", "Zuckererbsen"], aroma: ["Sojasauce", "Ingwer"] },
-    { base: ["Nudeln"], protein: ["Tofu"], veg: ["Pak Choi", "Babymais"], aroma: ["Knoblauch", "Chilischoten"] },
-    { base: ["Kartoffeln"], protein: ["Eier"], veg: ["Zucchini"], aroma: ["Zwiebeln"] },
+    { base: ["Reis"], protein: ["Hähnchenbrust"], veg: ["Paprika", "Zuckererbsen"], sauce: ["Sojasauce"], aroma: ["Ingwer"] },
+    { base: ["Nudeln"], protein: ["Tofu"], veg: ["Pak Choi", "Babymais"], sauce: ["Teriyaki-Sauce"], aroma: ["Knoblauch", "Chilischoten"] },
+    { base: ["Kartoffeln"], protein: ["Eier"], veg: ["Zucchini"], sauce: ["Crème fraîche"], aroma: ["Zwiebeln"] },
   ],
   menu: [
     { protein: ["Lachs"], starch: ["Kartoffeln"], veg: ["Grüne Bohnen"], sauce: ["Crème fraîche"] },
@@ -84,9 +84,11 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "finish", label: "Finish", min: 0, max: 2, ingredients: ["Basilikum", "Oregano", "Olivenöl"] },
   ] },
   { id: "pfanne", emoji: "🍳", color: "oklch(0.92 0.06 60)", steps: [
-    { key: "base", label: "Sättigungsbeilage", min: 1, max: 1, ingredients: ["Reis", "Nudeln", "Kartoffeln", "Kochbanane"] },
-    { key: "protein", label: "Protein", min: 0, max: 1, ingredients: ["Hähnchenbrust", "Tofu", "Eier", "Rinderhackfleisch"] },
+    { key: "base", label: "Stärkebeilage", min: 1, max: 1, ingredients: ["Reis", "Nudeln", "Kartoffeln", "Kochbanane"] },
+    { key: "protein", label: "Proteinquelle", min: 0, max: 2, ingredients: ["Hähnchenbrust", "Tofu", "Eier", "Rinderhackfleisch"] },
     { key: "veg", label: "Gemüse", min: 1, max: 4, ingredients: ["Paprika", "Zucchini", "Pak Choi", "Zuckererbsen", "Babymais", "Auberginen", "Grüne Bohnen"] },
+    { key: "fruit", label: "Früchte", min: 0, max: 2, ingredients: ["Ananas", "Mango", "Äpfel", "Zitronen"] },
+    { key: "sauce", label: "Saucen", min: 0, max: 99, ingredients: ["Sojasauce", "Teriyaki-Sauce", "Sweet-Chili-Sauce", "Kokosmilch", "Crème fraîche"] },
     { key: "aroma", label: "Würze", min: 1, max: 3, ingredients: ["Knoblauch", "Zwiebeln", "Ingwer", "Chilischoten", "Sojasauce"] },
   ] },
   { id: "menu", emoji: "🍽️", color: "oklch(0.92 0.04 250)", steps: [
