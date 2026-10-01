@@ -7,7 +7,7 @@
 ## Teil 2: Push-Benachrichtigungen
 
 ### Ziel
-1. **Neues Rezept mit meinen Lieblingszutaten** — wenn jemand ein öffentliches Rezept veröffentlicht, das mindestens einen Artikel aus meiner Favoritenliste enthält, bekomme ich eine Push-Mitteilung.
+1. **Neues Rezept mit meinen Lieblingszutaten** — wenn jemand ein öffentliches Rezept veröffentlicht, dessen **sämtliche Zutaten** auf meiner Favoritenliste stehen, bekomme ich eine Push-Mitteilung (kein Teil-Treffer, nur vollständige Übereinstimmung).
 2. **Kommentar auf meinem Rezept** — wenn jemand mein öffentliches Rezept kommentiert, bekomme ich eine Push-Mitteilung.
 
 ### Voraussetzung: Firebase Cloud Messaging (Push-Dienst)
@@ -23,7 +23,7 @@
 
 ### Server-Route (Webhook)
 - `src/routes/api/public/webhooks/recipe-events.ts` (unter `/api/public/`, externer Aufrufer) — prüft einen gemeinsamen geheimen Schlüssel, bevor etwas verarbeitet wird.
-- Neues Rezept: vergleicht `product_ids` des Rezepts mit den gespeicherten Lieblings-Produkt-IDs aller angemeldeten Geräte; Autor wird ausgeschlossen; pro Treffer eine FCM-Nachricht in der Sprache des Geräts.
+- Neues Rezept: vergleicht `product_ids` des Rezepts mit den gespeicherten Lieblings-Produkt-IDs aller angemeldeten Geräte — Mitteilung **nur, wenn jede Zutat des Rezepts in der Favoritenliste steht** (vollständige Abdeckung); Autor wird ausgeschlossen; pro Treffer eine FCM-Nachricht in der Sprache des Geräts.
 - Kommentar: sucht den Rezept-Besitzer und sendet an dessen Geräte (sofern `notify_comments` aktiv).
 - FCM-Versand über den Connector-Gateway; Fehler werden protokolliert, blockieren die App aber nicht.
 
