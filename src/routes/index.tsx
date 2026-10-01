@@ -33,6 +33,7 @@ import { unitShort } from "../lib/units";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
+import { deptColor, deptColorByLabel } from "../lib/dept-colors";
 import { toast } from "sonner";
 
 
@@ -337,9 +338,19 @@ function ListPage() {
                     >
                       {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
-                    <div className="grid h-10 w-10 shrink-0 select-none place-items-center overflow-hidden rounded-lg bg-primary-soft/25 text-xl">
-                      <ProductEmoji emoji={item.emoji} />
+                    {(() => {
+                      // Farbe: über die Wurzelkategorie, sonst über den Gruppennamen (z. B. ältere Einträge mit eigenem Gruppenlabel)
+                      const colorDept = group.root ?? departments.find((d) => d.name === group.label || d.baseName === group.label);
+                      const color = (colorDept ? deptColor(colorDept, deptById) : undefined) ?? deptColorByLabel(group.label);
+                      return (
+                    <div
+                      className={`grid h-9 w-9 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-lg ${color ? "" : "bg-primary-soft/25"}`}
+                      style={color ? { backgroundColor: color } : undefined}
+                    >
+                       <ProductEmoji emoji={item.emoji} />
                     </div>
+                      );
+                    })()}
                     <div className="min-w-0 flex-1">
                       <p className={`break-words text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
                         {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}

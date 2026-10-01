@@ -33,6 +33,7 @@ import {
 import { formatQuantity } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
+import { deptColor } from "../lib/dept-colors";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
 import { VoiceInputButton } from "../components/voice-input";
 import { useIsAdmin } from "../hooks/use-is-admin";
@@ -141,6 +142,7 @@ function DepartmentsPage() {
     setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames, kind });
 
   const current = departments.find((department) => department.id === currentId) ?? null;
+  const deptById = useMemo(() => new Map(departments.map((d) => [d.id, d])), [departments]);
   useEffect(() => {
     if (currentId && removedIds.has(currentId)) setCurrentId(null);
   }, [currentId, removedIds]);
@@ -543,6 +545,7 @@ function DepartmentsPage() {
           <div className="grid grid-cols-2 gap-3">
             {childDepartments.map((department) => {
               const dropKind = drag?.target?.id === department.id ? drag.target.kind : null;
+              const tileColor = deptColor(department, deptById);
               return (
               <div key={department.id} className="group relative min-w-0">
               <Button
@@ -560,7 +563,10 @@ function DepartmentsPage() {
                 style={{ WebkitTouchCallout: "none" }}
                 className={`relative w-full select-none ${drag?.id === department.id ? "opacity-40" : ""} ${dropKind === "into" ? "ring-2 ring-primary" : ""} ${dropKind === "before" ? "!border-l-4 !border-l-primary" : ""} ${dropKind === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
               >
-                <span className="grid aspect-[4/3] w-full place-items-center overflow-hidden bg-primary-soft/25">
+                <span
+                  className={`grid aspect-[4/3] w-full place-items-center overflow-hidden ${tileColor ? "" : "bg-primary-soft/25"}`}
+                  style={tileColor ? { backgroundColor: tileColor } : undefined}
+                >
                   <DepartmentThumb department={department} />
                 </span>
                 <span className="flex min-h-14 w-full items-center justify-between gap-2 px-3 py-2">
