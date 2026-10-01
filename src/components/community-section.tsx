@@ -140,7 +140,7 @@ function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
 
   return (
     <div className="rounded-2xl border border-border bg-card p-3">
-      <Link to="/rezepte/generator" search={{ recipe: r.id }} className="flex items-center gap-3">{body}</Link>
+      <Link to="/rezepte/generator" search={{ cat: undefined, recipe: r.id }} className="flex items-center gap-3">{body}</Link>
       <div className="mt-2 flex items-center justify-between gap-2 text-xs text-muted-foreground">
         {mine ? (
           <>
