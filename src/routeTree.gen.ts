@@ -26,6 +26,10 @@ import { Route as VorratRouteImport } from './routes/vorrat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedVorleseTexteRouteImport } from './routes/_authenticated/vorlese-texte'
 import { Route as RezeptSlugRouteImport } from './routes/rezept.$slug'
+import { Route as RezepteIndexRouteImport } from './routes/rezepte.index'
+import { Route as RezepteGeneratorRouteImport } from './routes/rezepte.generator'
+import { Route as RezepteInspirationenRouteImport } from './routes/rezepte.inspirationen'
+import { Route as RezepteListenRouteImport } from './routes/rezepte.listen'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -112,6 +116,26 @@ const RezeptSlugRoute = RezeptSlugRouteImport.update({
   path: '/rezept/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RezepteIndexRoute = RezepteIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RezepteRoute,
+} as any)
+const RezepteGeneratorRoute = RezepteGeneratorRouteImport.update({
+  id: '/generator',
+  path: '/generator',
+  getParentRoute: () => RezepteRoute,
+} as any)
+const RezepteInspirationenRoute = RezepteInspirationenRouteImport.update({
+  id: '/inspirationen',
+  path: '/inspirationen',
+  getParentRoute: () => RezepteRoute,
+} as any)
+const RezepteListenRoute = RezepteListenRouteImport.update({
+  id: '/listen',
+  path: '/listen',
+  getParentRoute: () => RezepteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -123,13 +147,17 @@ export interface FileRoutesByFullPath {
   '/community': typeof CommunityRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
-  '/rezepte': typeof RezepteRoute
+  '/rezepte': typeof RezepteRouteWithChildren
   '/scanner': typeof ScannerRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
   '/rezept/$slug': typeof RezeptSlugRoute
+  '/rezepte/generator': typeof RezepteGeneratorRoute
+  '/rezepte/inspirationen': typeof RezepteInspirationenRoute
+  '/rezepte/listen': typeof RezepteListenRoute
+  '/rezepte/': typeof RezepteIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -141,13 +169,16 @@ export interface FileRoutesByTo {
   '/community': typeof CommunityRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
-  '/rezepte': typeof RezepteRoute
   '/scanner': typeof ScannerRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
   '/rezept/$slug': typeof RezeptSlugRoute
+  '/rezepte/generator': typeof RezepteGeneratorRoute
+  '/rezepte/inspirationen': typeof RezepteInspirationenRoute
+  '/rezepte/listen': typeof RezepteListenRoute
+  '/rezepte': typeof RezepteIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -161,13 +192,17 @@ export interface FileRoutesById {
   '/community': typeof CommunityRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
-  '/rezepte': typeof RezepteRoute
+  '/rezepte': typeof RezepteRouteWithChildren
   '/scanner': typeof ScannerRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
   '/rezept/$slug': typeof RezeptSlugRoute
+  '/rezepte/generator': typeof RezepteGeneratorRoute
+  '/rezepte/inspirationen': typeof RezepteInspirationenRoute
+  '/rezepte/listen': typeof RezepteListenRoute
+  '/rezepte/': typeof RezepteIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -188,6 +223,10 @@ export interface FileRouteTypes {
     | '/admin'
     | '/vorlese-texte'
     | '/rezept/$slug'
+    | '/rezepte/generator'
+    | '/rezepte/inspirationen'
+    | '/rezepte/listen'
+    | '/rezepte/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -199,13 +238,16 @@ export interface FileRouteTypes {
     | '/community'
     | '/favoriten'
     | '/mehr'
-    | '/rezepte'
     | '/scanner'
     | '/verlauf'
     | '/vorrat'
     | '/admin'
     | '/vorlese-texte'
     | '/rezept/$slug'
+    | '/rezepte/generator'
+    | '/rezepte/inspirationen'
+    | '/rezepte/listen'
+    | '/rezepte'
   id:
     | '__root__'
     | '/'
@@ -225,6 +267,10 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/_authenticated/vorlese-texte'
     | '/rezept/$slug'
+    | '/rezepte/generator'
+    | '/rezepte/inspirationen'
+    | '/rezepte/listen'
+    | '/rezepte/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -238,7 +284,7 @@ export interface RootRouteChildren {
   CommunityRoute: typeof CommunityRoute
   FavoritenRoute: typeof FavoritenRoute
   MehrRoute: typeof MehrRoute
-  RezepteRoute: typeof RezepteRoute
+  RezepteRoute: typeof RezepteRouteWithChildren
   ScannerRoute: typeof ScannerRoute
   VerlaufRoute: typeof VerlaufRoute
   VorratRoute: typeof VorratRoute
@@ -366,6 +412,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RezeptSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rezepte/': {
+      id: '/rezepte/'
+      path: '/'
+      fullPath: '/rezepte/'
+      preLoaderRoute: typeof RezepteIndexRouteImport
+      parentRoute: typeof RezepteRoute
+    }
+    '/rezepte/generator': {
+      id: '/rezepte/generator'
+      path: '/generator'
+      fullPath: '/rezepte/generator'
+      preLoaderRoute: typeof RezepteGeneratorRouteImport
+      parentRoute: typeof RezepteRoute
+    }
+    '/rezepte/inspirationen': {
+      id: '/rezepte/inspirationen'
+      path: '/inspirationen'
+      fullPath: '/rezepte/inspirationen'
+      preLoaderRoute: typeof RezepteInspirationenRouteImport
+      parentRoute: typeof RezepteRoute
+    }
+    '/rezepte/listen': {
+      id: '/rezepte/listen'
+      path: '/listen'
+      fullPath: '/rezepte/listen'
+      preLoaderRoute: typeof RezepteListenRouteImport
+      parentRoute: typeof RezepteRoute
+    }
   }
 }
 
@@ -382,6 +456,23 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface RezepteRouteChildren {
+  RezepteGeneratorRoute: typeof RezepteGeneratorRoute
+  RezepteInspirationenRoute: typeof RezepteInspirationenRoute
+  RezepteListenRoute: typeof RezepteListenRoute
+  RezepteIndexRoute: typeof RezepteIndexRoute
+}
+
+const RezepteRouteChildren: RezepteRouteChildren = {
+  RezepteGeneratorRoute: RezepteGeneratorRoute,
+  RezepteInspirationenRoute: RezepteInspirationenRoute,
+  RezepteListenRoute: RezepteListenRoute,
+  RezepteIndexRoute: RezepteIndexRoute,
+}
+
+const RezepteRouteWithChildren =
+  RezepteRoute._addFileChildren(RezepteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
@@ -393,7 +484,7 @@ const rootRouteChildren: RootRouteChildren = {
   CommunityRoute: CommunityRoute,
   FavoritenRoute: FavoritenRoute,
   MehrRoute: MehrRoute,
-  RezepteRoute: RezepteRoute,
+  RezepteRoute: RezepteRouteWithChildren,
   ScannerRoute: ScannerRoute,
   VerlaufRoute: VerlaufRoute,
   VorratRoute: VorratRoute,
