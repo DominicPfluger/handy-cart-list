@@ -700,7 +700,11 @@
     "rk.topLevel": "Top level",
     "rk.deleteFolderConfirm": "Delete folder? Its recipes and subfolders move up one level.",
     "rs.expand": "Expand",
-    "rs.collapse": "Collapse"
+    "rs.collapse": "Collapse",
+    "pd.favQuantity": "My favorite quantity",
+    "pd.saveFavQuantity": "Save",
+    "pd.resetFavQuantity": "Reset",
+    "pd.favQuantitySaved": "Favorite quantity saved"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1403,7 +1407,11 @@
     "rk.topLevel": "Top level",
     "rk.deleteFolderConfirm": "Delete folder? Its recipes and subfolders move up one level.",
     "rs.expand": "Expand",
-    "rs.collapse": "Collapse"
+    "rs.collapse": "Collapse",
+    "pd.favQuantity": "My favourite quantity",
+    "pd.saveFavQuantity": "Save",
+    "pd.resetFavQuantity": "Reset",
+    "pd.favQuantitySaved": "Favourite quantity saved"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2106,7 +2114,11 @@
     "rk.topLevel": "Top level",
     "rk.deleteFolderConfirm": "Delete folder? Its recipes and subfolders move up one level.",
     "rs.expand": "Expand",
-    "rs.collapse": "Collapse"
+    "rs.collapse": "Collapse",
+    "pd.favQuantity": "My favorite quantity",
+    "pd.saveFavQuantity": "Save",
+    "pd.resetFavQuantity": "Reset",
+    "pd.favQuantitySaved": "Favorite quantity saved"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2809,7 +2821,11 @@
     "rk.topLevel": "Nivel superior",
     "rk.deleteFolderConfirm": "¿Eliminar carpeta? Sus recetas y subcarpetas suben un nivel.",
     "rs.expand": "Expandir",
-    "rs.collapse": "Contraer"
+    "rs.collapse": "Contraer",
+    "pd.favQuantity": "Mi cantidad favorita",
+    "pd.saveFavQuantity": "Guardar",
+    "pd.resetFavQuantity": "Restablecer",
+    "pd.favQuantitySaved": "Cantidad favorita guardada"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3512,7 +3528,11 @@
     "rk.topLevel": "Nivel superior",
     "rk.deleteFolderConfirm": "¿Eliminar carpeta? Sus recetas y subcarpetas suben un nivel.",
     "rs.expand": "Expandir",
-    "rs.collapse": "Contraer"
+    "rs.collapse": "Contraer",
+    "pd.favQuantity": "Mi cantidad favorita",
+    "pd.saveFavQuantity": "Guardar",
+    "pd.resetFavQuantity": "Restablecer",
+    "pd.favQuantitySaved": "Cantidad favorita guardada"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -4215,7 +4235,11 @@
     "rk.topLevel": "Niveau supérieur",
     "rk.deleteFolderConfirm": "Supprimer le dossier ? Ses recettes et sous-dossiers remontent d’un niveau.",
     "rs.expand": "Déplier",
-    "rs.collapse": "Replier"
+    "rs.collapse": "Replier",
+    "pd.favQuantity": "Ma quantité préférée",
+    "pd.saveFavQuantity": "Enregistrer",
+    "pd.resetFavQuantity": "Réinitialiser",
+    "pd.favQuantitySaved": "Quantité préférée enregistrée"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4918,7 +4942,11 @@
     "rk.topLevel": "Niveau supérieur",
     "rk.deleteFolderConfirm": "Supprimer le dossier ? Ses recettes et sous-dossiers remontent d’un niveau.",
     "rs.expand": "Déplier",
-    "rs.collapse": "Replier"
+    "rs.collapse": "Replier",
+    "pd.favQuantity": "Ma quantité préférée",
+    "pd.saveFavQuantity": "Enregistrer",
+    "pd.resetFavQuantity": "Réinitialiser",
+    "pd.favQuantitySaved": "Quantité préférée enregistrée"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -5621,7 +5649,11 @@
     "rk.topLevel": "Livello principale",
     "rk.deleteFolderConfirm": "Eliminare la cartella? Ricette e sottocartelle salgono di un livello.",
     "rs.expand": "Espandi",
-    "rs.collapse": "Comprimi"
+    "rs.collapse": "Comprimi",
+    "pd.favQuantity": "La mia quantità preferita",
+    "pd.saveFavQuantity": "Salva",
+    "pd.resetFavQuantity": "Reimposta",
+    "pd.favQuantitySaved": "Quantità preferita salvata"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -6324,7 +6356,11 @@
     "rk.topLevel": "Livello principale",
     "rk.deleteFolderConfirm": "Eliminare la cartella? Ricette e sottocartelle salgono di un livello.",
     "rs.expand": "Espandi",
-    "rs.collapse": "Comprimi"
+    "rs.collapse": "Comprimi",
+    "pd.favQuantity": "La mia quantità preferita",
+    "pd.saveFavQuantity": "Salva",
+    "pd.resetFavQuantity": "Reimposta",
+    "pd.favQuantitySaved": "Quantità preferita salvata"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -7027,7 +7063,11 @@
     "rk.topLevel": "Nível superior",
     "rk.deleteFolderConfirm": "Excluir pasta? As receitas e subpastas sobem um nível.",
     "rs.expand": "Expandir",
-    "rs.collapse": "Recolher"
+    "rs.collapse": "Recolher",
+    "pd.favQuantity": "A minha quantidade favorita",
+    "pd.saveFavQuantity": "Guardar",
+    "pd.resetFavQuantity": "Repor",
+    "pd.favQuantitySaved": "Quantidade favorita guardada"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -7730,7 +7770,11 @@
     "rk.topLevel": "Nível superior",
     "rk.deleteFolderConfirm": "Excluir pasta? As receitas e subpastas sobem um nível.",
     "rs.expand": "Expandir",
-    "rs.collapse": "Recolher"
+    "rs.collapse": "Recolher",
+    "pd.favQuantity": "Minha quantidade favorita",
+    "pd.saveFavQuantity": "Salvar",
+    "pd.resetFavQuantity": "Redefinir",
+    "pd.favQuantitySaved": "Quantidade favorita salva"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -8433,7 +8477,11 @@
     "rk.topLevel": "Hoogste niveau",
     "rk.deleteFolderConfirm": "Map verwijderen? Recepten en submappen gaan één niveau omhoog.",
     "rs.expand": "Uitklappen",
-    "rs.collapse": "Inklappen"
+    "rs.collapse": "Inklappen",
+    "pd.favQuantity": "Mijn favoriete hoeveelheid",
+    "pd.saveFavQuantity": "Opslaan",
+    "pd.resetFavQuantity": "Herstellen",
+    "pd.favQuantitySaved": "Favoriete hoeveelheid opgeslagen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -9136,7 +9184,11 @@
     "rk.topLevel": "Hoogste niveau",
     "rk.deleteFolderConfirm": "Map verwijderen? Recepten en submappen gaan één niveau omhoog.",
     "rs.expand": "Uitklappen",
-    "rs.collapse": "Inklappen"
+    "rs.collapse": "Inklappen",
+    "pd.favQuantity": "Mijn favoriete hoeveelheid",
+    "pd.saveFavQuantity": "Opslaan",
+    "pd.resetFavQuantity": "Herstellen",
+    "pd.favQuantitySaved": "Favoriete hoeveelheid opgeslagen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9391,7 +9443,11 @@
     "rk.topLevel": "Oberste Ebene",
     "rk.deleteFolderConfirm": "Ordner löschen? Rezepte und Unterordner wandern eine Ebene nach oben.",
     "rs.expand": "Aufklappen",
-    "rs.collapse": "Zuklappen"
+    "rs.collapse": "Zuklappen",
+    "pd.favQuantity": "Meine Lieblingsmenge",
+    "pd.saveFavQuantity": "Speichern",
+    "pd.resetFavQuantity": "Zurücksetzen",
+    "pd.favQuantitySaved": "Lieblingsmenge gespeichert"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9646,6 +9702,10 @@
     "rk.topLevel": "Oberste Ebene",
     "rk.deleteFolderConfirm": "Ordner löschen? Rezepte und Unterordner wandern eine Ebene nach oben.",
     "rs.expand": "Aufklappen",
-    "rs.collapse": "Zuklappen"
+    "rs.collapse": "Zuklappen",
+    "pd.favQuantity": "Mini Lieblingsmängi",
+    "pd.saveFavQuantity": "Spichere",
+    "pd.resetFavQuantity": "Zrücksetze",
+    "pd.favQuantitySaved": "Lieblingsmängi gspicheret"
   }
 }
