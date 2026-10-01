@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { translate, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
+import { MemberAvatar } from "../components/member-avatar";
 
 export const Route = createFileRoute("/aktivitaeten")({
   head: () => ({
@@ -29,13 +30,6 @@ function timeAgo(ts: number, locale: string): string {
   return t("more.dAgo", d);
 }
 
-const AVATAR_COLORS = [
-  "oklch(0.52 0.155 144)",
-  "oklch(0.75 0.16 47)",
-  "oklch(0.62 0.18 280)",
-  "oklch(0.55 0.13 210)",
-];
-
 function ActivityPage() {
   const { members, activity } = useShoppingList();
   const { t, locale } = useT();
@@ -49,12 +43,7 @@ function ActivityPage() {
       <div className="divide-y divide-border rounded-2xl border border-border bg-card">
         {activity.map((a) => (
           <div key={a.id} className="flex items-center gap-3 px-4 py-3">
-            <div
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-bold text-card"
-              style={{ background: AVATAR_COLORS[members.indexOf(a.user) % AVATAR_COLORS.length] }}
-            >
-              {a.user[0]}
-            </div>
+            <MemberAvatar name={a.user} index={Math.max(0, members.indexOf(a.user))} size={36} textClass="text-xs" />
             <div className="min-w-0 flex-1">
               <p className="text-sm text-foreground">
                 <span className="font-semibold">{a.user}</span> {a.action}{" "}

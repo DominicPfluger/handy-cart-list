@@ -22,6 +22,7 @@ import { useIsAdmin } from "../hooks/use-is-admin";
 import { setAllMarkets, useAllMarkets } from "../hooks/use-all-markets";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
+import { MemberAvatar } from "../components/member-avatar";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
@@ -40,12 +41,6 @@ export const Route = createFileRoute("/mehr")({
 });
 
 
-const AVATAR_COLORS = [
-  "oklch(0.52 0.155 144)",
-  "oklch(0.75 0.16 47)",
-  "oklch(0.62 0.18 280)",
-  "oklch(0.55 0.13 210)",
-];
 
 function MorePage() {
   const { members, signedIn, activeList, inviteLinkFor } = useShoppingList();
@@ -118,12 +113,7 @@ function MorePage() {
         <div className="flex flex-wrap gap-3">
           {members.map((m, i) => (
             <div key={m} className="flex flex-col items-center gap-1.5">
-              <div
-                className="grid h-14 w-14 place-items-center rounded-full text-lg font-bold text-card"
-                style={{ background: AVATAR_COLORS[i % AVATAR_COLORS.length] }}
-              >
-                {m[0]}
-              </div>
+              <MemberAvatar name={m} index={i} size={56} />
               <span className="text-xs font-medium text-foreground">{m}</span>
             </div>
           ))}
