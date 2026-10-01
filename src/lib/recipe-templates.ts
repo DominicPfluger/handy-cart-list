@@ -47,8 +47,8 @@ export const POPULAR_RECIPES: Record<RecipeTemplate["id"], Record<string, string
     { base: ["Kartoffeln"], protein: ["Eier"], veg: ["Zucchini"], aroma: ["Zwiebeln"] },
   ],
   menu: [
-    { starter: ["Bruschetta"], main: ["Lachs", "Kartoffeln"], side: ["Grüne Bohnen"], dessert: ["Panna Cotta"] },
-    { starter: ["Crostini"], main: ["Hähnchenbrust", "Reis"], side: ["Karotten"], dessert: ["Tiramisu"] },
+    { protein: ["Lachs"], starch: ["Kartoffeln"], veg: ["Grüne Bohnen"], sauce: ["Crème fraîche"] },
+    { protein: ["Hähnchenbrust"], starch: ["Reis"], veg: ["Karotten"], sauce: ["Passierte Tomaten"] },
   ],
   dessert: [
     { base: ["Mascarpone"], fruit: ["Erdbeeren"], sweet: ["Vanillezucker"], crunch: ["Kekse"] },
@@ -90,10 +90,10 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "aroma", label: "Würze", min: 1, max: 3, ingredients: ["Knoblauch", "Zwiebeln", "Ingwer", "Chilischoten", "Sojasauce"] },
   ] },
   { id: "menu", emoji: "🍽️", color: "oklch(0.92 0.04 250)", steps: [
-    { key: "starter", label: "Vorspeise", min: 1, max: 1, ingredients: ["Bruschetta", "Grissini", "Crostini", "Tomaten", "Mozzarella"] },
-    { key: "main", label: "Hauptgang", min: 1, max: 2, ingredients: ["Hähnchenbrust", "Lachs", "Rinderhackfleisch", "Nudeln", "Reis", "Kartoffeln"] },
-    { key: "side", label: "Beilage", min: 0, max: 2, ingredients: ["Grüne Bohnen", "Zucchini", "Babyspinat", "Karotten"] },
-    { key: "dessert", label: "Dessert", min: 1, max: 1, ingredients: ["Tiramisu", "Panna Cotta", "Mousse au Chocolat", "Crème Brûlée"] },
+    { key: "protein", label: "Proteinquelle", min: 1, max: 2, ingredients: ["Hähnchenbrust", "Lachs", "Rinderhackfleisch", "Tofu", "Eier"] },
+    { key: "starch", label: "Stärkebeilage", min: 1, max: 1, ingredients: ["Nudeln", "Reis", "Kartoffeln"] },
+    { key: "veg", label: "Gemüsebeilage", min: 0, max: 2, ingredients: ["Grüne Bohnen", "Zucchini", "Babyspinat", "Karotten"] },
+    { key: "sauce", label: "Sauce", min: 0, max: 1, ingredients: ["Passierte Tomaten", "Crème fraîche", "Sojasauce"] },
   ] },
   { id: "dessert", emoji: "🍮", color: "oklch(0.93 0.05 10)", steps: [
     { key: "base", label: "Basis", min: 1, max: 1, ingredients: ["Mascarpone", "Ricotta", "Joghurt", "Milchreis", "Griesscreme"] },
