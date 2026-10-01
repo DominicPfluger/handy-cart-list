@@ -11,6 +11,7 @@ import {
   catalogQueryOptions,
   useCatalog,
   headingByProduct,
+  departmentIdsOf,
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import { getLocale } from "../i18n";
@@ -47,7 +48,7 @@ export const Route = createFileRoute("/")({
 
 function ListPage() {
   const {
-    items, hydrated, toggleItem, removeItem, clearChecked, addItem,
+    items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
     templates, saveAsTemplate, createFromTemplate, deleteTemplate,
   } = useShoppingList();
@@ -83,6 +84,19 @@ function ListPage() {
     [orderedProducts],
   );
 
+  /** Kategorie eines Listeneintrags: Alias-Kategorie, wenn der Eintrag unter ihr hinzugefügt wurde, sonst Original. */
+  const leafOf = (it: ListItem): CatalogDepartment | undefined => {
+    const product = it.productId ? productById.get(it.productId) : undefined;
+    if (!product?.departmentId) return undefined;
+    if (it.groupLabel) {
+      for (const id of departmentIdsOf(product, data.productAliases ?? []).slice(1)) {
+        const d = deptById.get(id);
+        if (d && (d.name === it.groupLabel || d.baseName === it.groupLabel || Object.values(d.names).includes(it.groupLabel))) return d;
+      }
+    }
+    return deptById.get(product.departmentId);
+  };
+
   /** Kategoriepfad (Wurzel → ... → Blatt) eines Produkts. */
   const chainOf = (leaf: CatalogDepartment): CatalogDepartment[] => {
     const chain: CatalogDepartment[] = [];
@@ -111,8 +125,7 @@ function ListPage() {
   const grouped = useMemo(() => {
     const map = new Map<string, Group>();
     for (const it of items) {
-      const product = it.productId ? productById.get(it.productId) : undefined;
-      const leaf = product?.departmentId ? deptById.get(product.departmentId) : undefined;
+      const leaf = leafOf(it);
       const root = leaf ? chainOf(leaf)[0] : undefined;
       const key = root ? root.id : `label:${it.groupLabel ?? it.category}`;
       let group = map.get(key);
@@ -151,8 +164,7 @@ function ListPage() {
 
   /** Baum-Sortierschlüssel entlang des Kategoriebaums (analog Abteilungsansicht). */
   function segOf(it: ListItem) {
-    const p = it.productId ? productById.get(it.productId) : undefined;
-    const leaf = p?.departmentId ? deptById.get(p.departmentId) : undefined;
+    const leaf = leafOf(it);
     return { tree: leaf ? treeOrder(leaf) : Number.MAX_SAFE_INTEGER };
   }
 
@@ -307,6 +319,25 @@ function ListPage() {
                         </p>
                       )}
                     </div>
+                    {(() => {
+                      const product = item.productId ? productById.get(item.productId) : undefined;
+                      const ids = product ? departmentIdsOf(product, data.productAliases ?? []) : [];
+                      if (ids.length < 2) return null;
+                      const cur = leafOf(item)?.id ?? "";
+                      return (
+                        <label className="relative grid h-8 w-8 shrink-0 cursor-pointer place-items-center rounded-full text-base text-muted-foreground" title={t("palias.change")}>
+                          <span aria-hidden="true">📂</span>
+                          <select
+                            aria-label={t("palias.change")}
+                            value={cur}
+                            onChange={(e) => { const d = deptById.get(e.target.value); if (d) setItemGroup(item.id, d.name, d.emoji ?? undefined); }}
+                            className="absolute inset-0 cursor-pointer opacity-0"
+                          >
+                            {ids.map((id) => { const d = deptById.get(id); return d ? <option key={id} value={id}>{chainOf(d).map((x) => x.name).join(" › ")}</option> : null; })}
+                          </select>
+                        </label>
+                      );
+                    })()}
                     <button
                       onClick={() => removeItem(item.id)}
                       className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-coral transition active:scale-90"

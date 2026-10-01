@@ -16,6 +16,7 @@ import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
 import { RecipeAdmin } from "@/components/recipe-admin";
 import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
+import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias-admin";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -392,6 +393,7 @@ function AdminPage() {
               })}
             </section>
           )}
+          {cur && d && <ProductAliasRows departmentId={cur} prods={d.prods} onEdit={(id) => setSel({ kind: "product", id })} />}
         </>
       )}
 
@@ -672,6 +674,7 @@ function Editor(p: {
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
         {dept && <DeptAliasEditor dept={dept} depts={data.depts} options={p.deptOptions} />}
+        {prod && <ProductAliasEditor product={prod} prods={data.prods} options={p.deptOptions} />}
         {prod && <ProductCuisinePicker productId={prod.id} />}
         {prod && <ProductBrandEditor key={prod.id} productId={prod.id} productName={prod.name} path={data.depts.find((x) => x.id === prod.department_id)?.name ?? ""} />}
 

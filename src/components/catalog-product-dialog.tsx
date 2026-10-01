@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { brandsFor, type CatalogProduct } from "../lib/catalog-query";
+import { brandsFor, departmentIdsOf, pathTo, useCatalog, type CatalogProduct } from "../lib/catalog-query";
+import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { getUnits, formatQuantity, type UnitId } from "../lib/units";
 import { useT } from "../i18n";
 
@@ -30,6 +31,8 @@ interface CatalogProductDialogProps {
   groupLabel?: string | undefined;
   groupEmoji?: string | null | undefined;
   initialBrand?: string | undefined;
+  /** Kategorie, aus der das Produkt geöffnet wurde (für Alias-Produkte). */
+  initialDepartmentId?: string | undefined;
   onOpenChange: (open: boolean) => void;
 }
 
@@ -38,8 +41,13 @@ export function CatalogProductDialog({
   groupLabel,
   groupEmoji,
   initialBrand,
+  initialDepartmentId,
   onOpenChange,
 }: CatalogProductDialogProps) {
+  const catalog = useCatalog();
+  const { preferred, setPreferred } = usePreferredDept();
+  const deptIds = product ? departmentIdsOf(product, catalog.productAliases ?? []).filter((id) => catalog.departments.some((d) => d.id === id)) : [];
+  const [deptId, setDeptId] = useState<string>("");
   const { addCatalogItem } = useShoppingList();
   const pantry = usePantry();
   const pantryEntry = product ? pantry.isInPantry(product.id) : undefined;
@@ -65,7 +73,12 @@ export function CatalogProductDialog({
     setCustomInput("");
     setExpanded(false);
     setBrand(initialBrand);
-  }, [product, initialBrand]);
+    const ids = departmentIdsOf(product, catalog.productAliases ?? []);
+    const pref = preferred[product.id];
+    setDeptId(initialDepartmentId && ids.includes(initialDepartmentId) ? initialDepartmentId : pref && ids.includes(pref) ? pref : product.departmentId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product, initialBrand, initialDepartmentId]);
+  const chosenDept = deptIds.length > 1 ? catalog.departments.find((d) => d.id === deptId) : undefined;
 
   const toggleVariant = (v: string) =>
     setSelected((prev) => (prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v]));
@@ -95,10 +108,11 @@ export function CatalogProductDialog({
       organic,
       emoji: product.emoji,
       imageUrl: product.imageUrl,
-      groupLabel,
-      groupEmoji: groupEmoji ?? undefined,
+      groupLabel: chosenDept?.name ?? groupLabel,
+      groupEmoji: (chosenDept ? chosenDept.emoji : groupEmoji) ?? undefined,
       note,
     });
+    if (chosenDept) setPreferred(product.id, chosenDept.id);
     onOpenChange(false);
   };
 
@@ -140,6 +154,20 @@ export function CatalogProductDialog({
             </Select>
           </div>
         </div>
+
+        {deptIds.length > 1 && (
+          <div className="space-y-2">
+            <Label>{t("palias.listUnder")}</Label>
+            <Select value={deptId} onValueChange={setDeptId}>
+              <SelectTrigger className="h-11 rounded-xl bg-card"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {deptIds.map((id) => (
+                  <SelectItem key={id} value={id}>{pathTo(catalog.departments, id).map((d) => d.name).join(" › ")}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         {product && brandsFor(product, locale).length > 0 && (
           <div className="space-y-2">

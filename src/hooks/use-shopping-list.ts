@@ -361,6 +361,7 @@ interface CloudListsApi {
   addItem: (name: string, quantity: string, category: ListItem["category"], user_?: string) => void;
   addCatalogItem: (input: AddCatalogItemInput, user_?: string) => void;
   toggleItem: (id: string) => void;
+  setItemGroup: (id: string, label: string, emoji?: string) => void;
   removeItem: (id: string) => void;
   clearChecked: () => void;
   saveAsTemplate: (id: string) => void;
@@ -782,6 +783,16 @@ function useCloudLists(
     [setItems, selfName, logActivity]
   );
 
+  const setItemGroup = useCallback(
+    (id: string, label: string, emoji?: string) => {
+      setItems((prev) => prev.map((it) => (it.id === id ? { ...it, groupLabel: label, groupEmoji: emoji ?? it.groupEmoji } : it)));
+      if (!id.startsWith("tmp-")) {
+        updateCloudItem({ data: { id, groupLabel: label, ...(emoji ? { groupEmoji: emoji } : {}) } }).catch(() => toast.error(t("cloud.error")));
+      }
+    },
+    [setItems]
+  );
+
   const removeItem = useCallback(
     (id: string) => {
       setItems((prev) => prev.filter((it) => it.id !== id));
@@ -855,6 +866,7 @@ function useCloudLists(
     addItem,
     addCatalogItem,
     toggleItem,
+    setItemGroup,
     removeItem,
     clearChecked,
   };
@@ -965,6 +977,13 @@ export function useShoppingList() {
       logActivity(user_, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
     },
     [local, logActivity]
+  );
+
+  const localSetItemGroup = useCallback(
+    (id: string, label: string, emoji?: string) => {
+      local.setItems((prev) => prev.map((it) => (it.id === id ? { ...it, groupLabel: label, groupEmoji: emoji ?? it.groupEmoji } : it)));
+    },
+    [local]
   );
 
   const localToggleItem = useCallback(
@@ -1080,6 +1099,7 @@ export function useShoppingList() {
       addItem: localAddItem,
       addCatalogItem: localAddCatalogItem,
       toggleItem: localToggleItem,
+      setItemGroup: localSetItemGroup,
       removeItem: localRemoveItem,
       clearChecked: localClearChecked,
       isFavorite,
@@ -1112,6 +1132,7 @@ export function useShoppingList() {
     addItem: cloud.addItem,
     addCatalogItem: cloud.addCatalogItem,
     toggleItem: cloud.toggleItem,
+    setItemGroup: cloud.setItemGroup,
     removeItem: cloud.removeItem,
     clearChecked: cloud.clearChecked,
     isFavorite,

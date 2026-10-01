@@ -47,6 +47,7 @@ export function useCatalog(): Catalog {
       cuisines: (data.cuisines ?? []).map((c) => ({ ...c, name: pickName(c.names, locale, c.baseName) })),
       recipeIngredients: data.recipeIngredients ?? [],
       departmentAliases: data.departmentAliases ?? [],
+      productAliases: data.productAliases ?? [],
       recipeGroups: (data.recipeGroups ?? []).map((g) => ({ ...g, name: pickName(g.names, locale, g.baseName) })),
     };
   }, [data, locale, custom, own]);
@@ -115,4 +116,23 @@ export function compareByName(a: { name: string }, b: { name: string }) {
 export function brandsFor(product: Pick<CatalogProduct, "brands">, locale: string = getLocale()): string[] {
   const market = locale.split("-")[1] ?? "";
   return (product.brands ?? []).filter((b) => !b.markets.length || b.markets.includes(market)).map((b) => b.name);
+}
+
+/** Produkte einer Kategorie inkl. Alias-Produkten (an ihrer Alias-Position). */
+export function productsIn(products: CatalogProduct[], aliases: { productId: string; departmentId: string; sortOrder: number }[], departmentId: string): CatalogProduct[] {
+  const own = productsOf(products, departmentId);
+  const byId = new Map(products.map((p) => [p.id, p]));
+  const extra: CatalogProduct[] = [];
+  for (const a of aliases) {
+    if (a.departmentId !== departmentId) continue;
+    const p = byId.get(a.productId);
+    if (p && p.departmentId !== departmentId) extra.push({ ...p, sortOrder: a.sortOrder });
+  }
+  if (!extra.length) return own;
+  return [...own, ...extra].sort((a, b) => a.sortOrder - b.sortOrder);
+}
+
+/** Alle Kategorien, in denen ein Produkt vorkommt (Original zuerst, dann Aliase). */
+export function departmentIdsOf(product: Pick<CatalogProduct, "id" | "departmentId">, aliases: { productId: string; departmentId: string }[]): string[] {
+  return [product.departmentId, ...aliases.filter((a) => a.productId === product.id && a.departmentId !== product.departmentId).map((a) => a.departmentId)];
 }

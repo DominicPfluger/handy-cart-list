@@ -14,7 +14,9 @@ import {
   matchesProductSearch,
   type CatalogDepartment,
   type CatalogProduct,
+  departmentIdsOf,
 } from "../lib/catalog-query";
+import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { formatQuantity } from "../lib/units";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
@@ -73,6 +75,7 @@ function FavoritesPage() {
   const navigate = useNavigate();
   const favOrder = useFavoriteOrder();
   const data = useCatalog();
+  const { preferred: preferredDept } = usePreferredDept();
   const { t } = useT();
   const { departments } = useDepartmentOrder(data.departments);
   const [query, setQuery] = useState("");
@@ -216,8 +219,23 @@ function FavoritesPage() {
     return leaf?.name ?? fallback ?? "";
   };
 
+  /** Listen-Kategorie eines Favoriten: gespeicherte Alias-Kategorie, sonst bevorzugte, sonst Original. */
+  const groupOfRow = (row: FavRow): CatalogDepartment | undefined => {
+    const p = row.product;
+    if (!p.departmentId) return undefined;
+    const ids = departmentIdsOf(p, data.productAliases ?? []);
+    const lbl = row.favorite.groupLabel;
+    if (lbl) for (const id of ids.slice(1)) {
+      const d = deptById.get(id);
+      if (d && (d.name === lbl || d.baseName === lbl || Object.values(d.names).includes(lbl))) return d;
+    }
+    const pref = preferredDept[p.id];
+    if (pref && ids.includes(pref) && deptById.get(pref)) return deptById.get(pref);
+    return deptById.get(p.departmentId);
+  };
+
   const quickAdd = (row: FavRow) => {
-    const group = row.product.departmentId ? deptById.get(row.product.departmentId) : undefined;
+    const group = groupOfRow(row);
     addCatalogItem({
       productId: row.favorite.productId,
       name: row.product.name,
@@ -261,7 +279,7 @@ function FavoritesPage() {
     ];
     if (!rows.length) return;
     const items: ListItem[] = rows.map((row, i) => {
-      const group = row.product.departmentId ? deptById.get(row.product.departmentId) : undefined;
+      const group = groupOfRow(row);
       return {
         id: `i${Date.now()}-${i}`,
         name: row.product.name,
@@ -285,7 +303,7 @@ function FavoritesPage() {
   };
 
   const renderRow = (row: FavRow, { showCategory = false, sec, ids }: { showCategory?: boolean; sec?: string; ids?: string[] } = {}) => {
-    const group = row.product.departmentId ? deptById.get(row.product.departmentId) : undefined;
+    const group = groupOfRow(row);
     const id = row.favorite.productId;
     const isTarget = drag?.target === id && drag.target !== drag.id;
     return (
@@ -476,7 +494,8 @@ function FavoritesPage() {
 
       <CatalogProductDialog
         product={selected ? selected.product : null}
-        groupLabel={selected ? (selected.product.departmentId ? deptById.get(selected.product.departmentId)?.name : undefined) ?? selected.favorite.groupLabel : undefined}
+        groupLabel={selected ? groupOfRow(selected)?.name ?? selected.favorite.groupLabel : undefined}
+        initialDepartmentId={selected ? groupOfRow(selected)?.id : undefined}
         groupEmoji={selected ? ((selected.product.departmentId ? deptById.get(selected.product.departmentId)?.emoji : undefined) ?? selected.favorite.groupEmoji) ?? undefined : undefined}
         onOpenChange={(open) => { if (!open) setSelected(null); }}
       />

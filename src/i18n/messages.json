@@ -512,7 +512,11 @@
     "adm.alsoUnderPick": "Choose parent category",
     "adm.aliases": "Alias categories",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Remove alias \"{name}\" here? The category itself stays."
+    "adm.aliasRemove": "Remove alias \"{name}\" here? The category itself stays.",
+    "palias.change": "Change category",
+    "palias.listUnder": "Put on list under…",
+    "palias.alsoIn": "Also show in…",
+    "palias.rows": "Alias products"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1027,7 +1031,11 @@
     "adm.alsoUnderPick": "Choose parent category",
     "adm.aliases": "Alias categories",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Remove alias \"{name}\" here? The category itself stays."
+    "adm.aliasRemove": "Remove alias \"{name}\" here? The category itself stays.",
+    "palias.change": "Change category",
+    "palias.listUnder": "Put on list under…",
+    "palias.alsoIn": "Also show in…",
+    "palias.rows": "Alias products"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1542,7 +1550,11 @@
     "adm.alsoUnderPick": "Choose parent category",
     "adm.aliases": "Alias categories",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Remove alias \"{name}\" here? The category itself stays."
+    "adm.aliasRemove": "Remove alias \"{name}\" here? The category itself stays.",
+    "palias.change": "Change category",
+    "palias.listUnder": "Put on list under…",
+    "palias.alsoIn": "Also show in…",
+    "palias.rows": "Alias products"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2057,7 +2069,11 @@
     "adm.alsoUnderPick": "Elegir categoría superior",
     "adm.aliases": "Categorías alias",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "¿Quitar aquí el alias «{name}»? La categoría se mantiene."
+    "adm.aliasRemove": "¿Quitar aquí el alias «{name}»? La categoría se mantiene.",
+    "palias.change": "Cambiar categoría",
+    "palias.listUnder": "En la lista bajo…",
+    "palias.alsoIn": "Mostrar también en…",
+    "palias.rows": "Productos alias"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2572,7 +2588,11 @@
     "adm.alsoUnderPick": "Elegir categoría superior",
     "adm.aliases": "Categorías alias",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "¿Quitar aquí el alias «{name}»? La categoría se mantiene."
+    "adm.aliasRemove": "¿Quitar aquí el alias «{name}»? La categoría se mantiene.",
+    "palias.change": "Cambiar categoría",
+    "palias.listUnder": "En la lista bajo…",
+    "palias.alsoIn": "Mostrar también en…",
+    "palias.rows": "Productos alias"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3087,7 +3107,11 @@
     "adm.alsoUnderPick": "Choisir la catégorie parente",
     "adm.aliases": "Catégories alias",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Retirer l’alias « {name} » ici ? La catégorie elle-même est conservée."
+    "adm.aliasRemove": "Retirer l’alias « {name} » ici ? La catégorie elle-même est conservée.",
+    "palias.change": "Changer de catégorie",
+    "palias.listUnder": "Sur la liste sous…",
+    "palias.alsoIn": "Afficher aussi dans…",
+    "palias.rows": "Produits alias"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3602,7 +3626,11 @@
     "adm.alsoUnderPick": "Choisir la catégorie parente",
     "adm.aliases": "Catégories alias",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Retirer l’alias « {name} » ici ? La catégorie elle-même est conservée."
+    "adm.aliasRemove": "Retirer l’alias « {name} » ici ? La catégorie elle-même est conservée.",
+    "palias.change": "Changer de catégorie",
+    "palias.listUnder": "Sur la liste sous…",
+    "palias.alsoIn": "Afficher aussi dans…",
+    "palias.rows": "Produits alias"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4117,7 +4145,11 @@
     "adm.alsoUnderPick": "Scegli categoria superiore",
     "adm.aliases": "Categorie alias",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Rimuovere qui l’alias «{name}»? La categoria resta."
+    "adm.aliasRemove": "Rimuovere qui l’alias «{name}»? La categoria resta.",
+    "palias.change": "Cambia categoria",
+    "palias.listUnder": "Nella lista sotto…",
+    "palias.alsoIn": "Mostra anche in…",
+    "palias.rows": "Prodotti alias"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4632,7 +4664,11 @@
     "adm.alsoUnderPick": "Scegli categoria superiore",
     "adm.aliases": "Categorie alias",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Rimuovere qui l’alias «{name}»? La categoria resta."
+    "adm.aliasRemove": "Rimuovere qui l’alias «{name}»? La categoria resta.",
+    "palias.change": "Cambia categoria",
+    "palias.listUnder": "Nella lista sotto…",
+    "palias.alsoIn": "Mostra anche in…",
+    "palias.rows": "Prodotti alias"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -5147,7 +5183,11 @@
     "adm.alsoUnderPick": "Escolher categoria superior",
     "adm.aliases": "Categorias alias",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Remover aqui o alias «{name}»? A categoria mantém-se."
+    "adm.aliasRemove": "Remover aqui o alias «{name}»? A categoria mantém-se.",
+    "palias.change": "Alterar categoria",
+    "palias.listUnder": "Na lista em…",
+    "palias.alsoIn": "Mostrar também em…",
+    "palias.rows": "Produtos alias"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5662,7 +5702,11 @@
     "adm.alsoUnderPick": "Escolher categoria superior",
     "adm.aliases": "Categorias alias",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Remover aqui o alias «{name}»? A categoria mantém-se."
+    "adm.aliasRemove": "Remover aqui o alias «{name}»? A categoria mantém-se.",
+    "palias.change": "Alterar categoria",
+    "palias.listUnder": "Na lista em…",
+    "palias.alsoIn": "Mostrar também em…",
+    "palias.rows": "Produtos alias"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -6177,7 +6221,11 @@
     "adm.alsoUnderPick": "Bovenliggende categorie kiezen",
     "adm.aliases": "Aliascategorieën",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Alias \"{name}\" hier verwijderen? De categorie zelf blijft bestaan."
+    "adm.aliasRemove": "Alias \"{name}\" hier verwijderen? De categorie zelf blijft bestaan.",
+    "palias.change": "Categorie wijzigen",
+    "palias.listUnder": "Op de lijst onder…",
+    "palias.alsoIn": "Ook tonen in…",
+    "palias.rows": "Alias-producten"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6692,7 +6740,11 @@
     "adm.alsoUnderPick": "Bovenliggende categorie kiezen",
     "adm.aliases": "Aliascategorieën",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Alias \"{name}\" hier verwijderen? De categorie zelf blijft bestaan."
+    "adm.aliasRemove": "Alias \"{name}\" hier verwijderen? De categorie zelf blijft bestaan.",
+    "palias.change": "Categorie wijzigen",
+    "palias.listUnder": "Op de lijst onder…",
+    "palias.alsoIn": "Ook tonen in…",
+    "palias.rows": "Alias-producten"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6761,7 +6813,11 @@
     "adm.alsoUnderPick": "Oberkategorie wählen",
     "adm.aliases": "Alias-Kategorien",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Alias „{name}\" hier entfernen? Die Kategorie selbst bleibt erhalten."
+    "adm.aliasRemove": "Alias „{name}\" hier entfernen? Die Kategorie selbst bleibt erhalten.",
+    "palias.change": "Kategorie ändern",
+    "palias.listUnder": "Auf der Liste unter…",
+    "palias.alsoIn": "Auch anzeigen in…",
+    "palias.rows": "Alias-Produkte"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6830,6 +6886,10 @@
     "adm.alsoUnderPick": "Oberkategorie wählen",
     "adm.aliases": "Alias-Kategorien",
     "adm.alias": "Alias",
-    "adm.aliasRemove": "Alias „{name}\" hier entfernen? Die Kategorie selbst bleibt erhalten."
+    "adm.aliasRemove": "Alias „{name}\" hier entfernen? Die Kategorie selbst bleibt erhalten.",
+    "palias.change": "Kategorie ändern",
+    "palias.listUnder": "Auf der Liste unter…",
+    "palias.alsoIn": "Auch anzeigen in…",
+    "palias.rows": "Alias-Produkte"
   }
 }
