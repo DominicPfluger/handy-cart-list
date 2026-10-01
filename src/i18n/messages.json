@@ -646,7 +646,13 @@
     "rs.tapToRename": "Tap to rename",
     "rs.deleteRecipe": "Remove recipe",
     "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move",
-    "rk.cat.sandwich": "Sandwiches"
+    "rk.cat.sandwich": "Sandwiches",
+    "rs.visibility": "Visibility",
+    "rs.private": "🔒 Private",
+    "rs.privateHint": "Only you",
+    "rs.public": "🌍 Public",
+    "rs.publicHint": "Shared on the web",
+    "rs.newFolder": "+ New folder"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1295,7 +1301,13 @@
     "rs.tapToRename": "Tap to rename",
     "rs.deleteRecipe": "Remove recipe",
     "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move",
-    "rk.cat.sandwich": "Sandwiches"
+    "rk.cat.sandwich": "Sandwiches",
+    "rs.visibility": "Visibility",
+    "rs.private": "🔒 Private",
+    "rs.privateHint": "Only you",
+    "rs.public": "🌍 Public",
+    "rs.publicHint": "Shared on the web",
+    "rs.newFolder": "+ New folder"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1944,7 +1956,13 @@
     "rs.tapToRename": "Tap to rename",
     "rs.deleteRecipe": "Remove recipe",
     "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move",
-    "rk.cat.sandwich": "Sandwiches"
+    "rk.cat.sandwich": "Sandwiches",
+    "rs.visibility": "Visibility",
+    "rs.private": "🔒 Private",
+    "rs.privateHint": "Only you",
+    "rs.public": "🌍 Public",
+    "rs.publicHint": "Shared on the web",
+    "rs.newFolder": "+ New folder"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2593,7 +2611,13 @@
     "rs.tapToRename": "Toca para renombrar",
     "rs.deleteRecipe": "Eliminar receta",
     "rs.boardHint": "Toca un nombre para renombrarlo · arrastra ⋮⋮ para ordenar o mover",
-    "rk.cat.sandwich": "Sándwiches"
+    "rk.cat.sandwich": "Sándwiches",
+    "rs.visibility": "Visibilidad",
+    "rs.private": "🔒 Privada",
+    "rs.privateHint": "Solo tú",
+    "rs.public": "🌍 Pública",
+    "rs.publicHint": "Compartida en la web",
+    "rs.newFolder": "+ Nueva carpeta"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3242,7 +3266,13 @@
     "rs.tapToRename": "Toca para renombrar",
     "rs.deleteRecipe": "Eliminar receta",
     "rs.boardHint": "Toca un nombre para renombrarlo · arrastra ⋮⋮ para ordenar o mover",
-    "rk.cat.sandwich": "Sándwiches"
+    "rk.cat.sandwich": "Sándwiches",
+    "rs.visibility": "Visibilidad",
+    "rs.private": "🔒 Privada",
+    "rs.privateHint": "Solo tú",
+    "rs.public": "🌍 Pública",
+    "rs.publicHint": "Compartida en la web",
+    "rs.newFolder": "+ Nueva carpeta"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3891,7 +3921,13 @@
     "rs.tapToRename": "Toucher pour renommer",
     "rs.deleteRecipe": "Supprimer la recette",
     "rs.boardHint": "Touchez un nom pour le renommer · glissez ⋮⋮ pour trier ou déplacer",
-    "rk.cat.sandwich": "Sandwichs"
+    "rk.cat.sandwich": "Sandwichs",
+    "rs.visibility": "Visibilité",
+    "rs.private": "🔒 Privée",
+    "rs.privateHint": "Toi seul·e",
+    "rs.public": "🌍 Publique",
+    "rs.publicHint": "Partagée sur le web",
+    "rs.newFolder": "+ Nouveau dossier"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4540,7 +4576,13 @@
     "rs.tapToRename": "Toucher pour renommer",
     "rs.deleteRecipe": "Supprimer la recette",
     "rs.boardHint": "Touchez un nom pour le renommer · glissez ⋮⋮ pour trier ou déplacer",
-    "rk.cat.sandwich": "Sandwichs"
+    "rk.cat.sandwich": "Sandwichs",
+    "rs.visibility": "Visibilité",
+    "rs.private": "🔒 Privée",
+    "rs.privateHint": "Toi seul·e",
+    "rs.public": "🌍 Publique",
+    "rs.publicHint": "Partagée sur le web",
+    "rs.newFolder": "+ Nouveau dossier"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -5189,7 +5231,13 @@
     "rs.tapToRename": "Tocca per rinominare",
     "rs.deleteRecipe": "Rimuovi ricetta",
     "rs.boardHint": "Tocca un nome per rinominarlo · trascina ⋮⋮ per ordinare o spostare",
-    "rk.cat.sandwich": "Panini"
+    "rk.cat.sandwich": "Panini",
+    "rs.visibility": "Visibilità",
+    "rs.private": "🔒 Privata",
+    "rs.privateHint": "Solo tu",
+    "rs.public": "🌍 Pubblica",
+    "rs.publicHint": "Condivisa sul web",
+    "rs.newFolder": "+ Nuova cartella"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -5838,7 +5886,13 @@
     "rs.tapToRename": "Tocca per rinominare",
     "rs.deleteRecipe": "Rimuovi ricetta",
     "rs.boardHint": "Tocca un nome per rinominarlo · trascina ⋮⋮ per ordinare o spostare",
-    "rk.cat.sandwich": "Panini"
+    "rk.cat.sandwich": "Panini",
+    "rs.visibility": "Visibilità",
+    "rs.private": "🔒 Privata",
+    "rs.privateHint": "Solo tu",
+    "rs.public": "🌍 Pubblica",
+    "rs.publicHint": "Condivisa sul web",
+    "rs.newFolder": "+ Nuova cartella"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6487,7 +6541,13 @@
     "rs.tapToRename": "Toque para renomear",
     "rs.deleteRecipe": "Remover receita",
     "rs.boardHint": "Toque num nome para renomear · arraste ⋮⋮ para ordenar ou mover",
-    "rk.cat.sandwich": "Sanduíches"
+    "rk.cat.sandwich": "Sanduíches",
+    "rs.visibility": "Visibilidade",
+    "rs.private": "🔒 Privada",
+    "rs.privateHint": "Só você",
+    "rs.public": "🌍 Pública",
+    "rs.publicHint": "Compartilhada na web",
+    "rs.newFolder": "+ Nova pasta"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -7136,7 +7196,13 @@
     "rs.tapToRename": "Toque para renomear",
     "rs.deleteRecipe": "Remover receita",
     "rs.boardHint": "Toque num nome para renomear · arraste ⋮⋮ para ordenar ou mover",
-    "rk.cat.sandwich": "Sanduíches"
+    "rk.cat.sandwich": "Sanduíches",
+    "rs.visibility": "Visibilidade",
+    "rs.private": "🔒 Privada",
+    "rs.privateHint": "Só você",
+    "rs.public": "🌍 Pública",
+    "rs.publicHint": "Compartilhada na web",
+    "rs.newFolder": "+ Nova pasta"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -7785,7 +7851,13 @@
     "rs.tapToRename": "Tik om te hernoemen",
     "rs.deleteRecipe": "Recept verwijderen",
     "rs.boardHint": "Tik op een naam om te hernoemen · sleep ⋮⋮ om te sorteren of verplaatsen",
-    "rk.cat.sandwich": "Broodjes"
+    "rk.cat.sandwich": "Broodjes",
+    "rs.visibility": "Zichtbaarheid",
+    "rs.private": "🔒 Privé",
+    "rs.privateHint": "Alleen jij",
+    "rs.public": "🌍 Openbaar",
+    "rs.publicHint": "Gedeeld op het web",
+    "rs.newFolder": "+ Nieuwe map"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -8434,7 +8506,13 @@
     "rs.tapToRename": "Tik om te hernoemen",
     "rs.deleteRecipe": "Recept verwijderen",
     "rs.boardHint": "Tik op een naam om te hernoemen · sleep ⋮⋮ om te sorteren of verplaatsen",
-    "rk.cat.sandwich": "Broodjes"
+    "rk.cat.sandwich": "Broodjes",
+    "rs.visibility": "Zichtbaarheid",
+    "rs.private": "🔒 Privé",
+    "rs.privateHint": "Alleen jij",
+    "rs.public": "🌍 Openbaar",
+    "rs.publicHint": "Gedeeld op het web",
+    "rs.newFolder": "+ Nieuwe map"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8635,7 +8713,13 @@
     "rs.tapToRename": "Tippen zum Umbenennen",
     "rs.deleteRecipe": "Rezept entfernen",
     "rs.boardHint": "Namen antippen zum Umbenennen · ⋮⋮ ziehen zum Sortieren oder Verschieben",
-    "rk.cat.sandwich": "Sandwiches"
+    "rk.cat.sandwich": "Sandwiches",
+    "rs.visibility": "Sichtbarkeit",
+    "rs.private": "🔒 Privat",
+    "rs.privateHint": "Nur für dich",
+    "rs.public": "🌍 Öffentlich",
+    "rs.publicHint": "Im Web geteilt",
+    "rs.newFolder": "+ Neuer Ordner"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8836,6 +8920,12 @@
     "rs.tapToRename": "Tippen zum Umbenennen",
     "rs.deleteRecipe": "Rezept entfernen",
     "rs.boardHint": "Namen antippen zum Umbenennen · ⋮⋮ ziehen zum Sortieren oder Verschieben",
-    "rk.cat.sandwich": "Sandwiches"
+    "rk.cat.sandwich": "Sandwiches",
+    "rs.visibility": "Sichtbarkeit",
+    "rs.private": "🔒 Privat",
+    "rs.privateHint": "Nur für dich",
+    "rs.public": "🌍 Öffentlich",
+    "rs.publicHint": "Im Web geteilt",
+    "rs.newFolder": "+ Neuer Ordner"
   }
 }
