@@ -644,6 +644,33 @@ export type Database = {
         }
         Relationships: []
       }
+      speech_texts: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          locale: string
+          text: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          locale: string
+          text: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          locale?: string
+          text?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string

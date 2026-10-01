@@ -2,16 +2,41 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useT } from "../i18n";
 import { useSpeakRate } from "../hooks/use-speak-rate";
+import { useSpeakLocale } from "../hooks/use-speak-locale";
+import { fillSpeech, resolveSpeechText, useSpeechTexts } from "../lib/speech-texts";
 
 export interface SpeakGroup {
   label: string;
   items: string[];
 }
 
-export function SpeakListButton({ title, groups }: { title: string; groups: SpeakGroup[] }) {
-  const { t, locale } = useT();
+/** Liest Sätze mit passender Stimme der gewünschten Sprache vor. */
+export function speakSentences(sentences: string[], locale: string, rate: number, onDone?: () => void) {
+  const synth = window.speechSynthesis;
+  const voices = synth.getVoices();
+  const voice = voices.find((v) => v.lang.replace("_", "-") === locale) ?? voices.find((v) => v.lang.startsWith(locale.slice(0, 2)));
+  synth.cancel();
+  const list = sentences.filter((s) => s.trim());
+  list.forEach((text, i) => {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = locale;
+    if (voice) u.voice = voice;
+    u.rate = rate;
+    if (i === list.length - 1 && onDone) {
+      u.onend = onDone;
+      u.onerror = onDone;
+    }
+    synth.speak(u);
+  });
+}
+
+/** groups: Funktion, die die Gruppen in der Vorlese-Sprache liefert. */
+export function SpeakListButton({ title, groups }: { title: string; groups: (speakLocale: string) => SpeakGroup[] }) {
+  const { t } = useT();
   const [speaking, setSpeaking] = useState(false);
   const [rate] = useSpeakRate();
+  const [speakLocale] = useSpeakLocale();
+  const { data: rows } = useSpeechTexts();
 
   useEffect(() => () => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) window.speechSynthesis.cancel();
@@ -22,30 +47,22 @@ export function SpeakListButton({ title, groups }: { title: string; groups: Spea
       toast.error(t("speak.unsupported"));
       return;
     }
-    const synth = window.speechSynthesis;
     if (speaking) {
-      synth.cancel();
+      window.speechSynthesis.cancel();
       setSpeaking(false);
       return;
     }
-    const count = groups.reduce((n, g) => n + g.items.length, 0);
+    const gs = groups(speakLocale).filter((g) => g.items.length);
+    const count = gs.reduce((n, g) => n + g.items.length, 0);
+    const tx = (k: "intro" | "empty" | "group" | "outro") => resolveSpeechText(rows, speakLocale, k);
     const sentences = count === 0
-      ? [`${title}. ${t("speak.empty")}`]
-      : [t("speak.intro", { name: title, count }), ...groups.filter((g) => g.items.length).map((g) => `${g.label}: ${g.items.join(", ")}.`)];
-    const voices = synth.getVoices();
-    const voice = voices.find((v) => v.lang.replace("_", "-") === locale) ?? voices.find((v) => v.lang.startsWith(locale.slice(0, 2)));
-    synth.cancel();
-    sentences.forEach((text, i) => {
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = locale;
-      if (voice) u.voice = voice;
-      u.rate = rate;
-      if (i === sentences.length - 1) {
-        u.onend = () => setSpeaking(false);
-        u.onerror = () => setSpeaking(false);
-      }
-      synth.speak(u);
-    });
+      ? [fillSpeech(tx("empty"), { name: title, count: 0 })]
+      : [
+          fillSpeech(tx("intro"), { name: title, count }),
+          ...gs.map((g) => fillSpeech(tx("group"), { kategorie: g.label, artikel: g.items.join(", ") })),
+          fillSpeech(tx("outro"), { name: title, count }),
+        ];
+    speakSentences(sentences, speakLocale, rate, () => setSpeaking(false));
     setSpeaking(true);
   };
 

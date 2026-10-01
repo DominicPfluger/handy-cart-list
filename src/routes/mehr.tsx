@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
+import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useNotificationSettings } from "../hooks/use-notification-settings";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
@@ -256,6 +257,7 @@ function MorePage() {
         </Link>
         <NotificationSettingsRow />
         <SpeakRateRow />
+        <SpeakLocaleRow />
       </section>
 
       {hiddenProducts.length > 0 && (
@@ -311,6 +313,30 @@ function MorePage() {
       <p className="pb-2 text-center text-xs text-muted-foreground">
         {t("more.tagline")}
       </p>
+    </div>
+  );
+}
+
+function SpeakLocaleRow() {
+  const { t } = useT();
+  const [loc, setLoc] = useSpeakLocale();
+  return (
+    <div className="flex w-full items-center gap-3 px-4 py-3.5">
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+        <span className="text-lg" aria-hidden="true">🗣️</span>
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold text-foreground">{t("speak.locale")}</p>
+        <p className="truncate text-xs text-muted-foreground">{t("speak.localeSub")}</p>
+        <select
+          value={loc}
+          onChange={(e) => setLoc(e.target.value as Locale)}
+          aria-label={t("speak.locale")}
+          className="mt-2 w-full rounded-lg border border-border bg-background px-2 py-1.5 text-sm text-foreground"
+        >
+          {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
+        </select>
+      </div>
     </div>
   );
 }

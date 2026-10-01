@@ -23,6 +23,7 @@ import { Route as ScannerRouteImport } from './routes/scanner'
 import { Route as VerlaufRouteImport } from './routes/verlauf'
 import { Route as VorratRouteImport } from './routes/vorrat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedVorleseTexteRouteImport } from './routes/_authenticated/vorlese-texte'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -93,6 +94,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedVorleseTexteRoute =
+  AuthenticatedVorleseTexteRouteImport.update({
+    id: '/vorlese-texte',
+    path: '/vorlese-texte',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -108,6 +115,7 @@ export interface FileRoutesByFullPath {
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -123,6 +131,7 @@ export interface FileRoutesByTo {
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
+  '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -140,6 +149,7 @@ export interface FileRoutesById {
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/verlauf'
     | '/vorrat'
     | '/admin'
+    | '/vorlese-texte'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -172,6 +183,7 @@ export interface FileRouteTypes {
     | '/verlauf'
     | '/vorrat'
     | '/admin'
+    | '/vorlese-texte'
   id:
     | '__root__'
     | '/'
@@ -188,6 +200,7 @@ export interface FileRouteTypes {
     | '/verlauf'
     | '/vorrat'
     | '/_authenticated/admin'
+    | '/_authenticated/vorlese-texte'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -306,15 +319,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/vorlese-texte': {
+      id: '/_authenticated/vorlese-texte'
+      path: '/vorlese-texte'
+      fullPath: '/vorlese-texte'
+      preLoaderRoute: typeof AuthenticatedVorleseTexteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedVorleseTexteRoute: typeof AuthenticatedVorleseTexteRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedVorleseTexteRoute: AuthenticatedVorleseTexteRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
