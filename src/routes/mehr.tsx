@@ -49,6 +49,7 @@ export const Route = createFileRoute("/mehr")({
 
 
 function MorePage() {
+  const allLocs = useAllLocales();
   const { members, signedIn, activeList, inviteLinkFor } = useShoppingList();
   const { t, locale } = useT();
   const navigate = useNavigate();
@@ -308,6 +309,7 @@ function MorePage() {
 }
 
 function SpeakLocaleRow() {
+  const allLocs = useAllLocales();
   const { t } = useT();
   const [, setLoc, loc] = useSpeakLocale();
   return (

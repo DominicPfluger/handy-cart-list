@@ -39,6 +39,7 @@ type RowRecipe = {
 };
 
 export function LandingPage({ onEnterApp }: { onEnterApp: () => void }) {
+  const allLocs = useAllLocales();
   const { t } = useT();
   const locale = useLocale();
   const [installEvt, setInstallEvt] = useState<{ prompt: () => Promise<unknown> } | null>(null);
