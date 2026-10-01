@@ -162,35 +162,7 @@ function ListPage() {
   const progress = total > 0 ? (doneCount / total) * 100 : 0;
 
   // ---- Smarte Vorschläge (aus dem Einkaufsverlauf) & Einkauf abschliessen ----
-  const { addPurchase, stats } = usePurchaseHistory();
-  const inList = useMemo(
-    () => new Set(items.map((i) => i.productId ?? i.name.toLowerCase())),
-    [items],
-  );
-  const suggestions = useMemo(
-    () => stats.top.filter((s) => !inList.has(s.productId ?? s.name.toLowerCase())).slice(0, 6),
-    [stats.top, inList],
-  );
-  const addSuggestion = (s: { name: string; productId?: string | undefined; emoji?: string | undefined }) => {
-    const product = s.productId ? productById.get(s.productId) : undefined;
-    if (product) {
-      const group = product.departmentId ? deptById.get(product.departmentId) : undefined;
-      addCatalogItem({
-        productId: product.id,
-        name: product.name,
-        quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
-        unit: product.defaultUnit,
-        organic: false,
-        emoji: product.emoji,
-        imageUrl: product.imageUrl,
-        groupLabel: group?.name,
-        groupEmoji: group?.emoji ?? undefined,
-      });
-    } else {
-      addItem(s.name, "1", "sonstiges");
-    }
-    toast.success(t("common.addedToList", { name: s.name }));
-  };
+  const { addPurchase } = usePurchaseHistory();
   const finishShopping = () => {
     const bought = items.filter((i) => i.checked);
     if (bought.length === 0) return;
@@ -345,26 +317,6 @@ function ListPage() {
           );
         })}
       </div>
-
-      {/* Smarte Vorschläge aus dem Einkaufsverlauf */}
-      {suggestions.length > 0 && (
-        <section>
-          <h2 className="mb-2 text-sm font-semibold text-foreground">✨ {t("sugg.title")}</h2>
-          <div className="flex flex-wrap gap-2">
-            {suggestions.map((s) => (
-              <button
-                key={s.productId ?? s.name}
-                onClick={() => addSuggestion(s)}
-                className="flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary-soft/40 px-3 py-1.5 text-xs font-medium text-foreground transition active:scale-95"
-              >
-                <ProductEmoji emoji={s.emoji} />
-                <span>{s.name}</span>
-                <PlusIcon className="h-3 w-3 text-primary" />
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* Einkauf abschliessen: archiviert abgehakte Artikel im Verlauf */}
       {doneCount > 0 && (
