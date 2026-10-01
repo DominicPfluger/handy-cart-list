@@ -12,7 +12,7 @@ import {
   HistoryIcon,
 } from "../components/icons";
 import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18n";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
@@ -390,16 +390,23 @@ function NotificationToggle({
   sub,
   checked,
   disabled,
+  icon,
   onChange,
 }: {
   label: string;
   sub?: string;
   checked: boolean;
   disabled?: boolean;
+  icon?: ReactNode;
   onChange: (next: boolean) => void;
 }) {
   return (
     <label className={`flex w-full items-center gap-3 px-4 py-3 ${disabled ? "opacity-50" : "cursor-pointer"}`}>
+      {icon ? (
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50">
+          <span className="text-lg" aria-hidden="true">{icon}</span>
+        </div>
+      ) : null}
       <div className="min-w-0 flex-1">
         <p className="text-sm font-medium text-foreground">{label}</p>
         {sub ? <p className="text-xs text-muted-foreground">{sub}</p> : null}
@@ -482,5 +489,5 @@ function NotificationSettingsRow() {
 function AllMarketsRow() {
   const { t } = useT();
   const on = useAllMarkets();
-  return <NotificationToggle label={t("more.allMarkets")} sub={t("more.allMarketsSub")} checked={on} onChange={setAllMarkets} />;
+  return <NotificationToggle icon="🌍" label={t("more.allMarkets")} sub={t("more.allMarketsSub")} checked={on} onChange={setAllMarkets} />;
 }
