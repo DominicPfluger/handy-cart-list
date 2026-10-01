@@ -561,8 +561,8 @@ function DepartmentsPage() {
                 onContextMenu={(e) => e.preventDefault()}
                 onDragStart={(e) => e.preventDefault()}
                 onClick={() => { if (!suppressClick.current) openDepartment(department.id, aliasIds.has(department.id) ? currentId ?? undefined : undefined); }}
-                style={{ WebkitTouchCallout: "none" }}
-                className={`relative w-full select-none ${drag?.id === department.id ? "opacity-40" : ""} ${dropKind === "into" ? "ring-2 ring-primary" : ""} ${dropKind === "before" ? "!border-l-4 !border-l-primary" : ""} ${dropKind === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
+                style={{ WebkitTouchCallout: "none", ...(tileStrong ? { "--tile-strong": tileStrong } : {}) } as React.CSSProperties}
+                className={`group/tile relative w-full select-none ${drag?.id === department.id ? "opacity-40" : ""} ${dropKind === "into" ? "ring-2 ring-primary" : ""} ${dropKind === "before" ? "!border-l-4 !border-l-primary" : ""} ${dropKind === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
               >
                 <span
                   className={`grid aspect-[4/3] w-full place-items-center overflow-hidden ${tileColor ? "" : "bg-primary-soft/25"}`}
@@ -570,7 +570,7 @@ function DepartmentsPage() {
                 >
                   <DepartmentThumb department={department} />
                 </span>
-                <span className="flex min-h-14 w-full items-center justify-center gap-2 px-3 py-2" style={tileStrong ? { backgroundColor: tileStrong } : undefined}>
+                <span className="flex min-h-14 w-full items-center justify-center gap-2 bg-background px-3 py-2 transition-colors group-hover/tile:bg-[var(--tile-strong)]">
                   <span className="min-w-0 text-center whitespace-normal text-[13px] font-bold leading-4 text-foreground">{department.name}</span>
                 </span>
               </Button>
