@@ -402,6 +402,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
 
   return (
     <div className="space-y-5">
+    {categoryBar}
     <section className="space-y-4">
       <div className="flex items-start justify-between gap-2">
         <button onClick={() => setTplId(null)} className="shrink-0 pt-1.5 text-xs font-semibold text-primary">← {t("rk.back")}</button>
