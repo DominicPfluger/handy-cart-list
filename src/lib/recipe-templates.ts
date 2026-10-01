@@ -69,7 +69,7 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "topping", label: "Topping", min: 0, max: 3, ingredients: ["Rosinen", "Gojibeeren", "Honig", "Walnüsse", "Mandeln"] },
   ] },
   { id: "smoothie", emoji: "🥤", color: "oklch(0.92 0.07 150)", steps: [
-    { key: "liquid", label: "Flüssigkeit", min: 1, max: 1, ingredients: ["Milch", "Hafermilch", "Mandelmilch", "Orangensaft", "Joghurt"] },
+    { key: "liquid", label: "Flüssigkeit", min: 1, max: 3, ingredients: ["Milch", "Hafermilch", "Mandelmilch", "Orangensaft", "Joghurt"] },
     { key: "fruit", label: "Früchte", min: 1, max: 3, ingredients: ["Bananen", "Mango", "Ananas", "Erdbeeren", "Heidelbeeren", "Himbeeren", "Kiwis"] },
     { key: "green", label: "Grünes", min: 0, max: 2, ingredients: ["Babyspinat", "Spinat", "Minze", "Avocado"] },
     { key: "extra", label: "Extra", min: 0, max: 2, ingredients: ["Honig", "Datteln", "Haferflocken"] },
