@@ -244,6 +244,36 @@ function FavoritesPage() {
     });
   };
 
+  /** Alle Favoriten (in angezeigter Reihenfolge) in eine neue Einkaufsliste übertragen. */
+  const transferAllToNewList = () => {
+    const rows: FavRow[] = [
+      ...sections.flatMap((s) => s.entries.map((e) => e.row)),
+      ...[...looseFavorites].sort((a, b) => (favOrder[a.favorite.productId] ?? 1e9) - (favOrder[b.favorite.productId] ?? 1e9)),
+    ];
+    if (!rows.length) return;
+    const items: ListItem[] = rows.map((row, i) => {
+      const group = row.product.departmentId ? deptById.get(row.product.departmentId) : undefined;
+      return {
+        id: `i${Date.now()}-${i}`,
+        name: row.product.name,
+        quantity: formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit),
+        category: "sonstiges",
+        checked: false,
+        addedBy: selfName,
+        addedAt: Date.now(),
+        unit: row.favorite.defaultUnit,
+        emoji: row.favorite.emoji ?? undefined,
+        imageUrl: row.product.imageUrl ?? row.favorite.imageUrl,
+        groupLabel: group?.name ?? row.favorite.groupLabel,
+        groupEmoji: (group?.emoji ?? row.favorite.groupEmoji) ?? undefined,
+        productId: row.favorite.productId,
+      };
+    });
+    createListFromItems(t("fav.newListName"), items);
+    toast.success(t("fav.toListDone", { count: items.length }));
+    navigate({ to: "/" });
+  };
+
   const renderRow = (row: FavRow, { showCategory = false, sec, ids }: { showCategory?: boolean; sec?: string; ids?: string[] } = {}) => {
     const group = row.product.departmentId ? deptById.get(row.product.departmentId) : undefined;
     const id = row.favorite.productId;
