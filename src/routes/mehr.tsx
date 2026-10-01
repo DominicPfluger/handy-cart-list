@@ -358,6 +358,8 @@ function MorePage() {
           <Link to="/datenschutz" className="text-primary underline-offset-2 hover:underline">{t("more.privacy")}</Link>
           <span className="text-muted-foreground" aria-hidden="true">·</span>
           <Link to="/feedback" className="text-primary underline-offset-2 hover:underline">{t("more.feedback")}</Link>
+          <span className="text-muted-foreground" aria-hidden="true">·</span>
+          <Link to="/start" className="text-primary underline-offset-2 hover:underline">{t("land.siteLink")}</Link>
         </nav>
       </footer>
     </div>
