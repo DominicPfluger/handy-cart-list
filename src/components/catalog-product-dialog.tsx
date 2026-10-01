@@ -5,6 +5,7 @@ import { getUnits, formatQuantity, type UnitId } from "../lib/units";
 import { useT, pickName } from "../i18n";
 
 import { useShoppingList } from "../hooks/use-shopping-list";
+import { getFavoriteQuantity } from "../hooks/use-favorite-quantity";
 import { usePantry } from "../hooks/use-pantry";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
@@ -64,8 +65,9 @@ export function CatalogProductDialog({
 
   useEffect(() => {
     if (!product) return;
-    setQuantity(String(product.defaultQuantity));
-    setUnit(product.defaultUnit as UnitId);
+    const favQty = getFavoriteQuantity(product.id);
+    setQuantity(String(favQty?.quantity ?? product.defaultQuantity));
+    setUnit((favQty?.unit ?? product.defaultUnit) as UnitId);
     setOrganic(false);
     setNote("");
     setSelected([]);

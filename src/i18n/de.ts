@@ -681,6 +681,10 @@ export const de = {
   "pd.brands": "Marken",
   "pd.variants": "Varianten",
   "pd.addToList": "Zur Liste hinzufügen",
+  "pd.favQuantity": "Meine Lieblingsmenge",
+  "pd.saveFavQuantity": "Speichern",
+  "pd.resetFavQuantity": "Zurücksetzen",
+  "pd.favQuantitySaved": "Lieblingsmenge gespeichert",
 } as const;
 
 export type MessageKey = keyof typeof de;

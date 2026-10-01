@@ -399,6 +399,15 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
         </div>
       </div>
 
+      {user && chosen.length > 0 && (
+        <button
+          onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setSaveOpen(true); }}
+          className="w-full rounded-2xl bg-primary px-4 py-4 text-lg font-bold text-primary-foreground shadow-md transition active:scale-[0.98]"
+        >
+          {savedMsg ? `✓ ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
+        </button>
+      )}
+
       <div className="flex items-center gap-3">
         <span className="grid h-12 w-12 place-items-center rounded-2xl text-3xl" style={{ background: tpl.color }}>{tpl.emoji}</span>
         <h2 className="text-lg font-bold text-foreground">{catName}</h2>
