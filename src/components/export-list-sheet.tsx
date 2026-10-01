@@ -55,7 +55,7 @@ export function ExportListButton({ title, groups }: { title: string; groups: Exp
     const rows = [head.map(q).join(";")];
     for (const g of filtered) for (const i of g.items) {
       const { name, brand } = splitBrand(i.name);
-      rows.push([name, i.quantity, i.unit, brand, i.organic ? t("export.yes") : "", g.label, i.note].map(q).join(";"));
+      rows.push([name, (i.quantity.match(/^[\d.,]+/)?.[0] ?? i.quantity), i.unit, brand, i.organic ? t("export.yes") : "", g.label, i.note].map(q).join(";"));
     }
     download(new Blob(["\uFEFF" + rows.join("\r\n")], { type: "text/csv;charset=utf-8" }), `${fileBase(title)}.csv`);
     setOpen(false);
