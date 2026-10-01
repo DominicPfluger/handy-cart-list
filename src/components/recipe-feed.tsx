@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useT } from "../i18n";
@@ -86,6 +87,7 @@ function Row({ title, emoji, bg, order, ids, empty }: { title: string; emoji: st
           ))}
         </div>
       )}
+      <ShowMoreToggle total={list.length} all={all} onToggle={() => setAll((v) => !v)} />
     </section>
   );
 }
