@@ -363,7 +363,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           <p className="text-sm font-semibold text-foreground">
             {s.label}{" "}
             <span className="text-xs font-normal text-muted-foreground">
-              ({s.max === 1 ? t("rk.pickOne") : t("rk.pick", { min: s.min, max: s.max })})
+              ({s.max >= 99 ? t("rk.pickAny") : s.max === 1 ? t("rk.pickOne") : t("rk.pick", { min: s.min, max: s.max })})
             </span>
           </p>
           {s.products.length === 0 ? (
