@@ -28,7 +28,9 @@ export function missingVoice(locale: string): boolean {
 /** Kürzel, die die deutsche Sprachausgabe ausschreiben soll. */
 function expandAbbreviations(text: string, locale: string): string {
   if (!locale.toLowerCase().startsWith("de")) return text;
-  return text.replace(/\bStk\.?/g, "Stück");
+  return text
+    .replace(/\bStk\.?/g, "Stück")
+    .replace(/\bPkg\.?/g, "Packung");
 }
 
 export function speakSentences(sentences: string[], locale: string, rate: number, onDone?: () => void) {
