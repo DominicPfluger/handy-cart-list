@@ -3,12 +3,14 @@ import { aiJson } from "./translate.server";
 const GATEWAY = "https://ai.gateway.lovable.dev/v1";
 
 /** Erzeugt ein Produktbild (PNG-Bytes) über das Lovable-KI-Bildmodell. */
-export async function generateProductImage(name: string, emoji: string | null): Promise<Uint8Array> {
+export async function generateProductImage(name: string, emoji: string | null, hint?: string): Promise<Uint8Array> {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("KI-Schlüssel fehlt");
+  const extra = hint?.trim() ? ` The image must show: ${hint.trim()}.` : "";
   const prompt =
     `Clean product photo of "${name}" (${emoji ?? "grocery item"}) for a shopping list app. ` +
-    "Single item, centered, on a plain very light neutral background, soft daylight, no text, no brand logos, no packaging labels with words, square composition.";
+    "Single item, centered, on a plain very light neutral background, soft daylight, no text, no brand logos, no packaging labels with words, square composition." +
+    extra;
   const res = await fetch(`${GATEWAY}/images/generations`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}`, "X-Lovable-AIG-SDK": "fetch" },

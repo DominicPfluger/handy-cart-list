@@ -104,7 +104,7 @@ export const generateProductImages = createServerFn({ method: "POST" })
 export const generateImageFor = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
-    z.object({ id: z.string().uuid(), kind: z.enum(["product", "department"]).default("product") }).parse(d),
+    z.object({ id: z.string().uuid(), kind: z.enum(["product", "department"]).default("product"), hint: z.string().max(300).optional() }).parse(d),
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
@@ -113,7 +113,7 @@ export const generateImageFor = createServerFn({ method: "POST" })
     const table = data.kind === "department" ? "departments" : "products";
     const { data: p, error } = await context.supabase.from(table).select("id, name, emoji").eq("id", data.id).single();
     if (error || !p) throw new Error(data.kind === "department" ? "Kategorie nicht gefunden" : "Produkt nicht gefunden");
-    const bytes = await generateProductImage(p.name, p.emoji);
+    const bytes = await generateProductImage(p.name, p.emoji, data.hint);
     const path = `${table}/${p.id}.png`;
     const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/png", upsert: true });
     if (up.error) throw new Error(up.error.message);

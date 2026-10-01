@@ -599,6 +599,7 @@ export const de = {
   "tile.pickImage": "Bild auswählen",
   "tile.pickEmpty": "Keine Bilder gefunden",
   "tile.aiImage": "KI-Bild",
+  "tile.aiHint": "Stichworte fürs KI-Bild (z. B. rot, in Scheiben)",
   "tile.imgDone": "Bild erzeugt",
   "tile.save": "Speichern",
   "tile.delete": "Löschen",

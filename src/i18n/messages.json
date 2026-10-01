@@ -901,7 +901,8 @@
     "loc.continue": "Continue translating",
     "loc.deleteConfirm": "Delete language “{name}” with all translations?",
     "tile.pickImage": "Choose image",
-    "tile.pickEmpty": "No images found"
+    "tile.pickEmpty": "No images found",
+    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1805,7 +1806,8 @@
     "loc.continue": "Continue translating",
     "loc.deleteConfirm": "Delete language “{name}” with all translations?",
     "tile.pickImage": "Choose image",
-    "tile.pickEmpty": "No images found"
+    "tile.pickEmpty": "No images found",
+    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2709,7 +2711,8 @@
     "loc.continue": "Continue translating",
     "loc.deleteConfirm": "Delete language “{name}” with all translations?",
     "tile.pickImage": "Choose image",
-    "tile.pickEmpty": "No images found"
+    "tile.pickEmpty": "No images found",
+    "tile.aiHint": "Keywords for the AI image (e.g. red, sliced)"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3613,7 +3616,8 @@
     "loc.continue": "Seguir traduciendo",
     "loc.deleteConfirm": "¿Eliminar el idioma «{name}» con todas sus traducciones?",
     "tile.pickImage": "Elegir imagen",
-    "tile.pickEmpty": "Sin imágenes"
+    "tile.pickEmpty": "Sin imágenes",
+    "tile.aiHint": "Palabras clave para la imagen IA (p. ej. rojo, en rodajas)"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4517,7 +4521,8 @@
     "loc.continue": "Seguir traduciendo",
     "loc.deleteConfirm": "¿Eliminar el idioma «{name}» con todas sus traducciones?",
     "tile.pickImage": "Elegir imagen",
-    "tile.pickEmpty": "Sin imágenes"
+    "tile.pickEmpty": "Sin imágenes",
+    "tile.aiHint": "Palabras clave para la imagen IA (p. ej. rojo, en rodajas)"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5421,7 +5426,8 @@
     "loc.continue": "Continuer la traduction",
     "loc.deleteConfirm": "Supprimer la langue « {name} » et toutes ses traductions ?",
     "tile.pickImage": "Choisir une image",
-    "tile.pickEmpty": "Aucune image"
+    "tile.pickEmpty": "Aucune image",
+    "tile.aiHint": "Mots-clés pour l'image IA (p. ex. rouge, en tranches)"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6325,7 +6331,8 @@
     "loc.continue": "Continuer la traduction",
     "loc.deleteConfirm": "Supprimer la langue « {name} » et toutes ses traductions ?",
     "tile.pickImage": "Choisir une image",
-    "tile.pickEmpty": "Aucune image"
+    "tile.pickEmpty": "Aucune image",
+    "tile.aiHint": "Mots-clés pour l'image IA (p. ex. rouge, en tranches)"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7229,7 +7236,8 @@
     "loc.continue": "Continua a tradurre",
     "loc.deleteConfirm": "Eliminare la lingua «{name}» con tutte le traduzioni?",
     "tile.pickImage": "Scegli immagine",
-    "tile.pickEmpty": "Nessuna immagine"
+    "tile.pickEmpty": "Nessuna immagine",
+    "tile.aiHint": "Parole chiave per l'immagine IA (es. rosso, a fette)"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8133,7 +8141,8 @@
     "loc.continue": "Continua a tradurre",
     "loc.deleteConfirm": "Eliminare la lingua «{name}» con tutte le traduzioni?",
     "tile.pickImage": "Scegli immagine",
-    "tile.pickEmpty": "Nessuna immagine"
+    "tile.pickEmpty": "Nessuna immagine",
+    "tile.aiHint": "Parole chiave per l'immagine IA (es. rosso, a fette)"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9037,7 +9046,8 @@
     "loc.continue": "Continuar a traduzir",
     "loc.deleteConfirm": "Eliminar o idioma «{name}» com todas as traduções?",
     "tile.pickImage": "Escolher imagem",
-    "tile.pickEmpty": "Nenhuma imagem"
+    "tile.pickEmpty": "Nenhuma imagem",
+    "tile.aiHint": "Palavras-chave para a imagem IA (ex.: vermelho, às fatias)"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -9941,7 +9951,8 @@
     "loc.continue": "Continuar a traduzir",
     "loc.deleteConfirm": "Eliminar o idioma «{name}» com todas as traduções?",
     "tile.pickImage": "Escolher imagem",
-    "tile.pickEmpty": "Nenhuma imagem"
+    "tile.pickEmpty": "Nenhuma imagem",
+    "tile.aiHint": "Palavras-chave para a imagem IA (ex.: vermelho, em fatias)"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -10845,7 +10856,8 @@
     "loc.continue": "Verder vertalen",
     "loc.deleteConfirm": "Taal „{name}” met alle vertalingen verwijderen?",
     "tile.pickImage": "Afbeelding kiezen",
-    "tile.pickEmpty": "Geen afbeeldingen"
+    "tile.pickEmpty": "Geen afbeeldingen",
+    "tile.aiHint": "Trefwoorden voor de AI-afbeelding (bv. rood, in plakjes)"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -11749,7 +11761,8 @@
     "loc.continue": "Verder vertalen",
     "loc.deleteConfirm": "Taal „{name}” met alle vertalingen verwijderen?",
     "tile.pickImage": "Afbeelding kiezen",
-    "tile.pickEmpty": "Geen afbeeldingen"
+    "tile.pickEmpty": "Geen afbeeldingen",
+    "tile.aiHint": "Trefwoorden voor de AI-afbeelding (bv. rood, in plakjes)"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12115,7 +12128,8 @@
     "loc.continue": "Weiter übersetzen",
     "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?",
     "tile.pickImage": "Bild auswählen",
-    "tile.pickEmpty": "Keine Bilder gefunden"
+    "tile.pickEmpty": "Keine Bilder gefunden",
+    "tile.aiHint": "Stichworte fürs KI-Bild (z. B. rot, in Scheiben)"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12481,6 +12495,7 @@
     "loc.continue": "Weiter übersetzen",
     "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?",
     "tile.pickImage": "Bild auswählen",
-    "tile.pickEmpty": "Keine Bilder gefunden"
+    "tile.pickEmpty": "Keine Bilder gefunden",
+    "tile.aiHint": "Stichworte fürs KI-Bild (z. B. rot, in Scheiben)"
   }
 }
