@@ -1,0 +1,10 @@
+REVOKE EXECUTE ON FUNCTION public.has_role(uuid, public.app_role) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.can_access_list(uuid, uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.is_list_member(uuid, uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.is_list_owner(uuid, uuid) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.join_list_by_invite(text) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.has_role(uuid, public.app_role) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.can_access_list(uuid, uuid) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.is_list_member(uuid, uuid) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.is_list_owner(uuid, uuid) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.join_list_by_invite(text) TO authenticated, service_role;
