@@ -36,6 +36,7 @@ import { Route as RezepteIndexRouteImport } from './routes/rezepte.index'
 import { Route as RezepteGeneratorRouteImport } from './routes/rezepte.generator'
 import { Route as RezepteInspirationenRouteImport } from './routes/rezepte.inspirationen'
 import { Route as RezepteListenRouteImport } from './routes/rezepte.listen'
+import { Route as ApiPublicCronImportSyncRouteImport } from './routes/api/public/cron/import-sync'
 import { Route as ApiPublicWebhooksRecipeEventsRouteImport } from './routes/api/public/webhooks/recipe-events'
 
 const IndexRoute = IndexRouteImport.update({
@@ -174,6 +175,11 @@ const RezepteListenRoute = RezepteListenRouteImport.update({
   path: '/listen',
   getParentRoute: () => RezepteRoute,
 } as any)
+const ApiPublicCronImportSyncRoute = ApiPublicCronImportSyncRouteImport.update({
+  id: '/api/public/cron/import-sync',
+  path: '/api/public/cron/import-sync',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicWebhooksRecipeEventsRoute =
   ApiPublicWebhooksRecipeEventsRouteImport.update({
     id: '/api/public/webhooks/recipe-events',
@@ -208,6 +214,7 @@ export interface FileRoutesByFullPath {
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
   '/rezepte/listen': typeof RezepteListenRoute
   '/rezepte/': typeof RezepteIndexRoute
+  '/api/public/cron/import-sync': typeof ApiPublicCronImportSyncRoute
   '/api/public/webhooks/recipe-events': typeof ApiPublicWebhooksRecipeEventsRoute
 }
 export interface FileRoutesByTo {
@@ -236,6 +243,7 @@ export interface FileRoutesByTo {
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
   '/rezepte/listen': typeof RezepteListenRoute
   '/rezepte': typeof RezepteIndexRoute
+  '/api/public/cron/import-sync': typeof ApiPublicCronImportSyncRoute
   '/api/public/webhooks/recipe-events': typeof ApiPublicWebhooksRecipeEventsRoute
 }
 export interface FileRoutesById {
@@ -267,6 +275,7 @@ export interface FileRoutesById {
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
   '/rezepte/listen': typeof RezepteListenRoute
   '/rezepte/': typeof RezepteIndexRoute
+  '/api/public/cron/import-sync': typeof ApiPublicCronImportSyncRoute
   '/api/public/webhooks/recipe-events': typeof ApiPublicWebhooksRecipeEventsRoute
 }
 export interface FileRouteTypes {
@@ -298,6 +307,7 @@ export interface FileRouteTypes {
     | '/rezepte/inspirationen'
     | '/rezepte/listen'
     | '/rezepte/'
+    | '/api/public/cron/import-sync'
     | '/api/public/webhooks/recipe-events'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -326,6 +336,7 @@ export interface FileRouteTypes {
     | '/rezepte/inspirationen'
     | '/rezepte/listen'
     | '/rezepte'
+    | '/api/public/cron/import-sync'
     | '/api/public/webhooks/recipe-events'
   id:
     | '__root__'
@@ -356,6 +367,7 @@ export interface FileRouteTypes {
     | '/rezepte/inspirationen'
     | '/rezepte/listen'
     | '/rezepte/'
+    | '/api/public/cron/import-sync'
     | '/api/public/webhooks/recipe-events'
   fileRoutesById: FileRoutesById
 }
@@ -380,6 +392,7 @@ export interface RootRouteChildren {
   VorratRoute: typeof VorratRoute
   ProduktIdRoute: typeof ProduktIdRoute
   RezeptSlugRoute: typeof RezeptSlugRoute
+  ApiPublicCronImportSyncRoute: typeof ApiPublicCronImportSyncRoute
   ApiPublicWebhooksRecipeEventsRoute: typeof ApiPublicWebhooksRecipeEventsRoute
 }
 
@@ -574,6 +587,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RezepteListenRouteImport
       parentRoute: typeof RezepteRoute
     }
+    '/api/public/cron/import-sync': {
+      id: '/api/public/cron/import-sync'
+      path: '/api/public/cron/import-sync'
+      fullPath: '/api/public/cron/import-sync'
+      preLoaderRoute: typeof ApiPublicCronImportSyncRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/webhooks/recipe-events': {
       id: '/api/public/webhooks/recipe-events'
       path: '/api/public/webhooks/recipe-events'
@@ -637,6 +657,7 @@ const rootRouteChildren: RootRouteChildren = {
   VorratRoute: VorratRoute,
   ProduktIdRoute: ProduktIdRoute,
   RezeptSlugRoute: RezeptSlugRoute,
+  ApiPublicCronImportSyncRoute: ApiPublicCronImportSyncRoute,
   ApiPublicWebhooksRecipeEventsRoute: ApiPublicWebhooksRecipeEventsRoute,
 }
 export const routeTree = rootRouteImport
