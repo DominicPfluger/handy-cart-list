@@ -5,6 +5,7 @@ import { useT, useLocale, setLocale, LOCALES, type Locale } from "../../i18n";
 import type { MessageKey } from "../../i18n/de";
 import { RECIPE_TEMPLATES } from "../../lib/recipe-templates";
 import { fetchFeed, fetchCommunity } from "../../lib/recipes-api";
+import { APP_STORE_URL, GOOGLE_PLAY_URL } from "../../lib/app-version";
 import { RecipePhoto } from "../recipe-photo";
 import appIcon from "@/assets/app-icon.png.asset.json";
 import mockupList from "@/assets/landing/mockup-list.png";
@@ -130,7 +131,21 @@ export function LandingPage({ onEnterApp }: { onEnterApp: () => void }) {
           <span className="grid mx-auto h-12 w-12 place-items-center rounded-2xl bg-primary-soft/40 text-2xl" aria-hidden="true">📲</span>
           <h2 className="mt-3 text-xl font-bold text-foreground">{t("land.installTitle")}</h2>
           <p className="mt-2 text-sm text-muted-foreground">{t("land.installDesc")}</p>
-          <ol className="mx-auto mt-4 max-w-md space-y-2 text-left text-sm text-muted-foreground">
+          <div className="mt-5 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <StoreButton
+              href={APP_STORE_URL}
+              label={t("land.storeAppStore")}
+              soon={t("land.storeSoon")}
+              icon={<AppleIcon />}
+            />
+            <StoreButton
+              href={GOOGLE_PLAY_URL}
+              label={t("land.storeGooglePlay")}
+              soon={t("land.storeSoon")}
+              icon={<PlayIcon />}
+            />
+          </div>
+          <ol className="mx-auto mt-5 max-w-md space-y-2 text-left text-sm text-muted-foreground">
             <li className="flex gap-2"><span aria-hidden="true"></span><span>{t("land.installIos")}</span></li>
             <li className="flex gap-2"><span aria-hidden="true"></span><span>{t("land.installAndroid")}</span></li>
           </ol>
