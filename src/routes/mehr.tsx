@@ -46,30 +46,45 @@ function MorePage() {
   const { members, signedIn, activeList, inviteLinkFor } = useShoppingList();
   const { t, locale } = useT();
   const navigate = useNavigate();
-  const invite = async () => {
+  const [inviteOpen, setInviteOpen] = useState(false);
+  const inviteLink = signedIn ? inviteLinkFor(activeList.id) : null;
+  const invite = () => {
     if (!signedIn) {
       navigate({ to: "/auth" });
       return;
     }
-    const link = inviteLinkFor(activeList.id);
-    if (!link) {
+    if (!inviteLink) {
       toast.error(t("join.needSignIn"));
       return;
     }
-    const text = `${t("lm.inviteHint")}\n${link}`;
-    if (typeof navigator !== "undefined" && navigator.share) {
-      try {
-        await navigator.share({ title: activeList.name, text, url: link });
-        return;
-      } catch (e) {
-        if ((e as Error).name === "AbortError") return;
-      }
-    }
+    setInviteOpen(true);
+  };
+  const inviteText = inviteLink ? `„${activeList.name}“ – ${t("lm.inviteHint")}\n${inviteLink}` : "";
+  const enc = encodeURIComponent(inviteText);
+  const channels = [
+    { label: "WhatsApp", emoji: "💬", href: `https://wa.me/?text=${enc}` },
+    { label: "Telegram", emoji: "✈️", href: `https://t.me/share/url?url=${encodeURIComponent(inviteLink ?? "")}&text=${encodeURIComponent(`„${activeList.name}“ – ${t("lm.inviteHint")}`)}` },
+    { label: "Threema", emoji: "🔒", href: `threema://compose?text=${enc}` },
+    { label: t("inv.sms"), emoji: "📱", href: `sms:?&body=${enc}` },
+    { label: t("inv.email"), emoji: "✉️", href: `mailto:?subject=${encodeURIComponent(`Shoppi: ${activeList.name}`)}&body=${enc}` },
+  ];
+  const copyInvite = async () => {
+    if (!inviteLink) return;
     try {
-      await navigator.clipboard.writeText(link);
+      await navigator.clipboard.writeText(inviteLink);
       toast.success(t("lm.inviteCopied"));
     } catch {
-      window.prompt(t("lm.inviteCopy"), link);
+      window.prompt(t("lm.inviteCopy"), inviteLink);
+    }
+    setInviteOpen(false);
+  };
+  const nativeShare = async () => {
+    if (!inviteLink) return;
+    try {
+      await navigator.share({ title: activeList.name, text: inviteText, url: inviteLink });
+      setInviteOpen(false);
+    } catch {
+      /* abgebrochen */
     }
   };
   const [choice, setChoice] = useState<string>("auto");
@@ -122,6 +137,35 @@ function MorePage() {
           <ShareIcon className="h-4 w-4" /> {t("more.invitePeople")}
         </button>
       </section>
+
+      {inviteOpen && (
+        <div className="fixed inset-0 z-[70] flex items-end justify-center bg-foreground/40" onClick={() => setInviteOpen(false)}>
+          <div className="w-full max-w-[440px] space-y-4 rounded-t-2xl bg-card p-5 pb-8" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-base font-semibold text-foreground">{t("inv.title")}</h3>
+            <div className="grid grid-cols-4 gap-3">
+              {channels.map((c) => (
+                <a key={c.label} href={c.href} target="_blank" rel="noopener noreferrer" onClick={() => setInviteOpen(false)} className="flex flex-col items-center gap-1.5">
+                  <span className="grid h-14 w-14 place-items-center rounded-full bg-primary-soft/50 text-2xl">{c.emoji}</span>
+                  <span className="text-xs text-foreground">{c.label}</span>
+                </a>
+              ))}
+              <button type="button" onClick={copyInvite} className="flex flex-col items-center gap-1.5">
+                <span className="grid h-14 w-14 place-items-center rounded-full bg-primary-soft/50 text-2xl">🔗</span>
+                <span className="text-xs text-foreground">{t("lm.inviteCopy")}</span>
+              </button>
+              {typeof navigator !== "undefined" && "share" in navigator && (
+                <button type="button" onClick={nativeShare} className="flex flex-col items-center gap-1.5">
+                  <span className="grid h-14 w-14 place-items-center rounded-full bg-primary-soft/50 text-primary"><ShareIcon className="h-6 w-6" /></span>
+                  <span className="text-xs text-foreground">{t("inv.more")}</span>
+                </button>
+              )}
+            </div>
+            <button type="button" onClick={() => setInviteOpen(false)} className="w-full rounded-xl border border-border py-3 text-sm font-medium text-foreground">
+              {t("common.cancel")}
+            </button>
+          </div>
+        </div>
+      )}
 
 
       {/* Sprache & Admin */}
