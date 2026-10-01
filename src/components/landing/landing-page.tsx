@@ -298,7 +298,10 @@ function StoreButton({ href, label, soon, icon }: { href: string; label: string;
   const inner = (
     <>
       <span aria-hidden="true">{icon}</span>
-      <span>{href ? label : `${label} · ${soon}`}</span>
+      <span className="flex flex-col items-center leading-tight">
+        <span>{label}</span>
+        {!href && <span className="text-xs font-normal text-muted-foreground">{soon}</span>}
+      </span>
     </>
   );
   if (href) {
