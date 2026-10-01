@@ -53,19 +53,14 @@ function Row({
   list,
   active,
   canDelete,
-  signedIn,
-  inviteLink,
   onSelect,
   onRename,
   onDelete,
   onSaveAsTemplate,
-  onShareInvite,
 }: {
   list: ShoppingList;
   active: boolean;
   canDelete: boolean;
-  signedIn: boolean;
-  inviteLink: string | null;
   onSelect: () => void;
   onRename: (name: string) => void;
   onDelete: () => void;
