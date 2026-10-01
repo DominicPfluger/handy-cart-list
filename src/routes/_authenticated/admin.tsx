@@ -567,6 +567,12 @@ function AdminPage() {
   );
 }
 
+/** Zeigt den Bereich erst, wenn der Katalog geladen ist; vorher einen Ladetext. */
+function LoadingGate({ d, children }: { d: AdminData | undefined; children: React.ReactNode }) {
+  if (!d) return <p className="pt-2 text-sm text-muted-foreground">{T("adm.loadingCatalog")}</p>;
+  return <>{children}</>;
+}
+
 function Stat({ label, value }: { label: string; value: number | undefined }) {
   return (
     <div className="rounded-xl border border-border bg-card p-2">
