@@ -386,6 +386,7 @@ export const de = {
   "rk.save": "Rezept speichern",
   "rk.saveTo": "In Liste speichern",
   "rk.recipeTitle": "Titel für dein Rezept",
+  "rk.recipeDesc": "Beschreibung hinzufügen (z. B. Zubereitung, Tipps …)",
   "rk.newCollection": "Neue Liste",
   "rs.visibility": "Sichtbarkeit",
   "rs.private": "🔒 Privat",

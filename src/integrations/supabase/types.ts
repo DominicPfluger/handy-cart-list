@@ -848,6 +848,7 @@ export type Database = {
         Row: {
           author_name: string | null
           created_at: string
+          description: string | null
           id: string
           image_path: string | null
           is_public: boolean
@@ -863,6 +864,7 @@ export type Database = {
         Insert: {
           author_name?: string | null
           created_at?: string
+          description?: string | null
           id?: string
           image_path?: string | null
           is_public?: boolean
@@ -878,6 +880,7 @@ export type Database = {
         Update: {
           author_name?: string | null
           created_at?: string
+          description?: string | null
           id?: string
           image_path?: string | null
           is_public?: boolean
@@ -1050,6 +1053,7 @@ export type Database = {
           author_name: string
           avg_rating: number
           created_at: string
+          description: string
           id: string
           image_path: string
           items: Json

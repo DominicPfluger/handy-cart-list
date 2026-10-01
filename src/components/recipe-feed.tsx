@@ -28,6 +28,7 @@ function Card({ r, badge }: { r: FeedRecipe; badge: string }) {
     >
       <RecipePhoto path={r.image_path} emoji={tpl?.emoji} color={tpl?.color} className="h-32 w-full rounded-xl" />
       <span className="line-clamp-2 text-sm font-semibold text-foreground">{r.title}</span>
+      {r.description ? <span className="line-clamp-2 text-xs text-muted-foreground">{r.description}</span> : null}
       <span className="mt-auto text-xs text-muted-foreground">{badge}</span>
     </Link>
   );
