@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useEffect, useState, useMemo } from "react";
 import { SplashScreen } from "../components/splash-screen";
+import { LandingPage } from "@/components/landing/landing-page";
+import { shouldShowLanding, markLandingDone } from "@/lib/landing";
 import {
   useShoppingList,
   getCategory,
