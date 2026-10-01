@@ -56,7 +56,7 @@ function RecipesPage() {
           </span>
         </Link>
 
-        <div className="mt-3 grid grid-cols-2 gap-2.5">
+        <div className="mt-6 grid grid-cols-2 gap-2.5">
           {RECIPE_TEMPLATES.map((x) => (
             <Link
               key={x.id}
