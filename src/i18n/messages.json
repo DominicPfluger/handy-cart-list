@@ -585,7 +585,10 @@
     "adm.imageError": "Could not save image",
     "adm.imageHint": "Automatically cropped to 512 × 512 px and saved as PNG.",
     "adm.diets": "Not suitable for:",
-    "adm.dietsHint": "The product is hidden when this filter is active."
+    "adm.dietsHint": "The product is hidden when this filter is active.",
+    "adm.variants": "Variants",
+    "adm.variantsHint": "Variants are offered as options when adding to the shopping list.",
+    "adm.variantPlaceholder": "New variant…"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1173,7 +1176,10 @@
     "adm.imageError": "Could not save image",
     "adm.imageHint": "Automatically cropped to 512 × 512 px and saved as PNG.",
     "adm.diets": "Not suitable for:",
-    "adm.dietsHint": "The product is hidden when this filter is active."
+    "adm.dietsHint": "The product is hidden when this filter is active.",
+    "adm.variants": "Variants",
+    "adm.variantsHint": "Variants are offered as options when adding to the shopping list.",
+    "adm.variantPlaceholder": "New variant…"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1761,7 +1767,10 @@
     "adm.imageError": "Could not save image",
     "adm.imageHint": "Automatically cropped to 512 × 512 px and saved as PNG.",
     "adm.diets": "Not suitable for:",
-    "adm.dietsHint": "The product is hidden when this filter is active."
+    "adm.dietsHint": "The product is hidden when this filter is active.",
+    "adm.variants": "Variants",
+    "adm.variantsHint": "Variants are offered as options when adding to the shopping list.",
+    "adm.variantPlaceholder": "New variant…"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2349,7 +2358,10 @@
     "adm.imageError": "No se pudo guardar la imagen",
     "adm.imageHint": "Se recorta automáticamente a 512 × 512 px y se guarda como PNG.",
     "adm.diets": "No apto para:",
-    "adm.dietsHint": "El producto se oculta cuando este filtro está activo."
+    "adm.dietsHint": "El producto se oculta cuando este filtro está activo.",
+    "adm.variants": "Variantes",
+    "adm.variantsHint": "Las variantes se ofrecen como opción al añadir a la lista de la compra.",
+    "adm.variantPlaceholder": "Nueva variante…"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2937,7 +2949,10 @@
     "adm.imageError": "No se pudo guardar la imagen",
     "adm.imageHint": "Se recorta automáticamente a 512 × 512 px y se guarda como PNG.",
     "adm.diets": "No apto para:",
-    "adm.dietsHint": "El producto se oculta cuando este filtro está activo."
+    "adm.dietsHint": "El producto se oculta cuando este filtro está activo.",
+    "adm.variants": "Variantes",
+    "adm.variantsHint": "Las variantes se ofrecen como opción al añadir a la lista de compras.",
+    "adm.variantPlaceholder": "Nueva variante…"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3525,7 +3540,10 @@
     "adm.imageError": "Impossible d'enregistrer l'image",
     "adm.imageHint": "Recadrée automatiquement en 512 × 512 px et enregistrée en PNG.",
     "adm.diets": "Ne convient pas à :",
-    "adm.dietsHint": "Le produit est masqué lorsque ce filtre est actif."
+    "adm.dietsHint": "Le produit est masqué lorsque ce filtre est actif.",
+    "adm.variants": "Variantes",
+    "adm.variantsHint": "Les variantes sont proposées lors de l'ajout à la liste de courses.",
+    "adm.variantPlaceholder": "Nouvelle variante…"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4113,7 +4131,10 @@
     "adm.imageError": "Impossible d'enregistrer l'image",
     "adm.imageHint": "Recadrée automatiquement en 512 × 512 px et enregistrée en PNG.",
     "adm.diets": "Ne convient pas à :",
-    "adm.dietsHint": "Le produit est masqué lorsque ce filtre est actif."
+    "adm.dietsHint": "Le produit est masqué lorsque ce filtre est actif.",
+    "adm.variants": "Variantes",
+    "adm.variantsHint": "Les variantes sont proposées lors de l'ajout à la liste d'épicerie.",
+    "adm.variantPlaceholder": "Nouvelle variante…"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4701,7 +4722,10 @@
     "adm.imageError": "Impossibile salvare l'immagine",
     "adm.imageHint": "Ritagliata automaticamente a 512 × 512 px e salvata come PNG.",
     "adm.diets": "Non adatto a:",
-    "adm.dietsHint": "Il prodotto viene nascosto quando questo filtro è attivo."
+    "adm.dietsHint": "Il prodotto viene nascosto quando questo filtro è attivo.",
+    "adm.variants": "Varianti",
+    "adm.variantsHint": "Le varianti vengono proposte quando si aggiunge alla lista della spesa.",
+    "adm.variantPlaceholder": "Nuova variante…"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -5289,7 +5313,10 @@
     "adm.imageError": "Impossibile salvare l'immagine",
     "adm.imageHint": "Ritagliata automaticamente a 512 × 512 px e salvata come PNG.",
     "adm.diets": "Non adatto a:",
-    "adm.dietsHint": "Il prodotto viene nascosto quando questo filtro è attivo."
+    "adm.dietsHint": "Il prodotto viene nascosto quando questo filtro è attivo.",
+    "adm.variants": "Varianti",
+    "adm.variantsHint": "Le varianti vengono proposte quando si aggiunge alla lista della spesa.",
+    "adm.variantPlaceholder": "Nuova variante…"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -5877,7 +5904,10 @@
     "adm.imageError": "Não foi possível guardar a imagem",
     "adm.imageHint": "Recortada automaticamente para 512 × 512 px e guardada como PNG.",
     "adm.diets": "Não adequado para:",
-    "adm.dietsHint": "O produto fica oculto quando este filtro está ativo."
+    "adm.dietsHint": "O produto fica oculto quando este filtro está ativo.",
+    "adm.variants": "Variantes",
+    "adm.variantsHint": "As variantes são propostas ao adicionar à lista de compras.",
+    "adm.variantPlaceholder": "Nova variante…"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -6465,7 +6495,10 @@
     "adm.imageError": "Não foi possível salvar a imagem",
     "adm.imageHint": "Recortada automaticamente para 512 × 512 px e salva como PNG.",
     "adm.diets": "Não adequado para:",
-    "adm.dietsHint": "O produto fica oculto quando este filtro está ativo."
+    "adm.dietsHint": "O produto fica oculto quando este filtro está ativo.",
+    "adm.variants": "Variantes",
+    "adm.variantsHint": "As variantes são propostas ao adicionar à lista de compras.",
+    "adm.variantPlaceholder": "Nova variante…"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -7053,7 +7086,10 @@
     "adm.imageError": "Afbeelding kon niet worden opgeslagen",
     "adm.imageHint": "Wordt automatisch bijgesneden naar 512 × 512 px en opgeslagen als PNG.",
     "adm.diets": "Niet geschikt voor:",
-    "adm.dietsHint": "Het product wordt verborgen wanneer dit filter actief is."
+    "adm.dietsHint": "Het product wordt verborgen wanneer dit filter actief is.",
+    "adm.variants": "Varianten",
+    "adm.variantsHint": "Varianten worden aangeboden bij het toevoegen aan de boodschappenlijst.",
+    "adm.variantPlaceholder": "Nieuwe variant…"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -7641,7 +7677,10 @@
     "adm.imageError": "Afbeelding kon niet worden opgeslagen",
     "adm.imageHint": "Wordt automatisch bijgesneden naar 512 × 512 px en opgeslagen als PNG.",
     "adm.diets": "Niet geschikt voor:",
-    "adm.dietsHint": "Het product wordt verborgen wanneer dit filter actief is."
+    "adm.dietsHint": "Het product wordt verborgen wanneer dit filter actief is.",
+    "adm.variants": "Varianten",
+    "adm.variantsHint": "Varianten worden aangeboden bij het toevoegen aan de boodschappenlijst.",
+    "adm.variantPlaceholder": "Nieuwe variant…"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -7784,7 +7823,10 @@
     "adm.imageError": "Bild konnte nicht gespeichert werden",
     "adm.imageHint": "Wird automatisch auf 512 × 512 px zugeschnitten und als PNG gespeichert.",
     "adm.diets": "Nicht geeignet für:",
-    "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet."
+    "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet.",
+    "adm.variants": "Varianten",
+    "adm.variantsHint": "Varianten erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
+    "adm.variantPlaceholder": "Neue Variante…"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -7927,6 +7969,9 @@
     "adm.imageError": "Bild konnte nicht gespeichert werden",
     "adm.imageHint": "Wird automatisch auf 512 × 512 px zugeschnitten und als PNG gespeichert.",
     "adm.diets": "Nicht geeignet für:",
-    "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet."
+    "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet.",
+    "adm.variants": "Varianten",
+    "adm.variantsHint": "Varianten erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
+    "adm.variantPlaceholder": "Neue Variante…"
   }
 }
