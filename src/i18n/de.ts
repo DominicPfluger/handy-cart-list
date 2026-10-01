@@ -3,7 +3,8 @@ export const de = {
   "nav.departments": "Abteilungen",
   "nav.favorites": "Favoriten",
   "nav.lists": "Listen",
-  "nav.recipes": "Rezept-Kreator",
+  "nav.recipes": "Rezepte",
+  "recipes.title": "Rezept-Generator",
   "nav.more": "Mehr",
 
   "common.organic": "Bio",
