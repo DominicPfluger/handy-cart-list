@@ -56,7 +56,7 @@ const PUSH_TEXTS: Record<string, PushTexts> = {
 };
 
 function textsFor(locale: string): PushTexts {
-  return PUSH_TEXTS[locale.slice(0, 2)] ?? PUSH_TEXTS.de!;
+  return PUSH_TEXTS[locale.slice(0, 2)] ?? PUSH_TEXTS["de"]!;
 }
 
 function adminClient() {
