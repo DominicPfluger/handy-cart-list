@@ -23,10 +23,11 @@ export const Route = createFileRoute("/rezepte/")({
 type RecipeEntry = { id: string; to: "/rezepte/generator" | "/rezepte/inspirationen" | "/rezepte/listen"; icon: string; bg: string; titleKey: MessageKey; descKey: MessageKey };
 
 const RECIPE_ENTRIES: RecipeEntry[] = [
-  { id: "rk-generator", to: "/rezepte/generator", icon: "🧑‍🍳", bg: "#E4F3E6", titleKey: "rec.entryGenTitle", descKey: "rec.entryGenDesc" },
   { id: "rk-lists", to: "/rezepte/listen", icon: "📁", bg: "#E3EEF9", titleKey: "rec.entryListsTitle", descKey: "rec.entryListsDesc" },
   { id: "rk-inspiration", to: "/rezepte/inspirationen", icon: "✨", bg: "#FFF3D6", titleKey: "rec.entryInspTitle", descKey: "rec.entryInspDesc" },
 ];
+
+const GENERATOR_ENTRY: RecipeEntry = { id: "rk-generator", to: "/rezepte/generator", icon: "🧑‍🍳", bg: "#E4F3E6", titleKey: "rec.entryGenTitle", descKey: "rec.entryGenDesc" };
 
 function RecipesPage() {
   const { t } = useT();
