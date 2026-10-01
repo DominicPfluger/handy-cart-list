@@ -193,6 +193,33 @@ export const rankProducts = createServerFn({ method: "POST" })
     };
   });
 
+/** Rezept-Zutaten eines Schritts nach Beliebtheit oder Relevanz ordnen (KI, nur Admins). */
+export const sortRecipeIngredients = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({
+    recipe: z.string().max(80),
+    step: z.string().max(80),
+    criterion: z.enum(["popularity", "relevance"]),
+    names: z.array(z.string().max(120)).max(800),
+  }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { aiJson } = await import("./translate.server");
+    const crit = data.criterion === "popularity"
+      ? "nach Beliebtheit: Zutaten, die für dieses Gericht am häufigsten verwendet werden, zuerst; seltene zuletzt"
+      : "nach Relevanz: Zutaten, die am besten zu diesem Schritt und dieser Rezept-Kategorie passen, zuerst; unpassende zuletzt";
+    const r = await aiJson<{ names: string[] }>(
+      `Sortiere die Zutaten für den Schritt „${data.step}" im Rezept „${data.recipe}" ${crit}. ` +
+        "Gib exakt dieselben Namen zurück (keine hinzufügen, keine entfernen, nicht umschreiben).",
+      JSON.stringify({ zutaten: data.names }),
+      "recipe_ranking",
+      { type: "object", additionalProperties: false, required: ["names"],
+        properties: { names: { type: "array", items: { type: "string" } } } },
+    );
+    const out = (r.names ?? []).filter((n, k, a) => data.names.includes(n) && a.indexOf(n) === k);
+    return { names: [...out, ...data.names.filter((n) => !out.includes(n))] };
+  });
+
 /** Länderküche anlegen/ändern (nur Admins); Name wird in alle Sprachen übersetzt (manuelle bleiben). */
 export const saveCuisine = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
