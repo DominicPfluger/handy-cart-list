@@ -36,7 +36,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 type Kind = "department" | "product" | "heading";
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; excluded_diets: string[] };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; excluded_diets: string[]; variants: string[] };
 type Head = { id: string; name: string; department_id: string; before_product_id: string };
 type Tr = { entity_id: string; locale: string; name: string; is_manual: boolean };
 type Sel = { kind: Kind; id: string } | null;
@@ -54,7 +54,7 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
 async function loadAll() {
   const [depts, prods, heads, trs] = await Promise.all([
     paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path").order("sort_order").order("id").range(a, b)),
-    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets").order("sort_order").order("id").range(a, b) as never),
+    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets, variants").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
     paged<Tr>((a, b) => supabase.from("catalog_translations").select("entity_id, locale, name, is_manual").order("id").range(a, b)),
   ]);
@@ -417,6 +417,7 @@ function AdminPage() {
               if (patch.qty !== undefined) upd['default_quantity'] = patch.qty;
               if (patch.unit) upd['default_unit'] = patch.unit;
               if (patch.diets) upd['excluded_diets'] = patch.diets;
+              if (patch.variants) upd['variants'] = patch.variants;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
             }
           })}
@@ -622,7 +623,7 @@ function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) 
   );
 }
 
-type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[] };
+type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[]; variants?: string[] };
 
 function Editor(p: {
   sel: NonNullable<Sel>; name: string; data: Awaited<ReturnType<typeof loadAll>>; products: Prod[]; busy: boolean;
