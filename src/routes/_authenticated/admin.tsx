@@ -36,7 +36,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 type Kind = "department" | "product" | "heading";
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; excluded_diets: string[] };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; excluded_diets: string[]; variants: string[] };
 type Head = { id: string; name: string; department_id: string; before_product_id: string };
 type Tr = { entity_id: string; locale: string; name: string; is_manual: boolean };
 type Sel = { kind: Kind; id: string } | null;
@@ -54,7 +54,7 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
 async function loadAll() {
   const [depts, prods, heads, trs] = await Promise.all([
     paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path").order("sort_order").order("id").range(a, b)),
-    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets").order("sort_order").order("id").range(a, b) as never),
+    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets, variants").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
     paged<Tr>((a, b) => supabase.from("catalog_translations").select("entity_id, locale, name, is_manual").order("id").range(a, b)),
   ]);
@@ -417,6 +417,7 @@ function AdminPage() {
               if (patch.qty !== undefined) upd['default_quantity'] = patch.qty;
               if (patch.unit) upd['default_unit'] = patch.unit;
               if (patch.diets) upd['excluded_diets'] = patch.diets;
+              if (patch.variants) upd['variants'] = patch.variants;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
             }
           })}
@@ -622,7 +623,10 @@ function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) 
   );
 }
 
-type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[] };
+type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[]; variants?: string[] };
+
+/** Häufige Varianten als Schnellauswahl im Produkt-Dialog. */
+const COMMON_VARIANTS = ["Bio", "Vollkorn", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
 function Editor(p: {
   sel: NonNullable<Sel>; name: string; data: Awaited<ReturnType<typeof loadAll>>; products: Prod[]; busy: boolean;
@@ -642,6 +646,13 @@ function Editor(p: {
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [before, setBefore] = useState(head?.before_product_id ?? "");
   const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
+  const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
+  const [variantInput, setVariantInput] = useState("");
+  const addVariant = (v: string) => {
+    const val = v.trim();
+    if (val && !variants.some((x) => x.toLowerCase() === val.toLowerCase())) setVariants((x) => [...x, val]);
+    setVariantInput("");
+  };
   const tr = data.tr.get(sel.id) ?? {};
   const title = T(`adm.edit.${sel.kind}` as MessageKey);
 
@@ -691,6 +702,50 @@ function Editor(p: {
             <p className="text-[11px] text-muted-foreground">{T("adm.dietsHint")}</p>
           </div>
         )}
+        {prod && (
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
+            {variants.length > 0 && (
+              <div className="divide-y divide-border rounded-lg border border-border">
+                {variants.map((v) => (
+                  <div key={v} className="flex items-center justify-between gap-2 px-3 py-1.5 text-sm">
+                    <span className="truncate">{v}</span>
+                    <button
+                      type="button"
+                      aria-label={`${v} entfernen`}
+                      onClick={() => setVariants((x) => x.filter((y) => y !== v))}
+                      className="shrink-0 text-muted-foreground hover:text-destructive"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex gap-2">
+              <Input
+                value={variantInput}
+                placeholder={T("adm.variantPlaceholder")}
+                onChange={(e) => setVariantInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addVariant(variantInput); } }}
+              />
+              <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {COMMON_VARIANTS.filter((v) => !variants.some((x) => x.toLowerCase() === v.toLowerCase())).map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => addVariant(v)}
+                  className="rounded-full border border-border bg-background px-2.5 py-1 text-xs text-muted-foreground hover:border-primary hover:text-foreground"
+                >
+                  + {v}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
+          </div>
+        )}
         {head && (
           <select value={before} onChange={(e) => setBefore(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
             {p.products.map((x) => <option key={x.id} value={x.id}>{T("adm.above", { name: x.name })}</option>)}
@@ -700,7 +755,7 @@ function Editor(p: {
           <Button className="flex-1" disabled={p.busy || !name.trim()} onClick={() => p.onSave({
             name: name.trim(), emoji, before,
             ...(sel.kind !== "heading" ? { parent } : {}),
-            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, diets } : {}),
+            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, diets, variants } : {}),
           })}>{T("adm.save")}</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
