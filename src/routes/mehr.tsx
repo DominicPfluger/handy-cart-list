@@ -170,42 +170,6 @@ function MorePage() {
       )}
 
 
-      {/* Sprache & Admin */}
-      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
-        <label className="flex w-full items-center gap-3 px-4 py-3.5">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
-            <GearIcon className="h-5 w-5" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-foreground">{t("lang.title")}</p>
-            <select
-              value={choice}
-              onChange={(e) => setLocale(e.target.value === "auto" ? null : (e.target.value as Locale))}
-              className="mt-1 w-full rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary"
-            >
-              <option value="auto">{t("lang.auto")}</option>
-              {LOCALES.map((l) => (
-                <option key={l.id} value={l.id}>{l.flag} {l.label}</option>
-              ))}
-            </select>
-          </div>
-        </label>
-        <SpeakLocaleRow />
-        <SpeakRateRow />
-        {isAdmin && (
-          <Link to="/admin" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
-            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
-              <span className="text-lg" aria-hidden="true">✎</span>
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-foreground">{t("more.admin")}</p>
-              <p className="truncate text-xs text-muted-foreground">{t("more.adminSub")}</p>
-            </div>
-            <span className="text-muted-foreground">›</span>
-          </Link>
-        )}
-      </section>
-
       {/* Settings menu */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <Link to="/angebote" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
