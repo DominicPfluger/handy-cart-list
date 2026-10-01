@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Fragment, useState, useMemo } from "react";
+import { SplashScreen } from "../components/splash-screen";
 import {
   useShoppingList,
   getCategory,
@@ -46,11 +47,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  pendingComponent: () => (
-    <div className="flex items-center justify-center py-20" role="status" aria-label="Laden">
-      <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-    </div>
-  ),
+  pendingComponent: () => <SplashScreen />,
   component: ListPage,
 });
 
