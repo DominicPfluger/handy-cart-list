@@ -5,6 +5,7 @@ import type { MessageKey } from "../i18n/de";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { POPULAR_RECIPES, RECIPE_TEMPLATES, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
+import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
 import { formatQuantity } from "../lib/units";
 import { ProductEmoji } from "./product-emoji";
 import { Button } from "./ui/button";
@@ -49,6 +50,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
   const collections = useRecipeCollections(user);
   const [busy, setBusy] = useState(false);
   const [onlyFav, setOnlyFav] = useState(false);
+  const diets = useDietFilter();
   const [showAllRecent, setShowAllRecent] = useState(false);
   const [showAllPopular, setShowAllPopular] = useState(false);
 
@@ -77,9 +79,18 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
       const base = fromDb.length > 0
         ? fromDb
         : s.ingredients.map((n) => byBase.get(n)).filter((p): p is CatalogProduct => !!p);
-      return { ...s, products: base.filter((p) => !onlyFav || favIds.has(p.id)) };
+      const picked = picks[s.key] ?? [];
+      return {
+        ...s,
+        products: base.filter((p) => {
+          if (picked.includes(p.id)) return true; // gewählte Zutaten bleiben sichtbar
+          if (onlyFav && !favIds.has(p.id)) return false;
+          if (diets.length && p.excludedDiets.some((d) => (diets as string[]).includes(d))) return false;
+          return true;
+        }),
+      };
     }),
-    [tpl, byBase, onlyFav, favIds, catalog.recipeIngredients, catalog.products],
+    [tpl, byBase, onlyFav, favIds, diets, picks, catalog.recipeIngredients, catalog.products],
   );
 
   const toggleOnlyFav = () => {
@@ -397,6 +408,34 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
             {t("rk.reset")}
           </button>
         </div>
+      </div>
+
+      <div className="space-y-1.5">
+        <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" role="group" aria-label={t("diet.filter")}>
+          {DIETS.map((d) => {
+            const on = diets.includes(d);
+            return (
+              <button
+                key={d}
+                type="button"
+                aria-pressed={on}
+                onClick={() => toggleDiet(d)}
+                className={`flex h-9 shrink-0 items-center gap-1.5 rounded-full border px-3 text-xs font-medium leading-none ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-foreground"}`}
+              >
+                <span className="text-base leading-none">{DIET_EMOJI[d]}</span>
+                {t(`diet.${d}`)}
+              </button>
+            );
+          })}
+        </div>
+        {diets.length > 0 && (
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-xs text-muted-foreground">{t("diet.hint")}</p>
+            <button type="button" onClick={() => setDiets([])} className="shrink-0 text-xs font-medium text-primary">
+              {t("diet.reset")}
+            </button>
+          </div>
+        )}
       </div>
 
       {user && chosen.length > 0 && (
