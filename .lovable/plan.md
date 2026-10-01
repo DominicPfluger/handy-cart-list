@@ -32,5 +32,11 @@ Im Admin-Panel lassen sich Produkte nach der Relevanz für einen bestimmten Mark
 - Bestehende RLS-Regeln auf `product_market_order` prüfen Markt-Admin-Rechte bereits; falls eine Schreib-Regel fehlt, wird sie per Migration ergänzt.
 - Texte in `src/i18n/de.ts` und `messages.json` (alle 16 Sprachen).
 
+## Zusatz: „Meine Listen" – Umbenennen per Tipp auf den Titel
+- Das Stift-Symbol neben jeder Liste wird entfernt.
+- Ein Tipp auf den Listennamen öffnet direkt das Eingabefeld zum Umbenennen (Enter/Wegtippen speichert, Escape bricht ab).
+- Ein Tipp auf die restliche Zeile (z. B. „x offen") öffnet bzw. wählt die Liste wie bisher.
+- Technisch: `src/components/list-manager.tsx` — Stift-Button löschen, Titel als eigener Tipp-Bereich mit `setEditing(true)`.
+
 ## Offene Punkte
 - Keine — baut vollständig auf vorhandenen Strukturen auf.
