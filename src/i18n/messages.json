@@ -587,7 +587,7 @@
     "adm.diets": "Not suitable for:",
     "adm.dietsHint": "The product is hidden when this filter is active.",
     "adm.variants": "Variants",
-    "adm.variantsHint": "Variants are offered as options when adding to the shopping list.",
+    "adm.variantsHint": "Variants apply only to this product and are offered when adding it to the shopping list.",
     "adm.variantPlaceholder": "New variant…"
   },
   "en-GB": {
@@ -1178,7 +1178,7 @@
     "adm.diets": "Not suitable for:",
     "adm.dietsHint": "The product is hidden when this filter is active.",
     "adm.variants": "Variants",
-    "adm.variantsHint": "Variants are offered as options when adding to the shopping list.",
+    "adm.variantsHint": "Variants apply only to this product and are offered when adding it to the shopping list.",
     "adm.variantPlaceholder": "New variant…"
   },
   "en-CA": {
@@ -1769,7 +1769,7 @@
     "adm.diets": "Not suitable for:",
     "adm.dietsHint": "The product is hidden when this filter is active.",
     "adm.variants": "Variants",
-    "adm.variantsHint": "Variants are offered as options when adding to the shopping list.",
+    "adm.variantsHint": "Variants apply only to this product and are offered when adding it to the shopping list.",
     "adm.variantPlaceholder": "New variant…"
   },
   "es-ES": {
@@ -2360,7 +2360,7 @@
     "adm.diets": "No apto para:",
     "adm.dietsHint": "El producto se oculta cuando este filtro está activo.",
     "adm.variants": "Variantes",
-    "adm.variantsHint": "Las variantes se ofrecen como opción al añadir a la lista de la compra.",
+    "adm.variantsHint": "Las variantes solo se aplican a este producto y se ofrecen al añadirlo a la lista de la compra.",
     "adm.variantPlaceholder": "Nueva variante…"
   },
   "es-MX": {
@@ -2951,7 +2951,7 @@
     "adm.diets": "No apto para:",
     "adm.dietsHint": "El producto se oculta cuando este filtro está activo.",
     "adm.variants": "Variantes",
-    "adm.variantsHint": "Las variantes se ofrecen como opción al añadir a la lista de compras.",
+    "adm.variantsHint": "Las variantes solo se aplican a este producto y se ofrecen al añadirlo a la lista de compras.",
     "adm.variantPlaceholder": "Nueva variante…"
   },
   "fr-FR": {
@@ -3542,7 +3542,7 @@
     "adm.diets": "Ne convient pas à :",
     "adm.dietsHint": "Le produit est masqué lorsque ce filtre est actif.",
     "adm.variants": "Variantes",
-    "adm.variantsHint": "Les variantes sont proposées lors de l'ajout à la liste de courses.",
+    "adm.variantsHint": "Les variantes ne s'appliquent qu'à ce produit et sont proposées lors de l'ajout à la liste de courses.",
     "adm.variantPlaceholder": "Nouvelle variante…"
   },
   "fr-CA": {
@@ -4133,7 +4133,7 @@
     "adm.diets": "Ne convient pas à :",
     "adm.dietsHint": "Le produit est masqué lorsque ce filtre est actif.",
     "adm.variants": "Variantes",
-    "adm.variantsHint": "Les variantes sont proposées lors de l'ajout à la liste d'épicerie.",
+    "adm.variantsHint": "Les variantes ne s'appliquent qu'à ce produit et sont proposées lors de l'ajout à la liste d'épicerie.",
     "adm.variantPlaceholder": "Nouvelle variante…"
   },
   "it-IT": {
@@ -4724,7 +4724,7 @@
     "adm.diets": "Non adatto a:",
     "adm.dietsHint": "Il prodotto viene nascosto quando questo filtro è attivo.",
     "adm.variants": "Varianti",
-    "adm.variantsHint": "Le varianti vengono proposte quando si aggiunge alla lista della spesa.",
+    "adm.variantsHint": "Le varianti valgono solo per questo prodotto e vengono proposte quando lo si aggiunge alla lista della spesa.",
     "adm.variantPlaceholder": "Nuova variante…"
   },
   "it-CH": {
@@ -5315,7 +5315,7 @@
     "adm.diets": "Non adatto a:",
     "adm.dietsHint": "Il prodotto viene nascosto quando questo filtro è attivo.",
     "adm.variants": "Varianti",
-    "adm.variantsHint": "Le varianti vengono proposte quando si aggiunge alla lista della spesa.",
+    "adm.variantsHint": "Le varianti valgono solo per questo prodotto e vengono proposte quando lo si aggiunge alla lista della spesa.",
     "adm.variantPlaceholder": "Nuova variante…"
   },
   "pt-PT": {
@@ -5906,7 +5906,7 @@
     "adm.diets": "Não adequado para:",
     "adm.dietsHint": "O produto fica oculto quando este filtro está ativo.",
     "adm.variants": "Variantes",
-    "adm.variantsHint": "As variantes são propostas ao adicionar à lista de compras.",
+    "adm.variantsHint": "As variantes aplicam-se apenas a este produto e são propostas ao adicioná-lo à lista de compras.",
     "adm.variantPlaceholder": "Nova variante…"
   },
   "pt-BR": {
@@ -6497,7 +6497,7 @@
     "adm.diets": "Não adequado para:",
     "adm.dietsHint": "O produto fica oculto quando este filtro está ativo.",
     "adm.variants": "Variantes",
-    "adm.variantsHint": "As variantes são propostas ao adicionar à lista de compras.",
+    "adm.variantsHint": "As variantes aplicam-se apenas a este produto e são propostas ao adicioná-lo à lista de compras.",
     "adm.variantPlaceholder": "Nova variante…"
   },
   "nl-NL": {
@@ -7088,7 +7088,7 @@
     "adm.diets": "Niet geschikt voor:",
     "adm.dietsHint": "Het product wordt verborgen wanneer dit filter actief is.",
     "adm.variants": "Varianten",
-    "adm.variantsHint": "Varianten worden aangeboden bij het toevoegen aan de boodschappenlijst.",
+    "adm.variantsHint": "Varianten gelden alleen voor dit product en worden aangeboden bij het toevoegen aan de boodschappenlijst.",
     "adm.variantPlaceholder": "Nieuwe variant…"
   },
   "nl-BE": {
@@ -7679,7 +7679,7 @@
     "adm.diets": "Niet geschikt voor:",
     "adm.dietsHint": "Het product wordt verborgen wanneer dit filter actief is.",
     "adm.variants": "Varianten",
-    "adm.variantsHint": "Varianten worden aangeboden bij het toevoegen aan de boodschappenlijst.",
+    "adm.variantsHint": "Varianten gelden alleen voor dit product en worden aangeboden bij het toevoegen aan de boodschappenlijst.",
     "adm.variantPlaceholder": "Nieuwe variant…"
   },
   "de-AT": {
@@ -7825,7 +7825,7 @@
     "adm.diets": "Nicht geeignet für:",
     "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet.",
     "adm.variants": "Varianten",
-    "adm.variantsHint": "Varianten erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
+    "adm.variantsHint": "Varianten gelten nur für dieses Produkt und erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
     "adm.variantPlaceholder": "Neue Variante…"
   },
   "de-CH": {
@@ -7971,7 +7971,7 @@
     "adm.diets": "Nicht geeignet für:",
     "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet.",
     "adm.variants": "Varianten",
-    "adm.variantsHint": "Varianten erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
+    "adm.variantsHint": "Varianten gelten nur für dieses Produkt und erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
     "adm.variantPlaceholder": "Neue Variante…"
   }
 }

@@ -627,8 +627,6 @@ function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) 
 
 type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[]; variants?: string[] };
 
-/** Häufige Varianten als Schnellauswahl im Produkt-Dialog. */
-const COMMON_VARIANTS = ["Bio", "Vollkorn", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
 function Editor(p: {
   sel: NonNullable<Sel>; name: string; data: Awaited<ReturnType<typeof loadAll>>; products: Prod[]; busy: boolean;
@@ -732,18 +730,6 @@ function Editor(p: {
                 onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addVariant(variantInput); } }}
               />
               <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {COMMON_VARIANTS.filter((v) => !variants.some((x) => x.toLowerCase() === v.toLowerCase())).map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  onClick={() => addVariant(v)}
-                  className="rounded-full border border-border bg-background px-2.5 py-1 text-xs text-muted-foreground hover:border-primary hover:text-foreground"
-                >
-                  + {v}
-                </button>
-              ))}
             </div>
             <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
           </div>

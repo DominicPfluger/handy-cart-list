@@ -528,7 +528,7 @@ export const de = {
   "adm.diets": "Nicht geeignet für:",
   "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet.",
   "adm.variants": "Varianten",
-  "adm.variantsHint": "Varianten erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
+  "adm.variantsHint": "Varianten gelten nur für dieses Produkt und erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
   "adm.variantPlaceholder": "Neue Variante…",
   "adm.recipeSortPopularity": "Beliebtheit",
   "adm.recipeSortRelevance": "Relevanz",
