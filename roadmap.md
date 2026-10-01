@@ -1,10 +1,12 @@
 # Roadmap
 
-## Offen
-- [ ] KI-Produktbilder: Admin-Funktion, die Produkten ohne Bild ein KI-Bild erzeugt (Stapelweise), in Storage speichert, image_path setzt
-- [ ] KI-Richtpreise pro Markt: Admin-Funktion, die typische Preise schätzt und in product_reference_prices schreibt
-- [ ] Preis in Abteilungsansicht am Artikel anzeigen (useReferencePrices vorhanden)
-- [ ] Vorschau-Verifikation
+## Erledigt
+- KI-Produktbilder: Admin-Panel „KI-Bilder & Richtpreise" erzeugt stapelweise Bilder (5 pro Lauf) → Storage catalog-images/products/{id}.png, image_path gesetzt. Verifiziert: 5 Bilder erzeugt.
+- KI-Richtpreise pro Markt: 50 pro Lauf, upsert in product_reference_prices. Verifiziert: 50 Preise für DE gespeichert.
+- Preisanzeige in Abteilungsansicht war bereits vorhanden (useReferencePrices).
+
+## Hinweis
+- 3590 Produkte total; Bilder/Preise entstehen stapelweise durch wiederholtes Tippen im Admin.
 
 ## Abgebrochen
 - Vorrats-Verwaltung — vom Nutzer abgebrochen, nicht umsetzen
