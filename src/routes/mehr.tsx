@@ -254,6 +254,40 @@ function MorePage() {
         </Link>
         {[
           { Icon: BellIcon, label: t("more.reminders"), sub: t("more.remindersSub") },
+        ].map((row) => (
+          <button
+            key={row.label}
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted"
+          >
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+              <row.Icon className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground">{row.label}</p>
+              <p className="truncate text-xs text-muted-foreground">{row.sub}</p>
+            </div>
+            <span className="text-muted-foreground">›</span>
+          </button>
+        ))}
+      </section>
+
+      {hiddenProducts.length > 0 && (
+        <section className="space-y-3">
+          <h2 className="text-base font-semibold text-foreground">{t("more.hiddenProducts")}</h2>
+          <p className="text-sm text-muted-foreground">{t("more.hiddenProductsHint")}</p>
+          <div className="divide-y divide-border border-y border-border">
+            {hiddenProducts.map((product) => (
+              <div key={product.id} className="flex items-center justify-between gap-3 py-2.5">
+                <span className="min-w-0 text-sm text-foreground">{product.name}</span>
+                <Button variant="ghost" size="sm" onClick={() => restoreProduct(product.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
+        {[
           { Icon: LeafIcon, label: t("more.sustainable"), sub: t("more.sustainableSub") },
         ].map((row) => (
           <button
@@ -281,21 +315,6 @@ function MorePage() {
               <div key={department.id} className="flex items-center justify-between gap-3 py-2.5">
                 <span className="min-w-0 text-sm text-foreground">{department.name}</span>
                 <Button variant="ghost" size="sm" onClick={() => restoreDepartment(department.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {hiddenProducts.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="text-base font-semibold text-foreground">{t("more.hiddenProducts")}</h2>
-          <p className="text-sm text-muted-foreground">{t("more.hiddenProductsHint")}</p>
-          <div className="divide-y divide-border border-y border-border">
-            {hiddenProducts.map((product) => (
-              <div key={product.id} className="flex items-center justify-between gap-3 py-2.5">
-                <span className="min-w-0 text-sm text-foreground">{product.name}</span>
-                <Button variant="ghost" size="sm" onClick={() => restoreProduct(product.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
               </div>
             ))}
           </div>
