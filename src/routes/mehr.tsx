@@ -26,6 +26,8 @@ import { Button } from "../components/ui/button";
 import { MemberAvatar } from "../components/member-avatar";
 import { siWhatsapp, siTelegram, siThreema } from "simple-icons";
 import { BrandIcon, MailIcon, SmsIcon } from "../components/share-icons";
+import appIcon from "../assets/app-icon.png.asset.json";
+import { APP_VERSION, FEEDBACK_EMAIL } from "../lib/app-version";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
@@ -327,9 +329,20 @@ function MorePage() {
         </section>
       )}
 
-      <p className="pb-2 text-center text-xs text-muted-foreground">
-        {t("more.tagline")}
-      </p>
+      <footer className="flex flex-col items-center gap-1 pt-4 pb-2 text-center">
+        <img src={appIcon.url} alt="Shoppi App-Icon" className="h-16 w-16 rounded-2xl shadow-sm" />
+        <p className="mt-2 text-base font-semibold text-foreground">Shoppi</p>
+        <p className="text-sm text-muted-foreground">{t("more.tagline").replace("Shoppi · ", "")}</p>
+        <p className="text-xs text-muted-foreground">{t("more.version", { version: APP_VERSION })}</p>
+        <p className="text-xs text-muted-foreground">{t("more.copyright")}</p>
+        <nav className="mt-3 flex flex-wrap items-center justify-center gap-x-2 text-xs">
+          <Link to="/impressum" className="text-primary underline-offset-2 hover:underline">{t("more.imprint")}</Link>
+          <span className="text-muted-foreground" aria-hidden="true">·</span>
+          <Link to="/datenschutz" className="text-primary underline-offset-2 hover:underline">{t("more.privacy")}</Link>
+          <span className="text-muted-foreground" aria-hidden="true">·</span>
+          <a href={`mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent("Shoppi Feedback")}`} className="text-primary underline-offset-2 hover:underline">{t("more.feedback")}</a>
+        </nav>
+      </footer>
     </div>
   );
 }
