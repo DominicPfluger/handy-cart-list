@@ -833,7 +833,10 @@
     "imp.neverRun": "Never read",
     "imp.runNow": "Now",
     "imp.deleteSource": "Delete source?",
-    "price.reference": "Reference price"
+    "price.reference": "Reference price",
+    "rs.speak": "Read recipe",
+    "rs.speakStop": "Stop reading",
+    "rs.speakIngredients": "Ingredients"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1669,7 +1672,10 @@
     "imp.neverRun": "Never read",
     "imp.runNow": "Now",
     "imp.deleteSource": "Delete source?",
-    "price.reference": "Reference price"
+    "price.reference": "Reference price",
+    "rs.speak": "Read recipe",
+    "rs.speakStop": "Stop reading",
+    "rs.speakIngredients": "Ingredients"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2505,7 +2511,10 @@
     "imp.neverRun": "Never read",
     "imp.runNow": "Now",
     "imp.deleteSource": "Delete source?",
-    "price.reference": "Reference price"
+    "price.reference": "Reference price",
+    "rs.speak": "Read recipe",
+    "rs.speakStop": "Stop reading",
+    "rs.speakIngredients": "Ingredients"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3341,7 +3350,10 @@
     "imp.neverRun": "Nunca leída",
     "imp.runNow": "Ahora",
     "imp.deleteSource": "¿Eliminar fuente?",
-    "price.reference": "Precio orientativo"
+    "price.reference": "Precio orientativo",
+    "rs.speak": "Leer receta",
+    "rs.speakStop": "Detener lectura",
+    "rs.speakIngredients": "Ingredientes"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4177,7 +4189,10 @@
     "imp.neverRun": "Nunca leída",
     "imp.runNow": "Ahora",
     "imp.deleteSource": "¿Eliminar fuente?",
-    "price.reference": "Precio orientativo"
+    "price.reference": "Precio orientativo",
+    "rs.speak": "Leer receta",
+    "rs.speakStop": "Detener lectura",
+    "rs.speakIngredients": "Ingredientes"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5013,7 +5028,10 @@
     "imp.neverRun": "Jamais lu",
     "imp.runNow": "Maintenant",
     "imp.deleteSource": "Supprimer la source ?",
-    "price.reference": "Prix indicatif"
+    "price.reference": "Prix indicatif",
+    "rs.speak": "Lire la recette",
+    "rs.speakStop": "Arrêter la lecture",
+    "rs.speakIngredients": "Ingrédients"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -5849,7 +5867,10 @@
     "imp.neverRun": "Jamais lu",
     "imp.runNow": "Maintenant",
     "imp.deleteSource": "Supprimer la source ?",
-    "price.reference": "Prix indicatif"
+    "price.reference": "Prix indicatif",
+    "rs.speak": "Lire la recette",
+    "rs.speakStop": "Arrêter la lecture",
+    "rs.speakIngredients": "Ingrédients"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -6685,7 +6706,10 @@
     "imp.neverRun": "Mai letta",
     "imp.runNow": "Ora",
     "imp.deleteSource": "Eliminare la fonte?",
-    "price.reference": "Prezzo indicativo"
+    "price.reference": "Prezzo indicativo",
+    "rs.speak": "Leggi la ricetta",
+    "rs.speakStop": "Interrompi la lettura",
+    "rs.speakIngredients": "Ingredienti"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -7521,7 +7545,10 @@
     "imp.neverRun": "Mai letta",
     "imp.runNow": "Ora",
     "imp.deleteSource": "Eliminare la fonte?",
-    "price.reference": "Prezzo indicativo"
+    "price.reference": "Prezzo indicativo",
+    "rs.speak": "Leggi la ricetta",
+    "rs.speakStop": "Interrompi la lettura",
+    "rs.speakIngredients": "Ingredienti"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -8357,7 +8384,10 @@
     "imp.neverRun": "Nunca lida",
     "imp.runNow": "Agora",
     "imp.deleteSource": "Eliminar fonte?",
-    "price.reference": "Preço de referência"
+    "price.reference": "Preço de referência",
+    "rs.speak": "Ler receita",
+    "rs.speakStop": "Parar leitura",
+    "rs.speakIngredients": "Ingredientes"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -9193,7 +9223,10 @@
     "imp.neverRun": "Nunca lida",
     "imp.runNow": "Agora",
     "imp.deleteSource": "Eliminar fonte?",
-    "price.reference": "Preço de referência"
+    "price.reference": "Preço de referência",
+    "rs.speak": "Ler receita",
+    "rs.speakStop": "Parar leitura",
+    "rs.speakIngredients": "Ingredientes"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -10029,7 +10062,10 @@
     "imp.neverRun": "Nooit ingelezen",
     "imp.runNow": "Nu",
     "imp.deleteSource": "Bron verwijderen?",
-    "price.reference": "Richtprijs"
+    "price.reference": "Richtprijs",
+    "rs.speak": "Recept voorlezen",
+    "rs.speakStop": "Voorlezen stoppen",
+    "rs.speakIngredients": "Ingrediënten"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -10865,7 +10901,10 @@
     "imp.neverRun": "Nooit ingelezen",
     "imp.runNow": "Nu",
     "imp.deleteSource": "Bron verwijderen?",
-    "price.reference": "Richtprijs"
+    "price.reference": "Richtprijs",
+    "rs.speak": "Recept voorlezen",
+    "rs.speakStop": "Voorlezen stoppen",
+    "rs.speakIngredients": "Ingrediënten"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -11163,7 +11202,10 @@
     "imp.neverRun": "Noch nie eingelesen",
     "imp.runNow": "Jetzt",
     "imp.deleteSource": "Quelle löschen?",
-    "price.reference": "Richtpreis"
+    "price.reference": "Richtpreis",
+    "rs.speak": "Rezept vorlesen",
+    "rs.speakStop": "Vorlesen stoppen",
+    "rs.speakIngredients": "Zutaten"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -11461,6 +11503,9 @@
     "imp.neverRun": "Noch nie eingelesen",
     "imp.runNow": "Jetzt",
     "imp.deleteSource": "Quelle löschen?",
-    "price.reference": "Richtpreis"
+    "price.reference": "Richtpreis",
+    "rs.speak": "Rezept vorlesen",
+    "rs.speakStop": "Vorlesen stoppen",
+    "rs.speakIngredients": "Zutaten"
   }
 }
