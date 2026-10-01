@@ -94,7 +94,7 @@ export function ProductAliasRows({ departmentId, prods, onEdit }: { departmentId
         return (
           <div key={a.id} className="flex items-center gap-2 rounded-xl border border-dashed border-border bg-card px-3 py-2 text-sm">
             <button type="button" onClick={() => onEdit(a.product_id)} className="min-w-0 flex-1 truncate text-left text-foreground">
-              {p?.emoji ?? "📦"} {p?.name ?? "?"} <span className="text-[10px] text-muted-foreground">· {T("adm.alias")} · #{a.sort_order}</span>
+              {p?.emoji ?? "📦"} {p?.name ?? "?"} <span className="text-[10px] text-muted-foreground">· {T("adm.alias")}</span>
             </button>
             <button type="button" disabled={busy || i === 0} onClick={() => swap(i, i - 1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
             <button type="button" disabled={busy || i === rows.length - 1} onClick={() => swap(i, i + 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
