@@ -9,6 +9,7 @@ import { LOCALES } from "@/i18n";
 import { getUnits } from "@/lib/units";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -238,6 +239,8 @@ function AdminPage() {
       <Button className="w-full rounded-xl" disabled={busy} onClick={() => run(async () => toast.info(`${await translateIds()} Übersetzungen ergänzt`), "Übersetzung abgeschlossen")}>
         {busy ? "Arbeite …" : "Fehlende Übersetzungen per KI ergänzen"}
       </Button>
+
+      {d && <CuisineAdmin depts={d.depts} prods={d.prods} />}
 
       <Input placeholder="Suchen (alle Sprachen) …" value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
 
@@ -659,6 +662,7 @@ function Editor(p: {
           })}>Speichern</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>Löschen</Button>
         </div>
+        {prod && <ProductCuisinePicker productId={prod.id} />}
 
         <div className="flex items-center justify-between pt-2">
           <h3 className="text-sm font-semibold text-foreground">Sprachen</h3>

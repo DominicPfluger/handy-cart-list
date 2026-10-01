@@ -13,3 +13,4 @@
 - Personal data is device-only localStorage: custom products/names (merged in `useCatalog`), hidden shared categories/products (restore in More), diet selection, purchase history (`shoppi:purchase-history`, drives suggestions). Why: shared catalog stays admin-controlled; personal data local.
 - Diet filter uses products.excluded_diets (text[], AI-classified, empty for non-food). Why: simple exclusion list.
 - Catalog-using routes use `ssr: false`; catalog loads in browser. Why: SSR embedded ~2.4 MB catalog per page, causing 'aborted' blank screens.
+- Cuisine filter uses `cuisines` + `product_cuisines` (admin-managed in /admin, AI-prefilled); selection device-local. Why: editable many-to-many.

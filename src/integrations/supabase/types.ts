@@ -47,6 +47,33 @@ export type Database = {
         }
         Relationships: []
       }
+      cuisines: {
+        Row: {
+          created_at: string
+          emoji: string | null
+          id: string
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       departments: {
         Row: {
           color: string | null
@@ -241,6 +268,42 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      product_cuisines: {
+        Row: {
+          created_at: string
+          cuisine_id: string
+          id: string
+          product_id: string
+        }
+        Insert: {
+          created_at?: string
+          cuisine_id: string
+          id?: string
+          product_id: string
+        }
+        Update: {
+          created_at?: string
+          cuisine_id?: string
+          id?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_cuisines_cuisine_id_fkey"
+            columns: ["cuisine_id"]
+            isOneToOne: false
+            referencedRelation: "cuisines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_cuisines_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_headings: {
         Row: {

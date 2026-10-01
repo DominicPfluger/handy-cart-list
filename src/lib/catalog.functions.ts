@@ -27,6 +27,8 @@ export interface CatalogProduct {
   variants: string[];
   /** Ernährungsformen, in denen das Produkt nicht erlaubt ist */
   excludedDiets: string[];
+  /** Länderküchen, in denen das Produkt typisch ist */
+  cuisineIds: string[];
   sortOrder: number;
   baseName: string;
   names: Record<string, string>;
@@ -41,10 +43,20 @@ export interface CatalogHeading {
   names: Record<string, string>;
 }
 
+export interface CatalogCuisine {
+  id: string;
+  name: string;
+  emoji: string | null;
+  sortOrder: number;
+  baseName: string;
+  names: Record<string, string>;
+}
+
 export interface Catalog {
   departments: CatalogDepartment[];
   products: CatalogProduct[];
   headings: CatalogHeading[];
+  cuisines: CatalogCuisine[];
 }
 
 export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Promise<Catalog> => {
@@ -86,7 +98,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     return { data: all, error: null };
   }
 
-  const [deptRes, prodRes, headRes, trRes] = await Promise.all([
+  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
@@ -98,7 +110,13 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     ),
     supabase.from("product_headings").select("id, department_id, before_product_id, name"),
     fetchAll("catalog_translations", "entity_id, locale, name", ["id"]),
+    supabase.from("cuisines").select("id, name, emoji, sort_order").order("sort_order", { ascending: true }),
+    fetchAll("product_cuisines", "product_id, cuisine_id", ["id"]),
   ]);
+  const cuisineIdsByProduct = new Map<string, string[]>();
+  for (const r of (pcRes.data ?? []) as Array<{ product_id: string; cuisine_id: string }>) {
+    cuisineIdsByProduct.set(r.product_id, [...(cuisineIdsByProduct.get(r.product_id) ?? []), r.cuisine_id]);
+  }
 
   if (trRes.error) throw new Error(trRes.error.message);
   const names = new Map<string, Record<string, string>>();
@@ -153,6 +171,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       organicAvailable: (r["organic_available"] as boolean) ?? true,
       variants: (r["variants"] as string[] | null) ?? [],
       excludedDiets: (r["excluded_diets"] as string[] | null) ?? [],
+      cuisineIds: cuisineIdsByProduct.get(r["id"] as string) ?? [],
       sortOrder: (r["sort_order"] as number) ?? 0,
       baseName: r["name"] as string,
       names: names.get(r["id"] as string) ?? {},
@@ -164,6 +183,14 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       name: r["name"]!,
       baseName: r["name"]!,
       names: names.get(r["id"]!) ?? {},
+    })),
+    cuisines: ((cuiRes.data ?? []) as Array<Record<string, unknown>>).map((r) => ({
+      id: r["id"] as string,
+      name: r["name"] as string,
+      emoji: (r["emoji"] as string | null) ?? null,
+      sortOrder: (r["sort_order"] as number) ?? 0,
+      baseName: r["name"] as string,
+      names: names.get(r["id"] as string) ?? {},
     })),
   };
 });
