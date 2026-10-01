@@ -7,7 +7,8 @@
 
 ## Was sich aendert
 - Jede Kategorie-Kachel in der Abteilungsansicht bekommt eine Umbenennen-Moeglichkeit direkt auf der Kachel:
-  - Ein Stift-Symbol neben dem vorhandenen Papierkorb-Symbol (oben rechts auf der Kachel, gleiches Verhalten: auf dem Desktop erst bei Mausberuehrung sichtbar).
+  - Ein Stift-Symbol neben dem vorhandenen Papierkorb-Symbol (oben rechts auf der Kachel).
+  - Wie der Papierkorb erscheint der Stift nur bei Mausberuehrung (Hover) bzw. ist auf Touch-Geraeten dauerhaft sichtbar, damit er dort auch ohne Maus erreichbar ist.
   - Ein Tipp darauf oeffnet den vorhandenen Umbenennen-Dialog mit dem Kategorienamen.
 - Im Dialog wie bei Produkten:
   - Neuer Name wird nur auf diesem Geraet gespeichert (persoenliche Umbenennung), der Originalname wird darunter angezeigt.
