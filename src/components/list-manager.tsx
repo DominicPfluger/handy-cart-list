@@ -63,7 +63,6 @@ function Row({
   onRename: (name: string) => void;
   onDelete: () => void;
   onSaveAsTemplate: () => void;
-  onShareInvite: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: list.id });
   const { t } = useT();
