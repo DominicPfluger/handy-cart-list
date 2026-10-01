@@ -606,7 +606,9 @@
     "adm.marketOrder": "Order for market",
     "adm.marketGlobal": "🌍 Global",
     "adm.marketOrderHint": "Market relevance {m}: moving and sorting apply to this market only.",
-    "adm.marketUnavailable": "not in market"
+    "adm.marketUnavailable": "not in market",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "only {m}"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1215,7 +1217,9 @@
     "adm.marketOrder": "Order for market",
     "adm.marketGlobal": "🌍 Global",
     "adm.marketOrderHint": "Market relevance {m}: moving and sorting apply to this market only.",
-    "adm.marketUnavailable": "not in market"
+    "adm.marketUnavailable": "not in market",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "only {m}"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1824,7 +1828,9 @@
     "adm.marketOrder": "Order for market",
     "adm.marketGlobal": "🌍 Global",
     "adm.marketOrderHint": "Market relevance {m}: moving and sorting apply to this market only.",
-    "adm.marketUnavailable": "not in market"
+    "adm.marketUnavailable": "not in market",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "only {m}"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2433,7 +2439,9 @@
     "adm.marketOrder": "Orden para el mercado",
     "adm.marketGlobal": "🌍 Global",
     "adm.marketOrderHint": "Relevancia de mercado {m}: mover y ordenar solo afecta a este mercado.",
-    "adm.marketUnavailable": "no en el mercado"
+    "adm.marketUnavailable": "no en el mercado",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "solo {m}"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3042,7 +3050,9 @@
     "adm.marketOrder": "Orden para el mercado",
     "adm.marketGlobal": "🌍 Global",
     "adm.marketOrderHint": "Relevancia de mercado {m}: mover y ordenar solo afecta a este mercado.",
-    "adm.marketUnavailable": "no en el mercado"
+    "adm.marketUnavailable": "no en el mercado",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "solo {m}"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3651,7 +3661,9 @@
     "adm.marketOrder": "Ordre pour le marché",
     "adm.marketGlobal": "🌍 Global",
     "adm.marketOrderHint": "Pertinence marché {m} : déplacer et trier ne s’appliquent qu’à ce marché.",
-    "adm.marketUnavailable": "absent du marché"
+    "adm.marketUnavailable": "absent du marché",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "seulement {m}"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4260,7 +4272,9 @@
     "adm.marketOrder": "Ordre pour le marché",
     "adm.marketGlobal": "🌍 Global",
     "adm.marketOrderHint": "Pertinence marché {m} : déplacer et trier ne s’appliquent qu’à ce marché.",
-    "adm.marketUnavailable": "absent du marché"
+    "adm.marketUnavailable": "absent du marché",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "seulement {m}"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4869,7 +4883,9 @@
     "adm.marketOrder": "Ordine per mercato",
     "adm.marketGlobal": "🌍 Globale",
     "adm.marketOrderHint": "Rilevanza mercato {m}: spostare e ordinare vale solo per questo mercato.",
-    "adm.marketUnavailable": "non nel mercato"
+    "adm.marketUnavailable": "non nel mercato",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "solo {m}"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -5478,7 +5494,9 @@
     "adm.marketOrder": "Ordine per mercato",
     "adm.marketGlobal": "🌍 Globale",
     "adm.marketOrderHint": "Rilevanza mercato {m}: spostare e ordinare vale solo per questo mercato.",
-    "adm.marketUnavailable": "non nel mercato"
+    "adm.marketUnavailable": "non nel mercato",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "solo {m}"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6087,7 +6105,9 @@
     "adm.marketOrder": "Ordem para o mercado",
     "adm.marketGlobal": "🌍 Global",
     "adm.marketOrderHint": "Relevância de mercado {m}: mover e ordenar aplica-se só a este mercado.",
-    "adm.marketUnavailable": "fora do mercado"
+    "adm.marketUnavailable": "fora do mercado",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "só {m}"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -6696,7 +6716,9 @@
     "adm.marketOrder": "Ordem para o mercado",
     "adm.marketGlobal": "🌍 Global",
     "adm.marketOrderHint": "Relevância de mercado {m}: mover e ordenar aplica-se só a este mercado.",
-    "adm.marketUnavailable": "fora do mercado"
+    "adm.marketUnavailable": "fora do mercado",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "só {m}"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -7305,7 +7327,9 @@
     "adm.marketOrder": "Volgorde voor markt",
     "adm.marketGlobal": "🌍 Globaal",
     "adm.marketOrderHint": "Marktrelevantie {m}: verplaatsen en sorteren geldt alleen voor deze markt.",
-    "adm.marketUnavailable": "niet in markt"
+    "adm.marketUnavailable": "niet in markt",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "alleen {m}"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -7914,7 +7938,9 @@
     "adm.marketOrder": "Volgorde voor markt",
     "adm.marketGlobal": "🌍 Globaal",
     "adm.marketOrderHint": "Marktrelevantie {m}: verplaatsen en sorteren geldt alleen voor deze markt.",
-    "adm.marketUnavailable": "niet in markt"
+    "adm.marketUnavailable": "niet in markt",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "alleen {m}"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8074,7 +8100,9 @@
     "mk.hide": "Ausblenden",
     "mk.admins": "Markt-Admins verwalten",
     "mk.adminAdded": "Markt-Admin zugewiesen",
-    "mk.noAdmins": "Noch keine Markt-Admins"
+    "mk.noAdmins": "Noch keine Markt-Admins",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "only {m}"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8234,6 +8262,8 @@
     "mk.hide": "Ausblenden",
     "mk.admins": "Markt-Admins verwalten",
     "mk.adminAdded": "Markt-Admin zugewiesen",
-    "mk.noAdmins": "Noch keine Markt-Admins"
+    "mk.noAdmins": "Noch keine Markt-Admins",
+    "adm.scopeGlobal": "🌍 global",
+    "adm.scopeMarket": "only {m}"
   }
 }
