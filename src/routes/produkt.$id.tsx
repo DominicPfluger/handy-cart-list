@@ -170,6 +170,54 @@ function ProductPage() {
         )}
       </dl>
 
+      <div className="mt-4 rounded-2xl bg-card p-4 shadow-sm">
+        <p className="text-sm font-semibold text-foreground">{t("pd.favQuantity")}</p>
+        <div className="mt-2 flex gap-2">
+          <input
+            type="number"
+            min="0"
+            step="any"
+            inputMode="decimal"
+            value={favQty}
+            onChange={(e) => setFavQty(e.target.value)}
+            aria-label={t("pd.favQuantity")}
+            className="w-24 rounded-lg border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground outline-none focus:border-primary"
+          />
+          <select
+            value={favUnit}
+            onChange={(e) => setFavUnit(e.target.value)}
+            aria-label={t("pd.unit")}
+            className="min-w-0 flex-1 rounded-lg border border-border bg-card px-2 py-2 text-sm font-semibold text-foreground"
+          >
+            {units.map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+          </select>
+        </div>
+        <div className="mt-2 flex gap-2">
+          <button
+            type="button"
+            disabled={!Number(favQty.replace(",", ".")) || Number(favQty.replace(",", ".")) <= 0}
+            onClick={() => {
+              const n = Number(favQty.replace(",", "."));
+              if (!n || n <= 0) return;
+              fav.save({ quantity: n, unit: favUnit });
+              toast.success(t("pd.favQuantitySaved"));
+            }}
+            className="flex-1 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition active:scale-[0.98] disabled:opacity-50"
+          >
+            {t("pd.saveFavQuantity")}
+          </button>
+          {fav.value && (
+            <button
+              type="button"
+              onClick={fav.clear}
+              className="rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground"
+            >
+              {t("pd.resetFavQuantity")}
+            </button>
+          )}
+        </div>
+      </div>
+
       <div className="mt-6 flex gap-2">
         <Button
           type="button"
