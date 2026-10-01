@@ -54,7 +54,7 @@ export const listProductImages = createServerFn({ method: "GET" })
     const items = await Promise.all(
       ((rows ?? []) as Array<{ id: string; name: string; image_path: string }>).map(async (p) => {
         const signed = await supabaseAdmin.storage.from("catalog-images").createSignedUrl(p.image_path, 3600);
-        return { id: p.id, name: p.name, url: signed.data?.signedUrl ?? null };
+        return { id: p.id, name: p.name, path: p.image_path, url: signed.data?.signedUrl ?? null };
       }),
     );
     return { items, total: count ?? 0, page: data.page, perPage: data.perPage };
