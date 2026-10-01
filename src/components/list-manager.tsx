@@ -167,7 +167,7 @@ function Row({
 }
 
 export function ListManager(props: Props) {
-  const { open, onClose, lists, activeId, templates, signedIn } = props;
+  const { open, onClose, lists, activeId, templates } = props;
   const { t } = useT();
   const [newName, setNewName] = useState("");
   const sensors = useSensors(
@@ -219,7 +219,6 @@ export function ListManager(props: Props) {
                   onRename={(n) => props.onRename(l.id, n)}
                   onDelete={() => props.onDelete(l.id)}
                   onSaveAsTemplate={() => props.onSaveAsTemplate(l.id)}
-                  onShareInvite={() => copyInvite(l.id)}
                 />
               ))}
             </div>
