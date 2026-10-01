@@ -5,7 +5,9 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts } from "@/lib/admin.functions";
-import { LOCALES } from "@/i18n";
+import { LOCALES, getLocale, translate, type MessageKey } from "@/i18n";
+
+const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 import { getUnits } from "@/lib/units";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -90,7 +92,7 @@ function AdminPage() {
     await qc.invalidateQueries({ queryKey: ["admin-catalog"] });
     await qc.invalidateQueries({ queryKey: ["catalog"] });
   };
-  const run = async (fn: () => Promise<unknown>, ok = "Gespeichert") => {
+  const run = async (fn: () => Promise<unknown>, ok = T("adm.saved")) => {
     setBusy(true);
     try { await fn(); toast.success(ok); await refresh(); }
     catch (e) { toast.error((e as Error).message); }
@@ -121,7 +123,7 @@ function AdminPage() {
     const at = Math.max(0, Math.min(to > from ? to - 1 : to, next.length));
     if (at === from) return;
     next.splice(at, 0, item!);
-    run(() => Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), "Reihenfolge gespeichert");
+    run(() => Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), T("adm.orderSaved"));
   };
 
   /** Zielindex beim Ablegen auf einer Zeile: obere Hälfte = davor, untere Hälfte = danach. */
@@ -135,7 +137,7 @@ function AdminPage() {
   const moveHeading = (headingId: string, beforeProductId: string) => {
     const h = d?.heads.find((x) => x.id === headingId);
     if (!h || h.before_product_id === beforeProductId) return;
-    run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), "Überschrift verschoben");
+    run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), T("adm.headingMoved"));
   };
 
   const pathText = () => path(cur).map((p) => p.name).join(" › ");
@@ -153,8 +155,8 @@ function AdminPage() {
   /** Produkte nach Kriterium sortieren; Überschriften-Gruppen bleiben erhalten. */
   const sortProducts = () => {
     if (!cur || products.length < 2) return;
-    const label = { popularity: "Relevanz", alphabetical: "Alphabet", price: "Preis", similarity: "Ähnlichkeit" }[sortBy];
-    if (!confirm(`Produkte dieser Kategorie nach ${label} sortieren? Die Reihenfolge gilt für alle Nutzer. Überschriften-Gruppen bleiben erhalten.`)) return;
+    const label = T(`adm.crit.${sortBy}` as MessageKey);
+    if (!confirm(T("adm.sortConfirm", { label }))) return;
     const anchors = new Set(headings.map((h) => h.before_product_id));
     const groups: (typeof products)[] = [];
     products.forEach((p, i) => { if (i === 0 || anchors.has(p.id)) groups.push([]); groups[groups.length - 1]!.push(p); });
@@ -177,11 +179,11 @@ function AdminPage() {
         const first = ordered[gi]![0]!;
         return h && first.id !== h.before_product_id ? saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: first.id } }) : null;
       }));
-    }, `Nach ${label} sortiert`);
+    }, T("adm.sorted", { label }));
   };
 
   const remove = (s: NonNullable<Sel>, name: string) => {
-    if (!confirm(`„${name}“ endgültig für alle Nutzer löschen?`)) return;
+    if (!confirm(T("adm.deleteConfirm", { name }))) return;
     run(async () => {
       if (s.kind === "heading") { await delH({ data: { id: s.id } }); }
       else if (s.kind === "product") {
@@ -190,13 +192,13 @@ function AdminPage() {
         await must(supabase.from("catalog_translations").delete().eq("entity_id", s.id));
       } else {
         if (d?.depts.some((x) => x.parent_id === s.id) || d?.prods.some((x) => x.department_id === s.id))
-          throw new Error("Kategorie ist nicht leer");
+          throw new Error(T("adm.notEmpty"));
         await must(supabase.from("product_headings").delete().eq("department_id", s.id));
         await must(supabase.from("departments").delete().eq("id", s.id));
         await must(supabase.from("catalog_translations").delete().eq("entity_id", s.id));
       }
       setSel(null);
-    }, "Gelöscht");
+    }, T("adm.deleted"));
   };
 
   const results = useMemo(() => {
@@ -210,13 +212,13 @@ function AdminPage() {
     ].slice(0, 60);
   }, [search, d]);
 
-  if (admin.isLoading) return <p className="pt-6 text-sm text-muted-foreground">Lädt …</p>;
+  if (admin.isLoading) return <p className="pt-6 text-sm text-muted-foreground">{T("adm.loading")}</p>;
   if (!admin.data?.isAdmin)
     return (
       <div className="space-y-3 pt-6">
-        <h1 className="text-2xl font-bold text-foreground">Admin-Panel</h1>
-        <p className="text-sm text-muted-foreground">Dein Konto hat noch keine Admin-Berechtigung. Gib Bescheid, dann wird sie freigeschaltet.</p>
-        <Button variant="outline" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>Abmelden</Button>
+        <h1 className="text-2xl font-bold text-foreground">{T("adm.title")}</h1>
+        <p className="text-sm text-muted-foreground">{T("adm.noAccess")}</p>
+        <Button variant="outline" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
       </div>
     );
 
@@ -226,29 +228,29 @@ function AdminPage() {
   return (
     <div className="space-y-4 pb-10">
       <div className="flex items-center justify-between gap-2">
-        <h1 className="text-2xl font-bold text-foreground">Admin-Panel</h1>
-        <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>Abmelden</Button>
+        <h1 className="text-2xl font-bold text-foreground">{T("adm.title")}</h1>
+        <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
       </div>
 
       <div className="grid grid-cols-3 gap-2 text-center">
-        <Stat label="Kategorien" value={d?.depts.length} />
-        <Stat label="Produkte" value={d?.prods.length} />
-        <Stat label="Überschriften" value={d?.heads.length} />
+        <Stat label={T("adm.categories")} value={d?.depts.length} />
+        <Stat label={T("adm.products")} value={d?.prods.length} />
+        <Stat label={T("adm.headings")} value={d?.heads.length} />
       </div>
 
-      <Button className="w-full rounded-xl" disabled={busy} onClick={() => run(async () => toast.info(`${await translateIds()} Übersetzungen ergänzt`), "Übersetzung abgeschlossen")}>
-        {busy ? "Arbeite …" : "Fehlende Übersetzungen per KI ergänzen"}
+      <Button className="w-full rounded-xl" disabled={busy} onClick={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}>
+        {busy ? T("adm.working") : T("adm.trMissing")}
       </Button>
 
       {d && <CuisineAdmin depts={d.depts} prods={d.prods} />}
 
-      <Input placeholder="Suchen (alle Sprachen) …" value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
+      <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
 
-      {q.isLoading && <p className="text-sm text-muted-foreground">Lädt Katalog …</p>}
+      {q.isLoading && <p className="text-sm text-muted-foreground">{T("adm.loadingCatalog")}</p>}
 
       {results ? (
         <div className="space-y-1">
-          {results.length === 0 && <p className="text-sm text-muted-foreground">Keine Treffer.</p>}
+          {results.length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noHits")}</p>}
           {results.map((r) => (
             <button key={r.kind + r.id} onClick={() => { setCur(r.kind === "department" ? r.id : r.parent); setSel({ kind: r.kind, id: r.id }); setSearch(""); }}
               className="flex w-full items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-left text-sm">
@@ -261,7 +263,7 @@ function AdminPage() {
       ) : (
         <>
           <nav className="flex flex-wrap items-center gap-1 text-sm">
-            <button className="font-semibold text-primary" onClick={() => { setCur(null); setSel(null); }}>Katalog</button>
+            <button className="font-semibold text-primary" onClick={() => { setCur(null); setSel(null); }}>{T("adm.catalog")}</button>
             {path(cur).map((p) => (
               <span key={p.id} className="flex items-center gap-1">
                 <span className="text-muted-foreground">›</span>
@@ -271,11 +273,11 @@ function AdminPage() {
           </nav>
 
           <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" onClick={() => setAdding("department")}>+ Kategorie</Button>
-            {cur && <Button size="sm" variant="outline" onClick={() => setAdding("product")}>+ Produkt</Button>}
-            {cur && <Button size="sm" variant="outline" onClick={() => setBulk("plain")}>+ Mehrere Produkte</Button>}
-            {cur && <Button size="sm" variant="outline" onClick={() => setBulk("suggest")}>✨ Vorschläge</Button>}
-            {cur && products.length > 0 && <Button size="sm" variant="outline" onClick={() => setAdding("heading")}>+ Überschrift</Button>}
+            <Button size="sm" variant="outline" onClick={() => setAdding("department")}>+ {T("adm.category")}</Button>
+            {cur && <Button size="sm" variant="outline" onClick={() => setAdding("product")}>+ {T("adm.product")}</Button>}
+            {cur && <Button size="sm" variant="outline" onClick={() => setBulk("plain")}>+ {T("adm.multi")}</Button>}
+            {cur && <Button size="sm" variant="outline" onClick={() => setBulk("suggest")}>✨ {T("adm.suggestions")}</Button>}
+            {cur && products.length > 0 && <Button size="sm" variant="outline" onClick={() => setAdding("heading")}>+ {T("adm.heading")}</Button>}
           </div>
 
           {adding && (
@@ -293,7 +295,7 @@ function AdminPage() {
                   await translateIds([r.data.id]);
                 }
                 setAdding(null);
-              }, "Angelegt & übersetzt")} />
+              }, T("adm.created"))} />
           )}
 
           {bulk && (
@@ -304,12 +306,12 @@ function AdminPage() {
                 if (r.error) throw new Error(r.error.message);
                 await translateIds((r.data ?? []).map((x) => x.id as string));
                 setBulk(false);
-              }, "Angelegt & übersetzt")} />
+              }, T("adm.created"))} />
           )}
 
           {children.length > 0 && (
             <section className="space-y-1">
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Kategorien</h2>
+              <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{T("adm.categories")}</h2>
               {children.map((c, i) => (
                 <Row key={c.id} emoji={c.emoji ?? "📁"} name={c.name} active={sel?.id === c.id}
                   dragging={drag?.kind === "department" && drag.index === i}
@@ -317,7 +319,7 @@ function AdminPage() {
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={(e) => { if (drag?.kind === "department") reorder("department", children, drag.index, dropIndex(e, i)); setDrag(null); }}
                   onDragEnd={() => setDrag(null)}
-                  sub={`${d!.depts.filter((x) => x.parent_id === c.id).length} Unterkat. · ${d!.prods.filter((x) => x.department_id === c.id).length} Produkte`}
+                  sub={T("adm.rowSub", { s: d!.depts.filter((x) => x.parent_id === c.id).length, p: d!.prods.filter((x) => x.department_id === c.id).length })}
                   onOpen={() => { setCur(c.id); setSel(null); }} onEdit={() => setSel({ kind: "department", id: c.id })}
                   onUp={() => move("department", children, i, -1)} onDown={() => move("department", children, i, 1)} disabled={busy} />
               ))}
@@ -327,21 +329,21 @@ function AdminPage() {
           {cur && (
             <section className="space-y-1">
               <div className="flex items-center gap-2">
-                <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Produkte</h2>
+                <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{T("adm.products")}</h2>
                 {products.length > 1 && (
                   <div className="ml-auto flex items-center gap-1">
-                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label="Sortierkriterium"
+                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label={T("adm.sortBy")}
                       className="h-8 rounded-lg border border-input bg-background px-2 text-xs">
-                      <option value="popularity">Relevanz (Beliebtheit)</option>
-                      <option value="price">Preis (günstig zuerst)</option>
-                      <option value="alphabetical">Alphabetisch</option>
-                      <option value="similarity">Ähnlichkeit (gleiche Sorten)</option>
+                      <option value="popularity">{T("adm.opt.popularity")}</option>
+                      <option value="price">{T("adm.opt.price")}</option>
+                      <option value="alphabetical">{T("adm.opt.alphabetical")}</option>
+                      <option value="similarity">{T("adm.opt.similarity")}</option>
                     </select>
-                    <Button size="sm" variant="outline" className="h-8" disabled={busy} onClick={sortProducts}>Sortieren</Button>
+                    <Button size="sm" variant="outline" className="h-8" disabled={busy} onClick={sortProducts}>{T("adm.sort")}</Button>
                   </div>
                 )}
               </div>
-              {products.length === 0 && <p className="text-sm text-muted-foreground">Keine Produkte in dieser Kategorie.</p>}
+              {products.length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noProducts")}</p>}
               {products.map((p, i) => {
                 const h = headingBefore.get(p.id);
                 return (
@@ -362,7 +364,7 @@ function AdminPage() {
                         onDragEnd={() => setDrag(null)}
                         onClick={() => setSel({ kind: "heading", id: h.id })}
                         className={`mt-2 flex cursor-grab items-center gap-2 rounded-lg px-2 py-1 text-left text-sm font-bold text-foreground ${drag?.kind === "heading" && drag.id === h.id ? "opacity-40" : ""} ${drag?.kind === "product" ? "border border-dashed border-primary/60 bg-primary-soft/30" : ""} ${sel?.id === h.id ? "bg-primary-soft" : ""}`}>
-                        <span className="touch-none select-none text-muted-foreground" aria-label="Ziehen">⠿</span>
+                        <span className="touch-none select-none text-muted-foreground" aria-label={T("adm.drag")}>⠿</span>
                         {h.name}
                       </div>
                     )}
@@ -415,7 +417,7 @@ function AdminPage() {
               const h = d.heads.find((x) => x.id === sel.id)!;
               await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: h.before_product_id, name: h.name } });
             } else await translateIds([sel.id]);
-          }, "Neu übersetzt")}
+          }, T("adm.retranslated"))}
           deptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
         />
       )}
@@ -465,7 +467,7 @@ function Row(p: {
           }}
           onDragEnd={() => { setOver(null); p.onDragEnd?.(); }}
           className="-my-1.5 -ml-2 cursor-grab select-none px-2 py-1.5 text-lg text-muted-foreground active:cursor-grabbing"
-          aria-label="Ziehen"
+          aria-label={T("adm.drag")}
         >⠿</span>
       )}
       <button className="flex min-w-0 flex-1 items-center gap-2 text-left" onClick={p.onOpen ?? p.onEdit}>
@@ -477,7 +479,7 @@ function Row(p: {
       </button>
       <button aria-label="Nach oben" disabled={p.disabled} onClick={p.onUp} className="px-1.5 text-muted-foreground">▲</button>
       <button aria-label="Nach unten" disabled={p.disabled} onClick={p.onDown} className="px-1.5 text-muted-foreground">▼</button>
-      <button aria-label="Bearbeiten" onClick={p.onEdit} className="px-1.5 text-primary">✎</button>
+      <button aria-label={T("adm.edit")} onClick={p.onEdit} className="px-1.5 text-primary">✎</button>
     </div>
   );
 }
@@ -490,12 +492,12 @@ function AddForm({ kind, products, onSubmit, onCancel }: { kind: Kind; products:
   const [qty, setQty] = useState("1");
   const [unit, setUnit] = useState("stueck");
   const [before, setBefore] = useState(products[0]?.id ?? "");
-  const label = { department: "Neue Kategorie", product: "Neues Produkt", heading: "Neue Überschrift" }[kind];
+  const label = T(`adm.new.${kind}` as MessageKey);
   return (
     <div className="space-y-2 rounded-xl border border-dashed border-primary/50 p-3">
       <p className="text-sm font-semibold text-primary">{label}</p>
       <div className={kind === "heading" ? "" : "grid grid-cols-[1fr_4rem] gap-2"}>
-        <Input autoFocus placeholder="Name (Deutsch)" value={name} onChange={(e) => setName(e.target.value)} />
+        <Input autoFocus placeholder={T("adm.nameDe")} value={name} onChange={(e) => setName(e.target.value)} />
         {kind !== "heading" && <Input placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} />}
       </div>
       {kind === "product" && (
@@ -506,12 +508,12 @@ function AddForm({ kind, products, onSubmit, onCancel }: { kind: Kind; products:
       )}
       {kind === "heading" && (
         <select value={before} onChange={(e) => setBefore(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
-          {products.map((p) => <option key={p.id} value={p.id}>über: {p.name}</option>)}
+          {products.map((p) => <option key={p.id} value={p.id}>{T("adm.above", { name: p.name })}</option>)}
         </select>
       )}
       <div className="flex gap-2">
-        <Button className="flex-1" disabled={!name.trim()} onClick={() => onSubmit({ name: name.trim(), emoji, qty: Number(qty.replace(",", ".")) || 1, unit, before })}>Anlegen & übersetzen</Button>
-        <Button variant="ghost" onClick={onCancel}>Abbrechen</Button>
+        <Button className="flex-1" disabled={!name.trim()} onClick={() => onSubmit({ name: name.trim(), emoji, qty: Number(qty.replace(",", ".")) || 1, unit, before })}>{T("adm.createTr")}</Button>
+        <Button variant="ghost" onClick={onCancel}>{T("adm.cancel")}</Button>
       </div>
     </div>
   );
@@ -548,7 +550,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
   const names = text.split("\n").map((l) => l.trim()).filter(Boolean);
   return (
     <div className="space-y-2 rounded-xl border border-dashed border-primary/50 p-3">
-      <p className="text-sm font-semibold text-primary">Mehrere Produkte — ein Name pro Zeile</p>
+      <p className="text-sm font-semibold text-primary">{T("adm.multiTitle")}</p>
       <textarea
         autoFocus
         rows={8}
@@ -559,9 +561,9 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
       />
       <div className="space-y-2 rounded-lg bg-muted/50 p-2">
         <Button type="button" size="sm" variant="outline" className="w-full" disabled={loadingS} onClick={fetchS}>
-          {loadingS ? "Suche fehlende Produkte …" : "✨ Fehlende relevante Produkte vorschlagen"}
+          {loadingS ? T("adm.searchingMissing") : "✨ " + T("adm.suggestMissing")}
         </Button>
-        {sugs && sugs.length === 0 && <p className="text-xs text-muted-foreground">Keine weiteren Vorschläge — die Kategorie wirkt vollständig.</p>}
+        {sugs && sugs.length === 0 && <p className="text-xs text-muted-foreground">{T("adm.noMore")}</p>}
         {sugs && sugs.length > 0 && (
           <>
             <ul className="space-y-1">
@@ -576,7 +578,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
                 </li>
               ))}
             </ul>
-            <Button type="button" size="sm" className="w-full" disabled={picked.size === 0} onClick={takeOver}>{picked.size} Vorschläge in die Liste übernehmen</Button>
+            <Button type="button" size="sm" className="w-full" disabled={picked.size === 0} onClick={takeOver}>{T("adm.takeOver", { n: picked.size })}</Button>
           </>
         )}
       </div>
@@ -585,12 +587,12 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
         <Input inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} />
         <UnitSelect value={unit} onChange={setUnit} />
       </div>
-      <p className="text-xs text-muted-foreground">{names.length} Einträge erkannt — Menge, Einheit und Emoji gelten für alle.</p>
+      <p className="text-xs text-muted-foreground">{T("adm.detected", { n: names.length })}</p>
       <div className="flex gap-2">
         <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit)}>
-          {names.length} Produkte anlegen & übersetzen
+          {T("adm.createN", { n: names.length })}
         </Button>
-        <Button variant="ghost" onClick={onCancel}>Abbrechen</Button>
+        <Button variant="ghost" onClick={onCancel}>{T("adm.cancel")}</Button>
       </div>
     </div>
   );
@@ -599,7 +601,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest }: {
 function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
   return (
     <select value={value} onChange={(e) => onChange(e.target.value)} className="rounded-lg border border-input bg-background px-2 text-sm">
-      {getUnits("de-DE").map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+      {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
     </select>
   );
 }
@@ -623,23 +625,23 @@ function Editor(p: {
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [before, setBefore] = useState(head?.before_product_id ?? "");
   const tr = data.tr.get(sel.id) ?? {};
-  const title = { department: "Kategorie", product: "Produkt", heading: "Überschrift" }[sel.kind];
+  const title = T(`adm.edit.${sel.kind}` as MessageKey);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
       <div className="max-h-[88dvh] w-full max-w-[440px] space-y-3 overflow-y-auto rounded-t-3xl bg-background p-5 pb-[calc(2rem+env(safe-area-inset-bottom))]" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-foreground">{title} bearbeiten</h2>
-          <button onClick={p.onClose} className="text-muted-foreground" aria-label="Schliessen">✕</button>
+          <h2 className="text-lg font-bold text-foreground">{title}</h2>
+          <button onClick={p.onClose} className="text-muted-foreground" aria-label={T("adm.close")}>✕</button>
         </div>
 
         <div className={sel.kind === "heading" ? "" : "grid grid-cols-[1fr_4rem] gap-2"}>
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Name (Deutsch)" />
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={T("adm.nameDe")} />
           {sel.kind !== "heading" && <Input value={emoji} onChange={(e) => setEmoji(e.target.value)} placeholder="🙂" />}
         </div>
         {sel.kind !== "heading" && (
           <select value={parent} onChange={(e) => setParent(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
-            {sel.kind === "department" && <option value="">Oberste Ebene</option>}
+            {sel.kind === "department" && <option value="">{T("adm.topLevel")}</option>}
             {p.deptOptions.filter((o) => o.id !== sel.id).map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
           </select>
         )}
@@ -651,7 +653,7 @@ function Editor(p: {
         )}
         {head && (
           <select value={before} onChange={(e) => setBefore(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
-            {p.products.map((x) => <option key={x.id} value={x.id}>über: {x.name}</option>)}
+            {p.products.map((x) => <option key={x.id} value={x.id}>{T("adm.above", { name: x.name })}</option>)}
           </select>
         )}
         <div className="flex gap-2">
@@ -659,16 +661,16 @@ function Editor(p: {
             name: name.trim(), emoji, before,
             ...(sel.kind !== "heading" ? { parent } : {}),
             ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit } : {}),
-          })}>Speichern</Button>
-          <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>Löschen</Button>
+          })}>{T("adm.save")}</Button>
+          <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
         {prod && <ProductCuisinePicker productId={prod.id} />}
 
         <div className="flex items-center justify-between pt-2">
-          <h3 className="text-sm font-semibold text-foreground">Sprachen</h3>
-          <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onRetranslate}>KI neu übersetzen</Button>
+          <h3 className="text-sm font-semibold text-foreground">{T("adm.languages")}</h3>
+          <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onRetranslate}>{T("adm.retranslate")}</Button>
         </div>
-        <p className="text-[11px] text-muted-foreground">Grün = von Hand bearbeitet, wird von der KI nicht überschrieben. Leeren = Übersetzung löschen.</p>
+        <p className="text-[11px] text-muted-foreground">{T("adm.trHint")}</p>
         <div className="space-y-1.5">
           {LOCALES.filter((l) => l.id !== "de-DE").map((l) => (
             <TrField key={l.id + (tr[l.id]?.name ?? "")} label={`${l.flag} ${l.id}`} value={tr[l.id]?.name ?? ""} manual={tr[l.id]?.is_manual}
