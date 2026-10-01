@@ -192,3 +192,74 @@ export const rankProducts = createServerFn({ method: "POST" })
       }),
     };
   });
+
+/** Länderküche anlegen/ändern (nur Admins); Name wird in alle Sprachen übersetzt (manuelle bleiben). */
+export const saveCuisine = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({ id: z.string().uuid().optional(), name: z.string().trim().min(1).max(60), emoji: z.string().max(16).nullable(), sortOrder: z.number().int().optional() }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    let id = data.id;
+    let renamed = true;
+    if (id) {
+      const { data: prev } = await sb.from("cuisines").select("name").eq("id", id).single();
+      renamed = prev?.name !== data.name;
+      const { error } = await sb.from("cuisines").update({ name: data.name, emoji: data.emoji }).eq("id", id);
+      if (error) throw new Error(error.message);
+    } else {
+      const { data: row, error } = await sb.from("cuisines").insert({ name: data.name, emoji: data.emoji, sort_order: data.sortOrder ?? 999 }).select("id").single();
+      if (error) throw new Error(error.message);
+      id = row.id as string;
+    }
+    if (renamed) {
+      const { translateNames } = await import("./translate.server");
+      const { data: manual } = await sb.from("catalog_translations").select("locale").eq("entity_id", id).eq("is_manual", true);
+      const skip = new Set(((manual ?? []) as Array<{ locale: string }>).map((m) => m.locale));
+      const rows = (
+        await Promise.all(
+          TRANSLATED_LOCALES.filter((l) => !skip.has(l)).map(async (locale) => {
+            try {
+              const r = await translateNames({ [id!]: `${data.name} (Küche)` }, locale);
+              const n = r[id!]?.replace(/\s*\([^)]*\)\s*$/, "").trim();
+              return n ? [{ entity_type: "cuisine", entity_id: id!, locale, name: n, is_manual: false }] : [];
+            } catch { return []; }
+          }),
+        )
+      ).flat();
+      if (rows.length) await sb.from("catalog_translations").upsert(rows, { onConflict: "entity_type,entity_id,locale" });
+    }
+    return { id };
+  });
+
+export const deleteCuisine = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { error } = await context.supabase.from("cuisines").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    await context.supabase.from("catalog_translations").delete().eq("entity_id", data.id);
+    return { ok: true };
+  });
+
+/** KI schlägt aus einer Kandidatenliste Produkte vor, die in einer Küche typisch sind. */
+export const suggestCuisineProducts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({ cuisine: z.string().max(60), candidates: z.array(z.object({ id: z.string(), name: z.string().max(120), path: z.string().max(200) })).max(400) }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { aiJson } = await import("./translate.server");
+    const list = data.candidates.map((c, i) => ({ i, name: c.name, kategorie: c.path }));
+    const r = await aiJson<{ picks: number[] }>(
+      `Wähle aus der Liste die Supermarkt-Produkte, die in der Küche „${data.cuisine}" typische, gebräuchliche Zutaten sind. Non-Food nie. Gib nur die Indizes zurück.`,
+      JSON.stringify(list),
+      "picks",
+      { type: "object", additionalProperties: false, required: ["picks"], properties: { picks: { type: "array", items: { type: "integer" } } } },
+    );
+    return { ids: (r.picks ?? []).map((i) => data.candidates[i]?.id).filter((x): x is string => Boolean(x)) };
+  });
