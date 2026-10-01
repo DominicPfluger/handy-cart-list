@@ -351,6 +351,12 @@ function FavoritesPage() {
         <p className="mt-1 text-sm text-muted-foreground">{t("fav.subtitle")}</p>
       </div>
 
+      {hydrated && favorites.length > 0 && (
+        <Button type="button" variant="outline" className="w-full" onClick={transferAllToNewList}>
+          {t("fav.toList", { count: favorites.length })}
+        </Button>
+      )}
+
       <div className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
         <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
         <input
