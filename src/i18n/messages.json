@@ -602,7 +602,11 @@
     "mk.hide": "Hide",
     "mk.admins": "Manage market admins",
     "mk.adminAdded": "Market admin assigned",
-    "mk.noAdmins": "No market admins yet"
+    "mk.noAdmins": "No market admins yet",
+    "adm.marketOrder": "Order for market",
+    "adm.marketGlobal": "🌍 Global",
+    "adm.marketOrderHint": "Market relevance {m}: moving and sorting apply to this market only.",
+    "adm.marketUnavailable": "not in market"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1207,7 +1211,11 @@
     "mk.hide": "Hide",
     "mk.admins": "Manage market admins",
     "mk.adminAdded": "Market admin assigned",
-    "mk.noAdmins": "No market admins yet"
+    "mk.noAdmins": "No market admins yet",
+    "adm.marketOrder": "Order for market",
+    "adm.marketGlobal": "🌍 Global",
+    "adm.marketOrderHint": "Market relevance {m}: moving and sorting apply to this market only.",
+    "adm.marketUnavailable": "not in market"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1812,7 +1820,11 @@
     "mk.hide": "Hide",
     "mk.admins": "Manage market admins",
     "mk.adminAdded": "Market admin assigned",
-    "mk.noAdmins": "No market admins yet"
+    "mk.noAdmins": "No market admins yet",
+    "adm.marketOrder": "Order for market",
+    "adm.marketGlobal": "🌍 Global",
+    "adm.marketOrderHint": "Market relevance {m}: moving and sorting apply to this market only.",
+    "adm.marketUnavailable": "not in market"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2417,7 +2429,11 @@
     "mk.hide": "Ocultar",
     "mk.admins": "Gestionar administradores de mercado",
     "mk.adminAdded": "Administrador asignado",
-    "mk.noAdmins": "Aún no hay administradores de mercado"
+    "mk.noAdmins": "Aún no hay administradores de mercado",
+    "adm.marketOrder": "Orden para el mercado",
+    "adm.marketGlobal": "🌍 Global",
+    "adm.marketOrderHint": "Relevancia de mercado {m}: mover y ordenar solo afecta a este mercado.",
+    "adm.marketUnavailable": "no en el mercado"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3022,7 +3038,11 @@
     "mk.hide": "Ocultar",
     "mk.admins": "Gestionar administradores de mercado",
     "mk.adminAdded": "Administrador asignado",
-    "mk.noAdmins": "Aún no hay administradores de mercado"
+    "mk.noAdmins": "Aún no hay administradores de mercado",
+    "adm.marketOrder": "Orden para el mercado",
+    "adm.marketGlobal": "🌍 Global",
+    "adm.marketOrderHint": "Relevancia de mercado {m}: mover y ordenar solo afecta a este mercado.",
+    "adm.marketUnavailable": "no en el mercado"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3627,7 +3647,11 @@
     "mk.hide": "Masquer",
     "mk.admins": "Gérer les admins de marché",
     "mk.adminAdded": "Admin de marché attribué",
-    "mk.noAdmins": "Aucun admin de marché"
+    "mk.noAdmins": "Aucun admin de marché",
+    "adm.marketOrder": "Ordre pour le marché",
+    "adm.marketGlobal": "🌍 Global",
+    "adm.marketOrderHint": "Pertinence marché {m} : déplacer et trier ne s’appliquent qu’à ce marché.",
+    "adm.marketUnavailable": "absent du marché"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4232,7 +4256,11 @@
     "mk.hide": "Masquer",
     "mk.admins": "Gérer les admins de marché",
     "mk.adminAdded": "Admin de marché attribué",
-    "mk.noAdmins": "Aucun admin de marché"
+    "mk.noAdmins": "Aucun admin de marché",
+    "adm.marketOrder": "Ordre pour le marché",
+    "adm.marketGlobal": "🌍 Global",
+    "adm.marketOrderHint": "Pertinence marché {m} : déplacer et trier ne s’appliquent qu’à ce marché.",
+    "adm.marketUnavailable": "absent du marché"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4837,7 +4865,11 @@
     "mk.hide": "Nascondi",
     "mk.admins": "Gestisci admin di mercato",
     "mk.adminAdded": "Admin di mercato assegnato",
-    "mk.noAdmins": "Ancora nessun admin di mercato"
+    "mk.noAdmins": "Ancora nessun admin di mercato",
+    "adm.marketOrder": "Ordine per mercato",
+    "adm.marketGlobal": "🌍 Globale",
+    "adm.marketOrderHint": "Rilevanza mercato {m}: spostare e ordinare vale solo per questo mercato.",
+    "adm.marketUnavailable": "non nel mercato"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -5442,7 +5474,11 @@
     "mk.hide": "Nascondi",
     "mk.admins": "Gestisci admin di mercato",
     "mk.adminAdded": "Admin di mercato assegnato",
-    "mk.noAdmins": "Ancora nessun admin di mercato"
+    "mk.noAdmins": "Ancora nessun admin di mercato",
+    "adm.marketOrder": "Ordine per mercato",
+    "adm.marketGlobal": "🌍 Globale",
+    "adm.marketOrderHint": "Rilevanza mercato {m}: spostare e ordinare vale solo per questo mercato.",
+    "adm.marketUnavailable": "non nel mercato"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6047,7 +6083,11 @@
     "mk.hide": "Ocultar",
     "mk.admins": "Gerir administradores de mercado",
     "mk.adminAdded": "Administrador atribuído",
-    "mk.noAdmins": "Ainda sem administradores de mercado"
+    "mk.noAdmins": "Ainda sem administradores de mercado",
+    "adm.marketOrder": "Ordem para o mercado",
+    "adm.marketGlobal": "🌍 Global",
+    "adm.marketOrderHint": "Relevância de mercado {m}: mover e ordenar aplica-se só a este mercado.",
+    "adm.marketUnavailable": "fora do mercado"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -6652,7 +6692,11 @@
     "mk.hide": "Ocultar",
     "mk.admins": "Gerir administradores de mercado",
     "mk.adminAdded": "Administrador atribuído",
-    "mk.noAdmins": "Ainda sem administradores de mercado"
+    "mk.noAdmins": "Ainda sem administradores de mercado",
+    "adm.marketOrder": "Ordem para o mercado",
+    "adm.marketGlobal": "🌍 Global",
+    "adm.marketOrderHint": "Relevância de mercado {m}: mover e ordenar aplica-se só a este mercado.",
+    "adm.marketUnavailable": "fora do mercado"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -7257,7 +7301,11 @@
     "mk.hide": "Verbergen",
     "mk.admins": "Marktbeheerders beheren",
     "mk.adminAdded": "Marktbeheerder toegewezen",
-    "mk.noAdmins": "Nog geen marktbeheerders"
+    "mk.noAdmins": "Nog geen marktbeheerders",
+    "adm.marketOrder": "Volgorde voor markt",
+    "adm.marketGlobal": "🌍 Globaal",
+    "adm.marketOrderHint": "Marktrelevantie {m}: verplaatsen en sorteren geldt alleen voor deze markt.",
+    "adm.marketUnavailable": "niet in markt"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -7862,7 +7910,11 @@
     "mk.hide": "Verbergen",
     "mk.admins": "Marktbeheerders beheren",
     "mk.adminAdded": "Marktbeheerder toegewezen",
-    "mk.noAdmins": "Nog geen marktbeheerders"
+    "mk.noAdmins": "Nog geen marktbeheerders",
+    "adm.marketOrder": "Volgorde voor markt",
+    "adm.marketGlobal": "🌍 Globaal",
+    "adm.marketOrderHint": "Marktrelevantie {m}: verplaatsen en sorteren geldt alleen voor deze markt.",
+    "adm.marketUnavailable": "niet in markt"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
