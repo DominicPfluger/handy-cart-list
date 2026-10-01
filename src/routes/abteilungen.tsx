@@ -59,7 +59,7 @@ export const Route = createFileRoute("/abteilungen")({
 });
 
 function ProductThumb({ product }: { product: CatalogProduct }) {
-  return <ProductEmoji emoji={product.emoji} className="text-3xl" />;
+  return <ProductEmoji emoji={product.emoji} className="text-4xl" />;
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
@@ -627,7 +627,7 @@ function DepartmentsPage() {
                   data-drop={draggable ? "product" : undefined}
                   data-id={product.id}
                   onClickCapture={(e) => { if (suppressClick.current) { e.stopPropagation(); e.preventDefault(); } }}
-                  className={`flex min-h-20 select-none items-center gap-3 px-3 py-2.5 ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" && !headingDrop ? "!border-b-2 !border-b-primary" : ""}`}
+                  className={`flex min-h-16 select-none items-center gap-2.5 px-2.5 py-2 ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" && !headingDrop ? "!border-b-2 !border-b-primary" : ""}`}
                 >
                   <button
                     type="button"
@@ -638,7 +638,7 @@ function DepartmentsPage() {
                     onPointerLeave={draggable ? cancelPress : undefined}
                     onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
                     onClick={() => { if (!suppressClick.current) navigate({ to: "/produkt/$id", params: { id: product.id } }); }}
-                    className="grid h-14 w-14 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-xl bg-primary-soft/25"
+                    className="grid h-12 w-12 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-lg bg-primary-soft/25"
                   >
                     <ProductThumb product={product} />
                   </button>
