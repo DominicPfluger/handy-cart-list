@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -14,6 +14,7 @@ import { catalogQueryOptions, brandsFor } from "../lib/catalog-query";
 import { formatQuantity, getUnits } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
+import { useFavoriteQuantity } from "../hooks/use-favorite-quantity";
 
 export const Route = createFileRoute("/produkt/$id")({
   ssr: false,
@@ -44,8 +45,16 @@ function ProductPage() {
   const trVariants = useServerFn(translateVariants);
   const [newVariant, setNewVariant] = useState("");
   const [saving, setSaving] = useState(false);
+  const fav = useFavoriteQuantity(id);
+  const [favQty, setFavQty] = useState("1");
+  const [favUnit, setFavUnit] = useState("stueck");
 
   const product = data.products.find((p) => p.id === id);
+  useEffect(() => {
+    setFavQty(String(fav.value?.quantity ?? product?.defaultQuantity ?? 1));
+    setFavUnit(fav.value?.unit ?? product?.defaultUnit ?? "stueck");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fav.value, product?.id]);
   if (!product) {
     return (
       <div className="mx-auto max-w-md px-4 py-16 text-center">
