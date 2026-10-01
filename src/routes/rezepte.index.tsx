@@ -56,18 +56,18 @@ function RecipesPage() {
           </span>
         </Link>
 
-        <div className="mt-3 grid grid-cols-4 gap-2">
+        <div className="mt-3 grid grid-cols-2 gap-2.5">
           {RECIPE_TEMPLATES.map((x) => (
             <Link
               key={x.id}
               to="/rezepte/generator"
               search={{ cat: x.id, recipe: undefined }}
-              className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-background p-3 text-center transition active:scale-[0.96]"
+              className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-background p-4 text-center transition active:scale-[0.96]"
             >
-              <span className="grid h-11 w-11 place-items-center rounded-2xl text-xl" style={{ background: x.color }} aria-hidden="true">
+              <span className="grid h-16 w-16 place-items-center rounded-2xl text-4xl" style={{ background: x.color }} aria-hidden="true">
                 {x.emoji}
               </span>
-              <span className="text-[11px] font-semibold leading-tight text-foreground">{t(`rk.cat.${x.id}` as MessageKey)}</span>
+              <span className="text-[13px] font-semibold leading-tight text-foreground">{t(`rk.cat.${x.id}` as MessageKey)}</span>
             </Link>
           ))}
         </div>
