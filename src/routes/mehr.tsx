@@ -191,6 +191,7 @@ function MorePage() {
             </select>
           </div>
         </label>
+        <SpeakLocaleRow />
         <Link to="/admin" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
             <span className="text-lg" aria-hidden="true">✎</span>
@@ -257,7 +258,6 @@ function MorePage() {
         </Link>
         <NotificationSettingsRow />
         <SpeakRateRow />
-        <SpeakLocaleRow />
       </section>
 
       {hiddenProducts.length > 0 && (
