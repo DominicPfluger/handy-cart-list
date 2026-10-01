@@ -260,22 +260,22 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
 
   const upload = (file: File) => p.run(async () => {
     const blob = await prepareCategoryImage(file);
-    const path = `${table}/${item!.id}.png`;
+    const path = `${table}/${effId!}.png`;
     const { error } = await supabase.storage.from("catalog-images").upload(path, blob, { contentType: "image/png", upsert: true });
     if (error) throw new Error(error.message);
-    await p.must(supabase.from(table).update({ image_path: path }).eq("id", item!.id));
+    await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId!));
   });
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
       <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
-        {picking && item && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(() => p.must(supabase.from(table).update({ image_path: path }).eq("id", item.id))); }} />}
+        {picking && effId && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(() => p.must(supabase.from(table).update({ image_path: path }).eq("id", effId))); }} />}
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
             {p.imgUrl ? <img src={p.imgUrl} alt="" className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
           </div>
-          {item && (
+          {effId && (
             <div className="flex flex-1 flex-col gap-2">
               <div className="flex flex-wrap gap-2">
                 <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
@@ -284,8 +284,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               </div>
               <Input aria-label={T("tile.aiHint")} placeholder={T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 rounded-xl text-sm" />
               <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(async () => {
-                await genImg({ data: { id: item.id, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
-                const { data } = await supabase.storage.from("catalog-images").createSignedUrl(`${table}/${item.id}.png`, 600);
+                await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+                const { data } = await supabase.storage.from("catalog-images").createSignedUrl(`${table}/${effId}.png`, 600);
                 if (data?.signedUrl) setLarge(data.signedUrl);
               }, T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
             </div>
