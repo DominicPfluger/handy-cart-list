@@ -435,6 +435,10 @@ function AdminPage() {
           onImageChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }}
         />
       )}
+
+      <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
+        <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>
+      </Link>
     </div>
   );
 }
