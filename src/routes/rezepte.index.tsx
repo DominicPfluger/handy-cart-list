@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { getLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { catalogQueryOptions } from "../lib/catalog-query";
-import { RecipeBuilder } from "../components/recipe-builder";
 
 export const Route = createFileRoute("/rezepte/")({
   ssr: false,
@@ -23,6 +22,7 @@ export const Route = createFileRoute("/rezepte/")({
 type RecipeEntry = { id: string; to: "/rezepte/generator" | "/rezepte/inspirationen" | "/rezepte/listen"; icon: string; bg: string; titleKey: MessageKey; descKey: MessageKey };
 
 const RECIPE_ENTRIES: RecipeEntry[] = [
+  { id: "rk-generator", to: "/rezepte/generator", icon: "🧑‍🍳", bg: "#E4F3E6", titleKey: "rec.entryGenTitle", descKey: "rec.entryGenDesc" },
   { id: "rk-lists", to: "/rezepte/listen", icon: "📁", bg: "#E3EEF9", titleKey: "rec.entryListsTitle", descKey: "rec.entryListsDesc" },
   { id: "rk-inspiration", to: "/rezepte/inspirationen", icon: "✨", bg: "#FFF3D6", titleKey: "rec.entryInspTitle", descKey: "rec.entryInspDesc" },
 ];
@@ -38,8 +38,6 @@ function RecipesPage() {
           {t("rec.subtitle")}
         </p>
       </div>
-
-      <RecipeBuilder mode="generator" />
 
       <div className="space-y-3">
         {RECIPE_ENTRIES.map((e) => (
