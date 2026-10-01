@@ -552,3 +552,55 @@ export const translateUiBatch = createServerFn({ method: "POST" })
     }
     return { written: rows.length, remaining: Math.max(0, missing.length - rows.length) };
   });
+
+const SUGGEST_UNITS = ["stueck", "gramm", "kilogramm", "milliliter", "liter", "flasche", "dose", "beutel", "packung", "schachtel", "becher", "glas", "tube", "buendel", "netz", "rolle", "sixpack"];
+const normName = (s: string) => s.toLowerCase().replace(/ß/g, "ss").replace(/[^a-z0-9äöüéèàç]/g, "");
+
+/** KI schlägt typische, noch fehlende Produkte für eine Kategorie vor (Admin). */
+export const suggestCategoryProducts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ departmentId: z.string().uuid(), keywords: z.string().max(200).optional() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    const { data: depts } = await sb.from("departments").select("id,name,parent_id");
+    const byId = new Map(((depts ?? []) as Array<{ id: string; name: string; parent_id: string | null }>).map((d) => [d.id, d]));
+    const path: string[] = [];
+    let c = byId.get(data.departmentId); let g = 0;
+    while (c && g++ < 20) { path.unshift(c.name); c = c.parent_id ? byId.get(c.parent_id) : undefined; }
+    if (!path.length) throw new Error("Kategorie nicht gefunden");
+    const { data: here } = await sb.from("products").select("id,name").eq("department_id", data.departmentId);
+    const { data: al } = await sb.from("product_aliases").select("product_id").eq("department_id", data.departmentId);
+    const all: Array<{ id: string; name: string }> = [];
+    for (let from = 0; ; from += 1000) {
+      const { data: page } = await sb.from("products").select("id,name").range(from, from + 999);
+      all.push(...((page ?? []) as Array<{ id: string; name: string }>));
+      if (!page || page.length < 1000) break;
+    }
+    const inHere = new Set([...((here ?? []) as Array<{ id: string }>).map((r) => r.id), ...((al ?? []) as Array<{ product_id: string }>).map((r) => r.product_id)]);
+    const byName = new Map(all.map((p) => [normName(p.name), p.id]));
+    const existingNames = all.filter((p) => inHere.has(p.id)).map((p) => p.name);
+    const { aiJson } = await import("./translate.server");
+    const r = await aiJson<{ items: Array<{ name: string; emoji: string; quantity: number; unit: string }> }>(
+      "Du pflegst den Produktkatalog einer Schweizer Einkaufslisten-App. Schlage bis zu 15 typische, im Supermarkt übliche Produkte vor, die in der genannten Kategorie noch fehlen. " +
+        "Deutsche Namen, kurz, ohne Marken, Schweizer Schreibweise (ss statt ß). Keine Duplikate oder Varianten der vorhandenen Produkte. " +
+        `Ein passendes Emoji, typische Standardmenge und Einheit aus: ${SUGGEST_UNITS.join(", ")}.`,
+      `Kategorie: ${path.join(" › ")}\nVorhanden: ${existingNames.join(", ") || "(keine)"}${data.keywords?.trim() ? `\nStichworte: ${data.keywords.trim()}` : ""}`,
+      "product_suggestions",
+      {
+        type: "object", additionalProperties: false, required: ["items"],
+        properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "emoji", "quantity", "unit"],
+          properties: { name: { type: "string" }, emoji: { type: "string" }, quantity: { type: "number" }, unit: { type: "string", enum: SUGGEST_UNITS } } } } },
+      },
+    );
+    const seen = new Set<string>();
+    return (r.items ?? []).flatMap((it) => {
+      const n = it.name.trim().replace(/ß/g, "ss");
+      const key = normName(n);
+      if (!n || seen.has(key)) return [];
+      seen.add(key);
+      const existingId = byName.get(key) ?? null;
+      if (existingId && inHere.has(existingId)) return [];
+      return [{ name: n, emoji: it.emoji.trim() || "🛒", quantity: it.quantity > 0 ? it.quantity : 1, unit: it.unit, existingId }];
+    });
+  });
