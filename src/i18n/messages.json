@@ -687,7 +687,12 @@
     "pd.quantity": "Quantity",
     "pd.brands": "Brands",
     "pd.variants": "Variants",
-    "pd.addToList": "Add to list"
+    "pd.addToList": "Add to list",
+    "pd.unit": "Default unit",
+    "pd.saved": "Saved",
+    "pd.variantPh": "New variant",
+    "pd.addVariant": "+ Variant",
+    "pd.removeVariant": "Remove {name}"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1377,7 +1382,12 @@
     "pd.quantity": "Quantity",
     "pd.brands": "Brands",
     "pd.variants": "Variants",
-    "pd.addToList": "Add to list"
+    "pd.addToList": "Add to list",
+    "pd.unit": "Default unit",
+    "pd.saved": "Saved",
+    "pd.variantPh": "New variant",
+    "pd.addVariant": "+ Variant",
+    "pd.removeVariant": "Remove {name}"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2067,7 +2077,12 @@
     "pd.quantity": "Quantity",
     "pd.brands": "Brands",
     "pd.variants": "Variants",
-    "pd.addToList": "Add to list"
+    "pd.addToList": "Add to list",
+    "pd.unit": "Default unit",
+    "pd.saved": "Saved",
+    "pd.variantPh": "New variant",
+    "pd.addVariant": "+ Variant",
+    "pd.removeVariant": "Remove {name}"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2757,7 +2772,12 @@
     "pd.quantity": "Cantidad",
     "pd.brands": "Marcas",
     "pd.variants": "Variantes",
-    "pd.addToList": "Añadir a la lista"
+    "pd.addToList": "Añadir a la lista",
+    "pd.unit": "Unidad predeterminada",
+    "pd.saved": "Guardado",
+    "pd.variantPh": "Nueva variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "Quitar {name}"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3447,7 +3467,12 @@
     "pd.quantity": "Cantidad",
     "pd.brands": "Marcas",
     "pd.variants": "Variantes",
-    "pd.addToList": "Añadir a la lista"
+    "pd.addToList": "Añadir a la lista",
+    "pd.unit": "Unidad predeterminada",
+    "pd.saved": "Guardado",
+    "pd.variantPh": "Nueva variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "Quitar {name}"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -4137,7 +4162,12 @@
     "pd.quantity": "Quantité",
     "pd.brands": "Marques",
     "pd.variants": "Variantes",
-    "pd.addToList": "Ajouter à la liste"
+    "pd.addToList": "Ajouter à la liste",
+    "pd.unit": "Unité par défaut",
+    "pd.saved": "Enregistré",
+    "pd.variantPh": "Nouvelle variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "Retirer {name}"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4827,7 +4857,12 @@
     "pd.quantity": "Quantité",
     "pd.brands": "Marques",
     "pd.variants": "Variantes",
-    "pd.addToList": "Ajouter à la liste"
+    "pd.addToList": "Ajouter à la liste",
+    "pd.unit": "Unité par défaut",
+    "pd.saved": "Enregistré",
+    "pd.variantPh": "Nouvelle variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "Retirer {name}"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -5517,7 +5552,12 @@
     "pd.quantity": "Quantità",
     "pd.brands": "Marche",
     "pd.variants": "Varianti",
-    "pd.addToList": "Aggiungi alla lista"
+    "pd.addToList": "Aggiungi alla lista",
+    "pd.unit": "Unità predefinita",
+    "pd.saved": "Salvato",
+    "pd.variantPh": "Nuova variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "Rimuovi {name}"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -6207,7 +6247,12 @@
     "pd.quantity": "Quantità",
     "pd.brands": "Marche",
     "pd.variants": "Varianti",
-    "pd.addToList": "Aggiungi alla lista"
+    "pd.addToList": "Aggiungi alla lista",
+    "pd.unit": "Unità predefinita",
+    "pd.saved": "Salvato",
+    "pd.variantPh": "Nuova variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "Rimuovi {name}"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6897,7 +6942,12 @@
     "pd.quantity": "Quantidade",
     "pd.brands": "Marcas",
     "pd.variants": "Variantes",
-    "pd.addToList": "Adicionar à lista"
+    "pd.addToList": "Adicionar à lista",
+    "pd.unit": "Unidade padrão",
+    "pd.saved": "Salvo",
+    "pd.variantPh": "Nova variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "Remover {name}"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -7587,7 +7637,12 @@
     "pd.quantity": "Quantidade",
     "pd.brands": "Marcas",
     "pd.variants": "Variantes",
-    "pd.addToList": "Adicionar à lista"
+    "pd.addToList": "Adicionar à lista",
+    "pd.unit": "Unidade padrão",
+    "pd.saved": "Salvo",
+    "pd.variantPh": "Nova variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "Remover {name}"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -8277,7 +8332,12 @@
     "pd.quantity": "Hoeveelheid",
     "pd.brands": "Merken",
     "pd.variants": "Varianten",
-    "pd.addToList": "Aan lijst toevoegen"
+    "pd.addToList": "Aan lijst toevoegen",
+    "pd.unit": "Standaardeenheid",
+    "pd.saved": "Opgeslagen",
+    "pd.variantPh": "Nieuwe variant",
+    "pd.addVariant": "+ Variant",
+    "pd.removeVariant": "{name} verwijderen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -8967,7 +9027,12 @@
     "pd.quantity": "Hoeveelheid",
     "pd.brands": "Merken",
     "pd.variants": "Varianten",
-    "pd.addToList": "Aan lijst toevoegen"
+    "pd.addToList": "Aan lijst toevoegen",
+    "pd.unit": "Standaardeenheid",
+    "pd.saved": "Opgeslagen",
+    "pd.variantPh": "Nieuwe variant",
+    "pd.addVariant": "+ Variant",
+    "pd.removeVariant": "{name} verwijderen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9209,7 +9274,12 @@
     "pd.quantity": "Menge",
     "pd.brands": "Marken",
     "pd.variants": "Varianten",
-    "pd.addToList": "Zur Liste hinzufügen"
+    "pd.addToList": "Zur Liste hinzufügen",
+    "pd.unit": "Standard-Einheit",
+    "pd.saved": "Gespeichert",
+    "pd.variantPh": "Neue Variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "{name} entfernen"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9451,6 +9521,11 @@
     "pd.quantity": "Menge",
     "pd.brands": "Marken",
     "pd.variants": "Varianten",
-    "pd.addToList": "Zur Liste hinzufügen"
+    "pd.addToList": "Zur Liste hinzufügen",
+    "pd.unit": "Standard-Einheit",
+    "pd.saved": "Gespeichert",
+    "pd.variantPh": "Neue Variante",
+    "pd.addVariant": "+ Variante",
+    "pd.removeVariant": "{name} entfernen"
   }
 }
