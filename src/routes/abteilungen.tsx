@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
@@ -133,6 +133,7 @@ function DepartmentsPage() {
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
   const isAdmin = useIsAdmin();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const saveHeadingFn = useServerFn(saveHeading);
   const headingBefore = useMemo(() => new Map(data.headings.map((h) => [h.beforeProductId, h])), [data.headings]);
   const customNames = useCustomNames();
@@ -620,17 +621,22 @@ function DepartmentsPage() {
                 <div
                   data-drop={draggable ? "product" : undefined}
                   data-id={product.id}
-                  onPointerDown={draggable ? (e) => startPress(e, product, "product") : undefined}
-                  onPointerMove={draggable ? pressMove : undefined}
-                  onPointerUp={draggable ? cancelPress : undefined}
-                  onPointerLeave={draggable ? cancelPress : undefined}
-                  onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
                   onClickCapture={(e) => { if (suppressClick.current) { e.stopPropagation(); e.preventDefault(); } }}
                   className={`flex min-h-20 select-none items-center gap-3 px-3 py-2.5 ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" && !headingDrop ? "!border-b-2 !border-b-primary" : ""}`}
                 >
-                  <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25">
+                  <button
+                    type="button"
+                    aria-label={product.name}
+                    onPointerDown={draggable ? (e) => startPress(e, product, "product") : undefined}
+                    onPointerMove={draggable ? pressMove : undefined}
+                    onPointerUp={draggable ? cancelPress : undefined}
+                    onPointerLeave={draggable ? cancelPress : undefined}
+                    onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
+                    onClick={() => { if (!suppressClick.current) navigate({ to: "/produkt/$id", params: { id: product.id } }); }}
+                    className="grid h-14 w-14 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-xl bg-primary-soft/25"
+                  >
                     <ProductThumb product={product} />
-                  </div>
+                  </button>
                   <div className="min-w-0 flex-1">
                     <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} className="inline-flex text-left text-sm font-semibold text-foreground">
                       <span>{product.name}</span>

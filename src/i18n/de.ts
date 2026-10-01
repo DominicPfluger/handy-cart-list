@@ -662,6 +662,12 @@ export const de = {
   "mk.admins": "Markt-Admins verwalten",
   "mk.adminAdded": "Markt-Admin zugewiesen",
   "mk.noAdmins": "Noch keine Markt-Admins",
+  "pd.back": "Zurück",
+  "pd.notFound": "Produkt nicht gefunden.",
+  "pd.quantity": "Menge",
+  "pd.brands": "Marken",
+  "pd.variants": "Varianten",
+  "pd.addToList": "Zur Liste hinzufügen",
 } as const;
 
 export type MessageKey = keyof typeof de;
