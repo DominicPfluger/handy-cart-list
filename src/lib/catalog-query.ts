@@ -1,7 +1,7 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { getLocale, pickName, useLocale } from "../i18n";
-import { getCatalog, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct } from "./catalog.functions";
+import { getCatalog, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct, type CatalogCuisine } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
 
@@ -30,7 +30,7 @@ export function useCatalog(): Catalog {
     }));
     const ownProducts: CatalogProduct[] = own.products.map((p, i) => ({
       id: p.id, departmentId: p.departmentId, name: p.name, emoji: p.emoji, imageUrl: null,
-      defaultQuantity: p.defaultQuantity, defaultUnit: p.defaultUnit, organicAvailable: true, variants: [], excludedDiets: [],
+      defaultQuantity: p.defaultQuantity, defaultUnit: p.defaultUnit, organicAvailable: true, variants: [], excludedDiets: [], cuisineIds: [],
       sortOrder: 10000 + i, baseName: p.name, names: {},
     }));
     return {
@@ -40,11 +40,12 @@ export function useCatalog(): Catalog {
         name: custom[p.id] ?? pickName(p.names, locale, p.baseName),
       })),
       headings: (data.headings ?? []).map((h) => ({ ...h, name: pickName(h.names, locale, h.baseName) })),
+      cuisines: (data.cuisines ?? []).map((c) => ({ ...c, name: pickName(c.names, locale, c.baseName) })),
     };
   }, [data, locale, custom, own]);
 }
 
-export type { Catalog, CatalogDepartment, CatalogHeading, CatalogProduct };
+export type { Catalog, CatalogCuisine, CatalogDepartment, CatalogHeading, CatalogProduct };
 
 /** Überschrift, unter der ein Produkt steht (letzte Überschrift davor in der Katalogreihenfolge seiner Kategorie). */
 export function headingByProduct(products: CatalogProduct[], headings: CatalogHeading[]): Map<string, CatalogHeading> {
