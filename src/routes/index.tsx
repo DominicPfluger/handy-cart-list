@@ -182,7 +182,6 @@ function ListPage() {
         lists={lists}
         activeId={activeList.id}
         templates={templates}
-        signedIn={signedIn}
         onSelect={setActiveListId}
         onCreate={createList}
         onRename={renameList}
@@ -194,7 +193,6 @@ function ListPage() {
           toast.success(t("lm.templateCreated"));
         }}
         onDeleteTemplate={deleteTemplate}
-        inviteLinkFor={inviteLinkFor}
       />
 
       {/* List switcher */}
