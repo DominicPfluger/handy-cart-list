@@ -3,6 +3,7 @@ import { useState } from "react";
 import { getLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { RecipeBuilder } from "../components/recipe-builder";
+import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
 import { catalogQueryOptions } from "../lib/catalog-query";
 
 export const Route = createFileRoute("/rezepte/generator")({
