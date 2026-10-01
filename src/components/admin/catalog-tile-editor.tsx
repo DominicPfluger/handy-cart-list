@@ -209,6 +209,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [qty, setQty] = useState(prod?.default_quantity ?? 1);
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [hint, setHint] = useState("");
+  const [large, setLarge] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
   const table = isDept ? "departments" : "products";
@@ -259,7 +260,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
               </div>
               <Input aria-label={T("tile.aiHint")} placeholder={T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 rounded-xl text-sm" />
-              <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(() => genImg({ data: { id: item.id, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } }), T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
+              <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(async () => {
+                await genImg({ data: { id: item.id, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+                const { data } = await supabase.storage.from("catalog-images").createSignedUrl(`${table}/${item.id}.png`, 600);
+                if (data?.signedUrl) setLarge(data.signedUrl);
+              }, T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
             </div>
           )}
         </div>
