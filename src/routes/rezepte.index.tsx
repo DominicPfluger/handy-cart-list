@@ -62,7 +62,7 @@ function RecipesPage() {
               key={x.id}
               to="/rezepte/generator"
               search={{ cat: x.id, recipe: undefined }}
-              className="flex flex-col items-center gap-2 rounded-2xl border border-border bg-background p-4 text-center transition active:scale-[0.96]"
+              className="flex flex-col items-center gap-2 rounded-2xl bg-background p-4 text-center transition active:scale-[0.96]"
             >
               <span className="grid h-16 w-16 place-items-center rounded-2xl text-4xl" style={{ background: x.color }} aria-hidden="true">
                 {x.emoji}
