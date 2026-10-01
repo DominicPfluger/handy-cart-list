@@ -318,7 +318,7 @@ function AdminPage() {
       </div>
 
       <div className="flex gap-1.5 overflow-x-auto pb-1" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["markets", "adm.tab.markets"], ["recipes", "adm.tab.recipes"], ["languages", "adm.tab.languages"], ["more", "adm.tab.more"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["markets", "adm.tab.markets"], ["languages", "adm.tab.languages"], ["more", "adm.tab.more"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
             {T(key)}
