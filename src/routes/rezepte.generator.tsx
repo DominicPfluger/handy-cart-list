@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { z } from "zod";
 import { getLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { RecipeBuilder } from "../components/recipe-builder";
@@ -8,6 +9,9 @@ import { catalogQueryOptions } from "../lib/catalog-query";
 
 export const Route = createFileRoute("/rezepte/generator")({
   ssr: false,
+  validateSearch: (s: Record<string, unknown>) => ({
+    recipe: z.string().optional().catch(undefined).parse(s.recipe),
+  }),
   head: () => ({
     meta: [
       { title: "Shoppi — Rezept-Generator" },
@@ -24,6 +28,7 @@ export const Route = createFileRoute("/rezepte/generator")({
 
 function Page() {
   const { t } = useT();
+  const { recipe } = Route.useSearch();
   const [tplId, setTplId] = useState<string | null>(null);
   return (
     <div className="space-y-5">
@@ -35,7 +40,7 @@ function Page() {
             : t("rec.entryGenTitle")}
         </h1>
       </div>
-      <RecipeBuilder mode="generator" onTemplateChange={setTplId} />
+      <RecipeBuilder mode="generator" onTemplateChange={setTplId} loadRecipeId={recipe} />
     </div>
   );
 }
