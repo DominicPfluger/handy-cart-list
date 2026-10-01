@@ -72,7 +72,9 @@ export function FavoritesRow() {
   const favIds = favorites.map((f) => f.productId);
   return (
     <Row
-      title={`♥ ${t("rs.withFavorites")}`}
+      title={t("rs.withFavorites")}
+      emoji="♥"
+      bg="#FBE7EA"
       order="favorites"
       ids={favIds}
       empty={favIds.length ? t("rs.emptyFeed") : t("rs.noFavorites")}
@@ -84,8 +86,8 @@ export function RecipeFeed() {
   const { t } = useT();
   return (
     <div className="space-y-5">
-      <Row title={`★ ${t("rs.topRated")}`} order="rating" empty={t("rs.emptyFeed")} />
-      <Row title={`📁 ${t("rs.mostSaved")}`} order="saves" empty={t("rs.emptyFeed")} />
+      <Row title={t("rs.topRated")} emoji="⭐" bg="#FFF3D6" order="rating" empty={t("rs.emptyFeed")} />
+      <Row title={t("rs.mostSaved")} emoji="📁" bg="#E3EEF9" order="saves" empty={t("rs.emptyFeed")} />
     </div>
   );
 }
