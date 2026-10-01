@@ -16,3 +16,21 @@
 
 ## Prüfung
 - Danach zähle ich verbleibende Produkte ohne Icon (Ziel: 0) und kontrolliere Stichproben in der Vorschau.
+
+---
+
+# Varianten übersetzen (neu)
+
+## Ausgangslage
+Noch nicht umgesetzt: Varianten (z. B. „Bio“, „Vollkorn“) werden nur auf Deutsch gespeichert und in allen Sprachen deutsch angezeigt.
+
+## Vorgehen
+1. Neue Tabelle für Varianten-Übersetzungen je Produkt, Variante und Sprachvariante (inkl. Schweizer Schreibweise ß→ss).
+2. Beim Speichern eines Produkts im Admin-Panel werden neue Varianten automatisch über den bestehenden KI-Weg in alle 16 Sprachvarianten übersetzt.
+3. Einmalige Nachübersetzung aller bereits vorhandenen Varianten.
+4. Im Hinzufügen-Dialog erscheinen Varianten in der eingestellten Sprache; auf der Liste landet der übersetzte Begriff.
+
+## Technische Details
+- Tabelle `product_variant_translations(product_id, variant, locale, name, is_manual)`, Lesen öffentlich, Schreiben via RLS `has_role`/`is_market_product_admin`, GRANTs + updated_at-Trigger.
+- Übersetzung in `updateProduct`-Pfad (`admin.functions.ts`) mit `translateNames`; Katalog-Abfrage liefert Übersetzungen mit, Anzeige über `pickName`-ähnliche Hilfsfunktion.
+- Vorschlags-Chips im Editor bleiben deutsch (Quelltext), Anzeige für Nutzer übersetzt.
