@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { Button } from "../components/ui/button";
-import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon, TrashIcon } from "../components/icons";
+import { BoltIcon, HeartIcon, PencilIcon, PlusIcon, ScanIcon, SearchIcon, TrashIcon } from "../components/icons";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../components/ui/alert-dialog";
 import { deleteCustomEntry, isCustomId } from "../hooks/use-custom-catalog";
 import { hideDepartment, useHiddenDepartments } from "../hooks/use-hidden-departments";
@@ -574,6 +574,9 @@ function DepartmentsPage() {
                   <span className="min-w-0 whitespace-normal text-sm font-semibold leading-5 text-foreground">{department.name}</span>
                   <span className="shrink-0 text-lg text-primary" aria-hidden="true">›</span>
                 </span>
+              </Button>
+              <Button type="button" variant="ghost" size="icon" aria-label={t("rename.action", { name: department.name })} title={t("rename.action", { name: department.name })} onClick={() => openRename(department, "department")} className="absolute right-1 top-1 z-10 mr-9 h-9 w-9 bg-card/90 text-muted-foreground transition-opacity hover:text-foreground focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
+                <PencilIcon className="h-4 w-4" />
               </Button>
               <Button type="button" variant="ghost" size="icon" aria-label={t("dept.remove", { name: department.name })} title={t("dept.remove", { name: department.name })} onClick={() => setRemoveTarget(department)} className="absolute right-1 top-1 z-10 h-9 w-9 bg-card/90 text-muted-foreground transition-opacity hover:text-destructive focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
                 <TrashIcon className="h-4 w-4" />
