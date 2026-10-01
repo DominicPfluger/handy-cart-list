@@ -7,9 +7,9 @@ export const Route = createFileRoute("/rezepte")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Shoppi — Rezept-Kreator" },
+      { title: "Shoppi — Rezept-Generator" },
       { name: "description", content: "Rezepte entdecken und Zutaten direkt zur Einkaufsliste hinzufügen." },
-      { property: "og:title", content: "Shoppi — Rezept-Kreator" },
+      { property: "og:title", content: "Shoppi — Rezept-Generator" },
       { property: "og:description", content: "Rezepte entdecken und Zutaten direkt zur Einkaufsliste hinzufügen." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -24,7 +24,7 @@ function RecipesPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("nav.recipes")}</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("recipes.title")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {t("rec.subtitle")}
         </p>
