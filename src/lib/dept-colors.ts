@@ -54,3 +54,31 @@ export function deptColor(
 ): string | undefined {
   return ROOT_COLORS[rootOf(department, byId).baseName];
 }
+
+/**
+ * Fallback für Gruppenlabels älterer Listeneinträge, die keiner
+ * Katalog-Kategorie mehr direkt zugeordnet werden können.
+ */
+const LABEL_COLORS: Record<string, string> = {
+  "Obst & Gemüse": "var(--cat-frischmarkt)",
+  "Obst und Gemüse": "var(--cat-frischmarkt)",
+  "Milchprodukte": "var(--cat-milch)",
+  "Molkereiprodukte": "var(--cat-milch)",
+  "Fleisch": "var(--cat-fleisch)",
+  "Fisch": "var(--cat-fleisch)",
+  "Backwaren": "var(--cat-backwaren)",
+  "Brot & Backwaren": "var(--cat-backwaren)",
+  "Tiefkühl": "var(--cat-tiefkuehl)",
+  "Getränke": "var(--cat-getraenke)",
+  "Snacks": "var(--cat-snacks)",
+  "Süsswaren": "var(--cat-suess)",
+  "Süßwaren": "var(--cat-suess)",
+  "Drogerie": "var(--cat-apotheke)",
+  "Haushaltswaren": "var(--cat-haushalt)",
+  "Tiernahrung": "var(--cat-tierbedarf)",
+};
+
+/** Farbe anhand eines Gruppenlabels (Fallback ohne Katalog-Bezug). */
+export function deptColorByLabel(label: string | undefined): string | undefined {
+  return label ? LABEL_COLORS[label] : undefined;
+}
