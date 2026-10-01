@@ -71,6 +71,28 @@
   --border: oklch(0.92 0.01 90);
   --input: oklch(0.92 0.01 90);
   --ring: oklch(0.52 0.155 144);
+
+  /* Kategoriefarben (Hauptkategorien der Abteilungsansicht) */
+  --cat-frischmarkt: #DCF2E0;        /* Frisches Grün */
+  --cat-milch: #F6F1E7;              /* Cremeweiss */
+  --cat-fleisch: #F8E0DC;            /* Lachsrosa */
+  --cat-deli: #FCEBD8;               /* Apricot */
+  --cat-backwaren: #F9EFD2;          /* Goldgelb */
+  --cat-vorraete: #F3E5C8;           /* Honig/Ocker */
+  --cat-kochzutaten: #F5DFD3;        /* Terrakotta-Hell */
+  --cat-tiefkuehl: #DCEEF7;          /* Eisblau */
+  --cat-getraenke: #D9F0EC;          /* Aquamarin */
+  --cat-snacks: #FAE6D2;             /* Sand-Orange */
+  --cat-suess: #F9E0EC;              /* Bonbonrosa */
+  --cat-koerperpflege: #EAE4F5;      /* Lavendel */
+  --cat-haushalt: #DFF0F3;           /* Mintblau */
+  --cat-apotheke: #E2EFE6;           /* Salbeigrün */
+  --cat-tierbedarf: #F0E4D4;         /* Karamell */
+  --cat-buero: #E3E8EF;              /* Stahlblau-Grau */
+  --cat-tabak: #E8E2DC;              /* Graubraun */
+  --cat-kleidung: #E0E8F4;           /* Jeansblau-Hell */
+  --cat-kuechenutensilien: #F2E3D8;  /* Kupfer-Hell */
+  --cat-auto: #E4E6E9;               /* Anthrazit-Hell */
 }
 
 @layer base {
