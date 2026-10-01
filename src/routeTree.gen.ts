@@ -25,6 +25,7 @@ import { Route as VerlaufRouteImport } from './routes/verlauf'
 import { Route as VorratRouteImport } from './routes/vorrat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedVorleseTexteRouteImport } from './routes/_authenticated/vorlese-texte'
+import { Route as ProduktIdRouteImport } from './routes/produkt.$id'
 import { Route as RezeptSlugRouteImport } from './routes/rezept.$slug'
 import { Route as RezepteIndexRouteImport } from './routes/rezepte.index'
 import { Route as RezepteGeneratorRouteImport } from './routes/rezepte.generator'
@@ -111,6 +112,11 @@ const AuthenticatedVorleseTexteRoute =
     path: '/vorlese-texte',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const ProduktIdRoute = ProduktIdRouteImport.update({
+  id: '/produkt/$id',
+  path: '/produkt/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RezeptSlugRoute = RezeptSlugRouteImport.update({
   id: '/rezept/$slug',
   path: '/rezept/$slug',
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
+  '/produkt/$id': typeof ProduktIdRoute
   '/rezept/$slug': typeof RezeptSlugRoute
   '/rezepte/generator': typeof RezepteGeneratorRoute
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
@@ -174,6 +181,7 @@ export interface FileRoutesByTo {
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
+  '/produkt/$id': typeof ProduktIdRoute
   '/rezept/$slug': typeof RezeptSlugRoute
   '/rezepte/generator': typeof RezepteGeneratorRoute
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
@@ -198,6 +206,7 @@ export interface FileRoutesById {
   '/vorrat': typeof VorratRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
+  '/produkt/$id': typeof ProduktIdRoute
   '/rezept/$slug': typeof RezeptSlugRoute
   '/rezepte/generator': typeof RezepteGeneratorRoute
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
@@ -222,6 +231,7 @@ export interface FileRouteTypes {
     | '/vorrat'
     | '/admin'
     | '/vorlese-texte'
+    | '/produkt/$id'
     | '/rezept/$slug'
     | '/rezepte/generator'
     | '/rezepte/inspirationen'
@@ -243,6 +253,7 @@ export interface FileRouteTypes {
     | '/vorrat'
     | '/admin'
     | '/vorlese-texte'
+    | '/produkt/$id'
     | '/rezept/$slug'
     | '/rezepte/generator'
     | '/rezepte/inspirationen'
@@ -266,6 +277,7 @@ export interface FileRouteTypes {
     | '/vorrat'
     | '/_authenticated/admin'
     | '/_authenticated/vorlese-texte'
+    | '/produkt/$id'
     | '/rezept/$slug'
     | '/rezepte/generator'
     | '/rezepte/inspirationen'
@@ -288,6 +300,7 @@ export interface RootRouteChildren {
   ScannerRoute: typeof ScannerRoute
   VerlaufRoute: typeof VerlaufRoute
   VorratRoute: typeof VorratRoute
+  ProduktIdRoute: typeof ProduktIdRoute
   RezeptSlugRoute: typeof RezeptSlugRoute
 }
 
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVorleseTexteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/produkt/$id': {
+      id: '/produkt/$id'
+      path: '/produkt/$id'
+      fullPath: '/produkt/$id'
+      preLoaderRoute: typeof ProduktIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/rezept/$slug': {
       id: '/rezept/$slug'
       path: '/rezept/$slug'
@@ -488,6 +508,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScannerRoute: ScannerRoute,
   VerlaufRoute: VerlaufRoute,
   VorratRoute: VorratRoute,
+  ProduktIdRoute: ProduktIdRoute,
   RezeptSlugRoute: RezeptSlugRoute,
 }
 export const routeTree = rootRouteImport
