@@ -459,10 +459,12 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
         </button>
       )}
 
-      <div className="flex items-center gap-3">
-        <span className="grid h-12 w-12 place-items-center rounded-2xl text-3xl" style={{ background: tpl.color }}>{tpl.emoji}</span>
-        <h2 className="text-lg font-bold text-foreground">{catName}</h2>
-      </div>
+      {mode !== "generator" && (
+        <div className="flex items-center gap-3">
+          <span className="grid h-12 w-12 place-items-center rounded-2xl text-3xl" style={{ background: tpl.color }}>{tpl.emoji}</span>
+          <h2 className="text-lg font-bold text-foreground">{catName}</h2>
+        </div>
+      )}
 
       {steps.map((s) => (
         <div key={s.key} className="space-y-2">

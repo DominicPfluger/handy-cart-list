@@ -30,7 +30,9 @@ function Page() {
       <div>
         <Link to="/rezepte" className="text-xs font-semibold text-primary">← {t("nav.recipes")}</Link>
         <h1 className="mt-1 text-2xl font-bold tracking-tight text-foreground">
-          {tplId ? t(`rk.cat.${tplId}` as MessageKey) : t("rec.entryGenTitle")}
+          {tplId
+            ? `${RECIPE_TEMPLATES.find((x) => x.id === tplId)?.emoji ?? ""} ${t(`rk.cat.${tplId}` as MessageKey)}`.trim()
+            : t("rec.entryGenTitle")}
         </h1>
       </div>
       <RecipeBuilder mode="generator" onTemplateChange={setTplId} />
