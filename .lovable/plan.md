@@ -2,7 +2,14 @@
 
 ## Was du bekommst
 - **„Feedback senden"** auf „Mehr" öffnet eine eigene Formular-Seite statt der E-Mail-App.
-- Felder: **Name**, **E-Mail**, **Kategorie** (Fehler melden, Idee/Wunsch, Frage, Lob, Sonstiges) und **Nachricht**.
+- Felder: **Name**, **E-Mail**, **Kategorie** (Fehler melden, Idee/Wunsch, Frage, Lob, Sonstiges), **Betreff** und **Nachricht**.
+- **Betreff-Vorschläge:** Unter dem Betreff-Feld erscheinen antippbare Vorschläge, passend zur gewählten Kategorie, z. B.:
+  - Fehler melden: „App stürzt ab", „Produkt fehlt im Katalog", „Falsche Übersetzung", „Liste synchronisiert nicht"
+  - Idee/Wunsch: „Neue Funktion", „Neues Produkt vorschlagen", „Neue Rezept-Kategorie", „Design-Verbesserung"
+  - Frage: „Wie teile ich eine Liste?", „Konto & Anmeldung", „Rezepte veröffentlichen"
+  - Lob: „Tolle App!", „Lieblingsfunktion"
+  - Sonstiges: „Allgemeines Feedback", „Datenschutz-Anfrage"
+  Ein Tipp füllt den Betreff aus; er bleibt frei bearbeitbar.
 - Pflichtfelder werden geprüft (gültige E-Mail, Nachricht 10–2000 Zeichen). Nach dem Absenden kommt eine Bestätigung.
 - Ist man angemeldet, sind Name und E-Mail schon vorausgefüllt. Absenden geht auch ohne Anmeldung.
 - **Posteingang nur für dich (Admin):** Auf „Mehr" erscheint für dich der neue Eintrag „Feedback-Posteingang" mit einer Zahl für ungelesene Nachrichten. Dort siehst du alle Anfragen, neueste zuerst. Du kannst nach Kategorie filtern, Nachrichten als gelesen/erledigt markieren, löschen oder per Tipp auf die E-Mail direkt antworten.
