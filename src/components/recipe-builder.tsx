@@ -29,7 +29,7 @@ function shuffle<T>(a: T[]) {
   return r;
 }
 
-export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: string | null) => void } = {}) {
+export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemplateChange?: (id: string | null) => void; mode?: "generator" | "lists" | "inspiration" } = {}) {
   const { t } = useT();
   const catalog = useCatalog();
   const { addCatalogItem, favorites } = useShoppingList();
@@ -351,7 +351,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   if (!tpl) {
     return (
       <div className="space-y-5" id="rk-generator">
-      <section className="space-y-3">
+      {mode === "generator" && <section className="space-y-3">
         <div>
           <h2 className="text-lg font-bold text-foreground">{t("rk.title")}</h2>
           <p className="text-xs text-muted-foreground">{t("rk.sub")}</p>
@@ -370,11 +370,9 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
             </button>
           ))}
         </div>
-      </section>
-       <div id="rk-lists">{collectionsView}</div>
-        <FavoritesRow />
-       {popularView}
-       {recentView}
+      </section>}
+       {mode === "lists" && (collectionsView ?? <Link to="/auth" className="block rounded-full border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary">{t("rs.signInToSave")}</Link>)}
+       {mode === "inspiration" && <><FavoritesRow />{popularView}{recentView}</>}
        </div>
     );
   }
@@ -505,9 +503,6 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
         )}
       </div>
     </section>
-    <FavoritesRow />
-    {popularView}
-    {recentView}
     {saveDialog}
     </div>
   );
