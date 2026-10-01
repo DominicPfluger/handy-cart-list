@@ -9,4 +9,4 @@
 - [x] Rezept-Generator-Untertitel (rk.sub) neu: „Wähle eine Kategorie und stelle dir aus deinen Lieblingszutaten dein persönliches Wunschrezept zusammen. …" — de.ts + alle 13 übersetzten Blöcke in messages.json (de-AT/de-CH nutzen de-Fallback)
 - [x] „Alle Märkte anzeigen" bleibt immer sichtbar (Nutzer-Entscheid) — bedingte Einblendung in mehr.tsx wieder entfernt
 - [x] Rezept-Generator zurück auf eigene Seite /rezepte/generator; Rezepte-Hauptseite zeigt wieder nur Kacheln (Generator → Listen → Inspirationen)
-- [ ] Feedback-Formular (Name, E-Mail, Betreff aus 7 Einträgen, Nachricht) + Admin-Posteingang
+- [x] Feedback-Formular (Name, E-Mail, Betreff aus 7 Einträgen, Nachricht) + Admin-Posteingang
