@@ -17,6 +17,7 @@ import { RecipeAdmin } from "@/components/recipe-admin";
 import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias-admin";
+import { DeptImageEditor } from "@/components/dept-image-admin";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -33,7 +34,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 });
 
 type Kind = "department" | "product" | "heading";
-type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number };
+type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
 type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string };
 type Head = { id: string; name: string; department_id: string; before_product_id: string };
 type Tr = { entity_id: string; locale: string; name: string; is_manual: boolean };
@@ -51,7 +52,7 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
 
 async function loadAll() {
   const [depts, prods, heads, trs] = await Promise.all([
-    paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order").order("sort_order").order("id").range(a, b)),
+    paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path").order("sort_order").order("id").range(a, b)),
     paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
     paged<Tr>((a, b) => supabase.from("catalog_translations").select("entity_id, locale, name, is_manual").order("id").range(a, b)),
@@ -431,6 +432,7 @@ function AdminPage() {
             } else await translateIds([sel.id]);
           }, T("adm.retranslated"))}
           deptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
+          onImageChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }}
         />
       )}
     </div>
@@ -625,6 +627,7 @@ function Editor(p: {
   deptOptions: { id: string; label: string }[];
   onClose: () => void; onDelete: () => void; onSave: (patch: Patch) => void;
   onTr: (locale: string, v: string, prev?: string) => void; onRetranslate: () => void;
+  onImageChanged: () => void;
 }) {
   const { sel, data } = p;
   const dept = sel.kind === "department" ? data.depts.find((x) => x.id === sel.id) : undefined;
@@ -676,6 +679,7 @@ function Editor(p: {
           })}>{T("adm.save")}</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
+        {dept && <DeptImageEditor deptId={dept.id} imagePath={dept.image_path} onChanged={p.onImageChanged} />}
         {dept && <DeptAliasEditor dept={dept} depts={data.depts} options={p.deptOptions} />}
         {prod && <ProductAliasEditor product={prod} prods={data.prods} options={p.deptOptions} />}
         {prod && <ProductCuisinePicker productId={prod.id} />}
