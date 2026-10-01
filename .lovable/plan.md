@@ -1,24 +1,28 @@
-# Feedback-Formular mit Posteingang in der App
+# Kategorie-Kacheln aus dem Rezept-Generator entfernen
 
-## Was du bekommst
-- **„Feedback senden"** auf „Mehr" öffnet eine eigene Formular-Seite statt der E-Mail-App.
-- Felder: **Name**, **E-Mail**, **Kategorie** (Fehler melden, Idee/Wunsch, Frage, Lob, Sonstiges), **Betreff** und **Nachricht**.
-- **Betreff-Vorschläge:** Unter dem Betreff-Feld erscheinen antippbare Vorschläge, passend zur gewählten Kategorie, z. B.:
-  - Fehler melden: „App stürzt ab", „Produkt fehlt im Katalog", „Falsche Übersetzung", „Liste synchronisiert nicht"
-  - Idee/Wunsch: „Neue Funktion", „Neues Produkt vorschlagen", „Neue Rezept-Kategorie", „Design-Verbesserung"
-  - Frage: „Wie teile ich eine Liste?", „Konto & Anmeldung", „Rezepte veröffentlichen"
-  - Lob: „Tolle App!", „Lieblingsfunktion"
-  - Sonstiges: „Allgemeines Feedback", „Datenschutz-Anfrage"
-  Ein Tipp füllt den Betreff aus; er bleibt frei bearbeitbar.
-- Pflichtfelder werden geprüft (gültige E-Mail, Nachricht 10–2000 Zeichen). Nach dem Absenden kommt eine Bestätigung.
-- Ist man angemeldet, sind Name und E-Mail schon vorausgefüllt. Absenden geht auch ohne Anmeldung.
-- **Posteingang nur für dich (Admin):** Auf „Mehr" erscheint für dich der neue Eintrag „Feedback-Posteingang" mit einer Zahl für ungelesene Nachrichten. Dort siehst du alle Anfragen, neueste zuerst. Du kannst nach Kategorie filtern, Nachrichten als gelesen/erledigt markieren, löschen oder per Tipp auf die E-Mail direkt antworten.
-- Alle Beschriftungen werden in die 16 Sprachen übersetzt.
+## Ziel
 
-## Technische Details
-- Migration: Tabelle `feedback_messages` (id, user_id nullable, name, email, category text, message, status `neu|gelesen|erledigt`, locale, created_at), GRANT INSERT an anon/authenticated, SELECT/UPDATE/DELETE an authenticated, ALL an service_role. RLS: INSERT für alle (mit Längenprüfung), SELECT/UPDATE/DELETE nur `has_role(auth.uid(),'admin')`.
-- Validierung mit zod im Formular und Längen-Checks in der Policy.
-- Neue Routen: `/feedback` (Formular, öffentlich) und `/_authenticated/feedback-admin` (Posteingang, prüft Admin-Rolle, sonst Hinweis).
-- `mehr.tsx`: Feedback-Link auf `/feedback`; Admin-Zeile „Feedback-Posteingang" mit Zähler.
-- Neue Schlüssel `fb.*` in `de.ts` + `messages.json`; head-Metadaten für neue Seiten.
-- Keine E-Mail-Benachrichtigung (kann später ergänzt werden).
+Die Kategorie-Kacheln (Müsli, Smoothie, Salat, Sandwiches, Pizza, Pfannengericht, Menü-Kombinationen, Dessert) verschwinden aus der Generator-Seite (/rezepte/generator). Die Kategorien wählt man künftig nur noch über die Kacheln auf der Rezepte-Hauptseite (/rezepte) — diese bleiben unverändert.
+
+## Verhalten
+
+- **Generator-Seite mit `?cat=…`:** Nur noch der Generator (Filter, Zutaten, Speichern) — keine Kategorie-Kacheln mehr oberhalb.
+- **Generator-Seite ohne Kategorie** (direkter Aufruf von /rezepte/generator ohne `cat` und ohne `recipe`): automatische Weiterleitung zurück zur Rezepte-Hauptseite, wo die Kacheln zur Auswahl stehen.
+- **Öffnen eines Community-Rezepts** (`?recipe=…` ohne `cat`): weiter möglich — hier wird die Kategorie aus dem Rezept ermittelt, keine Weiterleitung.
+- **„← Zurück"-Knopf** im geöffneten Generator führt zurück zur Rezepte-Hauptseite (dort steht die Kategorie-Auswahl).
+
+## Technische Umsetzung
+
+1. `src/components/recipe-builder.tsx`
+   - `categoryBar` im Modus `generator` entfernen (sowohl der Block unter „Basis-Rezept erstellen" als auch die Kacheln oberhalb des geöffneten Generators).
+   - Den „← Zurück"-Knopf im Modus `generator` als Link nach `/rezepte` rendern statt `setTplId(null)` (in den anderen Modi bleibt alles wie bisher).
+   - Nicht mehr benutzte Importe/Code aufräumen (z. B. falls `RECIPE_TEMPLATES`/`setTplId` an dieser Stelle nicht mehr gebraucht werden — vorsichtig prüfen, `setTplId` wird anderswo weiterverwendet).
+2. `src/routes/rezepte.generator.tsx`
+   - `beforeLoad`: Wenn weder `cat` noch `recipe` gesetzt ist → `redirect({ to: "/rezepte" })`.
+   - Überschrift bleibt wie bisher (gewählte Kategorie als Titel, sonst „Rezept-Generator" — letzteres erscheint praktisch nie mehr wegen der Weiterleitung).
+3. Keine Änderungen an `/rezepte` (Kacheln bleiben), keine Übersetzungs- oder Datenbank-Änderungen.
+
+## Prüfung
+
+- Build läuft fehlerfrei.
+- Vorschau: /rezepte/generator ohne Parameter leitet auf /rezepte weiter; mit `?cat=pizza` erscheint nur der Pizza-Generator ohne Kacheln; Community-Rezept lässt sich weiterhin im Generator öffnen; „← Zurück" landet auf /rezepte.
