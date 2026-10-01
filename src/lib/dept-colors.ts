@@ -82,3 +82,12 @@ const LABEL_COLORS: Record<string, string> = {
 export function deptColorByLabel(label: string | undefined): string | undefined {
   return label ? LABEL_COLORS[label] : undefined;
 }
+
+/** Dunklere, sattere Variante für den Textbereich der Kacheln. */
+export function deptColorStrong(
+  department: CatalogDepartment,
+  byId: Map<string, CatalogDepartment>,
+): string | undefined {
+  const c = deptColor(department, byId);
+  return c ? c.replace(")", "-strong)") : undefined;
+}
