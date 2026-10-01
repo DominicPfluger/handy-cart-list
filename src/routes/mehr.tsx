@@ -18,6 +18,7 @@ import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products"
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useNotificationSettings } from "../hooks/use-notification-settings";
+import { useIsAdmin } from "../hooks/use-is-admin";
 import { setAllMarkets, useAllMarkets } from "../hooks/use-all-markets";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
@@ -50,6 +51,7 @@ function MorePage() {
   const { members, signedIn, activeList, inviteLinkFor } = useShoppingList();
   const { t, locale } = useT();
   const navigate = useNavigate();
+  const isAdmin = useIsAdmin();
   const [inviteOpen, setInviteOpen] = useState(false);
   const inviteLink = signedIn ? inviteLinkFor(activeList.id) : null;
   const invite = () => {
@@ -194,16 +196,18 @@ function MorePage() {
         </label>
         <SpeakLocaleRow />
         <SpeakRateRow />
-        <Link to="/admin" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
-            <span className="text-lg" aria-hidden="true">✎</span>
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-foreground">{t("more.admin")}</p>
-            <p className="truncate text-xs text-muted-foreground">{t("more.adminSub")}</p>
-          </div>
-          <span className="text-muted-foreground">›</span>
-        </Link>
+        {isAdmin && (
+          <Link to="/admin" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+              <span className="text-lg" aria-hidden="true">✎</span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground">{t("more.admin")}</p>
+              <p className="truncate text-xs text-muted-foreground">{t("more.adminSub")}</p>
+            </div>
+            <span className="text-muted-foreground">›</span>
+          </Link>
+        )}
       </section>
 
       {/* Settings menu */}
