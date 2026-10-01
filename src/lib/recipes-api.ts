@@ -102,8 +102,8 @@ export async function shareLink(slug: string, title: string): Promise<"shared" |
   const url = shareUrl(slug);
   if (navigator.share) {
     try { await navigator.share({ title, url }); return "shared"; } catch { /* abgebrochen → kopieren */ }
-  }
-  await navigator.clipboard?.writeText(url);
+    }
+  try { await navigator.clipboard?.writeText(url); } catch { /* Clipboard gesperrt → trotzdem teilen */ }
   return "copied";
 }
 
