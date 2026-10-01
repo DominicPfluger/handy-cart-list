@@ -10,8 +10,8 @@ import type { MessageKey } from "../i18n/de";
 
 export function SectionTitle({ emoji, bg, children }: { emoji: string; bg: string; children: React.ReactNode }) {
   return (
-    <h2 className="flex items-center gap-3 text-lg font-bold text-foreground">
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl text-xl" style={{ background: bg }} aria-hidden="true">
+    <h2 className="flex items-center gap-2.5 text-base font-bold text-foreground">
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-lg" style={{ background: bg }} aria-hidden="true">
         {emoji}
       </span>
       {children}
