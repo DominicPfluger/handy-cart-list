@@ -9,7 +9,7 @@ const ROOT_COLORS: Record<string, string> = {
   "Frischmarkt": "var(--cat-frischmarkt)",
   "Milchprodukte & Eier": "var(--cat-milch)",
   "Fleisch & Fisch": "var(--cat-fleisch)",
-  "Frisch-Produkte & Delikatessen": "var(--cat-deli)",
+  "Feinkost & Frischeprodukte": "var(--cat-deli)",
   "Backwaren & Frühstück": "var(--cat-backwaren)",
   "Vorräte": "var(--cat-vorraete)",
   "Kochzutaten": "var(--cat-kochzutaten)",
