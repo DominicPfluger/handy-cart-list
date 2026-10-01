@@ -19,7 +19,7 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { toast } from "sonner";
 import type { ShoppingList } from "../hooks/use-shopping-list";
-import { PlusIcon, ShareIcon, TrashIcon, CheckIcon } from "./icons";
+import { PlusIcon, TrashIcon, CheckIcon } from "./icons";
 import { getLocale, translate, useT } from "../i18n";
 
 interface Props {
@@ -28,7 +28,6 @@ interface Props {
   lists: ShoppingList[];
   activeId: string;
   templates: ShoppingList[];
-  signedIn: boolean;
   onSelect: (id: string) => void;
   onCreate: (name: string) => void;
   onRename: (id: string, name: string) => void;
@@ -37,7 +36,6 @@ interface Props {
   onSaveAsTemplate: (id: string) => void;
   onCreateFromTemplate: (templateId: string) => void;
   onDeleteTemplate: (templateId: string) => void;
-  inviteLinkFor: (listId: string) => string | null;
 }
 
 export async function shareList(list: ShoppingList) {
@@ -48,33 +46,23 @@ export async function shareList(list: ShoppingList) {
   openShareSheet({ title: list.name, text });
 }
 
-function shareInviteLink(link: string, listName: string) {
-  const text = `${translate(getLocale(), "lm.inviteHint")}\n${link}`;
-  openShareSheet({ title: listName, text });
-}
 
 function Row({
   list,
   active,
   canDelete,
-  signedIn,
-  inviteLink,
   onSelect,
   onRename,
   onDelete,
   onSaveAsTemplate,
-  onShareInvite,
 }: {
   list: ShoppingList;
   active: boolean;
   canDelete: boolean;
-  signedIn: boolean;
-  inviteLink: string | null;
   onSelect: () => void;
   onRename: (name: string) => void;
   onDelete: () => void;
   onSaveAsTemplate: () => void;
-  onShareInvite: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: list.id });
   const { t } = useT();
@@ -148,26 +136,6 @@ function Row({
           <path d="M13.5 6.5l4 4" />
         </svg>
       </button>
-      {signedIn && inviteLink ? (
-        <button
-          onClick={onShareInvite}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
-          aria-label={t("lm.invite")}
-        >
-          <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" />
-            <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" />
-          </svg>
-        </button>
-      ) : (
-        <button
-          onClick={() => shareList(list)}
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
-          aria-label={t("lm.share")}
-        >
-          <ShareIcon className="h-[18px] w-[18px]" />
-        </button>
-      )}
       <button
         onClick={onSaveAsTemplate}
         className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
@@ -196,7 +164,7 @@ function Row({
 }
 
 export function ListManager(props: Props) {
-  const { open, onClose, lists, activeId, templates, signedIn } = props;
+  const { open, onClose, lists, activeId, templates } = props;
   const { t } = useT();
   const [newName, setNewName] = useState("");
   const sensors = useSensors(
@@ -216,18 +184,6 @@ export function ListManager(props: Props) {
     props.onCreate(newName);
     setNewName("");
     onClose();
-  };
-
-  const copyInvite = (listId: string) => {
-    const link = props.inviteLinkFor(listId);
-    if (!link) {
-      toast.error(t("common.error"));
-      return;
-    }
-    navigator.clipboard
-      .writeText(link)
-      .then(() => toast.success(t("lm.inviteCopied")))
-      .catch(() => shareInviteLink(link, lists.find((l) => l.id === listId)?.name ?? ""));
   };
 
   return (
@@ -253,8 +209,6 @@ export function ListManager(props: Props) {
                   list={l}
                   active={l.id === activeId}
                   canDelete={lists.length > 1}
-                  signedIn={signedIn}
-                  inviteLink={props.inviteLinkFor(l.id)}
                   onSelect={() => {
                     props.onSelect(l.id);
                     onClose();
@@ -262,7 +216,6 @@ export function ListManager(props: Props) {
                   onRename={(n) => props.onRename(l.id, n)}
                   onDelete={() => props.onDelete(l.id)}
                   onSaveAsTemplate={() => props.onSaveAsTemplate(l.id)}
-                  onShareInvite={() => copyInvite(l.id)}
                 />
               ))}
             </div>
