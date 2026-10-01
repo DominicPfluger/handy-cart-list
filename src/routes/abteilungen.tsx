@@ -257,14 +257,6 @@ function DepartmentsPage() {
     if (p && Math.hypot(event.clientX - p.x, event.clientY - p.y) > 8) cancelPress();
   };
 
-  const startDragNow = (event: React.PointerEvent, entry: { id: string; name: string }, what: "product" | "heading") => {
-    if (event.button !== 0) return;
-    event.preventDefault();
-    event.stopPropagation();
-    cancelPress();
-    setDrag({ what, id: entry.id, name: entry.name, x: event.clientX, y: event.clientY, target: null });
-  };
-
   useEffect(() => {
     if (!drag) return;
     let lastY = drag.y;
