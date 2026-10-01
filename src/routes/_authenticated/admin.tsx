@@ -546,9 +546,9 @@ function AdminPage() {
 
       </>)}
 
-      {tab === "import" && d && <ImportPanel depts={d.depts} prods={d.prods} />}
-      {tab === "languages" && d && <LocaleAdminPanel />}
-      {tab === "media" && d && <CatalogMediaPanel />}
+      {tab === "import" && <LoadingGate d={d}><ImportPanel depts={d!.depts} prods={d!.prods} /></LoadingGate>}
+      {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
+      {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel /></LoadingGate>}
 
       {tab === "markets" && (<>
         <MarketAdmin markets={MARKETS} />
