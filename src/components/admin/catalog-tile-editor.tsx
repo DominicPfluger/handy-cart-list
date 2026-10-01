@@ -134,7 +134,7 @@ export function CatalogTileEditor(p: {
       </nav>
 
       {(p.children.length > 0 || editMode) && (
-        <div className="grid grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-3 gap-2.5 md:grid-cols-5 xl:grid-cols-7">
           {p.children.map((c, i) => (
             <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
               style={{ background: rootColorByName(rootName(c)) }}
@@ -337,7 +337,7 @@ function ImagePicker(p: { onClose: () => void; onPick: (path: string) => void })
           <button aria-label={T("common.cancel")} onClick={p.onClose} className="text-xl text-muted-foreground">✕</button>
         </div>
         <Input placeholder="🔍" value={q} onChange={(e) => { setQ(e.target.value); setPage(0); }} className="h-11 rounded-xl" />
-        <div className="grid flex-1 grid-cols-3 gap-2 overflow-y-auto">
+        <div className="grid flex-1 grid-cols-3 gap-2 md:grid-cols-6 overflow-y-auto">
           {r.data?.items.map((it) => (
             <button key={it.id} onClick={() => p.onPick(it.path)} className="flex flex-col items-center gap-1 rounded-xl p-1 hover:bg-muted">
               {it.url ? <img src={it.url} alt="" className="aspect-square w-full rounded-lg object-cover" /> : <div className="aspect-square w-full rounded-lg bg-muted" />}
