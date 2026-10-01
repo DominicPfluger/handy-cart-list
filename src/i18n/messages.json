@@ -507,7 +507,12 @@
     "adm.recipeGroupSub": "+ Subcategory",
     "adm.recipeGroupNone": "— no category —",
     "adm.recipeGroupTarget": "Target category",
-    "adm.recipeGroupDelete": "Delete category \"{name}\"? Subcategories are deleted too; ingredients move to \"Other\"."
+    "adm.recipeGroupDelete": "Delete category \"{name}\"? Subcategories are deleted too; ingredients move to \"Other\".",
+    "adm.alsoUnder": "Also show under…",
+    "adm.alsoUnderPick": "Choose parent category",
+    "adm.aliases": "Alias categories",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Remove alias \"{name}\" here? The category itself stays."
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1017,7 +1022,12 @@
     "adm.recipeGroupSub": "+ Subcategory",
     "adm.recipeGroupNone": "— no category —",
     "adm.recipeGroupTarget": "Target category",
-    "adm.recipeGroupDelete": "Delete category \"{name}\"? Subcategories are deleted too; ingredients move to \"Other\"."
+    "adm.recipeGroupDelete": "Delete category \"{name}\"? Subcategories are deleted too; ingredients move to \"Other\".",
+    "adm.alsoUnder": "Also show under…",
+    "adm.alsoUnderPick": "Choose parent category",
+    "adm.aliases": "Alias categories",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Remove alias \"{name}\" here? The category itself stays."
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1527,7 +1537,12 @@
     "adm.recipeGroupSub": "+ Subcategory",
     "adm.recipeGroupNone": "— no category —",
     "adm.recipeGroupTarget": "Target category",
-    "adm.recipeGroupDelete": "Delete category \"{name}\"? Subcategories are deleted too; ingredients move to \"Other\"."
+    "adm.recipeGroupDelete": "Delete category \"{name}\"? Subcategories are deleted too; ingredients move to \"Other\".",
+    "adm.alsoUnder": "Also show under…",
+    "adm.alsoUnderPick": "Choose parent category",
+    "adm.aliases": "Alias categories",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Remove alias \"{name}\" here? The category itself stays."
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2037,7 +2052,12 @@
     "adm.recipeGroupSub": "+ Subcategoría",
     "adm.recipeGroupNone": "— sin categoría —",
     "adm.recipeGroupTarget": "Categoría de destino",
-    "adm.recipeGroupDelete": "¿Eliminar la categoría «{name}»? Se eliminan también las subcategorías; los ingredientes pasan a «Otros»."
+    "adm.recipeGroupDelete": "¿Eliminar la categoría «{name}»? Se eliminan también las subcategorías; los ingredientes pasan a «Otros».",
+    "adm.alsoUnder": "Mostrar también en…",
+    "adm.alsoUnderPick": "Elegir categoría superior",
+    "adm.aliases": "Categorías alias",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "¿Quitar aquí el alias «{name}»? La categoría se mantiene."
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2547,7 +2567,12 @@
     "adm.recipeGroupSub": "+ Subcategoría",
     "adm.recipeGroupNone": "— sin categoría —",
     "adm.recipeGroupTarget": "Categoría de destino",
-    "adm.recipeGroupDelete": "¿Eliminar la categoría «{name}»? Se eliminan también las subcategorías; los ingredientes pasan a «Otros»."
+    "adm.recipeGroupDelete": "¿Eliminar la categoría «{name}»? Se eliminan también las subcategorías; los ingredientes pasan a «Otros».",
+    "adm.alsoUnder": "Mostrar también en…",
+    "adm.alsoUnderPick": "Elegir categoría superior",
+    "adm.aliases": "Categorías alias",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "¿Quitar aquí el alias «{name}»? La categoría se mantiene."
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3057,7 +3082,12 @@
     "adm.recipeGroupSub": "+ Sous-catégorie",
     "adm.recipeGroupNone": "— sans catégorie —",
     "adm.recipeGroupTarget": "Catégorie cible",
-    "adm.recipeGroupDelete": "Supprimer la catégorie « {name} » ? Les sous-catégories sont aussi supprimées ; les ingrédients passent dans « Autres »."
+    "adm.recipeGroupDelete": "Supprimer la catégorie « {name} » ? Les sous-catégories sont aussi supprimées ; les ingrédients passent dans « Autres ».",
+    "adm.alsoUnder": "Afficher aussi sous…",
+    "adm.alsoUnderPick": "Choisir la catégorie parente",
+    "adm.aliases": "Catégories alias",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Retirer l’alias « {name} » ici ? La catégorie elle-même est conservée."
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3567,7 +3597,12 @@
     "adm.recipeGroupSub": "+ Sous-catégorie",
     "adm.recipeGroupNone": "— sans catégorie —",
     "adm.recipeGroupTarget": "Catégorie cible",
-    "adm.recipeGroupDelete": "Supprimer la catégorie « {name} » ? Les sous-catégories sont aussi supprimées ; les ingrédients passent dans « Autres »."
+    "adm.recipeGroupDelete": "Supprimer la catégorie « {name} » ? Les sous-catégories sont aussi supprimées ; les ingrédients passent dans « Autres ».",
+    "adm.alsoUnder": "Afficher aussi sous…",
+    "adm.alsoUnderPick": "Choisir la catégorie parente",
+    "adm.aliases": "Catégories alias",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Retirer l’alias « {name} » ici ? La catégorie elle-même est conservée."
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4077,7 +4112,12 @@
     "adm.recipeGroupSub": "+ Sottocategoria",
     "adm.recipeGroupNone": "— senza categoria —",
     "adm.recipeGroupTarget": "Categoria di destinazione",
-    "adm.recipeGroupDelete": "Eliminare la categoria «{name}»? Anche le sottocategorie vengono eliminate; gli ingredienti finiscono in «Altro»."
+    "adm.recipeGroupDelete": "Eliminare la categoria «{name}»? Anche le sottocategorie vengono eliminate; gli ingredienti finiscono in «Altro».",
+    "adm.alsoUnder": "Mostra anche in…",
+    "adm.alsoUnderPick": "Scegli categoria superiore",
+    "adm.aliases": "Categorie alias",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Rimuovere qui l’alias «{name}»? La categoria resta."
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4587,7 +4627,12 @@
     "adm.recipeGroupSub": "+ Sottocategoria",
     "adm.recipeGroupNone": "— senza categoria —",
     "adm.recipeGroupTarget": "Categoria di destinazione",
-    "adm.recipeGroupDelete": "Eliminare la categoria «{name}»? Anche le sottocategorie vengono eliminate; gli ingredienti finiscono in «Altro»."
+    "adm.recipeGroupDelete": "Eliminare la categoria «{name}»? Anche le sottocategorie vengono eliminate; gli ingredienti finiscono in «Altro».",
+    "adm.alsoUnder": "Mostra anche in…",
+    "adm.alsoUnderPick": "Scegli categoria superiore",
+    "adm.aliases": "Categorie alias",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Rimuovere qui l’alias «{name}»? La categoria resta."
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -5097,7 +5142,12 @@
     "adm.recipeGroupSub": "+ Subcategoria",
     "adm.recipeGroupNone": "— sem categoria —",
     "adm.recipeGroupTarget": "Categoria de destino",
-    "adm.recipeGroupDelete": "Eliminar a categoria «{name}»? As subcategorias também são eliminadas; os ingredientes passam para «Outros»."
+    "adm.recipeGroupDelete": "Eliminar a categoria «{name}»? As subcategorias também são eliminadas; os ingredientes passam para «Outros».",
+    "adm.alsoUnder": "Mostrar também em…",
+    "adm.alsoUnderPick": "Escolher categoria superior",
+    "adm.aliases": "Categorias alias",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Remover aqui o alias «{name}»? A categoria mantém-se."
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5607,7 +5657,12 @@
     "adm.recipeGroupSub": "+ Subcategoria",
     "adm.recipeGroupNone": "— sem categoria —",
     "adm.recipeGroupTarget": "Categoria de destino",
-    "adm.recipeGroupDelete": "Eliminar a categoria «{name}»? As subcategorias também são eliminadas; os ingredientes passam para «Outros»."
+    "adm.recipeGroupDelete": "Eliminar a categoria «{name}»? As subcategorias também são eliminadas; os ingredientes passam para «Outros».",
+    "adm.alsoUnder": "Mostrar também em…",
+    "adm.alsoUnderPick": "Escolher categoria superior",
+    "adm.aliases": "Categorias alias",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Remover aqui o alias «{name}»? A categoria mantém-se."
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -6117,7 +6172,12 @@
     "adm.recipeGroupSub": "+ Subcategorie",
     "adm.recipeGroupNone": "— geen categorie —",
     "adm.recipeGroupTarget": "Doelcategorie",
-    "adm.recipeGroupDelete": "Categorie \"{name}\" verwijderen? Subcategorieën worden ook verwijderd; ingrediënten gaan naar \"Overige\"."
+    "adm.recipeGroupDelete": "Categorie \"{name}\" verwijderen? Subcategorieën worden ook verwijderd; ingrediënten gaan naar \"Overige\".",
+    "adm.alsoUnder": "Ook tonen onder…",
+    "adm.alsoUnderPick": "Bovenliggende categorie kiezen",
+    "adm.aliases": "Aliascategorieën",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Alias \"{name}\" hier verwijderen? De categorie zelf blijft bestaan."
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6627,7 +6687,12 @@
     "adm.recipeGroupSub": "+ Subcategorie",
     "adm.recipeGroupNone": "— geen categorie —",
     "adm.recipeGroupTarget": "Doelcategorie",
-    "adm.recipeGroupDelete": "Categorie \"{name}\" verwijderen? Subcategorieën worden ook verwijderd; ingrediënten gaan naar \"Overige\"."
+    "adm.recipeGroupDelete": "Categorie \"{name}\" verwijderen? Subcategorieën worden ook verwijderd; ingrediënten gaan naar \"Overige\".",
+    "adm.alsoUnder": "Ook tonen onder…",
+    "adm.alsoUnderPick": "Bovenliggende categorie kiezen",
+    "adm.aliases": "Aliascategorieën",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Alias \"{name}\" hier verwijderen? De categorie zelf blijft bestaan."
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6691,7 +6756,12 @@
     "adm.recipeGroupSub": "+ Unterkategorie",
     "adm.recipeGroupNone": "— ohne Kategorie —",
     "adm.recipeGroupTarget": "Ziel-Kategorie",
-    "adm.recipeGroupDelete": "Kategorie „{name}\" löschen? Unterkategorien werden mitgelöscht, Zutaten landen unter „Weitere\"."
+    "adm.recipeGroupDelete": "Kategorie „{name}\" löschen? Unterkategorien werden mitgelöscht, Zutaten landen unter „Weitere\".",
+    "adm.alsoUnder": "Auch anzeigen unter…",
+    "adm.alsoUnderPick": "Oberkategorie wählen",
+    "adm.aliases": "Alias-Kategorien",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Alias „{name}\" hier entfernen? Die Kategorie selbst bleibt erhalten."
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6755,6 +6825,11 @@
     "adm.recipeGroupSub": "+ Unterkategorie",
     "adm.recipeGroupNone": "— ohne Kategorie —",
     "adm.recipeGroupTarget": "Ziel-Kategorie",
-    "adm.recipeGroupDelete": "Kategorie „{name}\" löschen? Unterkategorien werden mitgelöscht, Zutaten landen unter „Weitere\"."
+    "adm.recipeGroupDelete": "Kategorie „{name}\" löschen? Unterkategorien werden mitgelöscht, Zutaten landen unter „Weitere\".",
+    "adm.alsoUnder": "Auch anzeigen unter…",
+    "adm.alsoUnderPick": "Oberkategorie wählen",
+    "adm.aliases": "Alias-Kategorien",
+    "adm.alias": "Alias",
+    "adm.aliasRemove": "Alias „{name}\" hier entfernen? Die Kategorie selbst bleibt erhalten."
   }
 }

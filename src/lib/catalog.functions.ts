@@ -62,6 +62,12 @@ export interface RecipeIngredient {
   groupId: string | null;
 }
 
+export interface DepartmentAlias {
+  departmentId: string;
+  parentId: string;
+  sortOrder: number;
+}
+
 export interface RecipeGroup {
   id: string;
   parentId: string | null;
@@ -79,6 +85,7 @@ export interface Catalog {
   cuisines: CatalogCuisine[];
   recipeIngredients: RecipeIngredient[];
   recipeGroups: RecipeGroup[];
+  departmentAliases: DepartmentAlias[];
 }
 
 export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Promise<Catalog> => {
@@ -120,7 +127,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     return { data: all, error: null };
   }
 
-  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes] = await Promise.all([
+  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes, daRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
@@ -137,6 +144,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     fetchAll("product_brands", "product_id, name, locales, sort_order", ["sort_order", "id"]),
     fetchAll("recipe_ingredients", "template_id, step_key, product_id, sort_order, group_id", ["sort_order", "id"]),
     supabase.from("recipe_groups").select("id, parent_id, name, emoji, sort_order").order("sort_order", { ascending: true }),
+    supabase.from("department_aliases").select("department_id, parent_id, sort_order").order("sort_order", { ascending: true }),
   ]);
   const brandsByProduct = new Map<string, { name: string; markets: string[] }[]>();
   for (const r of (brRes.data ?? []) as Array<{ product_id: string; name: string; locales: string[] | null }>) {
@@ -239,6 +247,11 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       sortOrder: (r["sort_order"] as number) ?? 0,
       baseName: r["name"] as string,
       names: names.get(r["id"] as string) ?? {},
+    })),
+    departmentAliases: ((daRes.data ?? []) as Array<Record<string, unknown>>).map((r) => ({
+      departmentId: r["department_id"] as string,
+      parentId: r["parent_id"] as string,
+      sortOrder: (r["sort_order"] as number) ?? 0,
     })),
   };
 });

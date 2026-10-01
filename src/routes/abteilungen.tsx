@@ -24,7 +24,6 @@ import {
   brandsFor,
   matchesProductSearch,
   originalName,
-  pathTo,
   productsOf,
   type CatalogDepartment,
   type CatalogProduct,
@@ -147,8 +146,34 @@ function DepartmentsPage() {
     else hideDepartment(removeTarget.id);
     setRemoveTarget(null);
   };
-  const breadcrumbs = pathTo(departments, currentId);
-  const childDepartments = childrenOf(departments, currentId).filter((d) => !hiddenDepts.has(d.id));
+  // Alias-Kategorien: zusätzlich unter weiteren Oberkategorien angezeigt (gleiche Kategorie, gleiche Produkte)
+  const [aliasVia, setAliasVia] = useState<Record<string, string>>({}); // deptId -> Alias-Oberkategorie, über die geöffnet wurde
+  const breadcrumbs = useMemo(() => {
+    const byId = new Map(departments.map((d) => [d.id, d]));
+    const out: CatalogDepartment[] = [];
+    let cur = currentId ? byId.get(currentId) : undefined;
+    let guard = 0;
+    while (cur && guard++ < 20) {
+      out.unshift(cur);
+      const up: string | null = aliasVia[cur.id] ?? cur.parentId;
+      cur = up ? byId.get(up) : undefined;
+    }
+    return out;
+  }, [departments, currentId, aliasVia]);
+  const aliasIds = new Set<string>();
+  const childDepartments = (() => {
+    const own = childrenOf(departments, currentId);
+    if (!currentId) return own.filter((d) => !hiddenDepts.has(d.id));
+    const byId = new Map(departments.map((d) => [d.id, d]));
+    const aliases = (data.departmentAliases ?? [])
+      .filter((a) => a.parentId === currentId)
+      .map((a) => { const d = byId.get(a.departmentId); return d ? { ...d, sortOrder: a.sortOrder } : null; })
+      .filter((d): d is CatalogDepartment => !!d && !own.some((o) => o.id === d.id));
+    for (const a of aliases) aliasIds.add(a.id);
+    return [...own, ...aliases]
+      .sort((a, b) => a.sortOrder - b.sortOrder)
+      .filter((d) => !hiddenDepts.has(d.id));
+  })();
   const directProducts = currentId ? productsOf(products, currentId) : [];
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const searchResults = useMemo(() => {
@@ -312,7 +337,12 @@ function DepartmentsPage() {
     };
   }, [drag?.id, departments, products, move, moveProduct, t, data.headings, saveHeadingFn, queryClient]);
 
-  const openDepartment = (id: string | null) => {
+  const openDepartment = (id: string | null, via?: string) => {
+    if (id) setAliasVia((prev) => {
+      const next = { ...prev };
+      if (via) next[id] = via; else if (!breadcrumbs.some((b) => b.id === id)) delete next[id];
+      return next;
+    });
     setCurrentId(id);
     setQuery("");
     if (id === null) window.scrollTo({ top: 0 });
@@ -515,13 +545,13 @@ function DepartmentsPage() {
                 variant="ghost"
                 data-drop="tile"
                 data-id={department.id}
-                onPointerDown={(e) => startPress(e, department)}
+                onPointerDown={aliasIds.has(department.id) ? undefined : (e) => startPress(e, department)}
                 onPointerMove={pressMove}
                 onPointerUp={cancelPress}
                 onPointerLeave={cancelPress}
                 onContextMenu={(e) => e.preventDefault()}
                 onDragStart={(e) => e.preventDefault()}
-                onClick={() => { if (!suppressClick.current) openDepartment(department.id); }}
+                onClick={() => { if (!suppressClick.current) openDepartment(department.id, aliasIds.has(department.id) ? currentId ?? undefined : undefined); }}
                 style={{ WebkitTouchCallout: "none" }}
                 className={`relative w-full select-none ${drag?.id === department.id ? "opacity-40" : ""} ${dropKind === "into" ? "ring-2 ring-primary" : ""} ${dropKind === "before" ? "!border-l-4 !border-l-primary" : ""} ${dropKind === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
               >
