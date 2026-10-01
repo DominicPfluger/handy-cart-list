@@ -17,7 +17,8 @@ export function SplashScreen() {
         />
         <div className="text-center">
           <p className="text-2xl font-bold tracking-tight text-foreground">Shoppi</p>
-          <p className="text-sm text-muted-foreground">Die smarte Einkaufsliste für deinen Alltag.</p>
+          <p className="text-sm font-semibold text-foreground">Gemeinsam.Einfach.Einkaufen.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Die smarte Einkaufsliste für den Alltag.</p>
         </div>
       </div>
       <div className="h-1.5 w-40 overflow-hidden rounded-full bg-muted">
