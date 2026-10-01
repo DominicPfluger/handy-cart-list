@@ -375,7 +375,7 @@ export const de = {
   "unit.blister": "Blister", "unitS.blister": "Blister",
   "unit.sixpack": "Sixpack", "unitS.sixpack": "Sixpack",
   "rk.title": "Basis-Rezept erstellen",
-  "rk.sub": "Wähle eine Kategorie und stelle dein Rezept aus passenden Zutaten zusammen.",
+  "rk.sub": "Wähle eine Kategorie und stelle dir aus deinen Lieblingszutaten dein persönliches Wunschrezept zusammen. Deiner Kreativität sind fast keine Grenzen gesetzt.",
   "rk.cat.muesli": "Müsli", "rk.cat.smoothie": "Smoothie", "rk.cat.salat": "Salat", "rk.cat.pizza": "Pizza",
   "rk.cat.pfanne": "Pfannengericht", "rk.cat.menu": "Menü-Kombination", "rk.cat.dessert": "Dessert", "rk.cat.sandwich": "Sandwiches",
   "rk.surprise": "🎲 Überrasch mich",
