@@ -15,6 +15,7 @@ import { formatQuantity, getUnits } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { useFavoriteQuantity } from "../hooks/use-favorite-quantity";
+import { useReferencePrices, formatRefPrice } from "../hooks/use-reference-prices";
 
 export const Route = createFileRoute("/produkt/$id")({
   ssr: false,
@@ -50,6 +51,8 @@ function ProductPage() {
   const [favUnit, setFavUnit] = useState("stueck");
 
   const product = data.products.find((p) => p.id === id);
+  const refPrices = useReferencePrices();
+  const refPrice = refPrices.data?.get(id);
   useEffect(() => {
     setFavQty(String(fav.value?.quantity ?? product?.defaultQuantity ?? 1));
     setFavUnit(fav.value?.unit ?? product?.defaultUnit ?? "stueck");
@@ -104,6 +107,11 @@ function ProductPage() {
           )}
         </div>
         <h1 className="mt-4 text-2xl font-bold text-foreground">{product.name}</h1>
+        {refPrice && (
+          <p className="mt-1 text-xs text-muted-foreground">
+            {t("price.reference")}: {formatRefPrice(refPrice)} · {new Date(refPrice.observed_at).toLocaleDateString(locale)}
+          </p>
+        )}
         {department && (
           <Link to="/abteilungen" className="mt-1 text-sm text-muted-foreground">
             {department.emoji} {department.name}
