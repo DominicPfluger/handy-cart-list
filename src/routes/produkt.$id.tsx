@@ -62,8 +62,7 @@ function ProductPage() {
   const favorite = isFavorite(product.id);
   const brands = brandsFor(product);
   const variantLabel = (v: string) => product.variantNames?.[v]?.[locale] ?? v;
-  const DB_UNITS = new Set(["stueck","gramm","kilogramm","milligramm","pfund","unzen","milliliter","deziliter","liter","gallone","tasse","glas","flasche","dose","beutel","packung","schachtel","box","karton","kiste","kanister","buendel"]);
-  const units = getUnits(locale).filter((u) => DB_UNITS.has(u.id));
+  const units = getUnits(locale);
 
   const save = async (patch: { default_unit?: string; variants?: string[] }, translate = false) => {
     setSaving(true);
