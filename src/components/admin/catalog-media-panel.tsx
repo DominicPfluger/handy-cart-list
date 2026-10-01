@@ -20,6 +20,7 @@ export function CatalogMediaPanel() {
   const [market, setMarket] = useState(getLocale().split("-")[1] ?? "CH");
   const [busy, setBusy] = useState<"img" | "price" | "allImg" | null>(null);
   const [allProgress, setAllProgress] = useState<{ done: number; total: number } | null>(null);
+  const [generated, setGenerated] = useState<Array<{ id: string; name: string; url: string | null }>>([]);
 
   const status = useQuery({
     queryKey: ["catalog-media-status", market],
@@ -32,6 +33,7 @@ export function CatalogMediaPanel() {
     try {
       const r = await genImages({ data: { limit: 5 } });
       if (r.errors.length > 0) toast.error(r.errors[0]!);
+      setGenerated((g) => [...r.items, ...g].slice(0, 60));
       toast.success(T("media.imgDone", { n: r.done }));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
