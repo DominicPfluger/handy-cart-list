@@ -45,6 +45,7 @@ export const generateProductImages = createServerFn({ method: "POST" })
 
     let done = 0;
     const errors: string[] = [];
+    const items: Array<{ id: string; name: string; url: string | null }> = [];
     for (const p of list) {
       try {
         const bytes = await generateProductImage(p.name, p.emoji);
@@ -53,13 +54,15 @@ export const generateProductImages = createServerFn({ method: "POST" })
         if (up.error) throw new Error(up.error.message);
         const upd = await sb.from("products").update({ image_path: path }).eq("id", p.id);
         if (upd.error) throw new Error(upd.error.message);
+        const signed = await supabaseAdmin.storage.from("catalog-images").createSignedUrl(path, 3600);
+        items.push({ id: p.id, name: p.name, url: signed.data?.signedUrl ?? null });
         done++;
       } catch (e) {
         errors.push(`${p.name}: ${e instanceof Error ? e.message : String(e)}`);
         if (errors.length >= 3) break; // bei wiederholten Fehlern (z. B. Guthaben) abbrechen
       }
     }
-    return { done, attempted: list.length, errors };
+    return { done, attempted: list.length, errors, items };
   });
 
 /** Schätzt KI-Richtpreise für die nächsten `limit` Produkte ohne Preis im gewählten Markt. */
