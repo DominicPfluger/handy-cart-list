@@ -314,6 +314,19 @@ function MorePage() {
             <span className="text-muted-foreground">›</span>
           </Link>
         )}
+        {isAdmin && (
+          <Link to="/feedback-admin" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+              <span className="text-lg" aria-hidden="true">✉</span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground">{t("fb.inbox")}</p>
+              <p className="truncate text-xs text-muted-foreground">{t("fb.inboxSub")}</p>
+            </div>
+            <FeedbackBadge />
+            <span className="text-muted-foreground">›</span>
+          </Link>
+        )}
       </section>
 
       {hiddenCategories.length > 0 && (
@@ -342,7 +355,7 @@ function MorePage() {
           <span className="text-muted-foreground" aria-hidden="true">·</span>
           <Link to="/datenschutz" className="text-primary underline-offset-2 hover:underline">{t("more.privacy")}</Link>
           <span className="text-muted-foreground" aria-hidden="true">·</span>
-          <a href={`mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent("Shoppi Feedback")}`} className="text-primary underline-offset-2 hover:underline">{t("more.feedback")}</a>
+          <Link to="/feedback" className="text-primary underline-offset-2 hover:underline">{t("more.feedback")}</Link>
         </nav>
       </footer>
     </div>

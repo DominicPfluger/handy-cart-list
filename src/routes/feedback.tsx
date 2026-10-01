@@ -25,7 +25,7 @@ const field = "w-full rounded-xl border border-border bg-card px-3 py-2.5 text-s
 
 function FeedbackPage() {
   const { t } = useT();
-  const [locale] = useLocale();
+  const locale = useLocale();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState<FeedbackSubject>("general");
