@@ -50,14 +50,21 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
 
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
   const steps = useMemo(
-    () => (tpl?.steps ?? []).map((s) => ({
-      ...s,
-      products: s.ingredients
-        .map((n) => byBase.get(n))
-        .filter((p): p is CatalogProduct => !!p)
-        .filter((p) => !onlyFav || favIds.has(p.id)),
-    })),
-    [tpl, byBase, onlyFav, favIds],
+    () => (tpl?.steps ?? []).map((s) => {
+      // Zutaten aus dem Backend (Admin-gepflegt); Fallback: feste Liste aus dem Code.
+      const dbIds = catalog.recipeIngredients
+        .filter((r) => r.templateId === tpl!.id && r.stepKey === s.key)
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .map((r) => r.productId);
+      const fromDb = dbIds
+        .map((id) => catalog.products.find((p) => p.id === id))
+        .filter((p): p is CatalogProduct => !!p);
+      const base = fromDb.length > 0
+        ? fromDb
+        : s.ingredients.map((n) => byBase.get(n)).filter((p): p is CatalogProduct => !!p);
+      return { ...s, products: base.filter((p) => !onlyFav || favIds.has(p.id)) };
+    }),
+    [tpl, byBase, onlyFav, favIds, catalog.recipeIngredients, catalog.products],
   );
 
   const toggleOnlyFav = () => {
@@ -82,15 +89,18 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
       const p: Picks = {};
       const items: CatalogProduct[] = [];
       for (const step of template.steps) {
+        const dbIds = catalog.recipeIngredients
+          .filter((r) => r.templateId === template.id && r.stepKey === step.key)
+          .map((r) => r.productId);
         const ps = (combo[step.key] ?? [])
           .map((n) => byBase.get(n))
-          .filter((x): x is CatalogProduct => !!x && step.ingredients.includes(x.baseName));
+          .filter((x): x is CatalogProduct => !!x && (dbIds.length > 0 ? dbIds.includes(x.id) : step.ingredients.includes(x.baseName)));
         p[step.key] = ps.map((x) => x.id);
         items.push(...ps);
       }
       return { key: `${template.id}-${i}`, template, picks: p, items };
     }).filter((r) => r.items.length > 0)
-  ), [byBase]);
+  ), [byBase, catalog.recipeIngredients]);
 
   const visiblePopular = tpl
     ? popular.filter((r) => r.template.id === tpl.id)

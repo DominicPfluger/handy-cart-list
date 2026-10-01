@@ -54,11 +54,19 @@ export interface CatalogCuisine {
   names: Record<string, string>;
 }
 
+export interface RecipeIngredient {
+  templateId: string;
+  stepKey: string;
+  productId: string;
+  sortOrder: number;
+}
+
 export interface Catalog {
   departments: CatalogDepartment[];
   products: CatalogProduct[];
   headings: CatalogHeading[];
   cuisines: CatalogCuisine[];
+  recipeIngredients: RecipeIngredient[];
 }
 
 export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Promise<Catalog> => {
@@ -100,7 +108,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     return { data: all, error: null };
   }
 
-  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes] = await Promise.all([
+  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
@@ -115,6 +123,7 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
     supabase.from("cuisines").select("id, name, emoji, sort_order").order("sort_order", { ascending: true }),
     fetchAll("product_cuisines", "product_id, cuisine_id", ["id"]),
     fetchAll("product_brands", "product_id, name, locales, sort_order", ["sort_order", "id"]),
+    fetchAll("recipe_ingredients", "template_id, step_key, product_id, sort_order", ["sort_order", "id"]),
   ]);
   const brandsByProduct = new Map<string, { name: string; markets: string[] }[]>();
   for (const r of (brRes.data ?? []) as Array<{ product_id: string; name: string; locales: string[] | null }>) {
@@ -201,6 +210,12 @@ export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Pr
       sortOrder: (r["sort_order"] as number) ?? 0,
       baseName: r["name"] as string,
       names: names.get(r["id"] as string) ?? {},
+    })),
+    recipeIngredients: ((riRes.data ?? []) as Array<Record<string, unknown>>).map((r) => ({
+      templateId: r["template_id"] as string,
+      stepKey: r["step_key"] as string,
+      productId: r["product_id"] as string,
+      sortOrder: (r["sort_order"] as number) ?? 0,
     })),
   };
 });
