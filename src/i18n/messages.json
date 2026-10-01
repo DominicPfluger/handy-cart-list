@@ -488,7 +488,11 @@
     "fav.listNamePlaceholder": "Name of the shopping list",
     "adm.recipeIngredients": "Recipe ingredients",
     "adm.recipeStepEmpty": "No ingredients assigned yet — add via search.",
-    "rk.pickAny": "any number"
+    "rk.pickAny": "any number",
+    "inv.title": "Invite via",
+    "inv.more": "More…",
+    "inv.sms": "Text message",
+    "inv.email": "Email"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -979,7 +983,11 @@
     "fav.listNamePlaceholder": "Name of the shopping list",
     "adm.recipeIngredients": "Recipe ingredients",
     "adm.recipeStepEmpty": "No ingredients assigned yet — add via search.",
-    "rk.pickAny": "any number"
+    "rk.pickAny": "any number",
+    "inv.title": "Invite via",
+    "inv.more": "More…",
+    "inv.sms": "Text message",
+    "inv.email": "Email"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1470,7 +1478,11 @@
     "fav.listNamePlaceholder": "Name of the shopping list",
     "adm.recipeIngredients": "Recipe ingredients",
     "adm.recipeStepEmpty": "No ingredients assigned yet — add via search.",
-    "rk.pickAny": "any number"
+    "rk.pickAny": "any number",
+    "inv.title": "Invite via",
+    "inv.more": "More…",
+    "inv.sms": "Text message",
+    "inv.email": "Email"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -1961,7 +1973,11 @@
     "fav.listNamePlaceholder": "Nombre de la lista de la compra",
     "adm.recipeIngredients": "Ingredientes de recetas",
     "adm.recipeStepEmpty": "Aún no hay ingredientes asignados — añade mediante la búsqueda.",
-    "rk.pickAny": "cualquier cantidad"
+    "rk.pickAny": "cualquier cantidad",
+    "inv.title": "Invitar por",
+    "inv.more": "Más…",
+    "inv.sms": "SMS",
+    "inv.email": "Correo"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2452,7 +2468,11 @@
     "fav.listNamePlaceholder": "Nombre de la lista de compras",
     "adm.recipeIngredients": "Ingredientes de recetas",
     "adm.recipeStepEmpty": "Aún no hay ingredientes asignados — agrega mediante la búsqueda.",
-    "rk.pickAny": "cualquier cantidad"
+    "rk.pickAny": "cualquier cantidad",
+    "inv.title": "Invitar por",
+    "inv.more": "Más…",
+    "inv.sms": "SMS",
+    "inv.email": "Correo"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -2943,7 +2963,11 @@
     "fav.listNamePlaceholder": "Nom de la liste de courses",
     "adm.recipeIngredients": "Ingrédients de recettes",
     "adm.recipeStepEmpty": "Aucun ingrédient assigné — ajoutez via la recherche.",
-    "rk.pickAny": "autant que voulu"
+    "rk.pickAny": "autant que voulu",
+    "inv.title": "Inviter via",
+    "inv.more": "Plus…",
+    "inv.sms": "SMS",
+    "inv.email": "E-mail"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3434,7 +3458,11 @@
     "fav.listNamePlaceholder": "Nom de la liste d'épicerie",
     "adm.recipeIngredients": "Ingrédients de recettes",
     "adm.recipeStepEmpty": "Aucun ingrédient assigné — ajoutez via la recherche.",
-    "rk.pickAny": "autant que voulu"
+    "rk.pickAny": "autant que voulu",
+    "inv.title": "Inviter via",
+    "inv.more": "Plus…",
+    "inv.sms": "SMS",
+    "inv.email": "E-mail"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -3925,7 +3953,11 @@
     "fav.listNamePlaceholder": "Nome della lista della spesa",
     "adm.recipeIngredients": "Ingredienti delle ricette",
     "adm.recipeStepEmpty": "Nessun ingrediente assegnato — aggiungi tramite la ricerca.",
-    "rk.pickAny": "quanti vuoi"
+    "rk.pickAny": "quanti vuoi",
+    "inv.title": "Invita tramite",
+    "inv.more": "Altro…",
+    "inv.sms": "SMS",
+    "inv.email": "E-mail"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4416,7 +4448,11 @@
     "fav.listNamePlaceholder": "Nome della lista della spesa",
     "adm.recipeIngredients": "Ingredienti delle ricette",
     "adm.recipeStepEmpty": "Nessun ingrediente assegnato — aggiungi tramite la ricerca.",
-    "rk.pickAny": "quanti vuoi"
+    "rk.pickAny": "quanti vuoi",
+    "inv.title": "Invita tramite",
+    "inv.more": "Altro…",
+    "inv.sms": "SMS",
+    "inv.email": "E-mail"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -4907,7 +4943,11 @@
     "fav.listNamePlaceholder": "Nome da lista de compras",
     "adm.recipeIngredients": "Ingredientes de receitas",
     "adm.recipeStepEmpty": "Ainda sem ingredientes atribuídos — adicione através da pesquisa.",
-    "rk.pickAny": "quantos quiser"
+    "rk.pickAny": "quantos quiser",
+    "inv.title": "Convidar por",
+    "inv.more": "Mais…",
+    "inv.sms": "SMS",
+    "inv.email": "E-mail"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5398,7 +5438,11 @@
     "fav.listNamePlaceholder": "Nome da lista de compras",
     "adm.recipeIngredients": "Ingredientes de receitas",
     "adm.recipeStepEmpty": "Ainda sem ingredientes atribuídos — adicione pela busca.",
-    "rk.pickAny": "quantos quiser"
+    "rk.pickAny": "quantos quiser",
+    "inv.title": "Convidar por",
+    "inv.more": "Mais…",
+    "inv.sms": "SMS",
+    "inv.email": "E-mail"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -5889,7 +5933,11 @@
     "fav.listNamePlaceholder": "Naam van de boodschappenlijst",
     "adm.recipeIngredients": "Receptingrediënten",
     "adm.recipeStepEmpty": "Nog geen ingrediënten toegewezen — voeg toe via zoeken.",
-    "rk.pickAny": "onbeperkt"
+    "rk.pickAny": "onbeperkt",
+    "inv.title": "Uitnodigen via",
+    "inv.more": "Meer…",
+    "inv.sms": "Sms",
+    "inv.email": "E-mail"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6380,7 +6428,11 @@
     "fav.listNamePlaceholder": "Naam van de boodschappenlijst",
     "adm.recipeIngredients": "Receptingrediënten",
     "adm.recipeStepEmpty": "Nog geen ingrediënten toegewezen — voeg toe via zoeken.",
-    "rk.pickAny": "onbeperkt"
+    "rk.pickAny": "onbeperkt",
+    "inv.title": "Uitnodigen via",
+    "inv.more": "Meer…",
+    "inv.sms": "Sms",
+    "inv.email": "E-mail"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6428,7 +6480,11 @@
     "fav.listNameTitle": "Neue Liste aus Favoriten",
     "fav.listNamePlaceholder": "Name der Einkaufsliste",
     "adm.recipeIngredients": "Rezept-Zutaten",
-    "adm.recipeStepEmpty": "Noch keine Zutaten zugewiesen — über die Suche hinzufügen."
+    "adm.recipeStepEmpty": "Noch keine Zutaten zugewiesen — über die Suche hinzufügen.",
+    "inv.title": "Einladen per",
+    "inv.more": "Weitere…",
+    "inv.sms": "SMS",
+    "inv.email": "E-Mail"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6476,6 +6532,10 @@
     "fav.listNameTitle": "Neue Liste aus Favoriten",
     "fav.listNamePlaceholder": "Name der Einkaufsliste",
     "adm.recipeIngredients": "Rezept-Zutaten",
-    "adm.recipeStepEmpty": "Noch keine Zutaten zugewiesen — über die Suche hinzufügen."
+    "adm.recipeStepEmpty": "Noch keine Zutaten zugewiesen — über die Suche hinzufügen.",
+    "inv.title": "Einladen per",
+    "inv.more": "Weitere…",
+    "inv.sms": "SMS",
+    "inv.email": "E-Mail"
   }
 }

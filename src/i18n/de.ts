@@ -248,6 +248,10 @@ export const de = {
   "lm.inviteHint": "Alle mit diesem Link können die Liste ansehen und bearbeiten.",
   "lm.inviteCopied": "Einladungslink kopiert",
   "lm.inviteCopy": "Link kopieren",
+  "inv.title": "Einladen per",
+  "inv.more": "Weitere…",
+  "inv.sms": "SMS",
+  "inv.email": "E-Mail",
   "lm.shareInvite": "Link teilen",
 
   "join.title": "Einkaufsliste beitreten",
