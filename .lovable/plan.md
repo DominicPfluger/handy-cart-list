@@ -1,51 +1,44 @@
-# Kategorie-Bezeichnungen in Kategorienfarbe (dunkler & satter)
+# Texthintergrund der Kategorie-Bezeichnungen einfärben
 
 ## Ziel
-In der Abteilungsansicht (`/abteilungen`) sollen die Kategorien-Bezeichnungen unter den Kacheln dieselbe Farbe tragen wie der Vorschau-Bild-Container darüber — aber dunkler und gesättigter, damit sie auf dem weissen Karten-Hintergrund gut lesbar sind.
+In der Abteilungsansicht bekommt der untere Bereich jeder Kachel, also der mit dem Kategorienamen, einen eigenen Hintergrund. Er hat denselben Farbton wie der Bildbereich darüber, ist aber etwas dunkler und satter. Die Schrift bleibt schwarz (bzw. in der normalen Textfarbe).
 
 ## Umsetzung
 
-### 1. `src/styles.css` — 20 Text-Tokens ergänzen
-Unterhalb der bestehenden 20 `--cat-*`-Flächenfarben jeweils ein dunkleres, satteres Pendant als `--cat-*-text` definieren (gleiche Namensbasis). Beispiele:
+### 1. `src/styles.css`: 20 neue Farbwerte
+Neben jeder bestehenden `--cat-*`-Farbe gibt es ein dunkleres, satteres Gegenstück `--cat-*-strong`. Es soll nur eine Stufe kräftiger sein, damit schwarze Schrift gut lesbar bleibt. Beispiele:
 
-| Kategorie | Fläche (bestehend) | Text (neu) |
+| Kategorie | Bildbereich (bisher) | Textbereich (neu) |
 |---|---|---|
-| frischmarkt | #EDF8EF | #3E8E52 |
-| milch | #FAF7F1 | #9C7A3F |
-| fleisch | #FBEEEC | #C05A4E |
-| deli | #FEF5EC | #C77A3A |
-| backwaren | #FCF7E8 | #B08A2E |
-| vorraete | #F9F2E3 | #A67B2E |
-| kochzutaten | #FAEFE9 | #B96A4C |
-| tiefkuehl | #ECF5FA | #3D7FA6 |
-| getraenke | #EAF7F5 | #2E8A80 |
-| snacks | #FCF2E8 | #C07836 |
-| suess | #FCEEF4 | #C4549A |
-| koerperpflege | #F4F1FA | #7A5FC0 |
-| haushalt | #EEF7F9 | #3D8FA3 |
-| apotheke | #F0F7F2 | #4E8A5E |
-| tierbedarf | #F7F1E9 | #9A6B3F |
-| buero | #F0F3F7 | #5A6B85 |
-| tabak | #F3F0ED | #7A6A55 |
-| kleidung | #EFF3FA | #4A6BB0 |
-| kuechenutensilien | #F8F0EB | #A56A45 |
-| auto | #F1F2F4 | #4A4F5A |
+| frischmarkt | #EDF8EF | #D3EFD9 |
+| milch | #FAF7F1 | #F1E8D3 |
+| fleisch | #FBEEEC | #F6D6D0 |
+| deli | #FEF5EC | #FCE2C9 |
+| backwaren | #FCF7E8 | #F7EAC2 |
+| vorraete | #F9F2E3 | #F1E1BE |
+| kochzutaten | #FAEFE9 | #F3D8CA |
+| tiefkuehl | #ECF5FA | #CFE5F3 |
+| getraenke | #EAF7F5 | #CAEDE7 |
+| snacks | #FCF2E8 | #F8DEC4 |
+| suess | #FCEEF4 | #F7D3E4 |
+| koerperpflege | #F4F1FA | #E3DBF4 |
+| haushalt | #EEF7F9 | #CFEAF0 |
+| apotheke | #F0F7F2 | #D5EBDC |
+| tierbedarf | #F7F1E9 | #ECDCC6 |
+| buero | #F0F3F7 | #D8E0EB |
+| tabak | #F3F0ED | #E3DCD4 |
+| kleidung | #EFF3FA | #D4E0F4 |
+| kuechenutensilien | #F8F0EB | #EED9CC |
+| auto | #F1F2F4 | #DCDFE4 |
 
-Alle Werte sind auf gute Lesbarkeit auf Weiss abgestimmt (Kontrast) und bleiben im gleichen Farbton wie die Fläche.
+### 2. `src/lib/dept-colors.ts`
+Neue Funktion `deptColorStrong(department, byId)`, die analog zu `deptColor` arbeitet: Sie gibt `var(--cat-*-strong)` der Wurzelkategorie zurück, für unbekannte Kategorien `undefined`.
 
-### 2. `src/lib/dept-colors.ts` — Textfarbe parallel zur Flächenfarbe
-- Neuer Map `ROOT_TEXT_COLORS` mit denselben 20 Schlüsseln → `var(--cat-*-text)`.
-- Neue Funktion `deptColorText(department, byId): string | undefined`, analog zu `deptColor` (Wurzelkategorie erben, `undefined` als Fallback).
-- `LABEL_COLORS`-Fallback ebenfalls um Textfarben ergänzen (neue Map bzw. Funktion `deptColorTextByLabel`).
-
-### 3. `src/routes/abteilungen.tsx` — Farbe auf die Bezeichnung anwenden
-- Zeile ~548: zusätzlich `const tileTextColor = deptColorText(department, deptById);`
-- Zeile ~573 (Label-Span): `text-foreground` entfernen und stattdessen `style={{ color: tileTextColor }}` setzen; ohne Farbe (unbekannte Kategorie) bleibt der bisherige `text-foreground` als Fallback.
+### 3. `src/routes/abteilungen.tsx`
+Der Bereich mit dem Kategorienamen (ca. Zeile 572) erhält `style={{ backgroundColor: deptColorStrong(...) }}`. Die Schrift behält `text-foreground`. Ohne Farbe bleibt alles wie bisher.
 
 ## Nicht im Umfang
-- Einkaufslisten-Gruppen-Icons, Favoriten, Admin-Bereich, dunkler Modus (Flächenfarben bleiben unverändert).
-- Nutzer-Farbauswahl.
+Schriftfarbe, Bildbereich, Einkaufsliste, Favoriten und Dunkelmodus.
 
-## Verifikation
-- Build-Log prüfen.
-- Playwright: `/abteilungen` öffnen, Kacheln ansehen — Bezeichnungen tragen je Kategorie die dunklere Version der Flaschenfarbe (Screenshot).
+## Prüfung
+Build prüfen und einen Screenshot von `/abteilungen` machen: farbiger Textbereich, schwarze Schrift.
