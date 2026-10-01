@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useT } from "../i18n";
 import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
+import { RecipePhoto } from "./recipe-photo";
 import { fetchFeed, type FeedOrder, type FeedRecipe } from "../lib/recipes-api";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import type { MessageKey } from "../i18n/de";
@@ -25,7 +26,7 @@ function Card({ r, badge }: { r: FeedRecipe; badge: string }) {
       params={{ slug: r.share_slug ?? "" }}
       className="flex w-full shrink-0 snap-start flex-col gap-2 rounded-2xl border border-border bg-card p-3 transition active:scale-[0.98]"
     >
-      <span className="grid h-10 w-10 place-items-center rounded-xl text-xl" style={{ background: tpl?.color }}>{tpl?.emoji ?? "🍽️"}</span>
+      <RecipePhoto path={r.image_path} emoji={tpl?.emoji} color={tpl?.color} className="h-32 w-full rounded-xl" />
       <span className="line-clamp-2 text-sm font-semibold text-foreground">{r.title}</span>
       <span className="mt-auto text-xs text-muted-foreground">{badge}</span>
     </Link>

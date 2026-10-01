@@ -25,13 +25,13 @@ export const getRecipeBySlug = createServerFn({ method: "GET" })
       },
     });
     const { data: r } = await sb.from("recipes")
-      .select("id, title, template_id, picks, items, author_name, created_at, share_slug")
+      .select("id, title, template_id, picks, items, author_name, created_at, share_slug, image_path")
       .eq("share_slug", data.slug).eq("is_public", true).maybeSingle();
     if (!r) return null;
     return {
       id: r.id, title: r.title, templateId: r.template_id,
       picks: (r.picks as Record<string, string[]>) ?? {},
       items: (r.items as PublicRecipe["items"]) ?? [],
-      authorName: r.author_name, createdAt: r.created_at, slug: r.share_slug!,
+      authorName: r.author_name, createdAt: r.created_at, slug: r.share_slug!, imagePath: r.image_path,
     };
   });
