@@ -342,3 +342,80 @@ function ImagePicker(p: { onClose: () => void; onPick: (path: string) => void })
     </div>
   );
 }
+
+type Suggestion = { name: string; emoji: string; quantity: number; unit: string; existingId: string | null };
+
+function SuggestSheet(p: Parameters<typeof CatalogTileEditor>[0] & { cur: string; onClose: () => void }) {
+  const suggest = useServerFn(suggestCategoryProducts);
+  const [keywords, setKeywords] = useState("");
+  const [items, setItems] = useState<Suggestion[] | null>(null);
+  const [sel, setSel] = useState<Set<number>>(new Set());
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  const load = async () => {
+    setBusy(true); setErr(null);
+    try {
+      const r = await suggest({ data: { departmentId: p.cur, keywords: keywords.trim() || undefined } });
+      setItems(r); setSel(new Set(r.map((_, i) => i)));
+    } catch (e) { setErr(e instanceof Error ? e.message : String(e)); }
+    finally { setBusy(false); }
+  };
+
+  const chosen = (items ?? []).filter((_, i) => sel.has(i));
+
+  const create = () => p.run(async () => {
+    const fresh = chosen.filter((s) => !s.existingId);
+    const links = chosen.filter((s) => s.existingId);
+    const ids: string[] = [];
+    if (fresh.length) {
+      const r = await supabase.from("products").insert(fresh.map((s, i) => ({
+        name: s.name, emoji: s.emoji, department_id: p.cur, default_quantity: s.quantity, default_unit: s.unit as never, sort_order: p.products.length + i + 1,
+      }))).select("id");
+      if (r.error) throw new Error(r.error.message);
+      ids.push(...r.data.map((x) => x.id));
+    }
+    if (links.length) {
+      await p.must(supabase.from("product_aliases").upsert(links.map((s) => ({ product_id: s.existingId!, department_id: p.cur })), { onConflict: "product_id,department_id", ignoreDuplicates: true }));
+    }
+    for (let i = 0; i < ids.length; i += 120) await p.translateIds(ids.slice(i, i + 120));
+    p.onClose();
+  }, T("tile.suggestDone", { n: chosen.length }));
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-foreground/40" onClick={p.onClose}>
+      <div className="max-h-[85vh] w-full max-w-[440px] space-y-3 overflow-y-auto rounded-t-2xl bg-background p-4" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold">{T("tile.suggest")}</h2>
+          <button type="button" onClick={p.onClose} className="text-xl">✕</button>
+        </div>
+        <Input value={keywords} onChange={(e) => setKeywords(e.target.value)} placeholder={T("tile.suggestKeywords")} />
+        <Button className="w-full" variant={items ? "outline" : "default"} disabled={busy} onClick={load}>
+          {busy ? T("tile.suggestBusy") : items ? T("tile.suggestAgain") : T("tile.suggestGo")}
+        </Button>
+        {err && <p className="text-sm text-destructive">{err}</p>}
+        {items && items.length === 0 && <p className="text-sm text-muted-foreground">{T("tile.suggestEmpty")}</p>}
+        {items && items.length > 0 && (
+          <div className="divide-y divide-border rounded-xl border border-border">
+            {items.map((s, i) => (
+              <label key={i} className="flex items-center gap-3 px-3 py-2 text-sm">
+                <input type="checkbox" checked={sel.has(i)} onChange={() => setSel((o) => { const n = new Set(o); if (n.has(i)) n.delete(i); else n.add(i); return n; })} />
+                <span className="text-xl">{s.emoji}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate font-semibold">{s.name}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {s.quantity} {getUnits(getLocale()).find((u) => u.id === s.unit)?.label ?? s.unit}
+                    {s.existingId ? ` · ${T("tile.suggestLink")}` : ""}
+                  </span>
+                </span>
+              </label>
+            ))}
+          </div>
+        )}
+        {items && items.length > 0 && (
+          <Button className="w-full" disabled={sel.size === 0} onClick={create}>{T("tile.suggestCreate", { n: sel.size })}</Button>
+        )}
+      </div>
+    </div>
+  );
+}
