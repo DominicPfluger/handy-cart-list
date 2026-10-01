@@ -365,7 +365,7 @@ export const de = {
   "rk.title": "Basis-Rezept erstellen",
   "rk.sub": "Wähle eine Kategorie und stelle dein Rezept aus passenden Zutaten zusammen.",
   "rk.cat.muesli": "Müsli", "rk.cat.smoothie": "Smoothie", "rk.cat.salat": "Salat", "rk.cat.pizza": "Pizza",
-  "rk.cat.pfanne": "Pfannengericht", "rk.cat.menu": "Menü-Kombination", "rk.cat.dessert": "Dessert",
+  "rk.cat.pfanne": "Pfannengericht", "rk.cat.menu": "Menü-Kombination", "rk.cat.dessert": "Dessert", "rk.cat.sandwich": "Sandwiches",
   "rk.surprise": "🎲 Überrasch mich",
   "rk.reset": "Neu beginnen",
   "rk.back": "Alle Kategorien",

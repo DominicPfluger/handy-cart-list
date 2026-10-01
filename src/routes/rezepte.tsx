@@ -31,8 +31,8 @@ function RecipesPage() {
         </p>
       </div>
 
-      <RecipeFeed />
       <RecipeBuilder />
+      <RecipeFeed />
     </div>
   );
 }

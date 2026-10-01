@@ -55,7 +55,7 @@ export const POPULAR_RECIPES: Record<RecipeTemplate["id"], Record<string, string
     { base: ["Joghurt"], fruit: ["Mango", "Maracuja / Passionsfrucht"], sweet: ["Honig"], crunch: ["Granola"] },
   ],
   sandwich: [
-    { bread: ["Vollkornbrot"], spread: ["Butter"], protein: ["Schinken"], cheese: ["Emmentaler"], veg: ["Tomaten", "Eisbergsalat"] },
+    { bread: ["Vollkornbrot"], spread: ["Doppelrahmfrischkäse"], protein: ["Schinken"], cheese: ["Emmentaler"], veg: ["Tomaten", "Eisbergsalat"] },
     { bread: ["Ciabatta"], spread: ["Mayonnaise"], protein: ["Hähnchenbrust"], veg: ["Rucola", "Tomaten"], extra: ["Avocado"] },
     { bread: ["Baguette"], spread: ["Senf"], protein: ["Salami"], cheese: ["Gouda"], veg: ["Salatgurke", "Rote Zwiebeln"] },
   ],
@@ -110,10 +110,10 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
   ] },
   { id: "sandwich", emoji: "🥪", color: "oklch(0.93 0.06 95)", steps: [
     { key: "bread", label: "Brot", min: 1, max: 1, ingredients: ["Vollkornbrot", "Ciabatta", "Baguette"] },
-    { key: "spread", label: "Aufstrich", min: 0, max: 2, ingredients: ["Butter", "Mayonnaise", "Senf"] },
+    { key: "spread", label: "Aufstrich", min: 0, max: 2, ingredients: ["Doppelrahmfrischkäse", "Mayonnaise", "Senf"] },
     { key: "protein", label: "Belag", min: 0, max: 2, ingredients: ["Schinken", "Salami", "Hähnchenbrust", "Putenbrust", "Thunfisch"] },
-    { key: "cheese", label: "Käse", min: 0, max: 2, ingredients: ["Gouda", "Emmentaler", "Mozzarella"] },
+    { key: "cheese", label: "Käse", min: 0, max: 2, ingredients: ["Gouda", "Emmentaler", "Butterkäse"] },
     { key: "veg", label: "Gemüse", min: 0, max: 4, ingredients: ["Tomaten", "Salatgurke", "Eisbergsalat", "Rucola", "Paprika", "Rote Zwiebeln"] },
-    { key: "extra", label: "Extra", min: 0, max: 2, ingredients: ["Eier", "Avocado", "Zwiebeln"] },
+    { key: "extra", label: "Extra", min: 0, max: 2, ingredients: ["Freilandeier", "Avocado", "Zwiebeln"] },
   ] },
 ];

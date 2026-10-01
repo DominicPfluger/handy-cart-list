@@ -645,7 +645,8 @@
     "rs.dragHandle": "Drag to reorder",
     "rs.tapToRename": "Tap to rename",
     "rs.deleteRecipe": "Remove recipe",
-    "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move"
+    "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move",
+    "rk.cat.sandwich": "Sandwiches"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1293,7 +1294,8 @@
     "rs.dragHandle": "Drag to reorder",
     "rs.tapToRename": "Tap to rename",
     "rs.deleteRecipe": "Remove recipe",
-    "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move"
+    "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move",
+    "rk.cat.sandwich": "Sandwiches"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1941,7 +1943,8 @@
     "rs.dragHandle": "Drag to reorder",
     "rs.tapToRename": "Tap to rename",
     "rs.deleteRecipe": "Remove recipe",
-    "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move"
+    "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move",
+    "rk.cat.sandwich": "Sandwiches"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2589,7 +2592,8 @@
     "rs.dragHandle": "Arrastra para ordenar",
     "rs.tapToRename": "Toca para renombrar",
     "rs.deleteRecipe": "Eliminar receta",
-    "rs.boardHint": "Toca un nombre para renombrarlo · arrastra ⋮⋮ para ordenar o mover"
+    "rs.boardHint": "Toca un nombre para renombrarlo · arrastra ⋮⋮ para ordenar o mover",
+    "rk.cat.sandwich": "Sándwiches"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3237,7 +3241,8 @@
     "rs.dragHandle": "Arrastra para ordenar",
     "rs.tapToRename": "Toca para renombrar",
     "rs.deleteRecipe": "Eliminar receta",
-    "rs.boardHint": "Toca un nombre para renombrarlo · arrastra ⋮⋮ para ordenar o mover"
+    "rs.boardHint": "Toca un nombre para renombrarlo · arrastra ⋮⋮ para ordenar o mover",
+    "rk.cat.sandwich": "Sándwiches"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3885,7 +3890,8 @@
     "rs.dragHandle": "Glisser pour trier",
     "rs.tapToRename": "Toucher pour renommer",
     "rs.deleteRecipe": "Supprimer la recette",
-    "rs.boardHint": "Touchez un nom pour le renommer · glissez ⋮⋮ pour trier ou déplacer"
+    "rs.boardHint": "Touchez un nom pour le renommer · glissez ⋮⋮ pour trier ou déplacer",
+    "rk.cat.sandwich": "Sandwichs"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4533,7 +4539,8 @@
     "rs.dragHandle": "Glisser pour trier",
     "rs.tapToRename": "Toucher pour renommer",
     "rs.deleteRecipe": "Supprimer la recette",
-    "rs.boardHint": "Touchez un nom pour le renommer · glissez ⋮⋮ pour trier ou déplacer"
+    "rs.boardHint": "Touchez un nom pour le renommer · glissez ⋮⋮ pour trier ou déplacer",
+    "rk.cat.sandwich": "Sandwichs"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -5181,7 +5188,8 @@
     "rs.dragHandle": "Trascina per ordinare",
     "rs.tapToRename": "Tocca per rinominare",
     "rs.deleteRecipe": "Rimuovi ricetta",
-    "rs.boardHint": "Tocca un nome per rinominarlo · trascina ⋮⋮ per ordinare o spostare"
+    "rs.boardHint": "Tocca un nome per rinominarlo · trascina ⋮⋮ per ordinare o spostare",
+    "rk.cat.sandwich": "Panini"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -5829,7 +5837,8 @@
     "rs.dragHandle": "Trascina per ordinare",
     "rs.tapToRename": "Tocca per rinominare",
     "rs.deleteRecipe": "Rimuovi ricetta",
-    "rs.boardHint": "Tocca un nome per rinominarlo · trascina ⋮⋮ per ordinare o spostare"
+    "rs.boardHint": "Tocca un nome per rinominarlo · trascina ⋮⋮ per ordinare o spostare",
+    "rk.cat.sandwich": "Panini"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6477,7 +6486,8 @@
     "rs.dragHandle": "Arraste para ordenar",
     "rs.tapToRename": "Toque para renomear",
     "rs.deleteRecipe": "Remover receita",
-    "rs.boardHint": "Toque num nome para renomear · arraste ⋮⋮ para ordenar ou mover"
+    "rs.boardHint": "Toque num nome para renomear · arraste ⋮⋮ para ordenar ou mover",
+    "rk.cat.sandwich": "Sanduíches"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -7125,7 +7135,8 @@
     "rs.dragHandle": "Arraste para ordenar",
     "rs.tapToRename": "Toque para renomear",
     "rs.deleteRecipe": "Remover receita",
-    "rs.boardHint": "Toque num nome para renomear · arraste ⋮⋮ para ordenar ou mover"
+    "rs.boardHint": "Toque num nome para renomear · arraste ⋮⋮ para ordenar ou mover",
+    "rk.cat.sandwich": "Sanduíches"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -7773,7 +7784,8 @@
     "rs.dragHandle": "Sleep om te sorteren",
     "rs.tapToRename": "Tik om te hernoemen",
     "rs.deleteRecipe": "Recept verwijderen",
-    "rs.boardHint": "Tik op een naam om te hernoemen · sleep ⋮⋮ om te sorteren of verplaatsen"
+    "rs.boardHint": "Tik op een naam om te hernoemen · sleep ⋮⋮ om te sorteren of verplaatsen",
+    "rk.cat.sandwich": "Broodjes"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -8421,7 +8433,8 @@
     "rs.dragHandle": "Sleep om te sorteren",
     "rs.tapToRename": "Tik om te hernoemen",
     "rs.deleteRecipe": "Recept verwijderen",
-    "rs.boardHint": "Tik op een naam om te hernoemen · sleep ⋮⋮ om te sorteren of verplaatsen"
+    "rs.boardHint": "Tik op een naam om te hernoemen · sleep ⋮⋮ om te sorteren of verplaatsen",
+    "rk.cat.sandwich": "Broodjes"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8621,7 +8634,8 @@
     "rs.dragHandle": "Ziehen zum Sortieren",
     "rs.tapToRename": "Tippen zum Umbenennen",
     "rs.deleteRecipe": "Rezept entfernen",
-    "rs.boardHint": "Namen antippen zum Umbenennen · ⋮⋮ ziehen zum Sortieren oder Verschieben"
+    "rs.boardHint": "Namen antippen zum Umbenennen · ⋮⋮ ziehen zum Sortieren oder Verschieben",
+    "rk.cat.sandwich": "Sandwiches"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8821,6 +8835,7 @@
     "rs.dragHandle": "Ziehen zum Sortieren",
     "rs.tapToRename": "Tippen zum Umbenennen",
     "rs.deleteRecipe": "Rezept entfernen",
-    "rs.boardHint": "Namen antippen zum Umbenennen · ⋮⋮ ziehen zum Sortieren oder Verschieben"
+    "rs.boardHint": "Namen antippen zum Umbenennen · ⋮⋮ ziehen zum Sortieren oder Verschieben",
+    "rk.cat.sandwich": "Sandwiches"
   }
 }
