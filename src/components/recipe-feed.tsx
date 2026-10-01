@@ -85,7 +85,7 @@ export function FavoritesRow() {
 export function RecipeFeed() {
   const { t } = useT();
   return (
-    <div className="space-y-5">
+    <div className="space-y-5" id="rk-inspiration">
       <Row title={t("rs.topRated")} emoji="⭐" bg="#FFF3D6" order="rating" empty={t("rs.emptyFeed")} />
       <Row title={t("rs.mostSaved")} emoji="📁" bg="#E3EEF9" order="saves" empty={t("rs.emptyFeed")} />
     </div>
