@@ -21,6 +21,7 @@ import {
   useCatalog,
   childrenOf,
   compareByName,
+  brandsFor,
   matchesProductSearch,
   originalName,
   pathTo,
@@ -124,6 +125,7 @@ function DepartmentsPage() {
   const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<string | undefined>(undefined);
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
   const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);

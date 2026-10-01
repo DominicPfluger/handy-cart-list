@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { CatalogProduct } from "../lib/catalog-query";
+import { brandsFor, type CatalogProduct } from "../lib/catalog-query";
 import { getUnits, formatQuantity, type UnitId } from "../lib/units";
 import { useT } from "../i18n";
 
@@ -29,6 +29,7 @@ interface CatalogProductDialogProps {
   product: CatalogProduct | null;
   groupLabel?: string | undefined;
   groupEmoji?: string | null | undefined;
+  initialBrand?: string | undefined;
   onOpenChange: (open: boolean) => void;
 }
 
@@ -36,6 +37,7 @@ export function CatalogProductDialog({
   product,
   groupLabel,
   groupEmoji,
+  initialBrand,
   onOpenChange,
 }: CatalogProductDialogProps) {
   const { addCatalogItem } = useShoppingList();
@@ -50,6 +52,7 @@ export function CatalogProductDialog({
   const [custom, setCustom] = useState<string[]>([]);
   const [customInput, setCustomInput] = useState("");
   const [expanded, setExpanded] = useState(false);
+  const [brand, setBrand] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     if (!product) return;
@@ -61,7 +64,8 @@ export function CatalogProductDialog({
     setCustom([]);
     setCustomInput("");
     setExpanded(false);
-  }, [product]);
+    setBrand(initialBrand);
+  }, [product, initialBrand]);
 
   const toggleVariant = (v: string) =>
     setSelected((prev) => (prev.includes(v) ? prev.filter((x) => x !== v) : [...prev, v]));
@@ -81,7 +85,8 @@ export function CatalogProductDialog({
     if (!product || !validAmount) return;
     const pending = customInput.trim();
     const sorts = pending && !selected.includes(pending) ? [...selected, pending] : selected;
-    const names = sorts.length ? sorts.map((v) => `${product.name} · ${v}`) : [product.name];
+    const base = sorts.length ? sorts.map((v) => `${product.name} · ${v}`) : [product.name];
+    const names = brand ? base.map((n) => `${n} · ${brand}`) : base;
     for (const name of names) addCatalogItem({
       productId: product.id,
       name,
@@ -135,6 +140,20 @@ export function CatalogProductDialog({
             </Select>
           </div>
         </div>
+
+        {product && brandsFor(product, locale).length > 0 && (
+          <div className="space-y-2">
+            <Label>{t("brand.title")}</Label>
+            <div className="flex flex-wrap gap-1.5">
+              {brandsFor(product, locale).map((b) => (
+                <button key={b} type="button" aria-pressed={brand === b} onClick={() => setBrand(brand === b ? undefined : b)}
+                  className={`rounded-full border px-3 py-1 text-xs ${brand === b ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
+                  {b}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {product?.organicAvailable && (
           <Label
