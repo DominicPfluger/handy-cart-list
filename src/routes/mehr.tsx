@@ -12,7 +12,7 @@ import {
   HistoryIcon,
 } from "../components/icons";
 import { LOCALES, getExplicitLocale, setLocale, useT, type Locale } from "../i18n";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
