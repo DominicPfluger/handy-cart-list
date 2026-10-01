@@ -320,6 +320,7 @@ export const de = {
   "rk.back": "Alle Kategorien",
   "rk.pick": "wähle {min}–{max}",
   "rk.pickOne": "wähle 1",
+  "rk.pickAny": "beliebig viele",
   "rk.empty": "Für diesen Schritt sind noch keine Zutaten hinterlegt.",
   "rk.yourRecipe": "Dein Rezept",
   "rk.addAll": "{n} Zutaten zur Liste",
