@@ -14,7 +14,7 @@ import {
   departmentIdsOf,
   type CatalogDepartment,
 } from "../lib/catalog-query";
-import { getLocale } from "../i18n";
+import { getLocale, pickName } from "../i18n";
 import {
   CheckIcon,
   TrashIcon,
