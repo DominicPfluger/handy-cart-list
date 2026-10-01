@@ -122,6 +122,8 @@ export function CatalogMediaPanel() {
             ))}
           </div>
         )}
+
+        <ImageGallery />
       </section>
 
       <section className="mt-4 rounded-2xl border border-border bg-card p-4">
@@ -161,8 +163,6 @@ export function CatalogMediaPanel() {
           </Button>
         </div>
       </section>
-
-      <ImageGallery />
     </>
   );
 }
@@ -184,8 +184,8 @@ function ImageGallery() {
   const pages = g ? Math.max(1, Math.ceil(g.total / perPage)) : 1;
 
   return (
-    <section className="mt-4 rounded-2xl border border-border bg-card p-4">
-      <h2 className="text-base font-semibold">{T("media.galleryTitle")}</h2>
+    <div className="mt-5 border-t border-border pt-4">
+      <h3 className="text-sm font-semibold">{T("media.galleryTitle")}</h3>
       <p className="mt-1 text-sm text-muted-foreground">{T("media.galleryHint")}</p>
 
       <Input
@@ -234,6 +234,6 @@ function ImageGallery() {
           </Button>
         </div>
       )}
-    </section>
+    </div>
   );
 }
