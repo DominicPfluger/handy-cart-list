@@ -101,7 +101,9 @@ function AdminPage() {
   const [view, setView] = useState<"list" | "tiles">("list");
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: view === "tiles" }));
-    return () => window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: false }));
+    return () => {
+      window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: false }));
+    };
   }, [view]);
   const refPrices = useReferencePrices();
 
