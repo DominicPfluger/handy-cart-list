@@ -224,11 +224,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [large, setLarge] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
+  const [newId, setNewId] = useState<string | null>(null);
+  const [price, setPrice] = useState("");
+  const effId = item?.id ?? newId ?? undefined;
   const table = isDept ? "departments" : "products";
 
   const save = () => p.run(async () => {
     if (!name.trim()) throw new Error(T("tile.nameRequired"));
     const base = { name: name.trim(), emoji: emoji.trim() || null };
+    let id = item?.id;
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
@@ -242,9 +246,16 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         ? await supabase.from("departments").insert({ ...base, parent_id: p.cur, sort_order: p.children.length + 1 }).select("id").single()
         : await supabase.from("products").insert({ ...base, department_id: p.cur!, default_quantity: qty, default_unit: unit as never, sort_order: p.products.length + 1 }).select("id").single();
       if (r.error) throw new Error(r.error.message);
-      await p.translateIds([r.data.id]);
+      id = r.data.id;
+      await p.translateIds([id]);
+      setNewId(id);
     }
-    p.onClose();
+    if (!isDept && id && price.trim() && !Number.isNaN(Number(price))) {
+      const market = currentMarket();
+      await p.must(supabase.from("product_reference_prices").upsert({ product_id: id, market, price: Number(price), currency: MARKET_CCY[market] ?? "EUR" }, { onConflict: "product_id,market" }));
+    }
+    // Bei neuen Einträgen offen lassen, damit gleich ein Bild ergänzt werden kann.
+    if (item) p.onClose();
   });
 
   const upload = (file: File) => p.run(async () => {
