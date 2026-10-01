@@ -191,9 +191,9 @@ export function ShareSheet() {
                 className="flex h-12 w-12 items-center justify-center rounded-full text-primary-foreground"
                 style={{ backgroundColor: target.bg }}
               >
-                {target.iconPath ? <BrandIcon path={target.iconPath} /> : <MailIcon />}
+                {target.iconPath ? <BrandIcon path={target.iconPath} /> : target.id === "sms" ? <SmsIcon /> : <MailIcon />}
               </span>
-              <span className="text-xs font-medium">{target.id === "email" ? t("share.email") : target.label}</span>
+              <span className="text-xs font-medium">{target.id === "email" ? t("share.email") : target.id === "sms" ? t("inv.sms") : target.label}</span>
             </button>
           ))}
         </div>
