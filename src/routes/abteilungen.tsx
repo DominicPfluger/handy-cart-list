@@ -211,7 +211,7 @@ function DepartmentsPage() {
   type DropTarget = { kind: "before" | "after" | "into"; id: string | null };
   type DragState = { what: "dept" | "product" | "heading"; id: string; name: string; x: number; y: number; target: DropTarget | null };
   const [drag, setDrag] = useState<DragState | null>(null);
-  const pressRef = useRef<{ timer: number; x: number; y: number } | null>(null);
+  const pressRef = useRef<{ timer: number; x: number; y: number; what: "dept" | "product" | "heading"; id: string; name: string } | null>(null);
   const suppressClick = useRef(false);
   const dragRef = useRef(drag);
   dragRef.current = drag;
@@ -248,7 +248,7 @@ function DepartmentsPage() {
     const { clientX: x, clientY: y } = event;
     cancelPress();
     pressRef.current = {
-      x, y,
+      x, y, what, id: entry.id, name: entry.name,
       timer: window.setTimeout(() => {
         pressRef.current = null;
         navigator.vibrate?.(30);
@@ -259,7 +259,16 @@ function DepartmentsPage() {
 
   const pressMove = (event: React.PointerEvent) => {
     const p = pressRef.current;
-    if (p && Math.hypot(event.clientX - p.x, event.clientY - p.y) > 8) cancelPress();
+    if (!p || Math.hypot(event.clientX - p.x, event.clientY - p.y) <= 8) return;
+    if (p.what === "product") {
+      // Ziehen am Listen-Icon: sofort verschieben
+      cancelPress();
+      try { (event.currentTarget as Element).releasePointerCapture?.(event.pointerId); } catch { /* ignore */ }
+      const d = { what: p.what, id: p.id, name: p.name };
+      setDrag({ ...d, x: event.clientX, y: event.clientY, target: findTarget(event.clientX, event.clientY, d) });
+      return;
+    }
+    cancelPress();
   };
 
   useEffect(() => {
