@@ -434,6 +434,46 @@ function FavoritesPage() {
         </div>
       )}
 
+      {listNameOpen && (
+        <div className="fixed inset-0 z-[70] flex items-end justify-center bg-foreground/30" onClick={() => setListNameOpen(false)}>
+          <div
+            className="w-full max-w-[440px] rounded-t-3xl bg-background p-5 pb-[calc(2rem+env(safe-area-inset-bottom))]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-muted" />
+            <h2 className="mb-4 text-lg font-bold text-foreground">{t("fav.listNameTitle")}</h2>
+            <input
+              autoFocus
+              value={listName}
+              onChange={(e) => setListName(e.target.value.slice(0, 60))}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && listName.trim()) transferAllToNewList(listName.trim());
+              }}
+              onFocus={(e) => e.target.select()}
+              placeholder={t("fav.listNamePlaceholder")}
+              aria-label={t("fav.listNamePlaceholder")}
+              maxLength={60}
+              className="w-full rounded-xl border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
+            />
+            <div className="mt-4 flex gap-2">
+              <button
+                onClick={() => setListNameOpen(false)}
+                className="flex-1 rounded-xl border border-border px-4 py-2.5 text-sm font-semibold text-foreground"
+              >
+                {t("common.cancel")}
+              </button>
+              <button
+                onClick={() => listName.trim() && transferAllToNewList(listName.trim())}
+                disabled={!listName.trim()}
+                className="flex-1 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+              >
+                {t("lm.create")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <CatalogProductDialog
         product={selected ? selected.product : null}
         groupLabel={selected ? (selected.product.departmentId ? deptById.get(selected.product.departmentId)?.name : undefined) ?? selected.favorite.groupLabel : undefined}
