@@ -1,8 +1,8 @@
 # Roadmap
 
-## Offen
-- [ ] „Rezept-Kreator“ in „Rezept-Generator“ umbenennen; untere Nav-Leiste nur „Rezepte“
-- [ ] Haute Cuisine: 6 neue Produkte übersetzen (15 Sprachen) + mit Küche verknüpfen, dann in Vorschau prüfen
+## Erledigt
+- [x] „Rezept-Kreator“ → „Rezept-Generator“; Nav-Leiste zeigt nur „Rezepte“ (alle 16 Sprachen)
+- [x] Haute Cuisine: Küche angelegt (🍾, 15 Übersetzungen), 49 vorhandene Luxusartikel verknüpft, 6 neue Artikel (Safran, Wagyu-Rindsfilet, Knoblauch in Öl, Trüffelpaste, Gänseleberpastete, Weinbergschnecken) mit Übersetzungen angelegt und verknüpft — in Vorschau geprüft
 
 ## Ältere offene Punkte
 - Push-Versand (Firebase fehlt)
