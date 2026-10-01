@@ -237,11 +237,26 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                       <span className="min-w-0 flex-1 truncate font-semibold text-foreground">{pickerDept ? path(pickerDept) : T("adm.fromCatalog")}</span>
                     </div>
                     <div className="max-h-72 space-y-0.5 overflow-y-auto">
-                      {childDepts.map((d) => (
-                        <button key={d.id} type="button" onClick={() => setPickerDept(d.id)} className="flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left text-xs text-foreground hover:bg-accent/40">
-                          <span className="truncate">{d.emoji} {d.name}</span><span className="text-muted-foreground">›</span>
-                        </button>
-                      ))}
+                      {childDepts.map((d) => {
+                        const ids = deptProductIds(d.id);
+                        const chosen = ids.filter((id) => pickerSel.has(id)).length;
+                        return (
+                          <div key={d.id} className="flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-xs text-foreground hover:bg-accent/40">
+                            <input
+                              type="checkbox"
+                              checked={ids.length > 0 && chosen === ids.length}
+                              ref={(el) => { if (el) el.indeterminate = chosen > 0 && chosen < ids.length; }}
+                              disabled={ids.length === 0}
+                              onChange={(e) => toggleDeptPick(d.id, e.target.checked)}
+                              className="accent-primary"
+                              aria-label={d.name}
+                            />
+                            <button type="button" onClick={() => setPickerDept(d.id)} className="flex min-w-0 flex-1 items-center justify-between">
+                              <span className="truncate">{d.emoji} {d.name} <span className="text-muted-foreground">({chosen}/{ids.length})</span></span><span className="text-muted-foreground">›</span>
+                            </button>
+                          </div>
+                        );
+                      })}
                       {deptProds.map((p) => (
                         <label key={p.id} className="flex items-center gap-2 rounded-lg px-2 py-1 text-xs hover:bg-accent/40">
                           <input type="checkbox" checked={pickerSel.has(p.id)} onChange={() => togglePick(p.id)} className="accent-primary" />
