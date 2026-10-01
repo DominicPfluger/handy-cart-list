@@ -208,6 +208,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [emoji, setEmoji] = useState(item?.emoji ?? "");
   const [qty, setQty] = useState(prod?.default_quantity ?? 1);
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
+  const [hint, setHint] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
   const table = isDept ? "departments" : "products";
@@ -251,11 +252,14 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             {p.imgUrl ? <img src={p.imgUrl} alt="" className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
           </div>
           {item && (
-            <div className="flex flex-wrap gap-2">
-              <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
-              <Button size="sm" variant="outline" onClick={() => p.run(() => genImg({ data: { id: item.id, kind: isDept ? "department" : "product" } }), T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
-              <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
-              <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
+            <div className="flex flex-1 flex-col gap-2">
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
+                <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
+                <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
+              </div>
+              <Input aria-label={T("tile.aiHint")} placeholder={T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 rounded-xl text-sm" />
+              <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(() => genImg({ data: { id: item.id, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } }), T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
             </div>
           )}
         </div>
