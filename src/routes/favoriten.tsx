@@ -18,13 +18,13 @@ import {
 } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { formatQuantity } from "../lib/units";
-import { useT } from "../i18n";
+import { getLocale, useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
 
 
 export const Route = createFileRoute("/favoriten")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions),
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
   head: () => ({
     meta: [
       { title: "Shoppi — Favoriten" },

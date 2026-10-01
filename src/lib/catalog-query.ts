@@ -1,7 +1,7 @@
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { getLocale, pickName, useLocale } from "../i18n";
-import { getCatalog, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct, type CatalogCuisine } from "./catalog.functions";
+import { getCatalog, getCatalogImageUrls, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct, type CatalogCuisine } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
 import { useAllMarkets } from "../hooks/use-all-markets";
@@ -21,15 +21,25 @@ export function inMarket(p: Pick<CatalogProduct, "markets" | "excludedMarkets">,
   return !(p.excludedMarkets ?? []).includes(market);
 }
 
-export const catalogQueryOptions = queryOptions({
-  queryKey: ["catalog"],
-  queryFn: () => getCatalog(),
-  staleTime: 60 * 1000,
-  refetchInterval: 10 * 60 * 1000, // renew signed image URLs before they expire
-  // Loader uses ensureQueryData (fetchQuery = no retry by default). Retry so a
-  // single interrupted request (reload/HMR during the large download) doesn't blank the page.
-  retry: 3,
-  retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
+/** Katalog für eine Sprachvariante (nur deren Übersetzungen werden geladen). */
+export const catalogQueryOptions = (locale: string) =>
+  queryOptions({
+    queryKey: ["catalog", locale],
+    queryFn: () => getCatalog({ data: { locale } }),
+    staleTime: 30 * 60 * 1000,
+    // Loader uses ensureQueryData (fetchQuery = no retry by default). Retry so a
+    // single interrupted request (reload/HMR during the large download) doesn't blank the page.
+    retry: 3,
+    retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
+  });
+
+/** Signierte Bild-Adressen – leichtgewichtig, wird vor Ablauf (60 Min) erneuert. */
+export const catalogImagesQueryOptions = queryOptions({
+  queryKey: ["catalog-images"],
+  queryFn: () => getCatalogImageUrls(),
+  staleTime: 25 * 60 * 1000,
+  refetchInterval: 30 * 60 * 1000,
+  retry: 2,
 });
 
 /** Übersetzter Katalogname ohne persönliche Umbenennung. */
@@ -39,13 +49,15 @@ export function originalName(e: { names: Record<string, string>; baseName: strin
 
 /** Katalog mit Namen in der aktuell gewählten Sprache (persönliche Namen haben Vorrang). */
 export function useCatalog(): Catalog {
-  const { data } = useSuspenseQuery(catalogQueryOptions);
   const locale = useLocale();
+  const { data } = useSuspenseQuery(catalogQueryOptions(locale));
+  const { data: images } = useQuery(catalogImagesQueryOptions);
   const custom = useCustomNames();
   const own = useCustomCatalog();
   const allMarkets = useAllMarkets();
   return useMemo(() => {
     const market = marketOf(locale);
+    const img = (path: string | null | undefined) => (path ? (images?.[path] ?? null) : null);
     const ownDepts: CatalogDepartment[] = own.departments.map((d, i) => ({
       id: d.id, parentId: d.parentId, name: d.name, emoji: d.emoji, color: null, imageUrl: null,
       sortOrder: 10000 + i, baseName: d.name, names: {},
@@ -56,12 +68,13 @@ export function useCatalog(): Catalog {
       sortOrder: 10000 + i, baseName: p.name, names: {},
     }));
     return {
-      departments: [...data.departments, ...ownDepts].map((d) => ({ ...d, name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
+      departments: [...data.departments, ...ownDepts].map((d) => ({ ...d, imageUrl: img(d.imagePath), name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
       products: [...data.products.filter((p) => allMarkets || inMarket(p, market)), ...ownProducts].map((p) => {
         const name = custom[p.id] ?? pickName(p.names, locale, p.baseName);
         const foreign = p.markets?.length && !p.markets.includes(market);
         return {
           ...p,
+          imageUrl: img(p.imagePath),
           sortOrder: p.marketOrder?.[market] ?? p.sortOrder,
           name: foreign ? `${name} ${p.markets!.map(flagOf).join("")}` : name,
         };
@@ -73,7 +86,7 @@ export function useCatalog(): Catalog {
       productAliases: data.productAliases ?? [],
       recipeGroups: (data.recipeGroups ?? []).map((g) => ({ ...g, name: pickName(g.names, locale, g.baseName) })),
     };
-  }, [data, locale, custom, own, allMarkets]);
+  }, [data, images, locale, custom, own, allMarkets]);
 }
 
 export type { Catalog, CatalogCuisine, CatalogDepartment, CatalogHeading, CatalogProduct };

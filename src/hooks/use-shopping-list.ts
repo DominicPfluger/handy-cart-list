@@ -307,7 +307,102 @@ function useLocalLists(): LocalListsApi {
 // Cloud-Modus (angemeldet): Live-Sync über die Cloud
 // ============================================================
 
-type CloudRow = any;
+interface CloudItemRow {
+  id: string;
+  list_id: string;
+  name: string;
+  quantity: string | null;
+  checked: boolean | null;
+  added_by_name: string | null;
+  created_at: string | null;
+  unit: string | null;
+  organic: boolean | null;
+  emoji: string | null;
+  image_url: string | null;
+  group_label: string | null;
+  group_emoji: string | null;
+  product_id: string | null;
+  note: string | null;
+}
+
+interface CloudListRow {
+  id: string;
+  name: string;
+  is_template: boolean | null;
+  invite_code: string | null;
+  owner_id: string;
+  created_at: string | null;
+}
+
+type CloudRow = CloudItemRow & Partial<CloudListRow>;
+
+// ============= Offline-Warteschlange für Cloud-Änderungen =============
+
+const QUEUE_KEY = "shoppi:offline-queue";
+
+type QueueEntry =
+  | { fn: "addItems"; data: { listId: string; items: Array<Record<string, unknown>> } }
+  | { fn: "updateItem"; data: { id: string; checked?: boolean; checkedByName?: string; groupLabel?: string; groupEmoji?: string } }
+  | { fn: "deleteItem"; data: { id: string } }
+  | { fn: "clearChecked"; data: { listId: string } }
+  | { fn: "updateList"; data: { id: string; name?: string; order?: string[] } }
+  | { fn: "deleteList"; data: { id: string } };
+
+function readQueue(): QueueEntry[] {
+  try {
+    return JSON.parse(localStorage.getItem(QUEUE_KEY) ?? "[]") as QueueEntry[];
+  } catch {
+    return [];
+  }
+}
+
+function enqueue(entry: QueueEntry) {
+  try {
+    localStorage.setItem(QUEUE_KEY, JSON.stringify([...readQueue(), entry]));
+  } catch {
+    /* ignore */
+  }
+}
+
+async function runQueueEntry(entry: QueueEntry): Promise<void> {
+  switch (entry.fn) {
+    case "addItems":
+      await addCloudItems({ data: entry.data });
+      break;
+    case "updateItem":
+      await updateCloudItem({ data: entry.data });
+      break;
+    case "deleteItem":
+      await deleteCloudItem({ data: entry.data });
+      break;
+    case "clearChecked":
+      await clearCloudChecked({ data: entry.data });
+      break;
+    case "updateList":
+      await updateCloudList({ data: entry.data });
+      break;
+    case "deleteList":
+      await deleteCloudList({ data: entry.data });
+      break;
+  }
+}
+
+/** Führt einen Cloud-Aufruf aus; ohne Netz wird er sofort in die Warteschlange gelegt. */
+function runCloud(entry: QueueEntry, callFactory: () => Promise<unknown>, onQueued?: () => void) {
+  const queueIt = () => {
+    enqueue(entry);
+    onQueued?.();
+    toast.info(t("cloud.queued"));
+  };
+  if (typeof navigator !== "undefined" && !navigator.onLine) {
+    queueIt();
+    return;
+  }
+  callFactory().catch(() => {
+    if (typeof navigator !== "undefined" && !navigator.onLine) queueIt();
+    else toast.error(t("cloud.error"));
+  });
+}
 
 function rowToItem(r: CloudRow): ListItem {
   return {
@@ -342,6 +437,27 @@ function itemToCloudInput(it: ListItem, addedByName: string) {
     groupEmoji: it.groupEmoji ?? null,
     note: it.note ?? null,
     addedByName,
+  };
+}
+
+/** Baut einen Listeneintrag aus einem Katalogartikel (lokal und Cloud identisch). */
+function buildCatalogItem(id: string, input: AddCatalogItemInput, user: string): ListItem {
+  return {
+    id,
+    name: input.name,
+    quantity: input.quantity,
+    category: "sonstiges",
+    checked: false,
+    addedBy: user,
+    addedAt: Date.now(),
+    unit: input.unit,
+    organic: input.organic,
+    emoji: input.emoji ?? undefined,
+    imageUrl: input.imageUrl ?? null,
+    groupLabel: input.groupLabel ?? "Sonstiges",
+    groupEmoji: input.groupEmoji ?? "📦",
+    productId: input.productId,
+    note: input.note?.trim() ? input.note.trim() : undefined,
   };
 }
 
@@ -498,22 +614,73 @@ function useCloudLists(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [logActivity, navigate]);
 
-  // Erstladen + Live-Synchronisation
+  // Live-Synchronisation: auf die eigenen Listen begrenzt (weniger Daten, weniger Nachladen)
+  const channelRef = useRef<ReturnType<typeof supabase.channel> | null>(null);
+  const subscribedIdsRef = useRef<string>("");
+
+  const subscribe = useCallback(
+    (listIds: string[]) => {
+      const key = [...listIds].sort().join(",");
+      if (key === subscribedIdsRef.current) return;
+      subscribedIdsRef.current = key;
+      if (channelRef.current) supabase.removeChannel(channelRef.current);
+      let channel = supabase.channel(`shoppi-lists-${crypto.randomUUID()}`);
+      if (listIds.length) {
+        const inFilter = `in.(${listIds.join(",")})`;
+        channel = channel
+          .on("postgres_changes", { event: "*", schema: "public", table: "list_items", filter: `list_id=${inFilter}` }, scheduleReload)
+          .on("postgres_changes", { event: "*", schema: "public", table: "shopping_lists", filter: `id=${inFilter}` }, scheduleReload)
+          .on("postgres_changes", { event: "*", schema: "public", table: "list_members", filter: `list_id=${inFilter}` }, scheduleReload);
+      } else {
+        channel = channel
+          .on("postgres_changes", { event: "*", schema: "public", table: "shopping_lists" }, scheduleReload)
+          .on("postgres_changes", { event: "*", schema: "public", table: "list_members" }, scheduleReload);
+      }
+      channel.subscribe();
+      channelRef.current = channel;
+    },
+    [scheduleReload]
+  );
+
+  // Erstladen + Live-Synchronisation + Offline-Warteschlange abarbeiten
   useEffect(() => {
     if (!user) return;
     fetchCloud();
-    const channel = supabase
-      .channel(`shoppi-lists-${crypto.randomUUID()}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "list_items" }, scheduleReload)
-      .on("postgres_changes", { event: "*", schema: "public", table: "shopping_lists" }, scheduleReload)
-      .on("postgres_changes", { event: "*", schema: "public", table: "list_members" }, scheduleReload)
-      .subscribe();
+    const flushQueue = async () => {
+      const queued = readQueue();
+      if (!queued.length) return;
+      try {
+        localStorage.removeItem(QUEUE_KEY);
+        for (const entry of queued) await runQueueEntry(entry);
+        toast.success(t("cloud.queueFlushed", { n: queued.length }));
+        fetchCloud();
+      } catch {
+        // Wieder einreihen, damit nichts verloren geht
+        try {
+          localStorage.setItem(QUEUE_KEY, JSON.stringify(queued));
+        } catch {
+          /* ignore */
+        }
+      }
+    };
+    flushQueue();
+    window.addEventListener("online", flushQueue);
     return () => {
-      supabase.removeChannel(channel);
+      window.removeEventListener("online", flushQueue);
+      if (channelRef.current) supabase.removeChannel(channelRef.current);
+      channelRef.current = null;
+      subscribedIdsRef.current = "";
       if (reloadTimer.current) clearTimeout(reloadTimer.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
+
+  // Realtime-Abo an die aktuellen Listen anpassen
+  useEffect(() => {
+    if (!user || !hydrated) return;
+    subscribe(cloudLists.map((l) => l.id).filter((id) => !id.startsWith("tmp-")));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, hydrated, cloudLists]);
 
   // Aktive Liste merken
   useEffect(() => {
@@ -601,7 +768,7 @@ function useCloudLists(
       const n = name.trim();
       if (!n) return;
       setCloudLists((prev) => prev.map((l) => (l.id === id ? { ...l, name: n } : l)));
-      updateCloudList({ data: { id, name: n } }).catch(() => toast.error(t("cloud.error")));
+      runCloud({ fn: "updateList", data: { id, name: n } }, () => updateCloudList({ data: { id, name: n } }));
     },
     [user]
   );
@@ -617,9 +784,7 @@ function useCloudLists(
         });
         return next;
       });
-      deleteCloudList({ data: { id } })
-        .then(scheduleReload)
-        .catch(() => toast.error(t("cloud.error")));
+      runCloud({ fn: "deleteList", data: { id } }, () => deleteCloudList({ data: { id } }).then(scheduleReload));
     },
     [user, scheduleReload]
   );
@@ -634,7 +799,7 @@ function useCloudLists(
         const [moved] = next.splice(from, 1);
         next.splice(to, 0, moved!);
         const order = next.filter((l) => !l.isTemplate).map((l) => l.id);
-        updateCloudList({ data: { id: moved!.id, order } }).catch(() => toast.error(t("cloud.error")));
+        runCloud({ fn: "updateList", data: { id: moved!.id, order } }, () => updateCloudList({ data: { id: moved!.id, order } }));
         return next;
       });
     },
@@ -711,83 +876,59 @@ function useCloudLists(
       };
       setItems((prev) => [...prev, item]);
       logActivity(selfName, "hat hinzugefügt", item.name);
-      addCloudItems({
-        data: {
-          listId: activeListId,
-          items: [{ name: item.name, quantity: item.quantity, addedByName: selfName }],
-        },
-      })
-        .then((res) => {
+      const payload = { listId: activeListId, items: [{ name: item.name, quantity: item.quantity, addedByName: selfName }] };
+      runCloud(
+        { fn: "addItems", data: payload },
+        () => addCloudItems({ data: payload }).then((res) => {
           const row = (res.items as CloudRow[])[0];
           if (row) replaceItemLocally(item.id, rowToItem(row));
         })
-        .catch(() => toast.error(t("cloud.error")));
+      );
     },
     [selfName, activeListId, setItems, replaceItemLocally, logActivity]
   );
 
   const addCatalogItem = useCallback(
     (input: AddCatalogItemInput, _user = "Du") => {
-      const item: ListItem = {
-        id: `tmp-${Date.now()}${Math.round(Math.random() * 1000)}`,
-        name: input.name,
-        quantity: input.quantity,
-        category: "sonstiges",
-        checked: false,
-        addedBy: selfName,
-        addedAt: Date.now(),
-        unit: input.unit,
-        organic: input.organic,
-        emoji: input.emoji ?? undefined,
-        imageUrl: input.imageUrl ?? null,
-        groupLabel: input.groupLabel ?? "Sonstiges",
-        groupEmoji: input.groupEmoji ?? "📦",
-        productId: input.productId,
-        note: input.note?.trim() ? input.note.trim() : undefined,
-      };
+      const item = buildCatalogItem(`tmp-${Date.now()}${Math.round(Math.random() * 1000)}`, input, selfName);
       setItems((prev) => [...prev, item]);
       logActivity(selfName, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
-      addCloudItems({
-        data: {
-          listId: activeListId,
-          items: [itemToCloudInput(item, selfName)],
-        },
-      })
-        .then((res) => {
+      const payload = { listId: activeListId, items: [itemToCloudInput(item, selfName)] };
+      runCloud(
+        { fn: "addItems", data: payload },
+        () => addCloudItems({ data: payload }).then((res) => {
           const row = (res.items as CloudRow[])[0];
           if (row) replaceItemLocally(item.id, rowToItem(row));
         })
-        .catch(() => toast.error(t("cloud.error")));
+      );
     },
     [selfName, activeListId, setItems, replaceItemLocally, logActivity]
   );
 
   const toggleItem = useCallback(
     (id: string) => {
-      let after: ListItem | undefined;
-      setItems((prev) =>
-        prev.map((it) => {
-          if (it.id !== id) return it;
-          after = { ...it, checked: !it.checked };
-          return after;
-        })
-      );
+      const current = activeList.items.find((it) => it.id === id);
+      const after: ListItem | undefined = current ? { ...current, checked: !current.checked } : undefined;
+      setItems((prev) => prev.map((it) => (it.id === id ? { ...it, checked: !it.checked } : it)));
       if (after && !id.startsWith("tmp-")) {
         if (after.checked) logActivity(selfName, "hat abgehakt", after.name);
         else logActivity(selfName, "hat wieder hinzugefügt", after.name);
-        updateCloudItem({
-          data: { id, checked: after.checked, checkedByName: selfName },
-        }).catch(() => toast.error(t("cloud.error")));
+        const checked = after.checked;
+        runCloud(
+          { fn: "updateItem", data: { id, checked, checkedByName: selfName } },
+          () => updateCloudItem({ data: { id, checked, checkedByName: selfName } })
+        );
       }
     },
-    [setItems, selfName, logActivity]
+    [setItems, selfName, logActivity, activeList]
   );
 
   const setItemGroup = useCallback(
     (id: string, label: string, emoji?: string) => {
       setItems((prev) => prev.map((it) => (it.id === id ? { ...it, groupLabel: label, groupEmoji: emoji ?? it.groupEmoji } : it)));
       if (!id.startsWith("tmp-")) {
-        updateCloudItem({ data: { id, groupLabel: label, ...(emoji ? { groupEmoji: emoji } : {}) } }).catch(() => toast.error(t("cloud.error")));
+        const patch = { id, groupLabel: label, ...(emoji ? { groupEmoji: emoji } : {}) };
+        runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
       }
     },
     [setItems]
@@ -795,18 +936,47 @@ function useCloudLists(
 
   const removeItem = useCallback(
     (id: string) => {
+      const removed = activeList.items.find((it) => it.id === id);
       setItems((prev) => prev.filter((it) => it.id !== id));
       if (!id.startsWith("tmp-")) {
-        deleteCloudItem({ data: { id } }).catch(() => toast.error(t("cloud.error")));
+        runCloud({ fn: "deleteItem", data: { id } }, () => deleteCloudItem({ data: { id } }));
+      }
+      if (removed) {
+        const item = removed;
+        toast(t("list.itemRemoved", { name: item.name }), {
+          action: {
+            label: t("common.undo"),
+            onClick: () => {
+              setItems((prev) => [...prev, item]);
+              const payload = { listId: activeListId, items: [itemToCloudInput(item, selfName)] };
+              runCloud({ fn: "addItems", data: payload }, () => addCloudItems({ data: payload }));
+            },
+          },
+        });
       }
     },
-    [setItems]
+    [setItems, activeList, activeListId, selfName]
   );
 
   const clearChecked = useCallback(() => {
+    const removed = activeList.items.filter((it) => it.checked);
     setItems((prev) => prev.filter((it) => !it.checked));
-    if (activeListId) clearCloudChecked({ data: { listId: activeListId } }).catch(() => toast.error(t("cloud.error")));
-  }, [setItems, activeListId]);
+    if (activeListId) {
+      runCloud({ fn: "clearChecked", data: { listId: activeListId } }, () => clearCloudChecked({ data: { listId: activeListId } }));
+    }
+    if (removed.length) {
+      toast(t("list.checkedCleared", { n: removed.length }), {
+        action: {
+          label: t("common.undo"),
+          onClick: () => {
+            setItems((prev) => [...prev, ...removed]);
+            const payload = { listId: activeListId, items: removed.map((i) => itemToCloudInput(i, selfName)) };
+            runCloud({ fn: "addItems", data: payload }, () => addCloudItems({ data: payload }));
+          },
+        },
+      });
+    }
+  }, [setItems, activeList, activeListId, selfName]);
 
   const createListFromItems = useCallback(
     (name: string, items: ListItem[]) => {
@@ -956,24 +1126,7 @@ export function useShoppingList() {
 
   const localAddCatalogItem = useCallback(
     (input: AddCatalogItemInput, user_ = "Du") => {
-      const item: ListItem = {
-        id: `i${Date.now()}${Math.round(Math.random() * 1000)}`,
-        name: input.name,
-        quantity: input.quantity,
-        category: "sonstiges",
-        checked: false,
-        addedBy: user_,
-        addedAt: Date.now(),
-        unit: input.unit,
-        organic: input.organic,
-        emoji: input.emoji ?? undefined,
-        imageUrl: input.imageUrl ?? null,
-        groupLabel: input.groupLabel ?? "Sonstiges",
-        groupEmoji: input.groupEmoji ?? "📦",
-        productId: input.productId,
-        note: input.note?.trim() ? input.note.trim() : undefined,
-      };
-      local.setItems((prev) => [...prev, item]);
+      local.setItems((prev) => [...prev, buildCatalogItem(`i${Date.now()}${Math.round(Math.random() * 1000)}`, input, user_)]);
       logActivity(user_, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
     },
     [local, logActivity]
@@ -1001,14 +1154,27 @@ export function useShoppingList() {
 
   const localRemoveItem = useCallback(
     (id: string) => {
+      const removed = local.activeList.items.find((it) => it.id === id);
       local.setItems((prev) => prev.filter((it) => it.id !== id));
+      if (removed) {
+        const item = removed;
+        toast(t("list.itemRemoved", { name: item.name }), {
+          action: { label: t("common.undo"), onClick: () => local.setItems((prev) => [...prev, item]) },
+        });
+      }
     },
     [local]
   );
 
   const localClearChecked = useCallback(
     () => {
+      const removed = local.activeList.items.filter((it) => it.checked);
       local.setItems((prev) => prev.filter((it) => !it.checked));
+      if (removed.length) {
+        toast(t("list.checkedCleared", { n: removed.length }), {
+          action: { label: t("common.undo"), onClick: () => local.setItems((prev) => [...prev, ...removed]) },
+        });
+      }
     },
     [local]
   );

@@ -232,6 +232,11 @@ export const de = {
   "common.back": "Zurück",
 
   "cloud.error": "Synchronisierung fehlgeschlagen – bitte erneut versuchen",
+  "cloud.queued": "Offline gespeichert – wird synchronisiert, sobald du wieder online bist",
+  "cloud.queueFlushed": "{n} Änderungen nachsynchronisiert",
+  "common.undo": "Rückgängig",
+  "list.itemRemoved": "{name} entfernt",
+  "list.checkedCleared": "{n} abgehakte Artikel entfernt",
   "cloud.migrated": "{n} Listen in dein Konto übernommen",
   "cloud.signedIn": "Angemeldet – Listen werden synchronisiert",
   "cloud.signedOutHint": "Melde dich an, um Listen mit Familie und Freunden gemeinsam live zu nutzen.",
