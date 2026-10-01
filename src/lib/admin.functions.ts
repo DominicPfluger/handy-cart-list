@@ -12,7 +12,8 @@ export const checkAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { data } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
-    return { isAdmin: Boolean(data), userId: context.userId };
+    const { data: m } = await context.supabase.from("market_admins").select("market").eq("user_id", context.userId);
+    return { isAdmin: Boolean(data), userId: context.userId, markets: ((m ?? []) as Array<{ market: string }>).map((r) => r.market) };
   });
 
 /**
@@ -370,4 +371,50 @@ export const deleteRecipeGroup = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     await sb.from("catalog_translations").delete().in("entity_id", ids);
     return { ok: true };
+  });
+
+const marketSchema = z.string().regex(/^[A-Z]{2}$/);
+
+/** Markt-Admin per E-Mail zuweisen (nur Haupt-Admin). */
+export const addMarketAdmin = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ email: z.string().trim().email().max(200), market: marketSchema }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const email = data.email.toLowerCase();
+    let userId: string | null = null;
+    for (let page = 1; page <= 20 && !userId; page++) {
+      const { data: res, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
+      if (error) throw new Error(error.message);
+      userId = res.users.find((u) => u.email?.toLowerCase() === email)?.id ?? null;
+      if (res.users.length < 200) break;
+    }
+    if (!userId) throw new Error("Kein Konto mit dieser E-Mail gefunden");
+    const { error } = await context.supabase.from("market_admins").upsert({ user_id: userId, email, market: data.market }, { onConflict: "user_id,market", ignoreDuplicates: true });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/** Name eines Marktprodukts in alle Sprachen übersetzen (Haupt- oder zuständiger Markt-Admin). */
+export const translateMarketProduct = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const sb = context.supabase;
+    const { data: p } = await sb.from("products").select("name, markets").eq("id", data.id).single();
+    if (!p) throw new Error("Produkt nicht gefunden");
+    const { data: main } = await sb.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    const markets = (p.markets ?? []) as string[];
+    if (!main) {
+      if (markets.length !== 1) throw new Error("Kein Zugriff");
+      const { data: ok } = await sb.rpc("is_market_admin", { _user_id: context.userId, _market: markets[0]! });
+      if (!ok) throw new Error("Kein Zugriff");
+    }
+    const { translateNames } = await import("./translate.server");
+    const rows = (await Promise.all(TRANSLATED_LOCALES.map(async (locale) => {
+      try { const r = await translateNames({ [data.id]: p.name }, locale); return r[data.id] ? [{ entity_type: "product", entity_id: data.id, locale, name: r[data.id]!, is_manual: false }] : []; } catch { return []; }
+    }))).flat();
+    if (rows.length) await sb.from("catalog_translations").upsert(rows, { onConflict: "entity_type,entity_id,locale" });
+    return { written: rows.length };
   });
