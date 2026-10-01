@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { getLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { RecipeBuilder } from "../components/recipe-builder";
@@ -67,6 +67,13 @@ function RecipesPage() {
             </span>
           </button>
         ))}
+        <Link to="/community" className="flex w-full items-center gap-3 rounded-2xl border border-primary bg-card p-4 text-left transition active:scale-[0.98]">
+          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-2xl" style={{ background: "#FCE4EC" }} aria-hidden="true">🌍</span>
+          <span className="min-w-0">
+            <span className="block text-sm font-bold text-foreground">{t("cm.title")}</span>
+            <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">{t("cm.subtitle")}</span>
+          </span>
+        </Link>
       </div>
 
       <RecipeBuilder />
