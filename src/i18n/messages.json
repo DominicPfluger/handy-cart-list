@@ -854,7 +854,8 @@
     "media.imgStatus": "{total} products · {noImage} without image",
     "media.priceTitle": "Reference Prices",
     "media.priceHint": "Estimates typical store prices as reference values for the selected market. Tap a country to select the market.",
-    "media.priceStatus": "{market}: {priced} with saved price"
+    "media.priceStatus": "{market}: {priced} with saved price",
+    "adm.viewLocale": "Catalog language"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1711,7 +1712,8 @@
     "media.imgStatus": "{total} products · {noImage} without image",
     "media.priceTitle": "Reference Prices",
     "media.priceHint": "Estimates typical store prices as reference values for the selected market. Tap a country to select the market.",
-    "media.priceStatus": "{market}: {priced} with saved price"
+    "media.priceStatus": "{market}: {priced} with saved price",
+    "adm.viewLocale": "Catalog language"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2568,7 +2570,8 @@
     "media.imgStatus": "{total} products · {noImage} without image",
     "media.priceTitle": "Reference Prices",
     "media.priceHint": "Estimates typical store prices as reference values for the selected market. Tap a country to select the market.",
-    "media.priceStatus": "{market}: {priced} with saved price"
+    "media.priceStatus": "{market}: {priced} with saved price",
+    "adm.viewLocale": "Catalog language"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3425,7 +3428,8 @@
     "media.imgStatus": "{total} productos · {noImage} sin imagen",
     "media.priceTitle": "Precios de referencia",
     "media.priceHint": "Estima precios típicos de tienda como valores de referencia para el mercado elegido. Toca un país para elegir el mercado.",
-    "media.priceStatus": "{market}: {priced} con precio guardado"
+    "media.priceStatus": "{market}: {priced} con precio guardado",
+    "adm.viewLocale": "Idioma del catálogo"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4282,7 +4286,8 @@
     "media.imgStatus": "{total} products · {noImage} without image",
     "media.priceTitle": "Reference Prices",
     "media.priceHint": "Estimates typical store prices as reference values for the selected market. Tap a country to select the market.",
-    "media.priceStatus": "{market}: {priced} with saved price"
+    "media.priceStatus": "{market}: {priced} with saved price",
+    "adm.viewLocale": "Idioma del catálogo"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5139,7 +5144,8 @@
     "media.imgStatus": "{total} produits · {noImage} sans image",
     "media.priceTitle": "Prix de référence",
     "media.priceHint": "Estime des prix de magasin typiques comme valeurs de référence pour le marché choisi. Touchez un pays pour sélectionner le marché.",
-    "media.priceStatus": "{market} : {priced} avec prix enregistré"
+    "media.priceStatus": "{market} : {priced} avec prix enregistré",
+    "adm.viewLocale": "Langue du catalogue"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -5996,7 +6002,8 @@
     "media.imgStatus": "{total} products · {noImage} without image",
     "media.priceTitle": "Reference Prices",
     "media.priceHint": "Estimates typical store prices as reference values for the selected market. Tap a country to select the market.",
-    "media.priceStatus": "{market}: {priced} with saved price"
+    "media.priceStatus": "{market}: {priced} with saved price",
+    "adm.viewLocale": "Langue du catalogue"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -6853,7 +6860,8 @@
     "media.imgStatus": "{total} prodotti · {noImage} senza immagine",
     "media.priceTitle": "Prezzi di riferimento",
     "media.priceHint": "Stima prezzi tipici dei negozi come valori di riferimento per il mercato scelto. Tocca un paese per selezionare il mercato.",
-    "media.priceStatus": "{market}: {priced} con prezzo salvato"
+    "media.priceStatus": "{market}: {priced} con prezzo salvato",
+    "adm.viewLocale": "Lingua del catalogo"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -7710,7 +7718,8 @@
     "media.imgStatus": "{total} products · {noImage} without image",
     "media.priceTitle": "Reference Prices",
     "media.priceHint": "Estimates typical store prices as reference values for the selected market. Tap a country to select the market.",
-    "media.priceStatus": "{market}: {priced} with saved price"
+    "media.priceStatus": "{market}: {priced} with saved price",
+    "adm.viewLocale": "Lingua del catalogo"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -8567,7 +8576,8 @@
     "media.imgStatus": "{total} produtos · {noImage} sem imagem",
     "media.priceTitle": "Preços de referência",
     "media.priceHint": "Estima preços típicos de loja como valores de referência para o mercado escolhido. Toque num país para selecionar o mercado.",
-    "media.priceStatus": "{market}: {priced} com preço guardado"
+    "media.priceStatus": "{market}: {priced} com preço guardado",
+    "adm.viewLocale": "Idioma do catálogo"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -9424,7 +9434,8 @@
     "media.imgStatus": "{total} produtos · {noImage} sem imagem",
     "media.priceTitle": "Preços de referência",
     "media.priceHint": "Estima preços típicos de loja como valores de referência para o mercado escolhido. Toque em um país para selecionar o mercado.",
-    "media.priceStatus": "{market}: {priced} com preço salvo"
+    "media.priceStatus": "{market}: {priced} com preço salvo",
+    "adm.viewLocale": "Idioma do catálogo"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -10281,7 +10292,8 @@
     "media.imgStatus": "{total} producten · {noImage} zonder afbeelding",
     "media.priceTitle": "Richtprijzen",
     "media.priceHint": "Schat typische winkelprijzen als richtwaarden voor de gekozen markt. Tik op een land om de markt te kiezen.",
-    "media.priceStatus": "{market}: {priced} met opgeslagen prijs"
+    "media.priceStatus": "{market}: {priced} met opgeslagen prijs",
+    "adm.viewLocale": "Catalogustaal"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -11138,7 +11150,8 @@
     "media.imgStatus": "{total} products · {noImage} without image",
     "media.priceTitle": "Reference Prices",
     "media.priceHint": "Estimates typical store prices as reference values for the selected market. Tap a country to select the market.",
-    "media.priceStatus": "{market}: {priced} with saved price"
+    "media.priceStatus": "{market}: {priced} with saved price",
+    "adm.viewLocale": "Catalogustaal"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -11457,7 +11470,8 @@
     "media.imgStatus": "{total} Produkte · {noImage} ohne Bild",
     "media.priceTitle": "Richtpreise",
     "media.priceHint": "Schätzt typische Ladenpreise als Richtwerte für den gewählten Markt. Ein Tipp auf ein Land wählt den Markt aus.",
-    "media.priceStatus": "{market}: {priced} mit gespeichertem Preis"
+    "media.priceStatus": "{market}: {priced} mit gespeichertem Preis",
+    "adm.viewLocale": "Katalogsprache"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -11776,6 +11790,7 @@
     "media.imgStatus": "{total} products · {noImage} without image",
     "media.priceTitle": "Reference Prices",
     "media.priceHint": "Estimates typical store prices as reference values for the selected market. Tap a country to select the market.",
-    "media.priceStatus": "{market}: {priced} with saved price"
+    "media.priceStatus": "{market}: {priced} with saved price",
+    "adm.viewLocale": "Katalogsprache"
   }
 }

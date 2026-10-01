@@ -567,6 +567,7 @@ export const de = {
   "adm.working": "Arbeite …",
   "adm.trMissing": "Fehlende Übersetzungen per KI ergänzen",
   "adm.search": "Suchen (alle Sprachen) …",
+  "adm.viewLocale": "Katalogsprache",
   "adm.loadingCatalog": "Lädt Katalog …",
   "adm.noHits": "Keine Treffer.",
   "adm.catalog": "Katalog",
