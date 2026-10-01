@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useFavoriteOrder, saveFavoriteOrder } from "../hooks/use-item-order";
@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
 import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
-import { useShoppingList, type FavoriteProduct } from "../hooks/use-shopping-list";
+import { useShoppingList, type FavoriteProduct, type ListItem } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
   useCatalog,
@@ -69,7 +69,8 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 }
 
 function FavoritesPage() {
-  const { addCatalogItem, favorites, hydrated, toggleFavorite } = useShoppingList();
+  const { addCatalogItem, createListFromItems, favorites, hydrated, selfName, toggleFavorite } = useShoppingList();
+  const navigate = useNavigate();
   const favOrder = useFavoriteOrder();
   const data = useCatalog();
   const { t } = useT();
