@@ -53,7 +53,7 @@ function OffersPage() {
             tab === "nahe" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground"
           }`}
         >
-          In deiner Nähe
+          {t("offers.nearby")}
         </button>
         <button
           onClick={() => setTab("favoriten")}
@@ -61,7 +61,7 @@ function OffersPage() {
             tab === "favoriten" ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground"
           }`}
         >
-          Favoriten
+          {t("offers.favorites")}
         </button>
       </div>
 
@@ -79,7 +79,7 @@ function OffersPage() {
                 className={`absolute right-2 top-2 grid h-8 w-8 place-items-center rounded-full backdrop-blur-sm transition active:scale-90 ${
                   favorites.includes(o.id) ? "bg-coral text-coral-foreground" : "bg-card/80 text-muted-foreground"
                 }`}
-                aria-label="Favorit"
+                aria-label={t("offers.favorite")}
               >
                 <HeartIcon className="h-4 w-4" />
               </button>
@@ -101,7 +101,7 @@ function OffersPage() {
       {shown.length === 0 && (
         <div className="py-16 text-center">
           <div className="text-5xl">💚</div>
-          <p className="mt-4 text-sm text-muted-foreground">Noch keine Favoriten markiert.</p>
+          <p className="mt-4 text-sm text-muted-foreground">{t("offers.noFavorites")}</p>
         </div>
       )}
     </div>

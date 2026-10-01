@@ -350,6 +350,21 @@ export const de = {
   "voice.notSupported": "Spracheingabe wird von diesem Browser nicht unterstützt.",
   "voice.added": "{n} Produkte hinzugefügt",
   "voice.noMatch": "Keine passenden Produkte erkannt",
+  "auth.title": "Anmelden",
+  "auth.signInSub": "Melde dich an.",
+  "auth.signUpSub": "Konto erstellen.",
+  "auth.google": "Mit Google anmelden",
+  "auth.email": "E-Mail",
+  "auth.password": "Passwort",
+  "auth.signIn": "Anmelden",
+  "auth.signUp": "Registrieren",
+  "auth.toSignUp": "Noch kein Konto? Registrieren",
+  "auth.toSignIn": "Schon registriert? Anmelden",
+  "auth.confirmEmail": "Bitte bestätige deine E-Mail-Adresse.",
+  "offers.nearby": "In deiner Nähe",
+  "offers.favorites": "Favoriten",
+  "offers.favorite": "Favorit",
+  "offers.noFavorites": "Noch keine Favoriten markiert.",
 } as const;
 
 export type MessageKey = keyof typeof de;
