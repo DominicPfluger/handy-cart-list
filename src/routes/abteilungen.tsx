@@ -543,6 +543,7 @@ function DepartmentsPage() {
           <div className="grid grid-cols-2 gap-3">
             {childDepartments.map((department) => {
               const dropKind = drag?.target?.id === department.id ? drag.target.kind : null;
+              const tileColor = deptColor(department, deptById);
               return (
               <div key={department.id} className="group relative min-w-0">
               <Button
