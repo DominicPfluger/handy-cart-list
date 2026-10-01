@@ -679,7 +679,9 @@
     "cm.isPrivate": "Private",
     "cm.anon": "Unknown",
     "cm.ingredientsN": "{n} ingredients",
-    "cm.open": "Open community"
+    "cm.open": "Open community",
+    "rk.addPhoto": "📷 Add photo",
+    "rk.changePhoto": "Change photo"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1361,7 +1363,9 @@
     "cm.isPrivate": "Private",
     "cm.anon": "Unknown",
     "cm.ingredientsN": "{n} ingredients",
-    "cm.open": "Open community"
+    "cm.open": "Open community",
+    "rk.addPhoto": "📷 Add photo",
+    "rk.changePhoto": "Change photo"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2043,7 +2047,9 @@
     "cm.isPrivate": "Private",
     "cm.anon": "Unknown",
     "cm.ingredientsN": "{n} ingredients",
-    "cm.open": "Open community"
+    "cm.open": "Open community",
+    "rk.addPhoto": "📷 Add photo",
+    "rk.changePhoto": "Change photo"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2725,7 +2731,9 @@
     "cm.isPrivate": "Privada",
     "cm.anon": "Desconocido",
     "cm.ingredientsN": "{n} ingredientes",
-    "cm.open": "Abrir comunidad"
+    "cm.open": "Abrir comunidad",
+    "rk.addPhoto": "📷 Añadir foto",
+    "rk.changePhoto": "Cambiar foto"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3407,7 +3415,9 @@
     "cm.isPrivate": "Privada",
     "cm.anon": "Desconocido",
     "cm.ingredientsN": "{n} ingredientes",
-    "cm.open": "Abrir comunidad"
+    "cm.open": "Abrir comunidad",
+    "rk.addPhoto": "📷 Añadir foto",
+    "rk.changePhoto": "Cambiar foto"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -4089,7 +4099,9 @@
     "cm.isPrivate": "Privée",
     "cm.anon": "Inconnu",
     "cm.ingredientsN": "{n} ingrédients",
-    "cm.open": "Ouvrir la communauté"
+    "cm.open": "Ouvrir la communauté",
+    "rk.addPhoto": "📷 Ajouter une photo",
+    "rk.changePhoto": "Changer la photo"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4771,7 +4783,9 @@
     "cm.isPrivate": "Privée",
     "cm.anon": "Inconnu",
     "cm.ingredientsN": "{n} ingrédients",
-    "cm.open": "Ouvrir la communauté"
+    "cm.open": "Ouvrir la communauté",
+    "rk.addPhoto": "📷 Ajouter une photo",
+    "rk.changePhoto": "Changer la photo"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -5453,7 +5467,9 @@
     "cm.isPrivate": "Privata",
     "cm.anon": "Sconosciuto",
     "cm.ingredientsN": "{n} ingredienti",
-    "cm.open": "Apri community"
+    "cm.open": "Apri community",
+    "rk.addPhoto": "📷 Aggiungi foto",
+    "rk.changePhoto": "Cambia foto"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -6135,7 +6151,9 @@
     "cm.isPrivate": "Privata",
     "cm.anon": "Sconosciuto",
     "cm.ingredientsN": "{n} ingredienti",
-    "cm.open": "Apri community"
+    "cm.open": "Apri community",
+    "rk.addPhoto": "📷 Aggiungi foto",
+    "rk.changePhoto": "Cambia foto"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6817,7 +6835,9 @@
     "cm.isPrivate": "Privada",
     "cm.anon": "Desconhecido",
     "cm.ingredientsN": "{n} ingredientes",
-    "cm.open": "Abrir comunidade"
+    "cm.open": "Abrir comunidade",
+    "rk.addPhoto": "📷 Adicionar foto",
+    "rk.changePhoto": "Alterar foto"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -7499,7 +7519,9 @@
     "cm.isPrivate": "Privada",
     "cm.anon": "Desconhecido",
     "cm.ingredientsN": "{n} ingredientes",
-    "cm.open": "Abrir comunidade"
+    "cm.open": "Abrir comunidade",
+    "rk.addPhoto": "📷 Adicionar foto",
+    "rk.changePhoto": "Alterar foto"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -8181,7 +8203,9 @@
     "cm.isPrivate": "Privé",
     "cm.anon": "Onbekend",
     "cm.ingredientsN": "{n} ingrediënten",
-    "cm.open": "Community openen"
+    "cm.open": "Community openen",
+    "rk.addPhoto": "📷 Foto toevoegen",
+    "rk.changePhoto": "Foto wijzigen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -8863,7 +8887,9 @@
     "cm.isPrivate": "Privé",
     "cm.anon": "Onbekend",
     "cm.ingredientsN": "{n} ingrediënten",
-    "cm.open": "Community openen"
+    "cm.open": "Community openen",
+    "rk.addPhoto": "📷 Foto toevoegen",
+    "rk.changePhoto": "Foto wijzigen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9097,7 +9123,9 @@
     "cm.isPrivate": "Privat",
     "cm.anon": "Unbekannt",
     "cm.ingredientsN": "{n} Zutaten",
-    "cm.open": "Community öffnen"
+    "cm.open": "Community öffnen",
+    "rk.addPhoto": "📷 Foto hinzufügen",
+    "rk.changePhoto": "Foto ändern"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -9331,6 +9359,8 @@
     "cm.isPrivate": "Privat",
     "cm.anon": "Unbekannt",
     "cm.ingredientsN": "{n} Zutaten",
-    "cm.open": "Community öffnen"
+    "cm.open": "Community öffnen",
+    "rk.addPhoto": "📷 Foto hinzufügen",
+    "rk.changePhoto": "Foto ändern"
   }
 }

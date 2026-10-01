@@ -13,6 +13,7 @@ import {
   addComment, deleteComment, fetchComments, fetchFeed, myRating, rateRecipe, shareLink,
 } from "../lib/recipes-api";
 import { supabase } from "@/integrations/supabase/client";
+import { RecipePhoto } from "../components/recipe-photo";
 
 export const Route = createFileRoute("/rezept/$slug")({
   loader: async ({ params }) => {
@@ -123,6 +124,7 @@ function RecipePage() {
   return (
     <div className="space-y-5">
       <Link to="/rezepte" className="text-xs font-semibold text-primary">← {t("nav.recipes")}</Link>
+      {r.imagePath && <RecipePhoto path={r.imagePath} className="h-56 w-full rounded-2xl" />}
       <div className="flex items-center gap-3">
         <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl text-3xl" style={{ background: tpl?.color }}>{tpl?.emoji ?? "🍽️"}</span>
         <div className="min-w-0">

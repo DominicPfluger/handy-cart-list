@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
+import { RecipePhoto } from "../components/recipe-photo";
+import { setRecipeImage, uploadRecipeImage } from "../lib/recipe-images";
 import { useAuthUser } from "../hooks/use-auth-user";
 import { refreshCollections } from "../hooks/use-saved-recipes";
 import {
@@ -143,9 +145,20 @@ function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
     setBusy(false);
   };
 
+  const photo = async (f: File) => {
+    setBusy(true);
+    try {
+      await setRecipeImage(r.id, await uploadRecipeImage(r.owner_id, f));
+      await qc.invalidateQueries({ queryKey: ["community-mine"] });
+      await qc.invalidateQueries({ queryKey: ["community"] });
+      await qc.invalidateQueries({ queryKey: ["recipe-feed"] });
+    } catch { toast.error(t("cloud.error")); }
+    setBusy(false);
+  };
+
   const body = (
     <>
-      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-xl" style={{ background: tpl?.color }}>{tpl?.emoji ?? "🍽️"}</span>
+      <RecipePhoto path={r.image_path} emoji={tpl?.emoji} color={tpl?.color} className="h-16 w-16 shrink-0 rounded-xl" />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-bold text-foreground">{r.title}</span>
         <span className="block truncate text-xs text-muted-foreground">
@@ -164,6 +177,11 @@ function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
         {mine ? (
           <>
             <span>{r.is_public ? `🌍 ${t("cm.isPublic")}` : `🔒 ${t("cm.isPrivate")}`} · {date}</span>
+            <label className="cursor-pointer rounded-full bg-muted px-3 py-1 font-semibold text-foreground">
+              📷
+              <input type="file" accept="image/*" className="sr-only" aria-label={t(r.image_path ? "rk.changePhoto" : "rk.addPhoto")}
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) void photo(f); e.target.value = ""; }} />
+            </label>
             <button disabled={busy} onClick={() => void toggle()}
               className={`rounded-full px-3 py-1 font-semibold ${r.is_public ? "bg-muted text-foreground" : "bg-primary text-primary-foreground"}`}>
               {r.is_public ? t("cm.unpublish") : `🌍 ${t("cm.publish")}`}

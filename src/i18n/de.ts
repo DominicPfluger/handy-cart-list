@@ -445,6 +445,8 @@ export const de = {
   "cm.anon": "Unbekannt",
   "cm.ingredientsN": "{n} Zutaten",
   "cm.open": "Community öffnen",
+  "rk.addPhoto": "📷 Foto hinzufügen",
+  "rk.changePhoto": "Foto ändern",
   "rs.by": "von",
   "rs.yourRating": "Deine Bewertung",
   "rs.comments": "Kommentare",

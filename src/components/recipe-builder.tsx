@@ -1,3 +1,4 @@
+import { uploadRecipeImage } from "../lib/recipe-images";
 import { useMemo, useState } from "react";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
@@ -40,6 +41,8 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const [savedMsg, setSavedMsg] = useState(false);
   const [newName, setNewName] = useState("");
   const [makePublic, setMakePublic] = useState(false);
+  const [photo, setPhoto] = useState<File | null>(null);
+  const photoUrl = useMemo(() => (photo ? URL.createObjectURL(photo) : null), [photo]);
   const [customTitle, setCustomTitle] = useState("");
   const user = useAuthUser();
   const collections = useRecipeCollections(user);
@@ -187,7 +190,8 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     try {
       const folderId = collectionId ?? (await createCollection(user.id, newName));
       const recTitle = customTitle.trim() || title;
-      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic });
+      const imagePath = photo ? await uploadRecipeImage(user.id, photo) : null;
+      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic, imagePath });
       await saveToFolder(user.id, rec.id, folderId);
       if (makePublic && rec.share_slug) {
         const how = await shareLink(rec.share_slug, recTitle);
@@ -196,6 +200,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
       setSaveOpen(false);
       setNewName("");
       setCustomTitle("");
+      setPhoto(null);
       setSavedMsg(true);
     } catch {
       toast.error(t("cloud.error"));
@@ -232,6 +237,13 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           placeholder={t("rk.recipeTitle")}
           className="w-full rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
         />
+        <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-border bg-card p-2">
+          {photoUrl
+            ? <img src={photoUrl} alt="" className="h-16 w-16 rounded-xl object-cover" />
+            : <span className="grid h-16 w-16 place-items-center rounded-xl bg-muted text-2xl" aria-hidden="true">📷</span>}
+          <span className="text-sm font-semibold text-foreground">{t(photo ? "rk.changePhoto" : "rk.addPhoto")}</span>
+          <input type="file" accept="image/*" className="sr-only" onChange={(e) => setPhoto(e.target.files?.[0] ?? null)} />
+        </label>
         <div role="radiogroup" aria-label={t("rs.visibility")} className="grid grid-cols-2 gap-2">
           {([false, true] as const).map((pub) => (
             <button
