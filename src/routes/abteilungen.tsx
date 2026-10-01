@@ -569,9 +569,9 @@ function DepartmentsPage() {
                 >
                   <DepartmentThumb department={department} />
                 </span>
-                <span className="flex min-h-14 w-full items-center justify-between gap-2 px-3 py-2">
-                  <span className="min-w-0 whitespace-normal text-sm font-semibold leading-5 text-foreground">{department.name}</span>
-                  <span className="shrink-0 text-lg text-primary" aria-hidden="true">›</span>
+                <span className="relative flex min-h-14 w-full items-center justify-center gap-2 px-10 py-2">
+                  <span className="min-w-0 text-center whitespace-normal text-sm font-semibold leading-5 text-foreground">{department.name}</span>
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 shrink-0 text-lg text-primary" aria-hidden="true">›</span>
                 </span>
               </Button>
               <Button type="button" variant="ghost" size="icon" aria-label={t("rename.action", { name: department.name })} title={t("rename.action", { name: department.name })} onClick={() => openRename(department, "department")} className="absolute right-1 top-1 z-10 mr-9 h-9 w-9 bg-card/90 text-muted-foreground transition-opacity hover:text-foreground focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
