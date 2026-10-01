@@ -532,3 +532,15 @@ function AllMarketsRow() {
   const on = useAllMarkets();
   return <NotificationToggle icon="🌍" label={t("more.allMarkets")} sub={t("more.allMarketsSub")} checked={on} onChange={setAllMarkets} />;
 }
+
+function FeedbackBadge() {
+  const { data: count = 0 } = useQuery({
+    queryKey: ["feedback-messages", "unread"],
+    queryFn: async () => {
+      const { count } = await supabase.from("feedback_messages").select("id", { count: "exact", head: true }).eq("status", "neu");
+      return count ?? 0;
+    },
+  });
+  if (!count) return null;
+  return <span className="rounded-full bg-primary px-2 py-0.5 text-[11px] font-semibold text-primary-foreground">{count}</span>;
+}
