@@ -7,7 +7,7 @@
 ## Teil 2: Push-Benachrichtigungen
 
 ### Ziel
-1. **Neues Rezept mit meinen Lieblingszutaten** — wenn jemand ein öffentliches Rezept veröffentlicht, das mindestens einen Artikel aus meiner Favoritenliste enthält, bekomme ich eine Push-Mitteilung.
+1. **Neues Rezept mit meinen Lieblingszutaten** — wenn jemand ein öffentliches Rezept veröffentlicht, dessen **sämtliche Zutaten** auf meiner Favoritenliste stehen, bekomme ich eine Push-Mitteilung (kein Teil-Treffer, nur vollständige Übereinstimmung).
 2. **Kommentar auf meinem Rezept** — wenn jemand mein öffentliches Rezept kommentiert, bekomme ich eine Push-Mitteilung.
 
 ### Voraussetzung: Firebase Cloud Messaging (Push-Dienst)
