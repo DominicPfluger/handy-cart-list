@@ -1,7 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { TRANSLATED_LOCALES } from "@/i18n";
+import { (await targetLocales(context.supabase)) as BUILTIN_LOCALES } from "@/i18n";
+
+/** Eingebaute + im Admin angelegte Zielsprachen. */
+async function targetLocales(sb: any): Promise<string[]> {
+  const { data } = await sb.from("app_locales").select("id");
+  return [...new Set([...BUILTIN_LOCALES, ...((data ?? []) as Array<{ id: string }>).map((r) => r.id)])];
+}
 
 async function assertAdmin(context: { supabase: any; userId: string }) {
   const { data, error } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
@@ -49,7 +55,7 @@ export const translateMissing = createServerFn({ method: "POST" })
     let written = 0;
     let remaining = 0;
     await Promise.all(
-      TRANSLATED_LOCALES.map(async (locale) => {
+      (await targetLocales(context.supabase)).map(async (locale) => {
         const missing = entities.filter((e) => !existing.has(`${e.id}|${locale}`));
         const batch = missing.slice(0, data.limit);
         remaining += missing.length - batch.length;
@@ -106,7 +112,7 @@ export const saveHeading = createServerFn({ method: "POST" })
       const skip = new Set(((manual ?? []) as Array<{ locale: string }>).map((m) => m.locale));
       const rows = (
         await Promise.all(
-          TRANSLATED_LOCALES.filter((l) => !skip.has(l)).map(async (locale) => {
+          (await targetLocales(context.supabase)).filter((l) => !skip.has(l)).map(async (locale) => {
             try {
               const r = await translateNames({ [id!]: name }, locale);
               return r[id!] ? [{ entity_type: "heading", entity_id: id!, locale, name: r[id!]!, is_manual: false }] : [];
@@ -261,7 +267,7 @@ export const saveCuisine = createServerFn({ method: "POST" })
       const skip = new Set(((manual ?? []) as Array<{ locale: string }>).map((m) => m.locale));
       const rows = (
         await Promise.all(
-          TRANSLATED_LOCALES.filter((l) => !skip.has(l)).map(async (locale) => {
+          (await targetLocales(context.supabase)).filter((l) => !skip.has(l)).map(async (locale) => {
             try {
               const r = await translateNames({ [id!]: `${data.name} (Küche)` }, locale);
               const n = r[id!]?.replace(/\s*\([^)]*\)\s*$/, "").trim();
@@ -358,7 +364,7 @@ export const saveRecipeGroup = createServerFn({ method: "POST" })
       const skip = new Set(((manual ?? []) as Array<{ locale: string }>).map((m) => m.locale));
       const rows = (
         await Promise.all(
-          TRANSLATED_LOCALES.filter((l) => !skip.has(l)).map(async (locale) => {
+          (await targetLocales(context.supabase)).filter((l) => !skip.has(l)).map(async (locale) => {
             try {
               const r = await translateNames({ [id!]: `${data.name} (Zutaten-Kategorie)` }, locale);
               const n = r[id!]?.replace(/\s*\([^)]*\)\s*$/, "").trim();
@@ -425,7 +431,7 @@ export const translateMarketProduct = createServerFn({ method: "POST" })
       if (!ok) throw new Error("Kein Zugriff");
     }
     const { translateNames } = await import("./translate.server");
-    const rows = (await Promise.all(TRANSLATED_LOCALES.map(async (locale) => {
+    const rows = (await Promise.all((await targetLocales(context.supabase)).map(async (locale) => {
       try { const r = await translateNames({ [data.id]: p.name }, locale); return r[data.id] ? [{ entity_type: "product", entity_id: data.id, locale, name: r[data.id]!, is_manual: false }] : []; } catch { return []; }
     }))).flat();
     if (rows.length) await sb.from("catalog_translations").upsert(rows, { onConflict: "entity_type,entity_id,locale" });
@@ -463,7 +469,7 @@ export const translateVariants = createServerFn({ method: "POST" })
     const { translateNames } = await import("./translate.server");
     const src = Object.fromEntries(unique.map((v, i) => [`v${i}`, v]));
     let written = 0;
-    await Promise.all(TRANSLATED_LOCALES.map(async (locale) => {
+    await Promise.all((await targetLocales(context.supabase)).map(async (locale) => {
       let r: Record<string, string> = {};
       try { r = await translateNames(src, locale); } catch { return; }
       const map = new Map(unique.map((v, i) => [v, r[`v${i}`]]));
@@ -473,4 +479,76 @@ export const translateVariants = createServerFn({ method: "POST" })
       if (rows.length) { const { error } = await sb.from("variant_translations").upsert(rows, { onConflict: "product_id,variant,locale" }); if (!error) written += rows.length; }
     }));
     return { written };
+  });
+
+// ---------- Neue Sprachen ----------
+export const listAppLocales = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    const { data } = await sb.from("app_locales").select("id, label, flag, created_at").order("created_at");
+    const { de } = await import("@/i18n/de");
+    const total = Object.keys(de).length;
+    const out = [] as Array<{ id: string; label: string; flag: string; ui: number; uiTotal: number; catalog: number }>;
+    for (const l of (data ?? []) as Array<{ id: string; label: string; flag: string }>) {
+      const [{ count: ui }, { count: cat }] = await Promise.all([
+        sb.from("ui_translations").select("id", { count: "exact", head: true }).eq("locale", l.id),
+        sb.from("catalog_translations").select("id", { count: "exact", head: true }).eq("locale", l.id),
+      ]);
+      out.push({ ...l, ui: ui ?? 0, uiTotal: total, catalog: cat ?? 0 });
+    }
+    return out;
+  });
+
+export const createAppLocale = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().regex(/^[a-z]{2}-[A-Z]{2}$/), label: z.string().min(2).max(60), flag: z.string().min(1).max(16) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    if (BUILTIN_LOCALES.includes(data.id) || data.id === "de-DE") throw new Error("Diese Sprache gibt es schon");
+    const { error } = await context.supabase.from("app_locales").upsert(data, { onConflict: "id" });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteAppLocale = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    await context.supabase.from("catalog_translations").delete().eq("locale", data.id);
+    await context.supabase.from("variant_translations").delete().eq("locale", data.id);
+    const { error } = await context.supabase.from("app_locales").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+/** Übersetzt die nächsten fehlenden App-Texte (max. `limit`) in die angelegte Sprache. */
+export const translateUiBatch = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ locale: z.string(), limit: z.number().int().min(10).max(200).default(150) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    const { data: loc } = await sb.from("app_locales").select("id, label").eq("id", data.locale).single();
+    if (!loc) throw new Error("Sprache nicht gefunden");
+    const { de } = await import("@/i18n/de");
+    const have = new Set<string>();
+    for (let f = 0; ; f += 1000) {
+      const { data: rows } = await sb.from("ui_translations").select("key").eq("locale", data.locale).range(f, f + 999);
+      for (const r of rows ?? []) have.add(r.key);
+      if (!rows || rows.length < 1000) break;
+    }
+    const missing = Object.entries(de as Record<string, string>).filter(([k]) => !have.has(k));
+    const batch = Object.fromEntries(missing.slice(0, data.limit));
+    if (missing.length === 0) return { written: 0, remaining: 0 };
+    const { translateUiTexts } = await import("./translate.server");
+    const out = await translateUiTexts(batch, loc.id, loc.label);
+    const rows = Object.entries(out).map(([key, text]) => ({ locale: loc.id, key, text }));
+    if (rows.length) {
+      const { error } = await sb.from("ui_translations").upsert(rows, { onConflict: "locale,key" });
+      if (error) throw new Error(error.message);
+    }
+    return { written: rows.length, remaining: Math.max(0, missing.length - rows.length) };
   });

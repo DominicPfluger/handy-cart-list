@@ -148,3 +148,18 @@ export async function aiJson<T>(instructions: string, input: string, name: strin
   if (!text) throw new Error("Leere KI-Antwort");
   return JSON.parse(text) as T;
 }
+
+/** Übersetzt deutsche App-Texte (Menüs, Hinweise) in eine neue Sprache; Platzhalter {x} bleiben. */
+export async function translateUiTexts(texts: Record<string, string>, locale: string, label: string): Promise<Record<string, string>> {
+  const r = await aiJson<{ items: Array<{ key: string; text: string }> }>(
+    `Translate the German UI strings of a grocery shopping-list app into ${label} (${locale}). ` +
+      "Keep every {placeholder} unchanged, keep emojis, keep it short and natural like a mobile app. Return every key.",
+    JSON.stringify(texts),
+    "ui_translations",
+    {
+      type: "object", additionalProperties: false, required: ["items"],
+      properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["key", "text"], properties: { key: { type: "string" }, text: { type: "string" } } } } },
+    },
+  );
+  return Object.fromEntries((r.items ?? []).filter((i) => texts[i.key] !== undefined).map((i) => [i.key, i.text]));
+}
