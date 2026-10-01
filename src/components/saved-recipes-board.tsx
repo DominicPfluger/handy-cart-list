@@ -192,6 +192,18 @@ export function SavedRecipesBoard({ collections, userId, filterTemplate, onOpen 
     <section className="space-y-3">
       <h2 className="text-lg font-bold text-foreground">{t("rk.myRecipes")}</h2>
       {draggable && <p className="text-xs text-muted-foreground">{t("rs.boardHint")}</p>}
+      <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={onStart} onDragOver={onOver} onDragEnd={onEnd} onDragCancel={() => { setActiveId(null); setLayout(null); }}>
+        {shown.map((c) => (
+          <Folder key={c.id} c={c}>
+            <SortableContext items={c.recipes.map((r) => r.id)} strategy={verticalListSortingStrategy}>
+              {c.recipes.length === 0 ? (
+                <p className="py-2 text-xs text-muted-foreground">{t("rk.emptyCollection")}</p>
+              ) : c.recipes.map((r) => <Row key={r.id} r={r} userId={userId} draggable={draggable} onOpen={onOpen} />)}
+            </SortableContext>
+          </Folder>
+        ))}
+        <DragOverlay>{active ? <div className="rounded-xl border border-primary bg-background p-2 text-sm text-foreground shadow-lg">{active.title}</div> : null}</DragOverlay>
+      </DndContext>
       <form
         className="flex gap-2"
         onSubmit={async (e) => {
@@ -214,18 +226,6 @@ export function SavedRecipesBoard({ collections, userId, filterTemplate, onOpen 
           {t("rs.newFolder")}
         </button>
       </form>
-      <DndContext sensors={sensors} collisionDetection={closestCorners} onDragStart={onStart} onDragOver={onOver} onDragEnd={onEnd} onDragCancel={() => { setActiveId(null); setLayout(null); }}>
-        {shown.map((c) => (
-          <Folder key={c.id} c={c}>
-            <SortableContext items={c.recipes.map((r) => r.id)} strategy={verticalListSortingStrategy}>
-              {c.recipes.length === 0 ? (
-                <p className="py-2 text-xs text-muted-foreground">{t("rk.emptyCollection")}</p>
-              ) : c.recipes.map((r) => <Row key={r.id} r={r} userId={userId} draggable={draggable} onOpen={onOpen} />)}
-            </SortableContext>
-          </Folder>
-        ))}
-        <DragOverlay>{active ? <div className="rounded-xl border border-primary bg-background p-2 text-sm text-foreground shadow-lg">{active.title}</div> : null}</DragOverlay>
-      </DndContext>
     </section>
   );
 }
