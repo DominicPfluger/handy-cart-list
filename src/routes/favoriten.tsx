@@ -14,7 +14,9 @@ import {
   matchesProductSearch,
   type CatalogDepartment,
   type CatalogProduct,
+  departmentIdsOf,
 } from "../lib/catalog-query";
+import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { formatQuantity } from "../lib/units";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
@@ -73,6 +75,7 @@ function FavoritesPage() {
   const navigate = useNavigate();
   const favOrder = useFavoriteOrder();
   const data = useCatalog();
+  const { preferred: preferredDept } = usePreferredDept();
   const { t } = useT();
   const { departments } = useDepartmentOrder(data.departments);
   const [query, setQuery] = useState("");
@@ -491,7 +494,8 @@ function FavoritesPage() {
 
       <CatalogProductDialog
         product={selected ? selected.product : null}
-        groupLabel={selected ? (selected.product.departmentId ? deptById.get(selected.product.departmentId)?.name : undefined) ?? selected.favorite.groupLabel : undefined}
+        groupLabel={selected ? groupOfRow(selected)?.name ?? selected.favorite.groupLabel : undefined}
+        initialDepartmentId={selected ? groupOfRow(selected)?.id : undefined}
         groupEmoji={selected ? ((selected.product.departmentId ? deptById.get(selected.product.departmentId)?.emoji : undefined) ?? selected.favorite.groupEmoji) ?? undefined : undefined}
         onOpenChange={(open) => { if (!open) setSelected(null); }}
       />
