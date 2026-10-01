@@ -47,6 +47,21 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     return m;
   }, [catalog.products]);
   const deptById = useMemo(() => new Map(catalog.departments.map((d) => [d.id, d])), [catalog.departments]);
+  const rootDeptOf = useMemo(() => {
+    const cache = new Map<string, string>();
+    const resolve = (id: string): string => {
+      const hit = cache.get(id);
+      if (hit) return hit;
+      let cur = deptById.get(id);
+      let guard = 0;
+      while (cur?.parentId && guard++ < 10) cur = deptById.get(cur.parentId);
+      const root = cur?.id ?? id;
+      cache.set(id, root);
+      return root;
+    };
+    return resolve;
+  }, [deptById]);
+  const [openDept, setOpenDept] = useState<Record<string, string | null>>({}); // stepKey -> rootDeptId
 
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
   const steps = useMemo(
@@ -369,22 +384,81 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
           {s.products.length === 0 ? (
             <p className="text-xs text-muted-foreground">{t("rk.empty")}</p>
           ) : (
-            <div className="flex flex-wrap gap-2">
-              {s.products.map((p) => {
-                const on = (picks[s.key] ?? []).includes(p.id);
-                return (
-                  <button
-                    key={p.id}
-                    onClick={() => { setSavedMsg(false); toggle(s.key, p.id, s.max); }}
-                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition active:scale-95 ${
-                      on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
-                    }`}
-                  >
-                    {p.emoji ? <ProductEmoji emoji={p.emoji} className="mr-1" /> : null}{p.name}
-                  </button>
-                );
-              })}
-            </div>
+            (() => {
+              const byRoot = new Map<string, CatalogProduct[]>();
+              for (const p of s.products) {
+                const root = rootDeptOf(p.departmentId);
+                const arr = byRoot.get(root) ?? [];
+                arr.push(p);
+                byRoot.set(root, arr);
+              }
+              const roots = [...byRoot.entries()]
+                .map(([id, ps]) => ({ dept: deptById.get(id), ps }))
+                .sort((a, b) => b.ps.length - a.ps.length);
+              const openId = openDept[s.key] ?? null;
+              const open = roots.find((r) => r.dept?.id === openId) ?? null;
+              return (
+                <div className="space-y-2">
+                  <div className="flex flex-wrap gap-2">
+                    {roots.map(({ dept, ps }) => {
+                      const on = openId === dept?.id;
+                      return (
+                        <button
+                          key={dept?.id ?? "x"}
+                          onClick={() => setOpenDept((prev) => ({ ...prev, [s.key]: on ? null : (dept?.id ?? null) }))}
+                          className={`rounded-full border px-3 py-1.5 text-xs font-medium transition active:scale-95 ${
+                            on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
+                          }`}
+                        >
+                          {dept?.emoji ? <span className="mr-1">{dept.emoji}</span> : null}{dept?.name ?? "?"} ({ps.length})
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {open && (
+                    <div className="space-y-2 rounded-2xl border border-border bg-card p-3">
+                      {(() => {
+                        const bySub = new Map<string, CatalogProduct[]>();
+                        for (const p of open.ps) {
+                          const arr = bySub.get(p.departmentId) ?? [];
+                          arr.push(p);
+                          bySub.set(p.departmentId, arr);
+                        }
+                        return [...bySub.entries()].map(([subId, ps]) => {
+                          const sub = deptById.get(subId);
+                          const isRoot = subId === open.dept?.id;
+                          return (
+                            <div key={subId} className="space-y-1.5">
+                              {!isRoot && (
+                                <p className="text-xs font-semibold text-muted-foreground">
+                                  {sub?.emoji ? <span className="mr-1">{sub.emoji}</span> : null}{sub?.name ?? "?"}
+                                </p>
+                              )}
+                              <div className="flex flex-wrap gap-2">
+                                {ps.map((p) => {
+                                  const on = (picks[s.key] ?? []).includes(p.id);
+                                  return (
+                                    <button
+                                      key={p.id}
+                                      onClick={() => { setSavedMsg(false); toggle(s.key, p.id, s.max); }}
+                                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition active:scale-95 ${
+                                        on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
+                                      }`}
+                                    >
+                                      {p.emoji ? <ProductEmoji emoji={p.emoji} className="mr-1" /> : null}{p.name}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        });
+                      })()}
+                    </div>
+                  )}
+                </div>
+              );
+            })()
           )}
         </div>
       ))}
