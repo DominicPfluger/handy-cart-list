@@ -21,6 +21,7 @@ import { DeptImageEditor } from "@/components/dept-image-admin";
 import { MarketAdmin, MarketAdminsManager, MARKETS } from "@/components/market-admin";
 import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
+import { ImportPanel } from "@/components/admin/import-panel";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -487,6 +488,8 @@ function AdminPage() {
           onImageChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }}
         />
       )}
+
+      {d && <ImportPanel depts={d.depts} prods={d.prods} />}
 
       <MarketAdmin markets={MARKETS} />
       <MarketAdminsManager />

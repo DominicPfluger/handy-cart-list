@@ -40,6 +40,7 @@ import { useIsAdmin } from "../hooks/use-is-admin";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { saveHeading } from "../lib/admin.functions";
+import { useReferencePrices, formatRefPrice } from "../hooks/use-reference-prices";
 
 
 export const Route = createFileRoute("/abteilungen")({
@@ -122,6 +123,7 @@ function DepartmentsPage() {
     return hidden;
   }, [departments, orderedProducts, products, diets.length, cuisines.length]);
   const { t } = useT();
+  const refPrices = useReferencePrices();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const { preferred: preferredDept } = usePreferredDept();
   const [currentId, setCurrentId] = useState<string | null>(null);
@@ -648,7 +650,8 @@ function DepartmentsPage() {
                       <span>{product.name}</span>
                     </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                      {normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
+                       {normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
+                       {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
