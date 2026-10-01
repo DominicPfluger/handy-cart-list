@@ -100,6 +100,25 @@ export const generateProductImages = createServerFn({ method: "POST" })
     return { done, attempted: list.length, errors, items };
   });
 
+/** KI-Bild für genau ein Produkt erzeugen (überschreibt ein vorhandenes). */
+export const generateImageFor = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { generateProductImage } = await import("./product-media.server");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: p, error } = await context.supabase.from("products").select("id, name, emoji").eq("id", data.id).single();
+    if (error || !p) throw new Error("Produkt nicht gefunden");
+    const bytes = await generateProductImage(p.name, p.emoji);
+    const path = `products/${p.id}.png`;
+    const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/png", upsert: true });
+    if (up.error) throw new Error(up.error.message);
+    const upd = await context.supabase.from("products").update({ image_path: path }).eq("id", p.id);
+    if (upd.error) throw new Error(upd.error.message);
+    return { path };
+  });
+
 /** Schätzt KI-Richtpreise für die nächsten `limit` Produkte ohne Preis im gewählten Markt. */
 export const generateReferencePrices = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

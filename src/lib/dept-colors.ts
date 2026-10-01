@@ -56,6 +56,11 @@ export function deptColor(
   return ROOT_COLORS[rootOf(department, byId).baseName];
 }
 
+/** Farbe anhand des deutschen Namens der Wurzelkategorie (z. B. für den Admin-Bereich). */
+export function rootColorByName(name: string): string | undefined {
+  return ROOT_COLORS[name];
+}
+
 /**
  * Fallback für Gruppenlabels älterer Listeneinträge, die keiner
  * Katalog-Kategorie mehr direkt zugeordnet werden können.
