@@ -10,7 +10,7 @@ import { catalogQueryOptions } from "../lib/catalog-query";
 export const Route = createFileRoute("/rezepte/generator")({
   ssr: false,
   validateSearch: (s: Record<string, unknown>) => ({
-    recipe: z.string().optional().catch(undefined).parse(s.recipe),
+    recipe: z.string().optional().catch(undefined).parse(s["recipe"]),
   }),
   head: () => ({
     meta: [
