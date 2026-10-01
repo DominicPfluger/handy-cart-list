@@ -11,7 +11,7 @@ import { flagOf } from "@/lib/catalog-query";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
-/** KI-Bilder und KI-Richtpreise für den Katalog erzeugen (stapelweise). */
+/** KI-Bilder und KI-Richtpreise für den Katalog erzeugen (stapelweise), in getrennten Containern. */
 export function CatalogMediaPanel() {
   const qc = useQueryClient();
   const statusFn = useServerFn(catalogMediaStatus);
@@ -86,65 +86,80 @@ export function CatalogMediaPanel() {
 
   const s = status.data;
   return (
-    <section className="mt-8 rounded-2xl border border-border bg-card p-4">
-      <h2 className="text-base font-semibold">{T("media.title")}</h2>
-      <p className="mt-1 text-sm text-muted-foreground">{T("media.hint")}</p>
+    <>
+      <section className="mt-8 rounded-2xl border border-border bg-card p-4">
+        <h2 className="text-base font-semibold">{T("media.imgTitle")}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{T("media.imgHint")}</p>
 
-      <p className="mt-3 text-sm text-muted-foreground">{T("media.market")}</p>
-      <div className="mt-1.5 grid grid-cols-4 gap-1.5 sm:grid-cols-7">
-        {MARKETS.map((m) => {
-          const priced = s?.markets?.[m] ?? 0;
-          const active = m === market;
-          return (
-            <button
-              key={m}
-              type="button"
-              onClick={() => setMarket(m)}
-              className={`flex flex-col items-center rounded-xl border px-1 py-1.5 text-center transition-colors ${
-                active ? "border-primary bg-primary/10" : "border-border bg-background hover:bg-muted/50"
-              }`}
-            >
-              <span className="text-base leading-none">{flagOf(m)}</span>
-              <span className={`text-[11px] font-semibold leading-tight ${active ? "text-primary" : ""}`}>{m}</span>
-              <span className="text-[10px] leading-tight text-muted-foreground">{priced}</span>
-            </button>
-          );
-        })}
-      </div>
+        {s && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            {T("media.imgStatus", { total: s.total, noImage: s.noImage })}
+          </p>
+        )}
 
-      {s && (
-        <p className="mt-3 text-sm text-muted-foreground">
-          {T("media.status", { total: s.total, noImage: s.noImage, priced: s.priced })}
-        </p>
-      )}
-
-      <div className="mt-3 flex flex-wrap gap-2">
-        <Button size="sm" disabled={busy !== null || !s || s.noImage === 0} onClick={runImages}>
-          {busy === "img" ? T("media.working") : T("media.genImages")}
-        </Button>
-        <Button size="sm" variant="secondary" disabled={busy !== null || !s || s.noImage === 0} onClick={runAllImages}>
-          {busy === "allImg"
-            ? T("media.allProgress", { done: allProgress?.done ?? 0, total: allProgress?.total ?? 0 })
-            : T("media.genAllImages")}
-        </Button>
-        <Button size="sm" variant="secondary" disabled={busy !== null} onClick={runPrices}>
-          {busy === "price" ? T("media.working") : T("media.genPrices")}
-        </Button>
-      </div>
-      {generated.length > 0 && (
-        <div className="mt-4 grid grid-cols-5 gap-2">
-          {generated.map((g) => (
-            <figure key={g.id} className="overflow-hidden rounded-xl border border-border bg-background">
-              {g.url ? (
-                <img src={g.url} alt={g.name} className="aspect-square w-full object-cover" loading="lazy" />
-              ) : (
-                <div className="aspect-square w-full bg-muted" />
-              )}
-              <figcaption className="truncate px-1.5 py-1 text-center text-[11px] text-muted-foreground">{g.name}</figcaption>
-            </figure>
-          ))}
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button size="sm" disabled={busy !== null || !s || s.noImage === 0} onClick={runImages}>
+            {busy === "img" ? T("media.working") : T("media.genImages")}
+          </Button>
+          <Button size="sm" variant="secondary" disabled={busy !== null || !s || s.noImage === 0} onClick={runAllImages}>
+            {busy === "allImg"
+              ? T("media.allProgress", { done: allProgress?.done ?? 0, total: allProgress?.total ?? 0 })
+              : T("media.genAllImages")}
+          </Button>
         </div>
-      )}
-    </section>
+        {generated.length > 0 && (
+          <div className="mt-4 grid grid-cols-5 gap-2">
+            {generated.map((g) => (
+              <figure key={g.id} className="overflow-hidden rounded-xl border border-border bg-background">
+                {g.url ? (
+                  <img src={g.url} alt={g.name} className="aspect-square w-full object-cover" loading="lazy" />
+                ) : (
+                  <div className="aspect-square w-full bg-muted" />
+                )}
+                <figcaption className="truncate px-1.5 py-1 text-center text-[11px] text-muted-foreground">{g.name}</figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <section className="mt-4 rounded-2xl border border-border bg-card p-4">
+        <h2 className="text-base font-semibold">{T("media.priceTitle")}</h2>
+        <p className="mt-1 text-sm text-muted-foreground">{T("media.priceHint")}</p>
+
+        <div className="mt-3 grid grid-cols-4 gap-1.5 sm:grid-cols-7">
+          {MARKETS.map((m) => {
+            const priced = s?.markets?.[m] ?? 0;
+            const active = m === market;
+            return (
+              <button
+                key={m}
+                type="button"
+                onClick={() => setMarket(m)}
+                className={`flex flex-col items-center rounded-xl border px-1 py-1.5 text-center transition-colors ${
+                  active ? "border-primary bg-primary/10" : "border-border bg-background hover:bg-muted/50"
+                }`}
+              >
+                <span className="text-base leading-none">{flagOf(m)}</span>
+                <span className={`text-[11px] font-semibold leading-tight ${active ? "text-primary" : ""}`}>{m}</span>
+                <span className="text-[10px] leading-tight text-muted-foreground">{priced}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {s && (
+          <p className="mt-3 text-sm text-muted-foreground">
+            {T("media.priceStatus", { market, priced: s.priced })}
+          </p>
+        )}
+
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button size="sm" disabled={busy !== null} onClick={runPrices}>
+            {busy === "price" ? T("media.working") : T("media.genPrices")}
+          </Button>
+        </div>
+      </section>
+    </>
   );
 }
