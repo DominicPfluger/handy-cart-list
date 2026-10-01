@@ -492,7 +492,12 @@
     "inv.title": "Invite via",
     "inv.more": "More…",
     "inv.sms": "Text message",
-    "inv.email": "Email"
+    "inv.email": "Email",
+    "speak.read": "Read list aloud",
+    "speak.stop": "Stop reading",
+    "speak.empty": "The list is empty.",
+    "speak.unsupported": "Speech output is not supported on this device.",
+    "speak.intro": "{name}. {count} items open."
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -987,7 +992,12 @@
     "inv.title": "Invite via",
     "inv.more": "More…",
     "inv.sms": "Text message",
-    "inv.email": "Email"
+    "inv.email": "Email",
+    "speak.read": "Read list aloud",
+    "speak.stop": "Stop reading",
+    "speak.empty": "The list is empty.",
+    "speak.unsupported": "Speech output is not supported on this device.",
+    "speak.intro": "{name}. {count} items open."
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1482,7 +1492,12 @@
     "inv.title": "Invite via",
     "inv.more": "More…",
     "inv.sms": "Text message",
-    "inv.email": "Email"
+    "inv.email": "Email",
+    "speak.read": "Read list aloud",
+    "speak.stop": "Stop reading",
+    "speak.empty": "The list is empty.",
+    "speak.unsupported": "Speech output is not supported on this device.",
+    "speak.intro": "{name}. {count} items open."
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -1977,7 +1992,12 @@
     "inv.title": "Invitar por",
     "inv.more": "Más…",
     "inv.sms": "SMS",
-    "inv.email": "Correo"
+    "inv.email": "Correo",
+    "speak.read": "Leer la lista en voz alta",
+    "speak.stop": "Detener lectura",
+    "speak.empty": "La lista está vacía.",
+    "speak.unsupported": "Este dispositivo no admite la lectura en voz alta.",
+    "speak.intro": "{name}. {count} artículos pendientes."
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2472,7 +2492,12 @@
     "inv.title": "Invitar por",
     "inv.more": "Más…",
     "inv.sms": "SMS",
-    "inv.email": "Correo"
+    "inv.email": "Correo",
+    "speak.read": "Leer la lista en voz alta",
+    "speak.stop": "Detener lectura",
+    "speak.empty": "La lista está vacía.",
+    "speak.unsupported": "Este dispositivo no admite la lectura en voz alta.",
+    "speak.intro": "{name}. {count} artículos pendientes."
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -2967,7 +2992,12 @@
     "inv.title": "Inviter via",
     "inv.more": "Plus…",
     "inv.sms": "SMS",
-    "inv.email": "E-mail"
+    "inv.email": "E-mail",
+    "speak.read": "Lire la liste à voix haute",
+    "speak.stop": "Arrêter la lecture",
+    "speak.empty": "La liste est vide.",
+    "speak.unsupported": "La lecture vocale n'est pas prise en charge sur cet appareil.",
+    "speak.intro": "{name}. {count} articles restants."
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3462,7 +3492,12 @@
     "inv.title": "Inviter via",
     "inv.more": "Plus…",
     "inv.sms": "SMS",
-    "inv.email": "E-mail"
+    "inv.email": "E-mail",
+    "speak.read": "Lire la liste à voix haute",
+    "speak.stop": "Arrêter la lecture",
+    "speak.empty": "La liste est vide.",
+    "speak.unsupported": "La lecture vocale n'est pas prise en charge sur cet appareil.",
+    "speak.intro": "{name}. {count} articles restants."
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -3957,7 +3992,12 @@
     "inv.title": "Invita tramite",
     "inv.more": "Altro…",
     "inv.sms": "SMS",
-    "inv.email": "E-mail"
+    "inv.email": "E-mail",
+    "speak.read": "Leggi la lista ad alta voce",
+    "speak.stop": "Interrompi lettura",
+    "speak.empty": "La lista è vuota.",
+    "speak.unsupported": "La lettura vocale non è supportata su questo dispositivo.",
+    "speak.intro": "{name}. {count} articoli da prendere."
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4452,7 +4492,12 @@
     "inv.title": "Invita tramite",
     "inv.more": "Altro…",
     "inv.sms": "SMS",
-    "inv.email": "E-mail"
+    "inv.email": "E-mail",
+    "speak.read": "Leggi la lista ad alta voce",
+    "speak.stop": "Interrompi lettura",
+    "speak.empty": "La lista è vuota.",
+    "speak.unsupported": "La lettura vocale non è supportata su questo dispositivo.",
+    "speak.intro": "{name}. {count} articoli da prendere."
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -4947,7 +4992,12 @@
     "inv.title": "Convidar por",
     "inv.more": "Mais…",
     "inv.sms": "SMS",
-    "inv.email": "E-mail"
+    "inv.email": "E-mail",
+    "speak.read": "Ler a lista em voz alta",
+    "speak.stop": "Parar leitura",
+    "speak.empty": "A lista está vazia.",
+    "speak.unsupported": "A leitura em voz alta não é suportada neste dispositivo.",
+    "speak.intro": "{name}. {count} itens em aberto."
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5442,7 +5492,12 @@
     "inv.title": "Convidar por",
     "inv.more": "Mais…",
     "inv.sms": "SMS",
-    "inv.email": "E-mail"
+    "inv.email": "E-mail",
+    "speak.read": "Ler a lista em voz alta",
+    "speak.stop": "Parar leitura",
+    "speak.empty": "A lista está vazia.",
+    "speak.unsupported": "A leitura em voz alta não é suportada neste dispositivo.",
+    "speak.intro": "{name}. {count} itens em aberto."
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -5937,7 +5992,12 @@
     "inv.title": "Uitnodigen via",
     "inv.more": "Meer…",
     "inv.sms": "Sms",
-    "inv.email": "E-mail"
+    "inv.email": "E-mail",
+    "speak.read": "Lijst voorlezen",
+    "speak.stop": "Voorlezen stoppen",
+    "speak.empty": "De lijst is leeg.",
+    "speak.unsupported": "Voorlezen wordt op dit apparaat niet ondersteund.",
+    "speak.intro": "{name}. {count} artikelen open."
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6432,7 +6492,12 @@
     "inv.title": "Uitnodigen via",
     "inv.more": "Meer…",
     "inv.sms": "Sms",
-    "inv.email": "E-mail"
+    "inv.email": "E-mail",
+    "speak.read": "Lijst voorlezen",
+    "speak.stop": "Voorlezen stoppen",
+    "speak.empty": "De lijst is leeg.",
+    "speak.unsupported": "Voorlezen wordt op dit apparaat niet ondersteund.",
+    "speak.intro": "{name}. {count} artikelen open."
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6484,7 +6549,12 @@
     "inv.title": "Einladen per",
     "inv.more": "Weitere…",
     "inv.sms": "SMS",
-    "inv.email": "E-Mail"
+    "inv.email": "E-Mail",
+    "speak.read": "Liste vorlesen",
+    "speak.stop": "Vorlesen stoppen",
+    "speak.empty": "Die Liste ist leer.",
+    "speak.unsupported": "Sprachausgabe wird auf diesem Gerät nicht unterstützt.",
+    "speak.intro": "{name}. {count} offene Artikel."
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6536,6 +6606,11 @@
     "inv.title": "Einladen per",
     "inv.more": "Weitere…",
     "inv.sms": "SMS",
-    "inv.email": "E-Mail"
+    "inv.email": "E-Mail",
+    "speak.read": "Liste vorlesen",
+    "speak.stop": "Vorlesen stoppen",
+    "speak.empty": "Die Liste ist leer.",
+    "speak.unsupported": "Sprachausgabe wird auf diesem Gerät nicht unterstützt.",
+    "speak.intro": "{name}. {count} offene Artikel."
   }
 }
