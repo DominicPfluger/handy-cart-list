@@ -24,6 +24,7 @@ import { Route as VerlaufRouteImport } from './routes/verlauf'
 import { Route as VorratRouteImport } from './routes/vorrat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedVorleseTexteRouteImport } from './routes/_authenticated/vorlese-texte'
+import { Route as RezeptSlugRouteImport } from './routes/rezept.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -100,6 +101,11 @@ const AuthenticatedVorleseTexteRoute =
     path: '/vorlese-texte',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const RezeptSlugRoute = RezeptSlugRouteImport.update({
+  id: '/rezept/$slug',
+  path: '/rezept/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
+  '/rezept/$slug': typeof RezeptSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
+  '/rezept/$slug': typeof RezeptSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/vorrat': typeof VorratRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
+  '/rezept/$slug': typeof RezeptSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -168,6 +177,7 @@ export interface FileRouteTypes {
     | '/vorrat'
     | '/admin'
     | '/vorlese-texte'
+    | '/rezept/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/vorrat'
     | '/admin'
     | '/vorlese-texte'
+    | '/rezept/$slug'
   id:
     | '__root__'
     | '/'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/vorrat'
     | '/_authenticated/admin'
     | '/_authenticated/vorlese-texte'
+    | '/rezept/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   ScannerRoute: typeof ScannerRoute
   VerlaufRoute: typeof VerlaufRoute
   VorratRoute: typeof VorratRoute
+  RezeptSlugRoute: typeof RezeptSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -326,6 +339,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedVorleseTexteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/rezept/$slug': {
+      id: '/rezept/$slug'
+      path: '/rezept/$slug'
+      fullPath: '/rezept/$slug'
+      preLoaderRoute: typeof RezeptSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -356,6 +376,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScannerRoute: ScannerRoute,
   VerlaufRoute: VerlaufRoute,
   VorratRoute: VorratRoute,
+  RezeptSlugRoute: RezeptSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
