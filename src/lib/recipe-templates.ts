@@ -64,7 +64,7 @@ export const POPULAR_RECIPES: Record<RecipeTemplate["id"], Record<string, string
 export const RECIPE_TEMPLATES: RecipeTemplate[] = [
   { id: "muesli", emoji: "🥣", color: "oklch(0.93 0.05 80)", steps: [
     { key: "base", label: "Basis", min: 1, max: 2, ingredients: ["Haferflocken", "Dinkelflocken", "Cornflakes", "Granola"] },
-    { key: "liquid", label: "Flüssigkeit", min: 1, max: 1, ingredients: ["Milch", "Joghurt", "Hafermilch", "Mandelmilch"] },
+    { key: "liquid", label: "Flüssigkeit", min: 1, max: 3, ingredients: ["Milch", "Joghurt", "Hafermilch", "Mandelmilch"] },
     { key: "fruit", label: "Früchte", min: 1, max: 3, ingredients: ["Bananen", "Äpfel", "Heidelbeeren", "Himbeeren", "Erdbeeren", "Mango"] },
     { key: "topping", label: "Topping", min: 0, max: 3, ingredients: ["Rosinen", "Gojibeeren", "Honig", "Walnüsse", "Mandeln"] },
   ] },
@@ -82,7 +82,7 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "dressing", label: "Dressing", min: 1, max: 2, ingredients: ["Olivenöl", "Balsamico", "Zitronen", "Senf"] },
   ] },
   { id: "sandwich", emoji: "🥪", color: "oklch(0.93 0.06 95)", steps: [
-    { key: "bread", label: "Brot", min: 1, max: 1, ingredients: ["Vollkornbrot", "Ciabatta", "Baguette"] },
+    { key: "bread", label: "Brot", min: 1, max: 3, ingredients: ["Vollkornbrot", "Ciabatta", "Baguette"] },
     { key: "spread", label: "Aufstrich", min: 0, max: 2, ingredients: ["Doppelrahmfrischkäse", "Mayonnaise", "Senf"] },
     { key: "protein", label: "Belag", min: 0, max: 2, ingredients: ["Schinken", "Salami", "Hähnchenbrust", "Putenbrust", "Thunfisch"] },
     { key: "cheese", label: "Käse", min: 0, max: 2, ingredients: ["Gouda", "Emmentaler", "Butterkäse"] },
@@ -90,14 +90,14 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "extra", label: "Extra", min: 0, max: 2, ingredients: ["Freilandeier", "Avocado", "Zwiebeln"] },
   ] },
   { id: "pizza", emoji: "🍕", color: "oklch(0.92 0.07 40)", steps: [
-    { key: "dough", label: "Teig", min: 1, max: 1, ingredients: ["Pizzateig", "Mehl", "Hefe"] },
-    { key: "sauce", label: "Sauce", min: 1, max: 1, ingredients: ["Tomaten", "Passierte Tomaten", "Crème fraîche"] },
+    { key: "dough", label: "Teig", min: 1, max: 3, ingredients: ["Pizzateig", "Mehl", "Hefe"] },
+    { key: "sauce", label: "Sauce", min: 1, max: 3, ingredients: ["Tomaten", "Passierte Tomaten", "Crème fraîche"] },
     { key: "cheese", label: "Käse", min: 1, max: 2, ingredients: ["Mozzarella", "Parmigiano Reggiano", "Grana Padano", "Provolone"] },
     { key: "topping", label: "Belag", min: 1, max: 4, ingredients: ["Salami", "Schinken", "Paprika", "Champignons", "Schwarze Oliven", "Zucchini", "Ananas"] },
     { key: "finish", label: "Kräuter & Gewürze", min: 0, max: 4, ingredients: ["Basilikum", "Oregano", "Olivenöl", "Petersilie", "Rosmarin", "Thymian", "Chilischoten", "Knoblauch"] },
   ] },
   { id: "pfanne", emoji: "🍳", color: "oklch(0.92 0.06 60)", steps: [
-    { key: "base", label: "Stärkebeilage", min: 1, max: 1, ingredients: ["Reis", "Nudeln", "Kartoffeln", "Kochbanane"] },
+    { key: "base", label: "Stärkebeilage", min: 1, max: 3, ingredients: ["Reis", "Nudeln", "Kartoffeln", "Kochbanane"] },
     { key: "protein", label: "Proteinquelle", min: 0, max: 2, ingredients: ["Hähnchenbrust", "Tofu", "Eier", "Rinderhackfleisch"] },
     { key: "veg", label: "Gemüse", min: 1, max: 4, ingredients: ["Paprika", "Zucchini", "Pak Choi", "Zuckererbsen", "Babymais", "Auberginen", "Grüne Bohnen"] },
     { key: "fruit", label: "Früchte", min: 0, max: 2, ingredients: ["Ananas", "Mango", "Äpfel", "Zitronen"] },
@@ -106,14 +106,14 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
   ] },
   { id: "menu", emoji: "🍽️", color: "oklch(0.92 0.04 250)", steps: [
     { key: "protein", label: "Proteinquelle", min: 1, max: 2, ingredients: ["Hähnchenbrust", "Lachs", "Rinderhackfleisch", "Tofu", "Eier"] },
-    { key: "starch", label: "Stärkebeilage", min: 1, max: 1, ingredients: ["Nudeln", "Reis", "Kartoffeln"] },
+    { key: "starch", label: "Stärkebeilage", min: 1, max: 3, ingredients: ["Nudeln", "Reis", "Kartoffeln"] },
     { key: "veg", label: "Gemüsebeilage", min: 0, max: 2, ingredients: ["Grüne Bohnen", "Zucchini", "Babyspinat", "Karotten"] },
-    { key: "sauce", label: "Sauce", min: 0, max: 1, ingredients: ["Passierte Tomaten", "Crème fraîche", "Sojasauce"] },
+    { key: "sauce", label: "Sauce", min: 0, max: 3, ingredients: ["Passierte Tomaten", "Crème fraîche", "Sojasauce"] },
   ] },
   { id: "dessert", emoji: "🍮", color: "oklch(0.93 0.05 10)", steps: [
-    { key: "base", label: "Basis", min: 1, max: 1, ingredients: ["Mascarpone", "Ricotta", "Joghurt", "Milchreis", "Griesscreme"] },
+    { key: "base", label: "Basis", min: 1, max: 3, ingredients: ["Mascarpone", "Ricotta", "Joghurt", "Milchreis", "Griesscreme"] },
     { key: "fruit", label: "Früchte", min: 0, max: 2, ingredients: ["Erdbeeren", "Himbeeren", "Mango", "Maracuja / Passionsfrucht", "Feigen"] },
     { key: "sweet", label: "Süsse", min: 0, max: 2, ingredients: ["Honig", "Zucker", "Vanillezucker", "Schokolade"] },
-    { key: "crunch", label: "Crunch", min: 0, max: 1, ingredients: ["Kekse", "Mandeln", "Granola"] },
+    { key: "crunch", label: "Crunch", min: 0, max: 3, ingredients: ["Kekse", "Mandeln", "Granola"] },
   ] },
 ];
