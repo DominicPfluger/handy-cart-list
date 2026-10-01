@@ -173,9 +173,10 @@ function RootComponent() {
       .catch(() => {});
   }, []);
 
+  const isAdmin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") });
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="relative mx-auto min-h-screen w-full max-w-[440px] bg-background">
+      <div className={`relative mx-auto min-h-screen w-full bg-background ${isAdmin ? "max-w-[440px] md:max-w-5xl xl:max-w-7xl md:px-4" : "max-w-[440px]"}`}>
         <main className="px-5 pb-36 pt-5">
           <Outlet />
           <Toaster position="top-center" />

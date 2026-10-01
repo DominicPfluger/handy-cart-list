@@ -317,7 +317,7 @@ function AdminPage() {
         <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
       </div>
 
-      <div className="flex gap-1.5 overflow-x-auto pb-1" role="tablist" aria-label={T("adm.title")}>
+      <div className="flex gap-1.5 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible" role="tablist" aria-label={T("adm.title")}>
         {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["markets", "adm.tab.markets"], ["languages", "adm.tab.languages"], ["more", "adm.tab.more"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
@@ -327,7 +327,7 @@ function AdminPage() {
       </div>
 
       {tab === "catalog" && (<>
-      <div className="grid grid-cols-3 gap-2 text-center">
+      <div className="grid grid-cols-3 gap-2 text-center md:max-w-xl">
         <Stat label={T("adm.categories")} value={d?.depts.length} />
         <Stat label={T("adm.products")} value={d?.prods.length} />
         <Stat label={T("adm.headings")} value={d?.heads.length} />
