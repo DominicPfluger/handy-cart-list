@@ -81,7 +81,7 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "sauce", label: "Sauce", min: 1, max: 1, ingredients: ["Tomaten", "Passierte Tomaten", "Crème fraîche"] },
     { key: "cheese", label: "Käse", min: 1, max: 2, ingredients: ["Mozzarella", "Parmigiano Reggiano", "Grana Padano", "Provolone"] },
     { key: "topping", label: "Belag", min: 1, max: 4, ingredients: ["Salami", "Schinken", "Paprika", "Champignons", "Schwarze Oliven", "Zucchini", "Ananas"] },
-    { key: "finish", label: "Finish", min: 0, max: 2, ingredients: ["Basilikum", "Oregano", "Olivenöl"] },
+    { key: "finish", label: "Kräuter & Gewürze", min: 0, max: 4, ingredients: ["Basilikum", "Oregano", "Olivenöl", "Petersilie", "Rosmarin", "Thymian", "Chilischoten", "Knoblauch"] },
   ] },
   { id: "pfanne", emoji: "🍳", color: "oklch(0.92 0.06 60)", steps: [
     { key: "base", label: "Stärkebeilage", min: 1, max: 1, ingredients: ["Reis", "Nudeln", "Kartoffeln", "Kochbanane"] },
