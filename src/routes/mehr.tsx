@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
+import { useNotificationSettings } from "../hooks/use-notification-settings";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 
@@ -347,6 +348,100 @@ function SpeakRateRow() {
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+function NotificationToggle({
+  label,
+  sub,
+  checked,
+  disabled,
+  onChange,
+}: {
+  label: string;
+  sub?: string;
+  checked: boolean;
+  disabled?: boolean;
+  onChange: (next: boolean) => void;
+}) {
+  return (
+    <label className={`flex w-full items-center gap-3 px-4 py-3 ${disabled ? "opacity-50" : "cursor-pointer"}`}>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-medium text-foreground">{label}</p>
+        {sub ? <p className="text-xs text-muted-foreground">{sub}</p> : null}
+      </div>
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={(e) => onChange(e.target.checked)}
+        className="h-5 w-5 shrink-0 accent-primary"
+      />
+    </label>
+  );
+}
+
+function NotificationSettingsRow() {
+  const { t } = useT();
+  const [open, setOpen] = useState(false);
+  const [settings, update] = useNotificationSettings();
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted"
+      >
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+          <BellIcon className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-foreground">{t("notif.title")}</p>
+          <p className="truncate text-xs text-muted-foreground">{t("notif.sub")}</p>
+        </div>
+        <span className={`text-muted-foreground transition-transform ${open ? "rotate-90" : ""}`}>›</span>
+      </button>
+      {open ? (
+        <div className="divide-y divide-border border-t border-border pb-1">
+          <NotificationToggle
+            label={t("notif.enabled")}
+            sub={t("notif.enabledSub")}
+            checked={settings.enabled}
+            onChange={(v) => update({ enabled: v })}
+          />
+          <NotificationToggle
+            label={t("notif.listChanges")}
+            sub={t("notif.listChangesSub")}
+            checked={settings.listChanges}
+            disabled={!settings.enabled}
+            onChange={(v) => update({ listChanges: v })}
+          />
+          <NotificationToggle
+            label={t("notif.shoppingTrip")}
+            sub={t("notif.shoppingTripSub")}
+            checked={settings.shoppingTrip}
+            disabled={!settings.enabled}
+            onChange={(v) => update({ shoppingTrip: v })}
+          />
+          <NotificationToggle
+            label={t("notif.reminders")}
+            sub={t("notif.remindersSub")}
+            checked={settings.reminders}
+            disabled={!settings.enabled}
+            onChange={(v) => update({ reminders: v })}
+          />
+          <NotificationToggle
+            label={t("notif.pantryHistory")}
+            sub={t("notif.pantryHistorySub")}
+            checked={settings.pantryHistory}
+            disabled={!settings.enabled}
+            onChange={(v) => update({ pantryHistory: v })}
+          />
+          <p className="px-4 py-2.5 text-xs text-muted-foreground">{t("notif.note")}</p>
+        </div>
+      ) : null}
     </div>
   );
 }
