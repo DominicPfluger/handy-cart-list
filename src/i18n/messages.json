@@ -640,7 +640,12 @@
     "rs.comments": "Comments",
     "rs.commentPh": "Write a comment …",
     "rs.send": "Send",
-    "rs.deleteComment": "Delete comment"
+    "rs.deleteComment": "Delete comment",
+    "rs.removed": "Recipe removed",
+    "rs.dragHandle": "Drag to reorder",
+    "rs.tapToRename": "Tap to rename",
+    "rs.deleteRecipe": "Remove recipe",
+    "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1283,7 +1288,12 @@
     "rs.comments": "Comments",
     "rs.commentPh": "Write a comment …",
     "rs.send": "Send",
-    "rs.deleteComment": "Delete comment"
+    "rs.deleteComment": "Delete comment",
+    "rs.removed": "Recipe removed",
+    "rs.dragHandle": "Drag to reorder",
+    "rs.tapToRename": "Tap to rename",
+    "rs.deleteRecipe": "Remove recipe",
+    "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1926,7 +1936,12 @@
     "rs.comments": "Comments",
     "rs.commentPh": "Write a comment …",
     "rs.send": "Send",
-    "rs.deleteComment": "Delete comment"
+    "rs.deleteComment": "Delete comment",
+    "rs.removed": "Recipe removed",
+    "rs.dragHandle": "Drag to reorder",
+    "rs.tapToRename": "Tap to rename",
+    "rs.deleteRecipe": "Remove recipe",
+    "rs.boardHint": "Tap a name to rename · drag ⋮⋮ to reorder or move"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2569,7 +2584,12 @@
     "rs.comments": "Comentarios",
     "rs.commentPh": "Escribe un comentario …",
     "rs.send": "Enviar",
-    "rs.deleteComment": "Eliminar comentario"
+    "rs.deleteComment": "Eliminar comentario",
+    "rs.removed": "Receta eliminada",
+    "rs.dragHandle": "Arrastra para ordenar",
+    "rs.tapToRename": "Toca para renombrar",
+    "rs.deleteRecipe": "Eliminar receta",
+    "rs.boardHint": "Toca un nombre para renombrarlo · arrastra ⋮⋮ para ordenar o mover"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -3212,7 +3232,12 @@
     "rs.comments": "Comentarios",
     "rs.commentPh": "Escribe un comentario …",
     "rs.send": "Enviar",
-    "rs.deleteComment": "Eliminar comentario"
+    "rs.deleteComment": "Eliminar comentario",
+    "rs.removed": "Receta eliminada",
+    "rs.dragHandle": "Arrastra para ordenar",
+    "rs.tapToRename": "Toca para renombrar",
+    "rs.deleteRecipe": "Eliminar receta",
+    "rs.boardHint": "Toca un nombre para renombrarlo · arrastra ⋮⋮ para ordenar o mover"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3855,7 +3880,12 @@
     "rs.comments": "Commentaires",
     "rs.commentPh": "Écrire un commentaire …",
     "rs.send": "Envoyer",
-    "rs.deleteComment": "Supprimer le commentaire"
+    "rs.deleteComment": "Supprimer le commentaire",
+    "rs.removed": "Recette supprimée",
+    "rs.dragHandle": "Glisser pour trier",
+    "rs.tapToRename": "Toucher pour renommer",
+    "rs.deleteRecipe": "Supprimer la recette",
+    "rs.boardHint": "Touchez un nom pour le renommer · glissez ⋮⋮ pour trier ou déplacer"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -4498,7 +4528,12 @@
     "rs.comments": "Commentaires",
     "rs.commentPh": "Écrire un commentaire …",
     "rs.send": "Envoyer",
-    "rs.deleteComment": "Supprimer le commentaire"
+    "rs.deleteComment": "Supprimer le commentaire",
+    "rs.removed": "Recette supprimée",
+    "rs.dragHandle": "Glisser pour trier",
+    "rs.tapToRename": "Toucher pour renommer",
+    "rs.deleteRecipe": "Supprimer la recette",
+    "rs.boardHint": "Touchez un nom pour le renommer · glissez ⋮⋮ pour trier ou déplacer"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -5141,7 +5176,12 @@
     "rs.comments": "Commenti",
     "rs.commentPh": "Scrivi un commento …",
     "rs.send": "Invia",
-    "rs.deleteComment": "Elimina commento"
+    "rs.deleteComment": "Elimina commento",
+    "rs.removed": "Ricetta rimossa",
+    "rs.dragHandle": "Trascina per ordinare",
+    "rs.tapToRename": "Tocca per rinominare",
+    "rs.deleteRecipe": "Rimuovi ricetta",
+    "rs.boardHint": "Tocca un nome per rinominarlo · trascina ⋮⋮ per ordinare o spostare"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -5784,7 +5824,12 @@
     "rs.comments": "Commenti",
     "rs.commentPh": "Scrivi un commento …",
     "rs.send": "Invia",
-    "rs.deleteComment": "Elimina commento"
+    "rs.deleteComment": "Elimina commento",
+    "rs.removed": "Ricetta rimossa",
+    "rs.dragHandle": "Trascina per ordinare",
+    "rs.tapToRename": "Tocca per rinominare",
+    "rs.deleteRecipe": "Rimuovi ricetta",
+    "rs.boardHint": "Tocca un nome per rinominarlo · trascina ⋮⋮ per ordinare o spostare"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -6427,7 +6472,12 @@
     "rs.comments": "Comentários",
     "rs.commentPh": "Escreva um comentário …",
     "rs.send": "Enviar",
-    "rs.deleteComment": "Eliminar comentário"
+    "rs.deleteComment": "Eliminar comentário",
+    "rs.removed": "Receita removida",
+    "rs.dragHandle": "Arraste para ordenar",
+    "rs.tapToRename": "Toque para renomear",
+    "rs.deleteRecipe": "Remover receita",
+    "rs.boardHint": "Toque num nome para renomear · arraste ⋮⋮ para ordenar ou mover"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -7070,7 +7120,12 @@
     "rs.comments": "Comentários",
     "rs.commentPh": "Escreva um comentário …",
     "rs.send": "Enviar",
-    "rs.deleteComment": "Excluir comentário"
+    "rs.deleteComment": "Excluir comentário",
+    "rs.removed": "Receita removida",
+    "rs.dragHandle": "Arraste para ordenar",
+    "rs.tapToRename": "Toque para renomear",
+    "rs.deleteRecipe": "Remover receita",
+    "rs.boardHint": "Toque num nome para renomear · arraste ⋮⋮ para ordenar ou mover"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -7713,7 +7768,12 @@
     "rs.comments": "Reacties",
     "rs.commentPh": "Schrijf een reactie …",
     "rs.send": "Versturen",
-    "rs.deleteComment": "Reactie verwijderen"
+    "rs.deleteComment": "Reactie verwijderen",
+    "rs.removed": "Recept verwijderd",
+    "rs.dragHandle": "Sleep om te sorteren",
+    "rs.tapToRename": "Tik om te hernoemen",
+    "rs.deleteRecipe": "Recept verwijderen",
+    "rs.boardHint": "Tik op een naam om te hernoemen · sleep ⋮⋮ om te sorteren of verplaatsen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -8356,7 +8416,12 @@
     "rs.comments": "Reacties",
     "rs.commentPh": "Schrijf een reactie …",
     "rs.send": "Versturen",
-    "rs.deleteComment": "Reactie verwijderen"
+    "rs.deleteComment": "Reactie verwijderen",
+    "rs.removed": "Recept verwijderd",
+    "rs.dragHandle": "Sleep om te sorteren",
+    "rs.tapToRename": "Tik om te hernoemen",
+    "rs.deleteRecipe": "Recept verwijderen",
+    "rs.boardHint": "Tik op een naam om te hernoemen · sleep ⋮⋮ om te sorteren of verplaatsen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8551,7 +8616,12 @@
     "rs.comments": "Kommentare",
     "rs.commentPh": "Kommentar schreiben …",
     "rs.send": "Senden",
-    "rs.deleteComment": "Kommentar löschen"
+    "rs.deleteComment": "Kommentar löschen",
+    "rs.removed": "Rezept entfernt",
+    "rs.dragHandle": "Ziehen zum Sortieren",
+    "rs.tapToRename": "Tippen zum Umbenennen",
+    "rs.deleteRecipe": "Rezept entfernen",
+    "rs.boardHint": "Namen antippen zum Umbenennen · ⋮⋮ ziehen zum Sortieren oder Verschieben"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -8746,6 +8816,11 @@
     "rs.comments": "Kommentare",
     "rs.commentPh": "Kommentar schreiben …",
     "rs.send": "Senden",
-    "rs.deleteComment": "Kommentar löschen"
+    "rs.deleteComment": "Kommentar löschen",
+    "rs.removed": "Rezept entfernt",
+    "rs.dragHandle": "Ziehen zum Sortieren",
+    "rs.tapToRename": "Tippen zum Umbenennen",
+    "rs.deleteRecipe": "Rezept entfernen",
+    "rs.boardHint": "Namen antippen zum Umbenennen · ⋮⋮ ziehen zum Sortieren oder Verschieben"
   }
 }

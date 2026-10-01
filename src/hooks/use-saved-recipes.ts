@@ -10,6 +10,9 @@ export type SavedRecipe = {
   templateId: string;
   picks: Record<string, string[]>;
   savedAt: number;
+  folderId: string;
+  sortOrder: number;
+  customTitle: string | null;
   isPublic: boolean;
   shareSlug: string | null;
   isOwn: boolean;
@@ -27,8 +30,8 @@ async function load(userId: string) {
   const [{ data: folders }, { data: saves }] = await Promise.all([
     supabase.from("recipe_folders").select("id, name, sort_order").order("sort_order").order("created_at"),
     supabase.from("recipe_saves")
-      .select("id, folder_id, created_at, recipe:recipes(id, owner_id, title, template_id, picks, is_public, share_slug)")
-      .order("created_at", { ascending: false }),
+      .select("id, folder_id, created_at, custom_title, sort_order, recipe:recipes(id, owner_id, title, template_id, picks, is_public, share_slug)")
+      .order("sort_order").order("created_at", { ascending: false }),
   ]);
   const list: RecipeCollection[] = (folders ?? []).map((f) => ({ id: f.id, name: f.name, recipes: [] }));
   for (const s of saves ?? []) {
@@ -37,7 +40,7 @@ async function load(userId: string) {
     const c = list.find((x) => x.id === s.folder_id) ?? list[0];
     if (!c) continue;
     c.recipes.push({
-      id: s.id, recipeId: r.id, title: r.title, templateId: r.template_id, picks: r.picks ?? {},
+      id: s.id, recipeId: r.id, title: s.custom_title || r.title, customTitle: s.custom_title, folderId: c.id, sortOrder: s.sort_order, templateId: r.template_id, picks: r.picks ?? {},
       savedAt: new Date(s.created_at).getTime(), isPublic: r.is_public, shareSlug: r.share_slug, isOwn: r.owner_id === userId,
     });
   }
@@ -110,4 +113,42 @@ export async function moveSaved(saveId: string, folderId: string) {
 export async function deleteSaved(saveId: string) {
   await supabase.from("recipe_saves").delete().eq("id", saveId);
   await refreshCollections();
+}
+
+function setCache(next: RecipeCollection[]) { cache = next; emit(); }
+
+export async function renameSaved(rec: SavedRecipe, title: string) {
+  const t = title.trim();
+  if (!t || t === rec.title) return;
+  setCache(cache.map((c) => ({ ...c, recipes: c.recipes.map((r) => (r.id === rec.id ? { ...r, title: t } : r)) })));
+  if (rec.isOwn) {
+    await supabase.from("recipes").update({ title: t }).eq("id", rec.recipeId);
+    await supabase.from("recipe_saves").update({ custom_title: null }).eq("id", rec.id);
+  } else {
+    await supabase.from("recipe_saves").update({ custom_title: t }).eq("id", rec.id);
+  }
+  await refreshCollections();
+}
+
+/** Neue Anordnung (optimistisch) übernehmen und speichern. */
+export async function applyLayout(next: RecipeCollection[]) {
+  const prev = new Map(cache.flatMap((c) => c.recipes.map((r, i) => [r.id, `${c.id}:${i}`] as const)));
+  setCache(next);
+  const changes: Array<{ id: string; folder_id: string; sort_order: number }> = [];
+  for (const c of next) {
+    const touched = c.recipes.some((r, i) => prev.get(r.id) !== `${c.id}:${i}`) || c.recipes.some((r, i) => r.sortOrder !== i);
+    if (touched) c.recipes.forEach((r, i) => changes.push({ id: r.id, folder_id: c.id, sort_order: i }));
+  }
+  await Promise.all(changes.map((ch) => supabase.from("recipe_saves").update({ folder_id: ch.folder_id, sort_order: ch.sort_order }).eq("id", ch.id)));
+}
+
+/** Löschen; liefert eine Funktion zum Wiederherstellen. */
+export async function deleteSavedWithUndo(rec: SavedRecipe, userId: string) {
+  await deleteSaved(rec.id);
+  return async () => {
+    await supabase.from("recipe_saves").insert({
+      user_id: userId, recipe_id: rec.recipeId, folder_id: rec.folderId, sort_order: rec.sortOrder, custom_title: rec.customTitle,
+    });
+    await refreshCollections();
+  };
 }

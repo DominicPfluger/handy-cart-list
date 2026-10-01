@@ -8,12 +8,13 @@ import { formatQuantity } from "../lib/units";
 import { ProductEmoji } from "./product-emoji";
 import { Button } from "./ui/button";
 import {
-  createCollection, deleteCollection, deleteSaved, moveSaved, renameCollection, saveToFolder, useRecipeCollections,
+  createCollection, saveToFolder, useRecipeCollections,
 } from "../hooks/use-saved-recipes";
 import { useAuthUser } from "../hooks/use-auth-user";
 import { createRecipe, publishRecipe, shareLink, type RecipeItem } from "../lib/recipes-api";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { SavedRecipesBoard } from "./saved-recipes-board";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -303,58 +304,14 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     </section>
   );
 
-  const visibleCollections = collections
-    .map((c) => ({ ...c, recipes: tpl ? c.recipes.filter((r) => r.templateId === tpl.id) : c.recipes }))
-    .filter((c) => !tpl || c.recipes.length > 0);
-
-  const collectionsView = visibleCollections.length > 0 && (
-    <section className="space-y-3">
-      <h2 className="text-lg font-bold text-foreground">{t("rk.myRecipes")}</h2>
-      {visibleCollections.map((c) => (
-        <div key={c.id} className="space-y-2 rounded-2xl border border-border bg-card p-3">
-          <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-foreground">📁 {c.name}</p>
-            <div className="flex gap-3">
-              <button onClick={() => { const n = window.prompt(t("rs.renameFolder"), c.name); if (n) void renameCollection(c.id, n); }} className="text-xs text-muted-foreground">{t("rs.rename")}</button>
-              <button onClick={() => { if (window.confirm(t("rs.confirmDeleteFolder"))) void deleteCollection(c.id); }} className="text-xs text-muted-foreground">{t("rk.deleteList")}</button>
-            </div>
-          </div>
-          {c.recipes.length === 0 ? (
-            <p className="text-xs text-muted-foreground">{t("rk.emptyCollection")}</p>
-          ) : c.recipes.map((r) => {
-            const rt = RECIPE_TEMPLATES.find((x) => x.id === r.templateId);
-            return (
-              <div key={r.id} className="flex items-center gap-2 rounded-xl bg-background p-2">
-                <span className="text-xl">{rt?.emoji ?? "🍽️"}</span>
-                <button
-                  onClick={() => { if (rt) openRecipe(rt.id, r.picks); }}
-                  className="min-w-0 flex-1 truncate text-left text-sm text-foreground"
-                >
-                  {r.title}
-                </button>
-                {collections.length > 1 && (
-                  <select
-                    aria-label={t("rs.move")}
-                    value={c.id}
-                    onChange={(e) => void moveSaved(r.id, e.target.value)}
-                    className="max-w-[5.5rem] rounded-md border border-border bg-card px-1 py-0.5 text-xs text-foreground"
-                  >
-                    {collections.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}
-                  </select>
-                )}
-                {r.isOwn ? (
-                  <button onClick={() => void shareSaved(r.recipeId, r.title)} aria-label={t("rs.share")} className="px-1 text-sm">🔗</button>
-                ) : r.shareSlug ? (
-                  <Link to="/rezept/$slug" params={{ slug: r.shareSlug }} aria-label={t("rs.open")} className="px-1 text-sm">↗</Link>
-                ) : null}
-                <button onClick={() => void deleteSaved(r.id)} aria-label="✕" className="px-2 text-sm text-muted-foreground">✕</button>
-              </div>
-            );
-          })}
-        </div>
-      ))}
-    </section>
-  );
+  const collectionsView = user ? (
+    <SavedRecipesBoard
+      collections={collections}
+      userId={user.id}
+      filterTemplate={tpl?.id ?? null}
+      onOpen={(id, p) => { const rt = RECIPE_TEMPLATES.find((x) => x.id === id); if (rt) openRecipe(rt.id, p); }}
+    />
+  ) : null;
 
   if (!tpl) {
     return (
