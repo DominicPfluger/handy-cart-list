@@ -17,7 +17,7 @@ import { createRecipe, publishRecipe, shareLink, type RecipeItem } from "../lib/
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { SavedRecipesBoard } from "./saved-recipes-board";
-import { FavoritesRow, SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
+import { SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -381,7 +381,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator" }: { onTemp
         </div>
       </section>}
        {mode === "lists" && (collectionsView ?? <Link to="/auth" className="block rounded-full border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary">{t("rs.signInToSave")}</Link>)}
-       {mode === "inspiration" && <><FavoritesRow />{popularView}{recentView}</>}
+       {mode === "inspiration" && <>{popularView}{recentView}</>}
        </div>
     );
   }
