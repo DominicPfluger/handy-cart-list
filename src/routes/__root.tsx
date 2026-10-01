@@ -89,6 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
+      { rel: "manifest", href: "/manifest.webmanifest" },
     ],
   }),
   shellComponent: RootShell,
@@ -157,6 +158,12 @@ function BottomNav() {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   useEffect(() => initLocale(), []);
+  // Offline-Fähigkeit: Service Worker im Browser registrieren
+  useEffect(() => {
+    import("virtual:pwa-register")
+      .then(({ registerSW }) => registerSW({ immediate: true }))
+      .catch(() => {});
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
