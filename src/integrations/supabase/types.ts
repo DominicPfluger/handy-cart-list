@@ -444,9 +444,48 @@ export type Database = {
           },
         ]
       }
+      recipe_groups: {
+        Row: {
+          created_at: string
+          emoji: string | null
+          id: string
+          name: string
+          parent_id: string | null
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          name: string
+          parent_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          name?: string
+          parent_id?: string | null
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_groups_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "recipe_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recipe_ingredients: {
         Row: {
           created_at: string
+          group_id: string | null
           id: string
           product_id: string
           sort_order: number
@@ -455,6 +494,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          group_id?: string | null
           id?: string
           product_id: string
           sort_order?: number
@@ -463,6 +503,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          group_id?: string | null
           id?: string
           product_id?: string
           sort_order?: number
@@ -470,6 +511,13 @@ export type Database = {
           template_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "recipe_ingredients_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "recipe_groups"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "recipe_ingredients_product_id_fkey"
             columns: ["product_id"]
