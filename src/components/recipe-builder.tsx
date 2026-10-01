@@ -396,37 +396,10 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     />
   ) : null;
 
-  const categoryBar = mode === "generator" ? (
-    <section className="space-y-3">
-      <div className="grid grid-cols-2 gap-3">
-        {RECIPE_TEMPLATES.map((x) => (
-          <button
-            key={x.id}
-            onClick={() => { if (tpl?.id !== x.id) { setTplId(x.id); setPicks({}); setAdded(false); } }}
-            className={`flex items-center gap-3 rounded-2xl border p-3 text-left transition active:scale-[0.98] ${
-              tpl?.id === x.id ? "border-primary bg-primary-soft/40" : "border-border bg-card"
-            }`}
-          >
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-2xl" style={{ background: x.color }}>
-              {x.emoji}
-            </span>
-            <span className="text-sm font-semibold text-foreground">{t(`rk.cat.${x.id}` as MessageKey)}</span>
-          </button>
-        ))}
-      </div>
-    </section>
-  ) : null;
-
   if (!tpl) {
+    if (mode === "generator") return <div className="space-y-5" id="rk-generator" />;
     return (
       <div className="space-y-5" id="rk-generator">
-      {mode === "generator" && <section className="space-y-3">
-        <div>
-          <h2 className="text-lg font-bold text-foreground">{t("rk.title")}</h2>
-          <p className="text-xs text-muted-foreground">{t("rk.sub")}</p>
-        </div>
-        {categoryBar}
-      </section>}
        {mode === "lists" && (collectionsView ?? <Link to="/auth" className="block rounded-full border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary">{t("rs.signInToSave")}</Link>)}
        {mode === "inspiration" && <>{popularView}{recentView}</>}
        </div>
