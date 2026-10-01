@@ -516,7 +516,6 @@ export const de = {
   "adm.assigned": "Zugewiesen",
   "rk.otherGroup": "Weitere",
   "rk.showAll": "Alle {count} anzeigen ▾",
-  "rk.showLess": "Weniger anzeigen ▴",
   "adm.recipeSortBy": "Sortieren nach…",
   "adm.recipeSortPopularity": "Beliebtheit",
   "adm.recipeSortRelevance": "Relevanz",
