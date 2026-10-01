@@ -21,7 +21,7 @@ import {
   ShareIcon,
 } from "../components/icons";
 import { ListManager, shareList } from "../components/list-manager";
-import { formatQuantity, relocalizeQuantity } from "../lib/units";
+import { relocalizeQuantity } from "../lib/units";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
@@ -46,7 +46,7 @@ export const Route = createFileRoute("/")({
 
 function ListPage() {
   const {
-    items, hydrated, toggleItem, removeItem, clearChecked, addItem, addCatalogItem,
+    items, hydrated, toggleItem, removeItem, clearChecked, addItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
     templates, signedIn, saveAsTemplate, createFromTemplate, deleteTemplate, inviteLinkFor,
   } = useShoppingList();
