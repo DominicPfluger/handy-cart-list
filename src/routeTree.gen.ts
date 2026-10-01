@@ -16,6 +16,7 @@ import { Route as AktivitaetenRouteImport } from './routes/aktivitaeten'
 import { Route as AngeboteRouteImport } from './routes/angebote'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BeitretenRouteImport } from './routes/beitreten'
+import { Route as CommunityRouteImport } from './routes/community'
 import { Route as FavoritenRouteImport } from './routes/favoriten'
 import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
@@ -58,6 +59,11 @@ const AuthRoute = AuthRouteImport.update({
 const BeitretenRoute = BeitretenRouteImport.update({
   id: '/beitreten',
   path: '/beitreten',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommunityRoute = CommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FavoritenRoute = FavoritenRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/angebote': typeof AngeboteRoute
   '/auth': typeof AuthRoute
   '/beitreten': typeof BeitretenRoute
+  '/community': typeof CommunityRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
@@ -131,6 +138,7 @@ export interface FileRoutesByTo {
   '/angebote': typeof AngeboteRoute
   '/auth': typeof AuthRoute
   '/beitreten': typeof BeitretenRoute
+  '/community': typeof CommunityRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
@@ -150,6 +158,7 @@ export interface FileRoutesById {
   '/angebote': typeof AngeboteRoute
   '/auth': typeof AuthRoute
   '/beitreten': typeof BeitretenRoute
+  '/community': typeof CommunityRoute
   '/favoriten': typeof FavoritenRoute
   '/mehr': typeof MehrRoute
   '/rezepte': typeof RezepteRoute
@@ -169,6 +178,7 @@ export interface FileRouteTypes {
     | '/angebote'
     | '/auth'
     | '/beitreten'
+    | '/community'
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
@@ -186,6 +196,7 @@ export interface FileRouteTypes {
     | '/angebote'
     | '/auth'
     | '/beitreten'
+    | '/community'
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
     | '/angebote'
     | '/auth'
     | '/beitreten'
+    | '/community'
     | '/favoriten'
     | '/mehr'
     | '/rezepte'
@@ -223,6 +235,7 @@ export interface RootRouteChildren {
   AngeboteRoute: typeof AngeboteRoute
   AuthRoute: typeof AuthRoute
   BeitretenRoute: typeof BeitretenRoute
+  CommunityRoute: typeof CommunityRoute
   FavoritenRoute: typeof FavoritenRoute
   MehrRoute: typeof MehrRoute
   RezepteRoute: typeof RezepteRoute
@@ -281,6 +294,13 @@ declare module '@tanstack/react-router' {
       path: '/beitreten'
       fullPath: '/beitreten'
       preLoaderRoute: typeof BeitretenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/community': {
+      id: '/community'
+      path: '/community'
+      fullPath: '/community'
+      preLoaderRoute: typeof CommunityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/favoriten': {
@@ -370,6 +390,7 @@ const rootRouteChildren: RootRouteChildren = {
   AngeboteRoute: AngeboteRoute,
   AuthRoute: AuthRoute,
   BeitretenRoute: BeitretenRoute,
+  CommunityRoute: CommunityRoute,
   FavoritenRoute: FavoritenRoute,
   MehrRoute: MehrRoute,
   RezepteRoute: RezepteRoute,
