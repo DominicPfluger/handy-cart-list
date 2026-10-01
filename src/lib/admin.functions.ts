@@ -279,3 +279,68 @@ export const suggestBrands = createServerFn({ method: "POST" })
     );
     return { items: (r.items ?? []).map((it) => ({ productId: data.products[it.i]?.id ?? "", brands: it.brands })).filter((x) => x.productId) };
   });
+
+/** Rezept-Kategorie anlegen/ändern (nur Admins); Name wird in alle Sprachen übersetzt (manuelle bleiben). */
+export const saveRecipeGroup = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({
+      id: z.string().uuid().optional(),
+      parentId: z.string().uuid().nullable().optional(),
+      name: z.string().trim().min(1).max(60),
+      emoji: z.string().max(16).nullable(),
+      sortOrder: z.number().int().optional(),
+    }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    let id = data.id;
+    let renamed = true;
+    if (id) {
+      const { data: prev } = await sb.from("recipe_groups").select("name").eq("id", id).single();
+      renamed = prev?.name !== data.name;
+      const { error } = await sb.from("recipe_groups").update({ name: data.name, emoji: data.emoji }).eq("id", id);
+      if (error) throw new Error(error.message);
+    } else {
+      const { data: row, error } = await sb
+        .from("recipe_groups")
+        .insert({ name: data.name, emoji: data.emoji, parent_id: data.parentId ?? null, sort_order: data.sortOrder ?? 999 })
+        .select("id")
+        .single();
+      if (error) throw new Error(error.message);
+      id = row.id as string;
+    }
+    if (renamed) {
+      const { translateNames } = await import("./translate.server");
+      const { data: manual } = await sb.from("catalog_translations").select("locale").eq("entity_id", id).eq("is_manual", true);
+      const skip = new Set(((manual ?? []) as Array<{ locale: string }>).map((m) => m.locale));
+      const rows = (
+        await Promise.all(
+          TRANSLATED_LOCALES.filter((l) => !skip.has(l)).map(async (locale) => {
+            try {
+              const r = await translateNames({ [id!]: `${data.name} (Zutaten-Kategorie)` }, locale);
+              const n = r[id!]?.replace(/\s*\([^)]*\)\s*$/, "").trim();
+              return n ? [{ entity_type: "recipe_group", entity_id: id!, locale, name: n, is_manual: false }] : [];
+            } catch { return []; }
+          }),
+        )
+      ).flat();
+      if (rows.length) await sb.from("catalog_translations").upsert(rows, { onConflict: "entity_type,entity_id,locale" });
+    }
+    return { id };
+  });
+
+export const deleteRecipeGroup = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    const { data: kids } = await sb.from("recipe_groups").select("id").eq("parent_id", data.id);
+    const ids = [data.id, ...((kids ?? []) as Array<{ id: string }>).map((k) => k.id)];
+    const { error } = await sb.from("recipe_groups").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    await sb.from("catalog_translations").delete().in("entity_id", ids);
+    return { ok: true };
+  });

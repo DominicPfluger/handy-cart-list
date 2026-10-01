@@ -157,7 +157,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
 
   const addAll = () => {
     for (const p of chosen) {
-      const g = deptById.get(p.departmentId);
+      const g = catalog.departments.find((d) => d.id === p.departmentId);
       addCatalogItem({
         productId: p.id,
         name: p.name,
