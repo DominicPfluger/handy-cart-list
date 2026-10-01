@@ -45,7 +45,7 @@ function RecipesPage() {
           <Link
             key={x.id}
             to="/rezepte/generator"
-            search={{ cat: x.id }}
+            search={{ cat: x.id, recipe: undefined }}
             className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-card p-3 text-center transition active:scale-[0.96]"
           >
             <span className="grid h-11 w-11 place-items-center rounded-2xl text-xl" style={{ background: x.color }} aria-hidden="true">

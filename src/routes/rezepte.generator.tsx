@@ -30,7 +30,7 @@ export const Route = createFileRoute("/rezepte/generator")({
 function Page() {
   const { t } = useT();
   const { recipe, cat } = Route.useSearch();
-  const initialTpl = RECIPE_TEMPLATES.find((x) => x.id === cat)?.id;
+  const initialTpl = cat ? RECIPE_TEMPLATES.find((x) => x.id === cat)?.id : undefined;
   const [tplId, setTplId] = useState<string | null>(null);
   const shownTpl = tplId ?? initialTpl ?? null;
   return (
