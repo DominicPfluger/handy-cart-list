@@ -32,7 +32,7 @@ function Card({ r, badge }: { r: FeedRecipe; badge: string }) {
   );
 }
 
-function Row({ title, order, ids, empty }: { title: string; order: FeedOrder; ids?: string[]; empty: string }) {
+function Row({ title, emoji, bg, order, ids, empty }: { title: string; emoji: string; bg: string; order: FeedOrder; ids?: string[]; empty: string }) {
   const { t } = useT();
   const { data, isLoading } = useQuery({
     queryKey: ["recipe-feed", order, ids?.slice().sort().join(",") ?? ""],
@@ -42,7 +42,7 @@ function Row({ title, order, ids, empty }: { title: string; order: FeedOrder; id
   const list = (data ?? []).filter((r) => r.share_slug);
   return (
     <section className="space-y-2">
-      <h2 className="text-lg font-bold text-foreground">{title}</h2>
+      <SectionTitle emoji={emoji} bg={bg}>{title}</SectionTitle>
       {isLoading ? (
         <div className="h-28 animate-pulse rounded-2xl bg-muted" role="status" aria-label={t("rs.loading")} />
       ) : list.length === 0 ? (
