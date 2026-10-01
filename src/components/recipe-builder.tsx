@@ -1,5 +1,6 @@
 import { uploadRecipeImage } from "../lib/recipe-images";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
@@ -14,7 +15,7 @@ import {
   createCollection, saveToFolder, useRecipeCollections, flattenTree, folderPath,
 } from "../hooks/use-saved-recipes";
 import { useAuthUser } from "../hooks/use-auth-user";
-import { createRecipe, publishRecipe, shareLink, type RecipeItem } from "../lib/recipes-api";
+import { createRecipe, fetchRecipe, publishRecipe, shareLink, type RecipeItem } from "../lib/recipes-api";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { SavedRecipesBoard } from "./saved-recipes-board";
