@@ -23,10 +23,11 @@ export const Route = createFileRoute("/rezepte/")({
 type RecipeEntry = { id: string; to: "/rezepte/generator" | "/rezepte/inspirationen" | "/rezepte/listen"; icon: string; bg: string; titleKey: MessageKey; descKey: MessageKey };
 
 const RECIPE_ENTRIES: RecipeEntry[] = [
-  { id: "rk-generator", to: "/rezepte/generator", icon: "🧑‍🍳", bg: "#E4F3E6", titleKey: "rec.entryGenTitle", descKey: "rec.entryGenDesc" },
   { id: "rk-lists", to: "/rezepte/listen", icon: "📁", bg: "#E3EEF9", titleKey: "rec.entryListsTitle", descKey: "rec.entryListsDesc" },
   { id: "rk-inspiration", to: "/rezepte/inspirationen", icon: "✨", bg: "#FFF3D6", titleKey: "rec.entryInspTitle", descKey: "rec.entryInspDesc" },
 ];
+
+const GENERATOR_ENTRY: RecipeEntry = { id: "rk-generator", to: "/rezepte/generator", icon: "🧑‍🍳", bg: "#E4F3E6", titleKey: "rec.entryGenTitle", descKey: "rec.entryGenDesc" };
 
 function RecipesPage() {
   const { t } = useT();
@@ -39,6 +40,20 @@ function RecipesPage() {
           {t("rec.subtitle")}
         </p>
       </div>
+
+      <Link
+        key={GENERATOR_ENTRY.id}
+        to={GENERATOR_ENTRY.to}
+        className="flex w-full items-start gap-3 rounded-2xl border border-border bg-card p-4 text-left transition active:scale-[0.98]"
+      >
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-2xl" style={{ background: GENERATOR_ENTRY.bg }} aria-hidden="true">
+          {GENERATOR_ENTRY.icon}
+        </span>
+        <span className="min-w-0">
+          <span className="block text-sm font-bold text-foreground">{t(GENERATOR_ENTRY.titleKey)}</span>
+          <span className="mt-0.5 block text-xs leading-snug text-muted-foreground">{t(GENERATOR_ENTRY.descKey)}</span>
+        </span>
+      </Link>
 
       <div className="grid grid-cols-4 gap-2">
         {RECIPE_TEMPLATES.map((x) => (
