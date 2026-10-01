@@ -85,7 +85,7 @@ export const generateProductImages = createServerFn({ method: "POST" })
       try {
         const bytes = await generateProductImage(p.name, p.emoji);
         const path = `products/${p.id}.png`;
-        const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/png", upsert: true });
+        const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
         if (up.error) throw new Error(up.error.message);
         const upd = await sb.from("products").update({ image_path: path }).eq("id", p.id);
         if (upd.error) throw new Error(upd.error.message);
@@ -115,7 +115,7 @@ export const generateImageFor = createServerFn({ method: "POST" })
     if (error || !p) throw new Error(data.kind === "department" ? "Kategorie nicht gefunden" : "Produkt nicht gefunden");
     const bytes = await generateProductImage(p.name, p.emoji, data.hint);
     const path = `${table}/${p.id}.png`;
-    const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/png", upsert: true });
+    const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
     if (up.error) throw new Error(up.error.message);
     const upd = await context.supabase.from(table).update({ image_path: path }).eq("id", p.id);
     if (upd.error) throw new Error(upd.error.message);

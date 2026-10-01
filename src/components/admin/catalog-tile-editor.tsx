@@ -261,7 +261,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const upload = (file: File) => p.run(async () => {
     const blob = await prepareCategoryImage(file);
     const path = `${table}/${effId!}.png`;
-    const { error } = await supabase.storage.from("catalog-images").upload(path, blob, { contentType: "image/png", upsert: true });
+    const { error } = await supabase.storage.from("catalog-images").upload(path, blob, { contentType: "image/webp", upsert: true });
     if (error) throw new Error(error.message);
     await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId!));
   });

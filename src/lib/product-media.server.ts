@@ -2,19 +2,19 @@ import { aiJson } from "./translate.server";
 
 const GATEWAY = "https://ai.gateway.lovable.dev/v1";
 
-/** Erzeugt ein Produktbild (PNG-Bytes) über das Lovable-KI-Bildmodell. */
+/** Erzeugt ein Produktbild (komprimiertes WebP mit transparentem Hintergrund) über das Lovable-KI-Bildmodell. */
 export async function generateProductImage(name: string, emoji: string | null, hint?: string): Promise<Uint8Array> {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("KI-Schlüssel fehlt");
   const extra = hint?.trim() ? ` The image must show: ${hint.trim()}.` : "";
   const prompt =
     `Clean product photo of "${name}" (${emoji ?? "grocery item"}) for a shopping list app. ` +
-    "Single item, centered, on a plain very light neutral background, soft daylight, no text, no brand logos, no packaging labels with words, square composition." +
+    "Single item, centered, isolated on a fully transparent background (no backdrop, no shadow plate), soft daylight, no text, no brand logos, no packaging labels with words, square composition." +
     extra;
   const res = await fetch(`${GATEWAY}/images/generations`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}`, "X-Lovable-AIG-SDK": "fetch" },
-    body: JSON.stringify({ model: "openai/gpt-image-2.5-sunburst", prompt, size: "1024x1024" }),
+    body: JSON.stringify({ model: "openai/gpt-image-2.5-sunburst", prompt, size: "1024x1024", background: "transparent", output_format: "webp", output_compression: 75, quality: "medium" }),
   });
   if (!res.ok) {
     const body = await res.text().catch(() => "");
