@@ -18,3 +18,6 @@
 - [x] Rezept-Generator zurück auf eigene Seite /rezepte/generator; Rezepte-Hauptseite zeigt wieder nur Kacheln (Generator → Listen → Inspirationen)
 - [x] Feedback-Formular (Name, E-Mail, Betreff aus 7 Einträgen, Nachricht) + Admin-Posteingang
 - [x] Öffentliche Landingpage: /start mit Hero (Tagline „Gemeinsam.Einfach.Einkaufen."), Features, Mockups, Installationshinweis, beliebte/neue Rezepte, Generator, Community, Angebote, FAQ, Kontakt, Newsletter-Platzhalter, News, Footer — alle land.*-Texte in de.ts + messages.json (16 Sprachen); erster Besuch auf / zeigt die Landingpage (Flag „shoppi:landing-seen", src/lib/landing.ts), danach direkt die Liste; Footer-Link „Shoppi-Website" auf /start — E2E geprüft (Erstbesuch Landing, nach „App öffnen" Liste, Reload bleibt Liste, /start direkt)
+- [x] Admin-Import aus Supermarkt-Links: Vorschau/Abgleich, Richtpreise + Grundpreis, gespeicherte Quellen mit stündlicher Prüfung
+- [x] Grünes Plus auf Favoriten: mehr Abstand rechts
+- [ ] Vorrats-Verwaltung — vom Nutzer abgebrochen, nicht umsetzen
