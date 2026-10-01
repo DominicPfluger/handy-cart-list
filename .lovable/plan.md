@@ -7,7 +7,8 @@
 
 ## Was sich aendert
 - Jede Kategorie-Kachel in der Abteilungsansicht bekommt eine Umbenennen-Moeglichkeit direkt auf der Kachel:
-  - Ein Stift-Symbol neben dem vorhandenen Papierkorb-Symbol (oben rechts auf der Kachel, gleiches Verhalten: auf dem Desktop erst bei Mausberuehrung sichtbar).
+  - Ein Stift-Symbol neben dem vorhandenen Papierkorb-Symbol (oben rechts auf der Kachel).
+  - Wie der Papierkorb erscheint der Stift nur bei Mausberuehrung (Hover) bzw. ist auf Touch-Geraeten dauerhaft sichtbar, damit er dort auch ohne Maus erreichbar ist.
   - Ein Tipp darauf oeffnet den vorhandenen Umbenennen-Dialog mit dem Kategorienamen.
 - Im Dialog wie bei Produkten:
   - Neuer Name wird nur auf diesem Geraet gespeichert (persoenliche Umbenennung), der Originalname wird darunter angezeigt.
@@ -17,7 +18,7 @@
 - Umbenennungen gelten nur lokal auf dem Geraet (wie bisher bei Produkten). Globale Namensaenderungen bleiben dem Admin-Panel vorbehalten.
 
 ## Technische Umsetzung
-- `src/routes/abteilungen.tsx`: Stift-Button (PencilIcon aus `src/components/icons.tsx`, falls vorhanden, sonst neues Icon) neben dem Trash-Button auf der Kategorie-Kachel; Klick ruft `openRename(department, "department")` auf.
+- `src/routes/abteilungen.tsx`: Stift-Button auf der Kategorie-Kachel mit derselben Sichtbarkeitsklasse wie der Papierkorb-Button (`[@media(hover:hover)]:opacity-0 group-hover:opacity-100`); Klick ruft `openRename(department, "department")` auf.
 - `src/components/rename-dialog.tsx`: keine Aenderung noetig — unterstuetzt `kind: "department"` bereits.
 - i18n: vorhandene Schluessel (`rename.*`) werden wiederverwendet; kein neuer Text noetig.
 - Keine Datenbankaenderung.
