@@ -42,6 +42,8 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [pickerStep, setPickerStep] = useState<string | null>(null);
   const [pickerDept, setPickerDept] = useState<string | null>(null);
   const [pickerSel, setPickerSel] = useState<Set<string>>(new Set());
+  const [dragRow, setDragRow] = useState<string | null>(null);
+  const [dropAt, setDropAt] = useState<{ id: string; pos: "top" | "bottom" } | null>(null);
   const sortFn = useServerFn(sortRecipeIngredients);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
@@ -102,6 +104,25 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       if (e1) throw new Error(e1.message);
       const { error: e2 } = await supabase.from("recipe_ingredients").update({ sort_order: a.sort_order }).eq("id", b.id);
       if (e2) throw new Error(e2.message);
+    });
+
+  /** Zutat per Drag & Drop vor/hinter eine andere Zutat desselben Schritts setzen. */
+  const dropRow = (stepKey: string, dragId: string, targetId: string, pos: "top" | "bottom") =>
+    run(async () => {
+      const list = assignedFor(stepKey);
+      const from = list.findIndex((r) => r.id === dragId);
+      if (from < 0 || dragId === targetId) return;
+      const next = [...list];
+      const [item] = next.splice(from, 1);
+      let to = next.findIndex((r) => r.id === targetId);
+      if (to < 0) return;
+      if (pos === "bottom") to += 1;
+      next.splice(to, 0, item!);
+      for (let k = 0; k < next.length; k++) {
+        if (next[k]!.sort_order === k + 1) continue;
+        const { error } = await supabase.from("recipe_ingredients").update({ sort_order: k + 1 }).eq("id", next[k]!.id);
+        if (error) throw new Error(error.message);
+      }
     });
 
   const sortStep = (stepKey: string, stepLabel: string, criterion: "popularity" | "relevance") => {
@@ -240,13 +261,48 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                 <div className="space-y-1">
                   {assigned.map((r, i) => {
                     const p = prodById.get(r.product_id);
+                    const over = dropAt?.id === r.id ? dropAt.pos : null;
                     return (
-                      <label key={r.id} className="flex items-center gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs">
+                      <div
+                        key={r.id}
+                        onDragOver={(e) => {
+                          if (!dragRow || dragRow === r.id) return;
+                          e.preventDefault();
+                          e.dataTransfer.dropEffect = "move";
+                          const rect = e.currentTarget.getBoundingClientRect();
+                          setDropAt({ id: r.id, pos: e.clientY > rect.top + rect.height / 2 ? "bottom" : "top" });
+                        }}
+                        onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node) && dropAt?.id === r.id) setDropAt(null); }}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          const id = dragRow;
+                          const pos = dropAt?.id === r.id ? dropAt.pos : null;
+                          setDragRow(null);
+                          setDropAt(null);
+                          if (id && pos) void dropRow(s.key, id, r.id, pos);
+                        }}
+                        className={`relative flex items-center gap-2 rounded-lg border border-border bg-background px-2.5 py-1.5 text-xs ${dragRow === r.id ? "opacity-40" : ""}`}
+                      >
+                        {over && <span className={`pointer-events-none absolute inset-x-1 h-0.5 rounded bg-primary ${over === "top" ? "-top-1" : "-bottom-1"}`} />}
+                        <span
+                          draggable
+                          onDragStart={(e) => {
+                            e.dataTransfer.effectAllowed = "move";
+                            e.dataTransfer.setData("text/plain", p?.name ?? r.id); // Firefox startet Drag nur mit setData
+                            const row = e.currentTarget.parentElement;
+                            if (row) e.dataTransfer.setDragImage(row, 16, row.offsetHeight / 2);
+                            setDragRow(r.id);
+                          }}
+                          onDragEnd={() => { setDragRow(null); setDropAt(null); }}
+                          className="-my-1 -ml-1.5 cursor-grab select-none px-1.5 py-1 text-sm text-muted-foreground active:cursor-grabbing"
+                          aria-label={T("adm.drag")}
+                        >⠿</span>
                         <input type="checkbox" checked disabled={busy} onChange={() => toggle(s.key, r.product_id, false)} className="accent-primary" />
                         <span className="min-w-0 flex-1 truncate text-foreground">{p?.emoji} {p?.name ?? r.product_id}</span>
                         <button type="button" disabled={busy || i === 0} onClick={() => move(s.key, r.product_id, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
                         <button type="button" disabled={busy || i === assigned.length - 1} onClick={() => move(s.key, r.product_id, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
-                      </label>
+                      </div>
                     );
                   })}
                   {assigned.length === 0 && <p className="text-xs text-muted-foreground">{T("adm.recipeStepEmpty")}</p>}
