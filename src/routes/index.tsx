@@ -11,6 +11,7 @@ import {
   catalogQueryOptions,
   useCatalog,
   headingByProduct,
+  departmentIdsOf,
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import { getLocale } from "../i18n";
