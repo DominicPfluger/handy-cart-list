@@ -33,7 +33,7 @@ import { unitShort } from "../lib/units";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
-import { deptColor } from "../lib/dept-colors";
+import { deptColor, deptColorByLabel } from "../lib/dept-colors";
 import { toast } from "sonner";
 
 
@@ -341,7 +341,7 @@ function ListPage() {
                     {(() => {
                       // Farbe: über die Wurzelkategorie, sonst über den Gruppennamen (z. B. ältere Einträge mit eigenem Gruppenlabel)
                       const colorDept = group.root ?? departments.find((d) => d.name === group.label || d.baseName === group.label);
-                      const color = colorDept ? deptColor(colorDept, deptById) : undefined;
+                      const color = (colorDept ? deptColor(colorDept, deptById) : undefined) ?? deptColorByLabel(group.label);
                       return (
                     <div
                       className={`grid h-9 w-9 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-lg ${color ? "" : "bg-primary-soft/25"}`}
