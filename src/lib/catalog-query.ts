@@ -10,6 +10,10 @@ export const catalogQueryOptions = queryOptions({
   queryFn: () => getCatalog(),
   staleTime: 30 * 1000,
   refetchInterval: 45 * 60 * 1000, // renew signed image URLs before they expire
+  // Loader uses ensureQueryData (fetchQuery = no retry by default). Retry so a
+  // single interrupted request (reload/HMR during the large download) doesn't blank the page.
+  retry: 3,
+  retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
 });
 
 /** Übersetzter Katalogname ohne persönliche Umbenennung. */
