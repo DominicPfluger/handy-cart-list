@@ -360,8 +360,8 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
         </div>
       </section>
        {collectionsView}
-       {popularView}
        <FavoritesRow />
+       {popularView}
        {recentView}
        </div>
     );
@@ -493,9 +493,8 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
         )}
       </div>
     </section>
-    {collectionsView}
-    {popularView}
     <FavoritesRow />
+    {popularView}
     {recentView}
     {saveDialog}
     </div>

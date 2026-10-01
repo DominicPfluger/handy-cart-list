@@ -23,7 +23,7 @@ function Card({ r, badge }: { r: FeedRecipe; badge: string }) {
     <Link
       to="/rezept/$slug"
       params={{ slug: r.share_slug ?? "" }}
-      className="flex w-44 shrink-0 snap-start flex-col gap-2 rounded-2xl border border-border bg-card p-3 transition active:scale-[0.98]"
+      className="flex w-full shrink-0 snap-start flex-col gap-2 rounded-2xl border border-border bg-card p-3 transition active:scale-[0.98]"
     >
       <span className="grid h-10 w-10 place-items-center rounded-xl text-xl" style={{ background: tpl?.color }}>{tpl?.emoji ?? "🍽️"}</span>
       <span className="line-clamp-2 text-sm font-semibold text-foreground">{r.title}</span>
@@ -48,7 +48,7 @@ function Row({ title, emoji, bg, order, ids, empty }: { title: string; emoji: st
       ) : list.length === 0 ? (
         <p className="text-sm text-muted-foreground">{empty}</p>
       ) : (
-        <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-1">
+        <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
           {list.map((r) => (
             <Card
               key={r.id}
