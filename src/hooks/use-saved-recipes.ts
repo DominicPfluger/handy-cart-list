@@ -135,9 +135,10 @@ export async function applyLayout(next: RecipeCollection[]) {
   const prev = new Map(cache.flatMap((c) => c.recipes.map((r, i) => [r.id, `${c.id}:${i}`] as const)));
   setCache(next);
   const changes: Array<{ id: string; folder_id: string; sort_order: number }> = [];
-  for (const c of next) c.recipes.forEach((r, i) => {
-    if (prev.get(r.id) !== `${c.id}:${i}`) changes.push({ id: r.id, folder_id: c.id, sort_order: i });
-  });
+  for (const c of next) {
+    const touched = c.recipes.some((r, i) => prev.get(r.id) !== `${c.id}:${i}`) || c.recipes.some((r, i) => r.sortOrder !== i);
+    if (touched) c.recipes.forEach((r, i) => changes.push({ id: r.id, folder_id: c.id, sort_order: i }));
+  }
   await Promise.all(changes.map((ch) => supabase.from("recipe_saves").update({ folder_id: ch.folder_id, sort_order: ch.sort_order }).eq("id", ch.id)));
 }
 
