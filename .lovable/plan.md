@@ -7,7 +7,7 @@ Im Admin-Panel können beim Bearbeiten eines Produkts **Varianten manuell eingeg
 
 ### Neuer Bereich „Varianten" im Produkt-Dialog
 - Unterhalb der Ernährungsformen erscheint bei Produkten der Abschnitt **„Varianten"**.
-- **Bestehende Varianten** werden als Chips angezeigt, jede mit einem **✕ zum Entfernen** (sofort wirksam beim Speichern).
+- **Bestehende Varianten** werden als schlichte **Liste untereinander** angezeigt (eine Variante pro Zeile), jede Zeile mit einem **✕ zum Entfernen** (wirksam beim Speichern) — keine Chips.
 - **Manuelle Eingabe:** Freies Textfeld mit **„+"-Button**; Enter im Feld fügt ebenfalls hinzu. Doppelte Einträge (Groß-/Kleinschreibung ignoriert) werden abgelehnt. Kein automatisches Vorschlagen von Varianten.
 - **Häufige Varianten:** Zusätzlich eine Reihe antippbarer **Vorschlags-Chips** mit gängigen Varianten (z. B. „Bio", „Vollkorn", „laktosefrei", „zuckerfrei", „groß", „klein") — ein Tipp fügt sie der Liste hinzu; bereits vorhandene werden dort ausgeblendet.
 - Die Liste wird beim **Speichern** zusammen mit den übrigen Feldern in `products.variants` gespeichert und gilt sofort für alle Nutzer.
