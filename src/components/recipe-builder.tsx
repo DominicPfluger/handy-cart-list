@@ -8,8 +8,12 @@ import { formatQuantity } from "../lib/units";
 import { ProductEmoji } from "./product-emoji";
 import { Button } from "./ui/button";
 import {
-  createCollection, deleteCollection, deleteRecipe, saveRecipe, useRecipeCollections,
+  createCollection, deleteCollection, deleteSaved, moveSaved, renameCollection, saveToFolder, useRecipeCollections,
 } from "../hooks/use-saved-recipes";
+import { useAuthUser } from "../hooks/use-auth-user";
+import { createRecipe, publishRecipe, shareLink, type RecipeItem } from "../lib/recipes-api";
+import { Link } from "@tanstack/react-router";
+import { toast } from "sonner";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -34,7 +38,9 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
   const [savedMsg, setSavedMsg] = useState(false);
   const [newName, setNewName] = useState("");
   const [customTitle, setCustomTitle] = useState("");
-  const collections = useRecipeCollections();
+  const user = useAuthUser();
+  const collections = useRecipeCollections(user);
+  const [busy, setBusy] = useState(false);
   const [onlyFav, setOnlyFav] = useState(false);
   const [showAllRecent, setShowAllRecent] = useState(false);
   const [showAllPopular, setShowAllPopular] = useState(false);
@@ -167,13 +173,44 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
     setAdded(true);
   };
 
-  const doSave = (collectionId: string) => {
-    if (!tpl) return;
-    saveRecipe(collectionId, { title: customTitle.trim() || title, templateId: tpl.id, picks });
-    setSaveOpen(false);
-    setNewName("");
-    setCustomTitle("");
-    setSavedMsg(true);
+  const recipeItems = (): RecipeItem[] => chosen.map((p) => ({
+    productId: p.id, name: p.name, emoji: p.emoji, quantity: formatQuantity(p.defaultQuantity, p.defaultUnit), unit: p.defaultUnit,
+  }));
+
+  const doSave = async (collectionId: string | null) => {
+    if (!tpl || !user || busy) return;
+    setBusy(true);
+    try {
+      const folderId = collectionId ?? (await createCollection(user.id, newName));
+      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: customTitle.trim() || title, templateId: tpl.id, picks, items: recipeItems() });
+      await saveToFolder(user.id, rec.id, folderId);
+      setSaveOpen(false);
+      setNewName("");
+      setCustomTitle("");
+      setSavedMsg(true);
+    } catch {
+      toast.error(t("cloud.error"));
+    } finally { setBusy(false); }
+  };
+
+  const doShare = async () => {
+    if (!tpl || !user || busy) return;
+    setBusy(true);
+    try {
+      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title, templateId: tpl.id, picks, items: recipeItems(), isPublic: true });
+      const how = await shareLink(rec.share_slug!, title);
+      if (how === "copied") toast.success(t("rs.linkCopied"));
+    } catch {
+      toast.error(t("cloud.error"));
+    } finally { setBusy(false); }
+  };
+
+  const shareSaved = async (recipeId: string, recTitle: string) => {
+    try {
+      const slug = await publishRecipe(recipeId);
+      const how = await shareLink(slug, recTitle);
+      if (how === "copied") toast.success(t("rs.linkCopied"));
+    } catch { toast.error(t("cloud.error")); }
   };
 
   const saveDialog = saveOpen && (
@@ -188,7 +225,7 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
         />
         {collections.map((c) => (
           <button key={c.id} onClick={() => doSave(c.id)} className="flex w-full items-center justify-between rounded-2xl border border-border bg-card px-4 py-3 text-left text-sm font-semibold text-foreground">
-            <span>📒 {c.name}</span><span className="text-xs text-muted-foreground">{c.recipes.length}</span>
+            <span>📁 {c.name}</span><span className="text-xs text-muted-foreground">{c.recipes.length}</span>
           </button>
         ))}
         <div className="flex gap-2">
@@ -199,7 +236,8 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
             className="min-w-0 flex-1 rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
           />
           <button
-            onClick={() => doSave(createCollection(newName))}
+            onClick={() => doSave(null)}
+            disabled={busy}
             className="shrink-0 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
           >
             + {t("rk.newCollection")}
@@ -275,8 +313,11 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
       {visibleCollections.map((c) => (
         <div key={c.id} className="space-y-2 rounded-2xl border border-border bg-card p-3">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-semibold text-foreground">📒 {c.name}</p>
-            <button onClick={() => deleteCollection(c.id)} className="text-xs text-muted-foreground">{t("rk.deleteList")}</button>
+            <p className="text-sm font-semibold text-foreground">📁 {c.name}</p>
+            <div className="flex gap-3">
+              <button onClick={() => { const n = window.prompt(t("rs.renameFolder"), c.name); if (n) void renameCollection(c.id, n); }} className="text-xs text-muted-foreground">{t("rs.rename")}</button>
+              <button onClick={() => { if (window.confirm(t("rs.confirmDeleteFolder"))) void deleteCollection(c.id); }} className="text-xs text-muted-foreground">{t("rk.deleteList")}</button>
+            </div>
           </div>
           {c.recipes.length === 0 ? (
             <p className="text-xs text-muted-foreground">{t("rk.emptyCollection")}</p>
@@ -291,7 +332,22 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
                 >
                   {r.title}
                 </button>
-                <button onClick={() => deleteRecipe(c.id, r.id)} aria-label="✕" className="px-2 text-sm text-muted-foreground">✕</button>
+                {collections.length > 1 && (
+                  <select
+                    aria-label={t("rs.move")}
+                    value={c.id}
+                    onChange={(e) => void moveSaved(r.id, e.target.value)}
+                    className="max-w-[5.5rem] rounded-md border border-border bg-card px-1 py-0.5 text-xs text-foreground"
+                  >
+                    {collections.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}
+                  </select>
+                )}
+                {r.isOwn ? (
+                  <button onClick={() => void shareSaved(r.recipeId, r.title)} aria-label={t("rs.share")} className="px-1 text-sm">🔗</button>
+                ) : r.shareSlug ? (
+                  <Link to="/rezept/$slug" params={{ slug: r.shareSlug }} aria-label={t("rs.open")} className="px-1 text-sm">↗</Link>
+                ) : null}
+                <button onClick={() => void deleteSaved(r.id)} aria-label="✕" className="px-2 text-sm text-muted-foreground">✕</button>
               </div>
             );
           })}
@@ -428,12 +484,27 @@ export function RecipeBuilder({ onTemplateChange }: { onTemplateChange?: (id: st
             >
               {added ? `✓ ${t("rk.added")}` : t("rk.addAll", { n: chosen.length })}
             </button>
-            <button
-              onClick={() => { setSavedMsg(false); setCustomTitle(title); setSaveOpen(true); }}
-              className="mt-2 w-full rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition active:scale-[0.98]"
-            >
-              {savedMsg ? `✓ ${t("rk.saved")}` : `📒 ${t("rk.save")}`}
-            </button>
+            {user ? (
+              <div className="mt-2 flex gap-2">
+                <button
+                  onClick={() => { setSavedMsg(false); setCustomTitle(title); setSaveOpen(true); }}
+                  className="flex-1 rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition active:scale-[0.98]"
+                >
+                  {savedMsg ? `✓ ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
+                </button>
+                <button
+                  onClick={() => void doShare()}
+                  disabled={busy}
+                  className="rounded-full border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition active:scale-[0.98] disabled:opacity-60"
+                >
+                  🔗 {t("rs.share")}
+                </button>
+              </div>
+            ) : user === null ? (
+              <Link to="/auth" className="mt-2 block w-full rounded-full border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary">
+                {t("rs.signInToSave")}
+              </Link>
+            ) : null}
           </>
         )}
       </div>
