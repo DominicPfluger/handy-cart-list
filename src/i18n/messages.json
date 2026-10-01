@@ -237,7 +237,7 @@
     "rk.popular": "Popular recipes",
     "rk.showAllRecent": "Show all recently created recipes",
     "rk.showAllPopular": "Show all popular recipes",
-    "rk.showLess": "Show less",
+    "rk.showLess": "Show less ▴",
     "rk.ingredientsN": "{n} ingredients",
     "rk.recipeTitle": "Title for your recipe",
     "rename.deleteCatalog": "Remove from catalog",
@@ -569,7 +569,13 @@
     "speak.introOne": "{name}. 1 open item.",
     "speak.noVoice": "No voice for this language is installed on your device. A fallback voice will be used.",
     "speak.followApp": "Same as app language",
-    "stx.custom": "customized"
+    "stx.custom": "customized",
+    "rk.showAll": "Show all {count} ▾",
+    "adm.recipeSortBy": "Sort by…",
+    "adm.recipeSortPopularity": "Popularity",
+    "adm.recipeSortRelevance": "Relevance",
+    "adm.recipeSortConfirm": "Re-sort this step with AI? Applies to all users.",
+    "adm.recipeSortDone": "Sorted"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -809,7 +815,7 @@
     "rk.popular": "Popular recipes",
     "rk.showAllRecent": "Show all recently created recipes",
     "rk.showAllPopular": "Show all popular recipes",
-    "rk.showLess": "Show less",
+    "rk.showLess": "Show less ▴",
     "rk.ingredientsN": "{n} ingredients",
     "rk.recipeTitle": "Title for your recipe",
     "rename.deleteCatalog": "Remove from catalogue",
@@ -1141,7 +1147,13 @@
     "speak.introOne": "{name}. 1 open item.",
     "speak.noVoice": "No voice for this language is installed on your device. A fallback voice will be used.",
     "speak.followApp": "Same as app language",
-    "stx.custom": "customized"
+    "stx.custom": "customized",
+    "rk.showAll": "Show all {count} ▾",
+    "adm.recipeSortBy": "Sort by…",
+    "adm.recipeSortPopularity": "Popularity",
+    "adm.recipeSortRelevance": "Relevance",
+    "adm.recipeSortConfirm": "Re-sort this step with AI? Applies to all users.",
+    "adm.recipeSortDone": "Sorted"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1381,7 +1393,7 @@
     "rk.popular": "Popular recipes",
     "rk.showAllRecent": "Show all recently created recipes",
     "rk.showAllPopular": "Show all popular recipes",
-    "rk.showLess": "Show less",
+    "rk.showLess": "Show less ▴",
     "rk.ingredientsN": "{n} ingredients",
     "rk.recipeTitle": "Title for your recipe",
     "rename.deleteCatalog": "Remove from catalog",
@@ -1713,7 +1725,13 @@
     "speak.introOne": "{name}. 1 open item.",
     "speak.noVoice": "No voice for this language is installed on your device. A fallback voice will be used.",
     "speak.followApp": "Same as app language",
-    "stx.custom": "customized"
+    "stx.custom": "customized",
+    "rk.showAll": "Show all {count} ▾",
+    "adm.recipeSortBy": "Sort by…",
+    "adm.recipeSortPopularity": "Popularity",
+    "adm.recipeSortRelevance": "Relevance",
+    "adm.recipeSortConfirm": "Re-sort this step with AI? Applies to all users.",
+    "adm.recipeSortDone": "Sorted"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -1953,7 +1971,7 @@
     "rk.popular": "Recetas populares",
     "rk.showAllRecent": "Mostrar todas las recetas creadas recientemente",
     "rk.showAllPopular": "Mostrar todas las recetas populares",
-    "rk.showLess": "Mostrar menos",
+    "rk.showLess": "Mostrar menos ▴",
     "rk.ingredientsN": "{n} ingredientes",
     "rk.recipeTitle": "Título para tu receta",
     "rename.deleteCatalog": "Eliminar del catálogo",
@@ -2285,7 +2303,13 @@
     "speak.introOne": "{name}. 1 artículo pendiente.",
     "speak.noVoice": "Tu dispositivo no tiene una voz instalada para este idioma. Se usará una voz alternativa.",
     "speak.followApp": "Igual que el idioma de la app",
-    "stx.custom": "personalizado"
+    "stx.custom": "personalizado",
+    "rk.showAll": "Mostrar todos ({count}) ▾",
+    "adm.recipeSortBy": "Ordenar por…",
+    "adm.recipeSortPopularity": "Popularidad",
+    "adm.recipeSortRelevance": "Relevancia",
+    "adm.recipeSortConfirm": "¿Reordenar este paso con IA? Se aplica a todos.",
+    "adm.recipeSortDone": "Ordenado"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2525,7 +2549,7 @@
     "rk.popular": "Recetas populares",
     "rk.showAllRecent": "Mostrar todas las recetas creadas recientemente",
     "rk.showAllPopular": "Mostrar todas las recetas populares",
-    "rk.showLess": "Mostrar menos",
+    "rk.showLess": "Mostrar menos ▴",
     "rk.ingredientsN": "{n} ingredientes",
     "rk.recipeTitle": "Título para tu receta",
     "rename.deleteCatalog": "Eliminar del catálogo",
@@ -2857,7 +2881,13 @@
     "speak.introOne": "{name}. 1 artículo pendiente.",
     "speak.noVoice": "Tu dispositivo no tiene una voz instalada para este idioma. Se usará una voz alternativa.",
     "speak.followApp": "Igual que el idioma de la app",
-    "stx.custom": "personalizado"
+    "stx.custom": "personalizado",
+    "rk.showAll": "Mostrar todos ({count}) ▾",
+    "adm.recipeSortBy": "Ordenar por…",
+    "adm.recipeSortPopularity": "Popularidad",
+    "adm.recipeSortRelevance": "Relevancia",
+    "adm.recipeSortConfirm": "¿Reordenar este paso con IA? Se aplica a todos.",
+    "adm.recipeSortDone": "Ordenado"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3097,7 +3127,7 @@
     "rk.popular": "Recettes populaires",
     "rk.showAllRecent": "Afficher toutes les recettes récemment créées",
     "rk.showAllPopular": "Afficher toutes les recettes populaires",
-    "rk.showLess": "Afficher moins",
+    "rk.showLess": "Afficher moins ▴",
     "rk.ingredientsN": "{n} ingrédients",
     "rk.recipeTitle": "Titre de votre recette",
     "rename.deleteCatalog": "Retirer du catalogue",
@@ -3429,7 +3459,13 @@
     "speak.introOne": "{name}. 1 article restant.",
     "speak.noVoice": "Aucune voix pour cette langue n'est installée sur votre appareil. Une voix de remplacement sera utilisée.",
     "speak.followApp": "Comme la langue de l'app",
-    "stx.custom": "personnalisé"
+    "stx.custom": "personnalisé",
+    "rk.showAll": "Tout afficher ({count}) ▾",
+    "adm.recipeSortBy": "Trier par…",
+    "adm.recipeSortPopularity": "Popularité",
+    "adm.recipeSortRelevance": "Pertinence",
+    "adm.recipeSortConfirm": "Retrier cette étape avec l'IA ? S'applique à tous.",
+    "adm.recipeSortDone": "Trié"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3669,7 +3705,7 @@
     "rk.popular": "Recettes populaires",
     "rk.showAllRecent": "Afficher toutes les recettes récemment créées",
     "rk.showAllPopular": "Afficher toutes les recettes populaires",
-    "rk.showLess": "Afficher moins",
+    "rk.showLess": "Afficher moins ▴",
     "rk.ingredientsN": "{n} ingrédients",
     "rk.recipeTitle": "Titre de votre recette",
     "rename.deleteCatalog": "Retirer du catalogue",
@@ -4001,7 +4037,13 @@
     "speak.introOne": "{name}. 1 article restant.",
     "speak.noVoice": "Aucune voix pour cette langue n'est installée sur votre appareil. Une voix de remplacement sera utilisée.",
     "speak.followApp": "Comme la langue de l'app",
-    "stx.custom": "personnalisé"
+    "stx.custom": "personnalisé",
+    "rk.showAll": "Tout afficher ({count}) ▾",
+    "adm.recipeSortBy": "Trier par…",
+    "adm.recipeSortPopularity": "Popularité",
+    "adm.recipeSortRelevance": "Pertinence",
+    "adm.recipeSortConfirm": "Retrier cette étape avec l'IA ? S'applique à tous.",
+    "adm.recipeSortDone": "Trié"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4241,7 +4283,7 @@
     "rk.popular": "Ricette popolari",
     "rk.showAllRecent": "Mostra tutte le ricette create di recente",
     "rk.showAllPopular": "Mostra tutte le ricette popolari",
-    "rk.showLess": "Mostra meno",
+    "rk.showLess": "Mostra meno ▴",
     "rk.ingredientsN": "{n} ingredienti",
     "rk.recipeTitle": "Titolo per la tua ricetta",
     "rename.deleteCatalog": "Rimuovi dal catalogo",
@@ -4573,7 +4615,13 @@
     "speak.introOne": "{name}. 1 articolo da comprare.",
     "speak.noVoice": "Sul dispositivo non è installata una voce per questa lingua. Verrà usata una voce alternativa.",
     "speak.followApp": "Come la lingua dell'app",
-    "stx.custom": "personalizzato"
+    "stx.custom": "personalizzato",
+    "rk.showAll": "Mostra tutti ({count}) ▾",
+    "adm.recipeSortBy": "Ordina per…",
+    "adm.recipeSortPopularity": "Popolarità",
+    "adm.recipeSortRelevance": "Rilevanza",
+    "adm.recipeSortConfirm": "Riordinare questo passaggio con l'IA? Vale per tutti.",
+    "adm.recipeSortDone": "Ordinato"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4813,7 +4861,7 @@
     "rk.popular": "Ricette popolari",
     "rk.showAllRecent": "Mostra tutte le ricette create di recente",
     "rk.showAllPopular": "Mostra tutte le ricette popolari",
-    "rk.showLess": "Mostra meno",
+    "rk.showLess": "Mostra meno ▴",
     "rk.ingredientsN": "{n} ingredienti",
     "rk.recipeTitle": "Titolo per la tua ricetta",
     "rename.deleteCatalog": "Rimuovi dal catalogo",
@@ -5145,7 +5193,13 @@
     "speak.introOne": "{name}. 1 articolo da comprare.",
     "speak.noVoice": "Sul dispositivo non è installata una voce per questa lingua. Verrà usata una voce alternativa.",
     "speak.followApp": "Come la lingua dell'app",
-    "stx.custom": "personalizzato"
+    "stx.custom": "personalizzato",
+    "rk.showAll": "Mostra tutti ({count}) ▾",
+    "adm.recipeSortBy": "Ordina per…",
+    "adm.recipeSortPopularity": "Popolarità",
+    "adm.recipeSortRelevance": "Rilevanza",
+    "adm.recipeSortConfirm": "Riordinare questo passaggio con l'IA? Vale per tutti.",
+    "adm.recipeSortDone": "Ordinato"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -5385,7 +5439,7 @@
     "rk.popular": "Receitas populares",
     "rk.showAllRecent": "Mostrar todas as receitas criadas recentemente",
     "rk.showAllPopular": "Mostrar todas as receitas populares",
-    "rk.showLess": "Mostrar menos",
+    "rk.showLess": "Mostrar menos ▴",
     "rk.ingredientsN": "{n} ingredientes",
     "rk.recipeTitle": "Título para a sua receita",
     "rename.deleteCatalog": "Remover do catálogo",
@@ -5717,7 +5771,13 @@
     "speak.introOne": "{name}. 1 artigo por comprar.",
     "speak.noVoice": "Não há voz instalada para este idioma no seu dispositivo. Será usada uma voz alternativa.",
     "speak.followApp": "Igual ao idioma da app",
-    "stx.custom": "personalizado"
+    "stx.custom": "personalizado",
+    "rk.showAll": "Mostrar todos ({count}) ▾",
+    "adm.recipeSortBy": "Ordenar por…",
+    "adm.recipeSortPopularity": "Popularidade",
+    "adm.recipeSortRelevance": "Relevância",
+    "adm.recipeSortConfirm": "Reordenar este passo com IA? Aplica-se a todos.",
+    "adm.recipeSortDone": "Ordenado"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5957,7 +6017,7 @@
     "rk.popular": "Receitas populares",
     "rk.showAllRecent": "Mostrar todas as receitas criadas recentemente",
     "rk.showAllPopular": "Mostrar todas as receitas populares",
-    "rk.showLess": "Mostrar menos",
+    "rk.showLess": "Mostrar menos ▴",
     "rk.ingredientsN": "{n} ingredientes",
     "rk.recipeTitle": "Título para a sua receita",
     "rename.deleteCatalog": "Remover do catálogo",
@@ -6289,7 +6349,13 @@
     "speak.introOne": "{name}. 1 item pendente.",
     "speak.noVoice": "Não há voz instalada para este idioma no seu dispositivo. Uma voz alternativa será usada.",
     "speak.followApp": "Igual ao idioma do app",
-    "stx.custom": "personalizado"
+    "stx.custom": "personalizado",
+    "rk.showAll": "Mostrar todos ({count}) ▾",
+    "adm.recipeSortBy": "Ordenar por…",
+    "adm.recipeSortPopularity": "Popularidade",
+    "adm.recipeSortRelevance": "Relevância",
+    "adm.recipeSortConfirm": "Reordenar este passo com IA? Aplica-se a todos.",
+    "adm.recipeSortDone": "Ordenado"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -6529,7 +6595,7 @@
     "rk.popular": "Populaire recepten",
     "rk.showAllRecent": "Alle recent gemaakte recepten tonen",
     "rk.showAllPopular": "Alle populaire recepten tonen",
-    "rk.showLess": "Minder tonen",
+    "rk.showLess": "Minder tonen ▴",
     "rk.ingredientsN": "{n} ingrediënten",
     "rk.recipeTitle": "Titel voor je recept",
     "rename.deleteCatalog": "Uit catalogus verwijderen",
@@ -6861,7 +6927,13 @@
     "speak.introOne": "{name}. 1 openstaand artikel.",
     "speak.noVoice": "Er is geen stem voor deze taal op je apparaat geïnstalleerd. Er wordt een vervangende stem gebruikt.",
     "speak.followApp": "Zelfde als app-taal",
-    "stx.custom": "aangepast"
+    "stx.custom": "aangepast",
+    "rk.showAll": "Alle {count} tonen ▾",
+    "adm.recipeSortBy": "Sorteren op…",
+    "adm.recipeSortPopularity": "Populariteit",
+    "adm.recipeSortRelevance": "Relevantie",
+    "adm.recipeSortConfirm": "Deze stap met AI opnieuw sorteren? Geldt voor iedereen.",
+    "adm.recipeSortDone": "Gesorteerd"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -7101,7 +7173,7 @@
     "rk.popular": "Populaire recepten",
     "rk.showAllRecent": "Alle recent gemaakte recepten tonen",
     "rk.showAllPopular": "Alle populaire recepten tonen",
-    "rk.showLess": "Minder tonen",
+    "rk.showLess": "Minder tonen ▴",
     "rk.ingredientsN": "{n} ingrediënten",
     "rk.recipeTitle": "Titel voor je recept",
     "rename.deleteCatalog": "Uit catalogus verwijderen",
@@ -7433,7 +7505,13 @@
     "speak.introOne": "{name}. 1 openstaand artikel.",
     "speak.noVoice": "Er is geen stem voor deze taal op je apparaat geïnstalleerd. Er wordt een vervangende stem gebruikt.",
     "speak.followApp": "Zelfde als app-taal",
-    "stx.custom": "aangepast"
+    "stx.custom": "aangepast",
+    "rk.showAll": "Alle {count} tonen ▾",
+    "adm.recipeSortBy": "Sorteren op…",
+    "adm.recipeSortPopularity": "Populariteit",
+    "adm.recipeSortRelevance": "Relevantie",
+    "adm.recipeSortConfirm": "Deze stap met AI opnieuw sorteren? Geldt voor iedereen.",
+    "adm.recipeSortDone": "Gesorteerd"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -7559,7 +7637,14 @@
     "speak.introOne": "{name}. 1 offener Artikel.",
     "speak.noVoice": "Für diese Sprache ist auf deinem Gerät keine Stimme installiert. Es wird eine Ersatzstimme verwendet.",
     "speak.followApp": "Wie App-Sprache",
-    "stx.custom": "angepasst"
+    "stx.custom": "angepasst",
+    "rk.showAll": "Alle {count} anzeigen ▾",
+    "rk.showLess": "Weniger anzeigen ▴",
+    "adm.recipeSortBy": "Sortieren nach…",
+    "adm.recipeSortPopularity": "Beliebtheit",
+    "adm.recipeSortRelevance": "Relevanz",
+    "adm.recipeSortConfirm": "Reihenfolge dieses Schritts per KI neu sortieren? Gilt für alle Nutzer.",
+    "adm.recipeSortDone": "Neu sortiert"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -7685,6 +7770,13 @@
     "speak.introOne": "{name}. 1 offener Artikel.",
     "speak.noVoice": "Für diese Sprache ist auf deinem Gerät keine Stimme installiert. Es wird eine Ersatzstimme verwendet.",
     "speak.followApp": "Wie App-Sprache",
-    "stx.custom": "angepasst"
+    "stx.custom": "angepasst",
+    "rk.showAll": "Alle {count} anzeigen ▾",
+    "rk.showLess": "Weniger anzeigen ▴",
+    "adm.recipeSortBy": "Sortieren nach…",
+    "adm.recipeSortPopularity": "Beliebtheit",
+    "adm.recipeSortRelevance": "Relevanz",
+    "adm.recipeSortConfirm": "Reihenfolge dieses Schritts per KI neu sortieren? Gilt für alle Nutzer.",
+    "adm.recipeSortDone": "Neu sortiert"
   }
 }
