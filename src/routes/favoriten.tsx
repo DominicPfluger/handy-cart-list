@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useFavoriteOrder, saveFavoriteOrder } from "../hooks/use-item-order";
@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
 import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
-import { useShoppingList, type FavoriteProduct } from "../hooks/use-shopping-list";
+import { useShoppingList, type FavoriteProduct, type ListItem } from "../hooks/use-shopping-list";
 import {
   catalogQueryOptions,
   useCatalog,
@@ -69,7 +69,8 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 }
 
 function FavoritesPage() {
-  const { addCatalogItem, favorites, hydrated, toggleFavorite } = useShoppingList();
+  const { addCatalogItem, createListFromItems, favorites, hydrated, selfName, toggleFavorite } = useShoppingList();
+  const navigate = useNavigate();
   const favOrder = useFavoriteOrder();
   const data = useCatalog();
   const { t } = useT();
@@ -243,6 +244,36 @@ function FavoritesPage() {
     });
   };
 
+  /** Alle Favoriten (in angezeigter Reihenfolge) in eine neue Einkaufsliste übertragen. */
+  const transferAllToNewList = () => {
+    const rows: FavRow[] = [
+      ...sections.flatMap((s) => s.entries.map((e) => e.row)),
+      ...[...looseFavorites].sort((a, b) => (favOrder[a.favorite.productId] ?? 1e9) - (favOrder[b.favorite.productId] ?? 1e9)),
+    ];
+    if (!rows.length) return;
+    const items: ListItem[] = rows.map((row, i) => {
+      const group = row.product.departmentId ? deptById.get(row.product.departmentId) : undefined;
+      return {
+        id: `i${Date.now()}-${i}`,
+        name: row.product.name,
+        quantity: formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit),
+        category: "sonstiges",
+        checked: false,
+        addedBy: selfName,
+        addedAt: Date.now(),
+        unit: row.favorite.defaultUnit,
+        emoji: row.favorite.emoji ?? undefined,
+        imageUrl: row.product.imageUrl ?? row.favorite.imageUrl,
+        groupLabel: group?.name ?? row.favorite.groupLabel,
+        groupEmoji: (group?.emoji ?? row.favorite.groupEmoji) ?? undefined,
+        productId: row.favorite.productId,
+      };
+    });
+    createListFromItems(t("fav.newListName"), items);
+    toast.success(t("fav.toListDone", { count: items.length }));
+    navigate({ to: "/" });
+  };
+
   const renderRow = (row: FavRow, { showCategory = false, sec, ids }: { showCategory?: boolean; sec?: string; ids?: string[] } = {}) => {
     const group = row.product.departmentId ? deptById.get(row.product.departmentId) : undefined;
     const id = row.favorite.productId;
@@ -319,6 +350,12 @@ function FavoritesPage() {
         <h1 className="text-2xl font-bold text-foreground">{t("nav.favorites")}</h1>
         <p className="mt-1 text-sm text-muted-foreground">{t("fav.subtitle")}</p>
       </div>
+
+      {hydrated && favorites.length > 0 && (
+        <Button type="button" variant="outline" className="w-full" onClick={transferAllToNewList}>
+          {t("fav.toList", { count: favorites.length })}
+        </Button>
+      )}
 
       <div className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
         <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />

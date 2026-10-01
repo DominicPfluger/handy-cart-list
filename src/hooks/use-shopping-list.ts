@@ -353,6 +353,7 @@ interface CloudListsApi {
   selfName: string;
   setActiveListId: (id: string) => void;
   createList: (name: string, isTemplate?: boolean) => string | undefined;
+  createListFromItems: (name: string, items: ListItem[]) => void;
   renameList: (id: string, name: string) => void;
   deleteList: (id: string) => void;
   reorderLists: (fromId: string, toId: string) => void;
@@ -796,6 +797,44 @@ function useCloudLists(
     if (activeListId) clearCloudChecked({ data: { listId: activeListId } }).catch(() => toast.error(t("cloud.error")));
   }, [setItems, activeListId]);
 
+  const createListFromItems = useCallback(
+    (name: string, items: ListItem[]) => {
+      if (!user) return;
+      const id = `tmp-${Date.now()}`;
+      const optimistic: ShoppingList = {
+        id,
+        name: name.trim() || t("list.defaultName"),
+        items,
+        createdAt: Date.now(),
+      };
+      setCloudLists((prev) => [...prev, optimistic]);
+      setActiveListId(id);
+      createCloudList({
+        data: {
+          name: name.trim() || t("list.defaultName"),
+          items: items.map((i) => itemToCloudInput({ ...i, checked: false }, selfName)),
+        },
+      })
+        .then((res) => {
+          const newId = String((res.list as CloudRow).id);
+          setCloudLists((prev) =>
+            prev.map((l) =>
+              l.id === id
+                ? { ...l, id: newId, inviteCode: (res.list as CloudRow).invite_code ?? null }
+                : l
+            )
+          );
+          setActiveListId(newId);
+          scheduleReload();
+        })
+        .catch(() => {
+          toast.error(t("cloud.error"));
+          setCloudLists((prev) => prev.filter((l) => l.id !== id));
+        });
+    },
+    [user, selfName, scheduleReload]
+  );
+
   return {
     lists,
     templates,
@@ -804,6 +843,7 @@ function useCloudLists(
     selfName,
     setActiveListId,
     createList,
+    createListFromItems,
     renameList,
     deleteList,
     reorderLists,
@@ -1020,6 +1060,7 @@ export function useShoppingList() {
       activeList: local.activeList,
       setActiveListId: local.setActiveListId,
       createList: local.createList,
+      createListFromItems: local.createListFromItems,
       renameList: local.renameList,
       deleteList: local.deleteList,
       reorderLists: local.reorderLists,
@@ -1054,6 +1095,7 @@ export function useShoppingList() {
     activeList: cloud.activeList,
     setActiveListId: cloud.setActiveListId,
     createList: cloud.createList,
+    createListFromItems: cloud.createListFromItems,
     renameList: cloud.renameList,
     deleteList: cloud.deleteList,
     reorderLists: cloud.reorderLists,
