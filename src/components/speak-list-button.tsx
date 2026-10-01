@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useT } from "../i18n";
+import { translate, useT } from "../i18n";
 import { useSpeakRate } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { fillSpeech, resolveSpeechText, useSpeechTexts } from "../lib/speech-texts";
@@ -11,10 +11,23 @@ export interface SpeakGroup {
 }
 
 /** Liest Sätze mit passender Stimme der gewünschten Sprache vor. */
+export function findVoice(locale: string): SpeechSynthesisVoice | undefined {
+  const voices = window.speechSynthesis.getVoices();
+  const norm = (l: string) => l.replace("_", "-").toLowerCase();
+  const lang = locale.slice(0, 2).toLowerCase();
+  return voices.find((v) => norm(v.lang) === locale.toLowerCase())
+    ?? voices.find((v) => norm(v.lang).split("-")[0] === lang);
+}
+
+/** true wenn Stimmen geladen sind, aber keine zur Sprache passt. */
+export function missingVoice(locale: string): boolean {
+  const voices = window.speechSynthesis.getVoices();
+  return voices.length > 0 && !findVoice(locale);
+}
+
 export function speakSentences(sentences: string[], locale: string, rate: number, onDone?: () => void) {
   const synth = window.speechSynthesis;
-  const voices = synth.getVoices();
-  const voice = voices.find((v) => v.lang.replace("_", "-") === locale) ?? voices.find((v) => v.lang.startsWith(locale.slice(0, 2)));
+  const voice = findVoice(locale);
   synth.cancel();
   const list = sentences.filter((s) => s.trim());
   list.forEach((text, i) => {
@@ -54,7 +67,8 @@ export function SpeakListButton({ title, groups }: { title: string; groups: (spe
     }
     const gs = groups(speakLocale).filter((g) => g.items.length);
     const count = gs.reduce((n, g) => n + g.items.length, 0);
-    const tx = (k: "intro" | "empty" | "group" | "outro") => resolveSpeechText(rows, speakLocale, k);
+    const tx = (k: "intro" | "empty" | "group" | "outro") => resolveSpeechText(rows, speakLocale, k, count);
+    if (missingVoice(speakLocale)) toast.warning(translate(speakLocale, "speak.noVoice"));
     const sentences = count === 0
       ? [fillSpeech(tx("empty"), { name: title, count: 0 })]
       : [
