@@ -29,19 +29,21 @@ export const Route = createFileRoute("/rezepte/generator")({
 
 function Page() {
   const { t } = useT();
-  const { recipe } = Route.useSearch();
+  const { recipe, cat } = Route.useSearch();
+  const initialTpl = RECIPE_TEMPLATES.find((x) => x.id === cat)?.id;
   const [tplId, setTplId] = useState<string | null>(null);
+  const shownTpl = tplId ?? initialTpl ?? null;
   return (
     <div className="space-y-5">
       <div>
         <Link to="/rezepte" className="text-xs font-semibold text-primary">← {t("nav.recipes")}</Link>
         <h1 className="mt-1 text-2xl font-bold tracking-tight text-foreground">
-          {tplId
-            ? `${RECIPE_TEMPLATES.find((x) => x.id === tplId)?.emoji ?? ""} ${t(`rk.cat.${tplId}` as MessageKey)}`.trim()
+          {shownTpl
+            ? `${RECIPE_TEMPLATES.find((x) => x.id === shownTpl)?.emoji ?? ""} ${t(`rk.cat.${shownTpl}` as MessageKey)}`.trim()
             : t("rec.entryGenTitle")}
         </h1>
       </div>
-      <RecipeBuilder mode="generator" onTemplateChange={setTplId} loadRecipeId={recipe} />
+      <RecipeBuilder mode="generator" onTemplateChange={setTplId} loadRecipeId={recipe} initialTemplateId={initialTpl} />
     </div>
   );
 }
