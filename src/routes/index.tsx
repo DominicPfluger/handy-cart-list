@@ -48,7 +48,7 @@ function ListPage() {
   const {
     items, hydrated, toggleItem, removeItem, clearChecked, addItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
-    templates, signedIn, saveAsTemplate, createFromTemplate, deleteTemplate, inviteLinkFor,
+    templates, saveAsTemplate, createFromTemplate, deleteTemplate,
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
