@@ -278,7 +278,8 @@ function FavoritesPage() {
         productId: row.favorite.productId,
       };
     });
-    createListFromItems(t("fav.newListName"), items);
+    createListFromItems(name, items);
+    setListNameOpen(false);
     toast.success(t("fav.toListDone", { count: items.length }));
     navigate({ to: "/" });
   };
@@ -361,7 +362,7 @@ function FavoritesPage() {
       </div>
 
       {hydrated && favorites.length > 0 && (
-        <Button type="button" variant="outline" className="w-full" onClick={transferAllToNewList}>
+        <Button type="button" variant="outline" className="w-full" onClick={openTransferDialog}>
           {t("fav.toList", { count: favorites.length })}
         </Button>
       )}
