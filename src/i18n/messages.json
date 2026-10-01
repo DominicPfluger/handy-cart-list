@@ -485,7 +485,9 @@
     "fav.toListDone": "{count} items added to a new list",
     "fav.newListName": "Favorites",
     "fav.listNameTitle": "New list from favorites",
-    "fav.listNamePlaceholder": "Name of the shopping list"
+    "fav.listNamePlaceholder": "Name of the shopping list",
+    "adm.recipeIngredients": "Recipe ingredients",
+    "adm.recipeStepEmpty": "No ingredients assigned yet — add via search."
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -973,7 +975,9 @@
     "fav.toListDone": "{count} items added to a new list",
     "fav.newListName": "Favourites",
     "fav.listNameTitle": "New list from favourites",
-    "fav.listNamePlaceholder": "Name of the shopping list"
+    "fav.listNamePlaceholder": "Name of the shopping list",
+    "adm.recipeIngredients": "Recipe ingredients",
+    "adm.recipeStepEmpty": "No ingredients assigned yet — add via search."
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1461,7 +1465,9 @@
     "fav.toListDone": "{count} items added to a new list",
     "fav.newListName": "Favorites",
     "fav.listNameTitle": "New list from favorites",
-    "fav.listNamePlaceholder": "Name of the shopping list"
+    "fav.listNamePlaceholder": "Name of the shopping list",
+    "adm.recipeIngredients": "Recipe ingredients",
+    "adm.recipeStepEmpty": "No ingredients assigned yet — add via search."
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -1949,7 +1955,9 @@
     "fav.toListDone": "{count} artículos añadidos a una lista nueva",
     "fav.newListName": "Favoritos",
     "fav.listNameTitle": "Nueva lista desde favoritos",
-    "fav.listNamePlaceholder": "Nombre de la lista de la compra"
+    "fav.listNamePlaceholder": "Nombre de la lista de la compra",
+    "adm.recipeIngredients": "Ingredientes de recetas",
+    "adm.recipeStepEmpty": "Aún no hay ingredientes asignados — añade mediante la búsqueda."
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2437,7 +2445,9 @@
     "fav.toListDone": "{count} artículos agregados a una lista nueva",
     "fav.newListName": "Favoritos",
     "fav.listNameTitle": "Nueva lista desde favoritos",
-    "fav.listNamePlaceholder": "Nombre de la lista de compras"
+    "fav.listNamePlaceholder": "Nombre de la lista de compras",
+    "adm.recipeIngredients": "Ingredientes de recetas",
+    "adm.recipeStepEmpty": "Aún no hay ingredientes asignados — agrega mediante la búsqueda."
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -2925,7 +2935,9 @@
     "fav.toListDone": "{count} articles ajoutés à une nouvelle liste",
     "fav.newListName": "Favoris",
     "fav.listNameTitle": "Nouvelle liste à partir des favoris",
-    "fav.listNamePlaceholder": "Nom de la liste de courses"
+    "fav.listNamePlaceholder": "Nom de la liste de courses",
+    "adm.recipeIngredients": "Ingrédients de recettes",
+    "adm.recipeStepEmpty": "Aucun ingrédient assigné — ajoutez via la recherche."
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3413,7 +3425,9 @@
     "fav.toListDone": "{count} articles ajoutés à une nouvelle liste",
     "fav.newListName": "Favoris",
     "fav.listNameTitle": "Nouvelle liste à partir des favoris",
-    "fav.listNamePlaceholder": "Nom de la liste d'épicerie"
+    "fav.listNamePlaceholder": "Nom de la liste d'épicerie",
+    "adm.recipeIngredients": "Ingrédients de recettes",
+    "adm.recipeStepEmpty": "Aucun ingrédient assigné — ajoutez via la recherche."
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -3901,7 +3915,9 @@
     "fav.toListDone": "{count} articoli aggiunti a una nuova lista",
     "fav.newListName": "Preferiti",
     "fav.listNameTitle": "Nuova lista dai preferiti",
-    "fav.listNamePlaceholder": "Nome della lista della spesa"
+    "fav.listNamePlaceholder": "Nome della lista della spesa",
+    "adm.recipeIngredients": "Ingredienti delle ricette",
+    "adm.recipeStepEmpty": "Nessun ingrediente assegnato — aggiungi tramite la ricerca."
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4389,7 +4405,9 @@
     "fav.toListDone": "{count} articoli aggiunti a una nuova lista",
     "fav.newListName": "Preferiti",
     "fav.listNameTitle": "Nuova lista dai preferiti",
-    "fav.listNamePlaceholder": "Nome della lista della spesa"
+    "fav.listNamePlaceholder": "Nome della lista della spesa",
+    "adm.recipeIngredients": "Ingredienti delle ricette",
+    "adm.recipeStepEmpty": "Nessun ingrediente assegnato — aggiungi tramite la ricerca."
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -4877,7 +4895,9 @@
     "fav.toListDone": "{count} artigos adicionados a uma nova lista",
     "fav.newListName": "Favoritos",
     "fav.listNameTitle": "Nova lista a partir dos favoritos",
-    "fav.listNamePlaceholder": "Nome da lista de compras"
+    "fav.listNamePlaceholder": "Nome da lista de compras",
+    "adm.recipeIngredients": "Ingredientes de receitas",
+    "adm.recipeStepEmpty": "Ainda sem ingredientes atribuídos — adicione através da pesquisa."
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5365,7 +5385,9 @@
     "fav.toListDone": "{count} itens adicionados a uma nova lista",
     "fav.newListName": "Favoritos",
     "fav.listNameTitle": "Nova lista a partir dos favoritos",
-    "fav.listNamePlaceholder": "Nome da lista de compras"
+    "fav.listNamePlaceholder": "Nome da lista de compras",
+    "adm.recipeIngredients": "Ingredientes de receitas",
+    "adm.recipeStepEmpty": "Ainda sem ingredientes atribuídos — adicione pela busca."
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -5853,7 +5875,9 @@
     "fav.toListDone": "{count} artikelen naar een nieuwe lijst overgezet",
     "fav.newListName": "Favorieten",
     "fav.listNameTitle": "Nieuwe lijst vanuit favorieten",
-    "fav.listNamePlaceholder": "Naam van de boodschappenlijst"
+    "fav.listNamePlaceholder": "Naam van de boodschappenlijst",
+    "adm.recipeIngredients": "Receptingrediënten",
+    "adm.recipeStepEmpty": "Nog geen ingrediënten toegewezen — voeg toe via zoeken."
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6341,7 +6365,9 @@
     "fav.toListDone": "{count} artikelen naar een nieuwe lijst overgezet",
     "fav.newListName": "Favorieten",
     "fav.listNameTitle": "Nieuwe lijst vanuit favorieten",
-    "fav.listNamePlaceholder": "Naam van de boodschappenlijst"
+    "fav.listNamePlaceholder": "Naam van de boodschappenlijst",
+    "adm.recipeIngredients": "Receptingrediënten",
+    "adm.recipeStepEmpty": "Nog geen ingrediënten toegewezen — voeg toe via zoeken."
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6387,7 +6413,9 @@
     "fav.toListDone": "{count} Einträge in neue Liste übernommen",
     "fav.newListName": "Favoriten",
     "fav.listNameTitle": "Neue Liste aus Favoriten",
-    "fav.listNamePlaceholder": "Name der Einkaufsliste"
+    "fav.listNamePlaceholder": "Name der Einkaufsliste",
+    "adm.recipeIngredients": "Rezept-Zutaten",
+    "adm.recipeStepEmpty": "Noch keine Zutaten zugewiesen — über die Suche hinzufügen."
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -6433,6 +6461,8 @@
     "fav.toListDone": "{count} Einträge in neue Liste übernommen",
     "fav.newListName": "Favoriten",
     "fav.listNameTitle": "Neue Liste aus Favoriten",
-    "fav.listNamePlaceholder": "Name der Einkaufsliste"
+    "fav.listNamePlaceholder": "Name der Einkaufsliste",
+    "adm.recipeIngredients": "Rezept-Zutaten",
+    "adm.recipeStepEmpty": "Noch keine Zutaten zugewiesen — über die Suche hinzufügen."
   }
 }
