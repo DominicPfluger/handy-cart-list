@@ -8,6 +8,8 @@ export const SHARE_EVENT = "shoppi:share";
 export interface SharePayload {
   title: string;
   text: string;
+  /** Eigene Überschrift statt „„{name}“ teilen“ */
+  heading?: string;
 }
 
 export function openShareSheet(payload: SharePayload) {
@@ -147,7 +149,7 @@ export function ShareSheet() {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-muted" />
-        <h2 className="text-lg font-semibold">{t("share.title", { name: payload.title })}</h2>
+        <h2 className="text-lg font-semibold">{payload.heading ?? t("share.title", { name: payload.title })}</h2>
         <p className="mb-4 text-sm text-muted-foreground">{t("share.choose")}</p>
         <div className="grid grid-cols-3 gap-4">
           {TARGETS.map((target) => (
