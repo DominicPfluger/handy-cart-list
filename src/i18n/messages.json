@@ -533,7 +533,9 @@
     "export.colBrand": "Brand",
     "export.colOrganic": "Organic",
     "export.colCategory": "Category",
-    "export.colNote": "Note"
+    "export.colNote": "Note",
+    "speak.rate": "Reading speed",
+    "speak.rateSub": "How fast the list is read aloud"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1069,7 +1071,9 @@
     "export.colBrand": "Brand",
     "export.colOrganic": "Organic",
     "export.colCategory": "Category",
-    "export.colNote": "Note"
+    "export.colNote": "Note",
+    "speak.rate": "Reading speed",
+    "speak.rateSub": "How fast the list is read aloud"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1605,7 +1609,9 @@
     "export.colBrand": "Brand",
     "export.colOrganic": "Organic",
     "export.colCategory": "Category",
-    "export.colNote": "Note"
+    "export.colNote": "Note",
+    "speak.rate": "Reading speed",
+    "speak.rateSub": "How fast the list is read aloud"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2141,7 +2147,9 @@
     "export.colBrand": "Marca",
     "export.colOrganic": "Ecológico",
     "export.colCategory": "Categoría",
-    "export.colNote": "Nota"
+    "export.colNote": "Nota",
+    "speak.rate": "Velocidad de lectura",
+    "speak.rateSub": "A qué velocidad se lee la lista en voz alta"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2677,7 +2685,9 @@
     "export.colBrand": "Marca",
     "export.colOrganic": "Ecológico",
     "export.colCategory": "Categoría",
-    "export.colNote": "Nota"
+    "export.colNote": "Nota",
+    "speak.rate": "Velocidad de lectura",
+    "speak.rateSub": "A qué velocidad se lee la lista en voz alta"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3213,7 +3223,9 @@
     "export.colBrand": "Marque",
     "export.colOrganic": "Bio",
     "export.colCategory": "Catégorie",
-    "export.colNote": "Note"
+    "export.colNote": "Note",
+    "speak.rate": "Vitesse de lecture",
+    "speak.rateSub": "Vitesse de lecture de la liste à voix haute"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3749,7 +3761,9 @@
     "export.colBrand": "Marque",
     "export.colOrganic": "Bio",
     "export.colCategory": "Catégorie",
-    "export.colNote": "Note"
+    "export.colNote": "Note",
+    "speak.rate": "Vitesse de lecture",
+    "speak.rateSub": "Vitesse de lecture de la liste à voix haute"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4285,7 +4299,9 @@
     "export.colBrand": "Marca",
     "export.colOrganic": "Bio",
     "export.colCategory": "Categoria",
-    "export.colNote": "Nota"
+    "export.colNote": "Nota",
+    "speak.rate": "Velocità di lettura",
+    "speak.rateSub": "Velocità di lettura della lista ad alta voce"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -4821,7 +4837,9 @@
     "export.colBrand": "Marca",
     "export.colOrganic": "Bio",
     "export.colCategory": "Categoria",
-    "export.colNote": "Nota"
+    "export.colNote": "Nota",
+    "speak.rate": "Velocità di lettura",
+    "speak.rateSub": "Velocità di lettura della lista ad alta voce"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -5357,7 +5375,9 @@
     "export.colBrand": "Marca",
     "export.colOrganic": "Biológico",
     "export.colCategory": "Categoria",
-    "export.colNote": "Nota"
+    "export.colNote": "Nota",
+    "speak.rate": "Velocidade de leitura",
+    "speak.rateSub": "A que velocidade a lista é lida em voz alta"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -5893,7 +5913,9 @@
     "export.colBrand": "Marca",
     "export.colOrganic": "Biológico",
     "export.colCategory": "Categoria",
-    "export.colNote": "Nota"
+    "export.colNote": "Nota",
+    "speak.rate": "Velocidade de leitura",
+    "speak.rateSub": "A que velocidade a lista é lida em voz alta"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -6429,7 +6451,9 @@
     "export.colBrand": "Merk",
     "export.colOrganic": "Bio",
     "export.colCategory": "Categorie",
-    "export.colNote": "Notitie"
+    "export.colNote": "Notitie",
+    "speak.rate": "Voorleessnelheid",
+    "speak.rateSub": "Hoe snel de lijst wordt voorgelezen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -6965,7 +6989,9 @@
     "export.colBrand": "Merk",
     "export.colOrganic": "Bio",
     "export.colCategory": "Categorie",
-    "export.colNote": "Notitie"
+    "export.colNote": "Notitie",
+    "speak.rate": "Voorleessnelheid",
+    "speak.rateSub": "Hoe snel de lijst wordt voorgelezen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -7055,7 +7081,9 @@
     "export.colBrand": "Marke",
     "export.colOrganic": "Bio",
     "export.colCategory": "Kategorie",
-    "export.colNote": "Notiz"
+    "export.colNote": "Notiz",
+    "speak.rate": "Vorlese-Geschwindigkeit",
+    "speak.rateSub": "Wie schnell die Liste vorgelesen wird"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -7145,6 +7173,8 @@
     "export.colBrand": "Marke",
     "export.colOrganic": "Bio",
     "export.colCategory": "Kategorie",
-    "export.colNote": "Notiz"
+    "export.colNote": "Notiz",
+    "speak.rate": "Vorlese-Geschwindigkeit",
+    "speak.rateSub": "Wie schnell die Liste vorgelesen wird"
   }
 }
