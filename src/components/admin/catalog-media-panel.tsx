@@ -50,9 +50,10 @@ export function CatalogMediaPanel() {
     setAllProgress({ done: 0, total });
     try {
       for (;;) {
-        const r = await genImages({ data: { limit: 10 } });
+        const r = await genImages({ data: { limit: 5 } });
         totalDone += r.done;
         setAllProgress({ done: totalDone, total });
+        setGenerated((g) => [...r.items, ...g].slice(0, 60));
         if (r.errors.length > 0) {
           toast.error(r.errors[0]!);
           break;
