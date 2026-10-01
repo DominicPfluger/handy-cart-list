@@ -15,3 +15,4 @@
 - Catalog-using routes use `ssr: false`; catalog loads in browser. Why: SSR embedded ~2.4 MB catalog per page, causing 'aborted' blank screens.
 - Cuisine filter uses `cuisines` + `product_cuisines` (admin-managed in /admin, AI-prefilled); selection device-local. Why: editable many-to-many.
 - Brands: `product_brands` (locales = market codes like CH/DE, empty = all), filtered via `brandsFor`; chosen brand is appended to the list item name ("Name · Marke"). Why: works identically for cloud and local lists without extra plumbing.
+- Recipe creator groups ingredients by admin-managed `recipe_groups` (2 levels, via recipe_ingredients.group_id), not departments. Why: user wants curated recipe categories independent of the store catalog.
