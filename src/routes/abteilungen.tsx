@@ -33,7 +33,7 @@ import {
 import { formatQuantity } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
-import { deptColor } from "../lib/dept-colors";
+import { deptColor, deptColorStrong } from "../lib/dept-colors";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
 import { VoiceInputButton } from "../components/voice-input";
 import { useIsAdmin } from "../hooks/use-is-admin";
@@ -546,6 +546,7 @@ function DepartmentsPage() {
             {childDepartments.map((department) => {
               const dropKind = drag?.target?.id === department.id ? drag.target.kind : null;
               const tileColor = deptColor(department, deptById);
+              const tileStrong = deptColorStrong(department, deptById);
               return (
               <div key={department.id} className="group relative min-w-0">
               <Button
@@ -569,7 +570,7 @@ function DepartmentsPage() {
                 >
                   <DepartmentThumb department={department} />
                 </span>
-                <span className="flex min-h-14 w-full items-center justify-center gap-2 px-3 py-2">
+                <span className="flex min-h-14 w-full items-center justify-center gap-2 px-3 py-2" style={tileStrong ? { backgroundColor: tileStrong } : undefined}>
                   <span className="min-w-0 text-center whitespace-normal text-[13px] font-bold leading-4 text-foreground">{department.name}</span>
                 </span>
               </Button>

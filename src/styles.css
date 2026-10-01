@@ -93,6 +93,26 @@
   --cat-kleidung: #EFF3FA;           /* Jeansblau-Hell */
   --cat-kuechenutensilien: #F8F0EB;  /* Kupfer-Hell */
   --cat-auto: #F1F2F4;               /* Anthrazit-Hell */
+  --cat-frischmarkt-strong: #D3EFD9;
+  --cat-milch-strong: #F1E8D3;
+  --cat-fleisch-strong: #F6D6D0;
+  --cat-deli-strong: #FCE2C9;
+  --cat-backwaren-strong: #F7EAC2;
+  --cat-vorraete-strong: #F1E1BE;
+  --cat-kochzutaten-strong: #F3D8CA;
+  --cat-tiefkuehl-strong: #CFE5F3;
+  --cat-getraenke-strong: #CAEDE7;
+  --cat-snacks-strong: #F8DEC4;
+  --cat-suess-strong: #F7D3E4;
+  --cat-koerperpflege-strong: #E3DBF4;
+  --cat-haushalt-strong: #CFEAF0;
+  --cat-apotheke-strong: #D5EBDC;
+  --cat-tierbedarf-strong: #ECDCC6;
+  --cat-buero-strong: #D8E0EB;
+  --cat-tabak-strong: #E3DCD4;
+  --cat-kleidung-strong: #D4E0F4;
+  --cat-kuechenutensilien-strong: #EED9CC;
+  --cat-auto-strong: #DCDFE4;
 }
 
 @layer base {
