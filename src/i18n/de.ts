@@ -200,6 +200,7 @@ export const de = {
   "more.hiddenCategoriesHint": "Diese Kategorien sind nur auf diesem Gerät ausgeblendet.",
   "more.hiddenProducts": "Ausgeblendete Produkte",
   "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet.",
+  "more.hiddenProductsEmpty": "Keine ausgeblendeten Produkte.",
   "more.restore": "Wiederherstellen",
   "more.tagline": "Shoppi · Gemeinsam. Einfach. Einkaufen.",
   "more.justNow": "gerade eben",
