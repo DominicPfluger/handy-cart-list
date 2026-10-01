@@ -18,7 +18,8 @@ export function CatalogMediaPanel() {
   const genImages = useServerFn(generateProductImages);
   const genPrices = useServerFn(generateReferencePrices);
   const [market, setMarket] = useState(getLocale().split("-")[1] ?? "CH");
-  const [busy, setBusy] = useState<"img" | "price" | null>(null);
+  const [busy, setBusy] = useState<"img" | "price" | "allImg" | null>(null);
+  const [allProgress, setAllProgress] = useState<{ done: number; total: number } | null>(null);
 
   const status = useQuery({
     queryKey: ["catalog-media-status", market],
