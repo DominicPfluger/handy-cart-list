@@ -849,6 +849,7 @@ export type Database = {
           author_name: string | null
           created_at: string
           id: string
+          image_path: string | null
           is_public: boolean
           items: Json
           owner_id: string
@@ -863,6 +864,7 @@ export type Database = {
           author_name?: string | null
           created_at?: string
           id?: string
+          image_path?: string | null
           is_public?: boolean
           items?: Json
           owner_id: string
@@ -877,6 +879,7 @@ export type Database = {
           author_name?: string | null
           created_at?: string
           id?: string
+          image_path?: string | null
           is_public?: boolean
           items?: Json
           owner_id?: string
@@ -1048,6 +1051,7 @@ export type Database = {
           avg_rating: number
           created_at: string
           id: string
+          image_path: string
           items: Json
           match_count: number
           product_ids: string[]
