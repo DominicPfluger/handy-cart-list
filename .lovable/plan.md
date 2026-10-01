@@ -1,32 +1,25 @@
-# Lieblingsmengen auf der Produkt-Detailseite
+# Ernährungsform-Filter im Rezept-Generator
 
 ## Ziel
-Auf der Produkt-Detailseite kannst du pro Produkt deine bevorzugte Menge (Anzahl + Einheit) speichern. Diese Lieblingsmenge wird beim Hinzufügen zur Einkaufsliste automatisch vorgeschlagen.
+
+Im Rezept-Generator lassen sich Ernährungsformen wählen (z. B. Vegan, Glutenfrei); nicht passende Zutaten werden in allen Schritten ausgeblendet — genau wie in der Abteilungsansicht.
 
 ## Umsetzung
 
-### 1. Speicherung (geräte-lokal)
-- Lieblingsmengen sind persönliche Einstellungen und werden wie die übrigen persönlichen Daten (Favoriten, versteckte Artikel) nur auf deinem Gerät gespeichert — nicht in der Datenbank, damit der gemeinsame Katalog unverändert bleibt.
-- Neuer Speicher-Schlüssel `shoppi:product-quantities` in `localStorage`: pro Produkt-ID eine Menge + Einheit.
-- Neuer kleiner Hook `src/hooks/use-favorite-quantity.ts` mit Lesen, Speichern und Löschen pro Produkt.
+1. **Filter-Chips im Generator** (`src/components/recipe-builder.tsx`)
+   - Unter der Kopfzeile (neben „Nur Favoriten") eine waagerecht scrollbare Zeile mit den 15 Ernährungsform-Chips (Icon + Name, wie in der Abteilungsansicht).
+   - Auswahl nutzt den bestehenden `useDietFilter`-Hook — die Wahl gilt damit automatisch auch in der Abteilungsansicht und bleibt auf dem Gerät gespeichert.
+2. **Zutaten filtern**
+   - In der `steps`-Berechnung: Zutaten ausblenden, deren `excludedDiets` eine gewählte Ernährungsform enthält (gleiche Logik wie `abteilungen.tsx`).
+   - Bereits gewählte Zutaten, die durch den Filter ausgeblendet werden, bleiben in der Auswahl sichtbar (wie beim 12er-Aufklappen), damit nichts still verloren geht.
+3. **Hinweis bei aktivem Filter**
+   - Kleiner Hinweistext „Nicht passende Zutaten werden ausgeblendet" (existiert bereits als `n.hint`), wenn mindestens eine Ernährungsform gewählt ist.
 
-### 2. Produkt-Detailseite (`src/routes/produkt.$id.tsx`)
-- Neuer Abschnitt „Meine Lieblingsmenge" unter den Produktdetails:
-  - Zahlenfeld für die Menge und Auswahl der Einheit (alle 33 Einheiten).
-  - Knopf „Als Lieblingsmenge speichern".
-  - Ist bereits eine Lieblingsmenge gespeichert, wird sie angezeigt und kann überschrieben oder mit „Zurücksetzen" gelöscht werden.
-  - Kurze Bestätigung per Toast nach dem Speichern.
-- Der Abschnitt ist für alle Nutzer sichtbar (nicht nur Admins), weil es eine persönliche Einstellung ist.
+## Technik
 
-### 3. Vorschlag beim Hinzufügen (`src/components/catalog-product-dialog.tsx`)
-- Beim Öffnen des „Zur Liste hinzufügen"-Dialogs wird — falls vorhanden — die gespeicherte Lieblingsmenge statt der Standard-Menge vorausgefüllt (Menge + Einheit).
-- Ohne Lieblingsmenge bleibt alles wie bisher (Standard-Menge des Produkts).
+- Kein neuer Speicher, keine Datenbankänderung: `use-diet-filter.ts` (localStorage `shoppi:diet-filter`) und die Übersetzungen `n.*` existieren bereits in allen 16 Sprachen.
+- `getCatalog` liefert `excludedDiets` bereits mit.
 
-### 4. Übersetzungen
-- Neue Texte (`pd.favQuantity`, `pd.saveFavQuantity`, `pd.resetFavQuantity`, `pd.favQuantitySaved`) in `src/i18n/de.ts` und allen 15 Sprachen in `messages.json`.
+## Prüfung
 
-## Technische Details
-- Kein Datenbank-Schema nötig (keine Migration).
-- Betroffene Dateien: `src/hooks/use-favorite-quantity.ts` (neu), `src/routes/produkt.$id.tsx`, `src/components/catalog-product-dialog.tsx`, `src/i18n/de.ts`, `src/i18n/messages.json`.
-- Einheiten kommen aus `getUnits(locale)` (33 Einheiten, bereits übersetzt).
-- Verifikation: Build-Log prüfen, dann in der Vorschau eine Lieblingsmenge speichern und prüfen, ob der Hinzufügen-Dialog sie vorausfüllt.
+- In der Vorschau: Generator öffnen, „Vegan" wählen, kontrollieren, dass z. B. Milchprodukte im Müsli-Schritt verschwinden; Filter wieder entfernen; Build-Log prüfen.
