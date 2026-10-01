@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { LOCALES, useT, type Locale } from "@/i18n";
+import { LOCALES, translate, useT, type Locale } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { useSpeakLocale } from "@/hooks/use-speak-locale";
 import { useSpeakRate } from "@/hooks/use-speak-rate";

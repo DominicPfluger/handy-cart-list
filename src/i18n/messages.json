@@ -565,7 +565,11 @@
     "stx.saved": "Read-aloud texts saved",
     "stx.sampleList": "Weekly shop",
     "stx.sampleCat": "Fruit and vegetables",
-    "stx.sampleItems": "2 apples, bananas, carrots"
+    "stx.sampleItems": "2 apples, bananas, carrots",
+    "speak.introOne": "{name}. 1 open item.",
+    "speak.noVoice": "No voice for this language is installed on your device. A fallback voice will be used.",
+    "speak.followApp": "Same as app language",
+    "stx.custom": "customized"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1133,7 +1137,11 @@
     "stx.saved": "Read-aloud texts saved",
     "stx.sampleList": "Weekly shop",
     "stx.sampleCat": "Fruit and vegetables",
-    "stx.sampleItems": "2 apples, bananas, carrots"
+    "stx.sampleItems": "2 apples, bananas, carrots",
+    "speak.introOne": "{name}. 1 open item.",
+    "speak.noVoice": "No voice for this language is installed on your device. A fallback voice will be used.",
+    "speak.followApp": "Same as app language",
+    "stx.custom": "customized"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -1701,7 +1709,11 @@
     "stx.saved": "Read-aloud texts saved",
     "stx.sampleList": "Weekly shop",
     "stx.sampleCat": "Fruit and vegetables",
-    "stx.sampleItems": "2 apples, bananas, carrots"
+    "stx.sampleItems": "2 apples, bananas, carrots",
+    "speak.introOne": "{name}. 1 open item.",
+    "speak.noVoice": "No voice for this language is installed on your device. A fallback voice will be used.",
+    "speak.followApp": "Same as app language",
+    "stx.custom": "customized"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -2269,7 +2281,11 @@
     "stx.saved": "Textos guardados",
     "stx.sampleList": "Compra semanal",
     "stx.sampleCat": "Frutas y verduras",
-    "stx.sampleItems": "2 manzanas, plátanos, zanahorias"
+    "stx.sampleItems": "2 manzanas, plátanos, zanahorias",
+    "speak.introOne": "{name}. 1 artículo pendiente.",
+    "speak.noVoice": "Tu dispositivo no tiene una voz instalada para este idioma. Se usará una voz alternativa.",
+    "speak.followApp": "Igual que el idioma de la app",
+    "stx.custom": "personalizado"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -2837,7 +2853,11 @@
     "stx.saved": "Textos guardados",
     "stx.sampleList": "Compra semanal",
     "stx.sampleCat": "Frutas y verduras",
-    "stx.sampleItems": "2 manzanas, plátanos, zanahorias"
+    "stx.sampleItems": "2 manzanas, plátanos, zanahorias",
+    "speak.introOne": "{name}. 1 artículo pendiente.",
+    "speak.noVoice": "Tu dispositivo no tiene una voz instalada para este idioma. Se usará una voz alternativa.",
+    "speak.followApp": "Igual que el idioma de la app",
+    "stx.custom": "personalizado"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -3405,7 +3425,11 @@
     "stx.saved": "Textes enregistrés",
     "stx.sampleList": "Courses de la semaine",
     "stx.sampleCat": "Fruits et légumes",
-    "stx.sampleItems": "2 pommes, bananes, carottes"
+    "stx.sampleItems": "2 pommes, bananes, carottes",
+    "speak.introOne": "{name}. 1 article restant.",
+    "speak.noVoice": "Aucune voix pour cette langue n'est installée sur votre appareil. Une voix de remplacement sera utilisée.",
+    "speak.followApp": "Comme la langue de l'app",
+    "stx.custom": "personnalisé"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -3973,7 +3997,11 @@
     "stx.saved": "Textes enregistrés",
     "stx.sampleList": "Courses de la semaine",
     "stx.sampleCat": "Fruits et légumes",
-    "stx.sampleItems": "2 pommes, bananes, carottes"
+    "stx.sampleItems": "2 pommes, bananes, carottes",
+    "speak.introOne": "{name}. 1 article restant.",
+    "speak.noVoice": "Aucune voix pour cette langue n'est installée sur votre appareil. Une voix de remplacement sera utilisée.",
+    "speak.followApp": "Comme la langue de l'app",
+    "stx.custom": "personnalisé"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -4541,7 +4569,11 @@
     "stx.saved": "Testi salvati",
     "stx.sampleList": "Spesa settimanale",
     "stx.sampleCat": "Frutta e verdura",
-    "stx.sampleItems": "2 mele, banane, carote"
+    "stx.sampleItems": "2 mele, banane, carote",
+    "speak.introOne": "{name}. 1 articolo da comprare.",
+    "speak.noVoice": "Sul dispositivo non è installata una voce per questa lingua. Verrà usata una voce alternativa.",
+    "speak.followApp": "Come la lingua dell'app",
+    "stx.custom": "personalizzato"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -5109,7 +5141,11 @@
     "stx.saved": "Testi salvati",
     "stx.sampleList": "Spesa settimanale",
     "stx.sampleCat": "Frutta e verdura",
-    "stx.sampleItems": "2 mele, banane, carote"
+    "stx.sampleItems": "2 mele, banane, carote",
+    "speak.introOne": "{name}. 1 articolo da comprare.",
+    "speak.noVoice": "Sul dispositivo non è installata una voce per questa lingua. Verrà usata una voce alternativa.",
+    "speak.followApp": "Come la lingua dell'app",
+    "stx.custom": "personalizzato"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -5677,7 +5713,11 @@
     "stx.saved": "Textos guardados",
     "stx.sampleList": "Compras da semana",
     "stx.sampleCat": "Frutas e legumes",
-    "stx.sampleItems": "2 maçãs, bananas, cenouras"
+    "stx.sampleItems": "2 maçãs, bananas, cenouras",
+    "speak.introOne": "{name}. 1 artigo por comprar.",
+    "speak.noVoice": "Não há voz instalada para este idioma no seu dispositivo. Será usada uma voz alternativa.",
+    "speak.followApp": "Igual ao idioma da app",
+    "stx.custom": "personalizado"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -6245,7 +6285,11 @@
     "stx.saved": "Textos guardados",
     "stx.sampleList": "Compras da semana",
     "stx.sampleCat": "Frutas e legumes",
-    "stx.sampleItems": "2 maçãs, bananas, cenouras"
+    "stx.sampleItems": "2 maçãs, bananas, cenouras",
+    "speak.introOne": "{name}. 1 item pendente.",
+    "speak.noVoice": "Não há voz instalada para este idioma no seu dispositivo. Uma voz alternativa será usada.",
+    "speak.followApp": "Igual ao idioma do app",
+    "stx.custom": "personalizado"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -6813,7 +6857,11 @@
     "stx.saved": "Teksten opgeslagen",
     "stx.sampleList": "Weekboodschappen",
     "stx.sampleCat": "Groente en fruit",
-    "stx.sampleItems": "2 appels, bananen, wortels"
+    "stx.sampleItems": "2 appels, bananen, wortels",
+    "speak.introOne": "{name}. 1 openstaand artikel.",
+    "speak.noVoice": "Er is geen stem voor deze taal op je apparaat geïnstalleerd. Er wordt een vervangende stem gebruikt.",
+    "speak.followApp": "Zelfde als app-taal",
+    "stx.custom": "aangepast"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -7381,7 +7429,11 @@
     "stx.saved": "Teksten opgeslagen",
     "stx.sampleList": "Weekboodschappen",
     "stx.sampleCat": "Groente en fruit",
-    "stx.sampleItems": "2 appels, bananen, wortels"
+    "stx.sampleItems": "2 appels, bananen, wortels",
+    "speak.introOne": "{name}. 1 openstaand artikel.",
+    "speak.noVoice": "Er is geen stem voor deze taal op je apparaat geïnstalleerd. Er wordt een vervangende stem gebruikt.",
+    "speak.followApp": "Zelfde als app-taal",
+    "stx.custom": "aangepast"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -7503,7 +7555,11 @@
     "stx.saved": "Vorlese-Texte gespeichert",
     "stx.sampleList": "Wocheneinkauf",
     "stx.sampleCat": "Obst und Gemüse",
-    "stx.sampleItems": "2 Äpfel, Bananen, Karotten"
+    "stx.sampleItems": "2 Äpfel, Bananen, Karotten",
+    "speak.introOne": "{name}. 1 offener Artikel.",
+    "speak.noVoice": "Für diese Sprache ist auf deinem Gerät keine Stimme installiert. Es wird eine Ersatzstimme verwendet.",
+    "speak.followApp": "Wie App-Sprache",
+    "stx.custom": "angepasst"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -7625,6 +7681,10 @@
     "stx.saved": "Vorlese-Texte gespeichert",
     "stx.sampleList": "Wocheneinkauf",
     "stx.sampleCat": "Obst und Gemüse",
-    "stx.sampleItems": "2 Äpfel, Bananen, Karotten"
+    "stx.sampleItems": "2 Äpfel, Bananen, Karotten",
+    "speak.introOne": "{name}. 1 offener Artikel.",
+    "speak.noVoice": "Für diese Sprache ist auf deinem Gerät keine Stimme installiert. Es wird eine Ersatzstimme verwendet.",
+    "speak.followApp": "Wie App-Sprache",
+    "stx.custom": "angepasst"
   }
 }
