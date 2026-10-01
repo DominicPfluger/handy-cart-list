@@ -196,6 +196,130 @@ export type Database = {
         }
         Relationships: []
       }
+      import_candidates: {
+        Row: {
+          created_at: string
+          currency: string | null
+          department_id: string | null
+          emoji: string | null
+          id: string
+          market: string
+          match_product_id: string | null
+          match_type: string
+          pack_size: number | null
+          pack_unit: string | null
+          price: number | null
+          raw_name: string
+          source_id: string | null
+          source_url: string | null
+          status: string
+          suggested_name: string
+          unit_basis: string | null
+          unit_price: number | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string | null
+          department_id?: string | null
+          emoji?: string | null
+          id?: string
+          market?: string
+          match_product_id?: string | null
+          match_type?: string
+          pack_size?: number | null
+          pack_unit?: string | null
+          price?: number | null
+          raw_name: string
+          source_id?: string | null
+          source_url?: string | null
+          status?: string
+          suggested_name: string
+          unit_basis?: string | null
+          unit_price?: number | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string | null
+          department_id?: string | null
+          emoji?: string | null
+          id?: string
+          market?: string
+          match_product_id?: string | null
+          match_type?: string
+          pack_size?: number | null
+          pack_unit?: string | null
+          price?: number | null
+          raw_name?: string
+          source_id?: string | null
+          source_url?: string | null
+          status?: string
+          suggested_name?: string
+          unit_basis?: string | null
+          unit_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "import_candidates_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "import_candidates_match_product_id_fkey"
+            columns: ["match_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "import_candidates_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "import_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      import_sources: {
+        Row: {
+          created_at: string
+          enabled: boolean
+          id: string
+          interval: string
+          last_run_at: string | null
+          last_status: string | null
+          market: string
+          name: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          interval?: string
+          last_run_at?: string | null
+          last_status?: string | null
+          market?: string
+          name: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          interval?: string
+          last_run_at?: string | null
+          last_status?: string | null
+          market?: string
+          name?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
       list_items: {
         Row: {
           added_by: string | null
@@ -592,6 +716,69 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_reference_prices: {
+        Row: {
+          created_at: string
+          currency: string
+          id: string
+          market: string
+          observed_at: string
+          pack_size: number | null
+          pack_unit: string | null
+          price: number
+          product_id: string
+          source_id: string | null
+          unit_basis: string | null
+          unit_price: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency: string
+          id?: string
+          market: string
+          observed_at?: string
+          pack_size?: number | null
+          pack_unit?: string | null
+          price: number
+          product_id: string
+          source_id?: string | null
+          unit_basis?: string | null
+          unit_price?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency?: string
+          id?: string
+          market?: string
+          observed_at?: string
+          pack_size?: number | null
+          pack_unit?: string | null
+          price?: number
+          product_id?: string
+          source_id?: string | null
+          unit_basis?: string | null
+          unit_price?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_reference_prices_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_reference_prices_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "import_sources"
             referencedColumns: ["id"]
           },
         ]
