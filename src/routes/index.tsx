@@ -312,8 +312,8 @@ function ListPage() {
         {grouped.map((group) => {
           return (
             <div key={group.key}>
-              <div className="mb-2 flex items-center gap-2">
-                <span className="text-base">{group.emoji}</span>
+              <div className="mb-2 flex items-center gap-1.5">
+                <span className="text-lg">{group.emoji}</span>
                 <h2 className="text-sm font-semibold text-foreground">{group.label}</h2>
               </div>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
@@ -325,7 +325,7 @@ function ListPage() {
                   <Fragment key={item.id}>
                   {showH && <div className="bg-muted/50 px-4 pb-1.5 pt-3 text-sm font-bold text-foreground">{h.name}</div>}
                   <div
-                    className="relative flex items-center gap-3 py-3 pl-4 pr-4"
+                    className="relative flex items-center gap-2.5 py-2.5 pl-3 pr-3"
                   >
                     <button
                       onClick={() => toggleItem(item.id)}
@@ -344,7 +344,7 @@ function ListPage() {
                       const color = (colorDept ? deptColor(colorDept, deptById) : undefined) ?? deptColorByLabel(group.label);
                       return (
                     <div
-                      className={`grid h-8 w-8 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-base ${color ? "" : "bg-primary-soft/25"}`}
+                      className={`grid h-7 w-7 shrink-0 select-none place-items-center overflow-hidden rounded-md text-[19px] ${color ? "" : "bg-primary-soft/25"}`}
                       style={color ? { backgroundColor: color } : undefined}
                     >
                        <ProductEmoji emoji={item.emoji} />
