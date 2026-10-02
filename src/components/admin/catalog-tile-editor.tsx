@@ -60,7 +60,7 @@ export function CatalogTileEditor(p: {
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const headingBefore = useMemo(() => new Map((p.headings ?? []).map((h) => [h.before_product_id, h])), [p.headings]);
-  const [editMode, setEditMode] = useState(true);
+  const editMode = true;
   const [target, setTarget] = useState<Target>(null);
   const [drag, setDrag] = useState<Drag>(null);
   const [over, setOver] = useState<string | null>(null);
@@ -141,15 +141,7 @@ export function CatalogTileEditor(p: {
 
   return (
     <div className="space-y-3">
-      <div className="flex rounded-xl bg-muted p-1 text-sm font-semibold">
-        {([true, false] as const).map((m) => (
-          <button key={String(m)} type="button" onClick={() => { setEditMode(m); setTarget(null); }}
-            className={`flex-1 rounded-lg py-1.5 ${editMode === m ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}>
-            {m ? T("tile.edit") : T("tile.preview")}
-          </button>
-        ))}
-      </div>
-      {editMode && <p className="text-xs text-muted-foreground">{T("tile.hint")}</p>}
+      <p className="text-xs text-muted-foreground">{T("tile.hint")}</p>
 
       <nav className="flex flex-wrap items-center gap-1 text-sm">
         <button type="button" data-drop="crumb" data-id="" onClick={() => p.setCur(null)}
