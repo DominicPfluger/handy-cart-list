@@ -1,15 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductEmoji } from "./product-emoji";
 import { useIconSet } from "../hooks/use-icon-set";
 import { cachedCatalogImage } from "../lib/catalog-image-cache";
 
 function CachedImage({ path, signedUrl, className, fallback }: { path?: string | null | undefined; signedUrl?: string | null | undefined; className: string; fallback: React.ReactNode }) {
   const [url, setUrl] = useState<string | null>(null);
-  const tried = useRef<string | null>(null);
   useEffect(() => {
     if (!path) return;
-    if (tried.current === path && !signedUrl) return;
-    tried.current = path;
     let active = true;
     let objectUrl: string | null = null;
     cachedCatalogImage(path, signedUrl).then((result) => {
