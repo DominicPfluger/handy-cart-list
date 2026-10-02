@@ -959,7 +959,7 @@
     "price.catTitle": "Estimate prices for a category",
     "price.catPick": "Choose category …",
     "price.catRun": "Estimate category prices",
-    "price.catConfirm": "Estimate reference prices for category \"{name}\" in market {market}? Missing prices will be added.",
+    "price.catConfirm": "Estimate reference prices for the category “{name}” in {market}? Missing prices will be added.",
     "price.catDone": "{done} of {total} prices estimated",
     "price.listSearch": "Search product",
     "price.listEmpty": "No reference prices yet",
@@ -1128,7 +1128,9 @@
     "adm.popularNew": "Add combination",
     "adm.popularHint": "Step: products (comma separated), e.g. base: Oats; fruit: Bananas",
     "adm.popularDeleteConfirm": "Delete this combination?",
-    "adm.exportTxt": "Export as text file"
+    "adm.exportTxt": "Export as text file",
+    "media.genPricesMulti": "Estimate 50 prices ({n} markets)",
+    "media.priceProgress": "{market} · {done} of {total} markets"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2090,7 +2092,7 @@
     "price.catTitle": "Estimate prices for a category",
     "price.catPick": "Choose category …",
     "price.catRun": "Estimate category prices",
-    "price.catConfirm": "Estimate reference prices for category \"{name}\" in market {market}? Missing prices will be added.",
+    "price.catConfirm": "Estimate reference prices for the category “{name}” in {market}? Missing prices will be added.",
     "price.catDone": "{done} of {total} prices estimated",
     "price.listSearch": "Search product",
     "price.listEmpty": "No reference prices yet",
@@ -2259,7 +2261,9 @@
     "adm.popularNew": "Add combination",
     "adm.popularHint": "Step: products (comma separated), e.g. base: Oats; fruit: Bananas",
     "adm.popularDeleteConfirm": "Delete this combination?",
-    "adm.exportTxt": "Export as text file"
+    "adm.exportTxt": "Export as text file",
+    "media.genPricesMulti": "Estimate 50 prices ({n} markets)",
+    "media.priceProgress": "{market} · {done} of {total} markets"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3221,7 +3225,7 @@
     "price.catTitle": "Estimate prices for a category",
     "price.catPick": "Choose category …",
     "price.catRun": "Estimate category prices",
-    "price.catConfirm": "Estimate reference prices for category \"{name}\" in market {market}? Missing prices will be added.",
+    "price.catConfirm": "Estimate reference prices for the category “{name}” in {market}? Missing prices will be added.",
     "price.catDone": "{done} of {total} prices estimated",
     "price.listSearch": "Search product",
     "price.listEmpty": "No reference prices yet",
@@ -3390,7 +3394,9 @@
     "adm.popularNew": "Add combination",
     "adm.popularHint": "Step: products (comma separated), e.g. base: Oats; fruit: Bananas",
     "adm.popularDeleteConfirm": "Delete this combination?",
-    "adm.exportTxt": "Export as text file"
+    "adm.exportTxt": "Export as text file",
+    "media.genPricesMulti": "Estimate 50 prices ({n} markets)",
+    "media.priceProgress": "{market} · {done} of {total} markets"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4352,7 +4358,7 @@
     "price.catTitle": "Estimar precios de una categoría",
     "price.catPick": "Elegir categoría …",
     "price.catRun": "Estimar precios de la categoría",
-    "price.catConfirm": "¿Estimar los precios orientativos de la categoría \"{name}\" en el mercado {market}? Se añadirán los precios que falten.",
+    "price.catConfirm": "¿Estimar precios de referencia para la categoría «{name}» en {market}? Se añadirán los precios que falten.",
     "price.catDone": "{done} de {total} precios estimados",
     "price.listSearch": "Buscar producto",
     "price.listEmpty": "Aún no hay precios",
@@ -4521,7 +4527,9 @@
     "adm.popularNew": "Añadir combinación",
     "adm.popularHint": "Paso: productos (separados por comas), p. ej. base: Copos de avena; fruit: Plátanos",
     "adm.popularDeleteConfirm": "¿Eliminar esta combinación?",
-    "adm.exportTxt": "Exportar como archivo de texto"
+    "adm.exportTxt": "Exportar como archivo de texto",
+    "media.genPricesMulti": "Estimar 50 precios ({n} mercados)",
+    "media.priceProgress": "{market} · {done} de {total} mercados"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5483,7 +5491,7 @@
     "price.catTitle": "Estimar precios de una categoría",
     "price.catPick": "Elegir categoría …",
     "price.catRun": "Estimar precios de la categoría",
-    "price.catConfirm": "¿Estimar los precios orientativos de la categoría \"{name}\" en el mercado {market}? Se añadirán los precios que falten.",
+    "price.catConfirm": "¿Estimar precios de referencia para la categoría «{name}» en {market}? Se agregarán los precios faltantes.",
     "price.catDone": "{done} de {total} precios estimados",
     "price.listSearch": "Buscar producto",
     "price.listEmpty": "Aún no hay precios",
@@ -5652,7 +5660,9 @@
     "adm.popularNew": "Añadir combinación",
     "adm.popularHint": "Paso: productos (separados por comas), p. ej. base: Copos de avena; fruit: Plátanos",
     "adm.popularDeleteConfirm": "¿Eliminar esta combinación?",
-    "adm.exportTxt": "Exportar como archivo de texto"
+    "adm.exportTxt": "Exportar como archivo de texto",
+    "media.genPricesMulti": "Estimar 50 precios ({n} mercados)",
+    "media.priceProgress": "{market} · {done} de {total} mercados"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6614,7 +6624,7 @@
     "price.catTitle": "Estimer les prix d'une catégorie",
     "price.catPick": "Choisir une catégorie …",
     "price.catRun": "Estimer les prix de la catégorie",
-    "price.catConfirm": "Estimer les prix indicatifs de la catégorie « {name} » pour le marché {market} ? Les prix manquants seront ajoutés.",
+    "price.catConfirm": "Estimer les prix indicatifs de la catégorie « {name} » pour {market} ? Les prix manquants seront ajoutés.",
     "price.catDone": "{done} prix sur {total} estimés",
     "price.listSearch": "Rechercher un produit",
     "price.listEmpty": "Aucun prix indicatif",
@@ -6783,7 +6793,9 @@
     "adm.popularNew": "Ajouter une combinaison",
     "adm.popularHint": "Étape : produits (séparés par des virgules), p. ex. base : Flocons d'avoine ; fruit : Bananes",
     "adm.popularDeleteConfirm": "Supprimer cette combinaison ?",
-    "adm.exportTxt": "Exporter en fichier texte"
+    "adm.exportTxt": "Exporter en fichier texte",
+    "media.genPricesMulti": "Estimer 50 prix ({n} marchés)",
+    "media.priceProgress": "{market} · {done} sur {total} marchés"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7745,7 +7757,7 @@
     "price.catTitle": "Estimer les prix d'une catégorie",
     "price.catPick": "Choisir une catégorie …",
     "price.catRun": "Estimer les prix de la catégorie",
-    "price.catConfirm": "Estimer les prix indicatifs de la catégorie « {name} » pour le marché {market} ? Les prix manquants seront ajoutés.",
+    "price.catConfirm": "Estimer les prix indicatifs de la catégorie « {name} » pour {market} ? Les prix manquants seront ajoutés.",
     "price.catDone": "{done} prix sur {total} estimés",
     "price.listSearch": "Rechercher un produit",
     "price.listEmpty": "Aucun prix indicatif",
@@ -7914,7 +7926,9 @@
     "adm.popularNew": "Ajouter une combinaison",
     "adm.popularHint": "Étape : produits (séparés par des virgules), p. ex. base : Flocons d'avoine ; fruit : Bananes",
     "adm.popularDeleteConfirm": "Supprimer cette combinaison ?",
-    "adm.exportTxt": "Exporter en fichier texte"
+    "adm.exportTxt": "Exporter en fichier texte",
+    "media.genPricesMulti": "Estimer 50 prix ({n} marchés)",
+    "media.priceProgress": "{market} · {done} sur {total} marchés"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8876,7 +8890,7 @@
     "price.catTitle": "Stima i prezzi di una categoria",
     "price.catPick": "Scegli categoria …",
     "price.catRun": "Stima i prezzi della categoria",
-    "price.catConfirm": "Stimare i prezzi indicativi della categoria \"{name}\" per il mercato {market}? I prezzi mancanti verranno aggiunti.",
+    "price.catConfirm": "Stimare i prezzi indicativi per la categoria «{name}» in {market}? I prezzi mancanti verranno aggiunti.",
     "price.catDone": "{done} prezzi su {total} stimati",
     "price.listSearch": "Cerca prodotto",
     "price.listEmpty": "Nessun prezzo indicativo",
@@ -9045,7 +9059,9 @@
     "adm.popularNew": "Aggiungi combinazione",
     "adm.popularHint": "Passaggio: prodotti (separati da virgola), es. base: Fiocchi d'avena; fruit: Banane",
     "adm.popularDeleteConfirm": "Eliminare questa combinazione?",
-    "adm.exportTxt": "Esporta come file di testo"
+    "adm.exportTxt": "Esporta come file di testo",
+    "media.genPricesMulti": "Stima 50 prezzi ({n} mercati)",
+    "media.priceProgress": "{market} · {done} di {total} mercati"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10007,7 +10023,7 @@
     "price.catTitle": "Stima i prezzi di una categoria",
     "price.catPick": "Scegli categoria …",
     "price.catRun": "Stima i prezzi della categoria",
-    "price.catConfirm": "Stimare i prezzi indicativi della categoria \"{name}\" per il mercato {market}? I prezzi mancanti verranno aggiunti.",
+    "price.catConfirm": "Stimare i prezzi indicativi per la categoria «{name}» in {market}? I prezzi mancanti verranno aggiunti.",
     "price.catDone": "{done} prezzi su {total} stimati",
     "price.listSearch": "Cerca prodotto",
     "price.listEmpty": "Nessun prezzo indicativo",
@@ -10176,7 +10192,9 @@
     "adm.popularNew": "Aggiungi combinazione",
     "adm.popularHint": "Passaggio: prodotti (separati da virgola), es. base: Fiocchi d'avena; fruit: Banane",
     "adm.popularDeleteConfirm": "Eliminare questa combinazione?",
-    "adm.exportTxt": "Esporta come file di testo"
+    "adm.exportTxt": "Esporta come file di testo",
+    "media.genPricesMulti": "Stima 50 prezzi ({n} mercati)",
+    "media.priceProgress": "{market} · {done} di {total} mercati"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11138,7 +11156,7 @@
     "price.catTitle": "Estimar preços de uma categoria",
     "price.catPick": "Escolher categoria …",
     "price.catRun": "Estimar preços da categoria",
-    "price.catConfirm": "Estimar os preços de referência da categoria \"{name}\" no mercado {market}? Os preços em falta serão adicionados.",
+    "price.catConfirm": "Estimar preços de referência para a categoria «{name}» em {market}? Os preços em falta serão adicionados.",
     "price.catDone": "{done} de {total} preços estimados",
     "price.listSearch": "Pesquisar produto",
     "price.listEmpty": "Ainda sem preços",
@@ -11307,7 +11325,9 @@
     "adm.popularNew": "Adicionar combinação",
     "adm.popularHint": "Passo: produtos (separados por vírgula), ex. base: Flocos de aveia; fruit: Bananas",
     "adm.popularDeleteConfirm": "Eliminar esta combinação?",
-    "adm.exportTxt": "Exportar como ficheiro de texto"
+    "adm.exportTxt": "Exportar como ficheiro de texto",
+    "media.genPricesMulti": "Estimar 50 preços ({n} mercados)",
+    "media.priceProgress": "{market} · {done} de {total} mercados"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12269,7 +12289,7 @@
     "price.catTitle": "Estimar preços de uma categoria",
     "price.catPick": "Escolher categoria …",
     "price.catRun": "Estimar preços da categoria",
-    "price.catConfirm": "Estimar os preços de referência da categoria \"{name}\" no mercado {market}? Os preços em falta serão adicionados.",
+    "price.catConfirm": "Estimar preços de referência para a categoria «{name}» em {market}? Os preços ausentes serão adicionados.",
     "price.catDone": "{done} de {total} preços estimados",
     "price.listSearch": "Pesquisar produto",
     "price.listEmpty": "Ainda sem preços",
@@ -12438,7 +12458,9 @@
     "adm.popularNew": "Adicionar combinação",
     "adm.popularHint": "Passo: produtos (separados por vírgula), ex. base: Flocos de aveia; fruit: Bananas",
     "adm.popularDeleteConfirm": "Eliminar esta combinação?",
-    "adm.exportTxt": "Exportar como arquivo de texto"
+    "adm.exportTxt": "Exportar como arquivo de texto",
+    "media.genPricesMulti": "Estimar 50 preços ({n} mercados)",
+    "media.priceProgress": "{market} · {done} de {total} mercados"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13400,7 +13422,7 @@
     "price.catTitle": "Prijzen van een categorie schatten",
     "price.catPick": "Kies categorie …",
     "price.catRun": "Categorieprijzen schatten",
-    "price.catConfirm": "Richtprijzen voor categorie \"{name}\" in markt {market} schatten? Ontbrekende prijzen worden toegevoegd.",
+    "price.catConfirm": "Richtprijzen voor de categorie „{name}“ in {market} schatten? Ontbrekende prijzen worden toegevoegd.",
     "price.catDone": "{done} van {total} prijzen geschat",
     "price.listSearch": "Product zoeken",
     "price.listEmpty": "Nog geen richtprijzen",
@@ -13569,7 +13591,9 @@
     "adm.popularNew": "Combinatie toevoegen",
     "adm.popularHint": "Stap: producten (kommagescheiden), bijv. base: Havervlokken; fruit: Bananen",
     "adm.popularDeleteConfirm": "Deze combinatie verwijderen?",
-    "adm.exportTxt": "Exporteren als tekstbestand"
+    "adm.exportTxt": "Exporteren als tekstbestand",
+    "media.genPricesMulti": "50 prijzen schatten ({n} markten)",
+    "media.priceProgress": "{market} · {done} van {total} markten"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14531,7 +14555,7 @@
     "price.catTitle": "Prijzen van een categorie schatten",
     "price.catPick": "Kies categorie …",
     "price.catRun": "Categorieprijzen schatten",
-    "price.catConfirm": "Richtprijzen voor categorie \"{name}\" in markt {market} schatten? Ontbrekende prijzen worden toegevoegd.",
+    "price.catConfirm": "Richtprijzen voor de categorie „{name}“ in {market} schatten? Ontbrekende prijzen worden toegevoegd.",
     "price.catDone": "{done} van {total} prijzen geschat",
     "price.listSearch": "Product zoeken",
     "price.listEmpty": "Nog geen richtprijzen",
@@ -14700,7 +14724,9 @@
     "adm.popularNew": "Combinatie toevoegen",
     "adm.popularHint": "Stap: producten (kommagescheiden), bijv. base: Havervlokken; fruit: Bananen",
     "adm.popularDeleteConfirm": "Deze combinatie verwijderen?",
-    "adm.exportTxt": "Exporteren als tekstbestand"
+    "adm.exportTxt": "Exporteren als tekstbestand",
+    "media.genPricesMulti": "50 prijzen schatten ({n} markten)",
+    "media.priceProgress": "{market} · {done} van {total} markten"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15122,7 +15148,7 @@
     "price.catTitle": "Preise einer Kategorie schätzen",
     "price.catPick": "Kategorie wählen …",
     "price.catRun": "Preise für Kategorie schätzen",
-    "price.catConfirm": "Richtpreise für die Kategorie „{name}“ im Markt {market} schätzen? Fehlende Preise werden ergänzt.",
+    "price.catConfirm": "Richtpreise für die Kategorie „{name}“ in {market} schätzen? Fehlende Preise werden ergänzt.",
     "price.catDone": "{done} von {total} Preisen geschätzt",
     "price.listSearch": "Produkt suchen",
     "price.listEmpty": "Noch keine Richtpreise",
@@ -15293,7 +15319,9 @@
     "adm.popularNew": "Kombination hinzufügen",
     "adm.popularHint": "Schritt: Produkte (Komma getrennt), z. B. base: Haferflocken; fruit: Bananen",
     "adm.popularDeleteConfirm": "Diese Kombination löschen?",
-    "adm.exportTxt": "Als Textdatei exportieren"
+    "adm.exportTxt": "Als Textdatei exportieren",
+    "media.genPricesMulti": "50 Preise schätzen ({n} Märkte)",
+    "media.priceProgress": "{market} · {done} von {total} Märkten"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15715,7 +15743,7 @@
     "price.catTitle": "Preise einer Kategorie schätzen",
     "price.catPick": "Kategorie wählen …",
     "price.catRun": "Preise für Kategorie schätzen",
-    "price.catConfirm": "Richtpreise für die Kategorie „{name}“ im Markt {market} schätzen? Fehlende Preise werden ergänzt.",
+    "price.catConfirm": "Richtpreise für die Kategorie „{name}“ in {market} schätzen? Fehlende Preise werden ergänzt.",
     "price.catDone": "{done} von {total} Preisen geschätzt",
     "price.listSearch": "Produkt suchen",
     "price.listEmpty": "Noch keine Richtpreise",
@@ -15886,6 +15914,8 @@
     "adm.popularNew": "Kombination hinzufügen",
     "adm.popularHint": "Schritt: Produkte (Komma getrennt), z. B. base: Haferflocken; fruit: Bananen",
     "adm.popularDeleteConfirm": "Diese Kombination löschen?",
-    "adm.exportTxt": "Als Textdatei exportieren"
+    "adm.exportTxt": "Als Textdatei exportieren",
+    "media.genPricesMulti": "50 Preise schätzen ({n} Märkte)",
+    "media.priceProgress": "{market} · {done} von {total} Märkten"
   }
 }

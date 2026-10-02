@@ -23,7 +23,14 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
   const genImages = useServerFn(generateProductImages);
   const genPrices = useServerFn(generateReferencePrices);
   const estCat = useServerFn(estimateCategoryPrices);
-  const [market, setMarket] = useState(getLocale().split("-")[1] ?? "CH");
+  const [markets, setMarkets] = useState<Set<string>>(() => new Set([getLocale().split("-")[1] ?? "CH"]));
+  const market = [...markets][0] ?? "CH";
+  const marketList = [...markets].join(", ");
+  const toggleMarket = (m: string) => setMarkets((cur) => {
+    const next = new Set(cur);
+    if (next.has(m)) { if (next.size > 1) next.delete(m); } else next.add(m);
+    return next;
+  });
   const [busy, setBusy] = useState<"img" | "price" | "allImg" | "catPrice" | null>(null);
   const [openCategories, setOpenCategories] = useState<Set<string>>(() => new Set());
   const [allProgress, setAllProgress] = useState<{ done: number; total: number } | null>(null);
@@ -79,11 +86,15 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
   };
 
   const runCategoryPrices = async (dept: (typeof depts)[number]) => {
-    if (!window.confirm(T("price.catConfirm", { name: dept.name, market }))) return;
+    if (!window.confirm(T("price.catConfirm", { name: dept.name, market: marketList }))) return;
     setBusy("catPrice");
     try {
-      const r = await estCat({ data: { market, departmentId: dept.id, onlyMissing: true } });
-      toast.success(T("price.catDone", { done: r.done, total: r.total }));
+      let done = 0, total = 0;
+      for (const m of markets) {
+        const r = await estCat({ data: { market: m, departmentId: dept.id, onlyMissing: true } });
+        done += r.done; total += r.total;
+      }
+      toast.success(T("price.catDone", { done, total }));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
     } finally {
@@ -144,15 +155,22 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
     }
   };
 
+  const [priceProg, setPriceProg] = useState<{ market: string; done: number; total: number } | null>(null);
   const runPrices = async () => {
     setBusy("price");
     try {
-      const r = await genPrices({ data: { market, limit: 50 } });
-      toast.success(T("media.priceDone", { n: r.done }));
+      let done = 0, i = 0;
+      for (const m of markets) {
+        setPriceProg({ market: m, done: ++i, total: markets.size });
+        const r = await genPrices({ data: { market: m, limit: 50 } });
+        done += r.done;
+      }
+      toast.success(T("media.priceDone", { n: done }));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
     } finally {
       setBusy(null);
+      setPriceProg(null);
       refresh();
     }
   };
@@ -237,12 +255,13 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
         <div className="mt-3 grid grid-cols-4 gap-1.5 sm:grid-cols-7">
           {MARKETS.map((m) => {
             const priced = s?.markets?.[m] ?? 0;
-            const active = m === market;
+            const active = markets.has(m);
             return (
               <button
                 key={m}
                 type="button"
-                onClick={() => setMarket(m)}
+                onClick={() => toggleMarket(m)}
+                aria-pressed={active}
                 className={`flex flex-col items-center rounded-xl border px-1 py-1.5 text-center transition-colors ${
                   active ? "border-primary bg-primary/10" : "border-border bg-background hover:bg-muted/50"
                 }`}
@@ -263,7 +282,9 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
 
         <div className="mt-3 flex flex-wrap gap-2">
           <Button size="sm" disabled={busy !== null} onClick={runPrices}>
-            {busy === "price" ? T("media.working") : T("media.genPrices")}
+            {busy === "price"
+              ? (priceProg ? T("media.priceProgress", priceProg) : T("media.working"))
+              : markets.size > 1 ? T("media.genPricesMulti", { n: markets.size }) : T("media.genPrices")}
           </Button>
         </div>
 
