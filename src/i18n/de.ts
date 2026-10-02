@@ -839,6 +839,8 @@ export const de = {
   "adm.trHint": "Grün = von Hand bearbeitet, wird von der KI nicht überschrieben. Leeren = Übersetzung löschen.",
   "adm.cuisines": "Länderküchen",
   "adm.recipeIngredients": "Rezept-Generator Zutaten zuweisen",
+  "adm.recipeManage": "Rezept-Verwaltung",
+  "adm.recipeAssign": "Zutaten-Zuweisung",
   "adm.recipeIngredientSearch": "Zutaten suchen …",
   "adm.recipeTraits": "Rezept-Eigenschaften",
   "adm.recipeTraitsHint": "{n} Rezepte ohne vollständige Eigenschaften. Änderungen werden sofort gespeichert.",
