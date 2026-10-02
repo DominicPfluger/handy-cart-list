@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Offen
+- Produktbilder in Abteilungseinzelansicht zuverlässig anzeigen und lokal nach erstem Laden zwischenspeichern.
 
 ## Erledigt
 - Ernährungs- und Länderküchenfilter bei Non-Food/Near-Food in Abteilungen aussetzen.

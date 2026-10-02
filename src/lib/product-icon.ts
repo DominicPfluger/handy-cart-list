@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { forgetCatalogImage } from "./catalog-image-cache";
 
 /** Creates a transparent, padded thumbnail rather than resizing a CSS box around a large image. */
 export async function makeProductIcon(source: Blob): Promise<Blob> {
@@ -39,6 +40,7 @@ export async function saveProductIcon(productId: string, source: Blob, imagePath
   if (uploadError) throw uploadError;
   const { error: updateError } = await supabase.from("products").update({ icon_path: path, image_path: imagePath }).eq("id", productId);
   if (updateError) throw updateError;
+  await forgetCatalogImage(imagePath);
 }
 
 export async function saveProductIconFromPath(productId: string, path: string): Promise<void> {
