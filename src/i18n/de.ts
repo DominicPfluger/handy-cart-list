@@ -834,6 +834,7 @@ export const de = {
   "adm.trHint": "Grün = von Hand bearbeitet, wird von der KI nicht überschrieben. Leeren = Übersetzung löschen.",
   "adm.cuisines": "Länderküchen",
   "adm.recipeIngredients": "Rezept-Generator Zutaten zuweisen",
+  "adm.recipeIngredientSearch": "Zutaten suchen …",
   "adm.tplManage": "Vorlagen & Oberkategorien",
   "adm.tplNew": "Neue Vorlage",
   "adm.tplId": "Kennung (klein, ohne Leerzeichen)",

@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { RECIPE_TEMPLATES } from "@/lib/recipe-templates";
+import { normalizeSearch } from "@/lib/catalog-query";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getLocale, translate } from "@/i18n";
@@ -77,6 +78,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [busy, setBusy] = useState(false);
   const [pickerStep, setPickerStep] = useState<string | null>(null);
   const [pickerDept, setPickerDept] = useState<string | null>(null);
+  const [pickerSearch, setPickerSearch] = useState("");
   const [pickerSel, setPickerSel] = useState<Set<string>>(new Set());
   const [dragRow, setDragRow] = useState<string | null>(null);
   const [dropAt, setDropAt] = useState<{ id: string; pos: "top" | "bottom" } | null>(null);
@@ -380,6 +382,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const openPicker = (stepKey: string) => {
     setPickerStep(stepKey);
     setPickerDept(null);
+    setPickerSearch("");
     setPickerSel(new Set(assignedFor(stepKey).map((r) => r.product_id)));
   };
   const togglePick = (id: string) =>
@@ -389,6 +392,10 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
   const deptProds = pickerDept
     ? prods.filter((p) => p.department_id === pickerDept).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+    : [];
+  const pickerQuery = normalizeSearch(pickerSearch);
+  const pickerMatches = pickerQuery
+    ? prods.filter((p) => normalizeSearch(p.name).includes(pickerQuery) || normalizeSearch(path(p.department_id)).includes(pickerQuery))
     : [];
   /** Alle Produkt-IDs einer Kategorie inkl. aller Unterkategorien. */
   const deptProductIds = (deptId: string): string[] => {
@@ -439,7 +446,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
         {templates.map((x) => (
           <button
             key={x.id}
-            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setStepForm(null); setSuggestStep(null); }}
+            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setPickerSearch(""); setStepForm(null); setSuggestStep(null); }}
             aria-pressed={tplId === x.id}
             className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"} ${x.enabled ? "" : "opacity-50 line-through"}`}
           >
@@ -580,22 +587,28 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
             </div>
           </div>
           <Input
-            placeholder={T("adm.search")}
+            aria-label={T("adm.recipeIngredientSearch")}
+            placeholder={T("adm.recipeIngredientSearch")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="h-10 rounded-xl"
           />
+          {search.trim() && !prods.some((p) => normalizeSearch(p.name).includes(normalizeSearch(search)) || normalizeSearch(path(p.department_id)).includes(normalizeSearch(search))) && (
+            <p className="text-xs text-muted-foreground">{T("adm.noHits")}</p>
+          )}
           {tpl.steps.map((s) => {
             const assigned = assignedFor(s.key);
             const assignedIds = new Set(assigned.map((r) => r.product_id));
-            const q = search.trim().toLowerCase();
+            const q = normalizeSearch(search);
+            const matches = (p: Prod) => normalizeSearch(p.name).includes(q) || normalizeSearch(path(p.department_id)).includes(q);
+            const visibleAssigned = q ? assigned.filter((r) => { const p = prodById.get(r.product_id); return p ? matches(p) : normalizeSearch(r.product_id).includes(q); }) : assigned;
             const candidates = q
-              ? prods.filter((p) => !assignedIds.has(p.id) && (p.name.toLowerCase().includes(q) || path(p.department_id).toLowerCase().includes(q))).slice(0, 20)
+              ? prods.filter((p) => !assignedIds.has(p.id) && matches(p))
               : [];
             const sectionKey = `${tplId}:${s.key}`;
-            const expanded = ingredientOpen[sectionKey] ?? false;
+            const expanded = Boolean(q) || (ingredientOpen[sectionKey] ?? false);
             return (
-              <div key={s.key} className="space-y-1.5">
+              <div key={s.key} className={`space-y-1.5 ${q && !visibleAssigned.length && !candidates.length ? "hidden" : ""}`}>
                 <Button type="button" variant="ghost" aria-expanded={expanded} aria-controls={`recipe-admin-ingredient-${sectionKey}`} onClick={() => setIngredientOpen((prev) => ({ ...prev, [sectionKey]: !expanded }))} className="h-auto w-full justify-start gap-2 px-0 text-left text-xs font-semibold hover:bg-transparent">
                   <span aria-hidden="true" className="shrink-0 text-muted-foreground">{expanded ? "▲" : "▼"}</span>
                   <span className="min-w-0 truncate">{s.label} <span className="font-normal text-muted-foreground">({assigned.length})</span></span>
@@ -615,8 +628,9 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                   </select>
                 )}
                 <div className="space-y-1">
-                  {assigned.map((r, i) => {
+                  {visibleAssigned.map((r) => {
                     const p = prodById.get(r.product_id);
+                    const i = assigned.findIndex((x) => x.id === r.id);
                     const over = dropAt?.id === r.id ? dropAt.pos : null;
                     return (
                       <div
@@ -665,7 +679,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                       </div>
                     );
                   })}
-                  {assigned.length === 0 && <p className="text-xs text-muted-foreground">{T("adm.recipeStepEmpty")}</p>}
+                  {!q && assigned.length === 0 && <p className="text-xs text-muted-foreground">{T("adm.recipeStepEmpty")}</p>}
                 </div>
                 {candidates.length > 0 && (
                   <div className="space-y-1 rounded-lg border border-dashed border-border p-1.5">
@@ -715,8 +729,15 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                       )}
                       <span className="min-w-0 flex-1 truncate font-semibold text-foreground">{pickerDept ? path(pickerDept) : T("adm.fromCatalog")}</span>
                     </div>
+                    <Input
+                      aria-label={T("adm.recipeIngredientSearch")}
+                      placeholder={T("adm.recipeIngredientSearch")}
+                      value={pickerSearch}
+                      onChange={(e) => setPickerSearch(e.target.value)}
+                      className="h-9"
+                    />
                     <div className="max-h-72 space-y-0.5 overflow-y-auto">
-                      {childDepts.map((d) => {
+                      {!pickerQuery && childDepts.map((d) => {
                         const ids = deptProductIds(d.id);
                         const chosen = ids.filter((id) => pickerSel.has(id)).length;
                         return (
@@ -736,21 +757,23 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                           </div>
                         );
                       })}
-                      {deptProds.map((p) => (
+                      {(pickerQuery ? pickerMatches : deptProds).map((p) => (
                         <label key={p.id} className="flex items-center gap-2 rounded-lg px-2 py-1 text-xs hover:bg-accent/40">
                           <input type="checkbox" checked={pickerSel.has(p.id)} onChange={() => togglePick(p.id)} className="accent-primary" />
                           <span className="min-w-0 flex-1 truncate text-foreground">{p.emoji} {p.name}</span>
+                          {pickerQuery && <span className="hidden sm:block truncate text-[10px] text-muted-foreground">{path(p.department_id)}</span>}
                         </label>
                       ))}
+                      {pickerQuery && pickerMatches.length === 0 && <p className="px-2 py-1 text-xs text-muted-foreground">{T("adm.noHits")}</p>}
                     </div>
-                    {deptProds.length > 0 && (
+                    {!pickerQuery && deptProds.length > 0 && (
                       <div className="flex gap-3 text-xs">
                         <button type="button" onClick={() => setPickerSel((x) => new Set([...x, ...deptProds.map((p) => p.id)]))} className="text-primary">{T("adm.selectAll")}</button>
                         <button type="button" onClick={() => setPickerSel((x) => { const n = new Set(x); deptProds.forEach((p) => n.delete(p.id)); return n; })} className="text-primary">{T("adm.selectNone")}</button>
                       </div>
                     )}
                     <div className="flex justify-end gap-2">
-                      <Button size="sm" variant="ghost" onClick={() => setPickerStep(null)}>{T("adm.cancel")}</Button>
+                      <Button size="sm" variant="ghost" onClick={() => { setPickerStep(null); setPickerSearch(""); }}>{T("adm.cancel")}</Button>
                       <Button size="sm" disabled={busy} onClick={() => applyPicker(s.key)}>{T("adm.apply")} ({pickerSel.size})</Button>
                     </div>
                   </div>
