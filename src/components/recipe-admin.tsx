@@ -432,7 +432,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
         <span className="text-sm font-semibold text-foreground">🍽️ {T("adm.recipeIngredients")}</span>
         <span aria-hidden="true" className="text-xs text-muted-foreground">{open ? "▲" : "▼"}</span>
       </Button>
-      <div id="recipe-admin-content" hidden={!open} className="mt-3 space-y-3">
+      <div id="recipe-admin-content" className={`mt-3 space-y-3 ${open ? "" : "hidden"}`}>
 
 
       <div className="flex flex-wrap items-center gap-1.5">
@@ -451,7 +451,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
         </Button>
       </div>
 
-        <div id="recipe-admin-templates" hidden={!manageOpen} className="space-y-2 rounded-lg border border-border bg-background p-2">
+        <div id="recipe-admin-templates" className={`space-y-2 rounded-lg border border-border bg-background p-2 ${manageOpen ? "" : "hidden"}`}>
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-foreground">{T("adm.tplManage")}</span>
             <Button size="sm" variant="outline" disabled={busy} onClick={() => setTplForm({ id: "", emoji: "" })}>{T("adm.tplNew")}</Button>
@@ -516,9 +516,9 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                 <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{stepsOpen ? "▲" : "▼"}</span>
                 <span className="min-w-0 truncate">{tplLabel(tplId!)} · {T("adm.tplManage")}</span>
               </Button>
-              <Button size="sm" variant="outline" disabled={busy} onClick={() => setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true })}>{T("adm.stepNew")}</Button>
+              <Button size="sm" variant="outline" disabled={busy} onClick={() => { setStepsOpen(true); setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true }); }}>{T("adm.stepNew")}</Button>
             </div>
-            <div id="recipe-admin-steps" hidden={!stepsOpen} className="space-y-2">
+            <div id="recipe-admin-steps" className={`space-y-2 ${stepsOpen ? "" : "hidden"}`}>
             {steps.map((s, i) => (
               <div key={s.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/50 py-1 text-xs">
                 <span className="min-w-0 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
@@ -555,9 +555,9 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                 <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{groupsOpen ? "▲" : "▼"}</span>
                 <span className="min-w-0 truncate">{T("adm.recipeGroups")}</span>
               </Button>
-              <Button size="sm" variant="outline" disabled={busy} onClick={() => startGroup(null)}>{T("adm.recipeGroupNew")}</Button>
+              <Button size="sm" variant="outline" disabled={busy} onClick={() => { setGroupsOpen(true); startGroup(null); }}>{T("adm.recipeGroupNew")}</Button>
             </div>
-            <div id="recipe-admin-groups" hidden={!groupsOpen} className="space-y-2">
+            <div id="recipe-admin-groups" className={`space-y-2 ${groupsOpen ? "" : "hidden"}`}>
             {groupTree(null).map((parent) => (
               <div key={parent.id} className="space-y-1">
                 {[{ group: parent, depth: 0 }, ...groupRows(parent.id).map(({ group, depth }) => ({ group, depth: depth + 1 }))].map(({ group: g, depth }) => (
@@ -600,7 +600,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                   <span aria-hidden="true" className="shrink-0 text-muted-foreground">{expanded ? "▲" : "▼"}</span>
                   <span className="min-w-0 truncate">{s.label} <span className="font-normal text-muted-foreground">({assigned.length})</span></span>
                 </Button>
-                <div id={`recipe-admin-ingredient-${sectionKey}`} hidden={!expanded} className="space-y-1.5">
+                <div id={`recipe-admin-ingredient-${sectionKey}`} className={`space-y-1.5 ${expanded ? "" : "hidden"}`}>
                 {assigned.length > 1 && (
                   <select
                     value=""
