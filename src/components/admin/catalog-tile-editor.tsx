@@ -57,6 +57,9 @@ export function CatalogTileEditor(p: {
   deptAliasOptions?: { id: string; label: string }[];
   onAddDeptAlias?: (deptId: string) => void;
   onRemoveDeptAlias?: (aliasId: string, name: string) => void;
+  /** Wählbare Produkte für ein neues Alias-Produkt. */
+  productAliasOptions?: { id: string; label: string }[];
+  onAddProductAlias?: (productId: string) => void;
   headings?: TileHeading[];
   onAddHeading?: (name: string) => void;
   onMoveHeading?: (id: string, beforeProductId: string) => void;
@@ -77,6 +80,8 @@ export function CatalogTileEditor(p: {
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
   const [aliasPick, setAliasPick] = useState(false);
   const [aliasSearch, setAliasSearch] = useState("");
+  const [prodAliasPick, setProdAliasPick] = useState(false);
+  const [prodAliasSearch, setProdAliasSearch] = useState("");
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
   const moved = useRef(false);
@@ -218,6 +223,7 @@ export function CatalogTileEditor(p: {
             <Button size="sm" variant="outline" onClick={() => setNewTitle("")}>+ {T("adm.heading")}</Button>
           )}
           {p.cur && <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "product", id: null })}>+ {T("tile.newProd")}</Button>}
+          {p.cur && p.onAddProductAlias && <Button size="sm" variant="outline" onClick={() => { setProdAliasSearch(""); setProdAliasPick(true); }}>+ {T("tile.newProdAlias")}</Button>}
           {p.cur && p.onBulkAdd && <Button size="sm" variant="outline" onClick={p.onBulkAdd}>+ {T("adm.multi")}</Button>}
           {p.cur && <Button size="sm" variant="outline" onClick={() => setSuggesting(true)}>✨ {T("tile.suggest")}</Button>}
           {p.cur && p.products.length > 0 && (
@@ -330,6 +336,23 @@ export function CatalogTileEditor(p: {
               {(p.deptAliasOptions ?? []).length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noHits")}</p>}
             </div>
             <Button variant="outline" onClick={() => setAliasPick(false)}>{T("adm.cancel")}</Button>
+          </div>
+        </div>
+      )}
+
+      {prodAliasPick && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setProdAliasPick(false)}>
+          <div className="flex max-h-[80vh] w-full max-w-md flex-col gap-2 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+            <p className="text-sm font-bold text-foreground">{T("tile.pickProdAlias")}</p>
+            <Input autoFocus value={prodAliasSearch} onChange={(e) => setProdAliasSearch(e.target.value)} placeholder={T("tile.prodAliasSearch")} className="h-10 rounded-xl" />
+            <div className="min-h-0 flex-1 space-y-1 overflow-y-auto">
+              {(p.productAliasOptions ?? []).filter((o) => o.label.toLowerCase().includes(prodAliasSearch.trim().toLowerCase())).map((o) => (
+                <button key={o.id} type="button" onClick={() => { p.onAddProductAlias?.(o.id); setProdAliasPick(false); }}
+                  className="w-full truncate rounded-lg border border-border px-3 py-2 text-left text-sm text-foreground">{o.label}</button>
+              ))}
+              {(p.productAliasOptions ?? []).length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noHits")}</p>}
+            </div>
+            <Button variant="outline" onClick={() => setProdAliasPick(false)}>{T("adm.cancel")}</Button>
           </div>
         </div>
       )}
