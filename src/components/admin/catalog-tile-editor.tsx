@@ -21,7 +21,8 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
 export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
-export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null; variants?: string[] };
+/** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
+export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null; variants?: string[]; alias_id?: string; product_id?: string };
 
 const COMMON_VARIANTS = ["Bio", "Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
@@ -49,6 +50,7 @@ export function CatalogTileEditor(p: {
   /** Öffnet die erweiterte Bearbeitung (Übersetzungen, Marken, Aliase …). */
   onAdvanced?: (kind: "department" | "product", id: string) => void;
   busy?: boolean;
+  onRemoveAlias?: (aliasId: string, name: string) => void;
   headings?: TileHeading[];
   onAddHeading?: (name: string) => void;
   onMoveHeading?: (id: string, beforeProductId: string) => void;
@@ -149,6 +151,8 @@ export function CatalogTileEditor(p: {
       p.reorder("product", p.products, d.index, t.index);
       return;
     }
+    const isAlias = d.id.startsWith("alias:");
+    if (isAlias && (t.kind === "crumb" || t.kind === "department")) return;
     const after = (() => { const r = t.el.getBoundingClientRect(); return d.kind === "product" ? e.clientY > r.top + r.height / 2 : e.clientX > r.left + r.width / 2; })();
     if (t.kind === "crumb") {
       const dest = t.id || null;
@@ -236,7 +240,8 @@ export function CatalogTileEditor(p: {
       {p.cur && (
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
           {p.products.map((x, i) => {
-            const price = p.prices?.get(x.id);
+            const pid = x.product_id ?? x.id;
+            const price = p.prices?.get(pid);
             const h = headingBefore.get(x.id);
             return (
               <Fragment key={x.id}>
