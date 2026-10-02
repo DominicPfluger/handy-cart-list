@@ -270,7 +270,7 @@ export const estimateCategoryPrices = createServerFn({ method: "POST" })
 /** Schätzt den Richtpreis eines Produkts für alle aktiven Märkte und speichert ihn. */
 export const estimateProductPricesAllMarkets = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ productId: z.string().uuid() }).parse(d))
+  .inputValidator((d) => z.object({ productId: z.string().uuid(), skipExisting: z.boolean().optional() }).parse(d))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { estimatePrices } = await import("./product-media.server");
@@ -280,7 +280,11 @@ export const estimateProductPricesAllMarkets = createServerFn({ method: "POST" }
     const { data: mk } = await sb.from("markets").select("code, currency, enabled").eq("enabled", true).order("sort_order");
     const markets = ((mk ?? []) as Array<{ code: string; currency: string }>);
     const list = markets.length > 0 ? markets : Object.entries(CURRENCIES).map(([code, currency]) => ({ code, currency }));
-    const results = await Promise.allSettled(list.map(async (m) => {
+    const existing = data.skipExisting ? await sb.from("product_reference_prices").select("market").eq("product_id", prod.id) : null;
+    if (existing?.error) throw new Error(existing.error.message);
+    const present = new Set((existing?.data ?? []).map((r) => r.market));
+    const missing = list.filter((m) => !present.has(m.code));
+    const results = await Promise.allSettled(missing.map(async (m) => {
       const [e] = await estimatePrices([prod as any], m.code);
       if (!e || !(e.price > 0)) throw new Error("no price");
       const row = { product_id: prod.id, market: m.code, price: e.price, currency: m.currency || CURRENCIES[m.code] || "EUR", pack_size: e.pack_size, pack_unit: e.pack_unit, unit_price: e.unit_price, unit_basis: e.unit_basis };

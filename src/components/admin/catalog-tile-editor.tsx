@@ -313,6 +313,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const estAll = useServerFn(estimateProductPricesAllMarkets);
   const qc = useQueryClient();
   const [estimating, setEstimating] = useState(false);
+  const [enriching, setEnriching] = useState(false);
+  const [enrichStatus, setEnrichStatus] = useState("");
+  const [enrichErrors, setEnrichErrors] = useState<string[]>([]);
   const [estimates, setEstimates] = useState<Array<{ market: string; price: number; currency: string; unit_price: number | null; unit_basis: string | null }>>([]);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
@@ -350,6 +353,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   useEffect(() => { loadSuggestion(false); }, [effId, isDept]);
 
   const save = async () => {
+    if (enriching) return;
+    const isNewProduct = !item && !isDept && !newId;
+    let createdId: string | undefined;
     await p.run(async () => {
     if (!name.trim()) throw new Error(T("tile.nameRequired"));
     const base = { name: name.trim(), emoji: emoji.trim() || null };
@@ -369,9 +375,10 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         : await supabase.from("products").insert({ ...base, department_id: p.cur!, default_quantity: qty, default_unit: unit as never, variants, sort_order: p.products.length + 1 }).select("id").single();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
-      await p.translateIds([id]);
+      if (!isNewProduct) await p.translateIds([id]);
       if (!isDept) void trVariants({ data: { productId: id } }).catch(() => {});
       setNewId(id);
+      if (isNewProduct) createdId = id;
     }
     if (!isDept && id && price.trim() && !Number.isNaN(Number(price))) {
       const market = currentMarket();
@@ -380,6 +387,35 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     // Bei neuen Einträgen offen lassen, damit gleich ein Bild ergänzt werden kann.
     if (item) p.onClose();
     });
+    if (createdId) {
+      const id = createdId;
+      const errors: string[] = [];
+      setEnriching(true);
+      setEnrichErrors([]);
+      const step = async (label: string, fn: () => Promise<void>) => {
+        setEnrichStatus(label);
+        try { await fn(); } catch (e) { errors.push(`${label}: ${e instanceof Error ? e.message : String(e)}`); setEnrichErrors([...errors]); }
+      };
+      await step(T("tile.enrichTranslation"), async () => { await p.translateIds([id]); });
+      await step(T("tile.enrichImage"), async () => {
+        const { data, error } = await supabase.from("products").select("image_path, icon_path").eq("id", id).single();
+        if (error) throw new Error(error.message);
+        const path = data?.image_path ?? (await genImg({ data: { id, kind: "product" } })).path;
+        if (!data?.icon_path) await saveProductIconFromPath(id, path);
+        const signed = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
+        if (signed.data?.signedUrl) setLarge(signed.data.signedUrl);
+      });
+      await step(T("tile.enrichPrices"), async () => {
+        const r = await estAll({ data: { productId: id, skipExisting: true } });
+        setEstimates(r.items);
+        const mine = r.items.find((x) => x.market === currentMarket());
+        if (mine && !price.trim()) setPrice(String(mine.price));
+        if (r.failed) throw new Error(T("tile.estimateAllFailed", { n: r.failed }));
+      });
+      void qc.invalidateQueries();
+      setEnrichStatus(errors.length ? T("tile.enrichPartial") : T("tile.enrichDone"));
+      setEnriching(false);
+    }
     if (!isDept && item && headingSel !== curHeadingId) p.onAssignHeading?.(item.id, headingSel);
   };
 
@@ -402,6 +438,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           else await saveProductIconFromPath(effId, path);
         }); }} />}
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
+        {enrichStatus && <div role="status" className="text-sm text-foreground">{enriching && <span aria-hidden="true">⏳ </span>}{enrichStatus}</div>}
+        {enrichErrors.length > 0 && <ul className="max-h-24 overflow-auto text-xs text-destructive">{enrichErrors.map((error) => <li key={error}>{error}</li>)}</ul>}
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
             {p.imgUrl ? <ZoomableImage src={p.imgUrl} className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
@@ -519,7 +557,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           {item && p.onAdvanced && <Button variant="outline" className="h-11 rounded-xl" onClick={() => { p.onAdvanced!(p.target.kind, item.id); p.onClose(); }}>⚙ {T("tile.advanced")}</Button>}
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
           <Button variant="outline" className="h-11 rounded-xl" onClick={p.onClose}>{T("common.cancel")}</Button>
-          <Button className="h-11 flex-1 rounded-xl" onClick={() => void save()}>{T("tile.save")}</Button>
+          <Button className="h-11 flex-1 rounded-xl" disabled={enriching} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
         </div>
       </div>
       {large && (

@@ -35,6 +35,25 @@ import { useT } from "../i18n";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 import { deptColor, deptColorByLabel } from "../lib/dept-colors";
 import { toast } from "sonner";
+import { currentMarket, useReferencePrices } from "../hooks/use-reference-prices";
+
+const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
+const UNIT_SCALE: Record<string, { kind: string; factor: number }> = {
+  gramm: { kind: "weight", factor: 1 }, kilogramm: { kind: "weight", factor: 1000 }, milligramm: { kind: "weight", factor: 0.001 },
+  milliliter: { kind: "volume", factor: 1 }, deziliter: { kind: "volume", factor: 100 }, liter: { kind: "volume", factor: 1000 },
+};
+
+function priceForItem(item: ListItem, product: { defaultQuantity: number; defaultUnit: string }, price: number): number | null {
+  if (!Number.isFinite(price) || price <= 0) return null;
+  const match = /^\s*(\d+(?:[.,]\d+)?)(?:\s|$)/.exec(item.quantity);
+  if (!match) return null;
+  const amount = Number(match[1]?.replace(",", "."));
+  if (!Number.isFinite(amount) || amount <= 0 || product.defaultQuantity <= 0) return null;
+  if (item.unit === product.defaultUnit) return price * amount / product.defaultQuantity;
+  const from = item.unit ? UNIT_SCALE[item.unit] : undefined;
+  const to = UNIT_SCALE[product.defaultUnit];
+  return from && to && from.kind === to.kind ? price * amount * from.factor / (product.defaultQuantity * to.factor) : null;
+}
 
 
 export const Route = createFileRoute("/")({
@@ -63,6 +82,7 @@ function ListPage() {
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
   const { t } = useT();
+  const { data: referencePrices, isPending: pricesPending } = useReferencePrices();
   /** "Beliebige/Beliebiger/Beliebiges …" (und Übersetzungen wie "Any …") nicht anzeigen. */
   const stripAnyPrefix = (name: string) =>
     name.replace(
@@ -183,6 +203,15 @@ function ListPage() {
   const doneCount = items.filter((i) => i.checked).length;
   const total = items.length;
   const progress = total > 0 ? (doneCount / total) * 100 : 0;
+  const estimate = useMemo(() => items.reduce((acc, item) => {
+    const product = item.productId ? productById.get(item.productId) : undefined;
+    const ref = item.productId ? referencePrices?.get(item.productId) : undefined;
+    const amount = product && ref ? priceForItem(item, product, Number(ref.price)) : null;
+    if (amount === null) acc.missing += 1;
+    else acc.value += amount;
+    return acc;
+  }, { value: 0, missing: 0 }), [items, productById, referencePrices]);
+  const currency = referencePrices?.values().next().value?.currency ?? MARKET_CURRENCY[currentMarket()] ?? "EUR";
 
   // ---- Smarte Vorschläge (aus dem Einkaufsverlauf) & Einkauf abschliessen ----
   const { addPurchase } = usePurchaseHistory();
@@ -402,6 +431,16 @@ function ListPage() {
           );
         })}
       </div>
+
+      {hydrated && items.length > 0 && (
+        <div className="border-t border-border pt-4" aria-live="polite">
+          <div className="flex items-baseline justify-between gap-3">
+            <span className="text-sm font-semibold text-foreground">{t("list.estimatedTotal")}</span>
+            <span className="text-lg font-bold text-foreground">{pricesPending ? "…" : estimate.missing === items.length ? "—" : new Intl.NumberFormat(getLocale(), { style: "currency", currency }).format(estimate.value)}</span>
+          </div>
+          {!pricesPending && estimate.missing > 0 && <p className="mt-1 text-xs text-muted-foreground">{t("list.unpriced", { n: estimate.missing })}</p>}
+        </div>
+      )}
 
       {/* Einkauf abschliessen: archiviert abgehakte Artikel im Verlauf */}
       {doneCount > 0 && (
