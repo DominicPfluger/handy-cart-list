@@ -600,8 +600,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       {steps.map((s) => {
         const sel0 = picks[s.key] ?? [];
         const isReq = s.required || s.min > 0;
-        const satisfied = sel0.length >= s.min;
-        const missing = isReq && !satisfied;
+        const missing = isReq && sel0.length < s.min;
         const isOpen = openStep === s.key;
         return (
         <div key={s.key} className={`overflow-hidden rounded-2xl border transition ${missing ? "border-destructive/60" : "border-border"} bg-card`}>
@@ -718,7 +717,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setTraits({ satiety: null, spiciness: null, price_class: null }); setTraitsError(false); setSaveOpen(true); }}
                 className="mt-3 w-full rounded-2xl bg-primary px-4 py-4 text-lg font-bold text-primary-foreground shadow-md transition active:scale-[0.98]"
               >
-                {savedMsg ? `✓ ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
+                {savedMsg ? `📁 ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
               </button>
             )}
             <button
@@ -726,7 +725,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               disabled={added}
               className="mt-2 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition active:scale-[0.98] disabled:opacity-60"
             >
-              {added ? `✓ ${t("rk.added")}` : t("rk.addAll", { n: chosen.length })}
+              {added ? `🛒 ${t("rk.added")}` : t("rk.addAll", { n: chosen.length })}
             </button>
             {user ? (
               <button
