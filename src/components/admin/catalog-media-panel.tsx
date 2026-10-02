@@ -45,7 +45,7 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
   const runCategoryPrices = async () => {
     const dept = deptOptions.find((o) => o.id === catId);
     if (!dept) return;
-    if (!window.confirm(T("price.catConfirm", { name: dept.name.trim(), market }))) return;
+    if (!window.confirm(T("price.catConfirm", { name: dept.label.trim(), market }))) return;
     setBusy("catPrice");
     try {
       const r = await estCat({ data: { market, departmentId: catId, onlyMissing: true } });
