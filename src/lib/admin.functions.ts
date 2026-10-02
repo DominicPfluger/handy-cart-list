@@ -691,6 +691,7 @@ export const suggestCategoryProducts = createServerFn({ method: "POST" })
 
 /** Führt ein Dublett-Produkt in ein Zielprodukt zusammen: Verweise umbiegen, Name als Synonym übernehmen, Quelle löschen. */
 export const mergeProducts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((raw) => z.object({ keepId: z.string().uuid(), removeId: z.string().uuid() }).parse(raw))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
