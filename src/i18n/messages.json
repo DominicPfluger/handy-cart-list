@@ -926,7 +926,8 @@
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Tap to add and translate the language.",
     "adm.sortRelevance": "Sort by relevance",
-    "tile.advanced": "Advanced"
+    "tile.advanced": "Advanced",
+    "adm.marketChoice": "Market selection"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1855,7 +1856,8 @@
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Tap to add and translate the language.",
     "adm.sortRelevance": "Sort by relevance",
-    "tile.advanced": "Advanced"
+    "tile.advanced": "Advanced",
+    "adm.marketChoice": "Market selection"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2784,7 +2786,8 @@
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Tap to add and translate the language.",
     "adm.sortRelevance": "Sort by relevance",
-    "tile.advanced": "Advanced"
+    "tile.advanced": "Advanced",
+    "adm.marketChoice": "Market selection"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3713,7 +3716,8 @@
     "loc.suggest": "Sugerencias",
     "loc.suggestHint": "Toca para añadir y traducir el idioma.",
     "adm.sortRelevance": "Ordenar por relevancia",
-    "tile.advanced": "Avanzado"
+    "tile.advanced": "Avanzado",
+    "adm.marketChoice": "Selección de mercado"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4642,7 +4646,8 @@
     "loc.suggest": "Sugerencias",
     "loc.suggestHint": "Toca para añadir y traducir el idioma.",
     "adm.sortRelevance": "Ordenar por relevancia",
-    "tile.advanced": "Avanzado"
+    "tile.advanced": "Avanzado",
+    "adm.marketChoice": "Selección de mercado"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5571,7 +5576,8 @@
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
     "adm.sortRelevance": "Trier par pertinence",
-    "tile.advanced": "Avancé"
+    "tile.advanced": "Avancé",
+    "adm.marketChoice": "Choix du marché"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6500,7 +6506,8 @@
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
     "adm.sortRelevance": "Trier par pertinence",
-    "tile.advanced": "Avancé"
+    "tile.advanced": "Avancé",
+    "adm.marketChoice": "Choix du marché"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7429,7 +7436,8 @@
     "loc.suggest": "Suggerimenti",
     "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
     "adm.sortRelevance": "Ordina per rilevanza",
-    "tile.advanced": "Avanzate"
+    "tile.advanced": "Avanzate",
+    "adm.marketChoice": "Scelta del mercato"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8358,7 +8366,8 @@
     "loc.suggest": "Suggerimenti",
     "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
     "adm.sortRelevance": "Ordina per rilevanza",
-    "tile.advanced": "Avanzate"
+    "tile.advanced": "Avanzate",
+    "adm.marketChoice": "Scelta del mercato"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9287,7 +9296,8 @@
     "loc.suggest": "Sugestões",
     "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
     "adm.sortRelevance": "Ordenar por relevância",
-    "tile.advanced": "Avançado"
+    "tile.advanced": "Avançado",
+    "adm.marketChoice": "Escolha de mercado"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10216,7 +10226,8 @@
     "loc.suggest": "Sugestões",
     "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
     "adm.sortRelevance": "Ordenar por relevância",
-    "tile.advanced": "Avançado"
+    "tile.advanced": "Avançado",
+    "adm.marketChoice": "Escolha de mercado"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11145,7 +11156,8 @@
     "loc.suggest": "Suggesties",
     "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
     "adm.sortRelevance": "Sorteren op relevantie",
-    "tile.advanced": "Geavanceerd"
+    "tile.advanced": "Geavanceerd",
+    "adm.marketChoice": "Marktkeuze"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12074,7 +12086,8 @@
     "loc.suggest": "Suggesties",
     "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
     "adm.sortRelevance": "Sorteren op relevantie",
-    "tile.advanced": "Geavanceerd"
+    "tile.advanced": "Geavanceerd",
+    "adm.marketChoice": "Marktkeuze"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12465,7 +12478,8 @@
     "loc.suggest": "Vorschläge",
     "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
     "adm.sortRelevance": "Nach Relevanz sortieren",
-    "tile.advanced": "Erweitert"
+    "tile.advanced": "Erweitert",
+    "adm.marketChoice": "Marktwahl"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12856,6 +12870,7 @@
     "loc.suggest": "Vorschläge",
     "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
     "adm.sortRelevance": "Nach Relevanz sortieren",
-    "tile.advanced": "Erweitert"
+    "tile.advanced": "Erweitert",
+    "adm.marketChoice": "Marktwahl"
   }
 }
