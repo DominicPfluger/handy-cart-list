@@ -972,7 +972,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Prepare list icons for {n} existing images",
+    "media.iconsProgress": "List icons {done}/{total} …",
+    "media.iconsDone": "{n} list icons prepared"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1947,7 +1950,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Prepare list icons for {n} existing images",
+    "media.iconsProgress": "List icons {done}/{total} …",
+    "media.iconsDone": "{n} list icons prepared"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2922,7 +2928,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Prepare list icons for {n} existing images",
+    "media.iconsProgress": "List icons {done}/{total} …",
+    "media.iconsDone": "{n} list icons prepared"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3897,7 +3906,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Preparar iconos de lista para {n} imágenes existentes",
+    "media.iconsProgress": "Iconos de lista {done}/{total} …",
+    "media.iconsDone": "{n} iconos de lista preparados"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4872,7 +4884,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Preparar iconos de lista para {n} imágenes existentes",
+    "media.iconsProgress": "Iconos de lista {done}/{total} …",
+    "media.iconsDone": "{n} iconos de lista preparados"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5847,7 +5862,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Préparer les icônes de liste pour {n} images existantes",
+    "media.iconsProgress": "Icônes de liste {done}/{total} …",
+    "media.iconsDone": "{n} icônes de liste préparées"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6822,7 +6840,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Préparer les icônes de liste pour {n} images existantes",
+    "media.iconsProgress": "Icônes de liste {done}/{total} …",
+    "media.iconsDone": "{n} icônes de liste préparées"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7797,7 +7818,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Prepara icone elenco per {n} immagini esistenti",
+    "media.iconsProgress": "Icone elenco {done}/{total} …",
+    "media.iconsDone": "{n} icone elenco preparate"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8772,7 +8796,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Prepara icone elenco per {n} immagini esistenti",
+    "media.iconsProgress": "Icone elenco {done}/{total} …",
+    "media.iconsDone": "{n} icone elenco preparate"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9747,7 +9774,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Preparar ícones de lista para {n} imagens existentes",
+    "media.iconsProgress": "Ícones de lista {done}/{total} …",
+    "media.iconsDone": "{n} ícones de lista preparados"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10722,7 +10752,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Preparar ícones de lista para {n} imagens existentes",
+    "media.iconsProgress": "Ícones de lista {done}/{total} …",
+    "media.iconsDone": "{n} ícones de lista preparados"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11697,7 +11730,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Lijsticonen maken voor {n} bestaande afbeeldingen",
+    "media.iconsProgress": "Lijsticonen {done}/{total} …",
+    "media.iconsDone": "{n} lijsticonen gemaakt"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12672,7 +12708,10 @@
     "tile.estimateAll": "Estimate prices for all markets",
     "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
     "tile.estimateAllDone": "Prices estimated",
-    "tile.estimateAllFailed": "{n} markets could not be estimated"
+    "tile.estimateAllFailed": "{n} markets could not be estimated",
+    "media.iconsBackfill": "Lijsticonen maken voor {n} bestaande afbeeldingen",
+    "media.iconsProgress": "Lijsticonen {done}/{total} …",
+    "media.iconsDone": "{n} lijsticonen gemaakt"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13107,7 +13146,10 @@
     "tile.estimateAll": "Preise für alle Märkte schätzen",
     "tile.estimateAllConfirm": "Richtpreise für alle Märkte per KI schätzen? Vorhandene Preise werden überschrieben (verbraucht KI-Guthaben).",
     "tile.estimateAllDone": "Preise geschätzt",
-    "tile.estimateAllFailed": "{n} Märkte konnten nicht geschätzt werden"
+    "tile.estimateAllFailed": "{n} Märkte konnten nicht geschätzt werden",
+    "media.iconsBackfill": "Listen-Icons für {n} bestehende Bilder aufbereiten",
+    "media.iconsProgress": "Listen-Icons {done}/{total} …",
+    "media.iconsDone": "{n} Listen-Icons aufbereitet"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13542,6 +13584,9 @@
     "tile.estimateAll": "Preise für alle Märkte schätzen",
     "tile.estimateAllConfirm": "Richtpreise für alle Märkte per KI schätzen? Vorhandene Preise werden überschrieben (verbraucht KI-Guthaben).",
     "tile.estimateAllDone": "Preise geschätzt",
-    "tile.estimateAllFailed": "{n} Märkte konnten nicht geschätzt werden"
+    "tile.estimateAllFailed": "{n} Märkte konnten nicht geschätzt werden",
+    "media.iconsBackfill": "Listen-Icons für {n} bestehende Bilder aufbereiten",
+    "media.iconsProgress": "Listen-Icons {done}/{total} …",
+    "media.iconsDone": "{n} Listen-Icons aufbereitet"
   }
 }

@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Erledigt
+- Kleine Produkt-Icons: Abteilungen und Einkaufslisten verwenden separate komprimierte WebP-Icons; Upload, KI-Bilder und Galerie-Auswahl erstellen sie, bestehende Bilder lassen sich unter „Bilder“ nachträglich aufbereiten.
 - KI-Produktbilder: Admin-Panel „KI-Bilder & Richtpreise" erzeugt stapelweise Bilder (5 pro Lauf) → Storage catalog-images/products/{id}.png, image_path gesetzt. Verifiziert: 5 Bilder erzeugt.
 - KI-Richtpreise pro Markt: 50 pro Lauf, upsert in product_reference_prices. Verifiziert: 50 Preise für DE gespeichert.
 - Preisanzeige in Abteilungsansicht war bereits vorhanden (useReferencePrices).

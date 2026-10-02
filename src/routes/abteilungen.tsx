@@ -60,7 +60,9 @@ export const Route = createFileRoute("/abteilungen")({
 });
 
 function ProductThumb({ product }: { product: CatalogProduct }) {
-  return <ProductEmoji emoji={product.emoji} className="text-4xl" />;
+  return product.iconUrl
+    ? <img src={product.iconUrl} alt="" draggable={false} className="h-full w-full object-contain" />
+    : <ProductEmoji emoji={product.emoji} className="text-4xl" />;
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {

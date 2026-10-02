@@ -347,7 +347,12 @@ function ListPage() {
                       className={`grid h-7 w-7 shrink-0 select-none place-items-center overflow-hidden rounded-md text-[19px] ${color ? "" : "bg-primary-soft/25"}`}
                       style={color ? { backgroundColor: color } : undefined}
                     >
-                       <ProductEmoji emoji={item.emoji} />
+                        {(() => {
+                          const product = item.productId ? productById.get(item.productId) : undefined;
+                          return product?.iconUrl
+                            ? <img src={product.iconUrl} alt="" loading="lazy" className="h-full w-full object-contain" />
+                            : <ProductEmoji emoji={item.emoji} />;
+                        })()}
                     </div>
                       );
                     })()}
