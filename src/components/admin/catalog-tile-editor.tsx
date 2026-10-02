@@ -38,6 +38,8 @@ export function CatalogTileEditor(p: {
   translateIds: (ids?: string[]) => Promise<number>;
   reorder: (kind: "department" | "product", list: { id: string }[], from: number, to: number) => void;
   remove: (kind: "department" | "product", id: string, name: string) => void;
+  onSortRelevance?: () => void;
+  busy?: boolean;
 }) {
   const [editMode, setEditMode] = useState(true);
   const [target, setTarget] = useState<Target>(null);
@@ -195,6 +197,13 @@ export function CatalogTileEditor(p: {
             </button>
           )}
         </div>
+      )}
+
+      {p.cur && editMode && p.onSortRelevance && (
+        <button type="button" disabled={p.busy} onClick={p.onSortRelevance}
+          className="w-full rounded-2xl border border-border bg-card px-3 py-3 text-sm font-semibold text-primary disabled:opacity-50">
+          ↕ {p.busy ? T("adm.working") : T("adm.sortRelevance")}
+        </button>
       )}
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
