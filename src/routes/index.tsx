@@ -261,23 +261,6 @@ function ListPage() {
     setQuick("");
   };
 
-  // ---- Mengen-Schnelltasten am Eintrag ----
-  const bumpQuantity = (item: ListItem, delta: number) => {
-    const q = item.quantity ?? "";
-    const m = /^\s*(\d+(?:[.,]\d+)?)(.*)$/.exec(q);
-    let next: string;
-    if (!m) {
-      if (delta <= 0) return;
-      next = "1";
-    } else {
-      const num = m[1] ?? "";
-      const rest = m[2] ?? "";
-      const n = Math.max(1, Math.round((Number(num.replace(",", ".")) + delta) * 100) / 100);
-      next = `${String(n).replace(".", ",")}${rest}`;
-    }
-    setItemQuantity(item.id, next);
-  };
-
   // ---- Einkaufs-Modus: Grosschrift, nur Abhaken, Bildschirm bleibt wach ----
   const [shopMode, setShopMode] = useState(false);
   useEffect(() => {
