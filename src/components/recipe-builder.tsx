@@ -720,7 +720,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             })()
           )}
           </div>
-          )}
         </div>
         );
       })}
