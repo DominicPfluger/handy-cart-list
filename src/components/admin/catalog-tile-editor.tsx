@@ -53,6 +53,8 @@ export function CatalogTileEditor(p: {
   onRenameHeading?: (id: string, name: string) => void;
   onDeleteHeading?: (id: string, name: string) => void;
   onBulkAdd?: (() => void) | undefined;
+  /** Ergänzt fehlende Übersetzungen per KI (ganzer Katalog). */
+  onTranslateMissing?: () => void;
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const headingBefore = useMemo(() => new Map((p.headings ?? []).map((h) => [h.before_product_id, h])), [p.headings]);
@@ -161,6 +163,7 @@ export function CatalogTileEditor(p: {
           {p.cur && <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "product", id: null })}>+ {T("tile.newProd")}</Button>}
           {p.cur && p.onBulkAdd && <Button size="sm" variant="outline" onClick={p.onBulkAdd}>+ {T("adm.multi")}</Button>}
           {p.cur && <Button size="sm" variant="outline" onClick={() => setSuggesting(true)}>✨ {T("tile.suggest")}</Button>}
+          {p.onTranslateMissing && <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onTranslateMissing}>🌐 {p.busy ? T("adm.working") : T("adm.trMissing")}</Button>}
         </div>
       )}
 
