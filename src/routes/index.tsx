@@ -436,7 +436,7 @@ function ListPage() {
         <div className="border-t border-border pt-4" aria-live="polite">
           <div className="flex items-baseline justify-between gap-3">
             <span className="text-sm font-semibold text-foreground">{t("list.estimatedTotal")}</span>
-            <span className="text-lg font-bold text-foreground">{pricesPending ? "…" : new Intl.NumberFormat(getLocale(), { style: "currency", currency }).format(estimate.value)}</span>
+            <span className="text-lg font-bold text-foreground">{pricesPending ? "…" : estimate.missing === items.length ? "—" : new Intl.NumberFormat(getLocale(), { style: "currency", currency }).format(estimate.value)}</span>
           </div>
           {!pricesPending && estimate.missing > 0 && <p className="mt-1 text-xs text-muted-foreground">{t("list.unpriced", { n: estimate.missing })}</p>}
         </div>
