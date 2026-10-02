@@ -895,6 +895,7 @@ export const de = {
   "adm.picksHint": "{n} Vorschläge – abwählen, was nicht passt:",
   "adm.assigned": "Zugewiesen",
   "rk.otherGroup": "Weitere",
+  "rk.anyOf": "{name} nach Wahl",
   "rk.showAll": "Alle {count} anzeigen ▾",
   "rk.showMore": "Weitere {count} anzeigen ▾",
   "adm.recipeSortBy": "Sortieren nach…",

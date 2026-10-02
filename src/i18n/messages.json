@@ -1157,7 +1157,8 @@
     "rk.taste.bitter": "Bitter",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salty",
-    "rk.taste.fruity": "Fruity"
+    "rk.taste.fruity": "Fruity",
+    "rk.anyOf": "{name} of your choice"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2317,7 +2318,8 @@
     "rk.taste.bitter": "Bitter",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salty",
-    "rk.taste.fruity": "Fruity"
+    "rk.taste.fruity": "Fruity",
+    "rk.anyOf": "{name} of your choice"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3477,7 +3479,8 @@
     "rk.taste.bitter": "Bitter",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salty",
-    "rk.taste.fruity": "Fruity"
+    "rk.taste.fruity": "Fruity",
+    "rk.anyOf": "{name} of your choice"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4637,7 +4640,8 @@
     "rk.taste.bitter": "Amargo",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salado",
-    "rk.taste.fruity": "Frutal"
+    "rk.taste.fruity": "Frutal",
+    "rk.anyOf": "{name} a elección"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5797,7 +5801,8 @@
     "rk.taste.bitter": "Amargo",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salado",
-    "rk.taste.fruity": "Frutal"
+    "rk.taste.fruity": "Frutal",
+    "rk.anyOf": "{name} a elección"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6957,7 +6962,8 @@
     "rk.taste.bitter": "Amer",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salé",
-    "rk.taste.fruity": "Fruité"
+    "rk.taste.fruity": "Fruité",
+    "rk.anyOf": "{name} au choix"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8117,7 +8123,8 @@
     "rk.taste.bitter": "Amer",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salé",
-    "rk.taste.fruity": "Fruité"
+    "rk.taste.fruity": "Fruité",
+    "rk.anyOf": "{name} au choix"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9277,7 +9284,8 @@
     "rk.taste.bitter": "Amaro",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salato",
-    "rk.taste.fruity": "Fruttato"
+    "rk.taste.fruity": "Fruttato",
+    "rk.anyOf": "{name} a scelta"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10437,7 +10445,8 @@
     "rk.taste.bitter": "Amaro",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salato",
-    "rk.taste.fruity": "Fruttato"
+    "rk.taste.fruity": "Fruttato",
+    "rk.anyOf": "{name} a scelta"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11597,7 +11606,8 @@
     "rk.taste.bitter": "Amargo",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salgado",
-    "rk.taste.fruity": "Frutado"
+    "rk.taste.fruity": "Frutado",
+    "rk.anyOf": "{name} à escolha"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12757,7 +12767,8 @@
     "rk.taste.bitter": "Amargo",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salgado",
-    "rk.taste.fruity": "Frutado"
+    "rk.taste.fruity": "Frutado",
+    "rk.anyOf": "{name} à escolha"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13917,7 +13928,8 @@
     "rk.taste.bitter": "Bitter",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Zout",
-    "rk.taste.fruity": "Fruitig"
+    "rk.taste.fruity": "Fruitig",
+    "rk.anyOf": "{name} naar keuze"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15077,7 +15089,8 @@
     "rk.taste.bitter": "Bitter",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Zout",
-    "rk.taste.fruity": "Fruitig"
+    "rk.taste.fruity": "Fruitig",
+    "rk.anyOf": "{name} naar keuze"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15699,7 +15712,8 @@
     "rk.taste.bitter": "Bitter",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salzig",
-    "rk.taste.fruity": "Fruchtig"
+    "rk.taste.fruity": "Fruchtig",
+    "rk.anyOf": "{name} nach Wahl"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16321,6 +16335,7 @@
     "rk.taste.bitter": "Bitter",
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salzig",
-    "rk.taste.fruity": "Fruchtig"
+    "rk.taste.fruity": "Fruchtig",
+    "rk.anyOf": "{name} nach Wahl"
   }
 }

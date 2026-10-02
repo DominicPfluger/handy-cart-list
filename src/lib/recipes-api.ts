@@ -45,7 +45,7 @@ export async function createRecipe(input: {
     template_id: input.templateId,
     picks: input.picks as unknown as Json,
     items: input.items as unknown as Json,
-    product_ids: input.items.map((i) => i.productId),
+    product_ids: input.items.map((i) => i.productId).filter((id) => !id.startsWith("any:")),
     is_public: !!input.isPublic,
     image_path: input.imagePath ?? null,
     satiety: input.satiety ?? null,
