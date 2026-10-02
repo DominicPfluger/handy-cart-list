@@ -1127,7 +1127,8 @@
     "adm.popular": "Popular combinations",
     "adm.popularNew": "Add combination",
     "adm.popularHint": "Step: products (comma separated), e.g. base: Oats; fruit: Bananas",
-    "adm.popularDeleteConfirm": "Delete this combination?"
+    "adm.popularDeleteConfirm": "Delete this combination?",
+    "adm.exportTxt": "Export as text file"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2257,7 +2258,8 @@
     "adm.popular": "Popular combinations",
     "adm.popularNew": "Add combination",
     "adm.popularHint": "Step: products (comma separated), e.g. base: Oats; fruit: Bananas",
-    "adm.popularDeleteConfirm": "Delete this combination?"
+    "adm.popularDeleteConfirm": "Delete this combination?",
+    "adm.exportTxt": "Export as text file"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3387,7 +3389,8 @@
     "adm.popular": "Popular combinations",
     "adm.popularNew": "Add combination",
     "adm.popularHint": "Step: products (comma separated), e.g. base: Oats; fruit: Bananas",
-    "adm.popularDeleteConfirm": "Delete this combination?"
+    "adm.popularDeleteConfirm": "Delete this combination?",
+    "adm.exportTxt": "Export as text file"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4517,7 +4520,8 @@
     "adm.popular": "Combinaciones populares",
     "adm.popularNew": "Añadir combinación",
     "adm.popularHint": "Paso: productos (separados por comas), p. ej. base: Copos de avena; fruit: Plátanos",
-    "adm.popularDeleteConfirm": "¿Eliminar esta combinación?"
+    "adm.popularDeleteConfirm": "¿Eliminar esta combinación?",
+    "adm.exportTxt": "Exportar como archivo de texto"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5647,7 +5651,8 @@
     "adm.popular": "Combinaciones populares",
     "adm.popularNew": "Añadir combinación",
     "adm.popularHint": "Paso: productos (separados por comas), p. ej. base: Copos de avena; fruit: Plátanos",
-    "adm.popularDeleteConfirm": "¿Eliminar esta combinación?"
+    "adm.popularDeleteConfirm": "¿Eliminar esta combinación?",
+    "adm.exportTxt": "Exportar como archivo de texto"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6777,7 +6782,8 @@
     "adm.popular": "Combinaisons populaires",
     "adm.popularNew": "Ajouter une combinaison",
     "adm.popularHint": "Étape : produits (séparés par des virgules), p. ex. base : Flocons d'avoine ; fruit : Bananes",
-    "adm.popularDeleteConfirm": "Supprimer cette combinaison ?"
+    "adm.popularDeleteConfirm": "Supprimer cette combinaison ?",
+    "adm.exportTxt": "Exporter en fichier texte"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7907,7 +7913,8 @@
     "adm.popular": "Combinaisons populaires",
     "adm.popularNew": "Ajouter une combinaison",
     "adm.popularHint": "Étape : produits (séparés par des virgules), p. ex. base : Flocons d'avoine ; fruit : Bananes",
-    "adm.popularDeleteConfirm": "Supprimer cette combinaison ?"
+    "adm.popularDeleteConfirm": "Supprimer cette combinaison ?",
+    "adm.exportTxt": "Exporter en fichier texte"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9037,7 +9044,8 @@
     "adm.popular": "Combinazioni popolari",
     "adm.popularNew": "Aggiungi combinazione",
     "adm.popularHint": "Passaggio: prodotti (separati da virgola), es. base: Fiocchi d'avena; fruit: Banane",
-    "adm.popularDeleteConfirm": "Eliminare questa combinazione?"
+    "adm.popularDeleteConfirm": "Eliminare questa combinazione?",
+    "adm.exportTxt": "Esporta come file di testo"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10167,7 +10175,8 @@
     "adm.popular": "Combinazioni popolari",
     "adm.popularNew": "Aggiungi combinazione",
     "adm.popularHint": "Passaggio: prodotti (separati da virgola), es. base: Fiocchi d'avena; fruit: Banane",
-    "adm.popularDeleteConfirm": "Eliminare questa combinazione?"
+    "adm.popularDeleteConfirm": "Eliminare questa combinazione?",
+    "adm.exportTxt": "Esporta come file di testo"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11297,7 +11306,8 @@
     "adm.popular": "Combinações populares",
     "adm.popularNew": "Adicionar combinação",
     "adm.popularHint": "Passo: produtos (separados por vírgula), ex. base: Flocos de aveia; fruit: Bananas",
-    "adm.popularDeleteConfirm": "Eliminar esta combinação?"
+    "adm.popularDeleteConfirm": "Eliminar esta combinação?",
+    "adm.exportTxt": "Exportar como ficheiro de texto"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12427,7 +12437,8 @@
     "adm.popular": "Combinações populares",
     "adm.popularNew": "Adicionar combinação",
     "adm.popularHint": "Passo: produtos (separados por vírgula), ex. base: Flocos de aveia; fruit: Bananas",
-    "adm.popularDeleteConfirm": "Eliminar esta combinação?"
+    "adm.popularDeleteConfirm": "Eliminar esta combinação?",
+    "adm.exportTxt": "Exportar como arquivo de texto"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13557,7 +13568,8 @@
     "adm.popular": "Populaire combinaties",
     "adm.popularNew": "Combinatie toevoegen",
     "adm.popularHint": "Stap: producten (kommagescheiden), bijv. base: Havervlokken; fruit: Bananen",
-    "adm.popularDeleteConfirm": "Deze combinatie verwijderen?"
+    "adm.popularDeleteConfirm": "Deze combinatie verwijderen?",
+    "adm.exportTxt": "Exporteren als tekstbestand"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14687,7 +14699,8 @@
     "adm.popular": "Populaire combinaties",
     "adm.popularNew": "Combinatie toevoegen",
     "adm.popularHint": "Stap: producten (kommagescheiden), bijv. base: Havervlokken; fruit: Bananen",
-    "adm.popularDeleteConfirm": "Deze combinatie verwijderen?"
+    "adm.popularDeleteConfirm": "Deze combinatie verwijderen?",
+    "adm.exportTxt": "Exporteren als tekstbestand"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15279,7 +15292,8 @@
     "adm.popular": "Beliebte Kombinationen",
     "adm.popularNew": "Kombination hinzufügen",
     "adm.popularHint": "Schritt: Produkte (Komma getrennt), z. B. base: Haferflocken; fruit: Bananen",
-    "adm.popularDeleteConfirm": "Diese Kombination löschen?"
+    "adm.popularDeleteConfirm": "Diese Kombination löschen?",
+    "adm.exportTxt": "Als Textdatei exportieren"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15871,6 +15885,7 @@
     "adm.popular": "Beliebte Kombinationen",
     "adm.popularNew": "Kombination hinzufügen",
     "adm.popularHint": "Schritt: Produkte (Komma getrennt), z. B. base: Haferflocken; fruit: Bananen",
-    "adm.popularDeleteConfirm": "Diese Kombination löschen?"
+    "adm.popularDeleteConfirm": "Diese Kombination löschen?",
+    "adm.exportTxt": "Als Textdatei exportieren"
   }
 }

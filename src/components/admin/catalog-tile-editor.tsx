@@ -270,6 +270,24 @@ export function CatalogTileEditor(p: {
   // Icon-Klick öffnet den Dialog erst nach kurzer Verzögerung — ein Doppelklick (Zoom) kann ihn abbrechen
   const iconClickTimer = useRef<number | null>(null);
 
+  /** Produktliste der aktuellen Kategorie als Textdatei herunterladen (Überschriften als #-Zeilen). */
+  const exportTxt = () => {
+    if (!p.cur) return;
+    const lines: string[] = [p.path.map((d) => p.nm(d.id, d.name)).join(" › "), ""];
+    for (const x of p.products) {
+      if (x.alias_id) continue;
+      const h = headingBefore.get(x.id);
+      if (h) lines.push("", `# ${h.name}`);
+      lines.push(`${x.emoji ? x.emoji + " " : ""}${p.nm(x.id, x.name)}`);
+    }
+    const blob = new Blob([lines.join("\n") + "\n"], { type: "text/plain;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = `${p.nm(p.cur, p.path[p.path.length - 1]?.name ?? "katalog")}.txt`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
   return (
     <div className="space-y-3">
       <p className="text-xs text-muted-foreground">{T("tile.hint")}</p>
@@ -302,6 +320,9 @@ export function CatalogTileEditor(p: {
             <Button size="sm" variant="outline" disabled={!!imgProg} onClick={generateAllImages}>
               🖼️ {imgProg ? T("tile.genAllBusy", { done: imgProg.done, total: imgProg.total }) : T("tile.genAll")}
             </Button>
+          )}
+          {p.cur && p.products.length > 0 && (
+            <Button size="sm" variant="outline" onClick={exportTxt}>📄 {T("adm.exportTxt")}</Button>
           )}
           {p.onTranslateMissing && <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onTranslateMissing}>🌐 {p.busy ? T("adm.working") : T("adm.trMissing")}</Button>}
         </div>

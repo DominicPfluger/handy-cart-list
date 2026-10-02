@@ -820,6 +820,7 @@ export const de = {
   "adm.close": "Schliessen",
   "adm.fromCatalog": "+ Aus Katalog",
   "adm.selectAll": "Alle auswählen",
+  "adm.exportTxt": "Als Textdatei exportieren",
   "adm.selectNone": "Keine auswählen",
   "adm.topLevel": "Oberste Ebene",
   "adm.save": "Speichern",
