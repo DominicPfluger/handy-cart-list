@@ -491,7 +491,6 @@ function ListPage() {
                         </p>
                       )}
                     </div>
-                    {!shopMode && <ItemPhoto itemId={item.id} />}
                     {!shopMode && (
                     <div className="flex shrink-0 items-center gap-0.5">
                       <button
@@ -529,15 +528,6 @@ function ListPage() {
                         </label>
                       );
                     })()}
-                    {!shopMode && (
-                    <button
-                      onClick={() => removeItemWithPhoto(item.id)}
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-coral transition active:scale-90"
-                      aria-label={t("list.remove")}
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                    </button>
-                    )}
                   </div>
                   </Fragment>
                   );
