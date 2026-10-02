@@ -691,7 +691,7 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
   );
 }
 
-type Suggestion = { name: string; emoji: string; reason: string; scope: "global" | "market"; source?: string };
+type Suggestion = { name: string; emoji: string; reason: string; scope: "global" | "market"; source?: string | undefined };
 
 function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path }: {
   onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>) => void; onCancel: () => void;
