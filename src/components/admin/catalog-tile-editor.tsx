@@ -360,6 +360,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [estimates, setEstimates] = useState<Array<{ market: string; price: number; currency: string; unit_price: number | null; unit_basis: string | null }>>([]);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
+  const [prodLines, setProdLines] = useState("");
   const heads = p.headings ?? [];
   const curHeadingId = (() => {
     if (!prod) return "";
