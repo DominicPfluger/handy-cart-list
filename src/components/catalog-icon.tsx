@@ -3,7 +3,7 @@ import { ProductEmoji } from "./product-emoji";
 import { useIconSet } from "../hooks/use-icon-set";
 import { cachedCatalogImage } from "../lib/catalog-image-cache";
 
-function CachedImage({ path, signedUrl, className, fallback }: { path?: string | null | undefined; signedUrl?: string | null | undefined; className: string; fallback: React.ReactNode }) {
+export function CachedImage({ path, signedUrl, className, fallback }: { path?: string | null | undefined; signedUrl?: string | null | undefined; className: string; fallback: React.ReactNode }) {
   const [url, setUrl] = useState<string | null>(null);
   useEffect(() => {
     if (!path) return;
