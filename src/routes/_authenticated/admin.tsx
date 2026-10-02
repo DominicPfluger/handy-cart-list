@@ -293,7 +293,6 @@ function AdminPage() {
     const sel = new Set(Array.isArray(productIds) ? productIds : [productIds]);
     const block = list.filter((x) => sel.has(x.id));
     if (block.length === 0) return;
-    const productId = block[0]!.id;
     const isOwn = (id: string) => !id.startsWith("alias:");
     // Gruppen vor dem Verschieben ermitteln
     const anchorIdx = headings.map((h) => ({ h, i: list.findIndex((x) => x.id === h.before_product_id) })).filter((x) => x.i >= 0).sort((a, b) => a.i - b.i);
@@ -318,7 +317,7 @@ function AdminPage() {
       if (!anchor) {
         // Leere Gruppe: Überschrift bleibt an ihrer Stelle, vor dem nächsten eigenen Produkt
         const oldPos = list.findIndex((x) => x.id === h.before_product_id);
-        const after = list.slice(oldPos + 1).find((x) => isOwn(x.id) && x.id !== productId && !used.has(x.id));
+        const after = list.slice(oldPos + 1).find((x) => isOwn(x.id) && !sel.has(x.id) && !used.has(x.id));
         anchor = after?.id ?? h.before_product_id;
       }
       used.add(anchor);
