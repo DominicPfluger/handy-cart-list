@@ -46,9 +46,13 @@ export function LocaleAdminPanel() {
   const [id, setId] = useState("");
   const [label, setLabel] = useState("");
   const [flag, setFlag] = useState("");
+  const [search, setSearch] = useState("");
   const [progress, setProgress] = useState<string | null>(null);
   const taken = new Set([...LOCALES.map((l) => l.id), ...(q.data ?? []).map((l) => l.id)]);
-  const suggestions = SUGGESTED.filter((s) => !taken.has(s.id));
+  const needle = search.trim().toLowerCase();
+  const suggestions = SUGGESTED
+    .filter((s) => !taken.has(s.id))
+    .filter((s) => !needle || s.id.toLowerCase().includes(needle) || s.label.toLowerCase().includes(needle));
 
   const translateAll = async (loc: string) => {
     let done = 0;
@@ -100,16 +104,6 @@ export function LocaleAdminPanel() {
         <p className="text-sm text-muted-foreground">{t("loc.hint")}</p>
       </div>
 
-      <div className="space-y-2">
-        <div className="flex gap-2">
-          <Input aria-label={t("loc.flag")} placeholder="🇵🇱" value={flag} onChange={(e) => setFlag(e.target.value)} className="h-11 w-16 rounded-xl text-center text-xl" />
-          <Input aria-label={t("loc.code")} placeholder="pl-PL" value={id} onChange={(e) => setId(e.target.value)} className="h-11 w-28 rounded-xl" />
-          <Input aria-label={t("loc.label")} placeholder={t("loc.labelPh")} value={label} onChange={(e) => setLabel(e.target.value)} className="h-11 flex-1 rounded-xl" />
-        </div>
-        <Button className="h-11 w-full rounded-xl" disabled={Boolean(progress)} onClick={submit}>{t("loc.create")}</Button>
-        {progress && <p className="text-sm font-semibold text-primary">{progress}</p>}
-      </div>
-
       <div className="space-y-1.5">
         <h3 className="text-sm font-bold text-foreground">{t("loc.builtin")}</h3>
         <ul className="divide-y divide-border">
@@ -121,22 +115,6 @@ export function LocaleAdminPanel() {
           ))}
         </ul>
       </div>
-
-      {suggestions.length > 0 && (
-        <div className="space-y-1.5">
-          <h3 className="text-sm font-bold text-foreground">{t("loc.suggest")}</h3>
-          <p className="text-xs text-muted-foreground">{t("loc.suggestHint")}</p>
-          <div className="flex flex-wrap gap-1.5">
-            {suggestions.map((s) => (
-              <button key={s.id} type="button" disabled={Boolean(progress)}
-                onClick={() => { if (confirm(`${s.flag} ${s.label} (${s.id}) – ${t("loc.create")}?`)) void run(s.id, () => create({ data: s })); }}
-                className="flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground hover:border-primary disabled:opacity-50">
-                <span>{s.flag}</span>{s.label}<span className="text-xs text-muted-foreground">{s.id}</span><span className="font-bold text-primary">+</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
 
       {(q.data ?? []).length > 0 && (
         <ul className="divide-y divide-border">
@@ -154,6 +132,37 @@ export function LocaleAdminPanel() {
           ))}
         </ul>
       )}
+
+      <div className="space-y-1.5">
+        <Input aria-label={t("loc.search")} placeholder={t("loc.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
+        {suggestions.length > 0 ? (
+          <>
+            <h3 className="text-sm font-bold text-foreground">{t("loc.suggest")}</h3>
+            <p className="text-xs text-muted-foreground">{t("loc.suggestHint")}</p>
+            <div className="flex flex-wrap gap-1.5">
+              {suggestions.map((s) => (
+                <button key={s.id} type="button" disabled={Boolean(progress)}
+                  onClick={() => { if (confirm(`${s.flag} ${s.label} (${s.id}) – ${t("loc.create")}?`)) void run(s.id, () => create({ data: s })); }}
+                  className="flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1.5 text-sm text-foreground hover:border-primary disabled:opacity-50">
+                  <span>{s.flag}</span>{s.label}<span className="text-xs text-muted-foreground">{s.id}</span><span className="font-bold text-primary">+</span>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : (
+          needle ? <p className="text-sm text-muted-foreground">{t("loc.noMatch")}</p> : null
+        )}
+      </div>
+
+      <div className="space-y-2">
+        <div className="flex gap-2">
+          <Input aria-label={t("loc.flag")} placeholder="🇵🇱" value={flag} onChange={(e) => setFlag(e.target.value)} className="h-11 w-16 rounded-xl text-center text-xl" />
+          <Input aria-label={t("loc.code")} placeholder="pl-PL" value={id} onChange={(e) => setId(e.target.value)} className="h-11 w-28 rounded-xl" />
+          <Input aria-label={t("loc.label")} placeholder={t("loc.labelPh")} value={label} onChange={(e) => setLabel(e.target.value)} className="h-11 flex-1 rounded-xl" />
+        </div>
+        <Button className="h-11 w-full rounded-xl" disabled={Boolean(progress)} onClick={submit}>{t("loc.create")}</Button>
+        {progress && <p className="text-sm font-semibold text-primary">{progress}</p>}
+      </div>
     </section>
   );
 }

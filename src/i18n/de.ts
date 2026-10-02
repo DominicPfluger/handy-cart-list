@@ -594,6 +594,8 @@ export const de = {
   "loc.status": "App-Texte {ui}/{total} · Katalog {cat}",
   "loc.continue": "Weiter übersetzen",
   "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?",
+  "loc.search": "Sprache suchen",
+  "loc.noMatch": "Keine Treffer",
   "tile.viewList": "Liste",
   "tile.viewTiles": "Kacheln",
   "tile.advanced": "Erweitert",

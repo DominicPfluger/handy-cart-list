@@ -927,7 +927,9 @@
     "loc.suggestHint": "Tap to add and translate the language.",
     "adm.sortRelevance": "Sort by relevance",
     "tile.advanced": "Advanced",
-    "adm.marketChoice": "Market selection"
+    "adm.marketChoice": "Market selection",
+    "loc.search": "Search languages",
+    "loc.noMatch": "No matches"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1857,7 +1859,9 @@
     "loc.suggestHint": "Tap to add and translate the language.",
     "adm.sortRelevance": "Sort by relevance",
     "tile.advanced": "Advanced",
-    "adm.marketChoice": "Market selection"
+    "adm.marketChoice": "Market selection",
+    "loc.search": "Search languages",
+    "loc.noMatch": "No matches"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2787,7 +2791,9 @@
     "loc.suggestHint": "Tap to add and translate the language.",
     "adm.sortRelevance": "Sort by relevance",
     "tile.advanced": "Advanced",
-    "adm.marketChoice": "Market selection"
+    "adm.marketChoice": "Market selection",
+    "loc.search": "Search languages",
+    "loc.noMatch": "No matches"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3717,7 +3723,9 @@
     "loc.suggestHint": "Toca para añadir y traducir el idioma.",
     "adm.sortRelevance": "Ordenar por relevancia",
     "tile.advanced": "Avanzado",
-    "adm.marketChoice": "Selección de mercado"
+    "adm.marketChoice": "Selección de mercado",
+    "loc.search": "Buscar idiomas",
+    "loc.noMatch": "Sin resultados"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4647,7 +4655,9 @@
     "loc.suggestHint": "Toca para añadir y traducir el idioma.",
     "adm.sortRelevance": "Ordenar por relevancia",
     "tile.advanced": "Avanzado",
-    "adm.marketChoice": "Selección de mercado"
+    "adm.marketChoice": "Selección de mercado",
+    "loc.search": "Buscar idiomas",
+    "loc.noMatch": "Sin resultados"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5577,7 +5587,9 @@
     "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
     "adm.sortRelevance": "Trier par pertinence",
     "tile.advanced": "Avancé",
-    "adm.marketChoice": "Choix du marché"
+    "adm.marketChoice": "Choix du marché",
+    "loc.search": "Rechercher des langues",
+    "loc.noMatch": "Aucun résultat"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6507,7 +6519,9 @@
     "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
     "adm.sortRelevance": "Trier par pertinence",
     "tile.advanced": "Avancé",
-    "adm.marketChoice": "Choix du marché"
+    "adm.marketChoice": "Choix du marché",
+    "loc.search": "Rechercher des langues",
+    "loc.noMatch": "Aucun résultat"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7437,7 +7451,9 @@
     "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
     "adm.sortRelevance": "Ordina per rilevanza",
     "tile.advanced": "Avanzate",
-    "adm.marketChoice": "Scelta del mercato"
+    "adm.marketChoice": "Scelta del mercato",
+    "loc.search": "Cerca lingue",
+    "loc.noMatch": "Nessun risultato"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8367,7 +8383,9 @@
     "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
     "adm.sortRelevance": "Ordina per rilevanza",
     "tile.advanced": "Avanzate",
-    "adm.marketChoice": "Scelta del mercato"
+    "adm.marketChoice": "Scelta del mercato",
+    "loc.search": "Cerca lingue",
+    "loc.noMatch": "Nessun risultato"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9297,7 +9315,9 @@
     "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
     "adm.sortRelevance": "Ordenar por relevância",
     "tile.advanced": "Avançado",
-    "adm.marketChoice": "Escolha de mercado"
+    "adm.marketChoice": "Escolha de mercado",
+    "loc.search": "Pesquisar idiomas",
+    "loc.noMatch": "Sem resultados"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10227,7 +10247,9 @@
     "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
     "adm.sortRelevance": "Ordenar por relevância",
     "tile.advanced": "Avançado",
-    "adm.marketChoice": "Escolha de mercado"
+    "adm.marketChoice": "Escolha de mercado",
+    "loc.search": "Pesquisar idiomas",
+    "loc.noMatch": "Sem resultados"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11157,7 +11179,9 @@
     "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
     "adm.sortRelevance": "Sorteren op relevantie",
     "tile.advanced": "Geavanceerd",
-    "adm.marketChoice": "Marktkeuze"
+    "adm.marketChoice": "Marktkeuze",
+    "loc.search": "Talen zoeken",
+    "loc.noMatch": "Geen resultaten"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12087,7 +12111,9 @@
     "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
     "adm.sortRelevance": "Sorteren op relevantie",
     "tile.advanced": "Geavanceerd",
-    "adm.marketChoice": "Marktkeuze"
+    "adm.marketChoice": "Marktkeuze",
+    "loc.search": "Talen zoeken",
+    "loc.noMatch": "Geen resultaten"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12479,7 +12505,9 @@
     "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
     "adm.sortRelevance": "Nach Relevanz sortieren",
     "tile.advanced": "Erweitert",
-    "adm.marketChoice": "Marktwahl"
+    "adm.marketChoice": "Marktwahl",
+    "loc.search": "Sprachen suchen",
+    "loc.noMatch": "Keine Treffer"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12871,6 +12899,8 @@
     "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
     "adm.sortRelevance": "Nach Relevanz sortieren",
     "tile.advanced": "Erweitert",
-    "adm.marketChoice": "Marktwahl"
+    "adm.marketChoice": "Marktwahl",
+    "loc.search": "Sprachen suchen",
+    "loc.noMatch": "Keine Treffer"
   }
 }
