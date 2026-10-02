@@ -547,7 +547,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               const groupKey = openIngredientGroups[s.key];
               const other = s.products.filter((p) => !s.groupByProduct.get(p.id) || !s.groups.some((g) => g.id === s.groupByProduct.get(p.id)));
               if (hasGroups && !groupKey) return (
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                <div className="grid grid-cols-2 gap-2">
                   {s.groups.map((g) => {
                     const inGroup = s.products.filter((p) => s.groupByProduct.get(p.id) === g.id);
                     const selected = inGroup.filter((p) => sel.includes(p.id)).length;

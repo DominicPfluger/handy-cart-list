@@ -14,7 +14,7 @@
 - Diet filter: products.excluded_diets. Cuisine filter: `cuisines`+`product_cuisines`. Why: simple, editable.
 - Catalog routes `ssr: false`. Why: SSR-embedded catalog caused 'aborted' blank screens.
 - Brands: `product_brands` (locales = market codes); chosen brand appended as "Name · Marke". Why: same for cloud/local lists.
-- Recipe creator shows a flat admin-curated ingredient list per step (recipe_ingredients.sort_order, first 20 + expand); recipe_groups unused. Why: simpler choice, admin controls ranking.
+- Recipe creator groups ingredients within each step using recipe_groups and recipe_ingredients.group_id, falling back to flat lists for ungrouped steps. Why: browse ingredient families without changing selection rules.
 - Aliases: `department_aliases`/`product_aliases` show items in extra places; data lives once; list category = list_items.group_label. Why: single source of truth.
 - Read-aloud: own language (default de-DE) + admin templates in `speech_texts`. Why: mother tongue regardless of UI.
 - Recipe folders nest via recipe_folders.parent_id (DB trigger blocks cycles); deleting a folder moves its recipes and subfolders up one level. Why: themed sorting without data loss.
