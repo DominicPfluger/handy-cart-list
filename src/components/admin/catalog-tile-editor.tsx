@@ -384,10 +384,36 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
 
   // KI-Vorschlag für den Bildtext einer Kategorie, abgeleitet aus den enthaltenen Produkten.
   const [suggesting, setSuggesting] = useState(false);
-  const loadSuggestion = (overwrite: boolean) => {
+  // Produkte, die für den Bildvorschlag per Checkbox gewählt werden können.
+  const [pickList, setPickList] = useState<{ id: string; name: string; emoji: string | null }[]>([]);
+  const [picked, setPicked] = useState<Set<string>>(new Set());
+  const [pickSearch, setPickSearch] = useState("");
+  useEffect(() => {
+    if (!isDept || !effId) { setPickList([]); return; }
+    let off = false;
+    void (async () => {
+      const [own, al] = await Promise.all([
+        supabase.from("products").select("id, name, emoji").eq("department_id", effId).order("sort_order").limit(200),
+        supabase.from("product_aliases").select("products(id, name, emoji)").eq("department_id", effId).order("sort_order").limit(100),
+      ]);
+      let list = [...(own.data ?? []), ...((al.data ?? []).map((r) => (r as { products: { id: string; name: string; emoji: string | null } | null }).products).filter(Boolean) as { id: string; name: string; emoji: string | null }[])];
+      if (!list.length) {
+        const { data: kids } = await supabase.from("departments").select("id").eq("parent_id", effId);
+        const ids = (kids ?? []).map((k) => k.id);
+        if (ids.length) list = (await supabase.from("products").select("id, name, emoji").in("department_id", ids).order("sort_order").limit(200)).data ?? [];
+      }
+      const seen = new Set<string>();
+      list = list.filter((x) => (seen.has(x.id) ? false : (seen.add(x.id), true)));
+      if (off) return;
+      setPickList(list);
+      setPicked(new Set(list.slice(0, 30).map((x) => x.id)));
+    })();
+    return () => { off = true; };
+  }, [effId, isDept]);
+  const loadSuggestion = (overwrite: boolean, ids?: string[]) => {
     if (!isDept || !effId) return;
     setSuggesting(true);
-    void suggestPrompt({ data: { departmentId: effId } })
+    void suggestPrompt({ data: { departmentId: effId, ...(ids?.length ? { productIds: ids.slice(0, 60) } : {}) } })
       .then((r) => { if (r.prompt) setHint((h) => (overwrite || !h.trim() ? r.prompt : h)); })
       .catch(() => {})
       .finally(() => setSuggesting(false));
@@ -543,6 +569,29 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                   <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true)}>↻</Button>
                 )}
               </div>
+              {isDept && effId && pickList.length > 0 && (
+                <details className="rounded-xl border border-border p-2 text-sm">
+                  <summary className="cursor-pointer select-none font-medium text-foreground">
+                    {T("tile.imgProducts")} · {T("tile.imgProductsCount", { n: picked.size })}
+                  </summary>
+                  <div className="mt-2 space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => setPicked(new Set(pickList.map((x) => x.id)))}>{T("tile.imgProductsAll")}</Button>
+                      <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => setPicked(new Set())}>{T("tile.imgProductsNone")}</Button>
+                      {pickList.length > 12 && <Input value={pickSearch} onChange={(e) => setPickSearch(e.target.value)} placeholder={T("tile.deptAliasSearch")} className="h-7 flex-1 text-xs" />}
+                    </div>
+                    <div className="max-h-48 space-y-1 overflow-y-auto">
+                      {pickList.filter((x) => !pickSearch.trim() || x.name.toLowerCase().includes(pickSearch.trim().toLowerCase())).map((x) => (
+                        <label key={x.id} className="flex items-center gap-2 text-xs text-foreground">
+                          <input type="checkbox" checked={picked.has(x.id)} onChange={(e) => setPicked((s) => { const n = new Set(s); if (e.target.checked) n.add(x.id); else n.delete(x.id); return n; })} />
+                          <span>{x.emoji ?? ""} {x.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">{T("tile.imgProductsHint")}</p>
+                  </div>
+                </details>
+              )}
               <div className="flex flex-wrap gap-2">
                 <Button size="sm" variant="outline" disabled={imageBusy || p.busy} onClick={() => void generateDialogImage()}>{imageBusy ? T("adm.working") : isDept || !item ? `✨ ${T("tile.aiImage")}` : `✨ ${T("tile.regenerateImage")}`}</Button>
                 {!isDept && item && (imagePreview === undefined ? Boolean(p.imgUrl) : Boolean(imagePreview)) &&

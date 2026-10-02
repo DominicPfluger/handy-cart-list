@@ -178,11 +178,13 @@ export const suggestProducts = createServerFn({ method: "POST" })
 /** KI-Vorschlag für den Bildtext (hint) eines Kategorie-Bildes, abgeleitet aus den Produkten der Kategorie. */
 export const suggestImagePrompt = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ departmentId: z.string().uuid() }).parse(d))
+  .inputValidator((d) => z.object({ departmentId: z.string().uuid(), productIds: z.array(z.string().uuid()).max(60).optional() }).parse(d))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { data: dept } = await context.supabase.from("departments").select("name, emoji, parent_id").eq("id", data.departmentId).single();
-    const { data: prods } = await context.supabase.from("products").select("name").eq("department_id", data.departmentId).order("sort_order").limit(30);
+    const { data: prods } = data.productIds?.length
+      ? await context.supabase.from("products").select("name").in("id", data.productIds)
+      : await context.supabase.from("products").select("name").eq("department_id", data.departmentId).order("sort_order").limit(30);
     if (!dept || !prods?.length) return { prompt: "" };
     // Kategorie-Kontext: Überkategorie, Unterkategorien und Geschwister miteinbeziehen,
     // damit der Vorschlag die aktuelle Kategorie klar von ihren Nachbarn abgrenzt.
