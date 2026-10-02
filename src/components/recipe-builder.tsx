@@ -98,6 +98,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
   const [openIngredientGroups, setOpenIngredientGroups] = useState<Record<string, boolean>>({});
+  const [openStep, setOpenStep] = useState<string | null>(null);
+  const [stepSearch, setStepSearch] = useState<Record<string, string>>({});
+  const summaryRef = useRef<HTMLDivElement>(null);
   const [dietOpen, setDietOpen] = useState(false);
   const [cuisineOpen, setCuisineOpen] = useState(false);
   const PAGE = 12;
@@ -172,6 +175,18 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     }),
     [tpl, byBase, onlyFav, favIds, diets, cuisines, picks, catalog.recipeIngredients, catalog.products, catalog.recipeGroups],
   );
+
+  // Akkordeon: Pflicht-Schritte steuern Fortschritt und automatisches Weiterschalten.
+  const stepOk = (s: (typeof steps)[number]) => (picks[s.key] ?? []).length >= s.min;
+  const requiredSteps = steps.filter((s) => s.required || s.min > 0);
+  const doneRequired = requiredSteps.filter(stepOk).length;
+  const allRequiredDone = requiredSteps.every(stepOk);
+  // Beim Öffnen einer Vorlage den ersten offenen Pflicht-Schritt aufklappen.
+  useEffect(() => {
+    if (!tpl) { setOpenStep(null); return; }
+    setOpenStep((cur) => cur ?? (steps.find((s) => !stepOk(s) && (s.required || s.min > 0))?.key ?? steps[0]?.key ?? null));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tpl?.id]);
 
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
