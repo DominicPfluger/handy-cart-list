@@ -130,15 +130,15 @@ function DepartmentsPage() {
     return hidden;
   }, [departments, orderedProducts, products, diets.length, cuisines.length, filterExemptDepartments]);
   const { t } = useT();
+  const refPrices = useReferencePrices();
+  const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
+  const { preferred: preferredDept } = usePreferredDept();
+  const [currentId, setCurrentId] = useState<string | null>(null);
   // In Non-Food-/Near-Food-Abteilungen haben Ernährungs- und Küchenfilter keine Wirkung → Knöpfe ausblenden
   const filtersHiddenByDept = currentId !== null && filterExemptDepartments.has(currentId);
   useEffect(() => {
     if (filtersHiddenByDept) { setDietOpen(false); setCuisineOpen(false); }
   }, [filtersHiddenByDept]);
-  const refPrices = useReferencePrices();
-  const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
-  const { preferred: preferredDept } = usePreferredDept();
-  const [currentId, setCurrentId] = useState<string | null>(null);
   const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
