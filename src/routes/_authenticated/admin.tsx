@@ -16,7 +16,7 @@ import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
 import { RecipeAdmin } from "@/components/recipe-admin";
 import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
-import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias-admin";
+import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
 import { signedCategoryImageUrl } from "@/lib/image-upload";
@@ -125,7 +125,7 @@ function AdminPage() {
     return out;
   };
   const children = (d?.depts ?? []).filter((x) => x.parent_id === cur);
-  const products = useMemo(() => {
+  const ownProducts = useMemo(() => {
     const base = (d?.prods ?? []).filter((x) => x.department_id === cur);
     if (!mk || !d) return base;
     const avail = base.filter((p) => (p.markets.length === 0 || p.markets.includes(mk)) && !d.excl.has(`${p.id}|${mk}`));
@@ -140,6 +140,19 @@ function AdminPage() {
     });
     return [...avail, ...rest];
   }, [d, cur, mk]);
+  const aliasQ = useQuery({ queryKey: ALIAS_KEY, queryFn: loadAliases });
+  // Alias-Produkte an ihrer Alias-Position einmischen (wie in der App-Abteilungsansicht).
+  const products = useMemo(() => {
+    if (!cur || !d) return ownProducts;
+    const byId = new Map(d.prods.map((x) => [x.id, x]));
+    const extra = (aliasQ.data ?? []).filter((a) => a.department_id === cur).flatMap((a) => {
+      const p = byId.get(a.product_id);
+      return p && p.department_id !== cur ? [{ ...p, id: `alias:${a.id}`, sort_order: a.sort_order, alias_id: a.id, product_id: p.id }] : [];
+    });
+    if (!extra.length) return ownProducts;
+    if (mk) return [...ownProducts, ...extra];
+    return [...ownProducts, ...extra].sort((a, b) => a.sort_order - b.sort_order);
+  }, [ownProducts, aliasQ.data, cur, d, mk]);
   const unavailable = (p: Prod) => Boolean(mk && d && ((p.markets.length > 0 && !p.markets.includes(mk)) || d.excl.has(`${p.id}|${mk}`)));
   const headings = (d?.heads ?? []).filter((x) => x.department_id === cur);
 
@@ -184,13 +197,24 @@ function AdminPage() {
         return { ...old, [key]: arr };
       });
     }
-    run(() => kind === "product" ? saveOrder(next) : Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), T("adm.orderSaved"));
+    if (kind === "product") {
+      qc.setQueryData(ALIAS_KEY, (old: Array<{ id: string; sort_order: number }> | undefined) =>
+        old?.map((a) => (pos.has(`alias:${a.id}`) ? { ...a, sort_order: pos.get(`alias:${a.id}`)! } : a)));
+    }
+    run(async () => {
+      if (kind === "product") { await saveOrder(next); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }
+      else await Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id))));
+    }, T("adm.orderSaved"));
   };
 
-  /** Produkt-Reihenfolge speichern: global in products, sonst pro Markt in product_market_order. */
-  const saveOrder = async (list: { id: string }[]) => {
+  /** Produkt-Reihenfolge speichern: global in products, sonst pro Markt in product_market_order. Aliase: product_aliases. */
+  const saveOrder = async (all: { id: string }[]) => {
+    const aliases = all.map((x, i) => [x.id, i + 1] as const).filter(([id]) => id.startsWith("alias:"));
+    await Promise.all(aliases.map(([id, n]) => must(supabase.from("product_aliases").update({ sort_order: n }).eq("id", id.slice(6)))));
+    const list = all.filter((x) => !x.id.startsWith("alias:"));
     if (!mk) {
-      await Promise.all(list.map((x, i) => must(supabase.from("products").update({ sort_order: i + 1 }).eq("id", x.id))));
+      await Promise.all(all.map((x, i) => [x, i + 1] as const).filter(([x]) => !x.id.startsWith("alias:"))
+        .map(([x, n]) => must(supabase.from("products").update({ sort_order: n }).eq("id", x.id))));
       return;
     }
     await must(supabase.from("product_market_order").upsert(
@@ -202,7 +226,7 @@ function AdminPage() {
   /** Überschrift verschieben: die ganze Gruppe (Überschrift + ihre Produkte bis zur nächsten Überschrift) wandert mit. */
   const moveHeading = (headingId: string, beforeProductId: string) => {
     const h = d?.heads.find((x) => x.id === headingId);
-    if (!h || h.before_product_id === beforeProductId) return;
+    if (!h || h.before_product_id === beforeProductId || beforeProductId.startsWith("alias:")) return;
     const anchors = new Set(d?.heads.filter((x) => x.id !== headingId).map((x) => x.before_product_id) ?? []);
     const start = products.findIndex((p) => p.id === h.before_product_id);
     if (start < 0) { // leere Gruppe: nur der Titel wandert
@@ -442,7 +466,8 @@ function AdminPage() {
             reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
             busy={busy}
             headings={headings}
-            onAddHeading={(name) => { if (cur && products[0]) void run(() => saveH({ data: { departmentId: cur, beforeProductId: products[0]!.id, name } }), T("adm.created")); }}
+            onAddHeading={(name) => { const first = products.find((x) => !x.id.startsWith("alias:")); if (cur && first) void run(() => saveH({ data: { departmentId: cur, beforeProductId: first.id, name } }), T("adm.created")); }}
+            onRemoveAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("product_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }, T("adm.deleted")); }}
             onMoveHeading={moveHeading}
             onAssignHeading={(productId, headingId) => run(() => assignHeading(productId, headingId), T("adm.saved"))}
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
@@ -453,7 +478,6 @@ function AdminPage() {
             below={cur ? (
               <>
                 <DeptAliasRows parentId={cur} depts={d.depts} onEdit={(id) => setSel({ kind: "department", id })} />
-                <ProductAliasRows departmentId={cur} prods={d.prods} onEdit={(id) => setSel({ kind: "product", id })} />
               </>
             ) : null} />
           {bulk && (
