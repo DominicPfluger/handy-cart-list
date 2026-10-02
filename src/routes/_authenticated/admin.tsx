@@ -517,6 +517,12 @@ function AdminPage() {
             headings={headings}
             onAddHeading={(name) => { const first = products.find((x) => !x.id.startsWith("alias:")); if (cur && first) void run(() => saveH({ data: { departmentId: cur, beforeProductId: first.id, name } }), T("adm.created")); }}
             onRemoveAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("product_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }, T("adm.deleted")); }}
+            productAliasOptions={productAliasOptions}
+            onAddProductAlias={(productId) => { if (!cur) return; void run(async () => {
+              const n = products.length;
+              await must(supabase.from("product_aliases").insert({ product_id: productId, department_id: cur, sort_order: n + 1 }));
+              await qc.invalidateQueries({ queryKey: ALIAS_KEY });
+            }, T("adm.created")); }}
             deptAliasOptions={deptAliasOptions}
             onAddDeptAlias={(deptId) => { if (!cur) return; void run(async () => {
               const n = children.length;
