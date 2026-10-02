@@ -671,7 +671,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               }
               // Kategorie-Schalter bleiben in einer einzigen scrollbaren Reihe; Zutaten darunter ohne weitere Akkordeon-Ebene.
               return <div className="space-y-2">
-                <div className="flex min-w-0 gap-2 overflow-x-auto whitespace-nowrap pb-1" role="group">
+                <div className="flex min-w-0 flex-wrap gap-2" role="group">
                   {groups.map((group) => {
                     const gKey = `${s.key}:${group.key}`;
                     const gOpen = !!openGroups[gKey];
