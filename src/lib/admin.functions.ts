@@ -580,7 +580,7 @@ const normName = (s: string) => s.toLowerCase().replace(/ß/g, "ss").replace(/[^
 /** KI schlägt typische, noch fehlende Produkte für eine Kategorie vor (Admin). */
 export const suggestCategoryProducts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ departmentId: z.string().uuid(), keywords: z.string().max(200).optional() }).parse(d))
+  .inputValidator((d) => z.object({ departmentId: z.string().uuid(), keywords: z.string().max(200).optional(), exclude: z.array(z.string().max(120)).max(300).default([]), count: z.number().int().min(1).max(20).default(10) }).parse(d))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const sb = context.supabase;
@@ -602,19 +602,19 @@ export const suggestCategoryProducts = createServerFn({ method: "POST" })
     const byName = new Map(all.map((p) => [normName(p.name), p.id]));
     const existingNames = all.filter((p) => inHere.has(p.id)).map((p) => p.name);
     const { aiJson } = await import("./translate.server");
-    const r = await aiJson<{ items: Array<{ name: string; emoji: string; quantity: number; unit: string }> }>(
-      "Du pflegst den Produktkatalog einer Schweizer Einkaufslisten-App. Schlage bis zu 15 typische, im Supermarkt übliche Produkte vor, die in der genannten Kategorie noch fehlen. " +
+    const r = await aiJson<{ items: Array<{ name: string; emoji: string; quantity: number; unit: string; relevance: number }> }>(
+      `Du pflegst den Produktkatalog einer Schweizer Einkaufslisten-App. Schlage genau ${data.count} typische, im Supermarkt übliche Produkte vor, die in der genannten Kategorie noch fehlen, sortiert nach Relevanz (wie häufig im Supermarkt gekauft, häufigste zuerst). relevance: 1–100. Keine Einträge aus der Liste 'Bereits vorgeschlagen'. ` +
         "Deutsche Namen, kurz, ohne Marken, Schweizer Schreibweise (ss statt ß). Keine Duplikate oder Varianten der vorhandenen Produkte. " +
         `Ein passendes Emoji, typische Standardmenge und Einheit aus: ${SUGGEST_UNITS.join(", ")}.`,
-      `Kategorie: ${path.join(" › ")}\nVorhanden: ${existingNames.join(", ") || "(keine)"}${data.keywords?.trim() ? `\nStichworte: ${data.keywords.trim()}` : ""}`,
+      `Kategorie: ${path.join(" › ")}\nVorhanden: ${existingNames.join(", ") || "(keine)"}${data.keywords?.trim() ? `\nStichworte: ${data.keywords.trim()}` : ""}${data.exclude.length ? `\nBereits vorgeschlagen: ${data.exclude.join(", ")}` : ""}`,
       "product_suggestions",
       {
         type: "object", additionalProperties: false, required: ["items"],
-        properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "emoji", "quantity", "unit"],
-          properties: { name: { type: "string" }, emoji: { type: "string" }, quantity: { type: "number" }, unit: { type: "string", enum: SUGGEST_UNITS } } } } },
+        properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "emoji", "quantity", "unit", "relevance"],
+          properties: { name: { type: "string" }, emoji: { type: "string" }, quantity: { type: "number" }, unit: { type: "string", enum: SUGGEST_UNITS }, relevance: { type: "number" } } } } },
       },
     );
-    const seen = new Set<string>();
+    const seen = new Set<string>(data.exclude.map(normName));
     return (r.items ?? []).flatMap((it) => {
       const n = it.name.trim().replace(/ß/g, "ss");
       const key = normName(n);
@@ -622,6 +622,6 @@ export const suggestCategoryProducts = createServerFn({ method: "POST" })
       seen.add(key);
       const existingId = byName.get(key) ?? null;
       if (existingId && inHere.has(existingId)) return [];
-      return [{ name: n, emoji: it.emoji.trim() || "🛒", quantity: it.quantity > 0 ? it.quantity : 1, unit: it.unit, existingId }];
+      return [{ name: n, emoji: it.emoji.trim() || "🛒", quantity: it.quantity > 0 ? it.quantity : 1, unit: it.unit, existingId, relevance: Math.max(1, Math.min(100, Math.round(it.relevance || 50))) }];
     });
   });
