@@ -436,6 +436,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       {popularShown.map((r) => (
         <button key={r.key} onClick={() => openRecipe(r.template.id, r.picks)} className={LIST_CARD_CLASS}>
           <ListCardBody
+            image={r.template.image}
             emoji={r.template.emoji}
             color={r.template.color}
             kicker={!tpl ? templateLabel(r.template, t) : undefined}
