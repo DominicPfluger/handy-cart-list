@@ -618,11 +618,8 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           ) : (
             (() => {
               const sel = picks[s.key] ?? [];
-              const q = (stepSearch[s.key] ?? "").trim();
-              const pool = q
-                ? s.products.filter((p) => matchesProductSearch(p.name, q) || (p.variants ?? []).some((v) => matchesProductSearch(v, q)) || (p.synonyms ?? []).some((v) => matchesProductSearch(v, q)))
-                : s.products;
-              const hasGroups = s.groups.length > 0 && !q;
+              const pool = s.products;
+              const hasGroups = s.groups.length > 0;
               const groups = hasGroups
                 ? [...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: pool.filter((p) => s.groupByProduct.get(p.id) === g.id) })),
                     { key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: pool.filter((p) => !s.groups.some((g) => g.id === s.groupByProduct.get(p.id))) }].filter((g) => g.products.length > 0)
