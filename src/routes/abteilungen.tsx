@@ -450,16 +450,18 @@ function DepartmentsPage() {
           onResult={handleVoiceResult}
           className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
         />
-        <button
-          type="button"
-          onClick={() => { setDietOpen((v) => !v); setCuisineOpen(false); }}
-          aria-expanded={dietOpen}
-          aria-label={t("diet.filter")}
-          title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
-          className={`shrink-0 rounded-lg px-0.5 py-1.5 text-base leading-none ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
-        >
-          🥗
-        </button>
+        {showDietFilter && (
+          <button
+            type="button"
+            onClick={() => { setDietOpen((v) => !v); setCuisineOpen(false); }}
+            aria-expanded={dietOpen}
+            aria-label={t("diet.filter")}
+            title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
+            className={`shrink-0 rounded-lg px-0.5 py-1.5 text-base leading-none ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
+          >
+            🥗
+          </button>
+        )}
         <button
           type="button"
           onClick={() => { setCuisineOpen((v) => !v); setDietOpen(false); }}
