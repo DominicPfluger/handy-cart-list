@@ -237,6 +237,7 @@ export function CatalogTileEditor(p: {
                   </div>
                 </button>
               </div>
+              </Fragment>
             );
           })}
           {editMode && (
