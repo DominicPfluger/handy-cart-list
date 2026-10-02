@@ -604,24 +604,18 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         const sel0 = picks[s.key] ?? [];
         const isReq = s.required || s.min > 0;
         const missing = isReq && sel0.length < s.min;
-        const isOpen = openStep === s.key;
         return (
         <div key={s.key} className={`overflow-hidden rounded-2xl border transition ${missing ? "border-destructive/60" : "border-border"} bg-card`}>
-          <button
-            type="button"
-            aria-expanded={isOpen}
-            onClick={() => setOpenStep(isOpen ? null : s.key)}
-            className="flex w-full items-center gap-2 px-3 py-2.5 text-left"
-          >
+          <div className="flex w-full items-center gap-2 px-3 py-2.5 text-left">
             <span className="grid h-7 w-7 shrink-0 place-items-center text-lg" aria-hidden="true">{s.emoji || STEP_EMOJIS[s.key] || "🍽️"}</span>
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-semibold text-foreground">
                 {s.label}{" "}
-                <span className="text-xs font-normal text-muted-foreground">
+                 <span className="text-xs font-normal text-muted-foreground">
                   ({s.max >= 99 ? t("rk.pickAny") : s.max === 1 ? t("rk.pickOne") : t("rk.pick", { min: s.min, max: s.max })})
                 </span>
               </span>
-              {!isOpen && sel0.length > 0 && (
+              {sel0.length > 0 && (
                 <span className="mt-0.5 flex flex-wrap gap-1">
                   {sel0.map((id) => {
                     const p = s.products.find((x) => x.id === id);
@@ -630,9 +624,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 </span>
               )}
             </span>
-            <span className="shrink-0 text-muted-foreground">{isOpen ? "▲" : "▼"}</span>
-          </button>
-          {isOpen && (
+          </div>
           <div className="space-y-2 border-t border-border px-3 py-3">
           {s.products.length >= 8 && (
             <input
