@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { scaleQuantity } from "../lib/scale-quantity";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useT, translate } from "../i18n";
@@ -80,6 +81,7 @@ function RecipePage() {
     },
   });
   const items = r.items.map((i) => ({ ...i, name: i.name || names?.get(i.productId)?.name || "", emoji: i.emoji ?? names?.get(i.productId)?.emoji }));
+  const scaled = useMemo(() => items.map((i) => ({ ...i, quantity: i.quantity ? scaleQuantity(i.quantity, portions) : i.quantity })), [items, portions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const stats = useQuery({
     queryKey: ["recipe-stats", r.id],
