@@ -135,7 +135,7 @@ export function CatalogTileEditor(p: {
   };
   const onUp = (e: React.PointerEvent) => {
     const d = drag;
-    setDrag(null); setOver(null);
+    setDrag(null); setOver(null); setOverPos(null);
     if (!d || !moved.current) return;
     const t = dropAt(e.clientX, e.clientY);
     if (!t || t.id === d.id) return;
@@ -161,7 +161,7 @@ export function CatalogTileEditor(p: {
     }
   };
 
-  const dragHandlers = { onPointerMove: onMove, onPointerUp: onUp, onPointerCancel: () => { setDrag(null); setOver(null); } };
+  const dragHandlers = { onPointerMove: onMove, onPointerUp: onUp, onPointerCancel: () => { setDrag(null); setOver(null); setOverPos(null); } };
   const click = (fn: () => void) => () => { if (moved.current) { moved.current = false; return; } fn(); };
 
   return (
