@@ -64,6 +64,8 @@ export function CatalogTileEditor(p: {
   onAddHeading?: (name: string) => void;
   onMoveHeading?: (id: string, insertAt: number, mode: "title" | "group") => void;
   onSetHeadingAnchor?: (headingId: string, productId: string) => void;
+  /** Produkt an Position `to` (0..n) einfügen und Überschrift `headingId` ("" = keine) zuordnen. */
+  onMoveProduct?: (productId: string, to: number, headingId: string) => void;
   /** Ordnet ein Produkt einer Überschrift zu ("" = vor die erste Überschrift). */
   onAssignHeading?: (productId: string, headingId: string) => void;
   onRenameHeading?: (id: string, name: string) => void;
@@ -180,8 +182,23 @@ export function CatalogTileEditor(p: {
       setHeadMove({ id: h.id, name: p.nm(h.id, h.name), insertAt, n: end - start });
       return;
     }
+    if (d.kind === "product" && (t.kind === "heading" || t.kind === "product") && p.onMoveProduct) {
+      // Überschrift, zu der eine Listenposition gehört ("" = vor der ersten Überschrift)
+      const headOf = (i: number) => {
+        let best = -1; let id = "";
+        for (const h of p.headings ?? []) { const ai = p.products.findIndex((x) => x.id === h.before_product_id); if (ai >= 0 && ai <= i && ai > best) { best = ai; id = h.id; } }
+        return id;
+      };
+      if (t.kind === "heading") { p.onMoveProduct(d.id, t.index, t.id); return; }
+      const r = t.el.getBoundingClientRect();
+      const after = e.clientY > r.top + r.height / 2;
+      const anchorH = headingBefore.get(t.id);
+      // Obere Hälfte des ersten Produkts einer Gruppe = erstes Produkt dieser Gruppe (wie die Linie zeigt)
+      const headingId = !after && anchorH ? anchorH.id : headOf(t.index);
+      p.onMoveProduct(d.id, t.index + (after ? 1 : 0), headingId);
+      return;
+    }
     if (d.kind === "product" && t.kind === "heading") {
-      // Produkt wird erstes Produkt dieser Gruppe: vor den Anker setzen und Überschrift an das Produkt hängen.
       p.reorder("product", p.products, d.index, t.index);
       p.onSetHeadingAnchor?.(t.id, d.id);
       return;
