@@ -671,6 +671,7 @@ export const de = {
   "tile.suggestDone": "{n} Produkte angelegt",
   "tile.aiImage": "KI-Bild",
   "tile.aiHint": "Stichworte fürs KI-Bild (z. B. rot, in Scheiben)",
+  "tile.aiHintEmpty": "Optional: Stichworte fürs KI-Bild — ↻ für KI-Vorschlag",
   "tile.aiSuggestLoading": "Vorschlag wird erstellt …",
   "tile.aiSuggestReload": "Vorschlag neu laden",
   "tile.imgDone": "Bild erzeugt",

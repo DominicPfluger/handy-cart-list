@@ -418,7 +418,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       .catch(() => {})
       .finally(() => setSuggesting(false));
   };
-  useEffect(() => { loadSuggestion(false); }, [effId, isDept]);
+  // Kein automatischer KI-Aufruf beim Öffnen (spart Credits) — Vorschlag nur per ↻-Knopf.
 
   const save = async () => {
     if (enriching) return;
@@ -564,7 +564,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
               </div>
               <div className="flex gap-2">
-                <Input aria-label={T("tile.aiHint")} placeholder={suggesting ? T("tile.aiSuggestLoading") : T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 flex-1 rounded-xl text-sm" />
+                <Input aria-label={T("tile.aiHint")} placeholder={suggesting ? T("tile.aiSuggestLoading") : isDept ? T("tile.aiHintEmpty") : T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 flex-1 rounded-xl text-sm" />
                 {isDept && (
                   <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true, [...picked])}>↻</Button>
                 )}
