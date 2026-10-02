@@ -299,6 +299,24 @@ function AdminPage() {
   };
 
   const nm = (id: string, base: string) => viewLoc === "de-DE" ? base : d?.tr.get(id)?.[viewLoc]?.name ?? base;
+  /** Wählbare Kategorien für „Alias-Kategorie": ohne die offene Kategorie, ihre Unter- und Oberkategorien und bereits verlinkte. */
+  const deptAliasOptions = useMemo(() => {
+    if (!cur || !d) return [];
+    const blocked = new Set<string>([cur]);
+    let grew = true;
+    while (grew) {
+      grew = false;
+      for (const x of d.depts) {
+        if (x.parent_id && blocked.has(x.parent_id) && !blocked.has(x.id)) { blocked.add(x.id); grew = true; }
+        if (x.parent_id && blocked.has(x.id) && !blocked.has(x.parent_id)) { blocked.add(x.parent_id); grew = true; }
+      }
+    }
+    for (const x of d.depts) if (x.parent_id === cur) blocked.add(x.id);
+    for (const a of deptAliasQ.data ?? []) if (a.parent_id === cur) blocked.add(a.department_id);
+    return d.depts.filter((x) => !blocked.has(x.id))
+      .map((x) => ({ id: x.id, label: `${path(x.parent_id).map((p) => nm(p.id, p.name)).join(" › ")}${x.parent_id ? " › " : ""}${nm(x.id, x.name)}` }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [d, cur, deptAliasQ.data]);
   const pathText = () => path(cur).map((p) => p.name).join(" › ");
   /** Produkte aus Nachbarkategorien (gleiche Oberkategorie), damit nichts doppelt vorgeschlagen wird. */
   const siblingNames = () => {
