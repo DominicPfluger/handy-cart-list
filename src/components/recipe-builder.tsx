@@ -669,8 +669,27 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   </Button>}
                 </div>;
               }
-              // Kategorien: Zutaten erscheinen inline erst nach Klick auf die Kategorie; Gewähltes bleibt immer sichtbar.
-              return <div className="space-y-3">
+              // Kategorie-Schalter bleiben in einer einzigen scrollbaren Reihe; Zutaten darunter ohne weitere Akkordeon-Ebene.
+              return <div className="space-y-2">
+                <div className="flex min-w-0 gap-2 overflow-x-auto whitespace-nowrap pb-1" role="group">
+                  {groups.map((group) => {
+                    const gKey = `${s.key}:${group.key}`;
+                    const gOpen = !!openGroups[gKey];
+                    return <Button
+                      key={group.key}
+                      variant="outline"
+                      size="sm"
+                      type="button"
+                      aria-expanded={gOpen}
+                      onClick={() => setOpenGroups((x) => ({ ...x, [gKey]: !gOpen }))}
+                      className={`h-auto shrink-0 gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${gOpen ? "border-primary bg-primary-soft/50 text-foreground" : "border-border bg-muted text-foreground"}`}
+                    >
+                      {group.emoji && <span aria-hidden="true">{group.emoji}</span>}
+                      {group.name}
+                      <span aria-hidden="true" className="text-muted-foreground">{gOpen ? "▴" : "▾"}</span>
+                    </Button>;
+                  })}
+                </div>
                 {groups.map((group) => {
                   const gKey = `${s.key}:${group.key}`;
                   const gOpen = !!openGroups[gKey];
@@ -680,18 +699,10 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   for (const id of sel) if (group.products.some((p) => p.id === id)) shownIds.add(id);
                   const shown = gOpen ? group.products.filter((p) => shownIds.has(p.id)) : group.products.filter((p) => sel.includes(p.id));
                   const gHidden = group.products.length - shown.length;
+                  if (!shown.length && !gOpen) return null;
                   return (
-                    <div key={group.key}>
+                    <div key={group.key} className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <button
-                          type="button"
-                          aria-expanded={gOpen}
-                          onClick={() => setOpenGroups((x) => ({ ...x, [gKey]: !gOpen }))}
-                          className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${gOpen ? "border-primary bg-primary-soft/50 text-foreground" : "border-border bg-muted text-foreground"}`}
-                        >
-                          {group.emoji && <span aria-hidden="true" className="mr-1">{group.emoji}</span>}
-                          {group.name}
-                        </button>
                         {shown.map(chip)}
                       </div>
                       {gOpen && !q && gHidden > 0 && (
