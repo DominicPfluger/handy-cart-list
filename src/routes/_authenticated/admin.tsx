@@ -247,7 +247,7 @@ function AdminPage() {
       if (c === "alphabetical") {
         ordered = groups.map((g) => [...g].sort((a, b) => a.name.localeCompare(b.name, "de")));
       } else {
-        const r = await rank({ data: { path: pathText(), criterion: c, groups: groups.map((g) => g.map((p) => p.name)), ...(mk ? { market: mk } : {}) } });
+        const r = await rank({ data: { path: pathText(), criterion: c === "marketRelevance" ? "popularity" : c, groups: groups.map((g) => g.map((p) => p.name)), ...(mk ? { market: mk } : {}) } });
         ordered = groups.map((g, gi) => {
           const pool = [...g];
           return r.groups[gi]!.map((n) => pool.splice(pool.findIndex((p) => p.name === n), 1)[0]!).concat(pool);
@@ -351,7 +351,7 @@ function AdminPage() {
 
       <div className="flex flex-wrap gap-2">
         {cur && (
-          <select value={mk} onChange={(e) => setMk(e.target.value)} aria-label={T("adm.marketChoice")}
+          <select value={mk} onChange={(e) => { setMk(e.target.value); if (!e.target.value && sortBy === "marketRelevance") setSortBy("popularity"); }} aria-label={T("adm.marketChoice")}
             className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
             <optgroup label={T("adm.marketChoice")}>
               <option value="">{T("adm.marketGlobal")}</option>
@@ -369,6 +369,7 @@ function AdminPage() {
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label={T("adm.sortBy")}
               className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-3 text-sm">
               <option value="popularity">{T("adm.opt.popularity")}</option>
+              {mk && <option value="marketRelevance">{T("adm.opt.marketRelevance")}</option>}
               <option value="price">{T("adm.opt.price")}</option>
               <option value="alphabetical">{T("adm.opt.alphabetical")}</option>
               <option value="similarity">{T("adm.opt.similarity")}</option>
