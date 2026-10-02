@@ -422,9 +422,10 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       setNewId(id);
       if (isNewProduct) createdId = id;
       if (isDept && id) {
+        const deptId = id;
         const names = [...new Set(prodLines.split(/\r?\n/).map((l) => l.trim()).filter(Boolean))];
         if (names.length) {
-          const rows = names.map((n, i) => ({ department_id: id, name: n, default_quantity: 1, default_unit: "stueck" as never, sort_order: i + 1 }));
+          const rows = names.map((n, i) => ({ department_id: deptId, name: n, default_quantity: 1, default_unit: "stueck" as never, sort_order: i + 1 }));
           const ins = await supabase.from("products").insert(rows).select("id");
           if (ins.error) throw new Error(ins.error.message);
           await p.translateIds((ins.data ?? []).map((x) => x.id as string));
