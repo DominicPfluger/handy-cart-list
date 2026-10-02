@@ -616,6 +616,10 @@ export const suggestCategoryProducts = createServerFn({ method: "POST" })
     let c = byId.get(data.departmentId); let g = 0;
     while (c && g++ < 20) { path.unshift(c.name); c = c.parent_id ? byId.get(c.parent_id) : undefined; }
     if (!path.length) throw new Error("Kategorie nicht gefunden");
+    const deptList = [...byId.values()];
+    const selfDept = byId.get(data.departmentId);
+    const childTitles = deptList.filter((d) => d.parent_id === data.departmentId).map((d) => d.name);
+    const siblingTitles = deptList.filter((d) => d.id !== data.departmentId && d.parent_id === (selfDept?.parent_id ?? null)).map((d) => d.name).slice(0, 40);
     const { data: here } = await sb.from("products").select("id,name").eq("department_id", data.departmentId);
     const { data: al } = await sb.from("product_aliases").select("product_id").eq("department_id", data.departmentId);
     const all: Array<{ id: string; name: string }> = [];
@@ -629,10 +633,10 @@ export const suggestCategoryProducts = createServerFn({ method: "POST" })
     const existingNames = all.filter((p) => inHere.has(p.id)).map((p) => p.name);
     const { aiJson } = await import("./translate.server");
     const r = await aiJson<{ items: Array<{ name: string; emoji: string; quantity: number; unit: string; relevance: number }> }>(
-      `Du pflegst den Produktkatalog einer Schweizer Einkaufslisten-App. Schlage genau ${data.count} typische, im Supermarkt übliche Produkte vor, die in der genannten Kategorie noch fehlen, sortiert nach Relevanz (wie häufig im Supermarkt gekauft, häufigste zuerst). relevance: 1–100. Keine Einträge aus der Liste 'Bereits vorgeschlagen'. ` +
+      `Du pflegst den Produktkatalog einer Schweizer Einkaufslisten-App. Schlage genau ${data.count} typische, im Supermarkt übliche Produkte vor, die in der genannten Kategorie noch fehlen, abgeleitet vom Kategorie-Titel und den Titeln der Unterkategorien (klar abgegrenzt von den Nachbar-Kategorien), sortiert nach Relevanz (wie häufig im Supermarkt gekauft, häufigste zuerst). relevance: 1–100. Keine Einträge aus der Liste 'Bereits vorgeschlagen'. ` +
         "Deutsche Namen, kurz, ohne Marken, Schweizer Schreibweise (ss statt ß). Keine Duplikate oder Varianten der vorhandenen Produkte. " +
         `Ein passendes Emoji, typische Standardmenge und Einheit aus: ${SUGGEST_UNITS.join(", ")}.`,
-      `Kategorie: ${path.join(" › ")}\nVorhanden: ${existingNames.join(", ") || "(keine)"}${data.keywords?.trim() ? `\nStichworte: ${data.keywords.trim()}` : ""}${data.exclude.length ? `\nBereits vorgeschlagen: ${data.exclude.join(", ")}` : ""}`,
+      `Kategorie: ${path.join(" › ")}\nUnterkategorien: ${childTitles.join(", ") || "(keine)"}\nNachbar-Kategorien (deren Produkte NICHT vorschlagen): ${siblingTitles.join(", ") || "(keine)"}\nVorhanden: ${existingNames.join(", ") || "(keine)"}${data.keywords?.trim() ? `\nStichworte: ${data.keywords.trim()}` : ""}${data.exclude.length ? `\nBereits vorgeschlagen: ${data.exclude.join(", ")}` : ""}`,
       "product_suggestions",
       {
         type: "object", additionalProperties: false, required: ["items"],
@@ -641,7 +645,7 @@ export const suggestCategoryProducts = createServerFn({ method: "POST" })
       },
     );
     const seen = new Set<string>(data.exclude.map(normName));
-    return (r.items ?? []).flatMap((it) => {
+    return [...(r.items ?? [])].sort((a, b) => (b.relevance || 0) - (a.relevance || 0)).flatMap((it) => {
       const n = it.name.trim().replace(/ß/g, "ss");
       const key = normName(n);
       if (!n || seen.has(key)) return [];
