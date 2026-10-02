@@ -5,7 +5,7 @@ import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { matchesProductSearch } from "../lib/catalog-query";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
-import { POPULAR_RECIPES, RECIPE_TEMPLATES, type RecipeTemplate } from "../lib/recipe-templates";
+import { POPULAR_RECIPES, RECIPE_TEMPLATES, STEP_EMOJIS, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
 import { setCuisines, toggleCuisine, useCuisineFilter } from "../hooks/use-cuisine-filter";
@@ -75,14 +75,12 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     return m;
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
-  const [openIngredientGroups, setOpenIngredientGroups] = useState<Record<string, boolean>>({});
   const [openStep, setOpenStep] = useState<string | null>(null);
   const [stepSearch, setStepSearch] = useState<Record<string, string>>({});
   const summaryRef = useRef<HTMLDivElement>(null);
   const [dietOpen, setDietOpen] = useState(false);
   const [cuisineOpen, setCuisineOpen] = useState(false);
-  const PAGE = 12;
-  const THRESHOLD = 18;
+  const PAGE = 10;
 
   const tpl = templates.find((x) => x.id === tplId) ?? null;
 
@@ -127,6 +125,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       const fromDb = dbIds
         .map((id) => catalog.products.find((p) => p.id === id))
         .filter((p): p is CatalogProduct => !!p);
+      // Admin-managed steps have no built-in ingredients: an empty assignment stays empty.
       const base = fromDb.length > 0
         ? fromDb
         : s.ingredients.map((n) => byBase.get(n)).filter((p): p is CatalogProduct => !!p);
@@ -165,6 +164,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setOpenStep((cur) => cur ?? (steps.find((s) => !stepOk(s) && (s.required || s.min > 0))?.key ?? steps[0]?.key ?? null));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tpl?.id]);
+  useEffect(() => { setVisibleCount({}); setStepSearch({}); }, [tplId]);
 
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
@@ -611,9 +611,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             onClick={() => setOpenStep(isOpen ? null : s.key)}
             className="flex w-full items-center gap-2 px-3 py-2.5 text-left"
           >
-            <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-[11px] font-bold ${satisfied ? "bg-primary text-primary-foreground" : missing ? "bg-destructive/15 text-destructive" : "bg-muted text-muted-foreground"}`}>
-              {satisfied ? "✓" : sel0.length}
-            </span>
+            <span className="grid h-7 w-7 shrink-0 place-items-center text-lg" aria-hidden="true">{s.emoji || STEP_EMOJIS[s.key] || "🍽️"}</span>
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-semibold text-foreground">
                 {s.label}{" "}
@@ -653,21 +651,30 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 ? s.products.filter((p) => matchesProductSearch(p.name, q) || (p.variants ?? []).some((v) => matchesProductSearch(v, q)) || (p.synonyms ?? []).some((v) => matchesProductSearch(v, q)))
                 : s.products;
               const hasGroups = s.groups.length > 0 && !q;
-              const other = pool.filter((p) => !s.groupByProduct.get(p.id) || !s.groups.some((g) => g.id === s.groupByProduct.get(p.id)));
-              const renderIngredients = (current: typeof s.products, groupKey: string) => {
-                const countKey = `${s.key}:${groupKey}`;
-                const vis = visibleCount[countKey] ?? PAGE;
-                const shortList = current.length < THRESHOLD;
-                const open = shortList || vis >= current.length;
-                const shown = open ? current : [...current.slice(0, vis), ...current.slice(vis).filter((p) => sel.includes(p.id))];
-                const remaining = current.length - vis;
-                return <div className="space-y-2">
-                  <div className="flex flex-wrap gap-2">
+              const groups = hasGroups
+                ? [...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: pool.filter((p) => s.groupByProduct.get(p.id) === g.id) })),
+                    { key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: pool.filter((p) => !s.groups.some((g) => g.id === s.groupByProduct.get(p.id))) }].filter((g) => g.products.length > 0)
+                : [{ key: "all", name: "", emoji: null, products: pool }];
+              const ordered = groups.flatMap((g) => g.products);
+              const limit = visibleCount[s.key] ?? PAGE;
+              const expanded = limit >= ordered.length || !!q;
+              const shownIds = new Set(ordered.slice(0, expanded ? ordered.length : limit).map((p) => p.id));
+              for (const id of sel) shownIds.add(id);
+              const hiddenCount = ordered.filter((p) => !shownIds.has(p.id)).length;
+              return <div className="space-y-3">
+                {groups.map((group) => {
+                  const shown = group.products.filter((p) => shownIds.has(p.id));
+                  if (!shown.length) return null;
+                  return <div key={group.key} className="space-y-1.5">
+                    {hasGroups && <p className="text-xs font-semibold text-muted-foreground">{group.emoji && <span aria-hidden="true">{group.emoji} </span>}{group.name}</p>}
+                    <div className="flex flex-wrap gap-2">
                     {shown.map((p) => {
                       const on = sel.includes(p.id);
                       return (
                         <button
                           key={p.id}
+                          type="button"
+                          aria-pressed={on}
                           onClick={() => { setSavedMsg(false); toggle(s.key, p.id, s.max); }}
                           className={`rounded-full border px-3 py-1.5 text-xs font-medium transition active:scale-95 ${
                             on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
@@ -677,31 +684,14 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                         </button>
                       );
                     })}
-                  </div>
-                  {!shortList && (
-                    <Button variant="ghost" size="sm"
-                      type="button"
-                      onClick={() => setVisibleCount((x) => ({ ...x, [countKey]: open ? PAGE : vis + PAGE }))}
-                      className="text-xs font-medium text-primary"
-                      aria-expanded={open}
-                    >
-                      {open ? t("rk.showLess") : t("rk.showMore", { count: Math.min(remaining, PAGE) })}
-                    </Button>
-                  )}
-                </div>;
-              };
-              if (!hasGroups) return renderIngredients(pool, "all");
-              return <div className="space-y-1">
-                {[...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: pool.filter((p) => s.groupByProduct.get(p.id) === g.id) })), ...(other.length ? [{ key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: other }] : [])].map((group) => {
-                  const key = `${s.key}:${group.key}`;
-                  const expanded = !!openIngredientGroups[key];
-                  return <div key={key}>
-                    <Button variant="ghost" className="h-auto min-h-11 w-full justify-start whitespace-normal px-0 text-left font-semibold text-foreground" aria-expanded={expanded} onClick={() => setOpenIngredientGroups((prev) => ({ ...prev, [key]: !prev[key] }))}>
-                      <span className="min-w-0 break-words">{group.emoji && <span aria-hidden="true">{group.emoji} </span>}{group.name}</span>
-                    </Button>
-                    {expanded && <div className="pb-3 pl-2">{renderIngredients(group.products, group.key)}</div>}
+                    </div>
                   </div>;
                 })}
+                {!q && ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
+                  onClick={() => setVisibleCount((x) => ({ ...x, [s.key]: expanded ? PAGE : Math.min(ordered.length, limit + PAGE) }))}
+                  className="text-xs font-medium text-primary" aria-expanded={expanded}>
+                  {expanded ? t("rk.showLess") : t("rk.showMore", { count: Math.min(hiddenCount, PAGE) })}
+                </Button>}
               </div>;
             })()
           )}

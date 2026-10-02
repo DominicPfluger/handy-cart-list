@@ -7,11 +7,21 @@
 export type RecipeStep = {
   key: string;
   label: string; // deutscher Schritt-Titel
+  emoji?: string | null;
   min: number;
   max: number;
   /** Pflicht-Schritt (Datenbank-Vorlagen); eingebaute leiten es aus min > 0 ab. */
   required?: boolean;
   ingredients: string[];
+};
+
+/** Fallback for older ingredient steps that have no admin-assigned emoji. */
+export const STEP_EMOJIS: Record<string, string> = {
+  base: "🥣", liquid: "🥛", fruit: "🍓", topping: "✨", green: "🥬",
+  extra: "✨", veg: "🥕", protein: "🥚", dressing: "🫒", herb: "🌿",
+  dough: "🍞", sauce: "🥫", cheese: "🧀", meat: "🍗", vegtop: "🫑",
+  finish: "✨", aroma: "🧄", starch: "🥔", sweet: "🍯", crunch: "🥜",
+  bread: "🍞", spread: "🧈",
 };
 
 export type RecipeTemplate = {

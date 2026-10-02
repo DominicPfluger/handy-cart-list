@@ -17,7 +17,7 @@ export function useRecipeTemplates(): RecipeTemplate[] {
       steps: catalog.recipeSteps
         .filter((s) => s.templateId === x.id)
         .sort((a, b) => a.sortOrder - b.sortOrder)
-        .map((s) => ({ key: s.key, label: s.name, min: s.min, max: s.max, required: s.required, ingredients: [] as string[] })),
+        .map((s) => ({ key: s.key, label: s.name, emoji: s.emoji, min: s.min, max: s.max, required: s.required, ingredients: [] as string[] })),
     })) as RecipeTemplate[];
   }, [catalog.recipeTemplates, catalog.recipeSteps]);
 }
