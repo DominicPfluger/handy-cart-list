@@ -429,6 +429,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
         if (error) throw new Error(error.message);
       }
       setPickerStep(null);
+      setPickerSearch("");
     });
 
 
@@ -760,8 +761,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                       {(pickerQuery ? pickerMatches : deptProds).map((p) => (
                         <label key={p.id} className="flex items-center gap-2 rounded-lg px-2 py-1 text-xs hover:bg-accent/40">
                           <input type="checkbox" checked={pickerSel.has(p.id)} onChange={() => togglePick(p.id)} className="accent-primary" />
-                          <span className="min-w-0 flex-1 truncate text-foreground">{p.emoji} {p.name}</span>
-                          {pickerQuery && <span className="hidden sm:block truncate text-[10px] text-muted-foreground">{path(p.department_id)}</span>}
+                          <span className="min-w-0 flex-1 text-foreground">{p.emoji} {p.name}{pickerQuery && <span className="block truncate text-[10px] text-muted-foreground">{path(p.department_id)}</span>}</span>
                         </label>
                       ))}
                       {pickerQuery && pickerMatches.length === 0 && <p className="px-2 py-1 text-xs text-muted-foreground">{T("adm.noHits")}</p>}
