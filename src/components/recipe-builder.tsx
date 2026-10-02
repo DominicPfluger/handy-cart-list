@@ -418,7 +418,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         const rt = templates.find((x) => x.id === r.templateId);
         return (
           <button key={r.id} onClick={() => rt && openRecipe(rt.id, r.picks)} className={LIST_CARD_CLASS}>
-            <ListCardBody emoji={rt?.emoji ?? "🍽️"} color={rt?.color} title={r.title} badge={new Date(r.savedAt).toLocaleDateString()} />
+            <ListCardBody image={rt?.image} emoji={rt?.emoji ?? "🍽️"} color={rt?.color} title={r.title} badge={new Date(r.savedAt).toLocaleDateString()} />
           </button>
         );
       })}
@@ -436,6 +436,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       {popularShown.map((r) => (
         <button key={r.key} onClick={() => openRecipe(r.template.id, r.picks)} className={LIST_CARD_CLASS}>
           <ListCardBody
+            image={r.template.image}
             emoji={r.template.emoji}
             color={r.template.color}
             kicker={!tpl ? templateLabel(r.template, t) : undefined}
@@ -580,8 +581,10 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
 
       {mode !== "generator" && (
         <div className="flex items-center gap-3">
-          <span className="grid h-12 w-12 place-items-center rounded-2xl text-3xl" style={{ background: tpl.color }}>{tpl.emoji}</span>
           <h2 className="text-lg font-bold text-foreground">{catName}</h2>
+          <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-2xl text-3xl" style={{ background: tpl.color }}>
+            {tpl.image ? <img src={tpl.image} alt="" loading="lazy" className="h-full w-full object-cover" /> : tpl.emoji}
+          </span>
         </div>
       )}
 

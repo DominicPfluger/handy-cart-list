@@ -4,6 +4,15 @@
  * Namen, die im Katalog (noch) fehlen, werden einfach ausgeblendet.
  * Die Zutatenlisten sind Platzhalter und werden später manuell gepflegt.
  */
+import muesliImg from "../assets/recipes/muesli.jpg";
+import smoothieImg from "../assets/recipes/smoothie.jpg";
+import salatImg from "../assets/recipes/salat.jpg";
+import sandwichImg from "../assets/recipes/sandwich.jpg";
+import pizzaImg from "../assets/recipes/pizza.jpg";
+import pfanneImg from "../assets/recipes/pfanne.jpg";
+import menuImg from "../assets/recipes/menu.jpg";
+import dessertImg from "../assets/recipes/dessert.jpg";
+
 export type RecipeStep = {
   key: string;
   label: string; // deutscher Schritt-Titel
@@ -27,6 +36,8 @@ export const STEP_EMOJIS: Record<string, string> = {
 export type RecipeTemplate = {
   id: "muesli" | "smoothie" | "salat" | "pizza" | "pfanne" | "menu" | "dessert" | "sandwich";
   emoji: string;
+  /** KI-Bild der Vorlage (nur eingebaute); Emoji bleibt Fallback. */
+  image?: string;
   color: string;
   /** Anzeigename bei eigenen (Datenbank-)Vorlagen; eingebaute nutzen die Sprachdateien. */
   name?: string;
@@ -76,26 +87,26 @@ export const POPULAR_RECIPES: Record<RecipeTemplate["id"], Record<string, string
 };
 
 export const RECIPE_TEMPLATES: RecipeTemplate[] = [
-  { id: "muesli", emoji: "🥣", color: "oklch(0.93 0.05 80)", steps: [
+  { id: "muesli", image: muesliImg, emoji: "🥣", color: "oklch(0.93 0.05 80)", steps: [
     { key: "base", label: "Basis", min: 1, max: 2, ingredients: ["Haferflocken", "Dinkelflocken", "Cornflakes", "Granola"] },
     { key: "liquid", label: "Flüssigkeit", min: 1, max: 3, ingredients: ["Milch", "Joghurt", "Hafermilch", "Mandelmilch"] },
     { key: "fruit", label: "Früchte", min: 1, max: 3, ingredients: ["Bananen", "Äpfel", "Heidelbeeren", "Himbeeren", "Erdbeeren", "Mango"] },
     { key: "topping", label: "Topping", min: 0, max: 3, ingredients: ["Rosinen", "Gojibeeren", "Honig", "Walnüsse", "Mandeln"] },
   ] },
-  { id: "smoothie", emoji: "🥤", color: "oklch(0.92 0.07 150)", steps: [
+  { id: "smoothie", image: smoothieImg, emoji: "🥤", color: "oklch(0.92 0.07 150)", steps: [
     { key: "liquid", label: "Flüssigkeit", min: 1, max: 3, ingredients: ["Milch", "Hafermilch", "Mandelmilch", "Orangensaft", "Joghurt"] },
     { key: "fruit", label: "Früchte", min: 1, max: 3, ingredients: ["Bananen", "Mango", "Ananas", "Erdbeeren", "Heidelbeeren", "Himbeeren", "Kiwis"] },
     { key: "green", label: "Grünes", min: 0, max: 2, ingredients: ["Babyspinat", "Spinat", "Minze", "Avocado"] },
     { key: "extra", label: "Extra", min: 0, max: 2, ingredients: ["Honig", "Datteln", "Haferflocken"] },
   ] },
-  { id: "salat", emoji: "🥗", color: "oklch(0.92 0.06 135)", steps: [
+  { id: "salat", image: salatImg, emoji: "🥗", color: "oklch(0.92 0.06 135)", steps: [
     { key: "base", label: "Salatbasis", min: 1, max: 2, ingredients: ["Babyspinat", "Portulak", "Rucola", "Kopfsalat", "Eisbergsalat"] },
     { key: "veg", label: "Gemüse", min: 1, max: 4, ingredients: ["Tomaten", "Cherrytomaten", "Salatgurke", "Paprika", "Avocado", "Zuckermais"] },
     { key: "protein", label: "Proteinquelle", min: 0, max: 2, ingredients: ["Eier", "Feta", "Mozzarella", "Thunfisch", "Hähnchenbrust"] },
     { key: "herb", label: "Kräuter", min: 0, max: 2, ingredients: ["Petersilie", "Basilikum", "Schnittlauch", "Dill"] },
     { key: "dressing", label: "Dressing", min: 1, max: 2, ingredients: ["Olivenöl", "Balsamico", "Zitronen", "Senf"] },
   ] },
-  { id: "sandwich", emoji: "🥪", color: "oklch(0.93 0.06 95)", steps: [
+  { id: "sandwich", image: sandwichImg, emoji: "🥪", color: "oklch(0.93 0.06 95)", steps: [
     { key: "bread", label: "Brot", min: 1, max: 3, ingredients: ["Vollkornbrot", "Ciabatta", "Baguette"] },
     { key: "spread", label: "Aufstrich", min: 0, max: 2, ingredients: ["Doppelrahmfrischkäse", "Mayonnaise", "Senf"] },
     { key: "protein", label: "Belag", min: 0, max: 2, ingredients: ["Schinken", "Salami", "Hähnchenbrust", "Putenbrust", "Thunfisch"] },
@@ -103,7 +114,7 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "veg", label: "Gemüse", min: 0, max: 4, ingredients: ["Tomaten", "Salatgurke", "Eisbergsalat", "Rucola", "Paprika", "Rote Zwiebeln"] },
     { key: "extra", label: "Extra", min: 0, max: 2, ingredients: ["Freilandeier", "Avocado", "Zwiebeln"] },
   ] },
-  { id: "pizza", emoji: "🍕", color: "oklch(0.92 0.07 40)", steps: [
+  { id: "pizza", image: pizzaImg, emoji: "🍕", color: "oklch(0.92 0.07 40)", steps: [
     { key: "dough", label: "Teig", min: 1, max: 3, ingredients: ["Pizzateig", "Mehl", "Hefe"] },
     { key: "sauce", label: "Sauce", min: 1, max: 3, ingredients: ["Tomaten", "Passierte Tomaten", "Crème fraîche"] },
     { key: "cheese", label: "Käse", min: 1, max: 2, ingredients: ["Mozzarella", "Parmigiano Reggiano", "Grana Padano", "Provolone"] },
@@ -112,7 +123,7 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "vegtop", label: "Gemüse & Früchte", min: 1, max: 4, ingredients: ["Paprika", "Braune Champignons", "Schwarze Oliven", "Zucchini", "Rote Zwiebeln", "Cherrytomaten", "Artischockenherzen", "Ananas"] },
     { key: "finish", label: "Kräuter & Gewürze", min: 0, max: 4, ingredients: ["Basilikum", "Oregano", "Olivenöl", "Petersilie", "Rosmarin", "Thymian", "Chilischoten", "Knoblauch"] },
   ] },
-  { id: "pfanne", emoji: "🍳", color: "oklch(0.92 0.06 60)", steps: [
+  { id: "pfanne", image: pfanneImg, emoji: "🍳", color: "oklch(0.92 0.06 60)", steps: [
     { key: "base", label: "Stärkebeilage", min: 1, max: 3, ingredients: ["Reis", "Nudeln", "Kartoffeln", "Kochbanane"] },
     { key: "protein", label: "Proteinquelle", min: 0, max: 2, ingredients: ["Hähnchenbrust", "Tofu", "Eier", "Rinderhackfleisch"] },
     { key: "veg", label: "Gemüse", min: 1, max: 4, ingredients: ["Paprika", "Zucchini", "Pak Choi", "Zuckererbsen", "Babymais", "Auberginen", "Grüne Bohnen"] },
@@ -120,13 +131,13 @@ export const RECIPE_TEMPLATES: RecipeTemplate[] = [
     { key: "sauce", label: "Saucen", min: 0, max: 99, ingredients: ["Sojasauce", "Teriyaki-Sauce", "Sweet-Chili-Sauce", "Kokosmilch", "Crème fraîche"] },
     { key: "aroma", label: "Würze", min: 1, max: 3, ingredients: ["Knoblauch", "Zwiebeln", "Ingwer", "Chilischoten", "Sojasauce"] },
   ] },
-  { id: "menu", emoji: "🍽️", color: "oklch(0.92 0.04 250)", steps: [
+  { id: "menu", image: menuImg, emoji: "🍽️", color: "oklch(0.92 0.04 250)", steps: [
     { key: "protein", label: "Proteinquelle", min: 1, max: 2, ingredients: ["Hähnchenbrust", "Lachs", "Rinderhackfleisch", "Tofu", "Eier"] },
     { key: "starch", label: "Stärkebeilage", min: 1, max: 3, ingredients: ["Nudeln", "Reis", "Kartoffeln"] },
     { key: "veg", label: "Gemüsebeilage", min: 0, max: 2, ingredients: ["Grüne Bohnen", "Zucchini", "Babyspinat", "Karotten"] },
     { key: "sauce", label: "Sauce", min: 0, max: 3, ingredients: ["Passierte Tomaten", "Crème fraîche", "Sojasauce"] },
   ] },
-  { id: "dessert", emoji: "🍮", color: "oklch(0.93 0.05 10)", steps: [
+  { id: "dessert", image: dessertImg, emoji: "🍮", color: "oklch(0.93 0.05 10)", steps: [
     { key: "base", label: "Basis", min: 1, max: 3, ingredients: ["Mascarpone", "Ricotta", "Joghurt", "Milchreis", "Griesscreme"] },
     { key: "fruit", label: "Früchte", min: 0, max: 2, ingredients: ["Erdbeeren", "Himbeeren", "Mango", "Maracuja / Passionsfrucht", "Feigen"] },
     { key: "sweet", label: "Süsse", min: 0, max: 2, ingredients: ["Honig", "Zucker", "Vanillezucker", "Schokolade"] },

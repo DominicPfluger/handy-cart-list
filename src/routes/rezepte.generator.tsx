@@ -42,10 +42,13 @@ function Page() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          {shownTemplate
-            ? `${shownTemplate.emoji} ${templateLabel(shownTemplate, t)}`.trim()
-            : t("rec.entryGenTitle")}
+        <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight text-foreground">
+          {shownTemplate ? templateLabel(shownTemplate, t) : t("rec.entryGenTitle")}
+          {shownTemplate?.image ? (
+            <img src={shownTemplate.image} alt="" className="h-9 w-9 rounded-xl object-cover" style={{ background: shownTemplate.color }} />
+          ) : shownTemplate ? (
+            <span aria-hidden="true">{shownTemplate.emoji}</span>
+          ) : null}
         </h1>
       </div>
       <RecipeBuilder mode="generator" onTemplateChange={setTplId} loadRecipeId={recipe} initialTemplateId={initialTpl} />
