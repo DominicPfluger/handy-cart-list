@@ -333,11 +333,32 @@ function AdminPage() {
       </Button>
 
 
-      <select aria-label={T("adm.viewLocale")} value={viewLoc} onChange={(e) => setViewLoc(e.target.value)} className="h-11 w-full rounded-xl border border-input bg-background px-3 text-sm">
-        {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {T("adm.viewLocale")}: {l.label}</option>)}
-      </select>
-
-      <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
+      <div className="flex flex-wrap gap-2">
+        {cur && (
+          <select value={mk} onChange={(e) => setMk(e.target.value)} aria-label={T("adm.marketOrder")}
+            className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
+            <option value="">{T("adm.marketGlobal")}</option>
+            {MARKETS.map((m) => <option key={m} value={m}>{flagOf(m)} {m}</option>)}
+          </select>
+        )}
+        <select aria-label={T("adm.viewLocale")} value={viewLoc} onChange={(e) => setViewLoc(e.target.value)} className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
+          {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
+        </select>
+        {products.length > 1 && (
+          <div className="flex min-w-[10rem] flex-1 gap-2">
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label={T("adm.sortBy")}
+              className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-3 text-sm">
+              <option value="popularity">{T("adm.opt.popularity")}</option>
+              <option value="price">{T("adm.opt.price")}</option>
+              <option value="alphabetical">{T("adm.opt.alphabetical")}</option>
+              <option value="similarity">{T("adm.opt.similarity")}</option>
+            </select>
+            <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={() => sortProducts()}>↕ {busy ? T("adm.working") : T("adm.sort")}</Button>
+          </div>
+        )}
+        <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 min-w-[10rem] flex-1 rounded-xl" />
+      </div>
+      {cur && mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
 
       {q.isLoading && <p className="text-sm text-muted-foreground">{T("adm.loadingCatalog")}</p>}
 
