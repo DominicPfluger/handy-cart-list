@@ -74,6 +74,8 @@ export function CatalogTileEditor(p: {
   const [drag, setDrag] = useState<Drag>(null);
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
+  const [aliasPick, setAliasPick] = useState(false);
+  const [aliasSearch, setAliasSearch] = useState("");
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
   const moved = useRef(false);
@@ -156,7 +158,7 @@ export function CatalogTileEditor(p: {
       p.reorder("product", p.products, d.index, t.index);
       return;
     }
-    const isAlias = d.id.startsWith("alias:");
+    const isAlias = d.id.startsWith("alias:") || d.id.startsWith("deptalias:");
     if (isAlias && (t.kind === "crumb" || t.kind === "department")) return;
     const after = (() => { const r = t.el.getBoundingClientRect(); return d.kind === "product" ? e.clientY > r.top + r.height / 2 : e.clientX > r.left + r.width / 2; })();
     if (t.kind === "crumb") {
