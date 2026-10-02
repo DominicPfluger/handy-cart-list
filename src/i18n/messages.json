@@ -977,8 +977,15 @@
     "media.iconsProgress": "List icons {done}/{total} …",
     "media.iconsDone": "{n} list icons prepared",
     "more.iconSet": "Icon set",
-    "more.iconImages": "Generated images",
-    "more.iconSymbols": "Previous symbols"
+    "more.iconImages": "Pixel graphics",
+    "more.iconSymbols": "SVG graphics",
+    "list.estimatedTotal": "Estimated total",
+    "list.unpriced": "{n} items without a calculable reference price",
+    "tile.enrichTranslation": "Adding translations …",
+    "tile.enrichImage": "Creating product image …",
+    "tile.enrichPrices": "Estimating market prices …",
+    "tile.enrichPartial": "Product saved; some additions failed",
+    "tile.enrichDone": "Product image, translations and market prices added"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1958,8 +1965,15 @@
     "media.iconsProgress": "List icons {done}/{total} …",
     "media.iconsDone": "{n} list icons prepared",
     "more.iconSet": "Icon set",
-    "more.iconImages": "Generated images",
-    "more.iconSymbols": "Previous symbols"
+    "more.iconImages": "Pixel graphics",
+    "more.iconSymbols": "SVG graphics",
+    "list.estimatedTotal": "Estimated total",
+    "list.unpriced": "{n} items without a calculable reference price",
+    "tile.enrichTranslation": "Adding translations …",
+    "tile.enrichImage": "Creating product image …",
+    "tile.enrichPrices": "Estimating market prices …",
+    "tile.enrichPartial": "Product saved; some additions failed",
+    "tile.enrichDone": "Product image, translations and market prices added"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2939,8 +2953,15 @@
     "media.iconsProgress": "List icons {done}/{total} …",
     "media.iconsDone": "{n} list icons prepared",
     "more.iconSet": "Icon set",
-    "more.iconImages": "Generated images",
-    "more.iconSymbols": "Previous symbols"
+    "more.iconImages": "Pixel graphics",
+    "more.iconSymbols": "SVG graphics",
+    "list.estimatedTotal": "Estimated total",
+    "list.unpriced": "{n} items without a calculable reference price",
+    "tile.enrichTranslation": "Adding translations …",
+    "tile.enrichImage": "Creating product image …",
+    "tile.enrichPrices": "Estimating market prices …",
+    "tile.enrichPartial": "Product saved; some additions failed",
+    "tile.enrichDone": "Product image, translations and market prices added"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3920,8 +3941,15 @@
     "media.iconsProgress": "Iconos de lista {done}/{total} …",
     "media.iconsDone": "{n} iconos de lista preparados",
     "more.iconSet": "Conjunto de iconos",
-    "more.iconImages": "Imágenes generadas",
-    "more.iconSymbols": "Símbolos anteriores"
+    "more.iconImages": "Gráficos de píxeles",
+    "more.iconSymbols": "Gráficos SVG",
+    "list.estimatedTotal": "Total estimado",
+    "list.unpriced": "{n} artículos sin precio de referencia calculable",
+    "tile.enrichTranslation": "Añadiendo traducciones …",
+    "tile.enrichImage": "Creando imagen del producto …",
+    "tile.enrichPrices": "Estimando precios de mercado …",
+    "tile.enrichPartial": "Producto guardado; algunos añadidos fallaron",
+    "tile.enrichDone": "Imagen, traducciones y precios añadidos"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4901,8 +4929,15 @@
     "media.iconsProgress": "Iconos de lista {done}/{total} …",
     "media.iconsDone": "{n} iconos de lista preparados",
     "more.iconSet": "Conjunto de iconos",
-    "more.iconImages": "Imágenes generadas",
-    "more.iconSymbols": "Símbolos anteriores"
+    "more.iconImages": "Gráficos de píxeles",
+    "more.iconSymbols": "Gráficos SVG",
+    "list.estimatedTotal": "Total estimado",
+    "list.unpriced": "{n} artículos sin precio de referencia calculable",
+    "tile.enrichTranslation": "Añadiendo traducciones …",
+    "tile.enrichImage": "Creando imagen del producto …",
+    "tile.enrichPrices": "Estimando precios de mercado …",
+    "tile.enrichPartial": "Producto guardado; algunos añadidos fallaron",
+    "tile.enrichDone": "Imagen, traducciones y precios añadidos"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5882,8 +5917,15 @@
     "media.iconsProgress": "Icônes de liste {done}/{total} …",
     "media.iconsDone": "{n} icônes de liste préparées",
     "more.iconSet": "Jeu d’icônes",
-    "more.iconImages": "Images générées",
-    "more.iconSymbols": "Symboles précédents"
+    "more.iconImages": "Images en pixels",
+    "more.iconSymbols": "Images SVG",
+    "list.estimatedTotal": "Total estimé",
+    "list.unpriced": "{n} articles sans prix de référence calculable",
+    "tile.enrichTranslation": "Ajout des traductions …",
+    "tile.enrichImage": "Création de l’image du produit …",
+    "tile.enrichPrices": "Estimation des prix par marché …",
+    "tile.enrichPartial": "Produit enregistré ; certains ajouts ont échoué",
+    "tile.enrichDone": "Image, traductions et prix ajoutés"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6863,8 +6905,15 @@
     "media.iconsProgress": "Icônes de liste {done}/{total} …",
     "media.iconsDone": "{n} icônes de liste préparées",
     "more.iconSet": "Jeu d’icônes",
-    "more.iconImages": "Images générées",
-    "more.iconSymbols": "Symboles précédents"
+    "more.iconImages": "Images en pixels",
+    "more.iconSymbols": "Images SVG",
+    "list.estimatedTotal": "Total estimé",
+    "list.unpriced": "{n} articles sans prix de référence calculable",
+    "tile.enrichTranslation": "Ajout des traductions …",
+    "tile.enrichImage": "Création de l’image du produit …",
+    "tile.enrichPrices": "Estimation des prix par marché …",
+    "tile.enrichPartial": "Produit enregistré ; certains ajouts ont échoué",
+    "tile.enrichDone": "Image, traductions et prix ajoutés"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7844,8 +7893,15 @@
     "media.iconsProgress": "Icone elenco {done}/{total} …",
     "media.iconsDone": "{n} icone elenco preparate",
     "more.iconSet": "Set di icone",
-    "more.iconImages": "Immagini generate",
-    "more.iconSymbols": "Simboli precedenti"
+    "more.iconImages": "Grafica pixel",
+    "more.iconSymbols": "Grafica SVG",
+    "list.estimatedTotal": "Totale stimato",
+    "list.unpriced": "{n} articoli senza prezzo di riferimento calcolabile",
+    "tile.enrichTranslation": "Aggiunta delle traduzioni …",
+    "tile.enrichImage": "Creazione immagine prodotto …",
+    "tile.enrichPrices": "Stima dei prezzi di mercato …",
+    "tile.enrichPartial": "Prodotto salvato; alcune aggiunte non riuscite",
+    "tile.enrichDone": "Immagine, traduzioni e prezzi aggiunti"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8825,8 +8881,15 @@
     "media.iconsProgress": "Icone elenco {done}/{total} …",
     "media.iconsDone": "{n} icone elenco preparate",
     "more.iconSet": "Set di icone",
-    "more.iconImages": "Immagini generate",
-    "more.iconSymbols": "Simboli precedenti"
+    "more.iconImages": "Grafica pixel",
+    "more.iconSymbols": "Grafica SVG",
+    "list.estimatedTotal": "Totale stimato",
+    "list.unpriced": "{n} articoli senza prezzo di riferimento calcolabile",
+    "tile.enrichTranslation": "Aggiunta delle traduzioni …",
+    "tile.enrichImage": "Creazione immagine prodotto …",
+    "tile.enrichPrices": "Stima dei prezzi di mercato …",
+    "tile.enrichPartial": "Prodotto salvato; alcune aggiunte non riuscite",
+    "tile.enrichDone": "Immagine, traduzioni e prezzi aggiunti"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9806,8 +9869,15 @@
     "media.iconsProgress": "Ícones de lista {done}/{total} …",
     "media.iconsDone": "{n} ícones de lista preparados",
     "more.iconSet": "Conjunto de ícones",
-    "more.iconImages": "Imagens geradas",
-    "more.iconSymbols": "Símbolos anteriores"
+    "more.iconImages": "Gráficos em píxeis",
+    "more.iconSymbols": "Gráficos SVG",
+    "list.estimatedTotal": "Total estimado",
+    "list.unpriced": "{n} artigos sem preço de referência calculável",
+    "tile.enrichTranslation": "A adicionar traduções …",
+    "tile.enrichImage": "A criar imagem do produto …",
+    "tile.enrichPrices": "A estimar preços por mercado …",
+    "tile.enrichPartial": "Produto guardado; algumas adições falharam",
+    "tile.enrichDone": "Imagem, traduções e preços adicionados"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10787,8 +10857,15 @@
     "media.iconsProgress": "Ícones de lista {done}/{total} …",
     "media.iconsDone": "{n} ícones de lista preparados",
     "more.iconSet": "Conjunto de ícones",
-    "more.iconImages": "Imagens geradas",
-    "more.iconSymbols": "Símbolos anteriores"
+    "more.iconImages": "Gráficos em píxeis",
+    "more.iconSymbols": "Gráficos SVG",
+    "list.estimatedTotal": "Total estimado",
+    "list.unpriced": "{n} artigos sem preço de referência calculável",
+    "tile.enrichTranslation": "A adicionar traduções …",
+    "tile.enrichImage": "A criar imagem do produto …",
+    "tile.enrichPrices": "A estimar preços por mercado …",
+    "tile.enrichPartial": "Produto guardado; algumas adições falharam",
+    "tile.enrichDone": "Imagem, traduções e preços adicionados"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11768,8 +11845,15 @@
     "media.iconsProgress": "Lijsticonen {done}/{total} …",
     "media.iconsDone": "{n} lijsticonen gemaakt",
     "more.iconSet": "Pictogrammenset",
-    "more.iconImages": "Gegenereerde afbeeldingen",
-    "more.iconSymbols": "Vorige symbolen"
+    "more.iconImages": "Pixelafbeeldingen",
+    "more.iconSymbols": "SVG-afbeeldingen",
+    "list.estimatedTotal": "Geschat totaal",
+    "list.unpriced": "{n} artikelen zonder berekenbare richtprijs",
+    "tile.enrichTranslation": "Vertalingen toevoegen …",
+    "tile.enrichImage": "Productafbeelding maken …",
+    "tile.enrichPrices": "Marktprijzen schatten …",
+    "tile.enrichPartial": "Product opgeslagen; enkele aanvullingen mislukt",
+    "tile.enrichDone": "Productafbeelding, vertalingen en marktprijzen toegevoegd"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12749,8 +12833,15 @@
     "media.iconsProgress": "Lijsticonen {done}/{total} …",
     "media.iconsDone": "{n} lijsticonen gemaakt",
     "more.iconSet": "Pictogrammenset",
-    "more.iconImages": "Gegenereerde afbeeldingen",
-    "more.iconSymbols": "Vorige symbolen"
+    "more.iconImages": "Pixelafbeeldingen",
+    "more.iconSymbols": "SVG-afbeeldingen",
+    "list.estimatedTotal": "Geschat totaal",
+    "list.unpriced": "{n} artikelen zonder berekenbare richtprijs",
+    "tile.enrichTranslation": "Vertalingen toevoegen …",
+    "tile.enrichImage": "Productafbeelding maken …",
+    "tile.enrichPrices": "Marktprijzen schatten …",
+    "tile.enrichPartial": "Product opgeslagen; enkele aanvullingen mislukt",
+    "tile.enrichDone": "Productafbeelding, vertalingen en marktprijzen toegevoegd"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13190,8 +13281,15 @@
     "media.iconsProgress": "Listen-Icons {done}/{total} …",
     "media.iconsDone": "{n} Listen-Icons aufbereitet",
     "more.iconSet": "Icon-Set",
-    "more.iconImages": "Generierte Bilder",
-    "more.iconSymbols": "Bisherige Symbole"
+    "more.iconImages": "Pixelgrafiken",
+    "more.iconSymbols": "SVG-Grafiken",
+    "list.estimatedTotal": "Geschätzter Gesamtpreis",
+    "list.unpriced": "{n} Artikel ohne berechenbaren Richtpreis",
+    "tile.enrichTranslation": "Übersetzungen ergänzen …",
+    "tile.enrichImage": "Produktbild erstellen …",
+    "tile.enrichPrices": "Marktpreise schätzen …",
+    "tile.enrichPartial": "Produkt gespeichert; einzelne Ergänzungen fehlgeschlagen",
+    "tile.enrichDone": "Produktbild, Übersetzungen und Marktpreise ergänzt"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13631,7 +13729,14 @@
     "media.iconsProgress": "Listen-Icons {done}/{total} …",
     "media.iconsDone": "{n} Listen-Icons aufbereitet",
     "more.iconSet": "Icon-Set",
-    "more.iconImages": "Generierte Bilder",
-    "more.iconSymbols": "Bisherige Symbole"
+    "more.iconImages": "Pixelgrafiken",
+    "more.iconSymbols": "SVG-Grafiken",
+    "list.estimatedTotal": "Geschätzter Gesamtpreis",
+    "list.unpriced": "{n} Artikel ohne berechenbaren Richtpreis",
+    "tile.enrichTranslation": "Übersetzungen ergänzen …",
+    "tile.enrichImage": "Produktbild erstellen …",
+    "tile.enrichPrices": "Marktpreise schätzen …",
+    "tile.enrichPartial": "Produkt gespeichert; einzelne Ergänzungen fehlgeschlagen",
+    "tile.enrichDone": "Produktbild, Übersetzungen und Marktpreise ergänzt"
   }
 }

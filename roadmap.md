@@ -1,5 +1,11 @@
 # Roadmap
 
+## Offen
+- Geschätzte Summe am Ende der Einkaufsliste mit fehlenden Preisen und passenden Mengen.
+- Einzelne neue Katalogprodukte automatisch lokalisieren, bebildern und für Märkte schätzen; Mehrfachanlage unverändert.
+- Rezept-Zutaten-Kategorien rahmenlos und ohne Anzahl/Pfeil aufklappbar; manuelle Gruppenpflege im Admin sicherstellen.
+- Icon-Set unter „Mehr“ als Drop-down mit „Pixelgrafiken“ und „SVG-Grafiken“ in allen Sprachen.
+
 ## Erledigt
 - Icon-Auswahl unter „Mehr“: gerätelokal zwischen generierten Katalogbildern und bisherigen Symbolen wechseln; kleine Icons in App-Ansichten folgen der Auswahl.
 - Rezept-Generator: Zutaten je Rezeptschritt nach admin-gepflegten Gruppen mit zweiter Auswahl-Ebene; nicht gruppierte Zutaten unter „Weitere“, bisherige flache Ansicht ohne Gruppen bleibt erhalten.
