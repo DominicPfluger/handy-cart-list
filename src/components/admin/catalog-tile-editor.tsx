@@ -305,7 +305,7 @@ export function CatalogTileEditor(p: {
               <Fragment key={x.id}>
               {h && (
                 <div data-drop="heading" data-id={h.id} data-index={i}
-                  className={`flex items-center gap-2 bg-muted/50 px-3 py-2 ${drag?.id === h.id ? "opacity-40" : ""} ${over === `heading:${h.id}` ? "bg-primary-soft" : ""}`}>
+                  className={`flex items-center gap-2 bg-muted/50 px-3 py-2 ${drag?.id === h.id ? "opacity-40" : ""} ${over === `heading:${h.id}` ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : ""}`}>
                   {editMode && (
                     <span onPointerDown={(e) => startDrag(e, "heading", h.id, i, p.nm(h.id, h.name))} {...dragHandlers}
                       aria-label={T("adm.drag")} className="cursor-grab touch-none select-none px-1 text-lg text-muted-foreground">⠿</span>
@@ -346,6 +346,17 @@ export function CatalogTileEditor(p: {
       {p.below}
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
+
+      {headMove && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setHeadMove(null)}>
+          <div className="flex w-full max-w-sm flex-col gap-2 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+            <p className="text-sm font-bold text-foreground">{T("adm.headingMoveTitle", { name: headMove.name })}</p>
+            <Button variant="outline" disabled={!headMove.titleOk} onClick={() => { p.onMoveHeading?.(headMove.id, headMove.insertAt, "title"); setHeadMove(null); }}>{T("adm.headingMoveOnly")}</Button>
+            <Button onClick={() => { p.onMoveHeading?.(headMove.id, headMove.insertAt, "group"); setHeadMove(null); }}>{T("adm.headingMoveGroup", { n: headMove.n })}</Button>
+            <Button variant="ghost" onClick={() => setHeadMove(null)}>{T("adm.cancel")}</Button>
+          </div>
+        </div>
+      )}
 
       {aliasPick && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setAliasPick(false)}>
