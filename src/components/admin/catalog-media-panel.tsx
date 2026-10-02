@@ -202,6 +202,27 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
           </Button>
         </div>
 
+        {deptOptions.length > 0 && (
+          <div className="mt-4 rounded-xl border border-border bg-background p-3">
+            <h3 className="text-sm font-semibold">{T("price.catTitle")}</h3>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <select
+                value={catId}
+                onChange={(e) => setCatId(e.target.value)}
+                className="h-11 min-w-[12rem] flex-1 rounded-lg border border-border bg-card px-3 text-sm"
+              >
+                <option value="">{T("price.catPick")}</option>
+                {deptOptions.map((o) => (
+                  <option key={o.id} value={o.id}>{o.label}</option>
+                ))}
+              </select>
+              <Button size="sm" variant="secondary" disabled={busy !== null || !catId} onClick={runCategoryPrices}>
+                {busy === "catPrice" ? T("media.working") : T("price.catRun")}
+              </Button>
+            </div>
+          </div>
+        )}
+
         <div className="mt-5 border-t border-border pt-4">
           <h3 className="text-sm font-semibold">{T("price.listTitle")}</h3>
           <div className="mt-2 divide-y divide-border rounded-xl border border-border">
