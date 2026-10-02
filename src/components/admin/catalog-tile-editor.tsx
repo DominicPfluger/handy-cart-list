@@ -42,7 +42,14 @@ export function CatalogTileEditor(p: {
   translateIds: (ids?: string[]) => Promise<number>;
   reorder: (kind: "department" | "product", list: { id: string }[], from: number, to: number) => void;
   remove: (kind: "department" | "product", id: string, name: string) => void;
-  onSortRelevance?: (() => void) | undefined;
+  /** Markt-Auswahl o. ä. direkt unter der Pfadnavigation. */
+  toolbar?: React.ReactNode;
+  /** Sortier-Steuerung unter der Produktliste. */
+  sortControls?: React.ReactNode;
+  /** Zusätzlicher Inhalt unter dem Editor (z. B. Aliase). */
+  below?: React.ReactNode;
+  /** Öffnet die erweiterte Bearbeitung (Übersetzungen, Marken, Aliase …). */
+  onAdvanced?: (kind: "department" | "product", id: string) => void;
   busy?: boolean;
   headings?: TileHeading[];
   onAddHeading?: (name: string) => void;
@@ -155,6 +162,7 @@ export function CatalogTileEditor(p: {
           </span>
         ))}
       </nav>
+      {p.toolbar}
 
       {(p.children.length > 0 || editMode) && (
         <div className="grid grid-cols-3 gap-2.5 md:grid-cols-5 xl:grid-cols-7">
@@ -261,12 +269,8 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
-      {p.cur && editMode && p.onSortRelevance && (
-        <button type="button" disabled={p.busy} onClick={p.onSortRelevance}
-          className="w-full rounded-2xl border border-border bg-card px-3 py-3 text-sm font-semibold text-primary disabled:opacity-50">
-          ↕ {p.busy ? T("adm.working") : T("adm.sortRelevance")}
-        </button>
-      )}
+      {p.cur && editMode && p.sortControls}
+      {p.below}
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
 
@@ -432,6 +436,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </div>
         )}
         <div className="flex gap-2 pt-1">
+          {item && p.onAdvanced && <Button variant="outline" className="h-11 rounded-xl" onClick={() => { p.onAdvanced!(p.target.kind, item.id); p.onClose(); }}>⚙ {T("tile.advanced")}</Button>}
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
           <Button variant="outline" className="h-11 rounded-xl" onClick={p.onClose}>{T("common.cancel")}</Button>
           <Button className="h-11 flex-1 rounded-xl" onClick={() => void save()}>{T("tile.save")}</Button>

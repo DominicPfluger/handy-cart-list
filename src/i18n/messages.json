@@ -924,7 +924,8 @@
     "adm.tab.more": "More",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Tap to add and translate the language.",
-    "adm.sortRelevance": "Sort by relevance"
+    "adm.sortRelevance": "Sort by relevance",
+    "tile.advanced": "Advanced"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1851,7 +1852,8 @@
     "adm.tab.more": "More",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Tap to add and translate the language.",
-    "adm.sortRelevance": "Sort by relevance"
+    "adm.sortRelevance": "Sort by relevance",
+    "tile.advanced": "Advanced"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2778,7 +2780,8 @@
     "adm.tab.more": "More",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Tap to add and translate the language.",
-    "adm.sortRelevance": "Sort by relevance"
+    "adm.sortRelevance": "Sort by relevance",
+    "tile.advanced": "Advanced"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3705,7 +3708,8 @@
     "adm.tab.more": "Más",
     "loc.suggest": "Sugerencias",
     "loc.suggestHint": "Toca para añadir y traducir el idioma.",
-    "adm.sortRelevance": "Ordenar por relevancia"
+    "adm.sortRelevance": "Ordenar por relevancia",
+    "tile.advanced": "Avanzado"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4632,7 +4636,8 @@
     "adm.tab.more": "Más",
     "loc.suggest": "Sugerencias",
     "loc.suggestHint": "Toca para añadir y traducir el idioma.",
-    "adm.sortRelevance": "Ordenar por relevancia"
+    "adm.sortRelevance": "Ordenar por relevancia",
+    "tile.advanced": "Avanzado"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5559,7 +5564,8 @@
     "adm.tab.more": "Plus",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
-    "adm.sortRelevance": "Trier par pertinence"
+    "adm.sortRelevance": "Trier par pertinence",
+    "tile.advanced": "Avancé"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6486,7 +6492,8 @@
     "adm.tab.more": "Plus",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
-    "adm.sortRelevance": "Trier par pertinence"
+    "adm.sortRelevance": "Trier par pertinence",
+    "tile.advanced": "Avancé"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7413,7 +7420,8 @@
     "adm.tab.more": "Altro",
     "loc.suggest": "Suggerimenti",
     "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
-    "adm.sortRelevance": "Ordina per rilevanza"
+    "adm.sortRelevance": "Ordina per rilevanza",
+    "tile.advanced": "Avanzate"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8340,7 +8348,8 @@
     "adm.tab.more": "Altro",
     "loc.suggest": "Suggerimenti",
     "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
-    "adm.sortRelevance": "Ordina per rilevanza"
+    "adm.sortRelevance": "Ordina per rilevanza",
+    "tile.advanced": "Avanzate"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -8945,7 +8954,7 @@
     "adm.imageDone": "Imagem guardada",
     "adm.imageError": "Não foi possível guardar a imagem",
     "adm.imageHint": "Recortada automaticamente para 512 × 512 px e guardada como PNG.",
-    "adm.imgDblHint": "Duplo clique na imagem para ampli\u00e1-la.",
+    "adm.imgDblHint": "Duplo clique na imagem para ampliá-la.",
     "adm.diets": "Não adequado para:",
     "adm.dietsHint": "O produto fica oculto quando este filtro está ativo.",
     "adm.variants": "Variantes",
@@ -9267,7 +9276,8 @@
     "adm.tab.more": "Mais",
     "loc.suggest": "Sugestões",
     "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
-    "adm.sortRelevance": "Ordenar por relevância"
+    "adm.sortRelevance": "Ordenar por relevância",
+    "tile.advanced": "Avançado"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -9872,7 +9882,7 @@
     "adm.imageDone": "Imagem salva",
     "adm.imageError": "Não foi possível salvar a imagem",
     "adm.imageHint": "Recortada automaticamente para 512 × 512 px e salva como PNG.",
-    "adm.imgDblHint": "Duplo clique na imagem para ampli\u00e1-la.",
+    "adm.imgDblHint": "Duplo clique na imagem para ampliá-la.",
     "adm.diets": "Não adequado para:",
     "adm.dietsHint": "O produto fica oculto quando este filtro está ativo.",
     "adm.variants": "Variantes",
@@ -10194,7 +10204,8 @@
     "adm.tab.more": "Mais",
     "loc.suggest": "Sugestões",
     "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
-    "adm.sortRelevance": "Ordenar por relevância"
+    "adm.sortRelevance": "Ordenar por relevância",
+    "tile.advanced": "Avançado"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11121,7 +11132,8 @@
     "adm.tab.more": "Meer",
     "loc.suggest": "Suggesties",
     "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
-    "adm.sortRelevance": "Sorteren op relevantie"
+    "adm.sortRelevance": "Sorteren op relevantie",
+    "tile.advanced": "Geavanceerd"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12048,7 +12060,8 @@
     "adm.tab.more": "Meer",
     "loc.suggest": "Suggesties",
     "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
-    "adm.sortRelevance": "Sorteren op relevantie"
+    "adm.sortRelevance": "Sorteren op relevantie",
+    "tile.advanced": "Geavanceerd"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12196,7 +12209,7 @@
     "adm.imageDone": "Bild gespeichert",
     "adm.imageError": "Bild konnte nicht gespeichert werden",
     "adm.imageHint": "Wird automatisch auf 512 × 512 px zugeschnitten und als PNG gespeichert.",
-    "adm.imgDblHint": "Bild durch Doppelklick vergr\u00f6ssern.",
+    "adm.imgDblHint": "Bild durch Doppelklick vergrössern.",
     "adm.diets": "Nicht geeignet für:",
     "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet.",
     "adm.variants": "Varianten",
@@ -12437,7 +12450,8 @@
     "adm.tab.more": "Mehr",
     "loc.suggest": "Vorschläge",
     "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
-    "adm.sortRelevance": "Nach Relevanz sortieren"
+    "adm.sortRelevance": "Nach Relevanz sortieren",
+    "tile.advanced": "Erweitert"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12585,7 +12599,7 @@
     "adm.imageDone": "Bild gespeichert",
     "adm.imageError": "Bild konnte nicht gespeichert werden",
     "adm.imageHint": "Wird automatisch auf 512 × 512 px zugeschnitten und als PNG gespeichert.",
-    "adm.imgDblHint": "Bild durch Doppelklick vergr\u00f6ssern.",
+    "adm.imgDblHint": "Bild durch Doppelklick vergrössern.",
     "adm.diets": "Nicht geeignet für:",
     "adm.dietsHint": "Produkt wird bei aktivem Filter ausgeblendet.",
     "adm.variants": "Varianten",
@@ -12826,6 +12840,7 @@
     "adm.tab.more": "Mehr",
     "loc.suggest": "Vorschläge",
     "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
-    "adm.sortRelevance": "Nach Relevanz sortieren"
+    "adm.sortRelevance": "Nach Relevanz sortieren",
+    "tile.advanced": "Erweitert"
   }
 }

@@ -595,6 +595,7 @@ export const de = {
   "loc.deleteConfirm": "Sprache „{name}“ mit allen Übersetzungen löschen?",
   "tile.viewList": "Liste",
   "tile.viewTiles": "Kacheln",
+  "tile.advanced": "Erweitert",
   "tile.edit": "Bearbeiten",
   "tile.preview": "Vorschau",
   "tile.hint": "Bild ziehen zum Sortieren oder Verschieben (auf Kategorie oder Pfad). Antippen zum Bearbeiten.",
