@@ -19,11 +19,9 @@ import {
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import { getLocale, pickName } from "../i18n";
-import { ItemPhoto } from "../components/item-photo";
-import { deleteItemPhoto, deleteItemPhotos } from "../lib/item-photo-store";
+import { deleteItemPhotos } from "../lib/item-photo-store";
 import {
   CheckIcon,
-  TrashIcon,
   PlusIcon,
   ShareIcon,
 } from "../components/icons";
@@ -78,7 +76,7 @@ export const Route = createFileRoute("/")({
 
 function ListPage() {
   const {
-    items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem, setItemQuantity,
+    items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
     templates, saveAsTemplate, createFromTemplate, deleteTemplate,
   } = useShoppingList();
@@ -228,10 +226,6 @@ function ListPage() {
     clearCheckedWithPhotos();
     toast.success(t("hist.archived", { n: bought.length }));
   };
-  const removeItemWithPhoto = (id: string) => {
-    deleteItemPhoto(id).catch(() => {});
-    removeItem(id);
-  };
   const clearCheckedWithPhotos = () => {
     deleteItemPhotos(items.filter((i) => i.checked).map((i) => i.id)).catch(() => {});
     clearChecked();
@@ -265,23 +259,6 @@ function ListPage() {
       toast.success(t("common.addedToList", { name: entry.name }));
     }
     setQuick("");
-  };
-
-  // ---- Mengen-Schnelltasten am Eintrag ----
-  const bumpQuantity = (item: ListItem, delta: number) => {
-    const q = item.quantity ?? "";
-    const m = /^\s*(\d+(?:[.,]\d+)?)(.*)$/.exec(q);
-    let next: string;
-    if (!m) {
-      if (delta <= 0) return;
-      next = "1";
-    } else {
-      const num = m[1] ?? "";
-      const rest = m[2] ?? "";
-      const n = Math.max(1, Math.round((Number(num.replace(",", ".")) + delta) * 100) / 100);
-      next = `${String(n).replace(".", ",")}${rest}`;
-    }
-    setItemQuantity(item.id, next);
   };
 
   // ---- Einkaufs-Modus: Grosschrift, nur Abhaken, Bildschirm bleibt wach ----
@@ -514,25 +491,6 @@ function ListPage() {
                         </p>
                       )}
                     </div>
-                    {!shopMode && <ItemPhoto itemId={item.id} />}
-                    {!shopMode && (
-                    <div className="flex shrink-0 items-center gap-0.5">
-                      <button
-                        onClick={() => bumpQuantity(item, -1)}
-                        className="grid h-7 w-7 place-items-center rounded-full border border-border text-sm text-foreground transition active:scale-90"
-                        aria-label={t("list.qtyMinus")}
-                      >
-                        <span aria-hidden="true">−</span>
-                      </button>
-                      <button
-                        onClick={() => bumpQuantity(item, 1)}
-                        className="grid h-7 w-7 place-items-center rounded-full border border-border text-sm text-foreground transition active:scale-90"
-                        aria-label={t("list.qtyPlus")}
-                      >
-                        <span aria-hidden="true">+</span>
-                      </button>
-                    </div>
-                    )}
                     {!shopMode && (() => {
                       const product = item.productId ? productById.get(item.productId) : undefined;
                       const ids = product ? departmentIdsOf(product, data.productAliases ?? []) : [];
@@ -552,15 +510,6 @@ function ListPage() {
                         </label>
                       );
                     })()}
-                    {!shopMode && (
-                    <button
-                      onClick={() => removeItemWithPhoto(item.id)}
-                      className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-coral transition active:scale-90"
-                      aria-label={t("list.remove")}
-                    >
-                      <TrashIcon className="h-5 w-5" />
-                    </button>
-                    )}
                   </div>
                   </Fragment>
                   );
