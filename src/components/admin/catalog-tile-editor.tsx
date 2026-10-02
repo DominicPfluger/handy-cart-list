@@ -173,7 +173,7 @@ export function CatalogTileEditor(p: {
                 className={`flex items-center gap-3 px-3 py-2 ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? "bg-primary-soft" : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
                 <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers}
                   className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl ${editMode ? "cursor-grab touch-none" : ""}`}>
-                  {img(x.image_path) ? <img src={img(x.image_path)} alt="" className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
+                  {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
                 </span>
                 <button type="button" disabled={!editMode} onClick={click(() => setTarget({ kind: "product", id: x.id }))} className="min-w-0 flex-1 text-left">
                   <div className="truncate text-sm font-semibold text-foreground">{p.nm(x.id, x.name)}</div>
@@ -283,7 +283,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
-            {p.imgUrl ? <img src={p.imgUrl} alt="" className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
+            {p.imgUrl ? <ZoomableImage src={p.imgUrl} className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
           </div>
           {effId && (
             <div className="flex flex-1 flex-col gap-2">
