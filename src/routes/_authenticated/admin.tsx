@@ -289,9 +289,10 @@ function AdminPage() {
   /** Produkt unter eine Überschrift verschieben (ans Ende der Gruppe; "" = ganz nach oben, vor die erste Überschrift). */
   /** Produkt an Position `to` (0..n in `list`) einfügen und der Überschrift `headingId` ("" = keine) zuordnen.
    *  Danach wird jede Überschrift auf das erste eigene Produkt ihrer Gruppe neu verankert. */
-  const moveProduct = (list: { id: string }[], productId: string, to: number, headingId: string) => {
-    const from = list.findIndex((x) => x.id === productId);
-    if (from < 0) return;
+  const moveProduct = (list: { id: string }[], productIds: string | string[], to: number, headingId: string) => {
+    const sel = new Set(Array.isArray(productIds) ? productIds : [productIds]);
+    const block = list.filter((x) => sel.has(x.id));
+    if (block.length === 0) return;
     const isOwn = (id: string) => !id.startsWith("alias:");
     // Gruppen vor dem Verschieben ermitteln
     const anchorIdx = headings.map((h) => ({ h, i: list.findIndex((x) => x.id === h.before_product_id) })).filter((x) => x.i >= 0).sort((a, b) => a.i - b.i);
@@ -300,11 +301,12 @@ function AdminPage() {
       const end = anchorIdx[k + 1]?.i ?? list.length;
       members.set(h.id, new Set(list.slice(i, end).map((x) => x.id)));
     });
-    for (const s of members.values()) s.delete(productId);
-    if (headingId) members.get(headingId)?.add(productId);
-    const rest = list.filter((x) => x.id !== productId);
-    const at = Math.max(0, Math.min(to > from ? to - 1 : to, rest.length));
-    const next = [...rest.slice(0, at), list[from]!, ...rest.slice(at)];
+    for (const s of members.values()) for (const id of sel) s.delete(id);
+    if (headingId) { const m = members.get(headingId); if (m) for (const id of sel) m.add(id); }
+    const rest = list.filter((x) => !sel.has(x.id));
+    const before = list.slice(0, to).filter((x) => sel.has(x.id)).length;
+    const at = Math.max(0, Math.min(to - before, rest.length));
+    const next = [...rest.slice(0, at), ...block, ...rest.slice(at)];
     const changed = next.some((x, i) => x.id !== list[i]!.id);
     // Neue Anker
     const used = new Set<string>();
@@ -315,7 +317,7 @@ function AdminPage() {
       if (!anchor) {
         // Leere Gruppe: Überschrift bleibt an ihrer Stelle, vor dem nächsten eigenen Produkt
         const oldPos = list.findIndex((x) => x.id === h.before_product_id);
-        const after = list.slice(oldPos + 1).find((x) => isOwn(x.id) && x.id !== productId && !used.has(x.id));
+        const after = list.slice(oldPos + 1).find((x) => isOwn(x.id) && !sel.has(x.id) && !used.has(x.id));
         anchor = after?.id ?? h.before_product_id;
       }
       used.add(anchor);

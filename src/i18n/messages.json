@@ -517,7 +517,7 @@
     "speak.unsupported": "Speech output is not supported on this device.",
     "speak.intro": "{name}. {count} items open.",
     "adm.fromCatalog": "+ From catalog",
-    "adm.selectAll": "Select all",
+    "adm.selectAll": "All",
     "adm.selectNone": "Select none",
     "rk.otherGroup": "Other",
     "adm.recipeGroups": "Recipe categories",
@@ -1101,7 +1101,10 @@
     "adm.health.synSearch": "Search synonym …",
     "adm.health.collision": "Collides with product name",
     "adm.health.pairs": "{n} pairs",
-    "adm.health.open": "Edit"
+    "adm.health.open": "Edit",
+    "adm.select": "Select",
+    "adm.selectedCount": "{n} selected – drag to move",
+    "adm.clearSelection": "Clear selection"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -1621,7 +1624,7 @@
     "speak.unsupported": "Speech output is not supported on this device.",
     "speak.intro": "{name}. {count} items open.",
     "adm.fromCatalog": "+ From catalog",
-    "adm.selectAll": "Select all",
+    "adm.selectAll": "All",
     "adm.selectNone": "Select none",
     "rk.otherGroup": "Other",
     "adm.recipeGroups": "Recipe categories",
@@ -2205,7 +2208,10 @@
     "adm.health.synSearch": "Search synonym …",
     "adm.health.collision": "Collides with product name",
     "adm.health.pairs": "{n} pairs",
-    "adm.health.open": "Edit"
+    "adm.health.open": "Edit",
+    "adm.select": "Select",
+    "adm.selectedCount": "{n} selected – drag to move",
+    "adm.clearSelection": "Clear selection"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2725,7 +2731,7 @@
     "speak.unsupported": "Speech output is not supported on this device.",
     "speak.intro": "{name}. {count} items open.",
     "adm.fromCatalog": "+ From catalog",
-    "adm.selectAll": "Select all",
+    "adm.selectAll": "All",
     "adm.selectNone": "Select none",
     "rk.otherGroup": "Other",
     "adm.recipeGroups": "Recipe categories",
@@ -3309,7 +3315,10 @@
     "adm.health.synSearch": "Search synonym …",
     "adm.health.collision": "Collides with product name",
     "adm.health.pairs": "{n} pairs",
-    "adm.health.open": "Edit"
+    "adm.health.open": "Edit",
+    "adm.select": "Select",
+    "adm.selectedCount": "{n} selected – drag to move",
+    "adm.clearSelection": "Clear selection"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -3829,7 +3838,7 @@
     "speak.unsupported": "Este dispositivo no admite la lectura en voz alta.",
     "speak.intro": "{name}. {count} artículos pendientes.",
     "adm.fromCatalog": "+ Del catálogo",
-    "adm.selectAll": "Seleccionar todo",
+    "adm.selectAll": "Todos",
     "adm.selectNone": "Ninguno",
     "rk.otherGroup": "Otros",
     "adm.recipeGroups": "Categorías de recetas",
@@ -4413,7 +4422,10 @@
     "adm.health.synSearch": "Buscar sinónimo …",
     "adm.health.collision": "Colisiona con nombre de producto",
     "adm.health.pairs": "{n} pares",
-    "adm.health.open": "Editar"
+    "adm.health.open": "Editar",
+    "adm.select": "Seleccionar",
+    "adm.selectedCount": "{n} seleccionados – arrastra para mover",
+    "adm.clearSelection": "Quitar selección"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4933,7 +4945,7 @@
     "speak.unsupported": "Este dispositivo no admite la lectura en voz alta.",
     "speak.intro": "{name}. {count} artículos pendientes.",
     "adm.fromCatalog": "+ Del catálogo",
-    "adm.selectAll": "Seleccionar todo",
+    "adm.selectAll": "Todos",
     "adm.selectNone": "Ninguno",
     "rk.otherGroup": "Otros",
     "adm.recipeGroups": "Categorías de recetas",
@@ -5517,7 +5529,10 @@
     "adm.health.synSearch": "Buscar sinónimo …",
     "adm.health.collision": "Colisiona con nombre de producto",
     "adm.health.pairs": "{n} pares",
-    "adm.health.open": "Editar"
+    "adm.health.open": "Editar",
+    "adm.select": "Seleccionar",
+    "adm.selectedCount": "{n} seleccionados – arrastra para mover",
+    "adm.clearSelection": "Quitar selección"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6037,7 +6052,7 @@
     "speak.unsupported": "La lecture vocale n'est pas prise en charge sur cet appareil.",
     "speak.intro": "{name}. {count} articles restants.",
     "adm.fromCatalog": "+ Depuis le catalogue",
-    "adm.selectAll": "Tout sélectionner",
+    "adm.selectAll": "Tous",
     "adm.selectNone": "Tout désélectionner",
     "rk.otherGroup": "Autres",
     "adm.recipeGroups": "Catégories de recettes",
@@ -6621,7 +6636,10 @@
     "adm.health.synSearch": "Rechercher un synonyme …",
     "adm.health.collision": "En conflit avec un nom de produit",
     "adm.health.pairs": "{n} paires",
-    "adm.health.open": "Modifier"
+    "adm.health.open": "Modifier",
+    "adm.select": "Sélectionner",
+    "adm.selectedCount": "{n} sélectionné(s) – glisser pour déplacer",
+    "adm.clearSelection": "Désélectionner"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7141,7 +7159,7 @@
     "speak.unsupported": "La lecture vocale n'est pas prise en charge sur cet appareil.",
     "speak.intro": "{name}. {count} articles restants.",
     "adm.fromCatalog": "+ Depuis le catalogue",
-    "adm.selectAll": "Tout sélectionner",
+    "adm.selectAll": "Tous",
     "adm.selectNone": "Tout désélectionner",
     "rk.otherGroup": "Autres",
     "adm.recipeGroups": "Catégories de recettes",
@@ -7725,7 +7743,10 @@
     "adm.health.synSearch": "Rechercher un synonyme …",
     "adm.health.collision": "En conflit avec un nom de produit",
     "adm.health.pairs": "{n} paires",
-    "adm.health.open": "Modifier"
+    "adm.health.open": "Modifier",
+    "adm.select": "Sélectionner",
+    "adm.selectedCount": "{n} sélectionné(s) – glisser pour déplacer",
+    "adm.clearSelection": "Désélectionner"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8245,7 +8266,7 @@
     "speak.unsupported": "La lettura vocale non è supportata su questo dispositivo.",
     "speak.intro": "{name}. {count} articoli da prendere.",
     "adm.fromCatalog": "+ Dal catalogo",
-    "adm.selectAll": "Seleziona tutto",
+    "adm.selectAll": "Tutti",
     "adm.selectNone": "Deseleziona tutto",
     "rk.otherGroup": "Altro",
     "adm.recipeGroups": "Categorie di ricette",
@@ -8829,7 +8850,10 @@
     "adm.health.synSearch": "Cerca sinonimo …",
     "adm.health.collision": "In conflitto con un nome di prodotto",
     "adm.health.pairs": "{n} coppie",
-    "adm.health.open": "Modifica"
+    "adm.health.open": "Modifica",
+    "adm.select": "Seleziona",
+    "adm.selectedCount": "{n} selezionati – trascina per spostare",
+    "adm.clearSelection": "Annulla selezione"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9349,7 +9373,7 @@
     "speak.unsupported": "La lettura vocale non è supportata su questo dispositivo.",
     "speak.intro": "{name}. {count} articoli da prendere.",
     "adm.fromCatalog": "+ Dal catalogo",
-    "adm.selectAll": "Seleziona tutto",
+    "adm.selectAll": "Tutti",
     "adm.selectNone": "Deseleziona tutto",
     "rk.otherGroup": "Altro",
     "adm.recipeGroups": "Categorie di ricette",
@@ -9933,7 +9957,10 @@
     "adm.health.synSearch": "Cerca sinonimo …",
     "adm.health.collision": "In conflitto con un nome di prodotto",
     "adm.health.pairs": "{n} coppie",
-    "adm.health.open": "Modifica"
+    "adm.health.open": "Modifica",
+    "adm.select": "Seleziona",
+    "adm.selectedCount": "{n} selezionati – trascina per spostare",
+    "adm.clearSelection": "Annulla selezione"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10453,7 +10480,7 @@
     "speak.unsupported": "A leitura em voz alta não é suportada neste dispositivo.",
     "speak.intro": "{name}. {count} itens em aberto.",
     "adm.fromCatalog": "+ Do catálogo",
-    "adm.selectAll": "Selecionar tudo",
+    "adm.selectAll": "Todos",
     "adm.selectNone": "Nenhum",
     "rk.otherGroup": "Outros",
     "adm.recipeGroups": "Categorias de receitas",
@@ -11037,7 +11064,10 @@
     "adm.health.synSearch": "Procurar sinónimo …",
     "adm.health.collision": "Colide com nome de produto",
     "adm.health.pairs": "{n} pares",
-    "adm.health.open": "Editar"
+    "adm.health.open": "Editar",
+    "adm.select": "Selecionar",
+    "adm.selectedCount": "{n} selecionados – arraste para mover",
+    "adm.clearSelection": "Limpar seleção"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11557,7 +11587,7 @@
     "speak.unsupported": "A leitura em voz alta não é suportada neste dispositivo.",
     "speak.intro": "{name}. {count} itens em aberto.",
     "adm.fromCatalog": "+ Do catálogo",
-    "adm.selectAll": "Selecionar tudo",
+    "adm.selectAll": "Todos",
     "adm.selectNone": "Nenhum",
     "rk.otherGroup": "Outros",
     "adm.recipeGroups": "Categorias de receitas",
@@ -12141,7 +12171,10 @@
     "adm.health.synSearch": "Buscar sinônimo …",
     "adm.health.collision": "Colide com nome de produto",
     "adm.health.pairs": "{n} pares",
-    "adm.health.open": "Editar"
+    "adm.health.open": "Editar",
+    "adm.select": "Selecionar",
+    "adm.selectedCount": "{n} selecionados – arraste para mover",
+    "adm.clearSelection": "Limpar seleção"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12661,7 +12694,7 @@
     "speak.unsupported": "Voorlezen wordt op dit apparaat niet ondersteund.",
     "speak.intro": "{name}. {count} artikelen open.",
     "adm.fromCatalog": "+ Uit catalogus",
-    "adm.selectAll": "Alles selecteren",
+    "adm.selectAll": "Alle",
     "adm.selectNone": "Niets selecteren",
     "rk.otherGroup": "Overige",
     "adm.recipeGroups": "Receptcategorieën",
@@ -13245,7 +13278,10 @@
     "adm.health.synSearch": "Synoniem zoeken …",
     "adm.health.collision": "Botst met productnaam",
     "adm.health.pairs": "{n} paren",
-    "adm.health.open": "Bewerken"
+    "adm.health.open": "Bewerken",
+    "adm.select": "Selecteren",
+    "adm.selectedCount": "{n} geselecteerd – sleep om te verplaatsen",
+    "adm.clearSelection": "Selectie wissen"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13765,7 +13801,7 @@
     "speak.unsupported": "Voorlezen wordt op dit apparaat niet ondersteund.",
     "speak.intro": "{name}. {count} artikelen open.",
     "adm.fromCatalog": "+ Uit catalogus",
-    "adm.selectAll": "Alles selecteren",
+    "adm.selectAll": "Alle",
     "adm.selectNone": "Niets selecteren",
     "rk.otherGroup": "Overige",
     "adm.recipeGroups": "Receptcategorieën",
@@ -14349,7 +14385,10 @@
     "adm.health.synSearch": "Synoniem zoeken …",
     "adm.health.collision": "Botst met productnaam",
     "adm.health.pairs": "{n} paren",
-    "adm.health.open": "Bewerken"
+    "adm.health.open": "Bewerken",
+    "adm.select": "Selecteren",
+    "adm.selectedCount": "{n} geselecteerd – sleep om te verplaatsen",
+    "adm.clearSelection": "Selectie wissen"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14914,7 +14953,11 @@
     "adm.health.synSearch": "Synonym suchen …",
     "adm.health.collision": "Kollidiert mit Produktname",
     "adm.health.pairs": "{n} Paare",
-    "adm.health.open": "Bearbeiten"
+    "adm.health.open": "Bearbeiten",
+    "adm.select": "Auswählen",
+    "adm.selectedCount": "{n} ausgewählt – zum Verschieben ziehen",
+    "adm.selectAll": "Alle",
+    "adm.clearSelection": "Auswahl aufheben"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15479,6 +15522,10 @@
     "adm.health.synSearch": "Synonym suchen …",
     "adm.health.collision": "Kollidiert mit Produktname",
     "adm.health.pairs": "{n} Paare",
-    "adm.health.open": "Bearbeiten"
+    "adm.health.open": "Bearbeiten",
+    "adm.select": "Auswählen",
+    "adm.selectedCount": "{n} ausgewählt – zum Verschieben ziehen",
+    "adm.selectAll": "Alle",
+    "adm.clearSelection": "Auswahl aufheben"
   }
 }
