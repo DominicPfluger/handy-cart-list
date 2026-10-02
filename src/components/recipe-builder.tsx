@@ -712,9 +712,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   )}
                 </div>;
               };
-              if (!hasGroups) return renderIngredients(s.products, "all");
+              if (!hasGroups) return renderIngredients(pool, "all");
               return <div className="space-y-1">
-                {[...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: s.products.filter((p) => s.groupByProduct.get(p.id) === g.id) })), ...(other.length ? [{ key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: other }] : [])].map((group) => {
+                {[...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: pool.filter((p) => s.groupByProduct.get(p.id) === g.id) })), ...(other.length ? [{ key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: other }] : [])].map((group) => {
                   const key = `${s.key}:${group.key}`;
                   const expanded = !!openIngredientGroups[key];
                   return <div key={key}>
@@ -727,10 +727,13 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               </div>;
             })()
           )}
+          </div>
+          )}
         </div>
-      ))}
+        );
+      })}
 
-      <div className="rounded-2xl bg-primary-soft/40 p-4">
+      <div ref={summaryRef} className="scroll-mt-24 rounded-2xl bg-primary-soft/40 p-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("rk.yourRecipe")}</p>
         {chosen.length === 0 ? (
           <p className="mt-1 text-sm text-muted-foreground">{t("rk.nothing")}</p>
