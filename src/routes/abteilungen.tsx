@@ -200,10 +200,10 @@ function DepartmentsPage() {
   const locale = getLocale();
   const variantLabel = (product: CatalogProduct, v: string) => pickName(product.variantNames?.[v], locale, v);
   const matchedVariant = (product: CatalogProduct) =>
-    (product.variants ?? []).find((v) => variantLabel(product, v).toLocaleLowerCase().includes(normalizedQuery));
+    (product.variants ?? []).find((v) => matchesProductSearch(variantLabel(product, v), normalizedQuery));
   const normSyn = (s: string) => s.toLocaleLowerCase().replace(/ß/g, "ss");
   const matchedSynonym = (product: CatalogProduct) =>
-    (product.synonyms ?? []).find((s) => normSyn(s).includes(normSyn(normalizedQuery)));
+    (product.synonyms ?? []).find((s) => matchesProductSearch(s, normalizedQuery));
   const searchResults = useMemo(() => {
     if (!normalizedQuery) return [];
     // Rang der Abteilung = Position in der Baumstruktur (Tiefensuche nach sortOrder)
