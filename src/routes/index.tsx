@@ -19,11 +19,9 @@ import {
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import { getLocale, pickName } from "../i18n";
-import { ItemPhoto } from "../components/item-photo";
-import { deleteItemPhoto, deleteItemPhotos } from "../lib/item-photo-store";
+import { deleteItemPhotos } from "../lib/item-photo-store";
 import {
   CheckIcon,
-  TrashIcon,
   PlusIcon,
   ShareIcon,
 } from "../components/icons";
