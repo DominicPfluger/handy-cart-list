@@ -16,7 +16,7 @@ import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
 import { RecipeAdmin } from "@/components/recipe-admin";
 import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
-import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias-admin";
+import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
 import { signedCategoryImageUrl } from "@/lib/image-upload";
@@ -226,7 +226,7 @@ function AdminPage() {
   /** Überschrift verschieben: die ganze Gruppe (Überschrift + ihre Produkte bis zur nächsten Überschrift) wandert mit. */
   const moveHeading = (headingId: string, beforeProductId: string) => {
     const h = d?.heads.find((x) => x.id === headingId);
-    if (!h || h.before_product_id === beforeProductId) return;
+    if (!h || h.before_product_id === beforeProductId || beforeProductId.startsWith("alias:")) return;
     const anchors = new Set(d?.heads.filter((x) => x.id !== headingId).map((x) => x.before_product_id) ?? []);
     const start = products.findIndex((p) => p.id === h.before_product_id);
     if (start < 0) { // leere Gruppe: nur der Titel wandert
@@ -466,7 +466,8 @@ function AdminPage() {
             reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
             busy={busy}
             headings={headings}
-            onAddHeading={(name) => { if (cur && products[0]) void run(() => saveH({ data: { departmentId: cur, beforeProductId: products[0]!.id, name } }), T("adm.created")); }}
+            onAddHeading={(name) => { const first = products.find((x) => !x.id.startsWith("alias:")); if (cur && first) void run(() => saveH({ data: { departmentId: cur, beforeProductId: first.id, name } }), T("adm.created")); }}
+            onRemoveAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("product_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }, T("adm.deleted")); }}
             onMoveHeading={moveHeading}
             onAssignHeading={(productId, headingId) => run(() => assignHeading(productId, headingId), T("adm.saved"))}
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
@@ -477,7 +478,6 @@ function AdminPage() {
             below={cur ? (
               <>
                 <DeptAliasRows parentId={cur} depts={d.depts} onEdit={(id) => setSel({ kind: "department", id })} />
-                <ProductAliasRows departmentId={cur} prods={d.prods} onEdit={(id) => setSel({ kind: "product", id })} />
               </>
             ) : null} />
           {bulk && (
