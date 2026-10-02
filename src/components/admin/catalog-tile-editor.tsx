@@ -383,6 +383,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         {!isDept && (
           <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 rounded-xl" />
         )}
+        {!isDept && item && heads.length > 0 && (
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-foreground">{T("adm.headingAssign")}</h3>
+            <select aria-label={T("adm.headingAssign")} value={headingSel} onChange={(e) => setHeadingSel(e.target.value)} className="h-11 w-full rounded-xl border border-input bg-background px-2 text-sm">
+              <option value="">{T("adm.noHeading")}</option>
+              {heads.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}
+            </select>
+          </div>
+        )}
         {!isDept && (
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
