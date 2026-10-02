@@ -20,12 +20,12 @@ export function SectionTitle({ emoji, bg, children }: { emoji: string; bg: strin
 }
 
 /** Einheitliche Rezept-Karte (untereinander) für alle Inspirationen-Bereiche. */
-export function ListCardBody({ photo, emoji, color, kicker, title, sub, badge }: {
-  photo?: string | null | undefined; emoji?: string | undefined; color?: string | undefined; kicker?: string | undefined; title: string; sub?: string | null | undefined; badge?: string | undefined;
+export function ListCardBody({ photo, image, emoji, color, kicker, title, sub, badge }: {
+  photo?: string | null | undefined; image?: string | undefined; emoji?: string | undefined; color?: string | undefined; kicker?: string | undefined; title: string; sub?: string | null | undefined; badge?: string | undefined;
 }) {
   return (
     <>
-      <RecipePhoto path={photo ?? null} emoji={emoji} color={color} className="h-16 w-16 shrink-0 rounded-xl" />
+      <RecipePhoto path={photo ?? null} image={image} emoji={emoji} color={color} className="h-16 w-16 shrink-0 rounded-xl" />
       <span className="min-w-0 flex-1 text-left">
         {kicker ? <span className="block text-xs text-primary">{kicker}</span> : null}
         <span className="line-clamp-2 block text-sm font-semibold text-foreground">{title}</span>
@@ -42,7 +42,7 @@ function Card({ r, badge }: { r: FeedRecipe; badge: string }) {
   const tpl = templates.find((x) => x.id === r.template_id);
   return (
     <Link to="/rezept/$slug" params={{ slug: r.share_slug ?? "" }} className={LIST_CARD_CLASS}>
-      <ListCardBody photo={r.image_path} emoji={tpl?.emoji} color={tpl?.color} title={r.title} sub={r.description} badge={badge} />
+      <ListCardBody photo={r.image_path} image={tpl?.image} emoji={tpl?.emoji} color={tpl?.color} title={r.title} sub={r.description} badge={badge} />
     </Link>
   );
 }
