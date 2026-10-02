@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
 import { RecipeAdmin } from "@/components/recipe-admin";
-import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
+import { DeptAliasEditor, KEY as DEPT_ALIAS_KEY, loadAliases as loadDeptAliases } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
@@ -124,7 +124,19 @@ function AdminPage() {
     while (c) { out.unshift(c); c = c.parent_id ? deptById.get(c.parent_id) : undefined; }
     return out;
   };
-  const children = (d?.depts ?? []).filter((x) => x.parent_id === cur);
+  const deptAliasQ = useQuery({ queryKey: DEPT_ALIAS_KEY, queryFn: loadDeptAliases });
+  // Alias-Kategorien an ihrer Position einmischen (wie in der App-Abteilungsansicht).
+  const children = useMemo(() => {
+    const own = (d?.depts ?? []).filter((x) => x.parent_id === cur);
+    if (!cur || !d) return own;
+    const byId = new Map(d.depts.map((x) => [x.id, x]));
+    const extra = (deptAliasQ.data ?? []).filter((a) => a.parent_id === cur).flatMap((a) => {
+      const x = byId.get(a.department_id);
+      return x && x.parent_id !== cur ? [{ ...x, id: `deptalias:${a.id}`, sort_order: a.sort_order, alias_id: a.id, dept_id: x.id }] : [];
+    });
+    if (!extra.length) return own;
+    return [...own, ...extra].sort((a, b) => a.sort_order - b.sort_order);
+  }, [d, cur, deptAliasQ.data]);
   const ownProducts = useMemo(() => {
     const base = (d?.prods ?? []).filter((x) => x.department_id === cur);
     if (!mk || !d) return base;
@@ -201,9 +213,19 @@ function AdminPage() {
       qc.setQueryData(ALIAS_KEY, (old: Array<{ id: string; sort_order: number }> | undefined) =>
         old?.map((a) => (pos.has(`alias:${a.id}`) ? { ...a, sort_order: pos.get(`alias:${a.id}`)! } : a)));
     }
+    if (kind === "department") {
+      qc.setQueryData(DEPT_ALIAS_KEY, (old: Array<{ id: string; sort_order: number }> | undefined) =>
+        old?.map((a) => (pos.has(`deptalias:${a.id}`) ? { ...a, sort_order: pos.get(`deptalias:${a.id}`)! } : a)));
+    }
     run(async () => {
       if (kind === "product") { await saveOrder(next); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }
-      else await Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id))));
+      else {
+        const aliases = next.map((x, i) => [x.id, i + 1] as const).filter(([id]) => id.startsWith("deptalias:"));
+        await Promise.all(aliases.map(([id, n]) => must(supabase.from("department_aliases").update({ sort_order: n }).eq("id", id.slice(10)))));
+        await Promise.all(next.map((x, i) => [x, i + 1] as const).filter(([x]) => !x.id.startsWith("deptalias:"))
+          .map(([x, n]) => must(supabase.from(TABLE[kind]).update({ sort_order: n }).eq("id", x.id))));
+        await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY });
+      }
     }, T("adm.orderSaved"));
   };
 
@@ -277,6 +299,24 @@ function AdminPage() {
   };
 
   const nm = (id: string, base: string) => viewLoc === "de-DE" ? base : d?.tr.get(id)?.[viewLoc]?.name ?? base;
+  /** Wählbare Kategorien für „Alias-Kategorie": ohne die offene Kategorie, ihre Unter- und Oberkategorien und bereits verlinkte. */
+  const deptAliasOptions = useMemo(() => {
+    if (!cur || !d) return [];
+    const blocked = new Set<string>([cur]);
+    let grew = true;
+    while (grew) {
+      grew = false;
+      for (const x of d.depts) {
+        if (x.parent_id && blocked.has(x.parent_id) && !blocked.has(x.id)) { blocked.add(x.id); grew = true; }
+        if (x.parent_id && blocked.has(x.id) && !blocked.has(x.parent_id)) { blocked.add(x.parent_id); grew = true; }
+      }
+    }
+    for (const x of d.depts) if (x.parent_id === cur) blocked.add(x.id);
+    for (const a of deptAliasQ.data ?? []) if (a.parent_id === cur) blocked.add(a.department_id);
+    return d.depts.filter((x) => !blocked.has(x.id))
+      .map((x) => ({ id: x.id, label: `${path(x.parent_id).map((p) => nm(p.id, p.name)).join(" › ")}${x.parent_id ? " › " : ""}${nm(x.id, x.name)}` }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [d, cur, deptAliasQ.data]);
   const pathText = () => path(cur).map((p) => p.name).join(" › ");
   /** Produkte aus Nachbarkategorien (gleiche Oberkategorie), damit nichts doppelt vorgeschlagen wird. */
   const siblingNames = () => {
@@ -468,18 +508,20 @@ function AdminPage() {
             headings={headings}
             onAddHeading={(name) => { const first = products.find((x) => !x.id.startsWith("alias:")); if (cur && first) void run(() => saveH({ data: { departmentId: cur, beforeProductId: first.id, name } }), T("adm.created")); }}
             onRemoveAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("product_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }, T("adm.deleted")); }}
+            deptAliasOptions={deptAliasOptions}
+            onAddDeptAlias={(deptId) => { if (!cur) return; void run(async () => {
+              const n = children.length;
+              await must(supabase.from("department_aliases").insert({ department_id: deptId, parent_id: cur, sort_order: n + 1 }));
+              await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY });
+            }, T("adm.created")); }}
+            onRemoveDeptAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("department_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY }); }, T("adm.deleted")); }}
             onMoveHeading={moveHeading}
             onAssignHeading={(productId, headingId) => run(() => assignHeading(productId, headingId), T("adm.saved"))}
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
-            onAdvanced={(kind, id) => setSel({ kind, id })}
-            below={cur ? (
-              <>
-                <DeptAliasRows parentId={cur} depts={d.depts} onEdit={(id) => setSel({ kind: "department", id })} />
-              </>
-            ) : null} />
+            onAdvanced={(kind, id) => setSel({ kind, id })} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
               onSubmit={handleBulkSubmit} />

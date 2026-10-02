@@ -20,7 +20,8 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 
 const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
-export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
+/** Alias-Kategorien: id = "deptalias:<aliasId>", alias_id + dept_id (Original) gesetzt. */
+export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; alias_id?: string; dept_id?: string };
 /** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
 export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null; variants?: string[]; alias_id?: string; product_id?: string };
 
@@ -51,6 +52,10 @@ export function CatalogTileEditor(p: {
   onAdvanced?: (kind: "department" | "product", id: string) => void;
   busy?: boolean;
   onRemoveAlias?: (aliasId: string, name: string) => void;
+  /** Wählbare Kategorien für eine neue Alias-Kategorie. */
+  deptAliasOptions?: { id: string; label: string }[];
+  onAddDeptAlias?: (deptId: string) => void;
+  onRemoveDeptAlias?: (aliasId: string, name: string) => void;
   headings?: TileHeading[];
   onAddHeading?: (name: string) => void;
   onMoveHeading?: (id: string, beforeProductId: string) => void;
@@ -69,6 +74,8 @@ export function CatalogTileEditor(p: {
   const [drag, setDrag] = useState<Drag>(null);
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
+  const [aliasPick, setAliasPick] = useState(false);
+  const [aliasSearch, setAliasSearch] = useState("");
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
   const moved = useRef(false);
@@ -151,7 +158,7 @@ export function CatalogTileEditor(p: {
       p.reorder("product", p.products, d.index, t.index);
       return;
     }
-    const isAlias = d.id.startsWith("alias:");
+    const isAlias = d.id.startsWith("alias:") || d.id.startsWith("deptalias:");
     if (isAlias && (t.kind === "crumb" || t.kind === "department")) return;
     const after = (() => { const r = t.el.getBoundingClientRect(); return d.kind === "product" ? e.clientY > r.top + r.height / 2 : e.clientX > r.left + r.width / 2; })();
     if (t.kind === "crumb") {
@@ -190,6 +197,7 @@ export function CatalogTileEditor(p: {
       {editMode && (
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "department", id: null })}>+ {T("tile.newCat")}</Button>
+          {p.cur && p.onAddDeptAlias && <Button size="sm" variant="outline" onClick={() => { setAliasSearch(""); setAliasPick(true); }}>+ {T("tile.newDeptAlias")}</Button>}
           {p.cur && p.onAddHeading && p.products.length > 0 && (
             <Button size="sm" variant="outline" onClick={() => setNewTitle("")}>+ {T("adm.heading")}</Button>
           )}
@@ -210,18 +218,22 @@ export function CatalogTileEditor(p: {
           {p.children.map((c, i) => (
             <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
               style={{ background: rootColorByName(rootName(c)) }}
-              className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? "ring-2 ring-primary" : ""}`}>
-              <button type="button" aria-label={p.nm(c.id, c.name)}
+              className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? "ring-2 ring-primary" : ""}`}>
+              <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
-                onClick={click(() => p.setCur(c.id))}
+                onClick={click(() => p.setCur(c.dept_id ?? c.id))}
                 onDoubleClick={() => { const u = img(c.image_path); if (u) setZoom(u); }}
                 className={`flex h-16 w-full items-center justify-center overflow-hidden rounded-xl text-4xl ${editMode ? "cursor-grab touch-none" : ""}`}>
                 {img(c.image_path) ? <ZoomableImage src={img(c.image_path)!} className="h-full w-full object-cover" /> : c.emoji ?? "📁"}
               </button>
-              <span className="line-clamp-2 text-center text-[13px] font-bold leading-tight text-foreground">{p.nm(c.id, c.name)}</span>
-              {editMode && (
+              <span className="line-clamp-2 text-center text-[13px] font-bold leading-tight text-foreground">{p.nm(c.dept_id ?? c.id, c.name)}{c.alias_id && <span className="block text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</span>
+              {editMode && !c.alias_id && (
                 <button type="button" onClick={() => setTarget({ kind: "department", id: c.id })} aria-label={T("tile.editItem")}
                   className="absolute right-1 top-1 rounded-full bg-background/80 px-1.5 text-xs">✎</button>
+              )}
+              {editMode && c.alias_id && (
+                <button type="button" onClick={() => p.onRemoveDeptAlias?.(c.alias_id!, p.nm(c.dept_id ?? c.id, c.name))} aria-label={T("adm.delete")}
+                  className="absolute right-1 top-1 rounded-full bg-background/80 px-1.5 text-xs text-destructive">✕</button>
               )}
             </div>
           ))}
@@ -288,6 +300,23 @@ export function CatalogTileEditor(p: {
       {p.below}
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
+
+      {aliasPick && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setAliasPick(false)}>
+          <div className="flex max-h-[80vh] w-full max-w-md flex-col gap-2 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+            <p className="text-sm font-bold text-foreground">{T("tile.pickDeptAlias")}</p>
+            <Input autoFocus value={aliasSearch} onChange={(e) => setAliasSearch(e.target.value)} placeholder={T("tile.deptAliasSearch")} className="h-10 rounded-xl" />
+            <div className="min-h-0 flex-1 space-y-1 overflow-y-auto">
+              {(p.deptAliasOptions ?? []).filter((o) => o.label.toLowerCase().includes(aliasSearch.trim().toLowerCase())).map((o) => (
+                <button key={o.id} type="button" onClick={() => { p.onAddDeptAlias?.(o.id); setAliasPick(false); }}
+                  className="w-full truncate rounded-lg border border-border px-3 py-2 text-left text-sm text-foreground">{o.label}</button>
+              ))}
+              {(p.deptAliasOptions ?? []).length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noHits")}</p>}
+            </div>
+            <Button variant="outline" onClick={() => setAliasPick(false)}>{T("adm.cancel")}</Button>
+          </div>
+        </div>
+      )}
 
       {drag && moved.current && (
         <div className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card px-3 py-2 text-2xl shadow-lg" style={{ left: drag.x, top: drag.y }}>{drag.label}</div>
