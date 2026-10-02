@@ -336,6 +336,44 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         {!isDept && (
           <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 rounded-xl" />
         )}
+        {!isDept && (
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
+            {variants.length > 0 && (
+              <div className="divide-y divide-border rounded-lg border border-border">
+                {variants.map((v) => (
+                  <div key={v} className="flex items-center justify-between gap-2 px-3 py-1.5 text-sm">
+                    <span className="truncate">{v}</span>
+                    <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex items-start gap-2">
+              <textarea
+                value={variantInput}
+                rows={3}
+                placeholder={T("adm.variantPlaceholder")}
+                onChange={(e) => setVariantInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); addVariant(variantInput); } }}
+                className="min-h-[72px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              />
+              <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {COMMON_VARIANTS.map((cv) => {
+                const on = variants.some((x) => x.toLowerCase() === cv.toLowerCase());
+                return (
+                  <button key={cv} type="button" disabled={on} onClick={() => addVariant(cv)}
+                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-muted-foreground line-through" : "border-border bg-background text-muted-foreground"}`}>
+                    {on ? "✓ " : "+ "}{cv}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
+          </div>
+        )}
         <div className="flex gap-2 pt-1">
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
           <Button variant="outline" className="h-11 rounded-xl" onClick={p.onClose}>{T("common.cancel")}</Button>
