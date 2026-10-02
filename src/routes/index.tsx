@@ -364,8 +364,7 @@ function ListPage() {
       </div>
 
       {/* Schnell erfassen: Suchfeld + Chips aus dem Einkaufsverlauf */}
-      {!shopMode && (
-        <div className="space-y-2">
+      <div className="space-y-2">
           <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4">
             <span aria-hidden="true" className="text-muted-foreground">🔍</span>
             <input
