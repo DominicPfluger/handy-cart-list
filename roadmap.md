@@ -3,6 +3,7 @@
 ## Offen
 
 ## Erledigt
+- Produktbild im Admin-Produktdialog entfernen oder neu generieren; Listen-Icon und Vorschau werden aktualisiert.
 - Geschätzte Summe am Ende der Einkaufsliste; fehlende Preise werden gezählt, statt als kostenlos dargestellt.
 - Einzelne neue Katalogprodukte automatisch lokalisieren, bebildern und für Märkte schätzen; Mehrfachanlage unverändert.
 - Rezept-Zutaten-Kategorien rahmenlos und ohne Anzahl/Pfeil aufklappbar; manuelle Gruppenpflege im Admin bleibt erhalten.
