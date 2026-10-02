@@ -1,6 +1,8 @@
 # Roadmap
 
 ## Offen
+- Ernährungs- und Länderküchenfilter bei Non-Food/Near-Food in Abteilungen aussetzen.
+- Lade- und Startbildschirm in allen eingerichteten Sprachen übersetzen.
 
 ## Erledigt
 - Gewünschte Ernährungsformen unter „Mehr“ voreinstellen; Abteilungen und Rezept-Generator übernehmen die gerätelokale Auswahl.
