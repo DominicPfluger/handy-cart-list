@@ -942,7 +942,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Reference prices by market",
+    "price.listSearch": "Search product",
+    "price.listEmpty": "No reference prices yet",
+    "price.listMore": "Load more"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1887,7 +1891,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Reference prices by market",
+    "price.listSearch": "Search product",
+    "price.listEmpty": "No reference prices yet",
+    "price.listMore": "Load more"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2832,7 +2840,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Reference prices by market",
+    "price.listSearch": "Search product",
+    "price.listEmpty": "No reference prices yet",
+    "price.listMore": "Load more"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3777,7 +3789,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Precios orientativos por mercado",
+    "price.listSearch": "Buscar producto",
+    "price.listEmpty": "Aún no hay precios",
+    "price.listMore": "Cargar más"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4722,7 +4738,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Precios orientativos por mercado",
+    "price.listSearch": "Buscar producto",
+    "price.listEmpty": "Aún no hay precios",
+    "price.listMore": "Cargar más"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5667,7 +5687,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Prix indicatifs par marché",
+    "price.listSearch": "Rechercher un produit",
+    "price.listEmpty": "Aucun prix indicatif",
+    "price.listMore": "Charger plus"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6612,7 +6636,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Prix indicatifs par marché",
+    "price.listSearch": "Rechercher un produit",
+    "price.listEmpty": "Aucun prix indicatif",
+    "price.listMore": "Charger plus"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7557,7 +7585,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Prezzi indicativi per mercato",
+    "price.listSearch": "Cerca prodotto",
+    "price.listEmpty": "Nessun prezzo indicativo",
+    "price.listMore": "Carica altro"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8502,7 +8534,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Prezzi indicativi per mercato",
+    "price.listSearch": "Cerca prodotto",
+    "price.listEmpty": "Nessun prezzo indicativo",
+    "price.listMore": "Carica altro"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9447,7 +9483,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Preços de referência por mercado",
+    "price.listSearch": "Pesquisar produto",
+    "price.listEmpty": "Ainda sem preços",
+    "price.listMore": "Carregar mais"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10392,7 +10432,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Preços de referência por mercado",
+    "price.listSearch": "Pesquisar produto",
+    "price.listEmpty": "Ainda sem preços",
+    "price.listMore": "Carregar mais"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11337,7 +11381,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Richtprijzen per markt",
+    "price.listSearch": "Product zoeken",
+    "price.listEmpty": "Nog geen richtprijzen",
+    "price.listMore": "Meer laden"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12282,7 +12330,11 @@
     "mkt.name": "Country",
     "mkt.currency": "Currency",
     "mkt.addMarket": "Country",
-    "mkt.save": "Save"
+    "mkt.save": "Save",
+    "price.listTitle": "Richtprijzen per markt",
+    "price.listSearch": "Product zoeken",
+    "price.listEmpty": "Nog geen richtprijzen",
+    "price.listMore": "Meer laden"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12689,7 +12741,11 @@
     "mkt.name": "Land",
     "mkt.currency": "Währung",
     "mkt.addMarket": "Land",
-    "mkt.save": "Speichern"
+    "mkt.save": "Speichern",
+    "price.listTitle": "Richtpreise je Markt",
+    "price.listSearch": "Produkt suchen",
+    "price.listEmpty": "Noch keine Richtpreise",
+    "price.listMore": "Mehr laden"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13096,6 +13152,10 @@
     "mkt.name": "Land",
     "mkt.currency": "Währung",
     "mkt.addMarket": "Land",
-    "mkt.save": "Speichern"
+    "mkt.save": "Speichern",
+    "price.listTitle": "Richtpreise je Markt",
+    "price.listSearch": "Produkt suchen",
+    "price.listEmpty": "Noch keine Richtpreise",
+    "price.listMore": "Mehr laden"
   }
 }
