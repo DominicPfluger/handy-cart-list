@@ -172,7 +172,7 @@ export function CatalogTileEditor(p: {
             return (
               <div key={x.id} data-drop="product" data-id={x.id} data-index={i}
                 className={`flex items-center gap-3 px-3 py-2 ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? "bg-primary-soft" : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
-                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers}
+                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers} onDoubleClick={() => { const u = img(x.image_path); if (u) setZoom(u); }}
                   className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl ${editMode ? "cursor-grab touch-none" : ""}`}>
                   {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
                 </span>
@@ -218,6 +218,8 @@ export function CatalogTileEditor(p: {
         <ItemSheet key={`${target.kind}:${target.id}`} {...p} target={target} onClose={() => setTarget(null)}
           imgUrl={target.id ? img(target.kind === "department" ? deptById.get(target.id)?.image_path : p.products.find((x) => x.id === target.id)?.image_path) : undefined} />
       )}
+
+      {zoom && <ImageZoomOverlay src={zoom} open onClose={() => setZoom(null)} />}
     </div>
   );
 }
