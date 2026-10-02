@@ -681,26 +681,32 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   </Button>}
                 </div>;
               }
-              // Kategorien: immer aufgeklappt, ohne Pfeil — Zutaten sind sofort sichtbar.
+              // Kategorien: Zutaten erscheinen inline erst nach Klick auf die Kategorie; Gewähltes bleibt immer sichtbar.
               return <div className="space-y-3">
                 {groups.map((group) => {
                   const gKey = `${s.key}:${group.key}`;
+                  const gOpen = !!openGroups[gKey];
                   const gLimit = visibleCount[gKey] ?? PAGE;
                   const gExpanded = gLimit >= group.products.length || !!q;
                   const shownIds = new Set(group.products.slice(0, gExpanded ? group.products.length : gLimit).map((p) => p.id));
                   for (const id of sel) if (group.products.some((p) => p.id === id)) shownIds.add(id);
-                  const shown = group.products.filter((p) => shownIds.has(p.id));
+                  const shown = gOpen ? group.products.filter((p) => shownIds.has(p.id)) : group.products.filter((p) => sel.includes(p.id));
                   const gHidden = group.products.length - shown.length;
                   return (
                     <div key={group.key}>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-foreground">
+                        <button
+                          type="button"
+                          aria-expanded={gOpen}
+                          onClick={() => setOpenGroups((x) => ({ ...x, [gKey]: !gOpen }))}
+                          className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${gOpen ? "border-primary bg-primary-soft/50 text-foreground" : "border-border bg-muted text-foreground"}`}
+                        >
                           {group.emoji && <span aria-hidden="true" className="mr-1">{group.emoji}</span>}
                           {group.name}
-                        </span>
+                        </button>
                         {shown.map(chip)}
                       </div>
-                      {!q && gHidden > 0 && (
+                      {gOpen && !q && gHidden > 0 && (
                         <Button variant="ghost" size="sm" type="button"
                           onClick={() => setVisibleCount((x) => ({ ...x, [gKey]: gExpanded ? PAGE : Math.min(group.products.length, gLimit + PAGE) }))}
                           className="mt-1 text-xs font-medium text-primary" aria-expanded={gExpanded}>
