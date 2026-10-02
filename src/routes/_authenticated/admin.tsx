@@ -328,11 +328,6 @@ function AdminPage() {
         <Stat label={T("adm.headings")} value={d?.heads.length} />
       </div>
 
-      <Button className="w-full rounded-xl" disabled={busy} onClick={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}>
-        {busy ? T("adm.working") : T("adm.trMissing")}
-      </Button>
-
-
       <div className="flex flex-wrap gap-2">
         {cur && (
           <select value={mk} onChange={(e) => setMk(e.target.value)} aria-label={T("adm.marketChoice")}
@@ -390,6 +385,7 @@ function AdminPage() {
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
+            onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
             onAdvanced={(kind, id) => setSel({ kind, id })}
             below={cur ? (
               <>
