@@ -1153,7 +1153,11 @@
     "adm.recipeTraitsOnlyMissing": "Incomplete only",
     "adm.recipeTraitsNone": "No recipes found.",
     "adm.recipeManage": "Recipe management",
-    "adm.recipeAssign": "Ingredient assignment"
+    "adm.recipeAssign": "Ingredient assignment",
+    "rk.taste.bitter": "Bitter",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salty",
+    "rk.taste.fruity": "Fruity"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2309,7 +2313,11 @@
     "adm.recipeTraitsOnlyMissing": "Incomplete only",
     "adm.recipeTraitsNone": "No recipes found.",
     "adm.recipeManage": "Recipe management",
-    "adm.recipeAssign": "Ingredient assignment"
+    "adm.recipeAssign": "Ingredient assignment",
+    "rk.taste.bitter": "Bitter",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salty",
+    "rk.taste.fruity": "Fruity"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3465,7 +3473,11 @@
     "adm.recipeTraitsOnlyMissing": "Incomplete only",
     "adm.recipeTraitsNone": "No recipes found.",
     "adm.recipeManage": "Recipe management",
-    "adm.recipeAssign": "Ingredient assignment"
+    "adm.recipeAssign": "Ingredient assignment",
+    "rk.taste.bitter": "Bitter",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salty",
+    "rk.taste.fruity": "Fruity"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4621,7 +4633,11 @@
     "adm.recipeTraitsOnlyMissing": "Solo incompletas",
     "adm.recipeTraitsNone": "No se encontraron recetas.",
     "adm.recipeManage": "Gestión de recetas",
-    "adm.recipeAssign": "Asignación de ingredientes"
+    "adm.recipeAssign": "Asignación de ingredientes",
+    "rk.taste.bitter": "Amargo",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salado",
+    "rk.taste.fruity": "Frutal"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5777,7 +5793,11 @@
     "adm.recipeTraitsOnlyMissing": "Solo incompletas",
     "adm.recipeTraitsNone": "No se encontraron recetas.",
     "adm.recipeManage": "Gestión de recetas",
-    "adm.recipeAssign": "Asignación de ingredientes"
+    "adm.recipeAssign": "Asignación de ingredientes",
+    "rk.taste.bitter": "Amargo",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salado",
+    "rk.taste.fruity": "Frutal"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6933,7 +6953,11 @@
     "adm.recipeTraitsOnlyMissing": "Incomplètes uniquement",
     "adm.recipeTraitsNone": "Aucune recette trouvée.",
     "adm.recipeManage": "Gestion des recettes",
-    "adm.recipeAssign": "Attribution des ingrédients"
+    "adm.recipeAssign": "Attribution des ingrédients",
+    "rk.taste.bitter": "Amer",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salé",
+    "rk.taste.fruity": "Fruité"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8089,7 +8113,11 @@
     "adm.recipeTraitsOnlyMissing": "Incomplètes uniquement",
     "adm.recipeTraitsNone": "Aucune recette trouvée.",
     "adm.recipeManage": "Gestion des recettes",
-    "adm.recipeAssign": "Attribution des ingrédients"
+    "adm.recipeAssign": "Attribution des ingrédients",
+    "rk.taste.bitter": "Amer",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salé",
+    "rk.taste.fruity": "Fruité"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9245,7 +9273,11 @@
     "adm.recipeTraitsOnlyMissing": "Solo incomplete",
     "adm.recipeTraitsNone": "Nessuna ricetta trovata.",
     "adm.recipeManage": "Gestione ricette",
-    "adm.recipeAssign": "Assegnazione ingredienti"
+    "adm.recipeAssign": "Assegnazione ingredienti",
+    "rk.taste.bitter": "Amaro",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salato",
+    "rk.taste.fruity": "Fruttato"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10401,7 +10433,11 @@
     "adm.recipeTraitsOnlyMissing": "Solo incomplete",
     "adm.recipeTraitsNone": "Nessuna ricetta trovata.",
     "adm.recipeManage": "Gestione ricette",
-    "adm.recipeAssign": "Assegnazione ingredienti"
+    "adm.recipeAssign": "Assegnazione ingredienti",
+    "rk.taste.bitter": "Amaro",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salato",
+    "rk.taste.fruity": "Fruttato"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11557,7 +11593,11 @@
     "adm.recipeTraitsOnlyMissing": "Só incompletas",
     "adm.recipeTraitsNone": "Nenhuma receita encontrada.",
     "adm.recipeManage": "Gestão de receitas",
-    "adm.recipeAssign": "Atribuição de ingredientes"
+    "adm.recipeAssign": "Atribuição de ingredientes",
+    "rk.taste.bitter": "Amargo",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salgado",
+    "rk.taste.fruity": "Frutado"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12713,7 +12753,11 @@
     "adm.recipeTraitsOnlyMissing": "Só incompletas",
     "adm.recipeTraitsNone": "Nenhuma receita encontrada.",
     "adm.recipeManage": "Gestão de receitas",
-    "adm.recipeAssign": "Atribuição de ingredientes"
+    "adm.recipeAssign": "Atribuição de ingredientes",
+    "rk.taste.bitter": "Amargo",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salgado",
+    "rk.taste.fruity": "Frutado"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13869,7 +13913,11 @@
     "adm.recipeTraitsOnlyMissing": "Alleen onvolledige",
     "adm.recipeTraitsNone": "Geen recepten gevonden.",
     "adm.recipeManage": "Receptenbeheer",
-    "adm.recipeAssign": "Ingrediënten toewijzen"
+    "adm.recipeAssign": "Ingrediënten toewijzen",
+    "rk.taste.bitter": "Bitter",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Zout",
+    "rk.taste.fruity": "Fruitig"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15025,7 +15073,11 @@
     "adm.recipeTraitsOnlyMissing": "Alleen onvolledige",
     "adm.recipeTraitsNone": "Geen recepten gevonden.",
     "adm.recipeManage": "Receptenbeheer",
-    "adm.recipeAssign": "Ingrediënten toewijzen"
+    "adm.recipeAssign": "Ingrediënten toewijzen",
+    "rk.taste.bitter": "Bitter",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Zout",
+    "rk.taste.fruity": "Fruitig"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15643,7 +15695,11 @@
     "adm.recipeTraitsOnlyMissing": "Nur unvollständige",
     "adm.recipeTraitsNone": "Keine Rezepte gefunden.",
     "adm.recipeManage": "Rezept-Verwaltung",
-    "adm.recipeAssign": "Zutaten-Zuweisung"
+    "adm.recipeAssign": "Zutaten-Zuweisung",
+    "rk.taste.bitter": "Bitter",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salzig",
+    "rk.taste.fruity": "Fruchtig"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16261,6 +16317,10 @@
     "adm.recipeTraitsOnlyMissing": "Nur unvollständige",
     "adm.recipeTraitsNone": "Keine Rezepte gefunden.",
     "adm.recipeManage": "Rezept-Verwaltung",
-    "adm.recipeAssign": "Zutaten-Zuweisung"
+    "adm.recipeAssign": "Zutaten-Zuweisung",
+    "rk.taste.bitter": "Bitter",
+    "rk.taste.umami": "Umami",
+    "rk.taste.salty": "Salzig",
+    "rk.taste.fruity": "Fruchtig"
   }
 }
