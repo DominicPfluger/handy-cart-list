@@ -31,6 +31,8 @@ export interface CatalogProduct {
   defaultUnit: string;
   organicAvailable: boolean;
   variants: string[];
+  /** Suchbegriffe wie „Passionsfrucht" für Maracuja (alle Sprachen) */
+  synonyms?: string[];
   /** Übersetzte Varianten: Variante → { locale: Name } */
   variantNames: Record<string, Record<string, string>>;
   /** Ernährungsformen, in denen das Produkt nicht erlaubt ist */
@@ -199,6 +201,9 @@ export const getCatalog = createServerFn({ method: "GET" })
     fetchAll("product_market_order", "product_id, market, sort_order", ["id"]),
     fetchAll("variant_translations", "product_id, variant, locale, name", ["id"], "locale"),
   ]);
+  const synRes = await fetchAll("product_synonyms", "product_id, term", ["id"]);
+  const synonyms = new Map<string, string[]>();
+  for (const r of (synRes.data ?? []) as Array<{ product_id: string; term: string }>) synonyms.set(r.product_id, [...(synonyms.get(r.product_id) ?? []), r.term]);
   const variantNames = new Map<string, Record<string, Record<string, string>>>();
   for (const r of (vtRes.data ?? []) as Array<{ product_id: string; variant: string; locale: string; name: string }>) {
     const m = variantNames.get(r.product_id) ?? {};
@@ -261,6 +266,7 @@ export const getCatalog = createServerFn({ method: "GET" })
       defaultUnit: (r["default_unit"] as string) ?? "stueck",
       organicAvailable: (r["organic_available"] as boolean) ?? true,
       variants: (r["variants"] as string[] | null) ?? [],
+      synonyms: synonyms.get(r["id"] as string) ?? [],
       variantNames: variantNames.get(r["id"] as string) ?? {},
       excludedDiets: (r["excluded_diets"] as string[] | null) ?? [],
       cuisineIds: cuisineIdsByProduct.get(r["id"] as string) ?? [],

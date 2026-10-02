@@ -1062,7 +1062,11 @@
     "more.preloadRunning": "Loading in background …",
     "more.preloadDone": "All images saved on this device",
     "more.preloadError": "Images could not be loaded",
-    "adm.headingNew": "New heading"
+    "adm.headingNew": "New heading",
+    "adm.synonyms": "Synonyms",
+    "adm.synonymPlaceholder": "e.g. passion fruit (comma separates)",
+    "adm.synonymsHint": "Other names that find this product in search. Applies to the current language.",
+    "search.alsoKnownAs": "also: {name}"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2127,7 +2131,11 @@
     "more.preloadRunning": "Loading in background …",
     "more.preloadDone": "All images saved on this device",
     "more.preloadError": "Images could not be loaded",
-    "adm.headingNew": "New heading"
+    "adm.headingNew": "New heading",
+    "adm.synonyms": "Synonyms",
+    "adm.synonymPlaceholder": "e.g. passion fruit (comma separates)",
+    "adm.synonymsHint": "Other names that find this product in search. Applies to the current language.",
+    "search.alsoKnownAs": "also: {name}"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3192,7 +3200,11 @@
     "more.preloadRunning": "Loading in background …",
     "more.preloadDone": "All images saved on this device",
     "more.preloadError": "Images could not be loaded",
-    "adm.headingNew": "New heading"
+    "adm.headingNew": "New heading",
+    "adm.synonyms": "Synonyms",
+    "adm.synonymPlaceholder": "e.g. passion fruit (comma separates)",
+    "adm.synonymsHint": "Other names that find this product in search. Applies to the current language.",
+    "search.alsoKnownAs": "also: {name}"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4257,7 +4269,11 @@
     "more.preloadRunning": "Cargando en segundo plano …",
     "more.preloadDone": "Todas las imágenes guardadas en el dispositivo",
     "more.preloadError": "No se pudieron cargar las imágenes",
-    "adm.headingNew": "Nuevo título"
+    "adm.headingNew": "Nuevo título",
+    "adm.synonyms": "Sinónimos",
+    "adm.synonymPlaceholder": "p. ej. fruta de la pasión (coma separa)",
+    "adm.synonymsHint": "Otros nombres con los que se encuentra el producto en la búsqueda. Aplica al idioma actual.",
+    "search.alsoKnownAs": "también: {name}"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5322,7 +5338,11 @@
     "more.preloadRunning": "Cargando en segundo plano …",
     "more.preloadDone": "Todas las imágenes guardadas en el dispositivo",
     "more.preloadError": "No se pudieron cargar las imágenes",
-    "adm.headingNew": "Nuevo título"
+    "adm.headingNew": "Nuevo título",
+    "adm.synonyms": "Sinónimos",
+    "adm.synonymPlaceholder": "p. ej. fruta de la pasión (coma separa)",
+    "adm.synonymsHint": "Otros nombres con los que se encuentra el producto en la búsqueda. Aplica al idioma actual.",
+    "search.alsoKnownAs": "también: {name}"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6387,7 +6407,11 @@
     "more.preloadRunning": "Chargement en arrière-plan …",
     "more.preloadDone": "Toutes les images sont enregistrées sur l'appareil",
     "more.preloadError": "Impossible de charger les images",
-    "adm.headingNew": "Nouveau titre"
+    "adm.headingNew": "Nouveau titre",
+    "adm.synonyms": "Synonymes",
+    "adm.synonymPlaceholder": "p. ex. fruit de la passion (virgule sépare)",
+    "adm.synonymsHint": "Autres noms permettant de trouver le produit dans la recherche. S’applique à la langue actuelle.",
+    "search.alsoKnownAs": "aussi : {name}"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7452,7 +7476,11 @@
     "more.preloadRunning": "Chargement en arrière-plan …",
     "more.preloadDone": "Toutes les images sont enregistrées sur l'appareil",
     "more.preloadError": "Impossible de charger les images",
-    "adm.headingNew": "Nouveau titre"
+    "adm.headingNew": "Nouveau titre",
+    "adm.synonyms": "Synonymes",
+    "adm.synonymPlaceholder": "p. ex. fruit de la passion (virgule sépare)",
+    "adm.synonymsHint": "Autres noms permettant de trouver le produit dans la recherche. S’applique à la langue actuelle.",
+    "search.alsoKnownAs": "aussi : {name}"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8517,7 +8545,11 @@
     "more.preloadRunning": "Caricamento in background …",
     "more.preloadDone": "Tutte le immagini salvate sul dispositivo",
     "more.preloadError": "Impossibile caricare le immagini",
-    "adm.headingNew": "Nuovo titolo"
+    "adm.headingNew": "Nuovo titolo",
+    "adm.synonyms": "Sinonimi",
+    "adm.synonymPlaceholder": "es. frutto della passione (virgola separa)",
+    "adm.synonymsHint": "Altri nomi con cui il prodotto viene trovato nella ricerca. Vale per la lingua attuale.",
+    "search.alsoKnownAs": "anche: {name}"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9582,7 +9614,11 @@
     "more.preloadRunning": "Caricamento in background …",
     "more.preloadDone": "Tutte le immagini salvate sul dispositivo",
     "more.preloadError": "Impossibile caricare le immagini",
-    "adm.headingNew": "Nuovo titolo"
+    "adm.headingNew": "Nuovo titolo",
+    "adm.synonyms": "Sinonimi",
+    "adm.synonymPlaceholder": "es. frutto della passione (virgola separa)",
+    "adm.synonymsHint": "Altri nomi con cui il prodotto viene trovato nella ricerca. Vale per la lingua attuale.",
+    "search.alsoKnownAs": "anche: {name}"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10647,7 +10683,11 @@
     "more.preloadRunning": "A carregar em segundo plano …",
     "more.preloadDone": "Todas as imagens guardadas no dispositivo",
     "more.preloadError": "Não foi possível carregar as imagens",
-    "adm.headingNew": "Novo título"
+    "adm.headingNew": "Novo título",
+    "adm.synonyms": "Sinónimos",
+    "adm.synonymPlaceholder": "ex. maracujá (vírgula separa)",
+    "adm.synonymsHint": "Outros nomes que encontram o produto na pesquisa. Aplica-se ao idioma atual.",
+    "search.alsoKnownAs": "também: {name}"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11712,7 +11752,11 @@
     "more.preloadRunning": "A carregar em segundo plano …",
     "more.preloadDone": "Todas as imagens guardadas no dispositivo",
     "more.preloadError": "Não foi possível carregar as imagens",
-    "adm.headingNew": "Novo título"
+    "adm.headingNew": "Novo título",
+    "adm.synonyms": "Sinônimos",
+    "adm.synonymPlaceholder": "ex. maracujá (vírgula separa)",
+    "adm.synonymsHint": "Outros nomes que encontram o produto na pesquisa. Aplica-se ao idioma atual.",
+    "search.alsoKnownAs": "também: {name}"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12777,7 +12821,11 @@
     "more.preloadRunning": "Laden op de achtergrond …",
     "more.preloadDone": "Alle afbeeldingen op het apparaat opgeslagen",
     "more.preloadError": "Afbeeldingen konden niet worden geladen",
-    "adm.headingNew": "Nieuwe kop"
+    "adm.headingNew": "Nieuwe kop",
+    "adm.synonyms": "Synoniemen",
+    "adm.synonymPlaceholder": "bv. passievrucht (komma scheidt)",
+    "adm.synonymsHint": "Andere namen waarmee het product in de zoekfunctie wordt gevonden. Geldt voor de huidige taal.",
+    "search.alsoKnownAs": "ook: {name}"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13842,7 +13890,11 @@
     "more.preloadRunning": "Laden op de achtergrond …",
     "more.preloadDone": "Alle afbeeldingen op het apparaat opgeslagen",
     "more.preloadError": "Afbeeldingen konden niet worden geladen",
-    "adm.headingNew": "Nieuwe kop"
+    "adm.headingNew": "Nieuwe kop",
+    "adm.synonyms": "Synoniemen",
+    "adm.synonymPlaceholder": "bv. passievrucht (komma scheidt)",
+    "adm.synonymsHint": "Andere namen waarmee het product in de zoekfunctie wordt gevonden. Geldt voor de huidige taal.",
+    "search.alsoKnownAs": "ook: {name}"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14367,7 +14419,11 @@
     "more.preloadRunning": "Lädt im Hintergrund …",
     "more.preloadDone": "Alle Bilder sind auf dem Gerät gespeichert",
     "more.preloadError": "Bilder konnten nicht geladen werden",
-    "adm.headingNew": "Neue Überschrift"
+    "adm.headingNew": "Neue Überschrift",
+    "adm.synonyms": "Synonyme",
+    "adm.synonymPlaceholder": "z. B. Passionsfrucht (Komma trennt)",
+    "adm.synonymsHint": "Weitere Namen, unter denen das Produkt in der Suche gefunden wird. Gilt für die aktuelle Sprache.",
+    "search.alsoKnownAs": "auch: {name}"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14892,6 +14948,10 @@
     "more.preloadRunning": "Lädt im Hintergrund …",
     "more.preloadDone": "Alle Bilder sind auf dem Gerät gespeichert",
     "more.preloadError": "Bilder konnten nicht geladen werden",
-    "adm.headingNew": "Neue Überschrift"
+    "adm.headingNew": "Neue Überschrift",
+    "adm.synonyms": "Synonyme",
+    "adm.synonymPlaceholder": "z. B. Passionsfrucht (Komma trennt)",
+    "adm.synonymsHint": "Weitere Namen, unter denen das Produkt in der Suche gefunden wird. Gilt für die aktuelle Sprache.",
+    "search.alsoKnownAs": "auch: {name}"
   }
 }

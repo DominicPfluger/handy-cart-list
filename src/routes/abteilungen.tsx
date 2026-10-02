@@ -201,17 +201,23 @@ function DepartmentsPage() {
   const variantLabel = (product: CatalogProduct, v: string) => pickName(product.variantNames?.[v], locale, v);
   const matchedVariant = (product: CatalogProduct) =>
     (product.variants ?? []).find((v) => variantLabel(product, v).toLocaleLowerCase().includes(normalizedQuery));
+  const normSyn = (s: string) => s.toLocaleLowerCase().replace(/ß/g, "ss");
+  const matchedSynonym = (product: CatalogProduct) =>
+    (product.synonyms ?? []).find((s) => normSyn(s).includes(normSyn(normalizedQuery)));
   const searchResults = useMemo(() => {
     if (!normalizedQuery) return [];
     const order = new Map(orderedProducts.map((p, i) => [p.id, i]));
+    const direct = (p: CatalogProduct) => matchesProductSearch(p.name, normalizedQuery) ? 0 : 1;
     return products
-      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || brandsFor(product).some((b) => b.toLocaleLowerCase().includes(normalizedQuery)) || !!matchedVariant(product))
-      .sort((a, b) => (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER));
+      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || brandsFor(product).some((b) => b.toLocaleLowerCase().includes(normalizedQuery)) || !!matchedVariant(product) || !!matchedSynonym(product))
+      .sort((a, b) => direct(a) - direct(b) || (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, orderedProducts, normalizedQuery]);
 
   const matchedBrand = (product: CatalogProduct) =>
     matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) ? undefined : brandsFor(product).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
+  const synonymHint = (product: CatalogProduct) =>
+    matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) || matchedBrand(product) ? undefined : matchedSynonym(product);
 
   const groupFor = (product: CatalogProduct) => {
     // Alias-Produkt in der aktuellen Kategorie → aktuelle Kategorie; Suche/Spracheingabe → bevorzugte Kategorie
@@ -680,7 +686,7 @@ function DepartmentsPage() {
                       <span>{product.name}</span>
                     </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                       {normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
+                       {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
                     </p>
                   </div>

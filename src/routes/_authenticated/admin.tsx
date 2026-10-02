@@ -16,6 +16,7 @@ import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
 import { RecipeAdmin } from "@/components/recipe-admin";
 import { DeptAliasEditor, KEY as DEPT_ALIAS_KEY, loadAliases as loadDeptAliases } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
+import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
 import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
@@ -987,6 +988,7 @@ function Editor(p: {
         {dept && <DeptAliasEditor dept={dept} depts={data.depts} options={p.deptOptions} />}
         {prod && <ProductAliasEditor product={prod} prods={data.prods} options={p.deptOptions} />}
         {prod && <ProductCuisinePicker productId={prod.id} />}
+        {prod && <ProductSynonymEditor key={`syn-${prod.id}`} productId={prod.id} />}
         {prod && <ProductBrandEditor key={prod.id} productId={prod.id} productName={prod.name} path={data.depts.find((x) => x.id === prod.department_id)?.name ?? ""} />}
 
         <div className="flex items-center justify-between pt-2">
