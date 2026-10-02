@@ -374,7 +374,12 @@ function AdminPage() {
         <CatalogTileEditor depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={children} products={products}
           path={path(cur)} nm={nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
           reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
-          onSortRelevance={products.length > 1 ? () => sortProducts("popularity") : undefined} busy={busy} />
+          onSortRelevance={products.length > 1 ? () => sortProducts("popularity") : undefined} busy={busy}
+          headings={headings}
+          onAddHeading={(name) => { if (cur && products[0]) void run(() => saveH({ data: { departmentId: cur, beforeProductId: products[0]!.id, name } }), T("adm.created")); }}
+          onMoveHeading={moveHeading}
+          onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
+          onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }} />
       ) : (
         <>
           <nav className="flex flex-wrap items-center gap-1 text-sm">
@@ -392,7 +397,6 @@ function AdminPage() {
             {cur && <Button size="sm" variant="outline" onClick={() => setAdding("product")}>+ {T("adm.product")}</Button>}
             {cur && <Button size="sm" variant="outline" onClick={() => setBulk("plain")}>+ {T("adm.multi")}</Button>}
             {cur && <Button size="sm" variant="outline" onClick={() => setBulk("suggest")}>✨ {T("adm.suggestions")}</Button>}
-            {cur && products.length > 0 && <Button size="sm" variant="outline" onClick={() => setAdding("heading")}>+ {T("adm.heading")}</Button>}
           </div>
 
           {adding && (
@@ -466,6 +470,9 @@ function AdminPage() {
                 )}
               </div>
               {mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
+              {products.length > 0 && adding !== "heading" && (
+                <Button size="sm" variant="outline" className="w-full border-dashed" onClick={() => setAdding("heading")}>+ {T("adm.heading")}</Button>
+              )}
               {products.length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noProducts")}</p>}
               {products.map((p, i) => {
                 const h = headingBefore.get(p.id);
