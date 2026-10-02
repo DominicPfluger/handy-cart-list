@@ -430,6 +430,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (error) throw new Error(error.message);
     if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
     else await saveProductIcon(effId, blob, path);
+    const { data: signed } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
+    setImagePreview(signed?.signedUrl ?? null);
   });
 
   const removeProductImage = async () => {
@@ -465,6 +467,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         {picking && effId && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(async () => {
           if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
           else await saveProductIconFromPath(effId, path);
+          const { data: signed } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
+          setImagePreview(signed?.signedUrl ?? null);
         }); }} />}
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         {enrichStatus && <div role="status" className="text-sm text-foreground">{enriching && <span aria-hidden="true">⏳ </span>}{enrichStatus}</div>}
