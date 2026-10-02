@@ -1,6 +1,7 @@
 # Roadmap
 
 - [x] Rezept-Generator: Zutaten-Ebenen mit Emoji, Untergruppen inline, zehn Produkte je Ebene mit „Weitere anzeigen“; nur manuell zugeordnete Produkte in verwalteten Vorlagen.
+- [x] Rezept-Generator: KI-Bilder für die acht Vorlagen (Kacheln, Titel hinter dem Text, Fallback in Rezeptkarten); Emoji bleibt Fallback für Admin-Vorlagen ohne Bild.
 
 Priorisierte Verbesserungen (Plan vom 2.10.2026 genehmigt):
 
