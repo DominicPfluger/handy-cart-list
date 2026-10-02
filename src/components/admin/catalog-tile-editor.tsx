@@ -531,26 +531,38 @@ function ImagePicker(p: { onClose: () => void; onPick: (path: string) => void })
   );
 }
 
-type Suggestion = { name: string; emoji: string; quantity: number; unit: string; existingId: string | null };
+type Suggestion = { name: string; emoji: string; quantity: number; unit: string; existingId: string | null; relevance: number };
 
 function SuggestSheet(p: Parameters<typeof CatalogTileEditor>[0] & { cur: string; onClose: () => void }) {
   const suggest = useServerFn(suggestCategoryProducts);
   const [keywords, setKeywords] = useState("");
   const [items, setItems] = useState<Suggestion[] | null>(null);
-  const [sel, setSel] = useState<Set<number>>(new Set());
+  const [sel, setSel] = useState<Set<string>>(new Set());
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<"relevance" | "alpha" | "loaded">("relevance");
 
-  const load = async () => {
+  const load = async (more: boolean) => {
     setBusy(true); setErr(null);
     try {
-      const r = await suggest({ data: { departmentId: p.cur, keywords: keywords.trim() || undefined } });
-      setItems(r); setSel(new Set(r.map((_, i) => i)));
+      const prev = more ? items ?? [] : [];
+      const r = await suggest({ data: { departmentId: p.cur, keywords: keywords.trim() || undefined, count: 10, exclude: prev.map((x) => x.name).slice(0, 300) } });
+      const have = new Set(prev.map((x) => x.name.toLowerCase()));
+      const fresh = r.filter((x) => !have.has(x.name.toLowerCase()));
+      setItems([...prev, ...fresh]);
+      setSel((o) => { const n = new Set(more ? o : []); fresh.forEach((x) => n.add(x.name)); return n; });
     } catch (e) { setErr(e instanceof Error ? e.message : String(e)); }
     finally { setBusy(false); }
   };
 
-  const chosen = (items ?? []).filter((_, i) => sel.has(i));
+  const shown = (() => {
+    const l = [...(items ?? [])];
+    if (sortBy === "relevance") l.sort((a, b) => b.relevance - a.relevance);
+    else if (sortBy === "alpha") l.sort((a, b) => a.name.localeCompare(b.name));
+    return l;
+  })();
+  const stars = (r: number) => (r >= 70 ? "★★★" : r >= 40 ? "★★" : "★");
+  const chosen = (items ?? []).filter((x) => sel.has(x.name));
 
   const create = () => p.run(async () => {
     const fresh = chosen.filter((s) => !s.existingId);
@@ -578,16 +590,26 @@ function SuggestSheet(p: Parameters<typeof CatalogTileEditor>[0] & { cur: string
           <button type="button" onClick={p.onClose} className="text-xl">✕</button>
         </div>
         <Input value={keywords} onChange={(e) => setKeywords(e.target.value)} placeholder={T("tile.suggestKeywords")} />
-        <Button className="w-full" variant={items ? "outline" : "default"} disabled={busy} onClick={load}>
+        <Button className="w-full" variant={items ? "outline" : "default"} disabled={busy} onClick={() => void load(false)}>
           {busy ? T("tile.suggestBusy") : items ? T("tile.suggestAgain") : T("tile.suggestGo")}
         </Button>
         {err && <p className="text-sm text-destructive">{err}</p>}
         {items && items.length === 0 && <p className="text-sm text-muted-foreground">{T("tile.suggestEmpty")}</p>}
         {items && items.length > 0 && (
+          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+            {T("tile.suggestSort")}
+            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} className="h-9 flex-1 rounded-lg border border-input bg-background px-2 text-foreground">
+              <option value="relevance">{T("tile.sortRelevance")}</option>
+              <option value="alpha">{T("tile.sortAlpha")}</option>
+              <option value="loaded">{T("tile.sortLoaded")}</option>
+            </select>
+          </label>
+        )}
+        {items && items.length > 0 && (
           <div className="divide-y divide-border rounded-xl border border-border">
-            {items.map((s, i) => (
-              <label key={i} className="flex items-center gap-3 px-3 py-2 text-sm">
-                <input type="checkbox" checked={sel.has(i)} onChange={() => setSel((o) => { const n = new Set(o); if (n.has(i)) n.delete(i); else n.add(i); return n; })} />
+            {shown.map((s) => (
+              <label key={s.name} className="flex items-center gap-3 px-3 py-2 text-sm">
+                <input type="checkbox" checked={sel.has(s.name)} onChange={() => setSel((o) => { const n = new Set(o); if (n.has(s.name)) n.delete(s.name); else n.add(s.name); return n; })} />
                 <span className="text-xl">{s.emoji}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-semibold">{s.name}</span>
@@ -596,9 +618,13 @@ function SuggestSheet(p: Parameters<typeof CatalogTileEditor>[0] & { cur: string
                     {s.existingId ? ` · ${T("tile.suggestLink")}` : ""}
                   </span>
                 </span>
+                <span className="shrink-0 text-xs text-primary" title={String(s.relevance)}>{stars(s.relevance)}</span>
               </label>
             ))}
           </div>
+        )}
+        {items && items.length > 0 && (
+          <Button variant="outline" className="w-full" disabled={busy} onClick={() => void load(true)}>{busy ? T("tile.suggestBusy") : T("tile.suggestMore")}</Button>
         )}
         {items && items.length > 0 && (
           <Button className="w-full" disabled={sel.size === 0} onClick={create}>{T("tile.suggestCreate", { n: sel.size })}</Button>

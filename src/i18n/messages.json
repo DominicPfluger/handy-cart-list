@@ -963,7 +963,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 more suggestions",
+    "tile.suggestSort": "Sort",
+    "tile.sortRelevance": "Relevance",
+    "tile.sortAlpha": "Alphabetical",
+    "tile.sortLoaded": "Order loaded"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1929,7 +1934,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 more suggestions",
+    "tile.suggestSort": "Sort",
+    "tile.sortRelevance": "Relevance",
+    "tile.sortAlpha": "Alphabetical",
+    "tile.sortLoaded": "Order loaded"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2895,7 +2905,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 more suggestions",
+    "tile.suggestSort": "Sort",
+    "tile.sortRelevance": "Relevance",
+    "tile.sortAlpha": "Alphabetical",
+    "tile.sortLoaded": "Order loaded"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3861,7 +3876,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 sugerencias más",
+    "tile.suggestSort": "Ordenar",
+    "tile.sortRelevance": "Relevancia",
+    "tile.sortAlpha": "Alfabético",
+    "tile.sortLoaded": "Orden de carga"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4827,7 +4847,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 sugerencias más",
+    "tile.suggestSort": "Ordenar",
+    "tile.sortRelevance": "Relevancia",
+    "tile.sortAlpha": "Alfabético",
+    "tile.sortLoaded": "Orden de carga"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5793,7 +5818,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 suggestions de plus",
+    "tile.suggestSort": "Trier",
+    "tile.sortRelevance": "Pertinence",
+    "tile.sortAlpha": "Alphabétique",
+    "tile.sortLoaded": "Ordre de chargement"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6759,7 +6789,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 suggestions de plus",
+    "tile.suggestSort": "Trier",
+    "tile.sortRelevance": "Pertinence",
+    "tile.sortAlpha": "Alphabétique",
+    "tile.sortLoaded": "Ordre de chargement"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7725,7 +7760,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 altri suggerimenti",
+    "tile.suggestSort": "Ordina",
+    "tile.sortRelevance": "Rilevanza",
+    "tile.sortAlpha": "Alfabetico",
+    "tile.sortLoaded": "Ordine di caricamento"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8691,7 +8731,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 altri suggerimenti",
+    "tile.suggestSort": "Ordina",
+    "tile.sortRelevance": "Rilevanza",
+    "tile.sortAlpha": "Alfabetico",
+    "tile.sortLoaded": "Ordine di caricamento"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9657,7 +9702,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 sugestões a mais",
+    "tile.suggestSort": "Ordenar",
+    "tile.sortRelevance": "Relevância",
+    "tile.sortAlpha": "Alfabético",
+    "tile.sortLoaded": "Ordem de carregamento"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10623,7 +10673,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 sugestões a mais",
+    "tile.suggestSort": "Ordenar",
+    "tile.sortRelevance": "Relevância",
+    "tile.sortAlpha": "Alfabético",
+    "tile.sortLoaded": "Ordem de carregamento"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11589,7 +11644,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 extra suggesties",
+    "tile.suggestSort": "Sorteren",
+    "tile.sortRelevance": "Relevantie",
+    "tile.sortAlpha": "Alfabetisch",
+    "tile.sortLoaded": "Laadvolgorde"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12555,7 +12615,12 @@
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
     "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
-    "tile.genAllDone": "{n} images generated"
+    "tile.genAllDone": "{n} images generated",
+    "tile.suggestMore": "+ 10 extra suggesties",
+    "tile.suggestSort": "Sorteren",
+    "tile.sortRelevance": "Relevantie",
+    "tile.sortAlpha": "Alfabetisch",
+    "tile.sortLoaded": "Laadvolgorde"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12981,7 +13046,12 @@
     "tile.genAllBusy": "Bilder {done}/{total} …",
     "tile.genAllConfirm": "Für {n} Produkte ohne Bild KI-Bilder erzeugen?",
     "tile.genAllRedo": "Alle Produkte haben bereits ein Bild. Alle {n} Bilder neu erzeugen?",
-    "tile.genAllDone": "{n} Bilder erzeugt"
+    "tile.genAllDone": "{n} Bilder erzeugt",
+    "tile.suggestMore": "+ 10 weitere Vorschläge",
+    "tile.suggestSort": "Sortieren",
+    "tile.sortRelevance": "Relevanz",
+    "tile.sortAlpha": "Alphabet",
+    "tile.sortLoaded": "Reihenfolge geladen"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13407,6 +13477,11 @@
     "tile.genAllBusy": "Bilder {done}/{total} …",
     "tile.genAllConfirm": "Für {n} Produkte ohne Bild KI-Bilder erzeugen?",
     "tile.genAllRedo": "Alle Produkte haben bereits ein Bild. Alle {n} Bilder neu erzeugen?",
-    "tile.genAllDone": "{n} Bilder erzeugt"
+    "tile.genAllDone": "{n} Bilder erzeugt",
+    "tile.suggestMore": "+ 10 weitere Vorschläge",
+    "tile.suggestSort": "Sortieren",
+    "tile.sortRelevance": "Relevanz",
+    "tile.sortAlpha": "Alphabet",
+    "tile.sortLoaded": "Reihenfolge geladen"
   }
 }
