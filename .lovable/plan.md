@@ -1,46 +1,60 @@
-# Verbesserungsvorschläge für Shoppi
+# Umsetzungsplan: 6 priorisierte Verbesserungen
 
-Ein Katalog von Ideen über alle Bereiche. Du wählst aus, was ich umsetzen soll — nichts davon wird automatisch gebaut.
+Die per Checkbox gewählten Funktionen, in sinnvoller Reihenfolge.
 
-## Alltag & Einkaufen
+## 1. Schneller erfassen & abhaken (Einkaufen)
 
-1. **Schnell-Hinzufügen-Leiste**: Beim Tippen im Suchfeld die zuletzt gekauften und häufigsten Produkte sofort als Chips anzeigen — ein Tipp genügt.
-2. **Mengen-Schnelltasten**: Direkt in der Liste per +/- die Menge ändern, ohne den Eintrag zu öffnen.
-3. **Einkaufs-Modus**: Grossschrift-Ansicht zum Abhaken im Laden — nur noch Häkchen, keine Bearbeitungs-Knöpfe, Bildschirm bleibt wach.
-4. **Wiederkehrende Artikel**: App schlägt Produkte vor, die du regelmässig kaufst, wenn sie länger nicht auf der Liste waren.
-5. **Notizen-Foto pro Eintrag**: Foto an einen Listeneintrag hängen (z. B. Verpackung, die man sucht).
+- **Schnell-Chips im Suchfeld**: Beim Tippen in der Listen-Suche erscheinen die zuletzt/häufigst gekauften Produkte als Chips — ein Tipp fügt sie hinzu. Basis: vorhandene lokale Kauf-Historie.
+- **Mengen-Schnelltasten**: +/− direkt am Listeneintrag, ohne den Eintrag zu öffnen.
+- **Einkaufs-Modus**: Grossschrift-Ansicht zum Abhaken — nur Häkchen, keine Bearbeitungs-Knöpfe; Bildschirm bleibt wach (Wake Lock).
 
-## Rezepte & Kochen
+## 2. Foto pro Listeneintrag
 
-6. **„Was kann ich kochen?"**: Rezepte vorschlagen, deren Zutaten grösstenteils auf der aktuellen Einkaufsliste oder in den Favoriten stehen.
-7. **Portionen-Rechner**: Rezept auf 2/4/6 Personen umrechnen; Mengen der Zutaten passen sich an, auch beim Übernehmen auf die Liste.
-8. **Koch-Modus**: Rezept Schritt für Schritt gross anzeigen, Bildschirm bleibt an, optional Vorlesen der Schritte (Sprachausgabe existiert schon).
-9. **Rezept-Bilder per KI**: Für Rezepte ohne Bild automatisch ein appetitliches Titelbild erzeugen.
-10. **Wochenplaner**: Rezepte auf Wochentage ziehen, daraus automatisch eine gemeinsame Einkaufsliste erzeugen.
+- Kamera-/Bild-Knopf am Listeneintrag; Foto wird komprimiert (max. ca. 200 KB, WebP) in einen neuen Storage-Bereich `list-item-photos` hochgeladen.
+- `list_items` erhält eine Spalte `photo_path`; Foto erscheint klein am Eintrag, per Tipp gross.
+- Geteilte Listen: Foto ist für alle Listen-Mitglieder sichtbar.
 
-## Admin & Katalog
+## 3. Portionen-Rechner (Rezepte)
 
-11. **KI-Bilder-Stapelverarbeitung**: „Alle Produkte ohne Bild" in einem Lauf bebildern, mit Fortschritt und Abbruch-Knopf.
-12. **Dubletten-Finder**: KI sucht im Katalog nach doppelten oder fast gleichen Produkten und schlägt Zusammenführungen vor.
-13. **Katalog-Gesundheit**: Übersichtsseite — wie viele Produkte ohne Bild, ohne Preis, ohne Übersetzung, ohne Kategorie-Filter-Zuordnung.
-14. **Angebote aus Supermarkt-Liste**: Die vorhandene Supermarkt-Tabelle auf der Angebotsseite nutzen (heute noch Demo-Daten).
-15. **Änderungs-Protokoll**: Wer hat wann welches Produkt geändert — hilfreich bei mehreren Markt-Admins.
+- Auf der Rezept-Seite: Auswahl 1–8 Portionen (Standard 4).
+- Zutaten-Mengen skalieren proportional; beim Übernehmen auf die Einkaufsliste gelten die skalierten Mengen.
+- Erkennung der Mengen aus den vorhandenen Mengen-/Einheiten-Feldern der Rezept-Zutaten; Zutaten ohne Menge bleiben unverändert.
 
-## Design & Technik
+## 4. Katalog-Gesundheit (Admin)
 
-16. **Schnellerer Start**: Katalog-Daten in kleineren Häppchen laden, damit die App spürbar früher reagiert (heute ca. 35 s erster Katalog-Abruf im Admin).
-17. **Dunkelmodus**: Komplettes dunkles Farbschema, wählbar unter „Mehr".
-18. **Schriftgrösse einstellbar**: Klein / Normal / Gross unter „Mehr" — gerade im Laden hilfreich.
-19. **Push aktivieren**: Der Push-Webhook ist gebaut, aber inaktiv, weil die Firebase-Anbindung fehlt. Mit Web-Push (ohne Firebase) liesse sich das lösen.
-20. **Installierbare App (PWA) polieren**: Eigenes Icon auf dem Homescreen, Offline-Startseite, Splash im gewählten Icon-Set.
+- Neuer Abschnitt im Admin unter „Mehr": Zähler für Produkte ohne Bild, ohne Preis (im gewählten Markt), ohne Übersetzung, ohne Ernährungs-/Küchen-Zuordnung.
+- Jede Zeile ist anklickbar und öffnet die gefilterte Katalog-Ansicht, damit die Lücken direkt geschlossen werden können.
+- Dubletten-Hinweis: Produkte mit identischem Namen in derselben Kategorie werden aufgelistet.
 
-## Wie weiter?
+## 5. Schnellerer Start
 
-Sag mir, welche Nummern ich umsetzen soll (z. B. „1, 3, 6 und 17") — ich lege dann direkt los oder erstelle dafür einen Detailplan.
+- Katalog wird in Häppchen geladen: zuerst Kategorien + Produkte der obersten Ebene, Rest im Hintergrund.
+- Lange Ladezeit beim ersten Admin-Katalog-Abruf (ca. 35 s) wird durch Nachladen pro geöffneter Kategorie verkürzt.
+- Ziel: App reagiert spürbar früher; bestehender Bilder-Cache bleibt unverändert.
+
+## 6. Schriftgrösse einstellbar
+
+- Unter „Mehr": Auswahl Klein / Normal / Gross (gerätelokal gespeichert).
+- Umsetzung über einen Skalierungsfaktor auf der Wurzel-Schriftgrösse, damit alle Texte mitwachsen.
+
+## Beschriftungen
+
+Alle neuen Texte in Deutsch und den 15 weiteren App-Sprachen.
 
 ## Technische Hinweise
 
-- Punkte 1–3, 7, 12, 13, 16–18: reine App-Änderungen, keine neuen Tabellen.
-- Punkt 4 nutzt die vorhandene Kauf-Historie (lokal). Punkt 10 bräuchte eine kleine neue Tabelle für den Wochenplan.
-- Punkt 19: Web-Push über den bestehenden Webhook unter `/api/public/`, VAPID-Schlüssel als Secret.
-- Punkt 14: `supermarkets`-Tabelle existiert bereits und ist befüllt; die Angebotsseite liest sie noch nicht.
+- Neue DB-Spalte: `list_items.photo_path` (Migration mit GRANT/RLS-Prüfung; Policy über `can_access_list`). Neuer Storage-Bucket `list-item-photos` (privat, Zugriff über Listen-Mitgliedschaft).
+- Einkaufs-Modus: `navigator.wakeLock` (mit Fallback ohne), Umschalter in der Listen-Ansicht.
+- Portionen-Rechner: reine Client-Logik auf `recipes.items` (jsonb), keine Schema-Änderung.
+- Katalog-Gesundheit: Abfragen über bestehende Tabellen (`products`, `product_reference_prices`, `catalog_translations`), serverseitig aggregiert.
+- Schnellerer Start: Katalog-Query in `catalogQueryOptions` aufteilen (Kategorien zuerst, Produkte pro Kategorie nachladen); Achtung: `ssr: false` und Cache-Verhalten beibehalten.
+- Schriftgrösse: `font-size` auf `html` via Klasse/Style-Property, Wert in localStorage (`shoppi:font-size`).
+
+## Reihenfolge der Umsetzung
+
+1. Schriftgrösse (klein, unabhängig)
+2. Schneller erfassen & abhaken
+3. Foto pro Eintrag (mit Migration)
+4. Portionen-Rechner
+5. Katalog-Gesundheit
+6. Schnellerer Start (grösster Eingriff, zum Schluss)
