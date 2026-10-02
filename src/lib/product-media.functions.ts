@@ -189,7 +189,7 @@ export const listReferencePrices = createServerFn({ method: "GET" })
     const q = data.q.trim();
     let query = context.supabase
       .from("product_reference_prices")
-      .select("id, price, currency, pack_size, pack_unit, unit_price, unit_basis, observed_at, products!inner(name)")
+      .select("id, price, currency, pack_size, pack_unit, unit_price, unit_basis, observed_at, products!inner(name, departments(name))")
       .eq("market", data.market)
       .order("name", { referencedTable: "products" })
       .range(data.offset, data.offset + data.limit);
@@ -197,7 +197,7 @@ export const listReferencePrices = createServerFn({ method: "GET" })
     const { data: rows, error } = await query;
     if (error) throw new Error(error.message);
     const all = ((rows ?? []) as any[]).map((r) => ({
-      id: r.id as string, name: (r.products?.name ?? "") as string, price: Number(r.price), currency: r.currency as string,
+      id: r.id as string, name: (r.products?.name ?? "") as string, dept: (r.products?.departments?.name ?? "") as string, price: Number(r.price), currency: r.currency as string,
       pack_size: r.pack_size as number | null, pack_unit: r.pack_unit as string | null,
       unit_price: r.unit_price == null ? null : Number(r.unit_price), unit_basis: r.unit_basis as string | null, observed_at: r.observed_at as string,
     }));
