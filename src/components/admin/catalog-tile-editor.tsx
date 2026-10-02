@@ -184,12 +184,46 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
+      {p.cur && editMode && p.onAddHeading && p.products.length > 0 && (
+        newTitle === null ? (
+          <button type="button" onClick={() => setNewTitle("")}
+            className="w-full rounded-2xl border-2 border-dashed border-border px-3 py-2 text-sm font-semibold text-primary">
+            + {T("adm.heading")}
+          </button>
+        ) : (
+          <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); const n = newTitle.trim(); if (!n) return; p.onAddHeading!(n); setNewTitle(null); }}>
+            <input autoFocus value={newTitle} maxLength={80} onChange={(e) => setNewTitle(e.target.value)} placeholder={T("adm.heading")}
+              className="h-10 min-w-0 flex-1 rounded-xl border border-input bg-background px-3 text-sm" />
+            <button type="submit" className="rounded-xl bg-primary px-3 text-sm font-semibold text-primary-foreground">{T("common.save")}</button>
+            <button type="button" onClick={() => setNewTitle(null)} className="rounded-xl border border-border px-3 text-sm">✕</button>
+          </form>
+        )
+      )}
+
       {p.cur && (
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
           {p.products.map((x, i) => {
             const price = p.prices?.get(x.id);
+            const h = headingBefore.get(x.id);
             return (
-              <div key={x.id} data-drop="product" data-id={x.id} data-index={i}
+              <Fragment key={x.id}>
+              {h && (
+                <div data-drop="heading" data-id={h.id} data-index={i}
+                  className={`flex items-center gap-2 bg-muted/50 px-3 py-2 ${drag?.id === h.id ? "opacity-40" : ""} ${over === `heading:${h.id}` ? "bg-primary-soft" : ""}`}>
+                  {editMode && (
+                    <span onPointerDown={(e) => startDrag(e, "heading", h.id, i, p.nm(h.id, h.name))} {...dragHandlers}
+                      aria-label={T("adm.drag")} className="cursor-grab touch-none select-none px-1 text-lg text-muted-foreground">⠿</span>
+                  )}
+                  <button type="button" disabled={!editMode}
+                    onClick={click(() => { const n = window.prompt(T("adm.heading"), h.name)?.trim(); if (n && n !== h.name) p.onRenameHeading?.(h.id, n); })}
+                    className="min-w-0 flex-1 truncate text-left text-sm font-bold text-foreground">{p.nm(h.id, h.name)}</button>
+                  {editMode && (
+                    <button type="button" onClick={() => p.onDeleteHeading?.(h.id, h.name)} aria-label={T("common.delete")}
+                      className="rounded-full px-2 text-xs text-muted-foreground">✕</button>
+                  )}
+                </div>
+              )}
+              <div data-drop="product" data-id={x.id} data-index={i}
                 className={`flex items-center gap-3 px-3 py-2 ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? "bg-primary-soft" : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
                 <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers} onDoubleClick={() => { const u = img(x.image_path); if (u) setZoom(u); }}
                   className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl ${editMode ? "cursor-grab touch-none" : ""}`}>
