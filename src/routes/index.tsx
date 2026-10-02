@@ -261,18 +261,6 @@ function ListPage() {
     setQuick("");
   };
 
-  // ---- Einkaufs-Modus: Grosschrift, nur Abhaken, Bildschirm bleibt wach ----
-  const [shopMode, setShopMode] = useState(false);
-  useEffect(() => {
-    if (!shopMode) return;
-    let cancelled = false;
-    let lock: { release: () => Promise<void> } | null = null;
-    const wl = (navigator as Navigator & { wakeLock?: { request: (type: "screen") => Promise<{ release: () => Promise<void> }> } }).wakeLock;
-    wl?.request("screen")
-      .then((l) => { if (cancelled) l.release().catch(() => {}); else lock = l; })
-      .catch(() => {});
-    return () => { cancelled = true; lock?.release().catch(() => {}); };
-  }, [shopMode]);
 
   return (
     <div className="space-y-5">
@@ -355,15 +343,6 @@ function ListPage() {
             }))}
           />
           <button
-            onClick={() => setShopMode((v) => !v)}
-            aria-pressed={shopMode}
-            aria-label={t("list.shopMode")}
-            title={t("list.shopMode")}
-            className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-lg transition active:scale-90 ${shopMode ? "bg-primary text-primary-foreground" : "text-primary active:bg-muted"}`}
-          >
-            <span aria-hidden="true">🛒</span>
-          </button>
-          <button
             onClick={() => shareList({ ...activeList, items: activeList.items.map((i) => ({ ...i, name: displayName(i), quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : i.quantity })) })}
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
             aria-label={t("list.share")}
@@ -385,8 +364,7 @@ function ListPage() {
       </div>
 
       {/* Schnell erfassen: Suchfeld + Chips aus dem Einkaufsverlauf */}
-      {!shopMode && (
-        <div className="space-y-2">
+      <div className="space-y-2">
           <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4">
             <span aria-hidden="true" className="text-muted-foreground">🔍</span>
             <input
@@ -417,8 +395,8 @@ function ListPage() {
               ))}
             </div>
           )}
-        </div>
-      )}
+      </div>
+
 
       {/* List grouped by category */}
       {items.length === 0 && hydrated && (
@@ -451,16 +429,15 @@ function ListPage() {
                   >
                     <button
                       onClick={() => toggleItem(item.id)}
-                      className={`grid shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
-                        shopMode ? "h-9 w-9" : "h-6 w-6"
-                      } ${
+                      className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
+
                         item.checked
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-muted-foreground/30 bg-transparent"
                       }`}
                       aria-label={item.checked ? t("list.uncheck") : t("list.check")}
                     >
-                      {item.checked && <CheckIcon className={shopMode ? "h-5 w-5" : "h-4 w-4"} />}
+                      {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
                     {(() => {
                       // Farbe: über die Wurzelkategorie, sonst über den Gruppennamen (z. B. ältere Einträge mit eigenem Gruppenlabel)
@@ -479,7 +456,7 @@ function ListPage() {
                       );
                     })()}
                     <div className="min-w-0 flex-1">
-                      <p className={`break-words font-medium ${shopMode ? "text-lg" : "text-sm"} ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
+                      <p className={`break-words font-medium text-sm ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
                         {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
                       </p>
                       <p className="break-words text-xs text-muted-foreground">
@@ -491,7 +468,7 @@ function ListPage() {
                         </p>
                       )}
                     </div>
-                    {!shopMode && (() => {
+                    {(() => {
                       const product = item.productId ? productById.get(item.productId) : undefined;
                       const ids = product ? departmentIdsOf(product, data.productAliases ?? []) : [];
                       if (ids.length < 2) return null;
