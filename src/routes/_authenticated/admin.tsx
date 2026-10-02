@@ -100,17 +100,15 @@ function AdminPage() {
   const [sel, setSel] = useState<Sel>(null);
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
-  const [adding, setAdding] = useState<Kind | null>(null);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
-  const [view, setView] = useState<"list" | "tiles">("list");
   /** Aktiver Admin-Bereich (Tabs). */
   const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "markets" | "recipes" | "languages" | "more">("catalog");
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: view === "tiles" }));
+    window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: true }));
     return () => {
       window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: false }));
     };
-  }, [view]);
+  }, []);
   const refPrices = useReferencePrices();
 
   const d = q.data;
@@ -162,12 +160,6 @@ function AdminPage() {
     return total;
   };
 
-  const move = (kind: "department" | "product", list: { id: string }[], idx: number, dir: -1 | 1) => {
-    const j = idx + dir;
-    if (j < 0 || j >= list.length) return;
-    reorder(kind, list, idx, j);
-  };
-
   const reorder = (kind: "department" | "product", list: { id: string }[], from: number, to: number) => {
     if (from < 0 || from >= list.length) return;
     const next = [...list];
@@ -200,14 +192,6 @@ function AdminPage() {
       { onConflict: "product_id,market" },
     ));
   };
-
-  /** Zielindex beim Ablegen auf einer Zeile: obere Hälfte = davor, untere Hälfte = danach. */
-  const dropIndex = (e: React.DragEvent, i: number) => {
-    const r = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    return e.clientY > r.top + r.height / 2 ? i + 1 : i;
-  };
-
-  const [drag, setDrag] = useState<{ kind: "department" | "product" | "heading"; index: number; id?: string } | null>(null);
 
   const moveHeading = (headingId: string, beforeProductId: string) => {
     const h = d?.heads.find((x) => x.id === headingId);
@@ -310,7 +294,6 @@ function AdminPage() {
       </div>
     );
 
-  const headingBefore = new Map(headings.map((h) => [h.before_product_id, h]));
   const selName = sel ? (sel.kind === "department" ? deptById.get(sel.id)?.name : sel.kind === "product" ? d?.prods.find((p) => p.id === sel.id)?.name : d?.heads.find((h) => h.id === sel.id)?.name) ?? "" : "";
 
   const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>) => run(async () => {
@@ -354,15 +337,6 @@ function AdminPage() {
         {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {T("adm.viewLocale")}: {l.label}</option>)}
       </select>
 
-      <div className="flex rounded-xl bg-muted p-1 text-sm font-semibold">
-        {(["list", "tiles"] as const).map((v) => (
-          <button key={v} type="button" onClick={() => setView(v)}
-            className={`flex-1 rounded-lg py-1.5 ${view === v ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}>
-            {v === "list" ? T("tile.viewList") : T("tile.viewTiles")}
-          </button>
-        ))}
-      </div>
-
       <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 rounded-xl" />
 
       {q.isLoading && <p className="text-sm text-muted-foreground">{T("adm.loadingCatalog")}</p>}
@@ -379,158 +353,53 @@ function AdminPage() {
             </button>
           ))}
         </div>
-      ) : view === "tiles" && d ? (
+      ) : d ? (
         <>
           <CatalogTileEditor depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={children} products={products}
             path={path(cur)} nm={nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
             reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
-            onSortRelevance={products.length > 1 ? () => sortProducts("popularity") : undefined} busy={busy}
+            busy={busy}
             headings={headings}
             onAddHeading={(name) => { if (cur && products[0]) void run(() => saveH({ data: { departmentId: cur, beforeProductId: products[0]!.id, name } }), T("adm.created")); }}
             onMoveHeading={moveHeading}
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
-            onBulkAdd={cur ? () => setBulk("plain") : undefined} />
-          {bulk && (
-            <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
-              onSubmit={handleBulkSubmit} />
-          )}
-        </>
-      ) : (
-        <>
-          <nav className="flex flex-wrap items-center gap-1 text-sm">
-            <button className="font-semibold text-primary" onClick={() => { setCur(null); setSel(null); }}>{T("adm.catalog")}</button>
-            {path(cur).map((p) => (
-              <span key={p.id} className="flex items-center gap-1">
-                <span className="text-muted-foreground">›</span>
-                <button className="font-semibold text-primary" onClick={() => { setCur(p.id); setSel(null); }}>{nm(p.id, p.name)}</button>
-              </span>
-            ))}
-          </nav>
-
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" onClick={() => setAdding("department")}>+ {T("adm.category")}</Button>
-            {cur && products.length > 0 && adding !== "heading" && <Button size="sm" variant="outline" onClick={() => setAdding("heading")}>+ {T("adm.heading")}</Button>}
-            {cur && <Button size="sm" variant="outline" onClick={() => setAdding("product")}>+ {T("adm.product")}</Button>}
-            {cur && <Button size="sm" variant="outline" onClick={() => setBulk("plain")}>+ {T("adm.multi")}</Button>}
-            {cur && <Button size="sm" variant="outline" onClick={() => setBulk("suggest")}>✨ {T("adm.suggestions")}</Button>}
-          </div>
-
-          {adding && (
-            <AddForm kind={adding} products={products} onCancel={() => setAdding(null)}
-              onSubmit={(v) => run(async () => {
-                if (adding === "heading") {
-                  await saveH({ data: { departmentId: cur!, beforeProductId: v.before!, name: v.name } });
-                } else if (adding === "department") {
-                  const r = await supabase.from("departments").insert({ parent_id: cur, name: v.name, emoji: v.emoji || null, sort_order: children.length + 1 }).select("id").single();
-                  if (r.error) throw new Error(r.error.message);
-                  await translateIds([r.data.id]);
-                } else {
-                  const r = await supabase.from("products").insert({ department_id: cur!, name: v.name, emoji: v.emoji || null, default_quantity: v.qty, default_unit: v.unit as never, sort_order: products.length + 1 }).select("id").single();
-                  if (r.error) throw new Error(r.error.message);
-                  await translateIds([r.data.id]);
-                }
-                setAdding(null);
-              }, T("adm.created"))} />
-          )}
-
-          {bulk && (
-            <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
-              onSubmit={handleBulkSubmit} />
-          )}
-
-          {children.length > 0 && (
-            <section className="space-y-1">
-              <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{T("adm.categories")}</h2>
-              {children.map((c, i) => (
-                <Row key={c.id} emoji={c.emoji ?? "📁"} name={nm(c.id, c.name)} active={sel?.id === c.id}
-                  dragging={drag?.kind === "department" && drag.index === i}
-                  onDragStart={() => setDrag({ kind: "department", index: i })}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={(e) => { if (drag?.kind === "department") reorder("department", children, drag.index, dropIndex(e, i)); setDrag(null); }}
-                  onDragEnd={() => setDrag(null)}
-                  sub={T("adm.rowSub", { s: d!.depts.filter((x) => x.parent_id === c.id).length, p: d!.prods.filter((x) => x.department_id === c.id).length })}
-                  onOpen={() => { setCur(c.id); setSel(null); }} onEdit={() => setSel({ kind: "department", id: c.id })}
-                  onUp={() => move("department", children, i, -1)} onDown={() => move("department", children, i, 1)} disabled={busy} />
-              ))}
-            </section>
-          )}
-
-          {cur && d && <DeptAliasRows parentId={cur} depts={d.depts} onEdit={(id) => setSel({ kind: "department", id })} />}
-
-          {cur && (
-            <section className="space-y-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{T("adm.products")}</h2>
+            onBulkAdd={cur ? () => setBulk("plain") : undefined}
+            onAdvanced={(kind, id) => setSel({ kind, id })}
+            toolbar={cur ? (
+              <div className="space-y-1">
                 <select value={mk} onChange={(e) => setMk(e.target.value)} aria-label={T("adm.marketOrder")}
-                  className="h-8 rounded-lg border border-input bg-background px-2 text-xs">
+                  className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm md:max-w-xs">
                   <option value="">{T("adm.marketGlobal")}</option>
                   {MARKETS.map((m) => <option key={m} value={m}>{flagOf(m)} {m}</option>)}
                 </select>
-                {products.length > 1 && (
-                  <div className="ml-auto flex items-center gap-1">
-                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label={T("adm.sortBy")}
-                      className="h-8 rounded-lg border border-input bg-background px-2 text-xs">
-                      <option value="popularity">{T("adm.opt.popularity")}</option>
-                      <option value="price">{T("adm.opt.price")}</option>
-                      <option value="alphabetical">{T("adm.opt.alphabetical")}</option>
-                      <option value="similarity">{T("adm.opt.similarity")}</option>
-                    </select>
-                    <Button size="sm" variant="outline" className="h-8" disabled={busy} onClick={() => sortProducts()}>{T("adm.sort")}</Button>
-                  </div>
-                )}
+                {mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
               </div>
-              {mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
-              {products.length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noProducts")}</p>}
-              {products.map((p, i) => {
-                const h = headingBefore.get(p.id);
-                return (
-                  <div key={p.id} className="space-y-1">
-                    {h && (
-                      <div
-                        draggable
-                        onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; e.dataTransfer.setData("text/plain", h.id); setDrag({ kind: "heading", index: i, id: h.id }); }}
-                        onDragOver={(e) => { if (drag?.kind === "product") e.preventDefault(); }}
-                        onDrop={(e) => {
-                          e.preventDefault();
-                          if (drag?.kind === "product") {
-                            // Produkt direkt unter diese Überschrift setzen
-                            reorder("product", products, drag.index, i);
-                          }
-                          setDrag(null);
-                        }}
-                        onDragEnd={() => setDrag(null)}
-                        onClick={() => setSel({ kind: "heading", id: h.id })}
-                        className={`mt-2 flex cursor-grab items-center gap-2 rounded-lg px-2 py-1 text-left text-sm font-bold text-foreground ${drag?.kind === "heading" && drag.id === h.id ? "opacity-40" : ""} ${drag?.kind === "product" ? "border border-dashed border-primary/60 bg-primary-soft/30" : ""} ${sel?.id === h.id ? "bg-primary-soft" : ""}`}>
-                        <span className="touch-none select-none text-muted-foreground" aria-label={T("adm.drag")}>⠿</span>
-                        {nm(h.id, h.name)}
-                      </div>
-                    )}
-                    <Row emoji={p.emoji ?? "•"} name={nm(p.id, p.name)} sub={`${p.default_quantity} ${p.default_unit}${unavailable(p) ? " · " + T("adm.marketUnavailable") : ""}`} active={sel?.id === p.id}
-                      dragging={drag?.kind === "product" && drag.index === i}
-                      onDragStart={() => setDrag({ kind: "product", index: i })}
-                      onDragOver={(e) => e.preventDefault()}
-                      onDrop={(e) => {
-                        if (drag?.kind === "product") reorder("product", products, drag.index, dropIndex(e, i));
-                        else if (drag?.kind === "heading" && drag.id) moveHeading(drag.id, p.id);
-                        setDrag(null);
-                      }}
-                      onDragEnd={() => setDrag(null)}
-                      onEdit={() => setSel({ kind: "product", id: p.id })}
-                      onUp={() => move("product", products, i, -1)} onDown={() => move("product", products, i, 1)} disabled={busy} />
-                  </div>
-                );
-              })}
-              {products.length > 1 && (
-                <Button variant="outline" className="mt-2 w-full" disabled={busy} onClick={() => sortProducts("popularity")}>
-                  ↕ {busy ? T("adm.working") : T("adm.sortRelevance")}
-                </Button>
-              )}
-            </section>
+            ) : null}
+            sortControls={products.length > 1 ? (
+              <div className="flex gap-2">
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label={T("adm.sortBy")}
+                  className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-3 text-sm">
+                  <option value="popularity">{T("adm.opt.popularity")}</option>
+                  <option value="price">{T("adm.opt.price")}</option>
+                  <option value="alphabetical">{T("adm.opt.alphabetical")}</option>
+                  <option value="similarity">{T("adm.opt.similarity")}</option>
+                </select>
+                <Button variant="outline" className="h-11 rounded-xl" disabled={busy} onClick={() => sortProducts()}>↕ {busy ? T("adm.working") : T("adm.sort")}</Button>
+              </div>
+            ) : null}
+            below={cur ? (
+              <>
+                <DeptAliasRows parentId={cur} depts={d.depts} onEdit={(id) => setSel({ kind: "department", id })} />
+                <ProductAliasRows departmentId={cur} prods={d.prods} onEdit={(id) => setSel({ kind: "product", id })} />
+              </>
+            ) : null} />
+          {bulk && (
+            <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
+              onSubmit={handleBulkSubmit} />
           )}
-          {cur && d && <ProductAliasRows departmentId={cur} prods={d.prods} onEdit={(id) => setSel({ kind: "product", id })} />}
         </>
-      )}
+      ) : null}
 
       {sel && d && (
         <Editor key={sel.kind + sel.id} sel={sel} name={selName} data={d} products={(d.prods).filter((p) => p.department_id === (sel.kind === "heading" ? d.heads.find((h) => h.id === sel.id)?.department_id : undefined))}
@@ -605,91 +474,6 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
     <div className="rounded-xl border border-border bg-card p-2">
       <div className="text-lg font-bold text-foreground">{value ?? "–"}</div>
       <div className="text-[11px] text-muted-foreground">{label}</div>
-    </div>
-  );
-}
-
-function Row(p: {
-  emoji: string; name: string; sub: string; active: boolean; disabled: boolean;
-  onOpen?: () => void; onEdit: () => void; onUp: () => void; onDown: () => void;
-  dragging?: boolean; onDragStart?: () => void; onDragOver?: (e: React.DragEvent) => void; onDrop?: (e: React.DragEvent) => void; onDragEnd?: () => void;
-}) {
-  const [over, setOver] = useState<"top" | "bottom" | null>(null);
-  return (
-    <div
-      onDragOver={(e) => {
-        p.onDragOver?.(e);
-        if (!p.onDrop) return;
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "move";
-        const r = e.currentTarget.getBoundingClientRect();
-        setOver(e.clientY > r.top + r.height / 2 ? "bottom" : "top");
-      }}
-      onDragLeave={(e) => { if (!e.currentTarget.contains(e.relatedTarget as Node)) setOver(null); }}
-      onDrop={(e) => { e.preventDefault(); e.stopPropagation(); setOver(null); p.onDrop?.(e); }}
-      className={`relative flex items-center gap-2 rounded-lg border px-2 py-1.5 ${p.dragging ? "opacity-40" : ""} ${p.active ? "border-primary bg-primary-soft/40" : "border-border bg-card"}`}
-    >
-      {over && <span className={`pointer-events-none absolute inset-x-1 h-0.5 rounded bg-primary ${over === "top" ? "-top-1" : "-bottom-1"}`} />}
-      {p.onDragStart && (
-        <span
-          draggable
-          onDragStart={(e) => {
-            e.dataTransfer.effectAllowed = "move";
-            e.dataTransfer.setData("text/plain", p.name); // Firefox startet Drag nur mit setData
-            const row = e.currentTarget.parentElement;
-            if (row) e.dataTransfer.setDragImage(row, 16, row.offsetHeight / 2);
-            p.onDragStart?.();
-          }}
-          onDragEnd={() => { setOver(null); p.onDragEnd?.(); }}
-          className="-my-1.5 -ml-2 cursor-grab select-none px-2 py-1.5 text-lg text-muted-foreground active:cursor-grabbing"
-          aria-label={T("adm.drag")}
-        >⠿</span>
-      )}
-      <button className="flex min-w-0 flex-1 items-center gap-2 text-left" onClick={p.onOpen ?? p.onEdit}>
-        <span className="text-lg">{p.emoji}</span>
-        <span className="min-w-0">
-          <span className="block truncate text-sm font-medium text-foreground">{p.name}</span>
-          <span className="block truncate text-[11px] text-muted-foreground">{p.sub}</span>
-        </span>
-      </button>
-      <button aria-label="Nach oben" disabled={p.disabled} onClick={p.onUp} className="px-1.5 text-muted-foreground">▲</button>
-      <button aria-label="Nach unten" disabled={p.disabled} onClick={p.onDown} className="px-1.5 text-muted-foreground">▼</button>
-      <button aria-label={T("adm.edit")} onClick={p.onEdit} className="px-1.5 text-primary">✎</button>
-    </div>
-  );
-}
-
-type Vals = { name: string; emoji: string; qty: number; unit: string; before?: string };
-
-function AddForm({ kind, products, onSubmit, onCancel }: { kind: Kind; products: Prod[]; onSubmit: (v: Vals) => void; onCancel: () => void }) {
-  const [name, setName] = useState("");
-  const [emoji, setEmoji] = useState("");
-  const [qty, setQty] = useState("1");
-  const [unit, setUnit] = useState("stueck");
-  const [before, setBefore] = useState(products[0]?.id ?? "");
-  const label = T(`adm.new.${kind}` as MessageKey);
-  return (
-    <div className="space-y-2 rounded-xl border border-dashed border-primary/50 p-3">
-      <p className="text-sm font-semibold text-primary">{label}</p>
-      <div className={kind === "heading" ? "" : "grid grid-cols-[1fr_4rem] gap-2"}>
-        <Input autoFocus placeholder={T("adm.nameDe")} value={name} onChange={(e) => setName(e.target.value)} />
-        {kind !== "heading" && <Input placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} />}
-      </div>
-      {kind === "product" && (
-        <div className="grid grid-cols-2 gap-2">
-          <Input inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} />
-          <UnitSelect value={unit} onChange={setUnit} />
-        </div>
-      )}
-      {kind === "heading" && (
-        <select value={before} onChange={(e) => setBefore(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
-          {products.map((p) => <option key={p.id} value={p.id}>{T("adm.above", { name: p.name })}</option>)}
-        </select>
-      )}
-      <div className="flex gap-2">
-        <Button className="flex-1" disabled={!name.trim()} onClick={() => onSubmit({ name: name.trim(), emoji, qty: Number(qty.replace(",", ".")) || 1, unit, before })}>{T("adm.createTr")}</Button>
-        <Button variant="ghost" onClick={onCancel}>{T("adm.cancel")}</Button>
-      </div>
     </div>
   );
 }
