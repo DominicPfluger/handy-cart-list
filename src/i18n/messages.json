@@ -1006,7 +1006,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2015,7 +2016,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3024,7 +3026,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4033,7 +4036,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Opcional: palabras clave para la imagen IA — ↻ para sugerencia"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5042,7 +5046,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Opcional: palabras clave para la imagen IA — ↻ para sugerencia"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6051,7 +6056,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Optionnel : mots-clés pour l’image IA — ↻ pour une suggestion"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7060,7 +7066,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Optionnel : mots-clés pour l’image IA — ↻ pour une suggestion"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8069,7 +8076,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Facoltativo: parole chiave per l’immagine IA — ↻ per un suggerimento"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9078,7 +9086,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Facoltativo: parole chiave per l’immagine IA — ↻ per un suggerimento"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10087,7 +10096,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Opcional: palavras-chave para a imagem IA — ↻ para sugestão"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11096,7 +11106,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Opcional: palavras-chave para a imagem IA — ↻ para sugestão"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12105,7 +12116,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Optioneel: trefwoorden voor de AI-afbeelding — ↻ voor AI-suggestie"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13114,7 +13126,8 @@
     "tile.imgProductsCount": "{n} selected",
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
-    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
+    "tile.aiHintEmpty": "Optioneel: trefwoorden voor de AI-afbeelding — ↻ voor AI-suggestie"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13583,7 +13596,8 @@
     "tile.imgProductsCount": "{n} ausgewählt",
     "tile.imgProductsAll": "Alle",
     "tile.imgProductsNone": "Keine",
-    "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen."
+    "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen.",
+    "tile.aiHintEmpty": "Optional: Stichworte fürs KI-Bild — ↻ für KI-Vorschlag"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14052,6 +14066,7 @@
     "tile.imgProductsCount": "{n} ausgewählt",
     "tile.imgProductsAll": "Alle",
     "tile.imgProductsNone": "Keine",
-    "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen."
+    "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen.",
+    "tile.aiHintEmpty": "Optional: Stichworte fürs KI-Bild — ↻ für KI-Vorschlag"
   }
 }
