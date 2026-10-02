@@ -643,13 +643,13 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               if (!hasGroups) {
                 const ordered = groups.flatMap((g) => g.products);
                 const limit = visibleCount[s.key] ?? PAGE;
-                const expanded = limit >= ordered.length || !!q;
+                const expanded = limit >= ordered.length;
                 const shownIds = new Set(ordered.slice(0, expanded ? ordered.length : limit).map((p) => p.id));
                 for (const id of sel) shownIds.add(id);
                 const hiddenCount = ordered.filter((p) => !shownIds.has(p.id)).length;
                 return <div className="space-y-3">
                   {ordered.filter((p) => shownIds.has(p.id)).map(chip)}
-                  {!q && ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
+                  {ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
                     onClick={() => setVisibleCount((x) => ({ ...x, [s.key]: expanded ? PAGE : Math.min(ordered.length, limit + PAGE) }))}
                     className="text-xs font-medium text-primary" aria-expanded={expanded}>
                     {expanded ? t("rk.showLess") : t("rk.showMore", { count: Math.min(hiddenCount, PAGE) })}
@@ -681,7 +681,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   const gKey = `${s.key}:${group.key}`;
                   const gOpen = !!openGroups[gKey];
                   const gLimit = visibleCount[gKey] ?? PAGE;
-                  const gExpanded = gLimit >= group.products.length || !!q;
+                  const gExpanded = gLimit >= group.products.length;
                   const shownIds = new Set(group.products.slice(0, gExpanded ? group.products.length : gLimit).map((p) => p.id));
                   for (const id of sel) if (group.products.some((p) => p.id === id)) shownIds.add(id);
                   const shown = gOpen ? group.products.filter((p) => shownIds.has(p.id)) : group.products.filter((p) => sel.includes(p.id));
@@ -692,7 +692,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                       <div className="flex flex-wrap items-center gap-2">
                         {shown.map(chip)}
                       </div>
-                      {gOpen && !q && gHidden > 0 && (
+                      {gOpen && gHidden > 0 && (
                         <Button variant="ghost" size="sm" type="button"
                           onClick={() => setVisibleCount((x) => ({ ...x, [gKey]: gExpanded ? PAGE : Math.min(group.products.length, gLimit + PAGE) }))}
                           className="mt-1 text-xs font-medium text-primary" aria-expanded={gExpanded}>
