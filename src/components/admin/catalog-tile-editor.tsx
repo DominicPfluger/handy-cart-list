@@ -65,7 +65,7 @@ export function CatalogTileEditor(p: {
   onMoveHeading?: (id: string, insertAt: number, mode: "title" | "group") => void;
   onSetHeadingAnchor?: (headingId: string, productId: string) => void;
   /** Produkt an Position `to` (0..n) einfügen und Überschrift `headingId` ("" = keine) zuordnen. */
-  onMoveProduct?: (productId: string, to: number, headingId: string) => void;
+  onMoveProduct?: (productId: string | string[], to: number, headingId: string) => void;
   /** Ordnet ein Produkt einer Überschrift zu ("" = vor die erste Überschrift). */
   onAssignHeading?: (productId: string, headingId: string) => void;
   onRenameHeading?: (id: string, name: string) => void;
@@ -80,6 +80,10 @@ export function CatalogTileEditor(p: {
   const editMode = true;
   const [target, setTarget] = useState<Target>(null);
   const [drag, setDrag] = useState<Drag>(null);
+  const [selected, setSelected] = useState<Set<string>>(() => new Set());
+  const [selCur, setSelCur] = useState(p.cur);
+  if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); }
+  const toggleSel = (id: string) => setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
   const [headMove, setHeadMove] = useState<{ id: string; name: string; insertAt: number; n: number } | null>(null);
@@ -165,6 +169,31 @@ export function CatalogTileEditor(p: {
     if (!d || !moved.current) return;
     const t = dropAt(e.clientX, e.clientY);
     if (!t || t.id === d.id) return;
+    const multi = d.kind === "product" && selected.has(d.id) && selected.size > 1;
+    if (multi) {
+      const ids = p.products.filter((x) => selected.has(x.id)).map((x) => x.id);
+      if (t.kind === "product" && selected.has(t.id)) return;
+      if ((t.kind === "heading" || t.kind === "product") && p.onMoveProduct) {
+        if (t.kind === "heading") p.onMoveProduct(ids, t.index, t.id);
+        else {
+          const r = t.el.getBoundingClientRect();
+          const after = e.clientY > r.top + r.height / 2;
+          const anchorH = headingBefore.get(t.id);
+          let best = -1; let hid = "";
+          for (const h of p.headings ?? []) { const ai = p.products.findIndex((x) => x.id === h.before_product_id); if (ai >= 0 && ai <= t.index && ai > best) { best = ai; hid = h.id; } }
+          p.onMoveProduct(ids, t.index + (after ? 1 : 0), !after && anchorH ? anchorH.id : hid);
+        }
+        setSelected(new Set());
+        return;
+      }
+      if (t.kind === "department" || (t.kind === "crumb" && t.id)) {
+        const own = ids.filter((id) => !id.startsWith("alias:"));
+        if (own.length === 0) return;
+        void p.run(() => p.must(supabase.from("products").update({ department_id: t.id }).in("id", own)), T("tile.moved"));
+        setSelected(new Set());
+      }
+      return;
+    }
     if (d.kind === "heading") {
       let insertAt: number;
       if (t.kind === "product") {
