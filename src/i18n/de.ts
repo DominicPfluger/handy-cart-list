@@ -1,5 +1,8 @@
 /** Deutsche Ausgangstexte (Quelle für alle anderen Sprachen). */
 export const de = {
+  "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
+  "splash.subtitle": "Die smarte Einkaufsliste für deinen Alltag.",
+  "splash.loading": "Shoppi lädt …",
   "nav.departments": "Abteilungen",
   "nav.favorites": "Favoriten",
   "nav.lists": "Listen",
