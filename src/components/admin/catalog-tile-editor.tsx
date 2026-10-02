@@ -306,6 +306,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [hint, setHint] = useState("");
   const [large, setLarge] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null | undefined>(undefined);
+  const [imageBusy, setImageBusy] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
@@ -428,7 +430,36 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (error) throw new Error(error.message);
     if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
     else await saveProductIcon(effId, blob, path);
+    const { data: signed } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
+    setImagePreview(signed?.signedUrl ?? null);
   });
+
+  const removeProductImage = async () => {
+    if (!effId || isDept || !window.confirm(T("tile.removeImageConfirm"))) return;
+    setImageBusy(true);
+    try {
+      await p.run(async () => {
+        await p.must(supabase.from("products").update({ image_path: null, icon_path: null }).eq("id", effId));
+        setImagePreview(null);
+        setLarge(null);
+        await qc.invalidateQueries({ queryKey: ["admin-tile-imgs"] });
+      }, T("tile.imageRemoved"));
+    } finally { setImageBusy(false); }
+  };
+
+  const generateDialogImage = async () => {
+    if (!effId) return;
+    setImageBusy(true);
+    try {
+      await p.run(async () => {
+        const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+        if (!isDept) await saveProductIconFromPath(effId, generated.path);
+        const { data, error } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
+        if (error) throw error;
+        if (data?.signedUrl) setImagePreview(data.signedUrl);
+      }, T("tile.imgDone"));
+    } finally { setImageBusy(false); }
+  };
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
@@ -436,13 +467,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         {picking && effId && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(async () => {
           if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
           else await saveProductIconFromPath(effId, path);
+          const { data: signed } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
+          setImagePreview(signed?.signedUrl ?? null);
         }); }} />}
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         {enrichStatus && <div role="status" className="text-sm text-foreground">{enriching && <span aria-hidden="true">⏳ </span>}{enrichStatus}</div>}
         {enrichErrors.length > 0 && <ul className="max-h-24 overflow-auto text-xs text-destructive">{enrichErrors.map((error) => <li key={error}>{error}</li>)}</ul>}
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
-            {p.imgUrl ? <ZoomableImage src={p.imgUrl} className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
+            {(imagePreview === undefined ? p.imgUrl : imagePreview) ? <ZoomableImage src={(imagePreview === undefined ? p.imgUrl : imagePreview) ?? ""} className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
           </div>
           {effId && (
             <div className="flex flex-1 flex-col gap-2">
@@ -457,12 +490,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                   <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true)}>↻</Button>
                 )}
               </div>
-              <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(async () => {
-                const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
-                if (!isDept) await saveProductIconFromPath(effId, generated.path);
-                const { data } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
-                if (data?.signedUrl) setLarge(data.signedUrl);
-              }, T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" variant="outline" disabled={imageBusy || p.busy} onClick={() => void generateDialogImage()}>{imageBusy ? T("adm.working") : isDept || !item ? `✨ ${T("tile.aiImage")}` : `✨ ${T("tile.regenerateImage")}`}</Button>
+                {!isDept && item && (imagePreview === undefined ? Boolean(p.imgUrl) : Boolean(imagePreview)) &&
+                  <Button size="sm" variant="outline" className="text-destructive" disabled={imageBusy || p.busy} onClick={() => void removeProductImage()}>{T("tile.removeImage")}</Button>}
+              </div>
             </div>
           )}
         </div>

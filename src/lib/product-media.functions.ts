@@ -128,7 +128,8 @@ export const generateImageFor = createServerFn({ method: "POST" })
     const { data: p, error } = await context.supabase.from(table).select("id, name, emoji").eq("id", data.id).single();
     if (error || !p) throw new Error(data.kind === "department" ? "Kategorie nicht gefunden" : "Produkt nicht gefunden");
     const bytes = await generateProductImage(p.name, p.emoji, data.hint);
-    const path = `${table}/${p.id}.png`;
+    // A new path makes the replacement visible immediately, even with cached signed URLs.
+    const path = `${table}/${p.id}-${crypto.randomUUID()}.webp`;
     const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
     if (up.error) throw new Error(up.error.message);
     const upd = data.kind === "product"
