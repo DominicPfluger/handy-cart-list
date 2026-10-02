@@ -50,6 +50,8 @@ export function CatalogTileEditor(p: {
   headings?: TileHeading[];
   onAddHeading?: (name: string) => void;
   onMoveHeading?: (id: string, beforeProductId: string) => void;
+  /** Ordnet ein Produkt einer Überschrift zu ("" = vor die erste Überschrift). */
+  onAssignHeading?: (productId: string, headingId: string) => void;
   onRenameHeading?: (id: string, name: string) => void;
   onDeleteHeading?: (id: string, name: string) => void;
   onBulkAdd?: (() => void) | undefined;
@@ -278,6 +280,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [price, setPrice] = useState("");
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
+  const heads = p.headings ?? [];
+  const curHeadingId = (() => {
+    if (!prod) return "";
+    const idx = p.products.findIndex((x) => x.id === prod.id);
+    let curH = "";
+    for (const h of heads) { const ai = p.products.findIndex((x) => x.id === h.before_product_id); if (ai >= 0 && ai <= idx) curH = h.id; }
+    return curH;
+  })();
+  const [headingSel, setHeadingSel] = useState(curHeadingId);
   const addVariant = (v: string) => {
     const vals = v.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
     setVariants((x) => {
