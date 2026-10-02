@@ -255,12 +255,13 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
         <div className="mt-3 grid grid-cols-4 gap-1.5 sm:grid-cols-7">
           {MARKETS.map((m) => {
             const priced = s?.markets?.[m] ?? 0;
-            const active = m === market;
+            const active = markets.has(m);
             return (
               <button
                 key={m}
                 type="button"
-                onClick={() => setMarket(m)}
+                onClick={() => toggleMarket(m)}
+                aria-pressed={active}
                 className={`flex flex-col items-center rounded-xl border px-1 py-1.5 text-center transition-colors ${
                   active ? "border-primary bg-primary/10" : "border-border bg-background hover:bg-muted/50"
                 }`}
