@@ -11,6 +11,7 @@ import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
 import { formatRefPrice } from "@/hooks/use-reference-prices";
 import { saveProductIconFromPath } from "@/lib/product-icon";
+import { ChevronDown, ChevronRight, Sparkles } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -24,7 +25,7 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
   const estCat = useServerFn(estimateCategoryPrices);
   const [market, setMarket] = useState(getLocale().split("-")[1] ?? "CH");
   const [busy, setBusy] = useState<"img" | "price" | "allImg" | "catPrice" | null>(null);
-  const [catId, setCatId] = useState("");
+  const [openCategories, setOpenCategories] = useState<Set<string>>(() => new Set());
   const [allProgress, setAllProgress] = useState<{ done: number; total: number } | null>(null);
   const [generated, setGenerated] = useState<Array<{ id: string; name: string; path: string; url: string | null }>>([]);
   const [iconProgress, setIconProgress] = useState<{ done: number; total: number } | null>(null);
@@ -61,28 +62,27 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
     }
   };
 
-  /** Kategorien flach mit Einrückung nach Hierarchie für das Dropdown. */
-  const deptOptions = (() => {
+  /** Kategorien in der gelieferten Katalogreihenfolge, jeweils unter ihrer Oberkategorie. */
+  const deptChildren = (() => {
     const byParent = new Map<string | null, typeof depts>();
     for (const d of depts) byParent.set(d.parent_id, [...(byParent.get(d.parent_id) ?? []), d]);
-    const out: Array<{ id: string; label: string }> = [];
-    const walk = (parent: string | null, depth: number) => {
-      for (const d of byParent.get(parent) ?? []) {
-        out.push({ id: d.id, label: `${" ".repeat(depth * 3)}${d.name}` });
-        walk(d.id, depth + 1);
-      }
-    };
-    walk(null, 0);
-    return out;
+    return byParent;
   })();
 
-  const runCategoryPrices = async () => {
-    const dept = deptOptions.find((o) => o.id === catId);
-    if (!dept) return;
-    if (!window.confirm(T("price.catConfirm", { name: dept.label.trim(), market }))) return;
+  const toggleCategory = (id: string) => {
+    setOpenCategories((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const runCategoryPrices = async (dept: (typeof depts)[number]) => {
+    if (!window.confirm(T("price.catConfirm", { name: dept.name, market }))) return;
     setBusy("catPrice");
     try {
-      const r = await estCat({ data: { market, departmentId: catId, onlyMissing: true } });
+      const r = await estCat({ data: { market, departmentId: dept.id, onlyMissing: true } });
       toast.success(T("price.catDone", { done: r.done, total: r.total }));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
@@ -158,6 +158,28 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
   };
 
   const s = status.data;
+  const categoryRows = (parent: string | null): React.ReactNode =>
+    (deptChildren.get(parent) ?? []).map((dept) => {
+      const hasChildren = (deptChildren.get(dept.id)?.length ?? 0) > 0;
+      const open = openCategories.has(dept.id);
+      return (
+        <div key={dept.id}>
+          <div className="flex min-h-11 items-center gap-1.5 border-b border-border/50 py-1 last:border-0">
+            {hasChildren ? (
+              <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0" onClick={() => toggleCategory(dept.id)} aria-label={dept.name} aria-expanded={open} title={dept.name}>
+                {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+              </Button>
+            ) : <span className="w-8 shrink-0" />}
+            <span className="min-w-0 flex-1 text-sm">{dept.name}</span>
+            <Button size="sm" variant="secondary" className="h-8 w-8 shrink-0 p-0 sm:w-auto sm:px-3" disabled={busy !== null} onClick={() => void runCategoryPrices(dept)} aria-label={`${T("price.catRun")}: ${dept.name}`} title={`${T("price.catRun")}: ${dept.name}`}>
+              <Sparkles className="h-4 w-4 sm:hidden" aria-hidden="true" />
+              <span className="hidden sm:inline">{busy === "catPrice" ? T("media.working") : T("price.catRun")}</span>
+            </Button>
+          </div>
+          {hasChildren && open && <div className="pl-4">{categoryRows(dept.id)}</div>}
+        </div>
+      );
+    });
   return (
     <>
       {section === "images" && (
@@ -245,23 +267,11 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
           </Button>
         </div>
 
-        {deptOptions.length > 0 && (
+        {(deptChildren.get(null)?.length ?? 0) > 0 && (
           <div className="mt-4 rounded-xl border border-border bg-background p-3">
             <h3 className="text-sm font-semibold">{T("price.catTitle")}</h3>
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              <select
-                value={catId}
-                onChange={(e) => setCatId(e.target.value)}
-                className="h-11 min-w-[12rem] flex-1 rounded-lg border border-border bg-card px-3 text-sm"
-              >
-                <option value="">{T("price.catPick")}</option>
-                {deptOptions.map((o) => (
-                  <option key={o.id} value={o.id}>{o.label}</option>
-                ))}
-              </select>
-              <Button size="sm" variant="secondary" disabled={busy !== null || !catId} onClick={runCategoryPrices}>
-                {busy === "catPrice" ? T("media.working") : T("price.catRun")}
-              </Button>
+            <div className="mt-2 max-h-[32rem] overflow-y-auto border-t border-border">
+              {categoryRows(null)}
             </div>
           </div>
         )}
