@@ -2,23 +2,23 @@
 
 ## Ausgangslage
 - Im Admin-Panel (Kachel-Ansicht) wird eine neue Überschrift aktuell immer ganz oben vor dem ersten Produkt eingefügt (`onAddHeading` in `admin.tsx` nutzt fest das erste Produkt als Anker).
-- Das Eingabefeld erscheint als eigene Zeile über der Produktliste und nimmt die volle Breite ein.
+- Das Eingabefeld erscheint nach Knopfdruck als eigene Zeile über der Produktliste und nimmt die volle Breite ein.
 
 ## Ziel
-1. **Position beim Anlegen wählbar:** Beim Hinzufügen einer Überschrift erscheint ein kleines Dialog-Fenster (analog zum vorhandenen Verschieben-Dialog): Textfeld für den Titel plus Auswahlfeld „Position" mit allen Produkten („Vor …") und „Ganz ans Ende". Voreingestellt ist „Vor <erstes Produkt>" (bisheriges Verhalten).
-2. **Kompakteres Textfeld:** Das Titel-Feld wird kleiner (kürzere Höhe, begrenzte Breite statt voller Zeile) und sitzt im Dialog statt als grosse Zeile über der Liste.
+1. **Position beim Anlegen wählbar:** Nach Klick auf „+ Überschrift" erscheint weiterhin das Eingabefeld direkt in der Seite (kein Dialogfenster) — neu mit einem Auswahlfeld „Position" daneben: alle Produkte („Vor …") plus „Ganz ans Ende". Voreingestellt ist „Vor <erstes Produkt>" (bisheriges Verhalten).
+2. **Kompakteres Textfeld:** Die Eingabezeile wird schmaler und niedriger — Textfeld mit begrenzter Breite statt voller Zeile, daneben Positions-Auswahl, Speichern- und Abbrechen-Knopf in einer kompakten Zeile.
 
 ## Umsetzung
-- `catalog-tile-editor.tsx`: Der Knopf „+ Überschrift" öffnet neu einen Dialog (gleiches Muster wie der bestehende Überschrift-Verschieben-Dialog) mit:
-  - kompaktem Textfeld (Titel, max. 80 Zeichen, Fokus automatisch),
-  - Positions-Auswahl (Select: „Vor <Produktname>" je Produkt + „Ganz ans Ende"),
-  - Knöpfen „Speichern" und „Abbrechen".
-  - Die bisherige grosse Eingabezeile (`newTitle`-Formular über der Produktliste) entfällt.
-- `admin.tsx`: `onAddHeading` erhält zusätzlich die gewählte Position (Anker-Produkt bzw. Ende). Bei „Ganz ans Ende" wird die Überschrift hinter dem letzten Produkt verankert (Anker = letztes Produkt, Einfügung danach) — dafür wird `saveHeading` falls nötig um eine „Ende"-Option ergänzt.
-- i18n: neue Texte (Dialogtitel, Positions-Label) in `de.ts` und allen 15 Lokalen in `messages.json`; vorhandene Texte des Verschieben-Dialogs werden wiederverwendet, wo möglich.
+- `catalog-tile-editor.tsx`: Das bestehende `newTitle`-Formular wird umgebaut:
+  - kompaktes Textfeld (Titel, max. 80 Zeichen, Fokus automatisch, feste/maximale Breite statt `flex-1` über die ganze Zeile),
+  - Select „Position" daneben („Vor <Produktname>" je Produkt + „Ganz ans Ende"),
+  - Speichern- und ✕-Knopf in derselben Zeile; auf schmalen Bildschirmen bricht die Zeile um.
+- `admin.tsx`: `onAddHeading` erhält zusätzlich die gewählte Position (Anker-Produkt bzw. Ende). Bei „Ganz ans Ende" wird die Überschrift hinter dem letzten Produkt verankert — dafür wird `saveHeading` falls nötig um eine „Ende"-Option ergänzt.
+- i18n: neue Texte (Positions-Label) in `de.ts` und allen 15 Lokalen in `messages.json`; vorhandene Texte des Verschieben-Dialogs werden wiederverwendet, wo möglich.
 
 ## Nicht Teil
-- Keine Änderung am Verschieben bestehender Überschriften (Funktion bleibt wie sie ist).
+- Kein Dialogfenster — das Eingabefeld bleibt inline in der Seite.
+- Keine Änderung am Verschieben bestehender Überschriften.
 - Keine Datenbank-Änderung, ausser `saveHeading` braucht eine optionale Ende-Position.
 
 ## Prüfung
