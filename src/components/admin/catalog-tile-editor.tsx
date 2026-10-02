@@ -187,6 +187,12 @@ export function CatalogTileEditor(p: {
               <span className="text-2xl">+</span>{T("adm.heading")}
             </button>
           )}
+          {editMode && p.cur && (
+            <button type="button" onClick={() => setTarget({ kind: "product", id: null })}
+              className="flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-sm font-semibold text-primary">
+              <span className="text-2xl">+</span>{T("tile.newProd")}
+            </button>
+          )}
         </div>
       )}
 
@@ -239,12 +245,6 @@ export function CatalogTileEditor(p: {
               </Fragment>
             );
           })}
-          {editMode && (
-            <button type="button" onClick={() => setTarget({ kind: "product", id: null })}
-              className="flex w-full items-center gap-3 px-3 py-3 text-sm font-semibold text-primary">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl border-2 border-dashed border-border text-xl">+</span>{T("tile.newProd")}
-            </button>
-          )}
           {editMode && (
             <button type="button" onClick={() => setSuggesting(true)}
               className="flex w-full items-center gap-3 px-3 py-3 text-sm font-semibold text-primary">
