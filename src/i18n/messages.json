@@ -996,7 +996,10 @@
     "more.dietPreference": "Preferred diet",
     "more.dietNone": "No restrictions",
     "more.market": "Market",
-    "more.marketAuto": "Automatic (from language)"
+    "more.marketAuto": "Automatic (from language)",
+    "tile.newDeptAlias": "Alias category",
+    "tile.pickDeptAlias": "Add category as alias",
+    "tile.deptAliasSearch": "Search categories…"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -1995,7 +1998,10 @@
     "more.dietPreference": "Preferred diet",
     "more.dietNone": "No restrictions",
     "more.market": "Market",
-    "more.marketAuto": "Automatic (from language)"
+    "more.marketAuto": "Automatic (from language)",
+    "tile.newDeptAlias": "Alias category",
+    "tile.pickDeptAlias": "Add category as alias",
+    "tile.deptAliasSearch": "Search categories…"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2994,7 +3000,10 @@
     "more.dietPreference": "Preferred diet",
     "more.dietNone": "No restrictions",
     "more.market": "Market",
-    "more.marketAuto": "Automatic (from language)"
+    "more.marketAuto": "Automatic (from language)",
+    "tile.newDeptAlias": "Alias category",
+    "tile.pickDeptAlias": "Add category as alias",
+    "tile.deptAliasSearch": "Search categories…"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -3993,7 +4002,10 @@
     "more.dietPreference": "Alimentación preferida",
     "more.dietNone": "Sin restricciones",
     "more.market": "Mercado",
-    "more.marketAuto": "Automático (según el idioma)"
+    "more.marketAuto": "Automático (según el idioma)",
+    "tile.newDeptAlias": "Categoría alias",
+    "tile.pickDeptAlias": "Añadir categoría como alias",
+    "tile.deptAliasSearch": "Buscar categorías…"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4992,7 +5004,10 @@
     "more.dietPreference": "Alimentación preferida",
     "more.dietNone": "Sin restricciones",
     "more.market": "Mercado",
-    "more.marketAuto": "Automático (según el idioma)"
+    "more.marketAuto": "Automático (según el idioma)",
+    "tile.newDeptAlias": "Categoría alias",
+    "tile.pickDeptAlias": "Añadir categoría como alias",
+    "tile.deptAliasSearch": "Buscar categorías…"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -5991,7 +6006,10 @@
     "more.dietPreference": "Régime alimentaire souhaité",
     "more.dietNone": "Aucune restriction",
     "more.market": "Marché",
-    "more.marketAuto": "Automatique (selon la langue)"
+    "more.marketAuto": "Automatique (selon la langue)",
+    "tile.newDeptAlias": "Catégorie alias",
+    "tile.pickDeptAlias": "Ajouter une catégorie comme alias",
+    "tile.deptAliasSearch": "Rechercher des catégories…"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6990,7 +7008,10 @@
     "more.dietPreference": "Régime alimentaire souhaité",
     "more.dietNone": "Aucune restriction",
     "more.market": "Marché",
-    "more.marketAuto": "Automatique (selon la langue)"
+    "more.marketAuto": "Automatique (selon la langue)",
+    "tile.newDeptAlias": "Catégorie alias",
+    "tile.pickDeptAlias": "Ajouter une catégorie comme alias",
+    "tile.deptAliasSearch": "Rechercher des catégories…"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -7989,7 +8010,10 @@
     "more.dietPreference": "Alimentazione preferita",
     "more.dietNone": "Nessuna restrizione",
     "more.market": "Mercato",
-    "more.marketAuto": "Automatico (dalla lingua)"
+    "more.marketAuto": "Automatico (dalla lingua)",
+    "tile.newDeptAlias": "Categoria alias",
+    "tile.pickDeptAlias": "Aggiungi categoria come alias",
+    "tile.deptAliasSearch": "Cerca categorie…"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8988,7 +9012,10 @@
     "more.dietPreference": "Alimentazione preferita",
     "more.dietNone": "Nessuna restrizione",
     "more.market": "Mercato",
-    "more.marketAuto": "Automatico (dalla lingua)"
+    "more.marketAuto": "Automatico (dalla lingua)",
+    "tile.newDeptAlias": "Categoria alias",
+    "tile.pickDeptAlias": "Aggiungi categoria come alias",
+    "tile.deptAliasSearch": "Cerca categorie…"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -9987,7 +10014,10 @@
     "more.dietPreference": "Alimentação preferida",
     "more.dietNone": "Sem restrições",
     "more.market": "Mercado",
-    "more.marketAuto": "Automático (conforme o idioma)"
+    "more.marketAuto": "Automático (conforme o idioma)",
+    "tile.newDeptAlias": "Categoria alias",
+    "tile.pickDeptAlias": "Adicionar categoria como alias",
+    "tile.deptAliasSearch": "Procurar categorias…"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10986,7 +11016,10 @@
     "more.dietPreference": "Alimentação preferida",
     "more.dietNone": "Sem restrições",
     "more.market": "Mercado",
-    "more.marketAuto": "Automático (conforme o idioma)"
+    "more.marketAuto": "Automático (conforme o idioma)",
+    "tile.newDeptAlias": "Categoria alias",
+    "tile.pickDeptAlias": "Adicionar categoria como alias",
+    "tile.deptAliasSearch": "Buscar categorias…"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -11985,7 +12018,10 @@
     "more.dietPreference": "Gewenst voedingspatroon",
     "more.dietNone": "Geen beperkingen",
     "more.market": "Markt",
-    "more.marketAuto": "Automatisch (uit taal)"
+    "more.marketAuto": "Automatisch (uit taal)",
+    "tile.newDeptAlias": "Aliascategorie",
+    "tile.pickDeptAlias": "Categorie als alias toevoegen",
+    "tile.deptAliasSearch": "Categorieën zoeken…"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12984,7 +13020,10 @@
     "more.dietPreference": "Gewenst voedingspatroon",
     "more.dietNone": "Geen beperkingen",
     "more.market": "Markt",
-    "more.marketAuto": "Automatisch (uit taal)"
+    "more.marketAuto": "Automatisch (uit taal)",
+    "tile.newDeptAlias": "Aliascategorie",
+    "tile.pickDeptAlias": "Categorie als alias toevoegen",
+    "tile.deptAliasSearch": "Categorieën zoeken…"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13443,7 +13482,10 @@
     "more.dietPreference": "Gewünschte Ernährungsform",
     "more.dietNone": "Keine Einschränkung",
     "more.market": "Markt",
-    "more.marketAuto": "Automatisch (aus Sprache)"
+    "more.marketAuto": "Automatisch (aus Sprache)",
+    "tile.newDeptAlias": "Alias-Kategorie",
+    "tile.pickDeptAlias": "Kategorie als Alias hinzufügen",
+    "tile.deptAliasSearch": "Kategorie suchen…"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13902,6 +13944,9 @@
     "more.dietPreference": "Gewünschte Ernährungsform",
     "more.dietNone": "Keine Einschränkung",
     "more.market": "Markt",
-    "more.marketAuto": "Automatisch (us de Sproch)"
+    "more.marketAuto": "Automatisch (us de Sproch)",
+    "tile.newDeptAlias": "Alias-Kategorie",
+    "tile.pickDeptAlias": "Kategorie als Alias hinzufügen",
+    "tile.deptAliasSearch": "Kategorie suchen…"
   }
 }
