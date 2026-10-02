@@ -455,7 +455,7 @@ function DepartmentsPage() {
           onResult={handleVoiceResult}
           className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
         />
-        {showDietFilter && (
+        {showDietFilter && !filtersHiddenByDept && (
           <button
             type="button"
             onClick={() => { setDietOpen((v) => !v); setCuisineOpen(false); }}
@@ -467,9 +467,10 @@ function DepartmentsPage() {
             🥗
           </button>
         )}
-        <button
-          type="button"
-          onClick={() => { setCuisineOpen((v) => !v); setDietOpen(false); }}
+        {!filtersHiddenByDept && (
+          <button
+            type="button"
+            onClick={() => { setCuisineOpen((v) => !v); setDietOpen(false); }}
           aria-expanded={cuisineOpen}
           aria-label={t("cuisine.filter")}
           title={`${t("cuisine.filter")}${cuisines.length ? ` · ${cuisines.length}` : ""}`}
@@ -479,7 +480,7 @@ function DepartmentsPage() {
         </button>
       </div>
 
-      {cuisineOpen && (
+      {cuisineOpen && !filtersHiddenByDept && (
         <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
           <div className="mb-1 text-sm font-semibold text-foreground">{t("cuisine.title")}</div>
           <p className="mb-3 text-xs text-muted-foreground">{t("cuisine.hint")}</p>
@@ -508,7 +509,7 @@ function DepartmentsPage() {
         </section>
       )}
 
-      {dietOpen && showDietFilter && (
+      {dietOpen && showDietFilter && !filtersHiddenByDept && (
         <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
           <div className="mb-1 text-sm font-semibold text-foreground">{t("diet.title")}</div>
           <p className="mb-3 text-xs text-muted-foreground">{t("diet.hint")}</p>
