@@ -197,16 +197,21 @@ function DepartmentsPage() {
   const directProducts = currentId ? productsIn(products, data.productAliases ?? [], currentId) : [];
   const aliasProductIds = new Set(directProducts.filter((p) => p.departmentId !== currentId).map((p) => p.id));
   const normalizedQuery = query.trim().toLocaleLowerCase();
+  const locale = getLocale();
+  const variantLabel = (product: CatalogProduct, v: string) => pickName(product.ln?.[v], locale, v);
+  const matchedVariant = (product: CatalogProduct) =>
+    (product.variants ?? []).find((v) => variantLabel(product, v).toLocaleLowerCase().includes(normalizedQuery));
   const searchResults = useMemo(() => {
     if (!normalizedQuery) return [];
     const order = new Map(orderedProducts.map((p, i) => [p.id, i]));
     return products
-      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || brandsFor(product).some((b) => b.toLocaleLowerCase().includes(normalizedQuery)))
+      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || brandsFor(product).some((b) => b.toLocaleLowerCase().includes(normalizedQuery)) || !!matchedVariant(product))
       .sort((a, b) => (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, orderedProducts, normalizedQuery]);
 
   const matchedBrand = (product: CatalogProduct) =>
-    matchesProductSearch(product.name, normalizedQuery) ? undefined : brandsFor(product).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
+    matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) ? undefined : brandsFor(product).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
 
   const groupFor = (product: CatalogProduct) => {
     // Alias-Produkt in der aktuellen Kategorie → aktuelle Kategorie; Suche/Spracheingabe → bevorzugte Kategorie
