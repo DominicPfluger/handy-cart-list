@@ -9,7 +9,7 @@ type Row = { id: string; term: string; locale: string };
 
 /** Synonyme eines Produkts (pro Sprache) – finden das Produkt in der Suche. */
 export function ProductSynonymEditor({ productId }: { productId: string }) {
-  const T = useT();
+  const { t: T } = useT();
   const locale = getLocale();
   const [rows, setRows] = useState<Row[]>([]);
   const [input, setInput] = useState("");
