@@ -198,7 +198,7 @@ function DepartmentsPage() {
   const aliasProductIds = new Set(directProducts.filter((p) => p.departmentId !== currentId).map((p) => p.id));
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const locale = getLocale();
-  const variantLabel = (product: CatalogProduct, v: string) => pickName(product.ln?.[v], locale, v);
+  const variantLabel = (product: CatalogProduct, v: string) => pickName(product.variantNames?.[v], locale, v);
   const matchedVariant = (product: CatalogProduct) =>
     (product.variants ?? []).find((v) => variantLabel(product, v).toLocaleLowerCase().includes(normalizedQuery));
   const searchResults = useMemo(() => {
