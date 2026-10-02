@@ -490,6 +490,13 @@ function AdminPage() {
             headings={headings}
             onAddHeading={(name) => { const first = products.find((x) => !x.id.startsWith("alias:")); if (cur && first) void run(() => saveH({ data: { departmentId: cur, beforeProductId: first.id, name } }), T("adm.created")); }}
             onRemoveAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("product_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }, T("adm.deleted")); }}
+            deptAliasOptions={deptAliasOptions}
+            onAddDeptAlias={(deptId) => { if (!cur) return; void run(async () => {
+              const n = children.length;
+              await must(supabase.from("department_aliases").insert({ department_id: deptId, parent_id: cur, sort_order: n + 1 }));
+              await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY });
+            }, T("adm.created")); }}
+            onRemoveDeptAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("department_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY }); }, T("adm.deleted")); }}
             onMoveHeading={moveHeading}
             onAssignHeading={(productId, headingId) => run(() => assignHeading(productId, headingId), T("adm.saved"))}
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
