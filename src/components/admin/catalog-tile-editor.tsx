@@ -353,6 +353,13 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
+      {p.cur && selected.size > 0 && (
+        <div className="flex items-center gap-2 rounded-xl bg-primary-soft px-3 py-2 text-sm">
+          <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: selected.size })}</span>
+          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set(p.products.map((x) => x.id)))}>{T("adm.selectAll")}</Button>
+          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>{T("adm.clearSelection")}</Button>
+        </div>
+      )}
       {p.cur && (
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
           {p.products.map((x, i) => {
@@ -379,7 +386,8 @@ export function CatalogTileEditor(p: {
               )}
               <div data-drop="product" data-id={x.id} data-index={i}
                 className={`flex items-center gap-3 px-3 py-2 ${x.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
-                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers} onClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (moved.current) { moved.current = false; return; } if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
+                <input type="checkbox" checked={selected.has(x.id)} onChange={() => toggleSel(x.id)} aria-label={T("adm.select")} className="h-4 w-4 shrink-0 accent-primary" />
+                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, (x.emoji ?? "•") + (selected.has(x.id) && selected.size > 1 ? ` +${selected.size - 1}` : ""))} {...dragHandlers} onClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (moved.current) { moved.current = false; return; } if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
                   className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl ${editMode ? "cursor-grab touch-none" : ""}`}>
                   {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
                 </span>
