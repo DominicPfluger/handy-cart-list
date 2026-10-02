@@ -144,3 +144,19 @@ export async function fetchRecipe(id: string): Promise<CommunityRecipe | null> {
   if (error) throw error;
   return data ? { ...data, items: (data.items as unknown as RecipeItem[]) ?? [] } : null;
 }
+
+/** Öffentliche Rezepte samt Eigenschaften für die Kriterien-Suche. */
+export type TraitRecipe = {
+  id: string; title: string; description: string | null; template_id: string; share_slug: string;
+  author_name: string | null; created_at: string; image_path: string | null;
+  satiety: string | null; spiciness: string | null; price_class: string | null;
+};
+
+export async function fetchTraitRecipes(): Promise<TraitRecipe[]> {
+  const { data, error } = await supabase.from("recipes")
+    .select("id, title, description, template_id, share_slug, author_name, created_at, image_path, satiety, spiciness, price_class")
+    .eq("is_public", true).not("share_slug", "is", null)
+    .order("created_at", { ascending: false }).limit(300);
+  if (error) throw error;
+  return (data ?? []) as unknown as TraitRecipe[];
+}
