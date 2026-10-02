@@ -440,6 +440,33 @@ function AdminPage() {
               if (patch.variants) upd['variants'] = patch.variants;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
               if (sel.kind === "product" && patch.variants) void trVariants({ data: { productId: sel.id } }).catch(() => {});
+              if (sel.kind === "product" && patch.heading !== undefined) {
+                const prod0 = d.prods.find((x) => x.id === sel.id)!;
+                const list = d.prods.filter((x) => x.department_id === prod0.department_id).slice().sort((a, b) => a.sort_order - b.sort_order);
+                const heads = d.heads.filter((h) => h.department_id === prod0.department_id);
+                const myIdx = list.findIndex((x) => x.id === sel.id);
+                let curH = "";
+                for (const h of heads) { const ai = list.findIndex((x) => x.id === h.before_product_id); if (ai >= 0 && ai <= myIdx) curH = h.id; }
+                if (patch.heading !== curH) {
+                  const follower = list[myIdx + 1];
+                  const anchored = heads.filter((h) => h.before_product_id === sel.id);
+                  const rest = list.filter((x) => x.id !== sel.id);
+                  let at = 0;
+                  if (patch.heading) {
+                    const h = heads.find((x) => x.id === patch.heading)!;
+                    let ai = rest.findIndex((x) => x.id === h.before_product_id);
+                    if (ai < 0) ai = follower ? rest.findIndex((x) => x.id === follower.id) : 0;
+                    if (ai < 0) ai = 0;
+                    let end = rest.length;
+                    for (const o of heads) { if (o.id === h.id || o.before_product_id === sel.id) continue; const oi = rest.findIndex((x) => x.id === o.before_product_id); if (oi > ai && oi < end) end = oi; }
+                    at = end;
+                  }
+                  await saveOrder([...rest.slice(0, at), prod0, ...rest.slice(at)]);
+                  for (const h of anchored) {
+                    if (follower) await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: follower.id } });
+                  }
+                }
+              }
             }
           })}
           onTr={(locale, value, prev) => {
