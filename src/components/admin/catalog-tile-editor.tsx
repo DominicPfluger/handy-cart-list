@@ -181,23 +181,22 @@ export function CatalogTileEditor(p: {
               <span className="text-2xl">+</span>{T("tile.newCat")}
             </button>
           )}
+          {editMode && p.cur && p.onAddHeading && p.products.length > 0 && (
+            <button type="button" onClick={() => setNewTitle("")}
+              className="flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-sm font-semibold text-primary">
+              <span className="text-2xl">+</span>{T("adm.heading")}
+            </button>
+          )}
         </div>
       )}
 
-      {p.cur && editMode && p.onAddHeading && p.products.length > 0 && (
-        newTitle === null ? (
-          <button type="button" onClick={() => setNewTitle("")}
-            className="w-full rounded-2xl border-2 border-dashed border-border px-3 py-2 text-sm font-semibold text-primary">
-            + {T("adm.heading")}
-          </button>
-        ) : (
-          <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); const n = newTitle.trim(); if (!n) return; p.onAddHeading!(n); setNewTitle(null); }}>
+      {p.cur && p.onAddHeading && newTitle !== null && (
+        <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); const n = newTitle.trim(); if (!n) return; p.onAddHeading!(n); setNewTitle(null); }}>
             <input autoFocus value={newTitle} maxLength={80} onChange={(e) => setNewTitle(e.target.value)} placeholder={T("adm.heading")}
               className="h-10 min-w-0 flex-1 rounded-xl border border-input bg-background px-3 text-sm" />
             <button type="submit" className="rounded-xl bg-primary px-3 text-sm font-semibold text-primary-foreground">{T("adm.save")}</button>
             <button type="button" onClick={() => setNewTitle(null)} className="rounded-xl border border-border px-3 text-sm">✕</button>
           </form>
-        )
       )}
 
       {p.cur && (
