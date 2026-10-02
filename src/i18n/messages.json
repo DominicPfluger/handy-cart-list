@@ -965,7 +965,6 @@
     "price.listMore": "Load more",
     "adm.opt.marketRelevance": "Market relevance",
     "adm.crit.marketRelevance": "Market relevance",
-    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -1011,7 +1010,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion",
-    "tile.moveIntoCycle": "Not possible: the target category is inside the moved category."
+    "tile.moveIntoCycle": "Not possible: the target category is inside the moved category.",
+    "adm.headingMoveTitle": "Move heading “{name}”",
+    "adm.headingMoveOnly": "Heading only",
+    "adm.headingMoveGroup": "Heading with {n} products",
+    "adm.headingMoveNoTarget": "No product follows here – only possible with products.",
+    "adm.headingMoveTaken": "A heading is already at this position."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -1979,7 +1983,6 @@
     "price.listMore": "Load more",
     "adm.opt.marketRelevance": "Market relevance",
     "adm.crit.marketRelevance": "Market relevance",
-    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -2025,7 +2028,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion",
-    "tile.moveIntoCycle": "Not possible: the target category is inside the moved category."
+    "tile.moveIntoCycle": "Not possible: the target category is inside the moved category.",
+    "adm.headingMoveTitle": "Move heading “{name}”",
+    "adm.headingMoveOnly": "Heading only",
+    "adm.headingMoveGroup": "Heading with {n} products",
+    "adm.headingMoveNoTarget": "No product follows here – only possible with products.",
+    "adm.headingMoveTaken": "A heading is already at this position."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2993,7 +3001,6 @@
     "price.listMore": "Load more",
     "adm.opt.marketRelevance": "Market relevance",
     "adm.crit.marketRelevance": "Market relevance",
-    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -3039,7 +3046,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion",
-    "tile.moveIntoCycle": "Not possible: the target category is inside the moved category."
+    "tile.moveIntoCycle": "Not possible: the target category is inside the moved category.",
+    "adm.headingMoveTitle": "Move heading “{name}”",
+    "adm.headingMoveOnly": "Heading only",
+    "adm.headingMoveGroup": "Heading with {n} products",
+    "adm.headingMoveNoTarget": "No product follows here – only possible with products.",
+    "adm.headingMoveTaken": "A heading is already at this position."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4007,7 +4019,6 @@
     "price.listMore": "Cargar más",
     "adm.opt.marketRelevance": "Relevancia del mercado",
     "adm.crit.marketRelevance": "Relevancia del mercado",
-    "adm.headingMoveConfirm": "¿Mover el título \"{name}\" y sus {n} productos?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -4053,7 +4064,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Opcional: palabras clave para la imagen IA — ↻ para sugerencia",
-    "tile.moveIntoCycle": "No es posible: la categoría de destino está dentro de la categoría movida."
+    "tile.moveIntoCycle": "No es posible: la categoría de destino está dentro de la categoría movida.",
+    "adm.headingMoveTitle": "Mover el título «{name}»",
+    "adm.headingMoveOnly": "Solo el título",
+    "adm.headingMoveGroup": "Título con {n} productos",
+    "adm.headingMoveNoTarget": "Aquí no sigue ningún producto – solo posible con productos.",
+    "adm.headingMoveTaken": "Ya hay un título en esta posición."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5021,7 +5037,6 @@
     "price.listMore": "Cargar más",
     "adm.opt.marketRelevance": "Relevancia del mercado",
     "adm.crit.marketRelevance": "Relevancia del mercado",
-    "adm.headingMoveConfirm": "¿Mover el título \"{name}\" y sus {n} productos?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -5067,7 +5082,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Opcional: palabras clave para la imagen IA — ↻ para sugerencia",
-    "tile.moveIntoCycle": "No es posible: la categoría de destino está dentro de la categoría movida."
+    "tile.moveIntoCycle": "No es posible: la categoría de destino está dentro de la categoría movida.",
+    "adm.headingMoveTitle": "Mover el título «{name}»",
+    "adm.headingMoveOnly": "Solo el título",
+    "adm.headingMoveGroup": "Título con {n} productos",
+    "adm.headingMoveNoTarget": "Aquí no sigue ningún producto – solo posible con productos.",
+    "adm.headingMoveTaken": "Ya hay un título en esta posición."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6035,7 +6055,6 @@
     "price.listMore": "Charger plus",
     "adm.opt.marketRelevance": "Pertinence du marché",
     "adm.crit.marketRelevance": "Pertinence du marché",
-    "adm.headingMoveConfirm": "Déplacer le titre « {name} » et ses {n} produits ?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -6081,7 +6100,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Optionnel : mots-clés pour l’image IA — ↻ pour une suggestion",
-    "tile.moveIntoCycle": "Impossible : la catégorie cible se trouve dans la catégorie déplacée."
+    "tile.moveIntoCycle": "Impossible : la catégorie cible se trouve dans la catégorie déplacée.",
+    "adm.headingMoveTitle": "Déplacer le titre « {name} »",
+    "adm.headingMoveOnly": "Titre seulement",
+    "adm.headingMoveGroup": "Titre avec {n} produits",
+    "adm.headingMoveNoTarget": "Aucun produit ne suit ici – possible uniquement avec les produits.",
+    "adm.headingMoveTaken": "Un titre se trouve déjà à cet endroit."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7049,7 +7073,6 @@
     "price.listMore": "Charger plus",
     "adm.opt.marketRelevance": "Pertinence du marché",
     "adm.crit.marketRelevance": "Pertinence du marché",
-    "adm.headingMoveConfirm": "Déplacer le titre « {name} » et ses {n} produits ?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -7095,7 +7118,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Optionnel : mots-clés pour l’image IA — ↻ pour une suggestion",
-    "tile.moveIntoCycle": "Impossible : la catégorie cible se trouve dans la catégorie déplacée."
+    "tile.moveIntoCycle": "Impossible : la catégorie cible se trouve dans la catégorie déplacée.",
+    "adm.headingMoveTitle": "Déplacer le titre « {name} »",
+    "adm.headingMoveOnly": "Titre seulement",
+    "adm.headingMoveGroup": "Titre avec {n} produits",
+    "adm.headingMoveNoTarget": "Aucun produit ne suit ici – possible uniquement avec les produits.",
+    "adm.headingMoveTaken": "Un titre se trouve déjà à cet endroit."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8063,7 +8091,6 @@
     "price.listMore": "Carica altro",
     "adm.opt.marketRelevance": "Rilevanza del mercato",
     "adm.crit.marketRelevance": "Rilevanza del mercato",
-    "adm.headingMoveConfirm": "Spostare il titolo \"{name}\" e i suoi {n} prodotti?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -8109,7 +8136,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Facoltativo: parole chiave per l’immagine IA — ↻ per un suggerimento",
-    "tile.moveIntoCycle": "Non possibile: la categoria di destinazione si trova dentro la categoria spostata."
+    "tile.moveIntoCycle": "Non possibile: la categoria di destinazione si trova dentro la categoria spostata.",
+    "adm.headingMoveTitle": "Sposta il titolo «{name}»",
+    "adm.headingMoveOnly": "Solo titolo",
+    "adm.headingMoveGroup": "Titolo con {n} prodotti",
+    "adm.headingMoveNoTarget": "Nessun prodotto segue qui – possibile solo con i prodotti.",
+    "adm.headingMoveTaken": "In questa posizione c’è già un titolo."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9077,7 +9109,6 @@
     "price.listMore": "Carica altro",
     "adm.opt.marketRelevance": "Rilevanza del mercato",
     "adm.crit.marketRelevance": "Rilevanza del mercato",
-    "adm.headingMoveConfirm": "Spostare il titolo \"{name}\" e i suoi {n} prodotti?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -9123,7 +9154,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Facoltativo: parole chiave per l’immagine IA — ↻ per un suggerimento",
-    "tile.moveIntoCycle": "Non possibile: la categoria di destinazione si trova dentro la categoria spostata."
+    "tile.moveIntoCycle": "Non possibile: la categoria di destinazione si trova dentro la categoria spostata.",
+    "adm.headingMoveTitle": "Sposta il titolo «{name}»",
+    "adm.headingMoveOnly": "Solo titolo",
+    "adm.headingMoveGroup": "Titolo con {n} prodotti",
+    "adm.headingMoveNoTarget": "Nessun prodotto segue qui – possibile solo con i prodotti.",
+    "adm.headingMoveTaken": "In questa posizione c’è già un titolo."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10091,7 +10127,6 @@
     "price.listMore": "Carregar mais",
     "adm.opt.marketRelevance": "Relevância do mercado",
     "adm.crit.marketRelevance": "Relevância do mercado",
-    "adm.headingMoveConfirm": "Mover o título \"{name}\" e os seus {n} produtos?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -10137,7 +10172,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Opcional: palavras-chave para a imagem IA — ↻ para sugestão",
-    "tile.moveIntoCycle": "Não é possível: a categoria de destino está dentro da categoria movida."
+    "tile.moveIntoCycle": "Não é possível: a categoria de destino está dentro da categoria movida.",
+    "adm.headingMoveTitle": "Mover o título «{name}»",
+    "adm.headingMoveOnly": "Só o título",
+    "adm.headingMoveGroup": "Título com {n} produtos",
+    "adm.headingMoveNoTarget": "Nenhum produto segue aqui – só possível com produtos.",
+    "adm.headingMoveTaken": "Já existe um título nesta posição."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11105,7 +11145,6 @@
     "price.listMore": "Carregar mais",
     "adm.opt.marketRelevance": "Relevância do mercado",
     "adm.crit.marketRelevance": "Relevância do mercado",
-    "adm.headingMoveConfirm": "Mover o título \"{name}\" e os seus {n} produtos?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -11151,7 +11190,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Opcional: palavras-chave para a imagem IA — ↻ para sugestão",
-    "tile.moveIntoCycle": "Não é possível: a categoria de destino está dentro da categoria movida."
+    "tile.moveIntoCycle": "Não é possível: a categoria de destino está dentro da categoria movida.",
+    "adm.headingMoveTitle": "Mover o título «{name}»",
+    "adm.headingMoveOnly": "Só o título",
+    "adm.headingMoveGroup": "Título com {n} produtos",
+    "adm.headingMoveNoTarget": "Nenhum produto segue aqui – só possível com produtos.",
+    "adm.headingMoveTaken": "Já existe um título nesta posição."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12119,7 +12163,6 @@
     "price.listMore": "Meer laden",
     "adm.opt.marketRelevance": "Marktrelevantie",
     "adm.crit.marketRelevance": "Marktrelevantie",
-    "adm.headingMoveConfirm": "Kop \"{name}\" en de {n} producten verplaatsen?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -12165,7 +12208,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Optioneel: trefwoorden voor de AI-afbeelding — ↻ voor AI-suggestie",
-    "tile.moveIntoCycle": "Niet mogelijk: de doelcategorie bevindt zich in de verplaatste categorie."
+    "tile.moveIntoCycle": "Niet mogelijk: de doelcategorie bevindt zich in de verplaatste categorie.",
+    "adm.headingMoveTitle": "Kop „{name}” verplaatsen",
+    "adm.headingMoveOnly": "Alleen kop",
+    "adm.headingMoveGroup": "Kop met {n} producten",
+    "adm.headingMoveNoTarget": "Hier volgt geen product – alleen mogelijk met producten.",
+    "adm.headingMoveTaken": "Op deze plek staat al een kop."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13133,7 +13181,6 @@
     "price.listMore": "Meer laden",
     "adm.opt.marketRelevance": "Marktrelevantie",
     "adm.crit.marketRelevance": "Marktrelevantie",
-    "adm.headingMoveConfirm": "Kop \"{name}\" en de {n} producten verplaatsen?",
     "tile.genAll": "Generate AI images for category",
     "tile.genAllBusy": "Images {done}/{total} …",
     "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
@@ -13179,7 +13226,12 @@
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
     "tile.aiHintEmpty": "Optioneel: trefwoorden voor de AI-afbeelding — ↻ voor AI-suggestie",
-    "tile.moveIntoCycle": "Niet mogelijk: de doelcategorie bevindt zich in de verplaatste categorie."
+    "tile.moveIntoCycle": "Niet mogelijk: de doelcategorie bevindt zich in de verplaatste categorie.",
+    "adm.headingMoveTitle": "Kop „{name}” verplaatsen",
+    "adm.headingMoveOnly": "Alleen kop",
+    "adm.headingMoveGroup": "Kop met {n} producten",
+    "adm.headingMoveNoTarget": "Hier volgt geen product – alleen mogelijk met producten.",
+    "adm.headingMoveTaken": "Op deze plek staat al een kop."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13607,7 +13659,6 @@
     "price.listMore": "Mehr laden",
     "adm.opt.marketRelevance": "Markt-Relevanz",
     "adm.crit.marketRelevance": "Markt-Relevanz",
-    "adm.headingMoveConfirm": "Überschrift „{name}“ und ihre {n} Produkte verschieben?",
     "tile.genAll": "KI-Bilder für Kategorie erzeugen",
     "tile.genAllBusy": "Bilder {done}/{total} …",
     "tile.genAllConfirm": "Für {n} Produkte ohne Bild KI-Bilder erzeugen?",
@@ -13653,7 +13704,12 @@
     "tile.imgProductsNone": "Keine",
     "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen.",
     "tile.aiHintEmpty": "Optional: Stichworte fürs KI-Bild — ↻ für KI-Vorschlag",
-    "tile.moveIntoCycle": "Nicht möglich: Die Zielkategorie liegt innerhalb der verschobenen Kategorie."
+    "tile.moveIntoCycle": "Nicht möglich: Die Zielkategorie liegt innerhalb der verschobenen Kategorie.",
+    "adm.headingMoveTitle": "Überschrift „{name}“ verschieben",
+    "adm.headingMoveOnly": "Nur Überschrift",
+    "adm.headingMoveGroup": "Überschrift mit {n} Produkten",
+    "adm.headingMoveNoTarget": "Hier folgt kein Produkt – nur mit Produkten möglich.",
+    "adm.headingMoveTaken": "An dieser Stelle steht bereits eine Überschrift."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14081,7 +14137,6 @@
     "price.listMore": "Mehr laden",
     "adm.opt.marketRelevance": "Markt-Relevanz",
     "adm.crit.marketRelevance": "Markt-Relevanz",
-    "adm.headingMoveConfirm": "Überschrift „{name}“ und ihre {n} Produkte verschieben?",
     "tile.genAll": "KI-Bilder für Kategorie erzeugen",
     "tile.genAllBusy": "Bilder {done}/{total} …",
     "tile.genAllConfirm": "Für {n} Produkte ohne Bild KI-Bilder erzeugen?",
@@ -14127,6 +14182,11 @@
     "tile.imgProductsNone": "Keine",
     "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen.",
     "tile.aiHintEmpty": "Optional: Stichworte fürs KI-Bild — ↻ für KI-Vorschlag",
-    "tile.moveIntoCycle": "Nicht möglich: Die Zielkategorie liegt innerhalb der verschobenen Kategorie."
+    "tile.moveIntoCycle": "Nicht möglich: Die Zielkategorie liegt innerhalb der verschobenen Kategorie.",
+    "adm.headingMoveTitle": "Überschrift „{name}“ verschieben",
+    "adm.headingMoveOnly": "Nur Überschrift",
+    "adm.headingMoveGroup": "Überschrift mit {n} Produkten",
+    "adm.headingMoveNoTarget": "Hier folgt kein Produkt – nur mit Produkten möglich.",
+    "adm.headingMoveTaken": "An dieser Stelle steht bereits eine Überschrift."
   }
 }
