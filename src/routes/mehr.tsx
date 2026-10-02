@@ -25,6 +25,8 @@ import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useNotificationSettings } from "../hooks/use-notification-settings";
 import { useIsAdmin } from "../hooks/use-is-admin";
 import { setAllMarkets, useAllMarkets } from "../hooks/use-all-markets";
+import { setMarketOverride, useMarket, useMarketOverride } from "../hooks/use-market";
+import { marketsQuery } from "../hooks/use-markets";
 import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 import { MemberAvatar } from "../components/member-avatar";
@@ -245,6 +247,7 @@ function MorePage() {
             </select>
           </div>
         </label>
+        <MarketRow />
         <AllMarketsRow />
         <IconSetRow />
         <DietPreferenceRow />
@@ -547,6 +550,32 @@ function NotificationSettingsRow() {
           <p className="px-4 py-2.5 text-xs text-muted-foreground">{t("notif.note")}</p>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function MarketRow() {
+  const { t } = useT();
+  const override = useMarketOverride();
+  const effective = useMarket();
+  const { data: markets = [] } = useQuery(marketsQuery);
+  const active = markets.filter((m) => m.enabled);
+  return (
+    <div className="flex w-full items-start gap-3 px-4 py-3.5">
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-xl" aria-hidden="true">🛒</div>
+      <label className="min-w-0 flex-1">
+        <span className="text-sm font-semibold text-foreground">{t("more.market")}</span>
+        <select
+          value={override ?? "auto"}
+          onChange={(e) => setMarketOverride(e.target.value === "auto" ? null : e.target.value)}
+          className="mt-2 h-11 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground"
+        >
+          <option value="auto">{t("more.marketAuto")} ({effective})</option>
+          {active.map((m) => (
+            <option key={m.code} value={m.code}>{m.flag} {m.name} · {m.currency}</option>
+          ))}
+        </select>
+      </label>
     </div>
   );
 }
