@@ -8,6 +8,7 @@ import {
   getCategory,
   type ListItem,
 } from "../hooks/use-shopping-list";
+import type { ProductFrequency } from "../hooks/use-purchase-history";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
 import {
@@ -18,6 +19,8 @@ import {
   type CatalogDepartment,
 } from "../lib/catalog-query";
 import { getLocale, pickName } from "../i18n";
+import { ItemPhoto } from "../components/item-photo";
+import { deleteItemPhoto, deleteItemPhotos } from "../lib/item-photo-store";
 import {
   CheckIcon,
   TrashIcon,
@@ -29,7 +32,7 @@ import { relocalizeQuantity } from "../lib/units";
 import { SpeakListButton } from "../components/speak-list-button";
 import { speakQuantity } from "../lib/speech-units";
 import { ExportListButton } from "../components/export-list-sheet";
-import { unitShort } from "../lib/units";
+import { unitShort, formatQuantity } from "../lib/units";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT } from "../i18n";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
@@ -75,7 +78,7 @@ export const Route = createFileRoute("/")({
 
 function ListPage() {
   const {
-    items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem,
+    items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem, setItemQuantity,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
     templates, saveAsTemplate, createFromTemplate, deleteTemplate,
   } = useShoppingList();
@@ -214,7 +217,7 @@ function ListPage() {
   const currency = referencePrices?.values().next().value?.currency ?? MARKET_CURRENCY[currentMarket()] ?? "EUR";
 
   // ---- Smarte Vorschläge (aus dem Einkaufsverlauf) & Einkauf abschliessen ----
-  const { addPurchase } = usePurchaseHistory();
+  const { addPurchase, stats } = usePurchaseHistory();
   const finishShopping = () => {
     const bought = items.filter((i) => i.checked);
     if (bought.length === 0) return;
@@ -222,9 +225,77 @@ function ListPage() {
       activeList.name,
       bought.map((i) => ({ name: displayName(i), productId: i.productId, emoji: i.emoji, quantity: i.quantity || undefined })),
     );
-    clearChecked();
+    clearCheckedWithPhotos();
     toast.success(t("hist.archived", { n: bought.length }));
   };
+  const removeItemWithPhoto = (id: string) => {
+    deleteItemPhoto(id).catch(() => {});
+    removeItem(id);
+  };
+  const clearCheckedWithPhotos = () => {
+    deleteItemPhotos(items.filter((i) => i.checked).map((i) => i.id)).catch(() => {});
+    clearChecked();
+  };
+
+  // ---- Schnell erfassen: Chips aus dem Einkaufsverlauf ----
+  const [quick, setQuick] = useState("");
+  const chipCandidates = useMemo(() => {
+    const q = quick.trim().toLowerCase();
+    if (!q) return [] as ProductFrequency[];
+    const onList = new Set(items.map((i) => i.productId ?? i.name.toLowerCase()));
+    return stats.top
+      .filter((p) => !onList.has(p.productId ?? p.name.toLowerCase()) && p.name.toLowerCase().includes(q))
+      .slice(0, 6);
+  }, [quick, stats.top, items]);
+  const addQuick = (entry: { name: string; productId?: string | undefined }) => {
+    const product = entry.productId ? productById.get(entry.productId) : undefined;
+    if (product) {
+      addCatalogItem({
+        productId: product.id,
+        name: product.name,
+        quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
+        unit: product.defaultUnit,
+        organic: false,
+        emoji: product.emoji,
+        imageUrl: product.imageUrl,
+      });
+      toast.success(t("common.addedToList", { name: product.name }));
+    } else {
+      addItem(entry.name, "", "sonstiges");
+      toast.success(t("common.addedToList", { name: entry.name }));
+    }
+    setQuick("");
+  };
+
+  // ---- Mengen-Schnelltasten am Eintrag ----
+  const bumpQuantity = (item: ListItem, delta: number) => {
+    const q = item.quantity ?? "";
+    const m = /^\s*(\d+(?:[.,]\d+)?)(.*)$/.exec(q);
+    let next: string;
+    if (!m) {
+      if (delta <= 0) return;
+      next = "1";
+    } else {
+      const num = m[1] ?? "";
+      const rest = m[2] ?? "";
+      const n = Math.max(1, Math.round((Number(num.replace(",", ".")) + delta) * 100) / 100);
+      next = `${String(n).replace(".", ",")}${rest}`;
+    }
+    setItemQuantity(item.id, next);
+  };
+
+  // ---- Einkaufs-Modus: Grosschrift, nur Abhaken, Bildschirm bleibt wach ----
+  const [shopMode, setShopMode] = useState(false);
+  useEffect(() => {
+    if (!shopMode) return;
+    let cancelled = false;
+    let lock: { release: () => Promise<void> } | null = null;
+    const wl = (navigator as Navigator & { wakeLock?: { request: (type: "screen") => Promise<{ release: () => Promise<void> }> } }).wakeLock;
+    wl?.request("screen")
+      .then((l) => { if (cancelled) l.release().catch(() => {}); else lock = l; })
+      .catch(() => {});
+    return () => { cancelled = true; lock?.release().catch(() => {}); };
+  }, [shopMode]);
 
   return (
     <div className="space-y-5">
@@ -307,6 +378,15 @@ function ListPage() {
             }))}
           />
           <button
+            onClick={() => setShopMode((v) => !v)}
+            aria-pressed={shopMode}
+            aria-label={t("list.shopMode")}
+            title={t("list.shopMode")}
+            className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-lg transition active:scale-90 ${shopMode ? "bg-primary text-primary-foreground" : "text-primary active:bg-muted"}`}
+          >
+            <span aria-hidden="true">🛒</span>
+          </button>
+          <button
             onClick={() => shareList({ ...activeList, items: activeList.items.map((i) => ({ ...i, name: displayName(i), quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : i.quantity })) })}
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
             aria-label={t("list.share")}
@@ -326,6 +406,42 @@ function ListPage() {
           </span>
         </div>
       </div>
+
+      {/* Schnell erfassen: Suchfeld + Chips aus dem Einkaufsverlauf */}
+      {!shopMode && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4">
+            <span aria-hidden="true" className="text-muted-foreground">🔍</span>
+            <input
+              value={quick}
+              onChange={(e) => setQuick(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter") return;
+                e.preventDefault();
+                if (quick.trim()) addQuick(chipCandidates[0] ?? { name: quick.trim() });
+              }}
+              placeholder={t("list.quickAdd")}
+              aria-label={t("list.quickAdd")}
+              className="h-11 min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+            />
+          </div>
+          {chipCandidates.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {chipCandidates.map((p) => (
+                <button
+                  key={p.productId ?? p.name}
+                  onClick={() => addQuick(p)}
+                  className="flex max-w-full items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition active:scale-95"
+                >
+                  <span aria-hidden="true">{p.emoji ?? "🛒"}</span>
+                  <span className="min-w-0 break-words text-left">{p.productId && productById.get(p.productId) ? productById.get(p.productId)!.name : p.name}</span>
+                  <PlusIcon className="h-3 w-3 shrink-0 text-primary" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* List grouped by category */}
       {items.length === 0 && hydrated && (
@@ -358,14 +474,16 @@ function ListPage() {
                   >
                     <button
                       onClick={() => toggleItem(item.id)}
-                      className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
+                      className={`grid shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
+                        shopMode ? "h-9 w-9" : "h-6 w-6"
+                      } ${
                         item.checked
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-muted-foreground/30 bg-transparent"
                       }`}
                       aria-label={item.checked ? t("list.uncheck") : t("list.check")}
                     >
-                      {item.checked && <CheckIcon className="h-4 w-4" />}
+                      {item.checked && <CheckIcon className={shopMode ? "h-5 w-5" : "h-4 w-4"} />}
                     </button>
                     {(() => {
                       // Farbe: über die Wurzelkategorie, sonst über den Gruppennamen (z. B. ältere Einträge mit eigenem Gruppenlabel)
@@ -384,7 +502,7 @@ function ListPage() {
                       );
                     })()}
                     <div className="min-w-0 flex-1">
-                      <p className={`break-words text-sm font-medium ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
+                      <p className={`break-words font-medium ${shopMode ? "text-lg" : "text-sm"} ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
                         {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
                       </p>
                       <p className="break-words text-xs text-muted-foreground">
@@ -396,7 +514,26 @@ function ListPage() {
                         </p>
                       )}
                     </div>
-                    {(() => {
+                    {!shopMode && <ItemPhoto itemId={item.id} />}
+                    {!shopMode && (
+                    <div className="flex shrink-0 items-center gap-0.5">
+                      <button
+                        onClick={() => bumpQuantity(item, -1)}
+                        className="grid h-7 w-7 place-items-center rounded-full border border-border text-sm text-foreground transition active:scale-90"
+                        aria-label={t("list.qtyMinus")}
+                      >
+                        <span aria-hidden="true">−</span>
+                      </button>
+                      <button
+                        onClick={() => bumpQuantity(item, 1)}
+                        className="grid h-7 w-7 place-items-center rounded-full border border-border text-sm text-foreground transition active:scale-90"
+                        aria-label={t("list.qtyPlus")}
+                      >
+                        <span aria-hidden="true">+</span>
+                      </button>
+                    </div>
+                    )}
+                    {!shopMode && (() => {
                       const product = item.productId ? productById.get(item.productId) : undefined;
                       const ids = product ? departmentIdsOf(product, data.productAliases ?? []) : [];
                       if (ids.length < 2) return null;
@@ -415,13 +552,15 @@ function ListPage() {
                         </label>
                       );
                     })()}
+                    {!shopMode && (
                     <button
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeItemWithPhoto(item.id)}
                       className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-coral transition active:scale-90"
                       aria-label={t("list.remove")}
                     >
                       <TrashIcon className="h-5 w-5" />
                     </button>
+                    )}
                   </div>
                   </Fragment>
                   );

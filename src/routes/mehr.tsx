@@ -17,6 +17,7 @@ import { useAllLocales, getExplicitLocale, getLocale, setLocale, useT, type Loca
 import { useEffect, useState, type ReactNode } from "react";
 import { EyeOff, Images } from "lucide-react";
 import { setIconSet, useIconSet, type IconSet } from "../hooks/use-icon-set";
+import { setFontSize, useFontSize, type FontSize } from "../hooks/use-font-size";
 import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
@@ -250,6 +251,7 @@ function MorePage() {
         <MarketRow />
         <AllMarketsRow />
         <IconSetRow />
+        <FontSizeRow />
         <DietPreferenceRow />
         <SpeakLocaleRow />
         <SpeakRateRow />
@@ -328,6 +330,26 @@ function IconSetRow() {
         <select value={selected} onChange={(e) => setIconSet(e.target.value as IconSet)} className="mt-2 h-11 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground">
           <option value="images">{t("more.iconImages")}</option>
           <option value="symbols">{t("more.iconSymbols")}</option>
+        </select>
+      </label>
+    </div>
+  );
+}
+
+function FontSizeRow() {
+  const { t } = useT();
+  const size = useFontSize();
+  return (
+    <div className="flex w-full items-start gap-3 px-4 py-3.5">
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+        <span className="text-base font-bold" aria-hidden="true">Aa</span>
+      </div>
+      <label className="min-w-0 flex-1">
+        <span className="text-sm font-semibold text-foreground">{t("more.fontSize")}</span>
+        <select value={size} onChange={(e) => setFontSize(e.target.value as FontSize)} className="mt-2 h-11 w-full rounded-lg border border-input bg-background px-3 text-sm text-foreground">
+          <option value="small">{t("more.fontSizeSmall")}</option>
+          <option value="normal">{t("more.fontSizeNormal")}</option>
+          <option value="large">{t("more.fontSizeLarge")}</option>
         </select>
       </label>
     </div>
