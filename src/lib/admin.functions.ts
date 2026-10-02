@@ -181,15 +181,33 @@ export const suggestImagePrompt = createServerFn({ method: "POST" })
   .inputValidator((d) => z.object({ departmentId: z.string().uuid() }).parse(d))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
-    const { data: dept } = await context.supabase.from("departments").select("name, emoji").eq("id", data.departmentId).single();
+    const { data: dept } = await context.supabase.from("departments").select("name, emoji, parent_id").eq("id", data.departmentId).single();
     const { data: prods } = await context.supabase.from("products").select("name").eq("department_id", data.departmentId).order("sort_order").limit(30);
     if (!dept || !prods?.length) return { prompt: "" };
+    // Kategorie-Kontext: Überkategorie, Unterkategorien und Geschwister miteinbeziehen,
+    // damit der Vorschlag die aktuelle Kategorie klar von ihren Nachbarn abgrenzt.
+    const [{ data: parent }, { data: children }, { data: siblings }] = await Promise.all([
+      dept.parent_id
+        ? context.supabase.from("departments").select("name").eq("id", dept.parent_id).single()
+        : Promise.resolve({ data: null }),
+      context.supabase.from("departments").select("name").eq("parent_id", data.departmentId).order("sort_order").limit(40),
+      dept.parent_id
+        ? context.supabase.from("departments").select("name").eq("parent_id", dept.parent_id).neq("id", data.departmentId).order("sort_order").limit(40)
+        : Promise.resolve({ data: null }),
+    ]);
     const { aiJson } = await import("./translate.server");
     const r = await aiJson<{ prompt: string }>(
       "Du erstellst Bildbeschreibungen für Kategorie-Bilder einer Einkaufslisten-App. " +
         "Formuliere aus Kategoriename und enthaltenen Produkten eine kurze, bildbeschreibende Stichwort-Zeile (max. 120 Zeichen, Deutsch): " +
-        "die typischsten Produkte nennen, Stil: appetitliches Produktfoto, heller einfarbiger Hintergrund. Nur die Zeile, keine Erklärung.",
-      JSON.stringify({ kategorie: dept.name, produkte: prods.map((x) => x.name) }),
+        "die typischsten Produkte nennen, Stil: appetitliches Produktfoto, heller einfarbiger Hintergrund. Nur die Zeile, keine Erklärung. " +
+        "Beachte den Kategorie-Kontext: Die Beschreibung soll zum Thema der Überkategorie passen und die Kategorie klar von ihren Geschwister-Kategorien abgrenzen (nicht deren typische Produkte zeigen).",
+      JSON.stringify({
+        kategorie: dept.name,
+        ueberkategorie: parent?.name ?? null,
+        unterkategorien: (children ?? []).map((x) => x.name),
+        geschwister: (siblings ?? []).map((x) => x.name),
+        produkte: prods.map((x) => x.name),
+      }),
       "image_prompt",
       { type: "object", additionalProperties: false, required: ["prompt"], properties: { prompt: { type: "string" } } },
     );
