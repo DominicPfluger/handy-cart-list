@@ -69,7 +69,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const { data: tplRows } = useQuery({ queryKey: ["admin-recipe-templates"], queryFn: loadTplRows });
   const { data: stepRows } = useQuery({ queryKey: ["admin-recipe-steps"], queryFn: loadStepRows });
   const { data: popRows } = useQuery({ queryKey: ["admin-recipe-popular"], queryFn: loadPopRows });
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [stepsOpen, setStepsOpen] = useState(true);
   const [groupsOpen, setGroupsOpen] = useState(false);
   const [tplId, setTplId] = useState<string | null>(null);
@@ -415,7 +415,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
   const { data: groupData } = useQuery({ queryKey: ["admin-recipe-groups"], queryFn: loadRecipeGroups });
   const { data: tplRows } = useQuery({ queryKey: ["admin-recipe-templates"], queryFn: loadTplRows });
   const { data: stepRows } = useQuery({ queryKey: ["admin-recipe-steps"], queryFn: loadStepRows });
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [ingredientOpen, setIngredientOpen] = useState<Record<string, boolean>>({});
   const [tplId, setTplId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
