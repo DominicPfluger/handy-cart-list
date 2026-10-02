@@ -1,0 +1,1 @@
+ALTER TABLE public.recipes ADD COLUMN satiety text, ADD COLUMN spiciness text, ADD COLUMN price_class text;
