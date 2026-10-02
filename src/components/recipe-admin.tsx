@@ -370,6 +370,8 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
           })}
         </div>
       )}
+      </div>
+      )}
     </section>
   );
 }
