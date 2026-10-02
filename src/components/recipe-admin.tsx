@@ -478,37 +478,6 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
 
           {tplId && (
             <div className="space-y-2 border-t border-border pt-2">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-foreground">{tplLabel(tplId)}</span>
-                <Button size="sm" variant="outline" disabled={busy} onClick={() => setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true })}>{T("adm.stepNew")}</Button>
-              </div>
-              {steps.map((s, i) => (
-                <div key={s.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
-                  <span className="min-w-0 flex-1 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
-                  <button type="button" disabled={busy || i === 0} onClick={() => moveStep(s, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
-                  <button type="button" disabled={busy || i === steps.length - 1} onClick={() => moveStep(s, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
-                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => setStepForm({ id: s.id, key: s.key, name: s.name, emoji: s.emoji ?? "", min: s.min, max: s.max, required: s.required })}>{T("adm.edit")}</Button>
-                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeStep(s)}>{T("adm.delete")}</Button>
-                </div>
-              ))}
-              {stepForm && (
-                <div className="space-y-2 rounded-lg border border-border p-2">
-                  <p className="text-xs font-semibold text-foreground">{stepForm.id ? T("adm.stepEdit") : T("adm.stepNew")}</p>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={stepForm.key} onChange={(e) => setStepForm({ ...stepForm, key: e.target.value })} className="w-28" disabled={!!stepForm.id} />
-                    <Input aria-label={T("add.name")} placeholder={T("add.name")} value={stepForm.name} onChange={(e) => setStepForm({ ...stepForm, name: e.target.value })} className="min-w-32 flex-1" />
-                    <Input aria-label="Emoji" placeholder="Emoji" value={stepForm.emoji} onChange={(e) => setStepForm({ ...stepForm, emoji: e.target.value })} className="w-16" />
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-foreground">
-                    <label className="flex items-center gap-1">{T("adm.stepMin")} <Input type="number" min={0} max={20} value={stepForm.min} onChange={(e) => setStepForm({ ...stepForm, min: Math.max(0, Number(e.target.value) || 0) })} className="w-16" /></label>
-                    <label className="flex items-center gap-1">{T("adm.stepMax")} <Input type="number" min={1} max={20} value={stepForm.max} onChange={(e) => setStepForm({ ...stepForm, max: Math.max(1, Number(e.target.value) || 1) })} className="w-16" /></label>
-                    <label className="flex items-center gap-1"><input type="checkbox" checked={stepForm.required} onChange={(e) => setStepForm({ ...stepForm, required: e.target.checked })} className="accent-primary" /> {T("adm.stepRequired")}</label>
-                    <Button size="sm" disabled={busy || !stepForm.key.trim() || !stepForm.name.trim()} onClick={saveStep}>{T("adm.save")}</Button>
-                    <Button size="sm" variant="ghost" onClick={() => setStepForm(null)}>{T("adm.cancel")}</Button>
-                  </div>
-                </div>
-              )}
-
               <div className="space-y-1 border-t border-border pt-2">
                 <span className="text-xs font-semibold text-foreground">{T("adm.popular")}</span>
                 {pops.map((p) => (
@@ -541,6 +510,40 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
 
       {tpl && (
         <div className="space-y-4">
+          <div className="space-y-2 border-b border-border pb-4">
+            <div className="flex items-center justify-between gap-2">
+              <span className="min-w-0 text-sm font-semibold text-foreground">{tplLabel(tplId!)} · {T("adm.tplManage")}</span>
+              <Button size="sm" variant="outline" disabled={busy} onClick={() => setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true })}>{T("adm.stepNew")}</Button>
+            </div>
+            {steps.map((s, i) => (
+              <div key={s.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+                <span className="min-w-0 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
+                <span className="flex shrink-0 items-center">
+                  <Button size="icon" variant="ghost" disabled={busy || i === 0} onClick={() => moveStep(s, -1)} title="↑" aria-label="↑">▲</Button>
+                  <Button size="icon" variant="ghost" disabled={busy || i === steps.length - 1} onClick={() => moveStep(s, 1)} title="↓" aria-label="↓">▼</Button>
+                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => setStepForm({ id: s.id, key: s.key, name: s.name, emoji: s.emoji ?? "", min: s.min, max: s.max, required: s.required })}>{T("adm.edit")}</Button>
+                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeStep(s)}>{T("adm.delete")}</Button>
+                </span>
+              </div>
+            ))}
+            {stepForm && (
+              <div className="space-y-2 rounded-lg border border-border p-2">
+                <p className="text-xs font-semibold text-foreground">{stepForm.id ? T("adm.stepEdit") : T("adm.stepNew")}</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={stepForm.key} onChange={(e) => setStepForm({ ...stepForm, key: e.target.value })} className="w-28" disabled={!!stepForm.id} />
+                  <Input aria-label={T("add.name")} placeholder={T("add.name")} value={stepForm.name} onChange={(e) => setStepForm({ ...stepForm, name: e.target.value })} className="min-w-32 flex-1" />
+                  <Input aria-label="Emoji" placeholder="Emoji" value={stepForm.emoji} onChange={(e) => setStepForm({ ...stepForm, emoji: e.target.value })} className="w-16" />
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-xs text-foreground">
+                  <label className="flex items-center gap-1">{T("adm.stepMin")} <Input type="number" min={0} max={20} value={stepForm.min} onChange={(e) => setStepForm({ ...stepForm, min: Math.max(0, Number(e.target.value) || 0) })} className="w-16" /></label>
+                  <label className="flex items-center gap-1">{T("adm.stepMax")} <Input type="number" min={1} max={20} value={stepForm.max} onChange={(e) => setStepForm({ ...stepForm, max: Math.max(1, Number(e.target.value) || 1) })} className="w-16" /></label>
+                  <label className="flex items-center gap-1"><input type="checkbox" checked={stepForm.required} onChange={(e) => setStepForm({ ...stepForm, required: e.target.checked })} className="accent-primary" /> {T("adm.stepRequired")}</label>
+                  <Button size="sm" disabled={busy || !stepForm.key.trim() || !stepForm.name.trim()} onClick={saveStep}>{T("adm.save")}</Button>
+                  <Button size="sm" variant="ghost" onClick={() => setStepForm(null)}>{T("adm.cancel")}</Button>
+                </div>
+              </div>
+            )}
+          </div>
           <div className="space-y-2 border-b border-border pb-4">
             <div className="flex flex-wrap items-center gap-2">
               <span className="mr-auto text-sm font-semibold text-foreground">{T("adm.recipeGroups")}</span>
