@@ -11,7 +11,7 @@ import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
 import { formatRefPrice } from "@/hooks/use-reference-prices";
 import { saveProductIconFromPath } from "@/lib/product-icon";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Sparkles } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -171,8 +171,9 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
               </Button>
             ) : <span className="w-8 shrink-0" />}
             <span className="min-w-0 flex-1 text-sm">{dept.name}</span>
-            <Button size="sm" variant="secondary" className="h-auto min-h-8 shrink-0 whitespace-normal text-right" disabled={busy !== null} onClick={() => void runCategoryPrices(dept)} aria-label={`${T("price.catRun")}: ${dept.name}`}>
-              {busy === "catPrice" ? T("media.working") : T("price.catRun")}
+            <Button size="sm" variant="secondary" className="h-8 w-8 shrink-0 p-0 sm:w-auto sm:px-3" disabled={busy !== null} onClick={() => void runCategoryPrices(dept)} aria-label={`${T("price.catRun")}: ${dept.name}`} title={`${T("price.catRun")}: ${dept.name}`}>
+              <Sparkles className="h-4 w-4 sm:hidden" aria-hidden="true" />
+              <span className="hidden sm:inline">{busy === "catPrice" ? T("media.working") : T("price.catRun")}</span>
             </Button>
           </div>
           {hasChildren && open && <div className="pl-4">{categoryRows(dept.id)}</div>}
