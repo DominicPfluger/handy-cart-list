@@ -317,6 +317,15 @@ function AdminPage() {
       .map((x) => ({ id: x.id, label: `${path(x.parent_id).map((p) => nm(p.id, p.name)).join(" › ")}${x.parent_id ? " › " : ""}${nm(x.id, x.name)}` }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [d, cur, deptAliasQ.data]);
+  /** Wählbare Produkte für „Alias-Produkt": ohne Produkte, die bereits in der offenen Kategorie liegen (eigene oder verlinkte). */
+  const productAliasOptions = useMemo(() => {
+    if (!cur || !d) return [];
+    const blocked = new Set<string>(d.prods.filter((x) => x.department_id === cur).map((x) => x.id));
+    for (const a of aliasQ.data ?? []) if (a.department_id === cur) blocked.add(a.product_id);
+    return d.prods.filter((x) => !blocked.has(x.id))
+      .map((x) => ({ id: x.id, label: `${nm(x.id, x.name)} · ${nm(x.department_id, deptById.get(x.department_id)?.name ?? "")}` }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [d, cur, aliasQ.data]);
   const pathText = () => path(cur).map((p) => p.name).join(" › ");
   /** Produkte aus Nachbarkategorien (gleiche Oberkategorie), damit nichts doppelt vorgeschlagen wird. */
   const siblingNames = () => {
