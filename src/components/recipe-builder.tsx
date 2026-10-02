@@ -613,15 +613,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             </span>
           </div>
           <div className="space-y-2 border-t border-border px-3 py-3">
-          {s.products.length >= 8 && (
-            <input
-              value={stepSearch[s.key] ?? ""}
-              onChange={(e) => setStepSearch((x) => ({ ...x, [s.key]: e.target.value }))}
-              placeholder={t("rk.stepSearch")}
-              aria-label={t("rk.stepSearch")}
-              className="w-full rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground outline-none focus:border-primary"
-            />
-          )}
           {s.products.length === 0 ? (
             <p className="text-xs text-muted-foreground">{t("rk.empty")}</p>
           ) : (
