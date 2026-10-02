@@ -654,6 +654,8 @@ export const de = {
   "adm.multi": "Mehrere Produkte",
   "adm.suggestions": "Vorschläge",
   "adm.heading": "Überschrift",
+  "adm.headingAssign": "Überschrift",
+  "adm.noHeading": "Keine Überschrift",
   "adm.created": "Angelegt & übersetzt",
   "adm.rowSub": "{s} Unterkat. · {p} Produkte",
   "adm.sortBy": "Sortierkriterium",
