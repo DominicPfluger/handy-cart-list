@@ -66,6 +66,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     return m;
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
+  const [openIngredientGroups, setOpenIngredientGroups] = useState<Record<string, string>>({});
   const [dietOpen, setDietOpen] = useState(false);
   const [cuisineOpen, setCuisineOpen] = useState(false);
   const PAGE = 12;
@@ -118,18 +119,27 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         ? fromDb
         : s.ingredients.map((n) => byBase.get(n)).filter((p): p is CatalogProduct => !!p);
       const picked = picks[s.key] ?? [];
+      const visible = base.filter((p) => {
+        if (picked.includes(p.id)) return true;
+        if (onlyFav && !favIds.has(p.id)) return false;
+        if (diets.length && p.excludedDiets.some((d) => (diets as string[]).includes(d))) return false;
+        if (cuisines.length && !p.cuisineIds.some((c) => cuisines.includes(c))) return false;
+        return true;
+      });
+      const groupByProduct = new Map(catalog.recipeIngredients
+        .filter((r) => r.templateId === tpl?.id && r.stepKey === s.key)
+        .map((r) => [r.productId, r.groupId]));
+      const groups = catalog.recipeGroups
+        .filter((g) => visible.some((p) => groupByProduct.get(p.id) === g.id))
+        .sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name));
       return {
         ...s,
-        products: base.filter((p) => {
-          if (picked.includes(p.id)) return true; // gewählte Zutaten bleiben sichtbar
-          if (onlyFav && !favIds.has(p.id)) return false;
-          if (diets.length && p.excludedDiets.some((d) => (diets as string[]).includes(d))) return false;
-          if (cuisines.length && !p.cuisineIds.some((c) => cuisines.includes(c))) return false;
-          return true;
-        }),
+        products: visible,
+        groups,
+        groupByProduct,
       };
     }),
-    [tpl, byBase, onlyFav, favIds, diets, cuisines, picks, catalog.recipeIngredients, catalog.products],
+    [tpl, byBase, onlyFav, favIds, diets, cuisines, picks, catalog.recipeIngredients, catalog.products, catalog.recipeGroups],
   );
 
   const toggleOnlyFav = () => {
@@ -533,13 +543,31 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           ) : (
             (() => {
               const sel = picks[s.key] ?? [];
-              const vis = visibleCount[s.key] ?? PAGE;
-              const shortList = s.products.length < THRESHOLD;
-              const open = shortList || vis >= s.products.length;
-              const shown = open ? s.products : [...s.products.slice(0, vis), ...s.products.slice(vis).filter((p) => sel.includes(p.id))];
-              const remaining = s.products.length - vis;
+              const hasGroups = s.groups.length > 0;
+              const groupKey = openIngredientGroups[s.key];
+              const other = s.products.filter((p) => !s.groupByProduct.get(p.id) || !s.groups.some((g) => g.id === s.groupByProduct.get(p.id)));
+              if (hasGroups && !groupKey) return (
+                <div className="grid grid-cols-2 gap-2">
+                  {s.groups.map((g) => {
+                    const inGroup = s.products.filter((p) => s.groupByProduct.get(p.id) === g.id);
+                    const selected = inGroup.filter((p) => sel.includes(p.id)).length;
+                    return <Button key={g.id} variant="outline" className="h-auto min-h-12 justify-between gap-2 whitespace-normal text-left" onClick={() => setOpenIngredientGroups((prev) => ({ ...prev, [s.key]: g.id }))}>
+                      <span className="min-w-0 break-words">{g.emoji && <span aria-hidden="true">{g.emoji} </span>}{g.name}</span><span className="shrink-0 text-muted-foreground">{selected ? `${selected}/` : ""}{inGroup.length} ›</span>
+                    </Button>;
+                  })}
+                  {other.length > 0 && <Button variant="outline" className="h-auto min-h-12 justify-between gap-2 whitespace-normal text-left" onClick={() => setOpenIngredientGroups((prev) => ({ ...prev, [s.key]: "other" }))}><span>{t("rk.otherGroup")}</span><span className="text-muted-foreground">{other.filter((p) => sel.includes(p.id)).length || ""}{other.some((p) => sel.includes(p.id)) ? "/" : ""}{other.length} ›</span></Button>}
+                </div>
+              );
+              const current = hasGroups ? (groupKey === "other" ? other : s.products.filter((p) => s.groupByProduct.get(p.id) === groupKey)) : s.products;
+              const countKey = `${s.key}:${groupKey ?? "all"}`;
+              const vis = visibleCount[countKey] ?? PAGE;
+              const shortList = current.length < THRESHOLD;
+              const open = shortList || vis >= current.length;
+              const shown = open ? current : [...current.slice(0, vis), ...current.slice(vis).filter((p) => sel.includes(p.id))];
+              const remaining = current.length - vis;
               return (
                 <div className="space-y-2">
+                  {hasGroups && <div className="flex items-center gap-2"><Button variant="ghost" size="sm" className="-ml-2" onClick={() => setOpenIngredientGroups((prev) => { const next = { ...prev }; delete next[s.key]; return next; })}>← {t("common.back")}</Button><span className="text-sm font-semibold text-foreground">{s.groups.find((g) => g.id === groupKey)?.name ?? t("rk.otherGroup")}</span></div>}
                   <div className="flex flex-wrap gap-2">
                     {shown.map((p) => {
                       const on = sel.includes(p.id);
@@ -559,7 +587,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   {!shortList && (
                     <button
                       type="button"
-                      onClick={() => setVisibleCount((x) => ({ ...x, [s.key]: open ? PAGE : vis + PAGE }))}
+                      onClick={() => setVisibleCount((x) => ({ ...x, [countKey]: open ? PAGE : vis + PAGE }))}
                       className="text-xs font-medium text-primary"
                       aria-expanded={open}
                     >

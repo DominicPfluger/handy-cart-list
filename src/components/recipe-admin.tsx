@@ -7,12 +7,13 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getLocale, translate } from "@/i18n";
 import { useServerFn } from "@tanstack/react-start";
-import { sortRecipeIngredients } from "@/lib/admin.functions";
+import { sortRecipeIngredients, saveRecipeGroup, deleteRecipeGroup } from "@/lib/admin.functions";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
-type Row = { id: string; template_id: string; step_key: string; product_id: string; sort_order: number };
+type Row = { id: string; template_id: string; step_key: string; product_id: string; sort_order: number; group_id: string | null };
+type Group = { id: string; parent_id: string | null; name: string; emoji: string | null; sort_order: number };
 type Dept = { id: string; name: string; parent_id: string | null; emoji?: string | null; sort_order?: number };
 type Prod = { id: string; name: string; department_id: string; emoji: string | null; sort_order?: number };
 
@@ -21,7 +22,7 @@ async function loadRecipeIngredients() {
   for (let f = 0; ; f += 1000) {
     const { data, error } = await supabase
       .from("recipe_ingredients")
-      .select("id, template_id, step_key, product_id, sort_order")
+      .select("id, template_id, step_key, product_id, sort_order, group_id")
       .order("sort_order")
       .range(f, f + 999);
     if (error) throw new Error(error.message);
@@ -31,10 +32,17 @@ async function loadRecipeIngredients() {
   return rows;
 }
 
+async function loadRecipeGroups(): Promise<Group[]> {
+  const { data, error } = await supabase.from("recipe_groups").select("id, parent_id, name, emoji, sort_order").order("sort_order");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as Group[];
+}
+
 /** Bereich „Rezept-Zutaten" im Admin-Panel: pro Rezept-Schritt Produkte per Checkbox zuweisen. */
 export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) {
   const qc = useQueryClient();
   const { data } = useQuery({ queryKey: ["admin-recipe-ingredients"], queryFn: loadRecipeIngredients });
+  const { data: groupData } = useQuery({ queryKey: ["admin-recipe-groups"], queryFn: loadRecipeGroups });
   const [open, setOpen] = useState(false);
   const [tplId, setTplId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -45,6 +53,14 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [dragRow, setDragRow] = useState<string | null>(null);
   const [dropAt, setDropAt] = useState<{ id: string; pos: "top" | "bottom" } | null>(null);
   const sortFn = useServerFn(sortRecipeIngredients);
+  const saveGroupFn = useServerFn(saveRecipeGroup);
+  const deleteGroupFn = useServerFn(deleteRecipeGroup);
+  const [editGroupId, setEditGroupId] = useState<string | null>(null);
+  const [groupFormOpen, setGroupFormOpen] = useState(false);
+  const [groupParent, setGroupParent] = useState<string | null>(null);
+  const [groupName, setGroupName] = useState("");
+  const [groupEmoji, setGroupEmoji] = useState("");
+  const [dragGroup, setDragGroup] = useState<string | null>(null);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
   const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
@@ -56,6 +72,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
 
   const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
   const rows = data ?? [];
+  const groups = groupData ?? [];
   const assignedFor = (stepKey: string) =>
     rows
       .filter((r) => r.template_id === tplId && r.step_key === stepKey)
@@ -73,6 +90,54 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       setBusy(false);
     }
   };
+
+  const groupTree = (parentId: string | null) => groups.filter((g) => g.parent_id === parentId).sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name));
+  const descendants = (id: string): string[] => [id, ...groupTree(id).flatMap((g) => descendants(g.id))];
+  const groupRows = (parentId: string | null): Array<{ group: Group; depth: number }> =>
+    groupTree(parentId).flatMap((group) => [{ group, depth: 0 }, ...groupRows(group.id).map(({ group: child, depth }) => ({ group: child, depth: depth + 1 }))]);
+  const startGroup = (parentId: string | null, group?: Group) => {
+    setGroupFormOpen(true);
+    setEditGroupId(group?.id ?? null);
+    setGroupParent(group?.parent_id ?? parentId);
+    setGroupName(group?.name ?? "");
+    setGroupEmoji(group?.emoji ?? "");
+  };
+  const saveGroup = () => run(async () => {
+    if (!groupName.trim()) return;
+    await saveGroupFn({ data: { id: editGroupId ?? undefined, parentId: groupParent, name: groupName.trim(), emoji: groupEmoji.trim() || null, sortOrder: groupTree(groupParent).length + 1 } });
+    await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
+    setGroupFormOpen(false); setGroupName(""); setEditGroupId(null); setGroupParent(null); setGroupEmoji("");
+  });
+  const removeGroup = (g: Group) => {
+    const ids = descendants(g.id);
+    const count = rows.filter((r) => r.group_id && ids.includes(r.group_id)).length;
+    if (!window.confirm(`${T("adm.recipeGroupDelete", { name: g.name })}\n${groupTree(g.id).length ? `${descendants(g.id).length - 1} ${T("adm.recipeGroupSub")}\n` : ""}${count} ${T("adm.assigned")}`)) return;
+    void run(async () => {
+      await deleteGroupFn({ data: { id: g.id } });
+      await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
+    });
+  };
+  const reorderGroup = (sourceId: string, target: Group) => run(async () => {
+    const siblings = groupTree(target.parent_id);
+    const from = siblings.findIndex((g) => g.id === sourceId);
+    const to = siblings.findIndex((g) => g.id === target.id);
+    if (from < 0 || to < 0 || from === to) return;
+    const next = [...siblings];
+    const [moved] = next.splice(from, 1);
+    if (!moved) return;
+    next.splice(to, 0, moved);
+    for (let i = 0; i < next.length; i++) {
+      const row = next[i];
+      if (!row) continue;
+      const { error } = await supabase.from("recipe_groups").update({ sort_order: i + 1 }).eq("id", row.id);
+      if (error) throw new Error(error.message);
+    }
+    await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
+  });
+  const assignGroup = (row: Row, id: string | null) => run(async () => {
+    const { error } = await supabase.from("recipe_ingredients").update({ group_id: id }).eq("id", row.id);
+    if (error) throw new Error(error.message);
+  });
 
   const toggle = (stepKey: string, productId: string, on: boolean) =>
     run(async () => {
@@ -222,6 +287,32 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
 
       {tpl && (
         <div className="space-y-4">
+          <div className="space-y-2 border-b border-border pb-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="mr-auto text-sm font-semibold text-foreground">{T("adm.recipeGroups")}</span>
+              <Button size="sm" variant="outline" disabled={busy} onClick={() => startGroup(null)}>{T("adm.recipeGroupNew")}</Button>
+            </div>
+            {groupTree(null).map((parent) => (
+              <div key={parent.id} className="space-y-1">
+                {[{ group: parent, depth: 0 }, ...groupRows(parent.id).map(({ group, depth }) => ({ group, depth: depth + 1 }))].map(({ group: g, depth }) => (
+                  <div key={g.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", g.id); setDragGroup(g.id); }} onDragEnd={() => setDragGroup(null)} onDragOver={(e) => { if (dragGroup) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragGroup) void reorderGroup(dragGroup, g); setDragGroup(null); }} className={`flex items-center gap-1.5 border-b border-border/50 py-1 text-xs ${depth ? "pl-5" : "font-semibold"}`}>
+                    {depth > 1 && <span className="text-muted-foreground">{"› ".repeat(depth - 1)}</span>}
+                    <span className="cursor-grab text-muted-foreground" title={T("adm.drag")}>⠿</span>
+                    <span className="min-w-0 flex-1 break-words text-foreground">{g.emoji} {g.name}</span>
+                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => startGroup(g.parent_id, g)}>{T("adm.edit")}</Button>
+                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeGroup(g)}>{T("adm.delete")}</Button>
+                  </div>
+                ))}
+                <Button size="sm" variant="ghost" className="ml-4" disabled={busy} onClick={() => startGroup(parent.id)}>{T("adm.recipeGroupSub")}</Button>
+              </div>
+            ))}
+            {groupFormOpen && <div className="flex flex-wrap items-center gap-2">
+              <Input aria-label={T("add.name")} placeholder={T("add.name")} value={groupName} onChange={(e) => setGroupName(e.target.value)} className="min-w-32 flex-1" />
+              <Input aria-label="Emoji" placeholder="Emoji" value={groupEmoji} onChange={(e) => setGroupEmoji(e.target.value)} className="w-20" />
+              <Button size="sm" disabled={busy || !groupName.trim()} onClick={saveGroup}>{T("adm.save")}</Button>
+              <Button size="sm" variant="ghost" onClick={() => { setGroupFormOpen(false); setGroupName(""); setGroupParent(null); setEditGroupId(null); }}>{T("adm.cancel")}</Button>
+            </div>}
+          </div>
           <Input
             placeholder={T("adm.search")}
             value={search}
@@ -295,6 +386,10 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                         >⠿</span>
                         <input type="checkbox" checked disabled={busy} onChange={() => toggle(s.key, r.product_id, false)} className="accent-primary" />
                         <span className="min-w-0 flex-1 truncate text-foreground">{p?.emoji} {p?.name ?? r.product_id}</span>
+                        <select aria-label={`${p?.name ?? r.product_id} · ${T("adm.recipeGroupTarget")}`} value={r.group_id ?? ""} disabled={busy} onChange={(e) => void assignGroup(r, e.target.value || null)} className="max-w-28 rounded border border-border bg-background p-1 text-xs text-foreground">
+                          <option value="">{T("adm.recipeGroupNone")}</option>
+                          {groupRows(null).map(({ group: g, depth }) => <option key={g.id} value={g.id}>{depth ? `${groups.find((x) => x.id === g.parent_id)?.name ?? ""} › ` : ""}{g.name}</option>)}
+                        </select>
                         <button type="button" disabled={busy || i === 0} onClick={() => move(s.key, r.product_id, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
                         <button type="button" disabled={busy || i === assigned.length - 1} onClick={() => move(s.key, r.product_id, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
                       </div>
