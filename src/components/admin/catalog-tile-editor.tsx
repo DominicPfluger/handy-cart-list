@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,7 +8,7 @@ import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { generateImageFor, listProductImages } from "@/lib/product-media.functions";
-import { suggestCategoryProducts, translateVariants } from "@/lib/admin.functions";
+import { suggestCategoryProducts, suggestImagePrompt, translateVariants } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -289,6 +289,7 @@ export function CatalogTileEditor(p: {
 function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNullable<Target>; onClose: () => void; imgUrl: string | undefined }) {
   const genImg = useServerFn(generateImageFor);
   const trVariants = useServerFn(translateVariants);
+  const suggestPrompt = useServerFn(suggestImagePrompt);
   const isDept = p.target.kind === "department";
   const item = p.target.id ? (isDept ? p.depts.find((d) => d.id === p.target.id) : p.products.find((x) => x.id === p.target.id)) : undefined;
   const prod = !isDept ? (item as TileProd | undefined) : undefined;
@@ -324,6 +325,18 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   };
   const effId = item?.id ?? newId ?? undefined;
   const table = isDept ? "departments" : "products";
+
+  // KI-Vorschlag für den Bildtext einer Kategorie, abgeleitet aus den enthaltenen Produkten.
+  const [suggesting, setSuggesting] = useState(false);
+  const loadSuggestion = (overwrite: boolean) => {
+    if (!isDept || !effId) return;
+    setSuggesting(true);
+    void suggestPrompt({ data: { departmentId: effId } })
+      .then((r) => { if (r.prompt) setHint((h) => (overwrite || !h.trim() ? r.prompt : h)); })
+      .catch(() => {})
+      .finally(() => setSuggesting(false));
+  };
+  useEffect(() => { loadSuggestion(false); }, [effId, isDept]);
 
   const save = async () => {
     await p.run(async () => {
@@ -383,7 +396,12 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
                 <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
               </div>
-              <Input aria-label={T("tile.aiHint")} placeholder={T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 rounded-xl text-sm" />
+              <div className="flex gap-2">
+                <Input aria-label={T("tile.aiHint")} placeholder={suggesting ? T("tile.aiSuggestLoading") : T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 flex-1 rounded-xl text-sm" />
+                {isDept && (
+                  <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true)}>↻</Button>
+                )}
+              </div>
               <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(async () => {
                 await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
                 const { data } = await supabase.storage.from("catalog-images").createSignedUrl(`${table}/${effId}.png`, 600);
