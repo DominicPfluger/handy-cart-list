@@ -254,7 +254,14 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       const cur = prev[stepKey] ?? [];
       if (cur.includes(id)) return { ...prev, [stepKey]: cur.filter((x) => x !== id) };
       const next = max === 1 ? [id] : cur.length >= max ? [...cur.slice(1), id] : [...cur, id];
-      return { ...prev, [stepKey]: next };
+      const updated = { ...prev, [stepKey]: next };
+      // Pflicht-Schritt erfüllt → nächsten offenen Pflicht-Schritt aufklappen.
+      const step = steps.find((s) => s.key === stepKey);
+      if (step && (step.required || step.min > 0) && next.length >= step.min) {
+        const nxt = steps.find((s) => s.key !== stepKey && (s.required || s.min > 0) && (updated[s.key] ?? []).length < s.min);
+        if (nxt) setOpenStep(nxt.key);
+      }
+      return updated;
     });
   };
 
