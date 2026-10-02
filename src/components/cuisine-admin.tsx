@@ -147,13 +147,18 @@ export function CuisineAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] })
           {!sel && (
             <>
               <ul className="space-y-1">
-                {data.cuisines.map((c) => (
-                  <li key={c.id} className="flex items-center gap-1 rounded-lg border border-border bg-background px-2 py-1.5">
+                {data.cuisines.map((c, idx) => (
+                  <li key={c.id} draggable
+                    onDragStart={() => setDragIdx(idx)}
+                    onDragOver={(e) => { e.preventDefault(); if (overIdx !== idx) setOverIdx(idx); }}
+                    onDragLeave={() => setOverIdx((v) => (v === idx ? null : v))}
+                    onDrop={(e) => { e.preventDefault(); dropCuisine(idx); }}
+                    onDragEnd={() => { setDragIdx(null); setOverIdx(null); }}
+                    className={`flex items-center gap-1 rounded-lg border px-2 py-1.5 ${overIdx === idx && dragIdx !== null && dragIdx !== idx ? "border-primary bg-primary/10" : "border-border bg-background"}`}>
+                    <span className="cursor-grab select-none text-muted-foreground" aria-hidden>⠿</span>
                     <button type="button" className="flex-1 text-left text-sm text-foreground" onClick={() => { setSelId(c.id); setPicks(null); setSearch(""); }}>
                       {c.emoji} {c.name} <span className="text-xs text-muted-foreground">· {counts.get(c.id) ?? 0}</span>
                     </button>
-                    <button type="button" aria-label={T("adm.up")} className="px-1 text-muted-foreground" disabled={busy} onClick={() => move(c, -1)}>▲</button>
-                    <button type="button" aria-label={T("adm.down")} className="px-1 text-muted-foreground" disabled={busy} onClick={() => move(c, 1)}>▼</button>
                   </li>
                 ))}
               </ul>
