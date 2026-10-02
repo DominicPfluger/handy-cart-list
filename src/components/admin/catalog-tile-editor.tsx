@@ -62,7 +62,8 @@ export function CatalogTileEditor(p: {
   onAddProductAlias?: (productId: string) => void;
   headings?: TileHeading[];
   onAddHeading?: (name: string) => void;
-  onMoveHeading?: (id: string, beforeProductId: string) => void;
+  onMoveHeading?: (id: string, insertAt: number, mode: "title" | "group") => void;
+  onSetHeadingAnchor?: (headingId: string, productId: string) => void;
   /** Ordnet ein Produkt einer Überschrift zu ("" = vor die erste Überschrift). */
   onAssignHeading?: (productId: string, headingId: string) => void;
   onRenameHeading?: (id: string, name: string) => void;
@@ -78,6 +79,7 @@ export function CatalogTileEditor(p: {
   const [drag, setDrag] = useState<Drag>(null);
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
+  const [headMove, setHeadMove] = useState<{ id: string; name: string; insertAt: number; n: number; titleOk: boolean } | null>(null);
   const [aliasPick, setAliasPick] = useState(false);
   const [aliasSearch, setAliasSearch] = useState("");
   const [prodAliasPick, setProdAliasPick] = useState(false);
@@ -144,7 +146,7 @@ export function CatalogTileEditor(p: {
     if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 6) moved.current = true;
     setDrag({ ...drag, x: e.clientX, y: e.clientY });
     const t = dropAt(e.clientX, e.clientY);
-    if (t && t.kind === "product" && drag.kind === "product") {
+    if (t && t.kind === "product" && (drag.kind === "product" || drag.kind === "heading")) {
       const r = t.el.getBoundingClientRect();
       setOverPos(e.clientY > r.top + r.height / 2 ? "after" : "before");
     } else if (t && t.kind === "department" && drag.kind === "department") {
@@ -161,11 +163,28 @@ export function CatalogTileEditor(p: {
     const t = dropAt(e.clientX, e.clientY);
     if (!t || t.id === d.id) return;
     if (d.kind === "heading") {
-      if (t.kind === "product") p.onMoveHeading?.(d.id, t.id);
+      let insertAt: number;
+      if (t.kind === "product") {
+        const r = t.el.getBoundingClientRect();
+        insertAt = t.index + (e.clientY > r.top + r.height / 2 ? 1 : 0);
+      } else if (t.kind === "heading") insertAt = t.index;
+      else return;
+      const h = (p.headings ?? []).find((x) => x.id === d.id);
+      if (!h) return;
+      const start = p.products.findIndex((x) => x.id === h.before_product_id);
+      const anchors = new Set((p.headings ?? []).filter((x) => x.id !== h.id).map((x) => x.before_product_id));
+      let end = start + 1;
+      if (start >= 0) while (end < p.products.length && !anchors.has(p.products[end]!.id)) end++;
+      const titleOk = p.products.slice(insertAt).some((x) => !x.id.startsWith("alias:"));
+      if (start < 0) { p.onMoveHeading?.(d.id, insertAt, "title"); return; }
+      if (insertAt >= start && insertAt <= end) return;
+      setHeadMove({ id: h.id, name: p.nm(h.id, h.name), insertAt, n: end - start, titleOk });
       return;
     }
     if (d.kind === "product" && t.kind === "heading") {
+      // Produkt wird erstes Produkt dieser Gruppe: vor den Anker setzen und Überschrift an das Produkt hängen.
       p.reorder("product", p.products, d.index, t.index);
+      p.onSetHeadingAnchor?.(t.id, d.id);
       return;
     }
     const isAlias = d.id.startsWith("alias:") || d.id.startsWith("deptalias:");
@@ -286,7 +305,7 @@ export function CatalogTileEditor(p: {
               <Fragment key={x.id}>
               {h && (
                 <div data-drop="heading" data-id={h.id} data-index={i}
-                  className={`flex items-center gap-2 bg-muted/50 px-3 py-2 ${drag?.id === h.id ? "opacity-40" : ""} ${over === `heading:${h.id}` ? "bg-primary-soft" : ""}`}>
+                  className={`flex items-center gap-2 bg-muted/50 px-3 py-2 ${drag?.id === h.id ? "opacity-40" : ""} ${over === `heading:${h.id}` ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : ""}`}>
                   {editMode && (
                     <span onPointerDown={(e) => startDrag(e, "heading", h.id, i, p.nm(h.id, h.name))} {...dragHandlers}
                       aria-label={T("adm.drag")} className="cursor-grab touch-none select-none px-1 text-lg text-muted-foreground">⠿</span>
@@ -327,6 +346,17 @@ export function CatalogTileEditor(p: {
       {p.below}
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
+
+      {headMove && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setHeadMove(null)}>
+          <div className="flex w-full max-w-sm flex-col gap-2 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+            <p className="text-sm font-bold text-foreground">{T("adm.headingMoveTitle", { name: headMove.name })}</p>
+            <Button variant="outline" disabled={!headMove.titleOk} onClick={() => { p.onMoveHeading?.(headMove.id, headMove.insertAt, "title"); setHeadMove(null); }}>{T("adm.headingMoveOnly")}</Button>
+            <Button onClick={() => { p.onMoveHeading?.(headMove.id, headMove.insertAt, "group"); setHeadMove(null); }}>{T("adm.headingMoveGroup", { n: headMove.n })}</Button>
+            <Button variant="ghost" onClick={() => setHeadMove(null)}>{T("adm.cancel")}</Button>
+          </div>
+        </div>
+      )}
 
       {aliasPick && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setAliasPick(false)}>
