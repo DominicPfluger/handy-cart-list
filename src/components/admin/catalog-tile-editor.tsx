@@ -262,18 +262,22 @@ export function CatalogTileEditor(p: {
                 </div>
               )}
               <div data-drop="product" data-id={x.id} data-index={i}
-                className={`flex items-center gap-3 px-3 py-2 ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
+                className={`flex items-center gap-3 px-3 py-2 ${x.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
                 <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers} onDoubleClick={() => { const u = img(x.image_path); if (u) setZoom(u); }}
                   className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl ${editMode ? "cursor-grab touch-none" : ""}`}>
                   {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
                 </span>
-                <button type="button" disabled={!editMode} onClick={click(() => setTarget({ kind: "product", id: x.id }))} className="min-w-0 flex-1 text-left">
-                  <div className="truncate text-sm font-semibold text-foreground">{p.nm(x.id, x.name)}</div>
+                <button type="button" disabled={!editMode} onClick={click(() => x.alias_id ? p.onAdvanced?.("product", pid) : setTarget({ kind: "product", id: x.id }))} className="min-w-0 flex-1 text-left">
+                  <div className="truncate text-sm font-semibold text-foreground">{p.nm(pid, x.name)}{x.alias_id && <span className="ml-1 text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</div>
                   <div className="truncate text-xs text-muted-foreground">
                     {x.default_quantity} {getUnits(getLocale()).find((u) => u.id === x.default_unit)?.label ?? x.default_unit}
                     {price ? ` · ${formatRefPrice(price)}` : ""}
                   </div>
                 </button>
+                {editMode && x.alias_id && (
+                  <button type="button" onClick={() => p.onRemoveAlias?.(x.alias_id!, p.nm(pid, x.name))} aria-label={T("adm.delete")}
+                    className="rounded-full px-2 text-xs text-destructive">✕</button>
+                )}
               </div>
               </Fragment>
             );
