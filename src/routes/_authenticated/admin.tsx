@@ -397,7 +397,6 @@ function AdminPage() {
             {cur && <Button size="sm" variant="outline" onClick={() => setAdding("product")}>+ {T("adm.product")}</Button>}
             {cur && <Button size="sm" variant="outline" onClick={() => setBulk("plain")}>+ {T("adm.multi")}</Button>}
             {cur && <Button size="sm" variant="outline" onClick={() => setBulk("suggest")}>✨ {T("adm.suggestions")}</Button>}
-            {cur && products.length > 0 && <Button size="sm" variant="outline" onClick={() => setAdding("heading")}>+ {T("adm.heading")}</Button>}
           </div>
 
           {adding && (
@@ -471,6 +470,9 @@ function AdminPage() {
                 )}
               </div>
               {mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
+              {products.length > 0 && adding !== "heading" && (
+                <Button size="sm" variant="outline" className="w-full border-dashed" onClick={() => setAdding("heading")}>+ {T("adm.heading")}</Button>
+              )}
               {products.length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noProducts")}</p>}
               {products.map((p, i) => {
                 const h = headingBefore.get(p.id);
