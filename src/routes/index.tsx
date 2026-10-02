@@ -231,9 +231,6 @@ function ListPage() {
   };
 
   return (
-
-
-  return (
     <div className="space-y-5">
       <ListManager
         open={managerOpen}
