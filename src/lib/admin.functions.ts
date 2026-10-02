@@ -141,9 +141,34 @@ const ctxSchema = z.object({
   existing: z.array(z.string().max(120)).max(400),
   exclude: z.array(z.string().max(120)).max(400).default([]),
   market: z.string().regex(/^[A-Z]{2}$/).optional(),
+  mode: z.enum(["web", "ai"]).default("ai"),
 });
 
-/** KI-Vorschläge für fehlende, relevante Produkte einer Kategorie. */
+/** Websuche (Firecrawl) nach Shop-Seiten zur Kategorie; liefert gekürzten Text + Quellen. */
+async function webContext(path: string, market: string): Promise<{ text: string; ok: boolean }> {
+  const lovable = process.env["LOVABLE_API_KEY"];
+  const fc = process.env["FIRECRAWL_API_KEY"];
+  if (!lovable || !fc) return { text: "", ok: false };
+  const leaf = path.split("›").map((s) => s.trim()).filter(Boolean).slice(-2).join(" ");
+  try {
+    const res = await fetch("https://connector-gateway.lovable.dev/firecrawl/v2/search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${lovable}`, "X-Connection-Api-Key": fc },
+      body: JSON.stringify({ query: `${leaf} Supermarkt Sortiment online kaufen ${market}`, limit: 5, scrapeOptions: { formats: ["markdown"], onlyMainContent: true } }),
+    });
+    if (!res.ok) { console.error("Firecrawl search", res.status, await res.text()); return { text: "", ok: false }; }
+    const j = (await res.json()) as { data?: { web?: Array<{ url?: string; title?: string; markdown?: string }> } | Array<{ url?: string; title?: string; markdown?: string }> };
+    const list = Array.isArray(j.data) ? j.data : (j.data?.web ?? []);
+    const parts = list.map((r) => {
+      let host = ""; try { host = new URL(r.url ?? "").hostname.replace(/^www\./, ""); } catch { /* */ }
+      return `### Quelle: ${host}\n${(r.markdown ?? r.title ?? "").slice(0, 7000)}`;
+    }).filter((s) => s.length > 30);
+    const text = parts.join("\n\n").slice(0, 30000);
+    return { text, ok: text.length > 200 };
+  } catch (e) { console.error(e); return { text: "", ok: false }; }
+}
+
+/** KI-Vorschläge für fehlende, relevante Produkte einer Kategorie (optional mit Websuche). */
 export const suggestProducts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => ctxSchema.parse(d))
@@ -154,25 +179,33 @@ export const suggestProducts = createServerFn({ method: "POST" })
       if (!m) throw new Error("Kein Admin-Zugriff");
     } else await assertAdmin(context);
     const { aiJson } = await import("./translate.server");
+    const web = data.mode === "web" ? await webContext(data.path, data.market ?? "DE") : { text: "", ok: false };
+    const webFailed = data.mode === "web" && !web.ok;
     const mkText = data.market
       ? `Zielmarkt: Land mit ISO-Code ${data.market}. Schlage Produkte vor, die in Supermärkten DIESES Landes typisch und relevant sind, sortiert nach Relevanz in diesem Land (lokale Spezialitäten und Marken-Klassiker eingeschlossen). ` +
         "scope: 'market', wenn das Produkt typisch nur für diesen Markt ist, sonst 'global'. "
       : "scope: immer 'global'. ";
-    const r = await aiJson<{ items: Array<{ name: string; emoji: string; reason: string; scope: "global" | "market" }> }>(
-      mkText + "Du kuratierst den Katalog einer deutschsprachigen Einkaufslisten-App (Schweiz/Deutschland/Österreich). " +
-        "Schlage 8–15 relevante Produkte vor, die in der genannten Kategorie FEHLEN und die Kundinnen im Supermarkt typischerweise kaufen. " +
+    const webText = web.ok
+      ? "Unter 'web' findest du Auszüge aus Online-Shops. Leite die Vorschläge vorrangig daraus ab (generische Produktnamen, keine Marken, keine Packungsgrössen). source: Domain der Quelle, oder leer wenn nicht aus dem Web. "
+      : "source: immer leer. ";
+    const r = await aiJson<{ items: Array<{ name: string; emoji: string; reason: string; scope: "global" | "market"; source: string }> }>(
+      mkText + webText + "Du kuratierst den Katalog einer deutschsprachigen Einkaufslisten-App (Schweiz/Deutschland/Österreich). " +
+        "Schlage 8–15 relevante Produkte vor, die in der genannten Kategorie FEHLEN und die Kundinnen im Supermarkt typischerweise kaufen. Sie müssen thematisch genau zur Kategorie passen. " +
         "Keine Duplikate, keine Synonyme bereits vorhandener Einträge, keine Einträge aus der Ausschlussliste, kein 'Beliebige'-Präfix. " +
         "Deutsche Namen (de-DE), kurz, wie im Regal. Sortiert nach Relevanz. emoji: ein passendes Emoji. reason: max. 6 Wörter.",
-      JSON.stringify({ kategorie: data.path, vorhanden: data.existing, ausschliessen: data.exclude }),
+      JSON.stringify({ kategorie: data.path, vorhanden: data.existing, ausschliessen: data.exclude, ...(web.ok ? { web: web.text } : {}) }),
       "suggestions",
       {
         type: "object", additionalProperties: false, required: ["items"],
-        properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "emoji", "reason", "scope"],
-          properties: { name: { type: "string" }, emoji: { type: "string" }, reason: { type: "string" }, scope: { type: "string", enum: ["global", "market"] } } } } },
+        properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "emoji", "reason", "scope", "source"],
+          properties: { name: { type: "string" }, emoji: { type: "string" }, reason: { type: "string" }, scope: { type: "string", enum: ["global", "market"] }, source: { type: "string" } } } } },
       },
     );
     const have = new Set([...data.existing, ...data.exclude].map((n) => n.toLowerCase()));
-    return { items: r.items.filter((x) => x.name.trim() && !have.has(x.name.trim().toLowerCase())).map((x) => ({ ...x, name: x.name.trim(), scope: data.market && x.scope === "market" ? "market" as const : "global" as const })) };
+    return {
+      webFailed,
+      items: r.items.filter((x) => x.name.trim() && !have.has(x.name.trim().toLowerCase())).map((x) => ({ ...x, name: x.name.trim(), source: x.source?.trim() || undefined, scope: data.market && x.scope === "market" ? "market" as const : "global" as const })),
+    };
   });
 
 /** KI-Vorschlag für den Bildtext (hint) eines Kategorie-Bildes, abgeleitet aus den Produkten der Kategorie. */
