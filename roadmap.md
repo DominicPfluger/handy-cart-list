@@ -3,6 +3,7 @@
 - [x] Rezept-Generator: Zutaten-Ebenen mit Emoji, Untergruppen inline, zehn Produkte je Ebene mit „Weitere anzeigen“; nur manuell zugeordnete Produkte in verwalteten Vorlagen.
 - [x] Rezept-Generator: KI-Bilder für die acht Vorlagen (Kacheln, Titel hinter dem Text, Fallback in Rezeptkarten); Emoji bleibt Fallback für Admin-Vorlagen ohne Bild.
 - [x] Rezept-Generator: Graue Zutatenkategorien mit Pfeilen in einer seitlich scrollbaren Zeile; Zutaten nach Klick darunter sichtbar. Zutatenbereiche der gewählten Vorlage direkt im Admin-Panel verwalten.
+- [x] Admin-Rezeptverwaltung: Vorlagenverwaltung, Oberkategorien, Rezept-Kategorien und Zutatenlisten je Oberkategorie unabhängig aufklappbar; Eingaben bleiben beim Zuklappen erhalten.
 
 Priorisierte Verbesserungen (Plan vom 2.10.2026 genehmigt):
 
