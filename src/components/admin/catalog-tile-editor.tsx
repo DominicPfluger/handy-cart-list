@@ -648,16 +648,18 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     setImagePreview(signed?.signedUrl ?? null);
   });
 
-  const removeProductImage = async () => {
-    if (!effId || isDept || !window.confirm(T("tile.removeImageConfirm"))) return;
+  const removeImage = async () => {
+    if (!effId || !window.confirm(T("tile.removeImageConfirm"))) return;
     setImageBusy(true);
     try {
       await p.run(async () => {
-        await p.must(supabase.from("products").update({ image_path: null, icon_path: null }).eq("id", effId));
+        if (isDept) await p.must(supabase.from(table).update({ image_path: null }).eq("id", effId));
+        else await p.must(supabase.from("products").update({ image_path: null, icon_path: null }).eq("id", effId));
         if (item && "image_path" in item && item.image_path) await forgetCatalogImage(item.image_path);
         setImagePreview(null);
         setLarge(null);
         await qc.invalidateQueries({ queryKey: ["admin-tile-imgs"] });
+        await qc.invalidateQueries({ queryKey: ["catalog"] });
       }, T("tile.imageRemoved"));
     } finally { setImageBusy(false); }
   };
@@ -731,8 +733,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               )}
               <div className="flex flex-wrap gap-2">
                 <Button size="sm" variant="outline" disabled={imageBusy || p.busy} onClick={() => void generateDialogImage()}>{imageBusy ? T("adm.working") : isDept || !item ? `✨ ${T("tile.aiImage")}` : `✨ ${T("tile.regenerateImage")}`}</Button>
-                {!isDept && item && (imagePreview === undefined ? Boolean(p.imgUrl) : Boolean(imagePreview)) &&
-                  <Button size="sm" variant="outline" className="text-destructive" disabled={imageBusy || p.busy} onClick={() => void removeProductImage()}>{T("tile.removeImage")}</Button>}
+                {(imagePreview === undefined ? Boolean(p.imgUrl) : Boolean(imagePreview)) && item &&
+                  <Button size="sm" variant="outline" className="text-destructive" disabled={imageBusy || p.busy} onClick={() => void removeImage()}>{T("tile.removeImage")}</Button>}
               </div>
             </div>
           )}
