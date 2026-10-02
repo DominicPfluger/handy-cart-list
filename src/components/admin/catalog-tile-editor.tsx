@@ -8,6 +8,7 @@ import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
+import { toast } from "sonner";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
 import { suggestCategoryProducts, suggestImagePrompt, translateVariants } from "@/lib/admin.functions";

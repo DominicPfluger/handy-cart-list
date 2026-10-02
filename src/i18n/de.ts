@@ -682,6 +682,7 @@ export const de = {
   "tile.save": "Speichern",
   "tile.delete": "Löschen",
   "tile.moved": "Verschoben",
+  "tile.moveIntoCycle": "Nicht möglich: Die Zielkategorie liegt innerhalb der verschobenen Kategorie.",
   "tile.nameRequired": "Bitte einen Namen eingeben",
   "adm.sortRelevance": "Nach Relevanz sortieren",
   "mk.sortRelevance": "Nach Relevanz im Markt sortieren",
