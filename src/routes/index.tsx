@@ -334,39 +334,6 @@ function ListPage() {
         </div>
       </div>
 
-      {/* Schnell erfassen: Suchfeld + Chips aus dem Einkaufsverlauf */}
-      <div className="space-y-2">
-          <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4">
-            <span aria-hidden="true" className="text-muted-foreground">🔍</span>
-            <input
-              value={quick}
-              onChange={(e) => setQuick(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key !== "Enter") return;
-                e.preventDefault();
-                if (quick.trim()) addQuick(chipCandidates[0] ?? { name: quick.trim() });
-              }}
-              placeholder={t("list.quickAdd")}
-              aria-label={t("list.quickAdd")}
-              className="h-11 min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-            />
-          </div>
-          {chipCandidates.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {chipCandidates.map((p) => (
-                <button
-                  key={p.productId ?? p.name}
-                  onClick={() => addQuick(p)}
-                  className="flex max-w-full items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition active:scale-95"
-                >
-                  <span aria-hidden="true">{p.emoji ?? "🛒"}</span>
-                  <span className="min-w-0 break-words text-left">{p.productId && productById.get(p.productId) ? productById.get(p.productId)!.name : p.name}</span>
-                  <PlusIcon className="h-3 w-3 shrink-0 text-primary" />
-                </button>
-              ))}
-            </div>
-          )}
-      </div>
 
 
       {/* List grouped by category */}
