@@ -491,24 +491,6 @@ function ListPage() {
                         </p>
                       )}
                     </div>
-                    {!shopMode && (
-                    <div className="flex shrink-0 items-center gap-0.5">
-                      <button
-                        onClick={() => bumpQuantity(item, -1)}
-                        className="grid h-7 w-7 place-items-center rounded-full border border-border text-sm text-foreground transition active:scale-90"
-                        aria-label={t("list.qtyMinus")}
-                      >
-                        <span aria-hidden="true">−</span>
-                      </button>
-                      <button
-                        onClick={() => bumpQuantity(item, 1)}
-                        className="grid h-7 w-7 place-items-center rounded-full border border-border text-sm text-foreground transition active:scale-90"
-                        aria-label={t("list.qtyPlus")}
-                      >
-                        <span aria-hidden="true">+</span>
-                      </button>
-                    </div>
-                    )}
                     {!shopMode && (() => {
                       const product = item.productId ? productById.get(item.productId) : undefined;
                       const ids = product ? departmentIdsOf(product, data.productAliases ?? []) : [];
