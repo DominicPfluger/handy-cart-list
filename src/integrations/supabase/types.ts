@@ -840,6 +840,38 @@ export type Database = {
           },
         ]
       }
+      product_synonyms: {
+        Row: {
+          created_at: string
+          id: string
+          locale: string
+          product_id: string
+          term: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          locale?: string
+          product_id: string
+          term: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          locale?: string
+          product_id?: string
+          term?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_synonyms_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       products: {
         Row: {
           created_at: string
