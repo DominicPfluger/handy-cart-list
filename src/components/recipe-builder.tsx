@@ -75,7 +75,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     return m;
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
-  const [openStep, setOpenStep] = useState<string | null>(null);
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [stepSearch, setStepSearch] = useState<Record<string, string>>({});
   const summaryRef = useRef<HTMLDivElement>(null);
   const [dietOpen, setDietOpen] = useState(false);
@@ -158,13 +158,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const requiredSteps = steps.filter((s) => s.required || s.min > 0);
   const doneRequired = requiredSteps.filter(stepOk).length;
   const allRequiredDone = requiredSteps.every(stepOk);
-  // Beim Öffnen einer Vorlage den ersten offenen Pflicht-Schritt aufklappen.
-  useEffect(() => {
-    if (!tpl) { setOpenStep(null); return; }
-    setOpenStep((cur) => cur ?? (steps.find((s) => !stepOk(s) && (s.required || s.min > 0))?.key ?? steps[0]?.key ?? null));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tpl?.id]);
-  useEffect(() => { setVisibleCount({}); setStepSearch({}); }, [tplId]);
+  useEffect(() => { setVisibleCount({}); setStepSearch({}); setOpenGroups({}); }, [tplId]);
 
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
@@ -233,12 +227,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       if (cur.includes(id)) return { ...prev, [stepKey]: cur.filter((x) => x !== id) };
       const next = max === 1 ? [id] : cur.length >= max ? [...cur.slice(1), id] : [...cur, id];
       const updated = { ...prev, [stepKey]: next };
-      // Pflicht-Schritt erfüllt → nächsten offenen Pflicht-Schritt aufklappen.
-      const step = steps.find((s) => s.key === stepKey);
-      if (step && (step.required || step.min > 0) && next.length >= step.min) {
-        const nxt = steps.find((s) => s.key !== stepKey && (s.required || s.min > 0) && (updated[s.key] ?? []).length < s.min);
-        if (nxt) setOpenStep(nxt.key);
-      }
       return updated;
     });
   };
@@ -604,24 +592,18 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         const sel0 = picks[s.key] ?? [];
         const isReq = s.required || s.min > 0;
         const missing = isReq && sel0.length < s.min;
-        const isOpen = openStep === s.key;
         return (
         <div key={s.key} className={`overflow-hidden rounded-2xl border transition ${missing ? "border-destructive/60" : "border-border"} bg-card`}>
-          <button
-            type="button"
-            aria-expanded={isOpen}
-            onClick={() => setOpenStep(isOpen ? null : s.key)}
-            className="flex w-full items-center gap-2 px-3 py-2.5 text-left"
-          >
+          <div className="flex w-full items-center gap-2 px-3 py-2.5 text-left">
             <span className="grid h-7 w-7 shrink-0 place-items-center text-lg" aria-hidden="true">{s.emoji || STEP_EMOJIS[s.key] || "🍽️"}</span>
             <span className="min-w-0 flex-1">
               <span className="block text-sm font-semibold text-foreground">
                 {s.label}{" "}
-                <span className="text-xs font-normal text-muted-foreground">
+                 <span className="text-xs font-normal text-muted-foreground">
                   ({s.max >= 99 ? t("rk.pickAny") : s.max === 1 ? t("rk.pickOne") : t("rk.pick", { min: s.min, max: s.max })})
                 </span>
               </span>
-              {!isOpen && sel0.length > 0 && (
+              {sel0.length > 0 && (
                 <span className="mt-0.5 flex flex-wrap gap-1">
                   {sel0.map((id) => {
                     const p = s.products.find((x) => x.id === id);
@@ -630,9 +612,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 </span>
               )}
             </span>
-            <span className="shrink-0 text-muted-foreground">{isOpen ? "▲" : "▼"}</span>
-          </button>
-          {isOpen && (
+          </div>
           <div className="space-y-2 border-t border-border px-3 py-3">
           {s.products.length >= 8 && (
             <input
@@ -689,26 +669,32 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   </Button>}
                 </div>;
               }
-              // Kategorien: immer aufgeklappt, ohne Pfeil — Zutaten sind sofort sichtbar.
+              // Kategorien: Zutaten erscheinen inline erst nach Klick auf die Kategorie; Gewähltes bleibt immer sichtbar.
               return <div className="space-y-3">
                 {groups.map((group) => {
                   const gKey = `${s.key}:${group.key}`;
+                  const gOpen = !!openGroups[gKey];
                   const gLimit = visibleCount[gKey] ?? PAGE;
                   const gExpanded = gLimit >= group.products.length || !!q;
                   const shownIds = new Set(group.products.slice(0, gExpanded ? group.products.length : gLimit).map((p) => p.id));
                   for (const id of sel) if (group.products.some((p) => p.id === id)) shownIds.add(id);
-                  const shown = group.products.filter((p) => shownIds.has(p.id));
+                  const shown = gOpen ? group.products.filter((p) => shownIds.has(p.id)) : group.products.filter((p) => sel.includes(p.id));
                   const gHidden = group.products.length - shown.length;
                   return (
                     <div key={group.key}>
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-foreground">
+                        <button
+                          type="button"
+                          aria-expanded={gOpen}
+                          onClick={() => setOpenGroups((x) => ({ ...x, [gKey]: !gOpen }))}
+                          className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${gOpen ? "border-primary bg-primary-soft/50 text-foreground" : "border-border bg-muted text-foreground"}`}
+                        >
                           {group.emoji && <span aria-hidden="true" className="mr-1">{group.emoji}</span>}
                           {group.name}
-                        </span>
+                        </button>
                         {shown.map(chip)}
                       </div>
-                      {!q && gHidden > 0 && (
+                      {gOpen && !q && gHidden > 0 && (
                         <Button variant="ghost" size="sm" type="button"
                           onClick={() => setVisibleCount((x) => ({ ...x, [gKey]: gExpanded ? PAGE : Math.min(group.products.length, gLimit + PAGE) }))}
                           className="mt-1 text-xs font-medium text-primary" aria-expanded={gExpanded}>
@@ -722,7 +708,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             })()
           )}
           </div>
-          )}
         </div>
         );
       })}
