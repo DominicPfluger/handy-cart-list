@@ -138,11 +138,17 @@ export function pathTo(departments: CatalogDepartment[], id: string | null): Cat
  * Artikelsuche: bis 4 Buchstaben nur Treffer am Wortanfang,
  * ab 5 Buchstaben auch Treffer mitten im Namen.
  */
-export function matchesProductSearch(name: string, normalizedQuery: string): boolean {
-  const normalized = name.toLocaleLowerCase(getLocale());
-  return normalizedQuery.length > 4
-    ? normalized.includes(normalizedQuery)
-    : normalized.startsWith(normalizedQuery);
+export function normalizeSearch(s: string): string {
+  return s.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ß/g, "ss").trim();
+}
+
+/** Wortanfang ab 1 Zeichen, beliebiger Teil ab 3 Zeichen; Akzente und ß/ss egal. */
+export function matchesProductSearch(name: string, query: string): boolean {
+  const n = normalizeSearch(name);
+  const q = normalizeSearch(query);
+  if (!q) return false;
+  if (q.length >= 3) return n.includes(q);
+  return n.split(/[^\p{L}\p{N}]+/u).some((w) => w.startsWith(q));
 }
 
 /** Alphabetische Sortierung der Suchtreffer (deutsche Regeln). */

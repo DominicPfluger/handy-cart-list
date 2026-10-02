@@ -200,19 +200,31 @@ function DepartmentsPage() {
   const locale = getLocale();
   const variantLabel = (product: CatalogProduct, v: string) => pickName(product.variantNames?.[v], locale, v);
   const matchedVariant = (product: CatalogProduct) =>
-    (product.variants ?? []).find((v) => variantLabel(product, v).toLocaleLowerCase().includes(normalizedQuery));
-  const normSyn = (s: string) => s.toLocaleLowerCase().replace(/ß/g, "ss");
+    (product.variants ?? []).find((v) => matchesProductSearch(variantLabel(product, v), normalizedQuery));
   const matchedSynonym = (product: CatalogProduct) =>
-    (product.synonyms ?? []).find((s) => normSyn(s).includes(normSyn(normalizedQuery)));
+    (product.synonyms ?? []).find((s) => matchesProductSearch(s, normalizedQuery));
   const searchResults = useMemo(() => {
     if (!normalizedQuery) return [];
+    // Rang der Abteilung = Position in der Baumstruktur (Tiefensuche nach sortOrder)
+    const kids = new Map<string | null, CatalogDepartment[]>();
+    for (const d of departments) kids.set(d.parentId, [...(kids.get(d.parentId) ?? []), d]);
+    const deptRank = new Map<string, number>();
+    const walk = (pid: string | null) => {
+      for (const d of [...(kids.get(pid) ?? [])].sort((a, b) => a.sortOrder - b.sortOrder)) {
+        if (deptRank.has(d.id)) continue;
+        deptRank.set(d.id, deptRank.size);
+        walk(d.id);
+      }
+    };
+    walk(null);
     const order = new Map(orderedProducts.map((p, i) => [p.id, i]));
-    const direct = (p: CatalogProduct) => matchesProductSearch(p.name, normalizedQuery) ? 0 : 1;
-    return products
-      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || brandsFor(product).some((b) => b.toLocaleLowerCase().includes(normalizedQuery)) || !!matchedVariant(product) || !!matchedSynonym(product))
-      .sort((a, b) => direct(a) - direct(b) || (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER));
+    const big = Number.MAX_SAFE_INTEGER;
+    return orderedProducts
+      .filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId))
+      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || matchesProductSearch(product.baseName ?? "", normalizedQuery) || brandsFor(product).some((b) => matchesProductSearch(b, normalizedQuery)) || !!matchedVariant(product) || !!matchedSynonym(product))
+      .sort((a, b) => (deptRank.get(a.departmentId) ?? big) - (deptRank.get(b.departmentId) ?? big) || (order.get(a.id) ?? big) - (order.get(b.id) ?? big));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, orderedProducts, normalizedQuery]);
+  }, [departments, orderedProducts, hiddenProductIds, removedIds, normalizedQuery]);
 
   const matchedBrand = (product: CatalogProduct) =>
     matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) ? undefined : brandsFor(product).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
