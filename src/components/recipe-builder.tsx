@@ -75,7 +75,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     return m;
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
-  const [openStep, setOpenStep] = useState<string | null>(null);
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [stepSearch, setStepSearch] = useState<Record<string, string>>({});
   const summaryRef = useRef<HTMLDivElement>(null);
   const [dietOpen, setDietOpen] = useState(false);
@@ -164,7 +164,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setOpenStep((cur) => cur ?? (steps.find((s) => !stepOk(s) && (s.required || s.min > 0))?.key ?? steps[0]?.key ?? null));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tpl?.id]);
-  useEffect(() => { setVisibleCount({}); setStepSearch({}); }, [tplId]);
+  useEffect(() => { setVisibleCount({}); setStepSearch({}); setOpenGroups({}); }, [tplId]);
 
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
