@@ -76,7 +76,7 @@ export const Route = createFileRoute("/")({
 
 function ListPage() {
   const {
-    items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem, setItemQuantity,
+    items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
     templates, saveAsTemplate, createFromTemplate, deleteTemplate,
   } = useShoppingList();
@@ -225,10 +225,6 @@ function ListPage() {
     );
     clearCheckedWithPhotos();
     toast.success(t("hist.archived", { n: bought.length }));
-  };
-  const removeItemWithPhoto = (id: string) => {
-    deleteItemPhoto(id).catch(() => {});
-    removeItem(id);
   };
   const clearCheckedWithPhotos = () => {
     deleteItemPhotos(items.filter((i) => i.checked).map((i) => i.id)).catch(() => {});
