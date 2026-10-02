@@ -79,7 +79,7 @@ export function CatalogTileEditor(p: {
   const [drag, setDrag] = useState<Drag>(null);
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
-  const [headMove, setHeadMove] = useState<{ id: string; name: string; insertAt: number; n: number; titleOk: boolean } | null>(null);
+  const [headMove, setHeadMove] = useState<{ id: string; name: string; insertAt: number; n: number } | null>(null);
   const [aliasPick, setAliasPick] = useState(false);
   const [aliasSearch, setAliasSearch] = useState("");
   const [prodAliasPick, setProdAliasPick] = useState(false);
@@ -175,10 +175,9 @@ export function CatalogTileEditor(p: {
       const anchors = new Set((p.headings ?? []).filter((x) => x.id !== h.id).map((x) => x.before_product_id));
       let end = start + 1;
       if (start >= 0) while (end < p.products.length && !anchors.has(p.products[end]!.id)) end++;
-      const titleOk = p.products.slice(insertAt).some((x) => !x.id.startsWith("alias:"));
       if (start < 0) { p.onMoveHeading?.(d.id, insertAt, "title"); return; }
       if (insertAt >= start && insertAt <= end) return;
-      setHeadMove({ id: h.id, name: p.nm(h.id, h.name), insertAt, n: end - start, titleOk });
+      setHeadMove({ id: h.id, name: p.nm(h.id, h.name), insertAt, n: end - start });
       return;
     }
     if (d.kind === "product" && t.kind === "heading") {
@@ -351,7 +350,14 @@ export function CatalogTileEditor(p: {
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setHeadMove(null)}>
           <div className="flex w-full max-w-sm flex-col gap-2 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
             <p className="text-sm font-bold text-foreground">{T("adm.headingMoveTitle", { name: headMove.name })}</p>
-            <Button variant="outline" disabled={!headMove.titleOk} onClick={() => { p.onMoveHeading?.(headMove.id, headMove.insertAt, "title"); setHeadMove(null); }}>{T("adm.headingMoveOnly")}</Button>
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="headmove-pos">{T("adm.headingMovePos")}</label>
+            <select id="headmove-pos" value={headMove.insertAt} onChange={(e) => setHeadMove({ ...headMove, insertAt: Number(e.target.value) })} className="h-11 w-full rounded-xl border border-input bg-background px-2 text-sm">
+              {p.products.map((x, i) => (
+                <option key={x.id} value={i}>{T("adm.headingMoveBefore", { name: p.nm(x.id, x.name) })}</option>
+              ))}
+              <option value={p.products.length}>{T("adm.headingMoveEnd")}</option>
+            </select>
+            <Button variant="outline" disabled={!p.products.slice(headMove.insertAt).some((x) => !x.id.startsWith("alias:"))} onClick={() => { p.onMoveHeading?.(headMove.id, headMove.insertAt, "title"); setHeadMove(null); }}>{T("adm.headingMoveOnly")}</Button>
             <Button onClick={() => { p.onMoveHeading?.(headMove.id, headMove.insertAt, "group"); setHeadMove(null); }}>{T("adm.headingMoveGroup", { n: headMove.n })}</Button>
             <Button variant="ghost" onClick={() => setHeadMove(null)}>{T("adm.cancel")}</Button>
           </div>
