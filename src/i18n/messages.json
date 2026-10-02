@@ -946,7 +946,10 @@
     "price.listTitle": "Reference prices by market",
     "price.listSearch": "Search product",
     "price.listEmpty": "No reference prices yet",
-    "price.listMore": "Load more"
+    "price.listMore": "Load more",
+    "adm.opt.marketRelevance": "Market relevance",
+    "adm.crit.marketRelevance": "Market relevance",
+    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1895,7 +1898,10 @@
     "price.listTitle": "Reference prices by market",
     "price.listSearch": "Search product",
     "price.listEmpty": "No reference prices yet",
-    "price.listMore": "Load more"
+    "price.listMore": "Load more",
+    "adm.opt.marketRelevance": "Market relevance",
+    "adm.crit.marketRelevance": "Market relevance",
+    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2844,7 +2850,10 @@
     "price.listTitle": "Reference prices by market",
     "price.listSearch": "Search product",
     "price.listEmpty": "No reference prices yet",
-    "price.listMore": "Load more"
+    "price.listMore": "Load more",
+    "adm.opt.marketRelevance": "Market relevance",
+    "adm.crit.marketRelevance": "Market relevance",
+    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3793,7 +3802,10 @@
     "price.listTitle": "Precios orientativos por mercado",
     "price.listSearch": "Buscar producto",
     "price.listEmpty": "Aún no hay precios",
-    "price.listMore": "Cargar más"
+    "price.listMore": "Cargar más",
+    "adm.opt.marketRelevance": "Relevancia del mercado",
+    "adm.crit.marketRelevance": "Relevancia del mercado",
+    "adm.headingMoveConfirm": "¿Mover el título \"{name}\" y sus {n} productos?"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4742,7 +4754,10 @@
     "price.listTitle": "Precios orientativos por mercado",
     "price.listSearch": "Buscar producto",
     "price.listEmpty": "Aún no hay precios",
-    "price.listMore": "Cargar más"
+    "price.listMore": "Cargar más",
+    "adm.opt.marketRelevance": "Relevancia del mercado",
+    "adm.crit.marketRelevance": "Relevancia del mercado",
+    "adm.headingMoveConfirm": "¿Mover el título \"{name}\" y sus {n} productos?"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5691,7 +5706,10 @@
     "price.listTitle": "Prix indicatifs par marché",
     "price.listSearch": "Rechercher un produit",
     "price.listEmpty": "Aucun prix indicatif",
-    "price.listMore": "Charger plus"
+    "price.listMore": "Charger plus",
+    "adm.opt.marketRelevance": "Pertinence du marché",
+    "adm.crit.marketRelevance": "Pertinence du marché",
+    "adm.headingMoveConfirm": "Déplacer le titre « {name} » et ses {n} produits ?"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6640,7 +6658,10 @@
     "price.listTitle": "Prix indicatifs par marché",
     "price.listSearch": "Rechercher un produit",
     "price.listEmpty": "Aucun prix indicatif",
-    "price.listMore": "Charger plus"
+    "price.listMore": "Charger plus",
+    "adm.opt.marketRelevance": "Pertinence du marché",
+    "adm.crit.marketRelevance": "Pertinence du marché",
+    "adm.headingMoveConfirm": "Déplacer le titre « {name} » et ses {n} produits ?"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7589,7 +7610,10 @@
     "price.listTitle": "Prezzi indicativi per mercato",
     "price.listSearch": "Cerca prodotto",
     "price.listEmpty": "Nessun prezzo indicativo",
-    "price.listMore": "Carica altro"
+    "price.listMore": "Carica altro",
+    "adm.opt.marketRelevance": "Rilevanza del mercato",
+    "adm.crit.marketRelevance": "Rilevanza del mercato",
+    "adm.headingMoveConfirm": "Spostare il titolo \"{name}\" e i suoi {n} prodotti?"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8538,7 +8562,10 @@
     "price.listTitle": "Prezzi indicativi per mercato",
     "price.listSearch": "Cerca prodotto",
     "price.listEmpty": "Nessun prezzo indicativo",
-    "price.listMore": "Carica altro"
+    "price.listMore": "Carica altro",
+    "adm.opt.marketRelevance": "Rilevanza del mercato",
+    "adm.crit.marketRelevance": "Rilevanza del mercato",
+    "adm.headingMoveConfirm": "Spostare il titolo \"{name}\" e i suoi {n} prodotti?"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9487,7 +9514,10 @@
     "price.listTitle": "Preços de referência por mercado",
     "price.listSearch": "Pesquisar produto",
     "price.listEmpty": "Ainda sem preços",
-    "price.listMore": "Carregar mais"
+    "price.listMore": "Carregar mais",
+    "adm.opt.marketRelevance": "Relevância do mercado",
+    "adm.crit.marketRelevance": "Relevância do mercado",
+    "adm.headingMoveConfirm": "Mover o título \"{name}\" e os seus {n} produtos?"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10436,7 +10466,10 @@
     "price.listTitle": "Preços de referência por mercado",
     "price.listSearch": "Pesquisar produto",
     "price.listEmpty": "Ainda sem preços",
-    "price.listMore": "Carregar mais"
+    "price.listMore": "Carregar mais",
+    "adm.opt.marketRelevance": "Relevância do mercado",
+    "adm.crit.marketRelevance": "Relevância do mercado",
+    "adm.headingMoveConfirm": "Mover o título \"{name}\" e os seus {n} produtos?"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11385,7 +11418,10 @@
     "price.listTitle": "Richtprijzen per markt",
     "price.listSearch": "Product zoeken",
     "price.listEmpty": "Nog geen richtprijzen",
-    "price.listMore": "Meer laden"
+    "price.listMore": "Meer laden",
+    "adm.opt.marketRelevance": "Marktrelevantie",
+    "adm.crit.marketRelevance": "Marktrelevantie",
+    "adm.headingMoveConfirm": "Kop \"{name}\" en de {n} producten verplaatsen?"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12334,7 +12370,10 @@
     "price.listTitle": "Richtprijzen per markt",
     "price.listSearch": "Product zoeken",
     "price.listEmpty": "Nog geen richtprijzen",
-    "price.listMore": "Meer laden"
+    "price.listMore": "Meer laden",
+    "adm.opt.marketRelevance": "Marktrelevantie",
+    "adm.crit.marketRelevance": "Marktrelevantie",
+    "adm.headingMoveConfirm": "Kop \"{name}\" en de {n} producten verplaatsen?"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12745,7 +12784,10 @@
     "price.listTitle": "Richtpreise je Markt",
     "price.listSearch": "Produkt suchen",
     "price.listEmpty": "Noch keine Richtpreise",
-    "price.listMore": "Mehr laden"
+    "price.listMore": "Mehr laden",
+    "adm.opt.marketRelevance": "Markt-Relevanz",
+    "adm.crit.marketRelevance": "Markt-Relevanz",
+    "adm.headingMoveConfirm": "Überschrift „{name}“ und ihre {n} Produkte verschieben?"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13156,6 +13198,9 @@
     "price.listTitle": "Richtpreise je Markt",
     "price.listSearch": "Produkt suchen",
     "price.listEmpty": "Noch keine Richtpreise",
-    "price.listMore": "Mehr laden"
+    "price.listMore": "Mehr laden",
+    "adm.opt.marketRelevance": "Markt-Relevanz",
+    "adm.crit.marketRelevance": "Markt-Relevanz",
+    "adm.headingMoveConfirm": "Überschrift „{name}“ und ihre {n} Produkte verschieben?"
   }
 }

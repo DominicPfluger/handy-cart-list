@@ -92,7 +92,7 @@ function AdminPage() {
   const suggest = useServerFn(suggestProducts);
   const trVariants = useServerFn(translateVariants);
   const rank = useServerFn(rankProducts);
-  const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity">("popularity");
+  const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity" | "marketRelevance">("popularity");
   /** "" = globale Reihenfolge, sonst Marktcode (z. B. CH) für marktspezifische Relevanz. */
   const [mk, setMk] = useState<string>("");
   /** Anzeigesprache des Katalogs im Admin (nur Anzeige, Bearbeitung bleibt Deutsch). */
@@ -196,10 +196,28 @@ function AdminPage() {
     ));
   };
 
+  /** Überschrift verschieben: die ganze Gruppe (Überschrift + ihre Produkte bis zur nächsten Überschrift) wandert mit. */
   const moveHeading = (headingId: string, beforeProductId: string) => {
     const h = d?.heads.find((x) => x.id === headingId);
     if (!h || h.before_product_id === beforeProductId) return;
-    run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), T("adm.headingMoved"));
+    const anchors = new Set(d?.heads.filter((x) => x.id !== headingId).map((x) => x.before_product_id) ?? []);
+    const start = products.findIndex((p) => p.id === h.before_product_id);
+    if (start < 0) { // leere Gruppe: nur der Titel wandert
+      run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), T("adm.headingMoved"));
+      return;
+    }
+    let end = start + 1;
+    while (end < products.length && !anchors.has(products[end]!.id)) end++;
+    const group = products.slice(start, end);
+    if (group.some((p) => p.id === beforeProductId)) return; // Ziel liegt in der eigenen Gruppe
+    if (!confirm(T("adm.headingMoveConfirm", { name: h.name, n: group.length }))) return;
+    const rest = products.filter((p) => !group.includes(p));
+    const at = rest.findIndex((p) => p.id === beforeProductId);
+    const next = at < 0 ? [...rest, ...group] : [...rest.slice(0, at), ...group, ...rest.slice(at)];
+    run(async () => {
+      await saveOrder(next);
+      await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: group[0]!.id } });
+    }, T("adm.headingMoved"));
   };
 
   const nm = (id: string, base: string) => viewLoc === "de-DE" ? base : d?.tr.get(id)?.[viewLoc]?.name ?? base;
@@ -229,7 +247,7 @@ function AdminPage() {
       if (c === "alphabetical") {
         ordered = groups.map((g) => [...g].sort((a, b) => a.name.localeCompare(b.name, "de")));
       } else {
-        const r = await rank({ data: { path: pathText(), criterion: c, groups: groups.map((g) => g.map((p) => p.name)), ...(mk ? { market: mk } : {}) } });
+        const r = await rank({ data: { path: pathText(), criterion: c === "marketRelevance" ? "popularity" : c, groups: groups.map((g) => g.map((p) => p.name)), ...(mk ? { market: mk } : {}) } });
         ordered = groups.map((g, gi) => {
           const pool = [...g];
           return r.groups[gi]!.map((n) => pool.splice(pool.findIndex((p) => p.name === n), 1)[0]!).concat(pool);
@@ -333,7 +351,7 @@ function AdminPage() {
 
       <div className="flex flex-wrap gap-2">
         {cur && (
-          <select value={mk} onChange={(e) => setMk(e.target.value)} aria-label={T("adm.marketChoice")}
+          <select value={mk} onChange={(e) => { setMk(e.target.value); if (!e.target.value && sortBy === "marketRelevance") setSortBy("popularity"); }} aria-label={T("adm.marketChoice")}
             className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
             <optgroup label={T("adm.marketChoice")}>
               <option value="">{T("adm.marketGlobal")}</option>
@@ -351,6 +369,7 @@ function AdminPage() {
             <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label={T("adm.sortBy")}
               className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-3 text-sm">
               <option value="popularity">{T("adm.opt.popularity")}</option>
+              {mk && <option value="marketRelevance">{T("adm.opt.marketRelevance")}</option>}
               <option value="price">{T("adm.opt.price")}</option>
               <option value="alphabetical">{T("adm.opt.alphabetical")}</option>
               <option value="similarity">{T("adm.opt.similarity")}</option>
