@@ -951,7 +951,12 @@
     "price.listMore": "Load more",
     "adm.opt.marketRelevance": "Market relevance",
     "adm.crit.marketRelevance": "Market relevance",
-    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?"
+    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1905,7 +1910,12 @@
     "price.listMore": "Load more",
     "adm.opt.marketRelevance": "Market relevance",
     "adm.crit.marketRelevance": "Market relevance",
-    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?"
+    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2859,7 +2869,12 @@
     "price.listMore": "Load more",
     "adm.opt.marketRelevance": "Market relevance",
     "adm.crit.marketRelevance": "Market relevance",
-    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?"
+    "adm.headingMoveConfirm": "Move heading \"{name}\" and its {n} products?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3813,7 +3828,12 @@
     "price.listMore": "Cargar más",
     "adm.opt.marketRelevance": "Relevancia del mercado",
     "adm.crit.marketRelevance": "Relevancia del mercado",
-    "adm.headingMoveConfirm": "¿Mover el título \"{name}\" y sus {n} productos?"
+    "adm.headingMoveConfirm": "¿Mover el título \"{name}\" y sus {n} productos?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4767,7 +4787,12 @@
     "price.listMore": "Cargar más",
     "adm.opt.marketRelevance": "Relevancia del mercado",
     "adm.crit.marketRelevance": "Relevancia del mercado",
-    "adm.headingMoveConfirm": "¿Mover el título \"{name}\" y sus {n} productos?"
+    "adm.headingMoveConfirm": "¿Mover el título \"{name}\" y sus {n} productos?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5721,7 +5746,12 @@
     "price.listMore": "Charger plus",
     "adm.opt.marketRelevance": "Pertinence du marché",
     "adm.crit.marketRelevance": "Pertinence du marché",
-    "adm.headingMoveConfirm": "Déplacer le titre « {name} » et ses {n} produits ?"
+    "adm.headingMoveConfirm": "Déplacer le titre « {name} » et ses {n} produits ?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6675,7 +6705,12 @@
     "price.listMore": "Charger plus",
     "adm.opt.marketRelevance": "Pertinence du marché",
     "adm.crit.marketRelevance": "Pertinence du marché",
-    "adm.headingMoveConfirm": "Déplacer le titre « {name} » et ses {n} produits ?"
+    "adm.headingMoveConfirm": "Déplacer le titre « {name} » et ses {n} produits ?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7629,7 +7664,12 @@
     "price.listMore": "Carica altro",
     "adm.opt.marketRelevance": "Rilevanza del mercato",
     "adm.crit.marketRelevance": "Rilevanza del mercato",
-    "adm.headingMoveConfirm": "Spostare il titolo \"{name}\" e i suoi {n} prodotti?"
+    "adm.headingMoveConfirm": "Spostare il titolo \"{name}\" e i suoi {n} prodotti?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8583,7 +8623,12 @@
     "price.listMore": "Carica altro",
     "adm.opt.marketRelevance": "Rilevanza del mercato",
     "adm.crit.marketRelevance": "Rilevanza del mercato",
-    "adm.headingMoveConfirm": "Spostare il titolo \"{name}\" e i suoi {n} prodotti?"
+    "adm.headingMoveConfirm": "Spostare il titolo \"{name}\" e i suoi {n} prodotti?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9537,7 +9582,12 @@
     "price.listMore": "Carregar mais",
     "adm.opt.marketRelevance": "Relevância do mercado",
     "adm.crit.marketRelevance": "Relevância do mercado",
-    "adm.headingMoveConfirm": "Mover o título \"{name}\" e os seus {n} produtos?"
+    "adm.headingMoveConfirm": "Mover o título \"{name}\" e os seus {n} produtos?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10491,7 +10541,12 @@
     "price.listMore": "Carregar mais",
     "adm.opt.marketRelevance": "Relevância do mercado",
     "adm.crit.marketRelevance": "Relevância do mercado",
-    "adm.headingMoveConfirm": "Mover o título \"{name}\" e os seus {n} produtos?"
+    "adm.headingMoveConfirm": "Mover o título \"{name}\" e os seus {n} produtos?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11445,7 +11500,12 @@
     "price.listMore": "Meer laden",
     "adm.opt.marketRelevance": "Marktrelevantie",
     "adm.crit.marketRelevance": "Marktrelevantie",
-    "adm.headingMoveConfirm": "Kop \"{name}\" en de {n} producten verplaatsen?"
+    "adm.headingMoveConfirm": "Kop \"{name}\" en de {n} producten verplaatsen?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12399,7 +12459,12 @@
     "price.listMore": "Meer laden",
     "adm.opt.marketRelevance": "Marktrelevantie",
     "adm.crit.marketRelevance": "Marktrelevantie",
-    "adm.headingMoveConfirm": "Kop \"{name}\" en de {n} producten verplaatsen?"
+    "adm.headingMoveConfirm": "Kop \"{name}\" en de {n} producten verplaatsen?",
+    "tile.genAll": "Generate AI images for category",
+    "tile.genAllBusy": "Images {done}/{total} …",
+    "tile.genAllConfirm": "Generate AI images for {n} products without an image?",
+    "tile.genAllRedo": "All products already have an image. Regenerate all {n}?",
+    "tile.genAllDone": "{n} images generated"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12813,7 +12878,12 @@
     "price.listMore": "Mehr laden",
     "adm.opt.marketRelevance": "Markt-Relevanz",
     "adm.crit.marketRelevance": "Markt-Relevanz",
-    "adm.headingMoveConfirm": "Überschrift „{name}“ und ihre {n} Produkte verschieben?"
+    "adm.headingMoveConfirm": "Überschrift „{name}“ und ihre {n} Produkte verschieben?",
+    "tile.genAll": "KI-Bilder für Kategorie erzeugen",
+    "tile.genAllBusy": "Bilder {done}/{total} …",
+    "tile.genAllConfirm": "Für {n} Produkte ohne Bild KI-Bilder erzeugen?",
+    "tile.genAllRedo": "Alle Produkte haben bereits ein Bild. Alle {n} Bilder neu erzeugen?",
+    "tile.genAllDone": "{n} Bilder erzeugt"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13227,6 +13297,11 @@
     "price.listMore": "Mehr laden",
     "adm.opt.marketRelevance": "Markt-Relevanz",
     "adm.crit.marketRelevance": "Markt-Relevanz",
-    "adm.headingMoveConfirm": "Überschrift „{name}“ und ihre {n} Produkte verschieben?"
+    "adm.headingMoveConfirm": "Überschrift „{name}“ und ihre {n} Produkte verschieben?",
+    "tile.genAll": "KI-Bilder für Kategorie erzeugen",
+    "tile.genAllBusy": "Bilder {done}/{total} …",
+    "tile.genAllConfirm": "Für {n} Produkte ohne Bild KI-Bilder erzeugen?",
+    "tile.genAllRedo": "Alle Produkte haben bereits ein Bild. Alle {n} Bilder neu erzeugen?",
+    "tile.genAllDone": "{n} Bilder erzeugt"
   }
 }

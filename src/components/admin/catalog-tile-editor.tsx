@@ -67,6 +67,25 @@ export function CatalogTileEditor(p: {
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
   const moved = useRef(false);
+  const genImgAll = useServerFn(generateImageFor);
+  const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
+  const generateAllImages = () => {
+    const missing = p.products.filter((x) => !x.image_path);
+    let list = missing;
+    if (missing.length === 0) {
+      if (!window.confirm(T("tile.genAllRedo", { n: p.products.length }))) return;
+      list = p.products;
+    } else if (!window.confirm(T("tile.genAllConfirm", { n: missing.length }))) return;
+    void p.run(async () => {
+      setImgProg({ done: 0, total: list.length });
+      try {
+        for (let i = 0; i < list.length; i++) {
+          await genImgAll({ data: { id: list[i]!.id, kind: "product" } });
+          setImgProg({ done: i + 1, total: list.length });
+        }
+      } finally { setImgProg(null); }
+    }, T("tile.genAllDone", { n: list.length }));
+  };
   const deptById = useMemo(() => new Map(p.depts.map((d) => [d.id, d])), [p.depts]);
 
   const rootName = (d: TileDept) => {
@@ -165,6 +184,11 @@ export function CatalogTileEditor(p: {
           {p.cur && <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "product", id: null })}>+ {T("tile.newProd")}</Button>}
           {p.cur && p.onBulkAdd && <Button size="sm" variant="outline" onClick={p.onBulkAdd}>+ {T("adm.multi")}</Button>}
           {p.cur && <Button size="sm" variant="outline" onClick={() => setSuggesting(true)}>✨ {T("tile.suggest")}</Button>}
+          {p.cur && p.products.length > 0 && (
+            <Button size="sm" variant="outline" disabled={!!imgProg} onClick={generateAllImages}>
+              🖼️ {imgProg ? T("tile.genAllBusy", { done: imgProg.done, total: imgProg.total }) : T("tile.genAll")}
+            </Button>
+          )}
           {p.onTranslateMissing && <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onTranslateMissing}>🌐 {p.busy ? T("adm.working") : T("adm.trMissing")}</Button>}
         </div>
       )}
