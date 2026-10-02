@@ -8,7 +8,6 @@ import {
   getCategory,
   type ListItem,
 } from "../hooks/use-shopping-list";
-import type { ProductFrequency } from "../hooks/use-purchase-history";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
 import {
@@ -215,7 +214,7 @@ function ListPage() {
   const currency = referencePrices?.values().next().value?.currency ?? MARKET_CURRENCY[currentMarket()] ?? "EUR";
 
   // ---- Smarte Vorschläge (aus dem Einkaufsverlauf) & Einkauf abschliessen ----
-  const { addPurchase, stats } = usePurchaseHistory();
+  const { addPurchase } = usePurchaseHistory();
   const finishShopping = () => {
     const bought = items.filter((i) => i.checked);
     if (bought.length === 0) return;
