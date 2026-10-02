@@ -212,7 +212,7 @@ export const getCatalog = createServerFn({ method: "GET" })
     return { data: all, error: null };
   }
 
-  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes, daRes, paRes, exRes, moRes, vtRes] = await Promise.all([
+  const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes, daRes, paRes, exRes, moRes, vtRes, rtRes, rsRes, rpRes] = await Promise.all([
     supabase
       .from("departments")
       .select("id, parent_id, name, emoji, color, image_path, sort_order")
@@ -355,6 +355,34 @@ export const getCatalog = createServerFn({ method: "GET" })
     productAliases: ((paRes.data ?? []) as Array<Record<string, unknown>>).map((r) => ({
       productId: r["product_id"] as string,
       departmentId: r["department_id"] as string,
+      sortOrder: (r["sort_order"] as number) ?? 0,
+    })),
+    recipeTemplates: ((rtRes.data ?? []) as Array<Record<string, unknown>>).map((r) => ({
+      id: r["id"] as string,
+      emoji: (r["emoji"] as string | null) ?? null,
+      color: (r["color"] as string | null) ?? null,
+      sortOrder: (r["sort_order"] as number) ?? 0,
+      enabled: (r["enabled"] as boolean) ?? true,
+      baseName: r["id"] as string,
+      names: names.get(r["id"] as string) ?? {},
+    })),
+    recipeSteps: ((rsRes.data ?? []) as Array<Record<string, unknown>>).map((r) => ({
+      id: r["id"] as string,
+      templateId: r["template_id"] as string,
+      key: r["key"] as string,
+      name: r["name"] as string,
+      emoji: (r["emoji"] as string | null) ?? null,
+      min: (r["min"] as number) ?? 0,
+      max: (r["max"] as number) ?? 1,
+      required: (r["required"] as boolean) ?? false,
+      sortOrder: (r["sort_order"] as number) ?? 0,
+      baseName: r["name"] as string,
+      names: names.get(r["id"] as string) ?? {},
+    })),
+    recipePopular: ((rpRes.data ?? []) as Array<Record<string, unknown>>).map((r) => ({
+      id: r["id"] as string,
+      templateId: r["template_id"] as string,
+      picks: (r["picks"] as Record<string, string[]>) ?? {},
       sortOrder: (r["sort_order"] as number) ?? 0,
     })),
   };
