@@ -1,16 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { getLocale } from "@/i18n";
+import { currentMarket, useMarket } from "./use-market";
+
+export { currentMarket };
 
 export type RefPrice = { product_id: string; price: number; currency: string; unit_price: number | null; unit_basis: string | null; observed_at: string };
 
-export function currentMarket() {
-  return getLocale().split("-")[1] ?? "DE";
-}
-
 /** Richtpreise (Admin-Import) für das aktuelle Land, als Map productId → Preis. */
 export function useReferencePrices() {
-  const market = currentMarket();
+  const market = useMarket();
   return useQuery({
     queryKey: ["reference-prices", market],
     staleTime: 10 * 60_000,

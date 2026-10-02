@@ -994,7 +994,9 @@
     "tile.enrichPartial": "Product saved; some additions failed",
     "tile.enrichDone": "Product image, translations and market prices added",
     "more.dietPreference": "Preferred diet",
-    "more.dietNone": "No restrictions"
+    "more.dietNone": "No restrictions",
+    "more.market": "Market",
+    "more.marketAuto": "Automatic (from language)"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -1991,7 +1993,9 @@
     "tile.enrichPartial": "Product saved; some additions failed",
     "tile.enrichDone": "Product image, translations and market prices added",
     "more.dietPreference": "Preferred diet",
-    "more.dietNone": "No restrictions"
+    "more.dietNone": "No restrictions",
+    "more.market": "Market",
+    "more.marketAuto": "Automatic (from language)"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2988,7 +2992,9 @@
     "tile.enrichPartial": "Product saved; some additions failed",
     "tile.enrichDone": "Product image, translations and market prices added",
     "more.dietPreference": "Preferred diet",
-    "more.dietNone": "No restrictions"
+    "more.dietNone": "No restrictions",
+    "more.market": "Market",
+    "more.marketAuto": "Automatic (from language)"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -3985,7 +3991,9 @@
     "tile.enrichPartial": "Producto guardado; algunos añadidos fallaron",
     "tile.enrichDone": "Imagen, traducciones y precios añadidos",
     "more.dietPreference": "Alimentación preferida",
-    "more.dietNone": "Sin restricciones"
+    "more.dietNone": "Sin restricciones",
+    "more.market": "Mercado",
+    "more.marketAuto": "Automático (según el idioma)"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4982,7 +4990,9 @@
     "tile.enrichPartial": "Producto guardado; algunos añadidos fallaron",
     "tile.enrichDone": "Imagen, traducciones y precios añadidos",
     "more.dietPreference": "Alimentación preferida",
-    "more.dietNone": "Sin restricciones"
+    "more.dietNone": "Sin restricciones",
+    "more.market": "Mercado",
+    "more.marketAuto": "Automático (según el idioma)"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -5979,7 +5989,9 @@
     "tile.enrichPartial": "Produit enregistré ; certains ajouts ont échoué",
     "tile.enrichDone": "Image, traductions et prix ajoutés",
     "more.dietPreference": "Régime alimentaire souhaité",
-    "more.dietNone": "Aucune restriction"
+    "more.dietNone": "Aucune restriction",
+    "more.market": "Marché",
+    "more.marketAuto": "Automatique (selon la langue)"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6976,7 +6988,9 @@
     "tile.enrichPartial": "Produit enregistré ; certains ajouts ont échoué",
     "tile.enrichDone": "Image, traductions et prix ajoutés",
     "more.dietPreference": "Régime alimentaire souhaité",
-    "more.dietNone": "Aucune restriction"
+    "more.dietNone": "Aucune restriction",
+    "more.market": "Marché",
+    "more.marketAuto": "Automatique (selon la langue)"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -7973,7 +7987,9 @@
     "tile.enrichPartial": "Prodotto salvato; alcune aggiunte non riuscite",
     "tile.enrichDone": "Immagine, traduzioni e prezzi aggiunti",
     "more.dietPreference": "Alimentazione preferita",
-    "more.dietNone": "Nessuna restrizione"
+    "more.dietNone": "Nessuna restrizione",
+    "more.market": "Mercato",
+    "more.marketAuto": "Automatico (dalla lingua)"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8970,7 +8986,9 @@
     "tile.enrichPartial": "Prodotto salvato; alcune aggiunte non riuscite",
     "tile.enrichDone": "Immagine, traduzioni e prezzi aggiunti",
     "more.dietPreference": "Alimentazione preferita",
-    "more.dietNone": "Nessuna restrizione"
+    "more.dietNone": "Nessuna restrizione",
+    "more.market": "Mercato",
+    "more.marketAuto": "Automatico (dalla lingua)"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -9967,7 +9985,9 @@
     "tile.enrichPartial": "Produto guardado; algumas adições falharam",
     "tile.enrichDone": "Imagem, traduções e preços adicionados",
     "more.dietPreference": "Alimentação preferida",
-    "more.dietNone": "Sem restrições"
+    "more.dietNone": "Sem restrições",
+    "more.market": "Mercado",
+    "more.marketAuto": "Automático (conforme o idioma)"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10964,7 +10984,9 @@
     "tile.enrichPartial": "Produto guardado; algumas adições falharam",
     "tile.enrichDone": "Imagem, traduções e preços adicionados",
     "more.dietPreference": "Alimentação preferida",
-    "more.dietNone": "Sem restrições"
+    "more.dietNone": "Sem restrições",
+    "more.market": "Mercado",
+    "more.marketAuto": "Automático (conforme o idioma)"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -11961,7 +11983,9 @@
     "tile.enrichPartial": "Product opgeslagen; enkele aanvullingen mislukt",
     "tile.enrichDone": "Productafbeelding, vertalingen en marktprijzen toegevoegd",
     "more.dietPreference": "Gewenst voedingspatroon",
-    "more.dietNone": "Geen beperkingen"
+    "more.dietNone": "Geen beperkingen",
+    "more.market": "Markt",
+    "more.marketAuto": "Automatisch (uit taal)"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12958,7 +12982,9 @@
     "tile.enrichPartial": "Product opgeslagen; enkele aanvullingen mislukt",
     "tile.enrichDone": "Productafbeelding, vertalingen en marktprijzen toegevoegd",
     "more.dietPreference": "Gewenst voedingspatroon",
-    "more.dietNone": "Geen beperkingen"
+    "more.dietNone": "Geen beperkingen",
+    "more.market": "Markt",
+    "more.marketAuto": "Automatisch (uit taal)"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13415,7 +13441,9 @@
     "tile.enrichPartial": "Produkt gespeichert; einzelne Ergänzungen fehlgeschlagen",
     "tile.enrichDone": "Produktbild, Übersetzungen und Marktpreise ergänzt",
     "more.dietPreference": "Gewünschte Ernährungsform",
-    "more.dietNone": "Keine Einschränkung"
+    "more.dietNone": "Keine Einschränkung",
+    "more.market": "Markt",
+    "more.marketAuto": "Automatisch (aus Sprache)"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13872,6 +13900,8 @@
     "tile.enrichPartial": "Produkt gespeichert; einzelne Ergänzungen fehlgeschlagen",
     "tile.enrichDone": "Produktbild, Übersetzungen und Marktpreise ergänzt",
     "more.dietPreference": "Gewünschte Ernährungsform",
-    "more.dietNone": "Keine Einschränkung"
+    "more.dietNone": "Keine Einschränkung",
+    "more.market": "Markt",
+    "more.marketAuto": "Automatisch (us de Sproch)"
   }
 }

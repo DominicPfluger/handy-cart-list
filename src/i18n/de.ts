@@ -813,6 +813,8 @@ export const de = {
   "adm.remove": "Entfernen",
   "adm.allCuisines": "Alle Küchen",
   "more.allMarkets": "Alle Märkte anzeigen",
+  "more.market": "Markt",
+  "more.marketAuto": "Automatisch (aus Sprache)",
   "more.iconSet": "Icon-Set",
   "more.dietPreference": "Gewünschte Ernährungsform",
   "more.dietNone": "Keine Einschränkung",
