@@ -239,7 +239,6 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
-      {p.cur && editMode && p.sortControls}
       {p.below}
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
