@@ -24,7 +24,7 @@ export const Route = createFileRoute("/rezepte/suchen")({
 
 type Filters = Record<TraitGroup, string | null>;
 
-const EMPTY_FILTERS: Filters = { satiety: null, spiciness: null, price_class: null };
+const EMPTY_FILTERS: Filters = { satiety: null, spiciness: null, price_class: null, taste: null };
 
 function RecipeSearchPage() {
   const { t } = useT();

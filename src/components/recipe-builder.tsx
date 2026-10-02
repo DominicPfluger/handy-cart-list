@@ -56,7 +56,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const user = useAuthUser();
   const collections = useRecipeCollections(user);
   const [busy, setBusy] = useState(false);
-  const [traits, setTraits] = useState<RecipeTraits>({ satiety: null, spiciness: null, price_class: null });
+  const [traits, setTraits] = useState<RecipeTraits>({ satiety: null, spiciness: null, price_class: null, taste: null });
   const [traitsError, setTraitsError] = useState(false);
   const traitsComplete = TRAIT_GROUPS.every((g) => !!traits[g]);
   const [onlyFav, setOnlyFav] = useState(false);
@@ -277,7 +277,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       const recTitle = customTitle.trim() || title;
       const recDesc = customDesc.trim() || null;
       const imagePath = photo ? await uploadRecipeImage(user.id, photo) : null;
-      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, description: recDesc, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic, imagePath, satiety: traits.satiety, spiciness: traits.spiciness, priceClass: traits.price_class });
+      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, description: recDesc, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic, imagePath, satiety: traits.satiety, spiciness: traits.spiciness, priceClass: traits.price_class, taste: traits.taste });
       await saveToFolder(user.id, rec.id, folderId);
       if (makePublic && rec.share_slug) {
         const how = await shareLink(rec.share_slug, recTitle);
@@ -723,7 +723,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             </ul>
             {user && (
               <button
-                onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setTraits({ satiety: null, spiciness: null, price_class: null }); setTraitsError(false); setSaveOpen(true); }}
+                onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setTraits({ satiety: null, spiciness: null, price_class: null, taste: null }); setTraitsError(false); setSaveOpen(true); }}
                 className="mt-3 w-full rounded-2xl bg-primary px-4 py-4 text-lg font-bold text-primary-foreground shadow-md transition active:scale-[0.98]"
               >
                 {savedMsg ? `📁 ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
