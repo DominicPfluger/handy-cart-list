@@ -433,18 +433,111 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       <div className="mt-3 space-y-3">
 
 
-      <div className="flex flex-wrap gap-1.5">
-        {RECIPE_TEMPLATES.map((x) => (
+      <div className="flex flex-wrap items-center gap-1.5">
+        {templates.map((x) => (
           <button
             key={x.id}
-            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); }}
+            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setStepForm(null); setSuggestStep(null); }}
             aria-pressed={tplId === x.id}
-            className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}
+            className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"} ${x.enabled ? "" : "opacity-50 line-through"}`}
           >
-            {x.emoji} {T(`rk.cat.${x.id}` as MessageKey)}
+            {x.emoji} {tplLabel(x.id)}
           </button>
         ))}
+        <button type="button" onClick={() => setManageOpen((v) => !v)} className={`rounded-full border px-2.5 py-1 text-xs ${manageOpen ? "border-primary bg-primary/15 text-foreground" : "border-dashed border-border bg-background text-muted-foreground"}`}>
+          ⚙️ {T("adm.tplManage")}
+        </button>
       </div>
+
+      {manageOpen && (
+        <div className="space-y-2 rounded-lg border border-border bg-background p-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-foreground">{T("adm.tplManage")}</span>
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => setTplForm({ id: "", emoji: "" })}>{T("adm.tplNew")}</Button>
+          </div>
+          {templates.map((t, i) => (
+            <div key={t.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+              <span className="min-w-0 flex-1 truncate text-foreground">{t.emoji} {tplLabel(t.id)} <span className="text-muted-foreground">({t.id})</span></span>
+              <button type="button" disabled={busy} onClick={() => toggleTpl(t)} className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${t.enabled ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
+                {t.enabled ? T("adm.tplEnabled") : T("adm.tplDisabled")}
+              </button>
+              <button type="button" disabled={busy || i === 0} onClick={() => moveTpl(t, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
+              <button type="button" disabled={busy || i === templates.length - 1} onClick={() => moveTpl(t, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
+              <Button size="sm" variant="ghost" disabled={busy} onClick={() => setTplForm({ id: t.id, emoji: t.emoji })}>{T("adm.edit")}</Button>
+              <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeTpl(t)}>{T("adm.delete")}</Button>
+            </div>
+          ))}
+          {tplForm && (
+            <div className="flex flex-wrap items-center gap-2">
+              <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={tplForm.id} onChange={(e) => setTplForm({ ...tplForm, id: e.target.value })} className="min-w-32 flex-1" disabled={templates.some((x) => x.id === tplForm.id)} />
+              <Input aria-label="Emoji" placeholder="Emoji" value={tplForm.emoji} onChange={(e) => setTplForm({ ...tplForm, emoji: e.target.value })} className="w-20" />
+              <Button size="sm" disabled={busy || !tplForm.id.trim()} onClick={saveTpl}>{T("adm.save")}</Button>
+              <Button size="sm" variant="ghost" onClick={() => setTplForm(null)}>{T("adm.cancel")}</Button>
+            </div>
+          )}
+
+          {tplId && (
+            <div className="space-y-2 border-t border-border pt-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-foreground">{tplLabel(tplId)}</span>
+                <Button size="sm" variant="outline" disabled={busy} onClick={() => setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true })}>{T("adm.stepNew")}</Button>
+              </div>
+              {steps.map((s, i) => (
+                <div key={s.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+                  <span className="min-w-0 flex-1 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
+                  <button type="button" disabled={busy || i === 0} onClick={() => moveStep(s, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
+                  <button type="button" disabled={busy || i === steps.length - 1} onClick={() => moveStep(s, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
+                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => setStepForm({ id: s.id, key: s.key, name: s.name, emoji: s.emoji ?? "", min: s.min, max: s.max, required: s.required })}>{T("adm.edit")}</Button>
+                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeStep(s)}>{T("adm.delete")}</Button>
+                </div>
+              ))}
+              {stepForm && (
+                <div className="space-y-2 rounded-lg border border-border p-2">
+                  <p className="text-xs font-semibold text-foreground">{stepForm.id ? T("adm.stepEdit") : T("adm.stepNew")}</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={stepForm.key} onChange={(e) => setStepForm({ ...stepForm, key: e.target.value })} className="w-28" disabled={!!stepForm.id} />
+                    <Input aria-label={T("add.name")} placeholder={T("add.name")} value={stepForm.name} onChange={(e) => setStepForm({ ...stepForm, name: e.target.value })} className="min-w-32 flex-1" />
+                    <Input aria-label="Emoji" placeholder="Emoji" value={stepForm.emoji} onChange={(e) => setStepForm({ ...stepForm, emoji: e.target.value })} className="w-16" />
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-foreground">
+                    <label className="flex items-center gap-1">{T("adm.stepMin")} <Input type="number" min={0} max={20} value={stepForm.min} onChange={(e) => setStepForm({ ...stepForm, min: Math.max(0, Number(e.target.value) || 0) })} className="w-16" /></label>
+                    <label className="flex items-center gap-1">{T("adm.stepMax")} <Input type="number" min={1} max={20} value={stepForm.max} onChange={(e) => setStepForm({ ...stepForm, max: Math.max(1, Number(e.target.value) || 1) })} className="w-16" /></label>
+                    <label className="flex items-center gap-1"><input type="checkbox" checked={stepForm.required} onChange={(e) => setStepForm({ ...stepForm, required: e.target.checked })} className="accent-primary" /> {T("adm.stepRequired")}</label>
+                    <Button size="sm" disabled={busy || !stepForm.key.trim() || !stepForm.name.trim()} onClick={saveStep}>{T("adm.save")}</Button>
+                    <Button size="sm" variant="ghost" onClick={() => setStepForm(null)}>{T("adm.cancel")}</Button>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-1 border-t border-border pt-2">
+                <span className="text-xs font-semibold text-foreground">{T("adm.popular")}</span>
+                {pops.map((p) => (
+                  <div key={p.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+                    <span className="min-w-0 flex-1 truncate text-muted-foreground">{Object.entries(p.picks).map(([k, v]) => `${k}: ${v.join(", ")}`).join(" · ")}</span>
+                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => removePop(p)}>{T("adm.delete")}</Button>
+                  </div>
+                ))}
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input aria-label={T("adm.popularNew")} placeholder={T("adm.popularHint")} value={popForm} onChange={(e) => setPopForm(e.target.value)} className="min-w-40 flex-1" />
+                  <Button size="sm" disabled={busy || !popForm.trim()} onClick={addPop}>{T("adm.popularNew")}</Button>
+                </div>
+              </div>
+
+              <div className="space-y-1 border-t border-border pt-2">
+                <span className="text-xs font-semibold text-foreground">{T("adm.preview")}</span>
+                <div className="rounded-xl border border-border bg-card p-2">
+                  <p className="text-sm font-semibold text-foreground">{templates.find((x) => x.id === tplId)?.emoji} {tplLabel(tplId)}</p>
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {steps.map((s) => (
+                      <span key={s.id} className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-foreground">{s.emoji} {s.name} {s.required ? "*" : ""}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {tpl && (
         <div className="space-y-4">
