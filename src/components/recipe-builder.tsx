@@ -440,16 +440,16 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           <button
             onClick={toggleOnlyFav}
             aria-pressed={onlyFav}
-            className={`rounded-full border px-2 py-1 text-[11px] font-semibold leading-tight transition ${
+            className={`shrink-0 whitespace-nowrap rounded-full border px-2 py-1 text-[11px] font-semibold leading-tight transition ${
               onlyFav ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
             }`}
           >
             ♥ {t("rk.onlyFavorites")}
           </button>
-          <button onClick={surprise} className="rounded-full bg-accent px-2 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
+          <button onClick={surprise} className="shrink-0 whitespace-nowrap rounded-full bg-accent px-2 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
             {t("rk.surprise")}
           </button>
-          <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
+          <button onClick={() => { setPicks({}); setAdded(false); }} className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
             {t("rk.reset")}
           </button>
       </div>
