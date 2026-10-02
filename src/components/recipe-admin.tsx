@@ -56,6 +56,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const saveGroupFn = useServerFn(saveRecipeGroup);
   const deleteGroupFn = useServerFn(deleteRecipeGroup);
   const [editGroupId, setEditGroupId] = useState<string | null>(null);
+  const [groupFormOpen, setGroupFormOpen] = useState(false);
   const [groupParent, setGroupParent] = useState<string | null>(null);
   const [groupName, setGroupName] = useState("");
   const [groupEmoji, setGroupEmoji] = useState("");
@@ -93,6 +94,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const groupTree = (parentId: string | null) => groups.filter((g) => g.parent_id === parentId).sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name));
   const descendants = (id: string): string[] => [id, ...groupTree(id).flatMap((g) => descendants(g.id))];
   const startGroup = (parentId: string | null, group?: Group) => {
+    setGroupFormOpen(true);
     setEditGroupId(group?.id ?? null);
     setGroupParent(group?.parent_id ?? parentId);
     setGroupName(group?.name ?? "");
@@ -102,7 +104,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     if (!groupName.trim()) return;
     await saveGroupFn({ data: { id: editGroupId ?? undefined, parentId: groupParent, name: groupName.trim(), emoji: groupEmoji.trim() || null, sortOrder: groupTree(groupParent).length + 1 } });
     await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
-    setGroupName(""); setEditGroupId(null); setGroupParent(null); setGroupEmoji("");
+    setGroupFormOpen(false); setGroupName(""); setEditGroupId(null); setGroupParent(null); setGroupEmoji("");
   });
   const removeGroup = (g: Group) => {
     const ids = descendants(g.id);
@@ -123,7 +125,9 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     if (!moved) return;
     next.splice(to, 0, moved);
     for (let i = 0; i < next.length; i++) {
-      const { error } = await supabase.from("recipe_groups").update({ sort_order: i + 1 }).eq("id", next[i].id);
+      const row = next[i];
+      if (!row) continue;
+      const { error } = await supabase.from("recipe_groups").update({ sort_order: i + 1 }).eq("id", row.id);
       if (error) throw new Error(error.message);
     }
     await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
@@ -299,11 +303,11 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                 <Button size="sm" variant="ghost" className="ml-4" disabled={busy} onClick={() => startGroup(parent.id)}>{T("adm.recipeGroupSub")}</Button>
               </div>
             ))}
-            {(groupName || groupParent || editGroupId !== null) && <div className="flex flex-wrap items-center gap-2">
-              <Input aria-label={T("adm.name")} placeholder={T("adm.name")} value={groupName} onChange={(e) => setGroupName(e.target.value)} className="min-w-32 flex-1" />
+            {groupFormOpen && <div className="flex flex-wrap items-center gap-2">
+              <Input aria-label={T("add.name")} placeholder={T("add.name")} value={groupName} onChange={(e) => setGroupName(e.target.value)} className="min-w-32 flex-1" />
               <Input aria-label="Emoji" placeholder="Emoji" value={groupEmoji} onChange={(e) => setGroupEmoji(e.target.value)} className="w-20" />
               <Button size="sm" disabled={busy || !groupName.trim()} onClick={saveGroup}>{T("adm.save")}</Button>
-              <Button size="sm" variant="ghost" onClick={() => { setGroupName(""); setGroupParent(null); setEditGroupId(null); }}>{T("adm.cancel")}</Button>
+              <Button size="sm" variant="ghost" onClick={() => { setGroupFormOpen(false); setGroupName(""); setGroupParent(null); setEditGroupId(null); }}>{T("adm.cancel")}</Button>
             </div>}
           </div>
           <Input

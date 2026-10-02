@@ -567,7 +567,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               const remaining = current.length - vis;
               return (
                 <div className="space-y-2">
-                  {hasGroups && <Button variant="ghost" size="sm" className="-ml-2" onClick={() => setOpenIngredientGroups((prev) => { const next = { ...prev }; delete next[s.key]; return next; })}>← {s.groups.find((g) => g.id === groupKey)?.name ?? t("rk.otherGroup")}</Button>}
+                  {hasGroups && <div className="flex items-center gap-2"><Button variant="ghost" size="sm" className="-ml-2" onClick={() => setOpenIngredientGroups((prev) => { const next = { ...prev }; delete next[s.key]; return next; })}>← {t("common.back")}</Button><span className="text-sm font-semibold text-foreground">{s.groups.find((g) => g.id === groupKey)?.name ?? t("rk.otherGroup")}</span></div>}
                   <div className="flex flex-wrap gap-2">
                     {shown.map((p) => {
                       const on = sel.includes(p.id);
