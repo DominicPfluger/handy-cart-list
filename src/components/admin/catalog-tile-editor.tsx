@@ -773,18 +773,40 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                     setEstimates(r.items);
                     const mine = r.items.find((x) => x.market === currentMarket());
                     if (mine) setPrice(String(mine.price));
+                    const est: Record<string, string> = {};
+                    for (const x of r.items) est[x.market] = String(x.price);
+                    setMp((o) => ({ ...o, ...est }));
+                    setMpOrig((o) => ({ ...o, ...est }));
                     void qc.invalidateQueries();
                     if (r.failed > 0) throw new Error(T("tile.estimateAllFailed", { n: r.failed }));
                   }, T("tile.estimateAllDone")).finally(() => setEstimating(false));
                 }}>{estimating ? "…" : `✨ ${T("tile.estimateAll")}`}</Button>
               )}
             </div>
-            {estimates.length > 0 && (
-              <ul className="max-h-40 space-y-0.5 overflow-y-auto rounded-xl bg-muted p-2 text-xs text-foreground">
-                {estimates.map((e) => (
-                  <li key={e.market}>{e.market} · {e.currency} {e.price.toFixed(2)}{e.unit_price ? ` · ${e.currency} ${e.unit_price.toFixed(2)}/${e.unit_basis}` : ""}</li>
-                ))}
-              </ul>
+            {mkts.length > 0 && (
+              <div className="rounded-xl border border-border">
+                <button type="button" onClick={() => setMpOpen((v) => !v)} className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold text-foreground">
+                  <span>{T("tile.marketPrices")} ({Object.values({ ...mp, [currentMarket()]: price }).filter((v) => v.trim()).length}/{mkts.length})</span>
+                  <span className="text-muted-foreground">{mpOpen ? "▾" : "▸"}</span>
+                </button>
+                {mpOpen && (
+                  <div className="space-y-1.5 border-t border-border p-2">
+                    <p className="text-xs text-muted-foreground">{T("tile.marketPricesHint")}</p>
+                    {mkts.map((m) => {
+                      const isCur = m.code === currentMarket();
+                      const v = isCur ? price : (mp[m.code] ?? "");
+                      return (
+                        <label key={m.code} className="flex items-center gap-2 text-sm">
+                          <span className="w-6 text-center">{m.flag}</span>
+                          <span className="flex-1 truncate text-foreground">{m.name}</span>
+                          <span className="w-10 text-xs text-muted-foreground">{m.currency}</span>
+                          <Input aria-label={`${m.name} ${m.currency}`} type="number" min={0} step="any" value={v} onChange={(e) => (isCur ? setPrice(e.target.value) : setMp((o) => ({ ...o, [m.code]: e.target.value })))} className="h-9 w-28 rounded-lg" />
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
