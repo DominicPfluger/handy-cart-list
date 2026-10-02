@@ -1,8 +1,9 @@
 import { uploadRecipeImage } from "../lib/recipe-images";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
+import { matchesProductSearch } from "../lib/catalog-query";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { POPULAR_RECIPES, RECIPE_TEMPLATES, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
@@ -31,6 +32,30 @@ function shuffle<T>(a: T[]) {
     [r[i], r[j]] = [r[j]!, r[i]!];
   }
   return r;
+}
+
+/** Vorlagen aus der Datenbank (Admin-gepflegt); Fallback: feste Vorlagen aus dem Code. */
+export function useRecipeTemplates(): RecipeTemplate[] {
+  const catalog = useCatalog();
+  return useMemo(() => {
+    const dbT = catalog.recipeTemplates.filter((x) => x.enabled);
+    if (dbT.length === 0) return RECIPE_TEMPLATES;
+    return dbT.map((x) => ({
+      id: x.id as RecipeTemplate["id"],
+      emoji: x.emoji ?? "🍽️",
+      color: x.color ?? "oklch(0.93 0.04 120)",
+      steps: catalog.recipeSteps
+        .filter((s) => s.templateId === x.id)
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .map((s) => ({ key: s.key, label: s.name, min: s.min, max: s.max, required: s.required, ingredients: [] as string[] })),
+    })) as RecipeTemplate[];
+  }, [catalog.recipeTemplates, catalog.recipeSteps]);
+}
+
+/** Name einer Vorlage: eingebaute IDs über die Sprachdateien, eigene über den Katalog-Namen. */
+export function templateLabel(tpl: RecipeTemplate, t: (k: MessageKey) => string): string {
+  const builtin = (RECIPE_TEMPLATES as ReadonlyArray<{ id: string }>).some((x) => x.id === tpl.id);
+  return builtin ? t(`rk.cat.${tpl.id}` as MessageKey) : ((tpl as unknown as { name?: string }).name ?? tpl.id);
 }
 
 export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipeId, initialTemplateId }: { onTemplateChange?: (id: string | null) => void; mode?: "generator" | "lists" | "inspiration"; loadRecipeId?: string | undefined; initialTemplateId?: RecipeTemplate["id"] | undefined } = {}) {
