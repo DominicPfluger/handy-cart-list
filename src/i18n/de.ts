@@ -710,7 +710,7 @@ export const de = {
   "adm.retranslate": "KI neu übersetzen",
   "adm.trHint": "Grün = von Hand bearbeitet, wird von der KI nicht überschrieben. Leeren = Übersetzung löschen.",
   "adm.cuisines": "Länderküchen",
-  "adm.recipeIngredients": "Rezept-Zutaten",
+  "adm.recipeIngredients": "Rezept-Generator Zutaten zuweisen",
   "adm.recipeStepEmpty": "Noch keine Zutaten zugewiesen — über die Suche hinzufügen.",
   "adm.cuisineCount": "{n} Küchen",
   "adm.up": "Nach oben",
