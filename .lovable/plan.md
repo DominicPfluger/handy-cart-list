@@ -1,8 +1,8 @@
-# Preis schätzen im Produkt-Bearbeiten-Fenster
+# Preis schätzen im Produkt-Fenster + Tab „Vorlese-Texte"
+
+## Teil 1: Preis schätzen im Produkt-Bearbeiten-Fenster
 
 Im Bearbeiten-Fenster eines Produkts (Admin → Katalog → Stift auf einer Produkt-Kachel) kann der Richtpreis per Knopfdruck von der KI geschätzt werden.
-
-## Umsetzung
 
 1. **Neue Server-Funktion `estimateProductPrice`** in `src/lib/product-media.functions.ts` (Admin-geschützt wie `estimateCategoryPrices`):
    - Eingabe: `name`, `qty`, `unit`, `market` (kein Produkt-ID nötig — funktioniert auch vor dem ersten Speichern).
@@ -18,11 +18,19 @@ Im Bearbeiten-Fenster eines Produkts (Admin → Katalog → Stift auf einer Prod
 
 3. **Übersetzungen**: Neue Schlüssel `tile.estimatePrice` („Schätzen") und `tile.priceNameRequired` („Bitte zuerst einen Namen eingeben") in `src/i18n/de.ts` und allen 15 Locales in `messages.json`.
 
+## Teil 2: Vorlese-Texte als eigener Tab
+
+- Neuer Tab **„Vorlese-Texte"** ganz am Ende der Admin-Navigation (nach „Mehr") in `src/routes/_authenticated/admin.tsx`.
+- Der Tab öffnet die bestehende Seite `/vorlese-texte` (gleiche Zielseite wie der bisherige Link).
+- Der bisherige Link „Vorlese-Texte" im Tab „Mehr" wird entfernt, damit es ihn nicht doppelt gibt.
+- Neuer i18n-Schlüssel `adm.tab.speech` („Vorlese-Texte") in allen 16 Sprachen.
+
 ## Nicht geändert
 
-- Speichern-Logik und bestehende Preis-Schätzung im Tab „Preise" (einzeln/pro Kategorie) bleiben unberührt.
+- Speichern-Logik und bestehende Preis-Schätzung im Tab „Preise" bleiben unberührt.
+- Die Seite `/vorlese-texte` selbst bleibt unverändert.
 - Keine Datenbankänderung.
 
 ## Verifikation
 
-Build prüfen, dann in der Vorschau: Produkt öffnen → „✨ Schätzen" → Preis erscheint im Feld → Speichern → Preis ist in der Datenbank.
+Build prüfen, dann in der Vorschau: Produkt öffnen → „✨ Schätzen" → Preis erscheint im Feld → Speichern. Tab „Vorlese-Texte" öffnen → Seite lädt.
