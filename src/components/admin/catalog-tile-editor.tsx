@@ -164,6 +164,18 @@ export function CatalogTileEditor(p: {
       </nav>
       {p.toolbar}
 
+      {editMode && (
+        <div className="flex flex-wrap gap-2">
+          <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "department", id: null })}>+ {T("tile.newCat")}</Button>
+          {p.cur && p.onAddHeading && p.products.length > 0 && (
+            <Button size="sm" variant="outline" onClick={() => setNewTitle("")}>+ {T("adm.heading")}</Button>
+          )}
+          {p.cur && <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "product", id: null })}>+ {T("tile.newProd")}</Button>}
+          {p.cur && p.onBulkAdd && <Button size="sm" variant="outline" onClick={p.onBulkAdd}>+ {T("adm.multi")}</Button>}
+          {p.cur && <Button size="sm" variant="outline" onClick={() => setSuggesting(true)}>✨ {T("tile.suggest")}</Button>}
+        </div>
+      )}
+
       {(p.children.length > 0 || editMode) && (
         <div className="grid grid-cols-3 gap-2.5 md:grid-cols-5 xl:grid-cols-7">
           {p.children.map((c, i) => (
@@ -184,30 +196,6 @@ export function CatalogTileEditor(p: {
               )}
             </div>
           ))}
-          {editMode && (
-            <button type="button" onClick={() => setTarget({ kind: "department", id: null })}
-              className="flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-sm font-semibold text-muted-foreground">
-              <span className="text-2xl">+</span>{T("tile.newCat")}
-            </button>
-          )}
-          {editMode && p.cur && p.onAddHeading && p.products.length > 0 && (
-            <button type="button" onClick={() => setNewTitle("")}
-              className="flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-sm font-semibold text-primary">
-              <span className="text-2xl">+</span>{T("adm.heading")}
-            </button>
-          )}
-          {editMode && p.cur && (
-            <button type="button" onClick={() => setTarget({ kind: "product", id: null })}
-              className="flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-sm font-semibold text-primary">
-              <span className="text-2xl">+</span>{T("tile.newProd")}
-            </button>
-          )}
-          {editMode && p.cur && p.onBulkAdd && (
-            <button type="button" onClick={p.onBulkAdd}
-              className="flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-sm font-semibold text-primary">
-              <span className="text-2xl">+</span>{T("adm.multi")}
-            </button>
-          )}
         </div>
       )}
 
@@ -260,12 +248,6 @@ export function CatalogTileEditor(p: {
               </Fragment>
             );
           })}
-          {editMode && (
-            <button type="button" onClick={() => setSuggesting(true)}
-              className="flex w-full items-center gap-3 px-3 py-3 text-sm font-semibold text-primary">
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-soft text-xl">✨</span>{T("tile.suggest")}
-            </button>
-          )}
         </div>
       )}
 
