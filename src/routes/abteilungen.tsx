@@ -680,7 +680,7 @@ function DepartmentsPage() {
                       <span>{product.name}</span>
                     </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                       {normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
+                       {normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
                     </p>
                   </div>
