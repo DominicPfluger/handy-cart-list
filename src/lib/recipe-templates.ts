@@ -9,6 +9,8 @@ export type RecipeStep = {
   label: string; // deutscher Schritt-Titel
   min: number;
   max: number;
+  /** Pflicht-Schritt (Datenbank-Vorlagen); eingebaute leiten es aus min > 0 ab. */
+  required?: boolean;
   ingredients: string[];
 };
 

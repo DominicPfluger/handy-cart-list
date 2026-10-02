@@ -107,6 +107,8 @@ export interface RecipeTemplateRow {
   sortOrder: number;
   enabled: boolean;
   baseName: string;
+  /** Anzeigename eigener Vorlagen (= Kennung, wenn keine Übersetzung existiert). */
+  name: string;
   names: Record<string, string>;
 }
 
