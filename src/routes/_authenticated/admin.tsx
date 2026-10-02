@@ -213,9 +213,19 @@ function AdminPage() {
       qc.setQueryData(ALIAS_KEY, (old: Array<{ id: string; sort_order: number }> | undefined) =>
         old?.map((a) => (pos.has(`alias:${a.id}`) ? { ...a, sort_order: pos.get(`alias:${a.id}`)! } : a)));
     }
+    if (kind === "department") {
+      qc.setQueryData(DEPT_ALIAS_KEY, (old: Array<{ id: string; sort_order: number }> | undefined) =>
+        old?.map((a) => (pos.has(`deptalias:${a.id}`) ? { ...a, sort_order: pos.get(`deptalias:${a.id}`)! } : a)));
+    }
     run(async () => {
       if (kind === "product") { await saveOrder(next); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }
-      else await Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id))));
+      else {
+        const aliases = next.map((x, i) => [x.id, i + 1] as const).filter(([id]) => id.startsWith("deptalias:"));
+        await Promise.all(aliases.map(([id, n]) => must(supabase.from("department_aliases").update({ sort_order: n }).eq("id", id.slice(10)))));
+        await Promise.all(next.map((x, i) => [x, i + 1] as const).filter(([x]) => !x.id.startsWith("deptalias:"))
+          .map(([x, n]) => must(supabase.from(TABLE[kind]).update({ sort_order: n }).eq("id", x.id))));
+        await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY });
+      }
     }, T("adm.orderSaved"));
   };
 
