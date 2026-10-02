@@ -1,5 +1,8 @@
 {
   "en-US": {
+    "splash.slogan": "Together. Simply. Shop.",
+    "splash.subtitle": "The smart shopping list for your everyday life.",
+    "splash.loading": "Shoppi is loading…",
     "nav.departments": "Departments",
     "nav.favorites": "Favorites",
     "nav.lists": "Lists",
@@ -994,6 +997,9 @@
     "more.dietNone": "No restrictions"
   },
   "en-GB": {
+    "splash.slogan": "Together. Simply. Shop.",
+    "splash.subtitle": "The smart shopping list for your everyday life.",
+    "splash.loading": "Shoppi is loading…",
     "nav.departments": "Departments",
     "nav.favorites": "Favourites",
     "nav.lists": "Lists",
@@ -1988,6 +1994,9 @@
     "more.dietNone": "No restrictions"
   },
   "en-CA": {
+    "splash.slogan": "Together. Simply. Shop.",
+    "splash.subtitle": "The smart shopping list for your everyday life.",
+    "splash.loading": "Shoppi is loading…",
     "nav.departments": "Aisles",
     "nav.favorites": "Favourites",
     "nav.lists": "Lists",
@@ -2982,6 +2991,9 @@
     "more.dietNone": "No restrictions"
   },
   "es-ES": {
+    "splash.slogan": "Juntos. Fácil. Comprar.",
+    "splash.subtitle": "La lista de la compra inteligente para tu día a día.",
+    "splash.loading": "Cargando Shoppi…",
     "nav.departments": "Secciones",
     "nav.favorites": "Favoritos",
     "nav.lists": "Listas",
@@ -3976,6 +3988,9 @@
     "more.dietNone": "Sin restricciones"
   },
   "es-MX": {
+    "splash.slogan": "Juntos. Fácil. Comprar.",
+    "splash.subtitle": "La lista de compras inteligente para tu día a día.",
+    "splash.loading": "Cargando Shoppi…",
     "nav.departments": "Departamentos",
     "nav.favorites": "Favoritos",
     "nav.lists": "Listas",
@@ -4970,6 +4985,9 @@
     "more.dietNone": "Sin restricciones"
   },
   "fr-FR": {
+    "splash.slogan": "Ensemble. Simplement. Faire les courses.",
+    "splash.subtitle": "La liste de courses intelligente pour ton quotidien.",
+    "splash.loading": "Chargement de Shoppi…",
     "nav.departments": "Rayons",
     "nav.favorites": "Favoris",
     "nav.lists": "Listes",
@@ -5964,6 +5982,9 @@
     "more.dietNone": "Aucune restriction"
   },
   "fr-CA": {
+    "splash.slogan": "Ensemble. Simplement. Faire les courses.",
+    "splash.subtitle": "La liste d’épicerie intelligente pour ton quotidien.",
+    "splash.loading": "Chargement de Shoppi…",
     "nav.departments": "Rayons",
     "nav.favorites": "Favoris",
     "nav.lists": "Listes",
@@ -6958,6 +6979,9 @@
     "more.dietNone": "Aucune restriction"
   },
   "it-IT": {
+    "splash.slogan": "Insieme. Facile. Fare la spesa.",
+    "splash.subtitle": "La lista della spesa intelligente per ogni giorno.",
+    "splash.loading": "Caricamento di Shoppi…",
     "nav.departments": "Reparti",
     "nav.favorites": "Preferiti",
     "nav.lists": "Liste",
@@ -7952,6 +7976,9 @@
     "more.dietNone": "Nessuna restrizione"
   },
   "it-CH": {
+    "splash.slogan": "Insieme. Facile. Fare la spesa.",
+    "splash.subtitle": "La lista della spesa intelligente per ogni giorno.",
+    "splash.loading": "Caricamento di Shoppi…",
     "nav.departments": "Reparti",
     "nav.favorites": "Preferiti",
     "nav.lists": "Liste",
@@ -8946,6 +8973,9 @@
     "more.dietNone": "Nessuna restrizione"
   },
   "pt-PT": {
+    "splash.slogan": "Juntos. Simples. Fazer compras.",
+    "splash.subtitle": "A lista de compras inteligente para o teu dia a dia.",
+    "splash.loading": "A carregar o Shoppi…",
     "nav.departments": "Secções",
     "nav.favorites": "Favoritos",
     "nav.lists": "Listas",
@@ -9940,6 +9970,9 @@
     "more.dietNone": "Sem restrições"
   },
   "pt-BR": {
+    "splash.slogan": "Juntos. Simples. Fazer compras.",
+    "splash.subtitle": "A lista de compras inteligente para o seu dia a dia.",
+    "splash.loading": "Carregando Shoppi…",
     "nav.departments": "Departamentos",
     "nav.favorites": "Favoritos",
     "nav.lists": "Listas",
@@ -10934,6 +10967,9 @@
     "more.dietNone": "Sem restrições"
   },
   "nl-NL": {
+    "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
+    "splash.subtitle": "Het slimme boodschappenlijstje voor elke dag.",
+    "splash.loading": "Shoppi wordt geladen…",
     "nav.departments": "Afdelingen",
     "nav.favorites": "Favorieten",
     "nav.lists": "Lijsten",
@@ -11928,6 +11964,9 @@
     "more.dietNone": "Geen beperkingen"
   },
   "nl-BE": {
+    "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
+    "splash.subtitle": "Het slimme boodschappenlijstje voor elke dag.",
+    "splash.loading": "Shoppi wordt geladen…",
     "nav.departments": "Afdelingen",
     "nav.favorites": "Favorieten",
     "nav.lists": "Lijsten",
@@ -12922,6 +12961,9 @@
     "more.dietNone": "Geen beperkingen"
   },
   "de-AT": {
+    "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
+    "splash.subtitle": "Die smarte Einkaufsliste für deinen Alltag.",
+    "splash.loading": "Shoppi lädt …",
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
     "more.hiddenProducts": "Ausgeblendete Produkte",
     "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet.",
@@ -13376,6 +13418,9 @@
     "more.dietNone": "Keine Einschränkung"
   },
   "de-CH": {
+    "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
+    "splash.subtitle": "Die smarte Einkaufsliste für deinen Alltag.",
+    "splash.loading": "Shoppi lädt …",
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
     "more.hiddenProducts": "Ausgeblendete Produkte",
     "more.hiddenProductsHint": "Diese Produkte sind nur auf diesem Gerät ausgeblendet.",

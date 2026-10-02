@@ -12,6 +12,7 @@
 - Admin writes via RLS `has_role`; AI translation in `translate.server.ts`. Why: no service-role in app code.
 - Personal data device-only localStorage (custom names, hidden items, diet/cuisine selection, purchase history, `shoppi:product-dept`, `shoppi:speak-locale`). Why: shared catalog admin-controlled.
 - Diet filter: products.excluded_diets. Cuisine filter: `cuisines`+`product_cuisines`. Why: simple, editable.
+- Department diet/cuisine filters exempt non-food root categories by stable catalog base names. Why: localized and nested non-food products remain visible without changing saved preferences.
 - Catalog routes `ssr: false`. Why: SSR-embedded catalog caused 'aborted' blank screens.
 - Brands: `product_brands` (locales = market codes); chosen brand appended as "Name · Marke". Why: same for cloud/local lists.
 - Recipe creator groups ingredients within each step using recipe_groups and recipe_ingredients.group_id, falling back to flat lists for ungrouped steps. Why: browse ingredient families without changing selection rules.

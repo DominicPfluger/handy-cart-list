@@ -33,7 +33,7 @@ import {
 import { formatQuantity } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
-import { deptColor, deptColorStrong } from "../lib/dept-colors";
+import { deptColor, deptColorStrong, rootOf } from "../lib/dept-colors";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
 import { VoiceInputButton } from "../components/voice-input";
 import { useIsAdmin } from "../hooks/use-is-admin";
@@ -94,9 +94,17 @@ function DepartmentsPage() {
     return removed;
   }, [hiddenIds, orderedDepartments]);
   const departments = useMemo(() => orderedDepartments.filter((d) => !removedIds.has(d.id)), [orderedDepartments, removedIds]);
+  const filterExemptDepartments = useMemo(() => {
+    const byId = new Map(orderedDepartments.map((d) => [d.id, d]));
+    const exemptRoots = new Set([
+      "Körperpflege", "Haushalt", "Tierbedarf", "Apotheke & Drogerie", "Büroartikel",
+      "Autozubehör", "Elektronik", "Kleidung & Textilien", "Küchenutensilien", "Tabak & Dampfen",
+    ]);
+    return new Set(orderedDepartments.filter((d) => exemptRoots.has(rootOf(d, byId).baseName)).map((d) => d.id));
+  }, [orderedDepartments]);
   const products = useMemo(
-    () => orderedProducts.filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId) && (!diets.length || !p.excludedDiets.some((d) => (diets as string[]).includes(d))) && (!cuisines.length || p.cuisineIds.some((c) => cuisines.includes(c)))),
-    [orderedProducts, diets, cuisines, removedIds, hiddenProductIds],
+    () => orderedProducts.filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId) && (filterExemptDepartments.has(p.departmentId) || ((!diets.length || !p.excludedDiets.some((d) => (diets as string[]).includes(d))) && (!cuisines.length || p.cuisineIds.some((c) => cuisines.includes(c)))))),
+    [orderedProducts, diets, cuisines, removedIds, hiddenProductIds, filterExemptDepartments],
   );
   // Kategorien, deren Produkte durch den Filter alle wegfallen, ausblenden
   const hiddenDepts = useMemo(() => {
@@ -113,12 +121,12 @@ function DepartmentsPage() {
     const walk = (id: string): [number, number] => {
       let a = all.get(id) ?? 0, b = shown.get(id) ?? 0;
       for (const c of kids.get(id) ?? []) { const [x, y] = walk(c); a += x; b += y; }
-      if (b === 0) hidden.add(id);
+      if (b === 0 && !filterExemptDepartments.has(id)) hidden.add(id);
       return [a, b];
     };
     for (const r of kids.get(null) ?? []) walk(r);
     return hidden;
-  }, [departments, orderedProducts, products, diets.length, cuisines.length]);
+  }, [departments, orderedProducts, products, diets.length, cuisines.length, filterExemptDepartments]);
   const { t } = useT();
   const refPrices = useReferencePrices();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
