@@ -8,6 +8,7 @@ import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
+import { toast } from "sonner";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
 import { suggestCategoryProducts, suggestImagePrompt, translateVariants } from "@/lib/admin.functions";
@@ -169,6 +170,21 @@ export function CatalogTileEditor(p: {
         : supabase.from("departments").update({ parent_id: dest }).eq("id", d.id)), T("tile.moved"));
     } else if (t.kind === "department" && d.kind === "product") {
       void p.run(() => p.must(supabase.from("products").update({ department_id: t.id }).eq("id", d.id)), T("tile.moved"));
+    } else if (t.kind === "department" && d.kind === "department") {
+      // Mitte der Kachel = in diese Kategorie hineinverschieben, Rand = umsortieren.
+      const r = t.el.getBoundingClientRect();
+      const frac = (e.clientX - r.left) / r.width;
+      const into = frac > 0.25 && frac < 0.75;
+      if (into) {
+        // Nicht in die eigene Unterkategorie verschieben (würde einen Kreis erzeugen).
+        let cur: TileDept | undefined = deptById.get(t.id);
+        let cyclic = false; let g = 0;
+        while (cur && g++ < 20) { if (cur.id === d.id) { cyclic = true; break; } cur = cur.parent_id ? deptById.get(cur.parent_id) : undefined; }
+        if (cyclic) { toast.error(T("tile.moveIntoCycle")); return; }
+        void p.run(() => p.must(supabase.from("departments").update({ parent_id: t.id }).eq("id", d.id)), T("tile.moved"));
+        return;
+      }
+      p.reorder("department", p.children, d.index, t.index + (after ? 1 : 0));
     } else if (t.kind === d.kind) {
       p.reorder(d.kind, d.kind === "department" ? p.children : p.products, d.index, t.index + (after ? 1 : 0));
     }

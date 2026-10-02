@@ -1007,7 +1007,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion"
+    "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion",
+    "tile.moveIntoCycle": "Not possible: the target category is inside the moved category."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2017,7 +2018,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion"
+    "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion",
+    "tile.moveIntoCycle": "Not possible: the target category is inside the moved category."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3027,7 +3029,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion"
+    "tile.aiHintEmpty": "Optional: keywords for the AI image — ↻ for AI suggestion",
+    "tile.moveIntoCycle": "Not possible: the target category is inside the moved category."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4037,7 +4040,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Opcional: palabras clave para la imagen IA — ↻ para sugerencia"
+    "tile.aiHintEmpty": "Opcional: palabras clave para la imagen IA — ↻ para sugerencia",
+    "tile.moveIntoCycle": "No es posible: la categoría de destino está dentro de la categoría movida."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5047,7 +5051,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Opcional: palabras clave para la imagen IA — ↻ para sugerencia"
+    "tile.aiHintEmpty": "Opcional: palabras clave para la imagen IA — ↻ para sugerencia",
+    "tile.moveIntoCycle": "No es posible: la categoría de destino está dentro de la categoría movida."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6057,7 +6062,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Optionnel : mots-clés pour l’image IA — ↻ pour une suggestion"
+    "tile.aiHintEmpty": "Optionnel : mots-clés pour l’image IA — ↻ pour une suggestion",
+    "tile.moveIntoCycle": "Impossible : la catégorie cible se trouve dans la catégorie déplacée."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7067,7 +7073,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Optionnel : mots-clés pour l’image IA — ↻ pour une suggestion"
+    "tile.aiHintEmpty": "Optionnel : mots-clés pour l’image IA — ↻ pour une suggestion",
+    "tile.moveIntoCycle": "Impossible : la catégorie cible se trouve dans la catégorie déplacée."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8077,7 +8084,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Facoltativo: parole chiave per l’immagine IA — ↻ per un suggerimento"
+    "tile.aiHintEmpty": "Facoltativo: parole chiave per l’immagine IA — ↻ per un suggerimento",
+    "tile.moveIntoCycle": "Non possibile: la categoria di destinazione si trova dentro la categoria spostata."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9087,7 +9095,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Facoltativo: parole chiave per l’immagine IA — ↻ per un suggerimento"
+    "tile.aiHintEmpty": "Facoltativo: parole chiave per l’immagine IA — ↻ per un suggerimento",
+    "tile.moveIntoCycle": "Non possibile: la categoria di destinazione si trova dentro la categoria spostata."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10097,7 +10106,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Opcional: palavras-chave para a imagem IA — ↻ para sugestão"
+    "tile.aiHintEmpty": "Opcional: palavras-chave para a imagem IA — ↻ para sugestão",
+    "tile.moveIntoCycle": "Não é possível: a categoria de destino está dentro da categoria movida."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11107,7 +11117,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Opcional: palavras-chave para a imagem IA — ↻ para sugestão"
+    "tile.aiHintEmpty": "Opcional: palavras-chave para a imagem IA — ↻ para sugestão",
+    "tile.moveIntoCycle": "Não é possível: a categoria de destino está dentro da categoria movida."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12117,7 +12128,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Optioneel: trefwoorden voor de AI-afbeelding — ↻ voor AI-suggestie"
+    "tile.aiHintEmpty": "Optioneel: trefwoorden voor de AI-afbeelding — ↻ voor AI-suggestie",
+    "tile.moveIntoCycle": "Niet mogelijk: de doelcategorie bevindt zich in de verplaatste categorie."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13127,7 +13139,8 @@
     "tile.imgProductsAll": "All",
     "tile.imgProductsNone": "None",
     "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text.",
-    "tile.aiHintEmpty": "Optioneel: trefwoorden voor de AI-afbeelding — ↻ voor AI-suggestie"
+    "tile.aiHintEmpty": "Optioneel: trefwoorden voor de AI-afbeelding — ↻ voor AI-suggestie",
+    "tile.moveIntoCycle": "Niet mogelijk: de doelcategorie bevindt zich in de verplaatste categorie."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13597,7 +13610,8 @@
     "tile.imgProductsAll": "Alle",
     "tile.imgProductsNone": "Keine",
     "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen.",
-    "tile.aiHintEmpty": "Optional: Stichworte fürs KI-Bild — ↻ für KI-Vorschlag"
+    "tile.aiHintEmpty": "Optional: Stichworte fürs KI-Bild — ↻ für KI-Vorschlag",
+    "tile.moveIntoCycle": "Nicht möglich: Die Zielkategorie liegt innerhalb der verschobenen Kategorie."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14067,6 +14081,7 @@
     "tile.imgProductsAll": "Alle",
     "tile.imgProductsNone": "Keine",
     "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen.",
-    "tile.aiHintEmpty": "Optional: Stichworte fürs KI-Bild — ↻ für KI-Vorschlag"
+    "tile.aiHintEmpty": "Optional: Stichworte fürs KI-Bild — ↻ für KI-Vorschlag",
+    "tile.moveIntoCycle": "Nicht möglich: Die Zielkategorie liegt innerhalb der verschobenen Kategorie."
   }
 }
