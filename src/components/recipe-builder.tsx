@@ -411,9 +411,10 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     <section className="space-y-4">
       <div className="flex items-start justify-between gap-2">
         {mode === "generator"
-          ? <Link to="/rezepte" className="shrink-0 pt-1.5 text-xs font-semibold text-primary">← {t("rk.back")}</Link>
-          : <button onClick={() => setTplId(null)} className="shrink-0 pt-1.5 text-xs font-semibold text-primary">← {t("rk.back")}</button>}
-        <div className="flex flex-wrap items-center justify-end gap-1.5">
+          ? <Link to="/rezepte" className="shrink-0 text-xs font-semibold text-primary">← {t("rk.back")}</Link>
+          : <button onClick={() => setTplId(null)} className="shrink-0 text-xs font-semibold text-primary">← {t("rk.back")}</button>}
+      </div>
+      <div className="flex flex-wrap items-center gap-1.5">
           <button
             type="button"
             onClick={() => setDietOpen((v) => !v)}
