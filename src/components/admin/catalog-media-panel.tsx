@@ -1,14 +1,15 @@
-import { useState } from "react";
-import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
+import { keepPreviousData, useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { catalogMediaStatus, generateProductImages, generateReferencePrices, listProductImages } from "@/lib/product-media.functions";
+import { catalogMediaStatus, generateProductImages, generateReferencePrices, listProductImages, listReferencePrices } from "@/lib/product-media.functions";
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
+import { formatRefPrice } from "@/hooks/use-reference-prices";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -166,6 +167,15 @@ export function CatalogMediaPanel({ section }: { section: "images" | "prices" })
             {busy === "price" ? T("media.working") : T("media.genPrices")}
           </Button>
         </div>
+
+        <div className="mt-5 border-t border-border pt-4">
+          <h3 className="text-sm font-semibold">{T("price.listTitle")}</h3>
+          <div className="mt-2 divide-y divide-border rounded-xl border border-border">
+            {MARKETS.map((m) => (
+              <MarketPriceList key={m} market={m} count={s?.markets?.[m] ?? 0} />
+            ))}
+          </div>
+        </div>
       </section>
       )}
     </>
@@ -237,6 +247,64 @@ function ImageGallery() {
           <Button size="sm" variant="secondary" disabled={page >= pages - 1 || gallery.isFetching} onClick={() => setPage((p) => p + 1)}>
             {T("media.galleryNext")}
           </Button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Aufklappbare Richtpreis-Liste eines Markts; lädt erst beim Öffnen und dann seitenweise nach. */
+function MarketPriceList({ market, count }: { market: string; count: number }) {
+  const fn = useServerFn(listReferencePrices);
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState("");
+  const sentinel = useRef<HTMLDivElement>(null);
+  const per = 30;
+  const query = useInfiniteQuery({
+    queryKey: ["ref-price-list", market, q],
+    enabled: open,
+    initialPageParam: 0,
+    queryFn: ({ pageParam }) => fn({ data: { market, q, offset: pageParam, limit: per } }),
+    getNextPageParam: (last, pages) => (last.hasMore ? pages.length * per : undefined),
+  });
+  useEffect(() => {
+    const el = sentinel.current;
+    if (!open || !el) return;
+    const io = new IntersectionObserver((e) => {
+      if (e[0]?.isIntersecting && query.hasNextPage && !query.isFetchingNextPage) query.fetchNextPage();
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [open, query.hasNextPage, query.isFetchingNextPage, query.fetchNextPage]);
+  const items = query.data?.pages.flatMap((p) => p.items) ?? [];
+  return (
+    <div>
+      <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-muted/50">
+        <span>{flagOf(market)}</span>
+        <span className="font-semibold">{market}</span>
+        <span className="text-muted-foreground">· {count}</span>
+        <span className={`ml-auto transition-transform ${open ? "rotate-180" : ""}`}>▼</span>
+      </button>
+      {open && (
+        <div className="px-3 pb-3">
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder={T("price.listSearch")} className="mb-2" />
+          {query.isLoading && <p className="text-sm text-muted-foreground">{T("media.working")}</p>}
+          {!query.isLoading && items.length === 0 && <p className="text-sm text-muted-foreground">{T("price.listEmpty")}</p>}
+          <ul className="max-h-96 overflow-y-auto">
+            {items.map((r) => (
+              <li key={r.id} className="flex items-baseline gap-2 border-b border-border/50 py-1.5 text-sm last:border-0">
+                <span className="min-w-0 flex-1 truncate">{r.name}{r.pack_size ? <span className="text-muted-foreground"> · {r.pack_size} {r.pack_unit ?? ""}</span> : null}</span>
+                <span className="shrink-0 tabular-nums">{formatRefPrice({ product_id: r.id, price: r.price, currency: r.currency, unit_price: r.unit_price, unit_basis: r.unit_basis, observed_at: r.observed_at })}</span>
+                <span className="shrink-0 text-[11px] text-muted-foreground">{new Date(r.observed_at).toLocaleDateString()}</span>
+              </li>
+            ))}
+            <div ref={sentinel} />
+          </ul>
+          {query.hasNextPage && (
+            <Button size="sm" variant="secondary" className="mt-2" disabled={query.isFetchingNextPage} onClick={() => query.fetchNextPage()}>
+              {query.isFetchingNextPage ? T("media.working") : T("price.listMore")}
+            </Button>
+          )}
         </div>
       )}
     </div>
