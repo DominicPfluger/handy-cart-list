@@ -127,6 +127,130 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       setBusy(false);
     }
   };
+  const runTpl = (fn: () => Promise<unknown>) =>
+    run(async () => {
+      await fn();
+      await qc.invalidateQueries({ queryKey: ["admin-recipe-templates"] });
+      await qc.invalidateQueries({ queryKey: ["admin-recipe-steps"] });
+      await qc.invalidateQueries({ queryKey: ["admin-recipe-popular"] });
+    });
+
+  const saveTpl = () => runTpl(async () => {
+    if (!tplForm) return;
+    const id = tplForm.id.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "");
+    if (!id) return;
+    const emoji = tplForm.emoji.trim() || "🍽️";
+    const exists = templates.some((x) => x.id === id);
+    const q = exists
+      ? supabase.from("recipe_templates").update({ emoji }).eq("id", id)
+      : supabase.from("recipe_templates").insert({ id, emoji, sort_order: templates.length + 1 });
+    const { error } = await q;
+    if (error) throw new Error(error.message);
+    setTplForm(null);
+  });
+  const removeTpl = (t: TplRow) => {
+    if (!window.confirm(T("adm.tplDeleteConfirm", { name: tplLabel(t.id) }))) return;
+    void runTpl(async () => {
+      const { error } = await supabase.from("recipe_templates").delete().eq("id", t.id);
+      if (error) throw new Error(error.message);
+      if (tplId === t.id) setTplId(null);
+    });
+  };
+  const toggleTpl = (t: TplRow) => runTpl(async () => {
+    const { error } = await supabase.from("recipe_templates").update({ enabled: !t.enabled }).eq("id", t.id);
+    if (error) throw new Error(error.message);
+  });
+  const moveTpl = (t: TplRow, dir: -1 | 1) => runTpl(async () => {
+    const list = [...templates].sort((a, b) => a.sort_order - b.sort_order);
+    const i = list.findIndex((x) => x.id === t.id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= list.length) return;
+    const a = list[i]!, b = list[j]!;
+    const { error: e1 } = await supabase.from("recipe_templates").update({ sort_order: b.sort_order }).eq("id", a.id);
+    if (e1) throw new Error(e1.message);
+    const { error: e2 } = await supabase.from("recipe_templates").update({ sort_order: a.sort_order }).eq("id", b.id);
+    if (e2) throw new Error(e2.message);
+  });
+
+  const saveStep = () => runTpl(async () => {
+    if (!stepForm || !tplId) return;
+    const key = stepForm.key.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "");
+    const name = stepForm.name.trim();
+    if (!key || !name) return;
+    const payload = { template_id: tplId, key, name, emoji: stepForm.emoji.trim() || null, min: stepForm.min, max: stepForm.max, required: stepForm.required };
+    const q = stepForm.id
+      ? supabase.from("recipe_steps").update(payload).eq("id", stepForm.id)
+      : supabase.from("recipe_steps").insert({ ...payload, sort_order: steps.length + 1 });
+    const { error } = await q;
+    if (error) throw new Error(error.message);
+    setStepForm(null);
+  });
+  const removeStep = (s: StepRow) => {
+    if (!window.confirm(T("adm.stepDeleteConfirm", { name: s.name }))) return;
+    void runTpl(async () => {
+      const { error } = await supabase.from("recipe_steps").delete().eq("id", s.id);
+      if (error) throw new Error(error.message);
+    });
+  };
+  const moveStep = (s: StepRow, dir: -1 | 1) => runTpl(async () => {
+    const list = steps;
+    const i = list.findIndex((x) => x.id === s.id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= list.length) return;
+    const a = list[i]!, b = list[j]!;
+    const { error: e1 } = await supabase.from("recipe_steps").update({ sort_order: b.sort_order }).eq("id", a.id);
+    if (e1) throw new Error(e1.message);
+    const { error: e2 } = await supabase.from("recipe_steps").update({ sort_order: a.sort_order }).eq("id", b.id);
+    if (e2) throw new Error(e2.message);
+  });
+
+  const addPop = () => runTpl(async () => {
+    if (!tplId || !popForm.trim()) return;
+    const picks: Record<string, string[]> = {};
+    for (const part of popForm.split(";")) {
+      const [k, v] = part.split(":");
+      if (!k?.trim() || !v?.trim()) continue;
+      picks[k.trim()] = v.split(",").map((x) => x.trim()).filter(Boolean);
+    }
+    if (Object.keys(picks).length === 0) return;
+    const { error } = await supabase.from("recipe_popular").insert({ template_id: tplId, picks, sort_order: pops.length + 1 });
+    if (error) throw new Error(error.message);
+    setPopForm("");
+  });
+  const removePop = (p: PopRow) => {
+    if (!window.confirm(T("adm.popularDeleteConfirm"))) return;
+    void runTpl(async () => {
+      const { error } = await supabase.from("recipe_popular").delete().eq("id", p.id);
+      if (error) throw new Error(error.message);
+    });
+  };
+
+  /** KI-Vorschläge für eine Oberkategorie: erst bestätigen, dann Vorschläge zum Abhaken. */
+  const startSuggest = (s: StepRow) => {
+    if (!window.confirm(T("adm.stepSuggestConfirm", { name: s.name }))) return;
+    setBusy(true);
+    const assigned = new Set(assignedFor(s.key).map((r) => r.product_id));
+    const candidates = prods.filter((p) => !assigned.has(p.id)).slice(0, 400).map((p) => ({ id: p.id, name: p.name, path: path(p.department_id) }));
+    suggestStepFn({ data: { step: s.name, template: tplLabel(tplId!), candidates } })
+      .then((r) => { setSuggestStep(s); setSuggestPicks(new Set(r.ids)); })
+      .catch((e) => toast.error((e as Error).message))
+      .finally(() => setBusy(false));
+  };
+  const applySuggest = () => run(async () => {
+    if (!suggestStep || !suggestPicks) return;
+    const s = suggestStep;
+    let max = Math.max(0, ...assignedFor(s.key).map((r) => r.sort_order));
+    const add = [...suggestPicks];
+    if (add.length) {
+      const { error } = await supabase.from("recipe_ingredients").upsert(
+        add.map((product_id) => ({ template_id: tplId!, step_key: s.key, product_id, sort_order: ++max })),
+        { onConflict: "template_id,step_key,product_id" },
+      );
+      if (error) throw new Error(error.message);
+    }
+    setSuggestStep(null);
+    setSuggestPicks(null);
+  });
 
   const groupTree = (parentId: string | null) => groups.filter((g) => g.parent_id === parentId).sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name));
   const descendants = (id: string): string[] => [id, ...groupTree(id).flatMap((g) => descendants(g.id))];
