@@ -14,7 +14,7 @@ import type { MessageKey } from "@/i18n/de";
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
 type Row = { id: string; template_id: string; step_key: string; product_id: string; sort_order: number; group_id: string | null };
-type Group = { id: string; parent_id: string | null; name: string; emoji: string | null; sort_order: number };
+type Group = { id: string; template_id: string; parent_id: string | null; name: string; emoji: string | null; sort_order: number };
 type Dept = { id: string; name: string; parent_id: string | null; emoji?: string | null; sort_order?: number };
 type TplRow = { id: string; emoji: string; color: string; sort_order: number; enabled: boolean };
 type StepRow = { id: string; template_id: string; key: string; name: string; emoji: string | null; min: number; max: number; required: boolean; sort_order: number };
@@ -56,7 +56,7 @@ async function loadRecipeIngredients() {
 }
 
 async function loadRecipeGroups(): Promise<Group[]> {
-  const { data, error } = await supabase.from("recipe_groups").select("id, parent_id, name, emoji, sort_order").order("sort_order");
+  const { data, error } = await supabase.from("recipe_groups").select("id, template_id, parent_id, name, emoji, sort_order").order("sort_order");
   if (error) throw new Error(error.message);
   return (data ?? []) as Group[];
 }
@@ -93,7 +93,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const steps = tplId ? stepsFor(tplId) : [];
   const pops = tplId ? (popRows ?? []).filter((p) => p.template_id === tplId).sort((a, b) => a.sort_order - b.sort_order) : [];
   const rows = data ?? [];
-  const groups = groupData ?? [];
+  const groups = (groupData ?? []).filter((g) => g.template_id === tplId);
 
   const run = async (fn: () => Promise<unknown>) => {
     setBusy(true);
@@ -218,7 +218,8 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   };
   const saveGroup = () => run(async () => {
     if (!groupName.trim()) return;
-    await saveGroupFn({ data: { id: editGroupId ?? undefined, parentId: groupParent, name: groupName.trim(), emoji: groupEmoji.trim() || null, sortOrder: groupTree(groupParent).length + 1 } });
+    if (!tplId) return;
+    await saveGroupFn({ data: { templateId: tplId, id: editGroupId ?? undefined, parentId: groupParent, name: groupName.trim(), emoji: groupEmoji.trim() || null, sortOrder: groupTree(groupParent).length + 1 } });
     await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
     setGroupFormOpen(false); setGroupName(""); setEditGroupId(null); setGroupParent(null); setGroupEmoji("");
   });
@@ -377,7 +378,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                 <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{groupsOpen ? "▲" : "▼"}</span>
                 <span className="min-w-0 truncate">{T("adm.recipeGroups")}</span>
               </Button>
-              <Button size="sm" variant="outline" disabled={busy} onClick={() => { setGroupsOpen(true); startGroup(null); }}>{T("adm.recipeGroupNew")}</Button>
+              <Button size="sm" variant="outline" disabled={busy || !tplId} onClick={() => { setGroupsOpen(true); startGroup(null); }}>{T("adm.recipeGroupNew")}</Button>
             </div>
             <div id="recipe-admin-groups" className={`space-y-2 ${groupsOpen ? "" : "hidden"}`}>
             {groupTree(null).map((parent) => (
@@ -443,7 +444,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
   const steps = tplId ? (stepRows ?? []).filter((s) => s.template_id === tplId).sort((a, b) => a.sort_order - b.sort_order) : [];
   const tpl = tplId ? { id: tplId, steps: steps.map((s) => ({ key: s.key, label: s.name })) } : null;
   const rows = data ?? [];
-  const groups = groupData ?? [];
+  const groups = (groupData ?? []).filter((g) => g.template_id === tplId);
   const assignedFor = (stepKey: string) =>
     rows
       .filter((r) => r.template_id === tplId && r.step_key === stepKey)

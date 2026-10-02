@@ -139,7 +139,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         .filter((r) => r.templateId === tpl?.id && r.stepKey === s.key)
         .map((r) => [r.productId, r.groupId]));
       const groups = catalog.recipeGroups
-        .filter((g) => visible.some((p) => groupByProduct.get(p.id) === g.id))
+        .filter((g) => g.templateId === tpl?.id && visible.some((p) => groupByProduct.get(p.id) === g.id))
         .sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name));
       return {
         ...s,

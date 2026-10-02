@@ -92,6 +92,7 @@ export interface ProductAlias {
 
 export interface RecipeGroup {
   id: string;
+  templateId: string;
   parentId: string | null;
   name: string;
   emoji: string | null;
@@ -230,7 +231,7 @@ export const getCatalog = createServerFn({ method: "GET" })
     fetchAll("product_cuisines", "product_id, cuisine_id", ["id"]),
     fetchAll("product_brands", "product_id, name, locales, sort_order", ["sort_order", "id"]),
     fetchAll("recipe_ingredients", "template_id, step_key, product_id, sort_order, group_id", ["sort_order", "id"]),
-    supabase.from("recipe_groups").select("id, parent_id, name, emoji, sort_order").order("sort_order", { ascending: true }),
+    supabase.from("recipe_groups").select("id, template_id, parent_id, name, emoji, sort_order").order("sort_order", { ascending: true }),
     supabase.from("department_aliases").select("department_id, parent_id, sort_order").order("sort_order", { ascending: true }),
     fetchAll("product_aliases", "product_id, department_id, sort_order", ["sort_order", "id"]),
     fetchAll("product_market_exclusions", "product_id, market", ["id"]),
@@ -342,6 +343,7 @@ export const getCatalog = createServerFn({ method: "GET" })
     })),
     recipeGroups: ((rgRes.data ?? []) as Array<Record<string, unknown>>).map((r) => ({
       id: r["id"] as string,
+      templateId: r["template_id"] as string,
       parentId: (r["parent_id"] as string | null) ?? null,
       name: r["name"] as string,
       emoji: (r["emoji"] as string | null) ?? null,

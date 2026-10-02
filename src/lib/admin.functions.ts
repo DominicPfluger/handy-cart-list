@@ -426,6 +426,7 @@ export const saveRecipeGroup = createServerFn({ method: "POST" })
   .inputValidator((d) =>
     z.object({
       id: z.string().uuid().optional(),
+      templateId: z.string().min(1).max(60),
       parentId: z.string().uuid().nullable().optional(),
       name: z.string().trim().min(1).max(60),
       emoji: z.string().max(16).nullable(),
@@ -445,7 +446,7 @@ export const saveRecipeGroup = createServerFn({ method: "POST" })
     } else {
       const { data: row, error } = await sb
         .from("recipe_groups")
-        .insert({ name: data.name, emoji: data.emoji, parent_id: data.parentId ?? null, sort_order: data.sortOrder ?? 999 })
+        .insert({ template_id: data.templateId, name: data.name, emoji: data.emoji, parent_id: data.parentId ?? null, sort_order: data.sortOrder ?? 999 })
         .select("id")
         .single();
       if (error) throw new Error(error.message);
