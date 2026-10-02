@@ -67,7 +67,6 @@ export function CatalogTileEditor(p: {
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
-  const [preview, setPreview] = useState(false);
   const moved = useRef(false);
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
