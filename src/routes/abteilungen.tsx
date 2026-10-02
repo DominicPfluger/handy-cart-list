@@ -15,7 +15,7 @@ import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dialog";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useShoppingList } from "../hooks/use-shopping-list";
-import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
+import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter, useDietFilterSource } from "../hooks/use-diet-filter";
 import { setCuisines, toggleCuisine, useCuisineFilter } from "../hooks/use-cuisine-filter";
 import {
   catalogQueryOptions,

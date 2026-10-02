@@ -360,7 +360,7 @@ function DietPreferenceRow() {
               const selected = diets.includes(diet);
               return (
                 <Button key={diet} type="button" size="sm" variant={selected ? "default" : "outline"}
-                  aria-pressed={selected} onClick={() => toggleDiet(diet)} className="h-9 gap-1.5 rounded-full text-xs">
+                  aria-pressed={selected} onClick={() => toggleDiet(diet, "pref")} className="h-9 gap-1.5 rounded-full text-xs">
                   <span aria-hidden="true">{DIET_EMOJI[diet]}</span>{t(`diet.${diet}`)}
                 </Button>
               );
