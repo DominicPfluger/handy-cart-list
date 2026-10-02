@@ -20,7 +20,8 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 
 const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
-export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
+/** Alias-Kategorien: id = "deptalias:<aliasId>", alias_id + dept_id (Original) gesetzt. */
+export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; alias_id?: string; dept_id?: string };
 /** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
 export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null; variants?: string[]; alias_id?: string; product_id?: string };
 
@@ -51,6 +52,10 @@ export function CatalogTileEditor(p: {
   onAdvanced?: (kind: "department" | "product", id: string) => void;
   busy?: boolean;
   onRemoveAlias?: (aliasId: string, name: string) => void;
+  /** Wählbare Kategorien für eine neue Alias-Kategorie. */
+  deptAliasOptions?: { id: string; label: string }[];
+  onAddDeptAlias?: (deptId: string) => void;
+  onRemoveDeptAlias?: (aliasId: string, name: string) => void;
   headings?: TileHeading[];
   onAddHeading?: (name: string) => void;
   onMoveHeading?: (id: string, beforeProductId: string) => void;
