@@ -237,6 +237,8 @@ export function CatalogTileEditor(p: {
 
   const dragHandlers = { onPointerMove: onMove, onPointerUp: onUp, onPointerCancel: () => { setDrag(null); setOver(null); setOverPos(null); } };
   const click = (fn: () => void) => () => { if (moved.current) { moved.current = false; return; } fn(); };
+  // Icon-Klick öffnet den Dialog erst nach kurzer Verzögerung — ein Doppelklick (Zoom) kann ihn abbrechen
+  const iconClickTimer = useRef<number | null>(null);
 
   return (
     <div className="space-y-3">
