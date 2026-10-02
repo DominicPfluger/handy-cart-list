@@ -1032,7 +1032,9 @@
     "adm.headingMoveBefore": "Before \"{name}\"",
     "adm.headingMoveEnd": "At the very end",
     "tile.marketPrices": "Prices per market",
-    "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save."
+    "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save.",
+    "tile.estimateMarket": "Estimate price for {market} with AI",
+    "tile.estimateDone": "Price estimated"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2067,7 +2069,9 @@
     "adm.headingMoveBefore": "Before \"{name}\"",
     "adm.headingMoveEnd": "At the very end",
     "tile.marketPrices": "Prices per market",
-    "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save."
+    "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save.",
+    "tile.estimateMarket": "Estimate price for {market} with AI",
+    "tile.estimateDone": "Price estimated"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3102,7 +3106,9 @@
     "adm.headingMoveBefore": "Before \"{name}\"",
     "adm.headingMoveEnd": "At the very end",
     "tile.marketPrices": "Prices per market",
-    "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save."
+    "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save.",
+    "tile.estimateMarket": "Estimate price for {market} with AI",
+    "tile.estimateDone": "Price estimated"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4137,7 +4143,9 @@
     "adm.headingMoveBefore": "Antes de \"{name}\"",
     "adm.headingMoveEnd": "Al final de todo",
     "tile.marketPrices": "Precios por mercado",
-    "tile.marketPricesHint": "Introducir manualmente (sin IA). Un campo vacío elimina el precio. Se aplica al guardar."
+    "tile.marketPricesHint": "Introducir manualmente (sin IA). Un campo vacío elimina el precio. Se aplica al guardar.",
+    "tile.estimateMarket": "Estimar el precio para {market} con IA",
+    "tile.estimateDone": "Precio estimado"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5172,7 +5180,9 @@
     "adm.headingMoveBefore": "Antes de \"{name}\"",
     "adm.headingMoveEnd": "Al final de todo",
     "tile.marketPrices": "Precios por mercado",
-    "tile.marketPricesHint": "Introducir manualmente (sin IA). Un campo vacío elimina el precio. Se aplica al guardar."
+    "tile.marketPricesHint": "Introducir manualmente (sin IA). Un campo vacío elimina el precio. Se aplica al guardar.",
+    "tile.estimateMarket": "Estimar el precio para {market} con IA",
+    "tile.estimateDone": "Precio estimado"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6207,7 +6217,9 @@
     "adm.headingMoveBefore": "Avant « {name} »",
     "adm.headingMoveEnd": "Tout à la fin",
     "tile.marketPrices": "Prix par marché",
-    "tile.marketPricesHint": "Saisie manuelle (sans IA). Un champ vide supprime le prix. Appliqué à l’enregistrement."
+    "tile.marketPricesHint": "Saisie manuelle (sans IA). Un champ vide supprime le prix. Appliqué à l’enregistrement.",
+    "tile.estimateMarket": "Estimer le prix pour {market} avec l'IA",
+    "tile.estimateDone": "Prix estimé"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7242,7 +7254,9 @@
     "adm.headingMoveBefore": "Avant « {name} »",
     "adm.headingMoveEnd": "Tout à la fin",
     "tile.marketPrices": "Prix par marché",
-    "tile.marketPricesHint": "Saisie manuelle (sans IA). Un champ vide supprime le prix. Appliqué à l’enregistrement."
+    "tile.marketPricesHint": "Saisie manuelle (sans IA). Un champ vide supprime le prix. Appliqué à l’enregistrement.",
+    "tile.estimateMarket": "Estimer le prix pour {market} avec l'IA",
+    "tile.estimateDone": "Prix estimé"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8277,7 +8291,9 @@
     "adm.headingMoveBefore": "Prima di \"{name}\"",
     "adm.headingMoveEnd": "Alla fine",
     "tile.marketPrices": "Prezzi per mercato",
-    "tile.marketPricesHint": "Inserimento manuale (senza IA). Un campo vuoto rimuove il prezzo. Applicato al salvataggio."
+    "tile.marketPricesHint": "Inserimento manuale (senza IA). Un campo vuoto rimuove il prezzo. Applicato al salvataggio.",
+    "tile.estimateMarket": "Stima il prezzo per {market} con l'IA",
+    "tile.estimateDone": "Prezzo stimato"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9312,7 +9328,9 @@
     "adm.headingMoveBefore": "Prima di \"{name}\"",
     "adm.headingMoveEnd": "Alla fine",
     "tile.marketPrices": "Prezzi per mercato",
-    "tile.marketPricesHint": "Inserimento manuale (senza IA). Un campo vuoto rimuove il prezzo. Applicato al salvataggio."
+    "tile.marketPricesHint": "Inserimento manuale (senza IA). Un campo vuoto rimuove il prezzo. Applicato al salvataggio.",
+    "tile.estimateMarket": "Stima il prezzo per {market} con l'IA",
+    "tile.estimateDone": "Prezzo stimato"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10347,7 +10365,9 @@
     "adm.headingMoveBefore": "Antes de \"{name}\"",
     "adm.headingMoveEnd": "No fim de tudo",
     "tile.marketPrices": "Preços por mercado",
-    "tile.marketPricesHint": "Introduzir manualmente (sem IA). Um campo vazio remove o preço. Aplicado ao guardar."
+    "tile.marketPricesHint": "Introduzir manualmente (sem IA). Um campo vazio remove o preço. Aplicado ao guardar.",
+    "tile.estimateMarket": "Estimar o preço para {market} com IA",
+    "tile.estimateDone": "Preço estimado"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11382,7 +11402,9 @@
     "adm.headingMoveBefore": "Antes de \"{name}\"",
     "adm.headingMoveEnd": "No fim de tudo",
     "tile.marketPrices": "Preços por mercado",
-    "tile.marketPricesHint": "Introduzir manualmente (sem IA). Um campo vazio remove o preço. Aplicado ao guardar."
+    "tile.marketPricesHint": "Introduzir manualmente (sem IA). Um campo vazio remove o preço. Aplicado ao guardar.",
+    "tile.estimateMarket": "Estimar o preço para {market} com IA",
+    "tile.estimateDone": "Preço estimado"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12417,7 +12439,9 @@
     "adm.headingMoveBefore": "Voor \"{name}\"",
     "adm.headingMoveEnd": "Helemaal onderaan",
     "tile.marketPrices": "Prijzen per markt",
-    "tile.marketPricesHint": "Handmatig invoeren (zonder AI). Een leeg veld verwijdert de prijs. Toegepast bij opslaan."
+    "tile.marketPricesHint": "Handmatig invoeren (zonder AI). Een leeg veld verwijdert de prijs. Toegepast bij opslaan.",
+    "tile.estimateMarket": "Prijs voor {market} schatten met AI",
+    "tile.estimateDone": "Prijs geschat"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13452,7 +13476,9 @@
     "adm.headingMoveBefore": "Voor \"{name}\"",
     "adm.headingMoveEnd": "Helemaal onderaan",
     "tile.marketPrices": "Prijzen per markt",
-    "tile.marketPricesHint": "Handmatig invoeren (zonder AI). Een leeg veld verwijdert de prijs. Toegepast bij opslaan."
+    "tile.marketPricesHint": "Handmatig invoeren (zonder AI). Een leeg veld verwijdert de prijs. Toegepast bij opslaan.",
+    "tile.estimateMarket": "Prijs voor {market} schatten met AI",
+    "tile.estimateDone": "Prijs geschat"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13947,7 +13973,9 @@
     "adm.headingMoveBefore": "Vor „{name}“",
     "adm.headingMoveEnd": "Ganz ans Ende",
     "tile.marketPrices": "Preise je Markt",
-    "tile.marketPricesHint": "Manuell eintragen (ohne KI). Leeres Feld entfernt den Preis. Wird beim Speichern übernommen."
+    "tile.marketPricesHint": "Manuell eintragen (ohne KI). Leeres Feld entfernt den Preis. Wird beim Speichern übernommen.",
+    "tile.estimateMarket": "Preis für {market} per KI schätzen",
+    "tile.estimateDone": "Preis geschätzt"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14442,6 +14470,8 @@
     "adm.headingMoveBefore": "Vor „{name}“",
     "adm.headingMoveEnd": "Ganz ans Ende",
     "tile.marketPrices": "Preise je Markt",
-    "tile.marketPricesHint": "Manuell eintragen (ohne KI). Leeres Feld entfernt den Preis. Wird beim Speichern übernommen."
+    "tile.marketPricesHint": "Manuell eintragen (ohne KI). Leeres Feld entfernt den Preis. Wird beim Speichern übernommen.",
+    "tile.estimateMarket": "Preis für {market} per KI schätzen",
+    "tile.estimateDone": "Preis geschätzt"
   }
 }

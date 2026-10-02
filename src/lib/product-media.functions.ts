@@ -297,6 +297,23 @@ export const estimateProductPricesAllMarkets = createServerFn({ method: "POST" }
     return { items, failed: results.length - items.length };
   });
 
+/** Schätzt den Richtpreis eines Produkts für genau einen Markt — ohne zu speichern. */
+export const estimateProductPrice = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ productId: z.string().uuid(), market: z.string().min(2).max(3) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { estimatePrices } = await import("./product-media.server");
+    const sb = context.supabase;
+    const { data: prod, error } = await sb.from("products").select("id, name, default_quantity, default_unit").eq("id", data.productId).single();
+    if (error || !prod) throw new Error(error?.message ?? "Produkt nicht gefunden");
+    const { data: mk } = await sb.from("markets").select("code, currency").eq("code", data.market).maybeSingle();
+    const currency = (mk?.currency as string | undefined) || CURRENCIES[data.market] || "EUR";
+    const [e] = await estimatePrices([prod as any], data.market);
+    if (!e || !(e.price > 0)) throw new Error("Keine Schätzung erhalten");
+    return { market: data.market, price: e.price, currency, pack_size: e.pack_size, pack_unit: e.pack_unit, unit_price: e.unit_price, unit_basis: e.unit_basis };
+  });
+
 /** Richtpreise eines Markts seitenweise (für Nachladen beim Scrollen). */
 export const listReferencePrices = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
