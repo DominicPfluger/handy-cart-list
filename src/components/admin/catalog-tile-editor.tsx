@@ -457,6 +457,29 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [enrichStatus, setEnrichStatus] = useState("");
   const [enrichErrors, setEnrichErrors] = useState<string[]>([]);
   const [estimates, setEstimates] = useState<Array<{ market: string; price: number; currency: string; unit_price: number | null; unit_basis: string | null }>>([]);
+  // Manuelle Richtpreise je Markt (ohne KI, keine Credits).
+  const [mkts, setMkts] = useState<{ code: string; name: string; flag: string; currency: string }[]>([]);
+  const [mp, setMp] = useState<Record<string, string>>({});
+  const [mpOrig, setMpOrig] = useState<Record<string, string>>({});
+  const [mpOpen, setMpOpen] = useState(false);
+  useEffect(() => {
+    if (isDept) return;
+    let off = false;
+    void (async () => {
+      const [m, pr] = await Promise.all([
+        supabase.from("markets").select("code, name, flag, currency").eq("enabled", true).order("sort_order"),
+        prod ? supabase.from("product_reference_prices").select("market, price").eq("product_id", prod.id) : Promise.resolve({ data: [] as { market: string; price: number }[] }),
+      ]);
+      if (off) return;
+      setMkts(m.data ?? []);
+      const o: Record<string, string> = {};
+      for (const r of pr.data ?? []) o[r.market] = String(r.price);
+      setMpOrig(o); setMp(o);
+      const cur = o[currentMarket()];
+      if (cur) setPrice((x) => x || cur);
+    })();
+    return () => { off = true; };
+  }, [isDept, prod?.id]);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
   const [prodLines, setProdLines] = useState("");
@@ -557,9 +580,22 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         }
       }
     }
-    if (!isDept && id && price.trim() && !Number.isNaN(Number(price))) {
-      const market = currentMarket();
-      await p.must(supabase.from("product_reference_prices").upsert({ product_id: id, market, price: Number(price), currency: MARKET_CCY[market] ?? "EUR" }, { onConflict: "product_id,market" }));
+    if (!isDept && id) {
+      const cm = currentMarket();
+      const vals: Record<string, string> = { ...mp, ...(price.trim() || mpOrig[cm] ? { [cm]: price } : {}) };
+      let changed = false;
+      for (const [market, raw] of Object.entries(vals)) {
+        const v = raw.trim().replace(",", ".");
+        if (v === (mpOrig[market] ?? "")) continue;
+        changed = true;
+        if (!v) {
+          await p.must(supabase.from("product_reference_prices").delete().eq("product_id", id).eq("market", market));
+        } else if (!Number.isNaN(Number(v))) {
+          const ccy = mkts.find((m) => m.code === market)?.currency ?? MARKET_CCY[market] ?? "EUR";
+          await p.must(supabase.from("product_reference_prices").upsert({ product_id: id, market, price: Number(v), currency: ccy, observed_at: new Date().toISOString() }, { onConflict: "product_id,market" }));
+        }
+      }
+      if (changed) void qc.invalidateQueries();
     }
     // Bei neuen Einträgen offen lassen, damit gleich ein Bild ergänzt werden kann.
     if (item) p.onClose();
@@ -737,18 +773,40 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                     setEstimates(r.items);
                     const mine = r.items.find((x) => x.market === currentMarket());
                     if (mine) setPrice(String(mine.price));
+                    const est: Record<string, string> = {};
+                    for (const x of r.items) est[x.market] = String(x.price);
+                    setMp((o) => ({ ...o, ...est }));
+                    setMpOrig((o) => ({ ...o, ...est }));
                     void qc.invalidateQueries();
                     if (r.failed > 0) throw new Error(T("tile.estimateAllFailed", { n: r.failed }));
                   }, T("tile.estimateAllDone")).finally(() => setEstimating(false));
                 }}>{estimating ? "…" : `✨ ${T("tile.estimateAll")}`}</Button>
               )}
             </div>
-            {estimates.length > 0 && (
-              <ul className="max-h-40 space-y-0.5 overflow-y-auto rounded-xl bg-muted p-2 text-xs text-foreground">
-                {estimates.map((e) => (
-                  <li key={e.market}>{e.market} · {e.currency} {e.price.toFixed(2)}{e.unit_price ? ` · ${e.currency} ${e.unit_price.toFixed(2)}/${e.unit_basis}` : ""}</li>
-                ))}
-              </ul>
+            {mkts.length > 0 && (
+              <div className="rounded-xl border border-border">
+                <button type="button" onClick={() => setMpOpen((v) => !v)} className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold text-foreground">
+                  <span>{T("tile.marketPrices")} ({Object.values({ ...mp, [currentMarket()]: price }).filter((v) => v.trim()).length}/{mkts.length})</span>
+                  <span className="text-muted-foreground">{mpOpen ? "▾" : "▸"}</span>
+                </button>
+                {mpOpen && (
+                  <div className="space-y-1.5 border-t border-border p-2">
+                    <p className="text-xs text-muted-foreground">{T("tile.marketPricesHint")}</p>
+                    {mkts.map((m) => {
+                      const isCur = m.code === currentMarket();
+                      const v = isCur ? price : (mp[m.code] ?? "");
+                      return (
+                        <label key={m.code} className="flex items-center gap-2 text-sm">
+                          <span className="w-6 text-center">{m.flag}</span>
+                          <span className="flex-1 truncate text-foreground">{m.name}</span>
+                          <span className="w-10 text-xs text-muted-foreground">{m.currency}</span>
+                          <Input aria-label={`${m.name} ${m.currency}`} type="number" min={0} step="any" value={v} onChange={(e) => (isCur ? setPrice(e.target.value) : setMp((o) => ({ ...o, [m.code]: e.target.value })))} className="h-9 w-28 rounded-lg" />
+                        </label>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             )}
           </div>
         )}
