@@ -23,6 +23,7 @@ import { signedCategoryImageUrl } from "@/lib/image-upload";
 import { MarketAdmin, MarketAdminsManager } from "@/components/market-admin";
 import { useMarketCodes } from "@/hooks/use-markets";
 import { MarketsManager } from "@/components/admin/markets-manager";
+import { CatalogPreview } from "@/components/admin/catalog-preview";
 import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 import { ImportPanel } from "@/components/admin/import-panel";
@@ -105,7 +106,8 @@ function AdminPage() {
   const [busy, setBusy] = useState(false);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
   /** Aktiver Admin-Bereich (Tabs). */
-  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "languages" | "more">("catalog");
+  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "languages" | "markets" | "more">("catalog");
+  const [preview, setPreview] = useState(false);
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: true }));
     return () => {
@@ -363,12 +365,16 @@ function AdminPage() {
       </div>
 
       <div className="flex gap-1.5 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["languages", "adm.tab.languages"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["more", "adm.tab.more"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["languages", "adm.tab.languages"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["markets", "adm.tab.markets"], ["more", "adm.tab.more"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
             {T(key)}
           </button>
         ))}
+        <button type="button" onClick={() => setPreview(true)}
+          className="whitespace-nowrap rounded-full border border-primary px-3.5 py-1.5 text-sm font-semibold text-primary">
+          👁 {T("tile.preview")}
+        </button>
       </div>
 
       {tab === "catalog" && (<>
@@ -501,9 +507,14 @@ function AdminPage() {
       {tab === "recipes" && (d ? <><RecipeAdmin depts={d.depts} prods={d.prods} /><CuisineAdmin depts={d.depts} prods={d.prods} /></> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
 
-      {tab === "more" && (<div className="space-y-4">
+      {tab === "markets" && (<div className="space-y-4">
         <MarketsManager />
         <MarketAdminsManager />
+      </div>)}
+
+      {preview && <CatalogPreview onClose={() => setPreview(false)} />}
+
+      {tab === "more" && (<div className="space-y-4">
         <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
 
           <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>

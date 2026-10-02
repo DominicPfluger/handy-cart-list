@@ -196,21 +196,6 @@ export function CatalogTileEditor(p: {
             </Button>
           )}
           {p.onTranslateMissing && <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onTranslateMissing}>🌐 {p.busy ? T("adm.working") : T("adm.trMissing")}</Button>}
-          <Button size="sm" variant="outline" onClick={() => setPreview(true)}>👁 {T("tile.preview")}</Button>
-        </div>
-      )}
-      {preview && (
-        <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-3 bg-foreground/60 p-4" onClick={() => setPreview(false)}>
-          <div className="flex w-full max-w-[400px] items-center justify-between text-background">
-            <span className="font-bold">👁 {T("tile.preview")}</span>
-            <Button size="sm" variant="secondary" onClick={() => setPreview(false)}>✕</Button>
-          </div>
-          <iframe
-            src="/abteilungen"
-            title={T("tile.preview")}
-            className="h-[min(820px,85vh)] w-full max-w-[400px] rounded-3xl border-8 border-foreground bg-background shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          />
         </div>
       )}
 
