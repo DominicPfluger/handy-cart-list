@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { translate, getLocale } from "../i18n";
+import { moveItemPhoto, putItemPhoto } from "../lib/item-photo-store";
 import {
   getMyLists,
   createCloudList,
@@ -150,6 +151,8 @@ export interface AddCatalogItemInput {
   groupLabel?: string | undefined;
   groupEmoji?: string | undefined;
   note?: string | undefined;
+  /** Fotonotiz: bleibt gerätelokal (IndexedDB), wird nicht hochgeladen. */
+  photo?: Blob | undefined;
 }
 
 const t = (key: MessageKey, vars?: Record<string, string | number>) =>
@@ -892,6 +895,7 @@ function useCloudLists(
   const addCatalogItem = useCallback(
     (input: AddCatalogItemInput, _user = "Du") => {
       const item = buildCatalogItem(`tmp-${Date.now()}${Math.round(Math.random() * 1000)}`, input, selfName);
+      const photoSaved = input.photo ? putItemPhoto(item.id, input.photo).catch(() => {}) : Promise.resolve();
       setItems((prev) => [...prev, item]);
       logActivity(selfName, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
       const payload = { listId: activeListId, items: [itemToCloudInput(item, selfName)] };
@@ -899,7 +903,10 @@ function useCloudLists(
         { fn: "addItems", data: payload },
         () => addCloudItems({ data: payload }).then((res) => {
           const row = (res.items as CloudRow[])[0];
-          if (row) replaceItemLocally(item.id, rowToItem(row));
+          if (!row) return;
+          const next = rowToItem(row);
+          if (!input.photo) return replaceItemLocally(item.id, next);
+          return photoSaved.then(() => moveItemPhoto(item.id, next.id)).then(() => replaceItemLocally(item.id, next));
         })
       );
     },
@@ -1139,7 +1146,9 @@ export function useShoppingList() {
 
   const localAddCatalogItem = useCallback(
     (input: AddCatalogItemInput, user_ = "Du") => {
-      local.setItems((prev) => [...prev, buildCatalogItem(`i${Date.now()}${Math.round(Math.random() * 1000)}`, input, user_)]);
+      const localItem = buildCatalogItem(`i${Date.now()}${Math.round(Math.random() * 1000)}`, input, user_);
+      if (input.photo) putItemPhoto(localItem.id, input.photo).catch(() => {});
+      local.setItems((prev) => [...prev, localItem]);
       logActivity(user_, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
     },
     [local, logActivity]

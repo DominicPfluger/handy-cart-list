@@ -1073,7 +1073,10 @@
     "adm.suggestCostWeb": "Uses credits: 1 web search + 1 AI evaluation.",
     "adm.suggestCostAi": "Uses credits: 1 AI evaluation.",
     "adm.suggestStart": "Start search",
-    "adm.suggestWebFailed": "Web search found nothing – suggestions come from AI only."
+    "adm.suggestWebFailed": "Web search found nothing – suggestions come from AI only.",
+    "dlg.photoNote": "Photo note",
+    "dlg.photoTake": "Take photo",
+    "dlg.photoRemove": "Remove photo"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2149,7 +2152,10 @@
     "adm.suggestCostWeb": "Uses credits: 1 web search + 1 AI evaluation.",
     "adm.suggestCostAi": "Uses credits: 1 AI evaluation.",
     "adm.suggestStart": "Start search",
-    "adm.suggestWebFailed": "Web search found nothing – suggestions come from AI only."
+    "adm.suggestWebFailed": "Web search found nothing – suggestions come from AI only.",
+    "dlg.photoNote": "Photo note",
+    "dlg.photoTake": "Take photo",
+    "dlg.photoRemove": "Remove photo"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3225,7 +3231,10 @@
     "adm.suggestCostWeb": "Uses credits: 1 web search + 1 AI evaluation.",
     "adm.suggestCostAi": "Uses credits: 1 AI evaluation.",
     "adm.suggestStart": "Start search",
-    "adm.suggestWebFailed": "Web search found nothing – suggestions come from AI only."
+    "adm.suggestWebFailed": "Web search found nothing – suggestions come from AI only.",
+    "dlg.photoNote": "Photo note",
+    "dlg.photoTake": "Take photo",
+    "dlg.photoRemove": "Remove photo"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4301,7 +4310,10 @@
     "adm.suggestCostWeb": "Consume créditos: 1 búsqueda web + 1 evaluación de IA.",
     "adm.suggestCostAi": "Consume créditos: 1 evaluación de IA.",
     "adm.suggestStart": "Iniciar búsqueda",
-    "adm.suggestWebFailed": "La búsqueda web no encontró nada: las sugerencias vienen solo de la IA."
+    "adm.suggestWebFailed": "La búsqueda web no encontró nada: las sugerencias vienen solo de la IA.",
+    "dlg.photoNote": "Nota con foto",
+    "dlg.photoTake": "Hacer foto",
+    "dlg.photoRemove": "Quitar foto"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5377,7 +5389,10 @@
     "adm.suggestCostWeb": "Consume créditos: 1 búsqueda web + 1 evaluación de IA.",
     "adm.suggestCostAi": "Consume créditos: 1 evaluación de IA.",
     "adm.suggestStart": "Iniciar búsqueda",
-    "adm.suggestWebFailed": "La búsqueda web no encontró nada: las sugerencias vienen solo de la IA."
+    "adm.suggestWebFailed": "La búsqueda web no encontró nada: las sugerencias vienen solo de la IA.",
+    "dlg.photoNote": "Nota con foto",
+    "dlg.photoTake": "Tomar foto",
+    "dlg.photoRemove": "Quitar foto"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6453,7 +6468,10 @@
     "adm.suggestCostWeb": "Consomme des crédits : 1 recherche web + 1 analyse IA.",
     "adm.suggestCostAi": "Consomme des crédits : 1 analyse IA.",
     "adm.suggestStart": "Lancer la recherche",
-    "adm.suggestWebFailed": "La recherche web n’a rien trouvé – suggestions de l’IA uniquement."
+    "adm.suggestWebFailed": "La recherche web n’a rien trouvé – suggestions de l’IA uniquement.",
+    "dlg.photoNote": "Note photo",
+    "dlg.photoTake": "Prendre une photo",
+    "dlg.photoRemove": "Supprimer la photo"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7529,7 +7547,10 @@
     "adm.suggestCostWeb": "Consomme des crédits : 1 recherche web + 1 analyse IA.",
     "adm.suggestCostAi": "Consomme des crédits : 1 analyse IA.",
     "adm.suggestStart": "Lancer la recherche",
-    "adm.suggestWebFailed": "La recherche web n’a rien trouvé – suggestions de l’IA uniquement."
+    "adm.suggestWebFailed": "La recherche web n’a rien trouvé – suggestions de l’IA uniquement.",
+    "dlg.photoNote": "Note photo",
+    "dlg.photoTake": "Prendre une photo",
+    "dlg.photoRemove": "Supprimer la photo"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8605,7 +8626,10 @@
     "adm.suggestCostWeb": "Consuma crediti: 1 ricerca web + 1 analisi IA.",
     "adm.suggestCostAi": "Consuma crediti: 1 analisi IA.",
     "adm.suggestStart": "Avvia ricerca",
-    "adm.suggestWebFailed": "La ricerca web non ha trovato nulla – suggerimenti solo dall’IA."
+    "adm.suggestWebFailed": "La ricerca web non ha trovato nulla – suggerimenti solo dall’IA.",
+    "dlg.photoNote": "Nota fotografica",
+    "dlg.photoTake": "Scatta foto",
+    "dlg.photoRemove": "Rimuovi foto"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9681,7 +9705,10 @@
     "adm.suggestCostWeb": "Consuma crediti: 1 ricerca web + 1 analisi IA.",
     "adm.suggestCostAi": "Consuma crediti: 1 analisi IA.",
     "adm.suggestStart": "Avvia ricerca",
-    "adm.suggestWebFailed": "La ricerca web non ha trovato nulla – suggerimenti solo dall’IA."
+    "adm.suggestWebFailed": "La ricerca web non ha trovato nulla – suggerimenti solo dall’IA.",
+    "dlg.photoNote": "Nota fotografica",
+    "dlg.photoTake": "Scatta foto",
+    "dlg.photoRemove": "Rimuovi foto"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10757,7 +10784,10 @@
     "adm.suggestCostWeb": "Consome créditos: 1 pesquisa web + 1 análise de IA.",
     "adm.suggestCostAi": "Consome créditos: 1 análise de IA.",
     "adm.suggestStart": "Iniciar pesquisa",
-    "adm.suggestWebFailed": "A pesquisa web não encontrou nada – sugestões apenas da IA."
+    "adm.suggestWebFailed": "A pesquisa web não encontrou nada – sugestões apenas da IA.",
+    "dlg.photoNote": "Nota com foto",
+    "dlg.photoTake": "Tirar foto",
+    "dlg.photoRemove": "Remover foto"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11833,7 +11863,10 @@
     "adm.suggestCostWeb": "Consome créditos: 1 pesquisa web + 1 análise de IA.",
     "adm.suggestCostAi": "Consome créditos: 1 análise de IA.",
     "adm.suggestStart": "Iniciar pesquisa",
-    "adm.suggestWebFailed": "A pesquisa web não encontrou nada – sugestões apenas da IA."
+    "adm.suggestWebFailed": "A pesquisa web não encontrou nada – sugestões apenas da IA.",
+    "dlg.photoNote": "Nota com foto",
+    "dlg.photoTake": "Tirar foto",
+    "dlg.photoRemove": "Remover foto"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12909,7 +12942,10 @@
     "adm.suggestCostWeb": "Verbruikt credits: 1 webzoekopdracht + 1 AI-analyse.",
     "adm.suggestCostAi": "Verbruikt credits: 1 AI-analyse.",
     "adm.suggestStart": "Zoeken starten",
-    "adm.suggestWebFailed": "Webzoekopdracht vond niets – suggesties komen alleen van AI."
+    "adm.suggestWebFailed": "Webzoekopdracht vond niets – suggesties komen alleen van AI.",
+    "dlg.photoNote": "Fotonotitie",
+    "dlg.photoTake": "Foto maken",
+    "dlg.photoRemove": "Foto verwijderen"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13985,7 +14021,10 @@
     "adm.suggestCostWeb": "Verbruikt credits: 1 webzoekopdracht + 1 AI-analyse.",
     "adm.suggestCostAi": "Verbruikt credits: 1 AI-analyse.",
     "adm.suggestStart": "Zoeken starten",
-    "adm.suggestWebFailed": "Webzoekopdracht vond niets – suggesties komen alleen van AI."
+    "adm.suggestWebFailed": "Webzoekopdracht vond niets – suggesties komen alleen van AI.",
+    "dlg.photoNote": "Fotonotitie",
+    "dlg.photoTake": "Foto maken",
+    "dlg.photoRemove": "Foto verwijderen"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14521,7 +14560,10 @@
     "adm.suggestCostWeb": "Verbraucht Credits: 1 Websuche + 1 KI-Auswertung.",
     "adm.suggestCostAi": "Verbraucht Credits: 1 KI-Auswertung.",
     "adm.suggestStart": "Suche starten",
-    "adm.suggestWebFailed": "Websuche ergab nichts – Vorschläge stammen nur von der KI."
+    "adm.suggestWebFailed": "Websuche ergab nichts – Vorschläge stammen nur von der KI.",
+    "dlg.photoNote": "Fotonotiz",
+    "dlg.photoTake": "Foto aufnehmen",
+    "dlg.photoRemove": "Foto entfernen"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15057,6 +15099,9 @@
     "adm.suggestCostWeb": "Verbraucht Credits: 1 Websuche + 1 KI-Auswertung.",
     "adm.suggestCostAi": "Verbraucht Credits: 1 KI-Auswertung.",
     "adm.suggestStart": "Suche starten",
-    "adm.suggestWebFailed": "Websuche ergab nichts – Vorschläge stammen nur von der KI."
+    "adm.suggestWebFailed": "Websuche ergab nichts – Vorschläge stammen nur von der KI.",
+    "dlg.photoNote": "Fotonotiz",
+    "dlg.photoTake": "Foto aufnehmen",
+    "dlg.photoRemove": "Foto entfernen"
   }
 }
