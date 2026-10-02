@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getLocale, translate } from "@/i18n";
 import { useServerFn } from "@tanstack/react-start";
-import { sortRecipeIngredients, saveRecipeGroup, deleteRecipeGroup } from "@/lib/admin.functions";
+import { sortRecipeIngredients, saveRecipeGroup, deleteRecipeGroup, suggestRecipeStepProducts } from "@/lib/admin.functions";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -15,6 +15,28 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 type Row = { id: string; template_id: string; step_key: string; product_id: string; sort_order: number; group_id: string | null };
 type Group = { id: string; parent_id: string | null; name: string; emoji: string | null; sort_order: number };
 type Dept = { id: string; name: string; parent_id: string | null; emoji?: string | null; sort_order?: number };
+type TplRow = { id: string; emoji: string; color: string; sort_order: number; enabled: boolean };
+type StepRow = { id: string; template_id: string; key: string; name: string; emoji: string | null; min: number; max: number; required: boolean; sort_order: number };
+type PopRow = { id: string; template_id: string; picks: Record<string, string[]>; sort_order: number };
+
+async function loadTplRows(): Promise<TplRow[]> {
+  const { data, error } = await supabase.from("recipe_templates").select("id, emoji, color, sort_order, enabled").order("sort_order");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as TplRow[];
+}
+async function loadStepRows(): Promise<StepRow[]> {
+  const { data, error } = await supabase.from("recipe_steps").select("id, template_id, key, name, emoji, min, max, required, sort_order").order("sort_order");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as StepRow[];
+}
+async function loadPopRows(): Promise<PopRow[]> {
+  const { data, error } = await supabase.from("recipe_popular").select("id, template_id, picks, sort_order").order("sort_order");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as PopRow[];
+}
+/** Anzeigename einer Vorlage: eingebaute über i18n, eigene über ihre Kennung. */
+const tplLabel = (id: string) =>
+  RECIPE_TEMPLATES.some((b) => b.id === id) ? T(`rk.cat.${id}` as MessageKey) : id;
 type Prod = { id: string; name: string; department_id: string; emoji: string | null; sort_order?: number };
 
 async function loadRecipeIngredients() {
