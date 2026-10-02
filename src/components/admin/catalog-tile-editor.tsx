@@ -12,6 +12,7 @@ import { suggestCategoryProducts } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ZoomableImage } from "@/components/admin/zoomable-image";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -145,7 +146,7 @@ export function CatalogTileEditor(p: {
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
                 onClick={click(() => p.setCur(c.id))}
                 className={`flex h-16 w-full items-center justify-center overflow-hidden rounded-xl text-4xl ${editMode ? "cursor-grab touch-none" : ""}`}>
-                {img(c.image_path) ? <img src={img(c.image_path)} alt="" className="h-full w-full object-cover" /> : c.emoji ?? "📁"}
+                {img(c.image_path) ? <ZoomableImage src={img(c.image_path)!} className="h-full w-full object-cover" /> : c.emoji ?? "📁"}
               </button>
               <span className="line-clamp-2 text-center text-[13px] font-bold leading-tight text-foreground">{p.nm(c.id, c.name)}</span>
               {editMode && (
