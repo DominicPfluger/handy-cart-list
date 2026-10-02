@@ -277,6 +277,8 @@ function MarketPriceList({ market, count }: { market: string; count: number }) {
     return () => io.disconnect();
   }, [open, query.hasNextPage, query.isFetchingNextPage, query.fetchNextPage]);
   const items = query.data?.pages.flatMap((p) => p.items) ?? [];
+  const groups = [...items.reduce((m, r) => { const k = r.dept || "—"; const arr = m.get(k) ?? []; arr.push(r); m.set(k, arr); return m; }, new Map<string, typeof items>())].sort((a, b) => a[0].localeCompare(b[0]));
+  for (const g of groups) g[1].sort((a, b) => a.name.localeCompare(b.name));
   return (
     <div>
       <button type="button" onClick={() => setOpen((o) => !o)} aria-expanded={open} className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-muted/50">
@@ -291,11 +293,18 @@ function MarketPriceList({ market, count }: { market: string; count: number }) {
           {query.isLoading && <p className="text-sm text-muted-foreground">{T("media.working")}</p>}
           {!query.isLoading && items.length === 0 && <p className="text-sm text-muted-foreground">{T("price.listEmpty")}</p>}
           <ul className="max-h-96 overflow-y-auto">
-            {items.map((r) => (
-              <li key={r.id} className="flex items-baseline gap-2 border-b border-border/50 py-1.5 text-sm last:border-0">
-                <span className="min-w-0 flex-1 truncate">{r.name}{r.pack_size ? <span className="text-muted-foreground"> · {r.pack_size} {r.pack_unit ?? ""}</span> : null}</span>
-                <span className="shrink-0 tabular-nums">{formatRefPrice({ product_id: r.id, price: r.price, currency: r.currency, unit_price: r.unit_price, unit_basis: r.unit_basis, observed_at: r.observed_at })}</span>
-                <span className="shrink-0 text-[11px] text-muted-foreground">{new Date(r.observed_at).toLocaleDateString()}</span>
+            {groups.map(([dept, rows]) => (
+              <li key={dept}>
+                <p className="sticky top-0 bg-background px-1 py-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">{dept}</p>
+                <ul>
+                  {rows.map((r) => (
+                    <li key={r.id} className="flex items-baseline gap-2 border-b border-border/50 py-1.5 text-sm last:border-0">
+                      <span className="min-w-0 flex-1 truncate">{r.name}{r.pack_size ? <span className="text-muted-foreground"> · {r.pack_size} {r.pack_unit ?? ""}</span> : null}</span>
+                      <span className="shrink-0 tabular-nums">{formatRefPrice({ product_id: r.id, price: r.price, currency: r.currency, unit_price: r.unit_price, unit_basis: r.unit_basis, observed_at: r.observed_at })}</span>
+                      <span className="shrink-0 text-[11px] text-muted-foreground">{new Date(r.observed_at).toLocaleDateString()}</span>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
             <div ref={sentinel} />
