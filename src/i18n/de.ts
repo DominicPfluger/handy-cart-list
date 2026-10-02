@@ -725,6 +725,7 @@ export const de = {
   "adm.multi": "Mehrere Produkte",
   "adm.suggestions": "Vorschläge",
   "adm.heading": "Überschrift",
+  "adm.headingNew": "Neue Überschrift",
   "adm.headingAssign": "Überschrift",
   "adm.noHeading": "Keine Überschrift",
   "adm.created": "Angelegt & übersetzt",
