@@ -197,20 +197,15 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
 
 
 
-  if (!open) {
-    return (
-      <Button variant="outline" className="w-full rounded-xl" onClick={() => setOpen(true)}>
-        🍽️ {T("adm.recipeIngredients")}
-      </Button>
-    );
-  }
-
   return (
-    <section className="space-y-3 rounded-2xl border border-border bg-card p-3">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-bold text-foreground">🍽️ {T("adm.recipeIngredients")}</h2>
-        <button onClick={() => { setOpen(false); setTplId(null); }} className="text-xs text-muted-foreground">{T("adm.close")}</button>
-      </div>
+    <section className="rounded-xl border border-border bg-card p-3">
+      <button type="button" onClick={() => { setOpen((v) => !v); if (open) setTplId(null); }} className="flex w-full items-center justify-between text-left">
+        <span className="text-sm font-semibold text-foreground">🍽️ {T("adm.recipeIngredients")}</span>
+        <span className="text-xs text-muted-foreground">{open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+      <div className="mt-3 space-y-3">
+
 
       <div className="flex flex-wrap gap-1.5">
         {RECIPE_TEMPLATES.map((x) => (
