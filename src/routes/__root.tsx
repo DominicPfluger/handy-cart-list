@@ -11,6 +11,7 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { initLocale, useT } from "../i18n";
+import { initFontSize } from "../hooks/use-font-size";
 import type { MessageKey } from "../i18n/de";
 
 import appCss from "../styles.css?url";
@@ -165,7 +166,7 @@ function BottomNav() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  useEffect(() => initLocale(), []);
+  useEffect(() => { initLocale(); initFontSize(); }, []);
   // Offline-Fähigkeit: Service Worker im Browser registrieren
   useEffect(() => {
     import("virtual:pwa-register")

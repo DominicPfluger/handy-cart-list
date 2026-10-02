@@ -342,7 +342,7 @@ const QUEUE_KEY = "shoppi:offline-queue";
 
 type QueueEntry =
   | { fn: "addItems"; data: { listId: string; items: Array<Record<string, unknown>> } }
-  | { fn: "updateItem"; data: { id: string; checked?: boolean; checkedByName?: string; groupLabel?: string; groupEmoji?: string } }
+  | { fn: "updateItem"; data: { id: string; checked?: boolean; checkedByName?: string; groupLabel?: string; groupEmoji?: string; quantity?: string } }
   | { fn: "deleteItem"; data: { id: string } }
   | { fn: "clearChecked"; data: { listId: string } }
   | { fn: "updateList"; data: { id: string; name?: string; order?: string[] } }
@@ -478,6 +478,7 @@ interface CloudListsApi {
   addCatalogItem: (input: AddCatalogItemInput, user_?: string) => void;
   toggleItem: (id: string) => void;
   setItemGroup: (id: string, label: string, emoji?: string) => void;
+  setItemQuantity: (id: string, quantity: string) => void;
   removeItem: (id: string) => void;
   clearChecked: () => void;
   saveAsTemplate: (id: string) => void;
@@ -934,6 +935,17 @@ function useCloudLists(
     [setItems]
   );
 
+  const setItemQuantity = useCallback(
+    (id: string, quantity: string) => {
+      setItems((prev) => prev.map((it) => (it.id === id ? { ...it, quantity } : it)));
+      if (!id.startsWith("tmp-")) {
+        const patch = { id, quantity };
+        runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
+      }
+    },
+    [setItems]
+  );
+
   const removeItem = useCallback(
     (id: string) => {
       const removed = activeList.items.find((it) => it.id === id);
@@ -1037,6 +1049,7 @@ function useCloudLists(
     addCatalogItem,
     toggleItem,
     setItemGroup,
+    setItemQuantity,
     removeItem,
     clearChecked,
   };
@@ -1135,6 +1148,13 @@ export function useShoppingList() {
   const localSetItemGroup = useCallback(
     (id: string, label: string, emoji?: string) => {
       local.setItems((prev) => prev.map((it) => (it.id === id ? { ...it, groupLabel: label, groupEmoji: emoji ?? it.groupEmoji } : it)));
+    },
+    [local]
+  );
+
+  const localSetItemQuantity = useCallback(
+    (id: string, quantity: string) => {
+      local.setItems((prev) => prev.map((it) => (it.id === id ? { ...it, quantity } : it)));
     },
     [local]
   );
@@ -1266,6 +1286,7 @@ export function useShoppingList() {
       addCatalogItem: localAddCatalogItem,
       toggleItem: localToggleItem,
       setItemGroup: localSetItemGroup,
+      setItemQuantity: localSetItemQuantity,
       removeItem: localRemoveItem,
       clearChecked: localClearChecked,
       isFavorite,
@@ -1299,6 +1320,7 @@ export function useShoppingList() {
     addCatalogItem: cloud.addCatalogItem,
     toggleItem: cloud.toggleItem,
     setItemGroup: cloud.setItemGroup,
+    setItemQuantity: cloud.setItemQuantity,
     removeItem: cloud.removeItem,
     clearChecked: cloud.clearChecked,
     isFavorite,
