@@ -989,7 +989,9 @@
     "tile.enrichImage": "Creating product image …",
     "tile.enrichPrices": "Estimating market prices …",
     "tile.enrichPartial": "Product saved; some additions failed",
-    "tile.enrichDone": "Product image, translations and market prices added"
+    "tile.enrichDone": "Product image, translations and market prices added",
+    "more.dietPreference": "Preferred diet",
+    "more.dietNone": "No restrictions"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1981,7 +1983,9 @@
     "tile.enrichImage": "Creating product image …",
     "tile.enrichPrices": "Estimating market prices …",
     "tile.enrichPartial": "Product saved; some additions failed",
-    "tile.enrichDone": "Product image, translations and market prices added"
+    "tile.enrichDone": "Product image, translations and market prices added",
+    "more.dietPreference": "Preferred diet",
+    "more.dietNone": "No restrictions"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2973,7 +2977,9 @@
     "tile.enrichImage": "Creating product image …",
     "tile.enrichPrices": "Estimating market prices …",
     "tile.enrichPartial": "Product saved; some additions failed",
-    "tile.enrichDone": "Product image, translations and market prices added"
+    "tile.enrichDone": "Product image, translations and market prices added",
+    "more.dietPreference": "Preferred diet",
+    "more.dietNone": "No restrictions"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3965,7 +3971,9 @@
     "tile.enrichImage": "Creando imagen del producto …",
     "tile.enrichPrices": "Estimando precios de mercado …",
     "tile.enrichPartial": "Producto guardado; algunos añadidos fallaron",
-    "tile.enrichDone": "Imagen, traducciones y precios añadidos"
+    "tile.enrichDone": "Imagen, traducciones y precios añadidos",
+    "more.dietPreference": "Alimentación preferida",
+    "more.dietNone": "Sin restricciones"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4957,7 +4965,9 @@
     "tile.enrichImage": "Creando imagen del producto …",
     "tile.enrichPrices": "Estimando precios de mercado …",
     "tile.enrichPartial": "Producto guardado; algunos añadidos fallaron",
-    "tile.enrichDone": "Imagen, traducciones y precios añadidos"
+    "tile.enrichDone": "Imagen, traducciones y precios añadidos",
+    "more.dietPreference": "Alimentación preferida",
+    "more.dietNone": "Sin restricciones"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5949,7 +5959,9 @@
     "tile.enrichImage": "Création de l’image du produit …",
     "tile.enrichPrices": "Estimation des prix par marché …",
     "tile.enrichPartial": "Produit enregistré ; certains ajouts ont échoué",
-    "tile.enrichDone": "Image, traductions et prix ajoutés"
+    "tile.enrichDone": "Image, traductions et prix ajoutés",
+    "more.dietPreference": "Régime alimentaire souhaité",
+    "more.dietNone": "Aucune restriction"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6941,7 +6953,9 @@
     "tile.enrichImage": "Création de l’image du produit …",
     "tile.enrichPrices": "Estimation des prix par marché …",
     "tile.enrichPartial": "Produit enregistré ; certains ajouts ont échoué",
-    "tile.enrichDone": "Image, traductions et prix ajoutés"
+    "tile.enrichDone": "Image, traductions et prix ajoutés",
+    "more.dietPreference": "Régime alimentaire souhaité",
+    "more.dietNone": "Aucune restriction"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7933,7 +7947,9 @@
     "tile.enrichImage": "Creazione immagine prodotto …",
     "tile.enrichPrices": "Stima dei prezzi di mercato …",
     "tile.enrichPartial": "Prodotto salvato; alcune aggiunte non riuscite",
-    "tile.enrichDone": "Immagine, traduzioni e prezzi aggiunti"
+    "tile.enrichDone": "Immagine, traduzioni e prezzi aggiunti",
+    "more.dietPreference": "Alimentazione preferita",
+    "more.dietNone": "Nessuna restrizione"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8925,7 +8941,9 @@
     "tile.enrichImage": "Creazione immagine prodotto …",
     "tile.enrichPrices": "Stima dei prezzi di mercato …",
     "tile.enrichPartial": "Prodotto salvato; alcune aggiunte non riuscite",
-    "tile.enrichDone": "Immagine, traduzioni e prezzi aggiunti"
+    "tile.enrichDone": "Immagine, traduzioni e prezzi aggiunti",
+    "more.dietPreference": "Alimentazione preferita",
+    "more.dietNone": "Nessuna restrizione"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9917,7 +9935,9 @@
     "tile.enrichImage": "A criar imagem do produto …",
     "tile.enrichPrices": "A estimar preços por mercado …",
     "tile.enrichPartial": "Produto guardado; algumas adições falharam",
-    "tile.enrichDone": "Imagem, traduções e preços adicionados"
+    "tile.enrichDone": "Imagem, traduções e preços adicionados",
+    "more.dietPreference": "Alimentação preferida",
+    "more.dietNone": "Sem restrições"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10909,7 +10929,9 @@
     "tile.enrichImage": "A criar imagem do produto …",
     "tile.enrichPrices": "A estimar preços por mercado …",
     "tile.enrichPartial": "Produto guardado; algumas adições falharam",
-    "tile.enrichDone": "Imagem, traduções e preços adicionados"
+    "tile.enrichDone": "Imagem, traduções e preços adicionados",
+    "more.dietPreference": "Alimentação preferida",
+    "more.dietNone": "Sem restrições"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11901,7 +11923,9 @@
     "tile.enrichImage": "Productafbeelding maken …",
     "tile.enrichPrices": "Marktprijzen schatten …",
     "tile.enrichPartial": "Product opgeslagen; enkele aanvullingen mislukt",
-    "tile.enrichDone": "Productafbeelding, vertalingen en marktprijzen toegevoegd"
+    "tile.enrichDone": "Productafbeelding, vertalingen en marktprijzen toegevoegd",
+    "more.dietPreference": "Gewenst voedingspatroon",
+    "more.dietNone": "Geen beperkingen"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12893,7 +12917,9 @@
     "tile.enrichImage": "Productafbeelding maken …",
     "tile.enrichPrices": "Marktprijzen schatten …",
     "tile.enrichPartial": "Product opgeslagen; enkele aanvullingen mislukt",
-    "tile.enrichDone": "Productafbeelding, vertalingen en marktprijzen toegevoegd"
+    "tile.enrichDone": "Productafbeelding, vertalingen en marktprijzen toegevoegd",
+    "more.dietPreference": "Gewenst voedingspatroon",
+    "more.dietNone": "Geen beperkingen"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13345,7 +13371,9 @@
     "tile.enrichImage": "Produktbild erstellen …",
     "tile.enrichPrices": "Marktpreise schätzen …",
     "tile.enrichPartial": "Produkt gespeichert; einzelne Ergänzungen fehlgeschlagen",
-    "tile.enrichDone": "Produktbild, Übersetzungen und Marktpreise ergänzt"
+    "tile.enrichDone": "Produktbild, Übersetzungen und Marktpreise ergänzt",
+    "more.dietPreference": "Gewünschte Ernährungsform",
+    "more.dietNone": "Keine Einschränkung"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13797,6 +13825,8 @@
     "tile.enrichImage": "Produktbild erstellen …",
     "tile.enrichPrices": "Marktpreise schätzen …",
     "tile.enrichPartial": "Produkt gespeichert; einzelne Ergänzungen fehlgeschlagen",
-    "tile.enrichDone": "Produktbild, Übersetzungen und Marktpreise ergänzt"
+    "tile.enrichDone": "Produktbild, Übersetzungen und Marktpreise ergänzt",
+    "more.dietPreference": "Gewünschte Ernährungsform",
+    "more.dietNone": "Keine Einschränkung"
   }
 }

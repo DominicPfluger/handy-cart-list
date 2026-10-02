@@ -17,6 +17,7 @@ import { useAllLocales, getExplicitLocale, getLocale, setLocale, useT, type Loca
 import { useEffect, useState, type ReactNode } from "react";
 import { EyeOff, Images } from "lucide-react";
 import { setIconSet, useIconSet, type IconSet } from "../hooks/use-icon-set";
+import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
@@ -246,6 +247,7 @@ function MorePage() {
         </label>
         <AllMarketsRow />
         <IconSetRow />
+        <DietPreferenceRow />
         <SpeakLocaleRow />
         <SpeakRateRow />
         {isAdmin && (
@@ -325,6 +327,48 @@ function IconSetRow() {
           <option value="symbols">{t("more.iconSymbols")}</option>
         </select>
       </label>
+    </div>
+  );
+}
+
+function DietPreferenceRow() {
+  const { t } = useT();
+  const diets = useDietFilter();
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <Button
+        type="button"
+        variant="ghost"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        className="flex h-auto w-full items-center justify-start gap-3 rounded-none px-4 py-3.5 text-left"
+      >
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-xl" aria-hidden="true">🥗</div>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-foreground">{t("more.dietPreference")}</p>
+          <p className="whitespace-normal text-xs font-normal text-muted-foreground">
+            {diets.length ? diets.map((diet) => t(`diet.${diet}`)).join(" · ") : t("more.dietNone")}
+          </p>
+        </div>
+        <span className="shrink-0 text-muted-foreground" aria-hidden="true">{open ? "▴" : "▾"}</span>
+      </Button>
+      {open && (
+        <div className="border-t border-border px-4 py-3">
+          <div className="flex flex-wrap gap-2">
+            {DIETS.map((diet) => {
+              const selected = diets.includes(diet);
+              return (
+                <Button key={diet} type="button" size="sm" variant={selected ? "default" : "outline"}
+                  aria-pressed={selected} onClick={() => toggleDiet(diet)} className="h-9 gap-1.5 rounded-full text-xs">
+                  <span aria-hidden="true">{DIET_EMOJI[diet]}</span>{t(`diet.${diet}`)}
+                </Button>
+              );
+            })}
+          </div>
+          {diets.length > 0 && <Button type="button" variant="ghost" size="sm" className="mt-2 px-2 text-primary" onClick={() => setDiets([])}>{t("diet.reset")}</Button>}
+        </div>
+      )}
     </div>
   );
 }
