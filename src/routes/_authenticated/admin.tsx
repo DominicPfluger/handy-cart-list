@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
 import { RecipeAdmin } from "@/components/recipe-admin";
-import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
+import { DeptAliasEditor, KEY as DEPT_ALIAS_KEY, loadAliases as loadDeptAliases } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
@@ -124,7 +124,19 @@ function AdminPage() {
     while (c) { out.unshift(c); c = c.parent_id ? deptById.get(c.parent_id) : undefined; }
     return out;
   };
-  const children = (d?.depts ?? []).filter((x) => x.parent_id === cur);
+  const deptAliasQ = useQuery({ queryKey: DEPT_ALIAS_KEY, queryFn: loadDeptAliases });
+  // Alias-Kategorien an ihrer Position einmischen (wie in der App-Abteilungsansicht).
+  const children = useMemo(() => {
+    const own = (d?.depts ?? []).filter((x) => x.parent_id === cur);
+    if (!cur || !d) return own;
+    const byId = new Map(d.depts.map((x) => [x.id, x]));
+    const extra = (deptAliasQ.data ?? []).filter((a) => a.parent_id === cur).flatMap((a) => {
+      const x = byId.get(a.department_id);
+      return x && x.parent_id !== cur ? [{ ...x, id: `deptalias:${a.id}`, sort_order: a.sort_order, alias_id: a.id, dept_id: x.id }] : [];
+    });
+    if (!extra.length) return own;
+    return [...own, ...extra].sort((a, b) => a.sort_order - b.sort_order);
+  }, [d, cur, deptAliasQ.data]);
   const ownProducts = useMemo(() => {
     const base = (d?.prods ?? []).filter((x) => x.department_id === cur);
     if (!mk || !d) return base;
