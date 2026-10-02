@@ -1001,7 +1001,12 @@
     "tile.pickDeptAlias": "Add category as alias",
     "tile.deptAliasSearch": "Search categories…",
     "tile.deptProducts": "Products (one name per line)",
-    "tile.deptProductsPlaceholder": "e.g. Apples\nBananas\n…"
+    "tile.deptProductsPlaceholder": "e.g. Apples\nBananas\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2005,7 +2010,12 @@
     "tile.pickDeptAlias": "Add category as alias",
     "tile.deptAliasSearch": "Search categories…",
     "tile.deptProducts": "Products (one name per line)",
-    "tile.deptProductsPlaceholder": "e.g. Apples\nBananas\n…"
+    "tile.deptProductsPlaceholder": "e.g. Apples\nBananas\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3009,7 +3019,12 @@
     "tile.pickDeptAlias": "Add category as alias",
     "tile.deptAliasSearch": "Search categories…",
     "tile.deptProducts": "Products (one name per line)",
-    "tile.deptProductsPlaceholder": "e.g. Apples\nBananas\n…"
+    "tile.deptProductsPlaceholder": "e.g. Apples\nBananas\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4013,7 +4028,12 @@
     "tile.pickDeptAlias": "Añadir categoría como alias",
     "tile.deptAliasSearch": "Buscar categorías…",
     "tile.deptProducts": "Productos (un nombre por línea)",
-    "tile.deptProductsPlaceholder": "p. ej. Manzanas\nPlátanos\n…"
+    "tile.deptProductsPlaceholder": "p. ej. Manzanas\nPlátanos\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5017,7 +5037,12 @@
     "tile.pickDeptAlias": "Añadir categoría como alias",
     "tile.deptAliasSearch": "Buscar categorías…",
     "tile.deptProducts": "Productos (un nombre por línea)",
-    "tile.deptProductsPlaceholder": "p. ej. Manzanas\nPlátanos\n…"
+    "tile.deptProductsPlaceholder": "p. ej. Manzanas\nPlátanos\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6021,7 +6046,12 @@
     "tile.pickDeptAlias": "Ajouter une catégorie comme alias",
     "tile.deptAliasSearch": "Rechercher des catégories…",
     "tile.deptProducts": "Produits (un nom par ligne)",
-    "tile.deptProductsPlaceholder": "p. ex. Pommes\nBananes\n…"
+    "tile.deptProductsPlaceholder": "p. ex. Pommes\nBananes\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7025,7 +7055,12 @@
     "tile.pickDeptAlias": "Ajouter une catégorie comme alias",
     "tile.deptAliasSearch": "Rechercher des catégories…",
     "tile.deptProducts": "Produits (un nom par ligne)",
-    "tile.deptProductsPlaceholder": "p. ex. Pommes\nBananes\n…"
+    "tile.deptProductsPlaceholder": "p. ex. Pommes\nBananes\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8029,7 +8064,12 @@
     "tile.pickDeptAlias": "Aggiungi categoria come alias",
     "tile.deptAliasSearch": "Cerca categorie…",
     "tile.deptProducts": "Prodotti (un nome per riga)",
-    "tile.deptProductsPlaceholder": "es. Mele\nBanane\n…"
+    "tile.deptProductsPlaceholder": "es. Mele\nBanane\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9033,7 +9073,12 @@
     "tile.pickDeptAlias": "Aggiungi categoria come alias",
     "tile.deptAliasSearch": "Cerca categorie…",
     "tile.deptProducts": "Prodotti (un nome per riga)",
-    "tile.deptProductsPlaceholder": "es. Mele\nBanane\n…"
+    "tile.deptProductsPlaceholder": "es. Mele\nBanane\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10037,7 +10082,12 @@
     "tile.pickDeptAlias": "Adicionar categoria como alias",
     "tile.deptAliasSearch": "Procurar categorias…",
     "tile.deptProducts": "Produtos (um nome por linha)",
-    "tile.deptProductsPlaceholder": "ex. Maçãs\nBananas\n…"
+    "tile.deptProductsPlaceholder": "ex. Maçãs\nBananas\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11041,7 +11091,12 @@
     "tile.pickDeptAlias": "Adicionar categoria como alias",
     "tile.deptAliasSearch": "Buscar categorias…",
     "tile.deptProducts": "Produtos (um nome por linha)",
-    "tile.deptProductsPlaceholder": "ex. Maçãs\nBananas\n…"
+    "tile.deptProductsPlaceholder": "ex. Maçãs\nBananas\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12045,7 +12100,12 @@
     "tile.pickDeptAlias": "Categorie als alias toevoegen",
     "tile.deptAliasSearch": "Categorieën zoeken…",
     "tile.deptProducts": "Producten (één naam per regel)",
-    "tile.deptProductsPlaceholder": "bv. Appels\nBananen\n…"
+    "tile.deptProductsPlaceholder": "bv. Appels\nBananen\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13049,7 +13109,12 @@
     "tile.pickDeptAlias": "Categorie als alias toevoegen",
     "tile.deptAliasSearch": "Categorieën zoeken…",
     "tile.deptProducts": "Producten (één naam per regel)",
-    "tile.deptProductsPlaceholder": "bv. Appels\nBananen\n…"
+    "tile.deptProductsPlaceholder": "bv. Appels\nBananen\n…",
+    "tile.imgProducts": "Products for the image",
+    "tile.imgProductsCount": "{n} selected",
+    "tile.imgProductsAll": "All",
+    "tile.imgProductsNone": "None",
+    "tile.imgProductsHint": "Change the selection and press ↻ to re-suggest the image text."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13513,7 +13578,12 @@
     "tile.pickDeptAlias": "Kategorie als Alias hinzufügen",
     "tile.deptAliasSearch": "Kategorie suchen…",
     "tile.deptProducts": "Produkte (ein Name pro Zeile)",
-    "tile.deptProductsPlaceholder": "z. B. Äpfel\nBananen\n…"
+    "tile.deptProductsPlaceholder": "z. B. Äpfel\nBananen\n…",
+    "tile.imgProducts": "Produkte fürs Bild",
+    "tile.imgProductsCount": "{n} ausgewählt",
+    "tile.imgProductsAll": "Alle",
+    "tile.imgProductsNone": "Keine",
+    "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13977,6 +14047,11 @@
     "tile.pickDeptAlias": "Kategorie als Alias hinzufügen",
     "tile.deptAliasSearch": "Kategorie suchen…",
     "tile.deptProducts": "Produkte (ein Name pro Zeile)",
-    "tile.deptProductsPlaceholder": "z. B. Äpfel\nBananen\n…"
+    "tile.deptProductsPlaceholder": "z. B. Äpfel\nBananen\n…",
+    "tile.imgProducts": "Produkte fürs Bild",
+    "tile.imgProductsCount": "{n} ausgewählt",
+    "tile.imgProductsAll": "Alle",
+    "tile.imgProductsNone": "Keine",
+    "tile.imgProductsHint": "Auswahl ändern und ↻ drücken, um den Bildtext neu vorzuschlagen."
   }
 }
