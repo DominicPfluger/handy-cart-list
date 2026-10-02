@@ -158,12 +158,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const requiredSteps = steps.filter((s) => s.required || s.min > 0);
   const doneRequired = requiredSteps.filter(stepOk).length;
   const allRequiredDone = requiredSteps.every(stepOk);
-  // Beim Öffnen einer Vorlage den ersten offenen Pflicht-Schritt aufklappen.
-  useEffect(() => {
-    if (!tpl) { setOpenStep(null); return; }
-    setOpenStep((cur) => cur ?? (steps.find((s) => !stepOk(s) && (s.required || s.min > 0))?.key ?? steps[0]?.key ?? null));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tpl?.id]);
   useEffect(() => { setVisibleCount({}); setStepSearch({}); setOpenGroups({}); }, [tplId]);
 
   const toggleOnlyFav = () => {
@@ -233,12 +227,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       if (cur.includes(id)) return { ...prev, [stepKey]: cur.filter((x) => x !== id) };
       const next = max === 1 ? [id] : cur.length >= max ? [...cur.slice(1), id] : [...cur, id];
       const updated = { ...prev, [stepKey]: next };
-      // Pflicht-Schritt erfüllt → nächsten offenen Pflicht-Schritt aufklappen.
-      const step = steps.find((s) => s.key === stepKey);
-      if (step && (step.required || step.min > 0) && next.length >= step.min) {
-        const nxt = steps.find((s) => s.key !== stepKey && (s.required || s.min > 0) && (updated[s.key] ?? []).length < s.min);
-        if (nxt) setOpenStep(nxt.key);
-      }
       return updated;
     });
   };
