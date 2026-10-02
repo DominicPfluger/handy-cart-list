@@ -35,6 +35,7 @@ export function makeSlug() {
 export async function createRecipe(input: {
   ownerId: string; authorName?: string | undefined; title: string; description?: string | null | undefined; templateId: string;
   picks: Record<string, string[]>; items: RecipeItem[]; isPublic?: boolean | undefined; imagePath?: string | null | undefined;
+  satiety?: string | null | undefined; spiciness?: string | null | undefined; priceClass?: string | null | undefined;
 }) {
   const { data, error } = await supabase.from("recipes").insert({
     owner_id: input.ownerId,
@@ -47,6 +48,9 @@ export async function createRecipe(input: {
     product_ids: input.items.map((i) => i.productId),
     is_public: !!input.isPublic,
     image_path: input.imagePath ?? null,
+    satiety: input.satiety ?? null,
+    spiciness: input.spiciness ?? null,
+    price_class: input.priceClass ?? null,
     share_slug: input.isPublic ? makeSlug() : null,
   }).select("id, share_slug").single();
   if (error) throw error;

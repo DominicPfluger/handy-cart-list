@@ -19,6 +19,7 @@ import { createRecipe, fetchRecipe, publishRecipe, shareLink, type RecipeItem } 
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { SavedRecipesBoard } from "./saved-recipes-board";
+import { RECIPE_TRAITS, TRAIT_GROUPS, type RecipeTraits } from "../lib/recipe-traits";
 import { SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
@@ -51,6 +52,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const user = useAuthUser();
   const collections = useRecipeCollections(user);
   const [busy, setBusy] = useState(false);
+  const [traits, setTraits] = useState<RecipeTraits>({ satiety: null, spiciness: null, price_class: null });
+  const [traitsError, setTraitsError] = useState(false);
+  const traitsComplete = TRAIT_GROUPS.every((g) => !!traits[g]);
   const [onlyFav, setOnlyFav] = useState(false);
   const diets = useDietFilter();
   const cuisineSel = useCuisineFilter();
@@ -247,13 +251,14 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
 
   const doSave = async (collectionId: string | null) => {
     if (!tpl || !user || busy) return;
+    if (!traitsComplete) { setTraitsError(true); toast.error(t("rk.traitsRequired")); return; }
     setBusy(true);
     try {
       const folderId = collectionId ?? (await createCollection(user.id, newName));
       const recTitle = customTitle.trim() || title;
       const recDesc = customDesc.trim() || null;
       const imagePath = photo ? await uploadRecipeImage(user.id, photo) : null;
-      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, description: recDesc, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic, imagePath });
+      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, description: recDesc, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic, imagePath, satiety: traits.satiety, spiciness: traits.spiciness, priceClass: traits.price_class });
       await saveToFolder(user.id, rec.id, folderId);
       if (makePublic && rec.share_slug) {
         const how = await shareLink(rec.share_slug, recTitle);
@@ -308,6 +313,23 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           maxLength={2000}
           className="w-full resize-none rounded-2xl border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
         />
+        {TRAIT_GROUPS.map((g) => {
+          const missing = traitsError && !traits[g];
+          return (
+            <div key={g} role="radiogroup" aria-label={t(`rk.${g}`)} aria-required="true" className="space-y-1.5">
+              <p className={`text-xs font-bold ${missing ? "text-destructive" : "text-foreground"}`}>{RECIPE_TRAITS[g].emoji} {t(`rk.${g}`)} *</p>
+              <div className="flex flex-wrap gap-1.5">
+                {RECIPE_TRAITS[g].values.map((v) => (
+                  <button key={v} type="button" role="radio" aria-checked={traits[g] === v}
+                    onClick={() => setTraits((o) => ({ ...o, [g]: v }))}
+                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${traits[g] === v ? "border-primary bg-primary text-primary-foreground" : missing ? "border-destructive bg-card text-foreground" : "border-border bg-card text-foreground"}`}>
+                    {t(`rk.${g}.${v}`)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
         <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-dashed border-border bg-card p-2">
           {photoUrl
             ? <img src={photoUrl} alt="" className="h-16 w-16 rounded-xl object-cover" />
@@ -613,7 +635,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             </ul>
             {user && (
               <button
-                onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setSaveOpen(true); }}
+                onClick={() => { setSavedMsg(false); setCustomTitle(title); setCustomDesc(""); setTraits({ satiety: null, spiciness: null, price_class: null }); setTraitsError(false); setSaveOpen(true); }}
                 className="mt-3 w-full rounded-2xl bg-primary px-4 py-4 text-lg font-bold text-primary-foreground shadow-md transition active:scale-[0.98]"
               >
                 {savedMsg ? `✓ ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
