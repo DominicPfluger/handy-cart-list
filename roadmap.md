@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Rezept-Generator: Zutaten-Ebenen mit Emoji, Untergruppen inline, zehn Produkte je Ebene mit „Weitere anzeigen“; nur manuell zugeordnete Produkte in verwalteten Vorlagen.
+- [x] Rezept-Generator: Zutaten-Ebenen mit Emoji, Untergruppen inline, zehn Produkte je Ebene mit „Weitere anzeigen“; nur manuell zugeordnete Produkte in verwalteten Vorlagen.
 
 Priorisierte Verbesserungen (Plan vom 2.10.2026 genehmigt):
 
