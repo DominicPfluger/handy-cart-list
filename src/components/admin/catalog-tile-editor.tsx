@@ -57,6 +57,9 @@ export function CatalogTileEditor(p: {
   deptAliasOptions?: { id: string; label: string }[];
   onAddDeptAlias?: (deptId: string) => void;
   onRemoveDeptAlias?: (aliasId: string, name: string) => void;
+  /** Wählbare Produkte für ein neues Alias-Produkt. */
+  productAliasOptions?: { id: string; label: string }[];
+  onAddProductAlias?: (productId: string) => void;
   headings?: TileHeading[];
   onAddHeading?: (name: string) => void;
   onMoveHeading?: (id: string, beforeProductId: string) => void;
@@ -77,6 +80,8 @@ export function CatalogTileEditor(p: {
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
   const [aliasPick, setAliasPick] = useState(false);
   const [aliasSearch, setAliasSearch] = useState("");
+  const [prodAliasPick, setProdAliasPick] = useState(false);
+  const [prodAliasSearch, setProdAliasSearch] = useState("");
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
   const moved = useRef(false);
