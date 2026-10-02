@@ -130,6 +130,11 @@ function DepartmentsPage() {
     return hidden;
   }, [departments, orderedProducts, products, diets.length, cuisines.length, filterExemptDepartments]);
   const { t } = useT();
+  // In Non-Food-/Near-Food-Abteilungen haben Ernährungs- und Küchenfilter keine Wirkung → Knöpfe ausblenden
+  const filtersHiddenByDept = currentId !== null && filterExemptDepartments.has(currentId);
+  useEffect(() => {
+    if (filtersHiddenByDept) { setDietOpen(false); setCuisineOpen(false); }
+  }, [filtersHiddenByDept]);
   const refPrices = useReferencePrices();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const { preferred: preferredDept } = usePreferredDept();
