@@ -301,6 +301,23 @@ export function CatalogTileEditor(p: {
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
 
+      {aliasPick && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setAliasPick(false)}>
+          <div className="flex max-h-[80vh] w-full max-w-md flex-col gap-2 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+            <p className="text-sm font-bold text-foreground">{T("tile.pickDeptAlias")}</p>
+            <Input autoFocus value={aliasSearch} onChange={(e) => setAliasSearch(e.target.value)} placeholder={T("tile.deptAliasSearch")} className="h-10 rounded-xl" />
+            <div className="min-h-0 flex-1 space-y-1 overflow-y-auto">
+              {(p.deptAliasOptions ?? []).filter((o) => o.label.toLowerCase().includes(aliasSearch.trim().toLowerCase())).map((o) => (
+                <button key={o.id} type="button" onClick={() => { p.onAddDeptAlias?.(o.id); setAliasPick(false); }}
+                  className="w-full truncate rounded-lg border border-border px-3 py-2 text-left text-sm text-foreground">{o.label}</button>
+              ))}
+              {(p.deptAliasOptions ?? []).length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noHits")}</p>}
+            </div>
+            <Button variant="outline" onClick={() => setAliasPick(false)}>{T("adm.cancel")}</Button>
+          </div>
+        </div>
+      )}
+
       {drag && moved.current && (
         <div className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card px-3 py-2 text-2xl shadow-lg" style={{ left: drag.x, top: drag.y }}>{drag.label}</div>
       )}
