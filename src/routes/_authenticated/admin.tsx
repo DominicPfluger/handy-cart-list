@@ -220,6 +220,35 @@ function AdminPage() {
     }, T("adm.headingMoved"));
   };
 
+  /** Produkt unter eine Überschrift verschieben (ans Ende der Gruppe; "" = ganz nach oben, vor die erste Überschrift). */
+  const assignHeading = async (productId: string, headingId: string) => {
+    const prod0 = d?.prods.find((x) => x.id === productId);
+    if (!d || !prod0) return;
+    const list = d.prods.filter((x) => x.department_id === prod0.department_id).slice().sort((a, b) => a.sort_order - b.sort_order);
+    const heads = d.heads.filter((h) => h.department_id === prod0.department_id);
+    const myIdx = list.findIndex((x) => x.id === productId);
+    let curH = "";
+    for (const h of heads) { const ai = list.findIndex((x) => x.id === h.before_product_id); if (ai >= 0 && ai <= myIdx) curH = h.id; }
+    if (headingId === curH) return;
+    const follower = list[myIdx + 1];
+    const anchored = heads.filter((h) => h.before_product_id === productId);
+    const rest = list.filter((x) => x.id !== productId);
+    let at = 0;
+    if (headingId) {
+      const h = heads.find((x) => x.id === headingId)!;
+      let ai = rest.findIndex((x) => x.id === h.before_product_id);
+      if (ai < 0) ai = follower ? rest.findIndex((x) => x.id === follower.id) : 0;
+      if (ai < 0) ai = 0;
+      let end = rest.length;
+      for (const o of heads) { if (o.id === h.id || o.before_product_id === productId) continue; const oi = rest.findIndex((x) => x.id === o.before_product_id); if (oi > ai && oi < end) end = oi; }
+      at = end;
+    }
+    await saveOrder([...rest.slice(0, at), prod0, ...rest.slice(at)]);
+    for (const h of anchored) {
+      if (follower) await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: follower.id } });
+    }
+  };
+
   const nm = (id: string, base: string) => viewLoc === "de-DE" ? base : d?.tr.get(id)?.[viewLoc]?.name ?? base;
   const pathText = () => path(cur).map((p) => p.name).join(" › ");
   /** Produkte aus Nachbarkategorien (gleiche Oberkategorie), damit nichts doppelt vorgeschlagen wird. */
