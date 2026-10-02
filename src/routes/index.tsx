@@ -261,18 +261,6 @@ function ListPage() {
     setQuick("");
   };
 
-  // ---- Einkaufs-Modus: Grosschrift, nur Abhaken, Bildschirm bleibt wach ----
-  const [shopMode, setShopMode] = useState(false);
-  useEffect(() => {
-    if (!shopMode) return;
-    let cancelled = false;
-    let lock: { release: () => Promise<void> } | null = null;
-    const wl = (navigator as Navigator & { wakeLock?: { request: (type: "screen") => Promise<{ release: () => Promise<void> }> } }).wakeLock;
-    wl?.request("screen")
-      .then((l) => { if (cancelled) l.release().catch(() => {}); else lock = l; })
-      .catch(() => {});
-    return () => { cancelled = true; lock?.release().catch(() => {}); };
-  }, [shopMode]);
 
   return (
     <div className="space-y-5">
