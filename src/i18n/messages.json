@@ -1135,7 +1135,12 @@
     "rec.entrySearchTitle": "Search Recipes",
     "rec.entrySearchDesc": "Find recipes that match your criteria – for example ingredients, diet or category.",
     "rec.searchTitle": "Search Recipes",
-    "rec.searchSoon": "Search by specific criteria will be available here soon."
+    "rec.searchSoon": "Search by specific criteria will be available here soon.",
+    "rec.searchIntro": "Find recipes by satiety, spiciness and price class.",
+    "rec.searchAll": "All",
+    "rec.searchClear": "Reset",
+    "rec.searchCount": "{n} recipes found",
+    "rec.searchEmpty": "No recipes found — try different filters."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2273,7 +2278,12 @@
     "rec.entrySearchTitle": "Search Recipes",
     "rec.entrySearchDesc": "Find recipes that match your criteria – for example ingredients, diet or category.",
     "rec.searchTitle": "Search Recipes",
-    "rec.searchSoon": "Search by specific criteria will be available here soon."
+    "rec.searchSoon": "Search by specific criteria will be available here soon.",
+    "rec.searchIntro": "Find recipes by satiety, spiciness and price class.",
+    "rec.searchAll": "All",
+    "rec.searchClear": "Reset",
+    "rec.searchCount": "{n} recipes found",
+    "rec.searchEmpty": "No recipes found — try different filters."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3411,7 +3421,12 @@
     "rec.entrySearchTitle": "Search Recipes",
     "rec.entrySearchDesc": "Find recipes that match your criteria – for example ingredients, diet or category.",
     "rec.searchTitle": "Search Recipes",
-    "rec.searchSoon": "Search by specific criteria will be available here soon."
+    "rec.searchSoon": "Search by specific criteria will be available here soon.",
+    "rec.searchIntro": "Find recipes by satiety, spiciness and price class.",
+    "rec.searchAll": "All",
+    "rec.searchClear": "Reset",
+    "rec.searchCount": "{n} recipes found",
+    "rec.searchEmpty": "No recipes found — try different filters."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4549,7 +4564,12 @@
     "rec.entrySearchTitle": "Buscar recetas",
     "rec.entrySearchDesc": "Encuentra recetas según tus criterios, por ejemplo ingredientes, dieta o categoría.",
     "rec.searchTitle": "Buscar recetas",
-    "rec.searchSoon": "La búsqueda por criterios específicos estará disponible aquí pronto."
+    "rec.searchSoon": "La búsqueda por criterios específicos estará disponible aquí pronto.",
+    "rec.searchIntro": "Encuentra recetas por saturación, nivel de picante y clase de precio.",
+    "rec.searchAll": "Todos",
+    "rec.searchClear": "Restablecer",
+    "rec.searchCount": "{n} recetas encontradas",
+    "rec.searchEmpty": "No se encontraron recetas; prueba otros criterios."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5687,7 +5707,12 @@
     "rec.entrySearchTitle": "Buscar recetas",
     "rec.entrySearchDesc": "Encuentra recetas según tus criterios, por ejemplo ingredientes, dieta o categoría.",
     "rec.searchTitle": "Buscar recetas",
-    "rec.searchSoon": "La búsqueda por criterios específicos estará disponible aquí pronto."
+    "rec.searchSoon": "La búsqueda por criterios específicos estará disponible aquí pronto.",
+    "rec.searchIntro": "Encuentra recetas por saturación, nivel de picante y clase de precio.",
+    "rec.searchAll": "Todos",
+    "rec.searchClear": "Restablecer",
+    "rec.searchCount": "{n} recetas encontradas",
+    "rec.searchEmpty": "No se encontraron recetas; prueba otros criterios."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6825,7 +6850,12 @@
     "rec.entrySearchTitle": "Rechercher des recettes",
     "rec.entrySearchDesc": "Trouvez des recettes selon vos critères – par exemple ingrédients, régime ou catégorie.",
     "rec.searchTitle": "Rechercher des recettes",
-    "rec.searchSoon": "La recherche par critères spécifiques sera bientôt disponible ici."
+    "rec.searchSoon": "La recherche par critères spécifiques sera bientôt disponible ici.",
+    "rec.searchIntro": "Trouvez des recettes selon la satiété, le piquant et la gamme de prix.",
+    "rec.searchAll": "Tout",
+    "rec.searchClear": "Réinitialiser",
+    "rec.searchCount": "{n} recettes trouvées",
+    "rec.searchEmpty": "Aucune recette trouvée — essaie d'autres critères."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7963,7 +7993,12 @@
     "rec.entrySearchTitle": "Rechercher des recettes",
     "rec.entrySearchDesc": "Trouvez des recettes selon vos critères – par exemple ingrédients, régime ou catégorie.",
     "rec.searchTitle": "Rechercher des recettes",
-    "rec.searchSoon": "La recherche par critères spécifiques sera bientôt disponible ici."
+    "rec.searchSoon": "La recherche par critères spécifiques sera bientôt disponible ici.",
+    "rec.searchIntro": "Trouvez des recettes selon la satiété, le piquant et la gamme de prix.",
+    "rec.searchAll": "Tout",
+    "rec.searchClear": "Réinitialiser",
+    "rec.searchCount": "{n} recettes trouvées",
+    "rec.searchEmpty": "Aucune recette trouvée — essaie d'autres critères."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9101,7 +9136,12 @@
     "rec.entrySearchTitle": "Cerca ricette",
     "rec.entrySearchDesc": "Trova ricette in base ai tuoi criteri, ad esempio ingredienti, dieta o categoria.",
     "rec.searchTitle": "Cerca ricette",
-    "rec.searchSoon": "La ricerca per criteri specifici sarà presto disponibile qui."
+    "rec.searchSoon": "La ricerca per criteri specifici sarà presto disponibile qui.",
+    "rec.searchIntro": "Trova ricette per sazietà, piccantezza e fascia di prezzo.",
+    "rec.searchAll": "Tutti",
+    "rec.searchClear": "Reimposta",
+    "rec.searchCount": "{n} ricette trovate",
+    "rec.searchEmpty": "Nessuna ricetta trovata — prova altri criteri."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10239,7 +10279,12 @@
     "rec.entrySearchTitle": "Cerca ricette",
     "rec.entrySearchDesc": "Trova ricette in base ai tuoi criteri, ad esempio ingredienti, dieta o categoria.",
     "rec.searchTitle": "Cerca ricette",
-    "rec.searchSoon": "La ricerca per criteri specifici sarà presto disponibile qui."
+    "rec.searchSoon": "La ricerca per criteri specifici sarà presto disponibile qui.",
+    "rec.searchIntro": "Trova ricette per sazietà, piccantezza e fascia di prezzo.",
+    "rec.searchAll": "Tutti",
+    "rec.searchClear": "Reimposta",
+    "rec.searchCount": "{n} ricette trovate",
+    "rec.searchEmpty": "Nessuna ricetta trovata — prova altri criteri."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11377,7 +11422,12 @@
     "rec.entrySearchTitle": "Procurar receitas",
     "rec.entrySearchDesc": "Encontre receitas segundo os seus critérios – por exemplo ingredientes, dieta ou categoria.",
     "rec.searchTitle": "Procurar receitas",
-    "rec.searchSoon": "A pesquisa por critérios específicos estará disponível aqui em breve."
+    "rec.searchSoon": "A pesquisa por critérios específicos estará disponível aqui em breve.",
+    "rec.searchIntro": "Encontre receitas por saciedade, picância e classe de preço.",
+    "rec.searchAll": "Todos",
+    "rec.searchClear": "Redefinir",
+    "rec.searchCount": "{n} receitas encontradas",
+    "rec.searchEmpty": "Nenhuma receita encontrada — tenta outros critérios."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12515,7 +12565,12 @@
     "rec.entrySearchTitle": "Procurar receitas",
     "rec.entrySearchDesc": "Encontre receitas segundo os seus critérios – por exemplo ingredientes, dieta ou categoria.",
     "rec.searchTitle": "Procurar receitas",
-    "rec.searchSoon": "A pesquisa por critérios específicos estará disponível aqui em breve."
+    "rec.searchSoon": "A pesquisa por critérios específicos estará disponível aqui em breve.",
+    "rec.searchIntro": "Encontre receitas por saciedade, picância e classe de preço.",
+    "rec.searchAll": "Todos",
+    "rec.searchClear": "Redefinir",
+    "rec.searchCount": "{n} receitas encontradas",
+    "rec.searchEmpty": "Nenhuma receita encontrada — tenta outros critérios."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13653,7 +13708,12 @@
     "rec.entrySearchTitle": "Recepten zoeken",
     "rec.entrySearchDesc": "Vind recepten die aan jouw criteria voldoen – bijvoorbeeld ingrediënten, dieet of categorie.",
     "rec.searchTitle": "Recepten zoeken",
-    "rec.searchSoon": "Zoeken op specifieke criteria is hier binnenkort beschikbaar."
+    "rec.searchSoon": "Zoeken op specifieke criteria is hier binnenkort beschikbaar.",
+    "rec.searchIntro": "Vind recepten op verzadiging, pittigheid en prijsklasse.",
+    "rec.searchAll": "Alle",
+    "rec.searchClear": "Opnieuw instellen",
+    "rec.searchCount": "{n} recepten gevonden",
+    "rec.searchEmpty": "Geen recepten gevonden — probeer andere eigenschappen."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14791,7 +14851,12 @@
     "rec.entrySearchTitle": "Recepten zoeken",
     "rec.entrySearchDesc": "Vind recepten die aan jouw criteria voldoen – bijvoorbeeld ingrediënten, dieet of categorie.",
     "rec.searchTitle": "Recepten zoeken",
-    "rec.searchSoon": "Zoeken op specifieke criteria is hier binnenkort beschikbaar."
+    "rec.searchSoon": "Zoeken op specifieke criteria is hier binnenkort beschikbaar.",
+    "rec.searchIntro": "Vind recepten op verzadiging, pittigheid en prijsklasse.",
+    "rec.searchAll": "Alle",
+    "rec.searchClear": "Opnieuw instellen",
+    "rec.searchCount": "{n} recepten gevonden",
+    "rec.searchEmpty": "Geen recepten gevonden — probeer andere eigenschappen."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15391,7 +15456,12 @@
     "rec.entrySearchTitle": "Rezepte suchen",
     "rec.entrySearchDesc": "Finde Rezepte gezielt nach deinen Kriterien – zum Beispiel Zutaten, Ernährungsform oder Kategorie.",
     "rec.searchTitle": "Rezepte suchen",
-    "rec.searchSoon": "Die Suche nach spezifischen Kriterien wird hier in Kürze verfügbar sein."
+    "rec.searchSoon": "Die Suche nach spezifischen Kriterien wird hier in Kürze verfügbar sein.",
+    "rec.searchIntro": "Rezepte nach Sättigung, Schärfe und Preisklasse finden.",
+    "rec.searchAll": "Alle",
+    "rec.searchClear": "Zurücksetzen",
+    "rec.searchCount": "{n} Rezepte gefunden",
+    "rec.searchEmpty": "Keine Rezepte gefunden — versuche andere Eigenschaften."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15991,6 +16061,11 @@
     "rec.entrySearchTitle": "Rezepte suchen",
     "rec.entrySearchDesc": "Finde Rezepte gezielt nach deinen Kriterien – zum Beispiel Zutaten, Ernährungsform oder Kategorie.",
     "rec.searchTitle": "Rezepte suchen",
-    "rec.searchSoon": "Die Suche nach spezifischen Kriterien wird hier in Kürze verfügbar sein."
+    "rec.searchSoon": "Die Suche nach spezifischen Kriterien wird hier in Kürze verfügbar sein.",
+    "rec.searchIntro": "Rezepte nach Sättigung, Schärfe und Preisklasse finden.",
+    "rec.searchAll": "Alle",
+    "rec.searchClear": "Zurücksetzen",
+    "rec.searchCount": "{n} Rezepte gefunden",
+    "rec.searchEmpty": "Keine Rezepte gefunden — versuche andere Eigenschaften."
   }
 }
