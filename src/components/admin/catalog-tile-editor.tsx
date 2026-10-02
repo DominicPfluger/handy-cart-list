@@ -150,7 +150,7 @@ export function CatalogTileEditor(p: {
           </span>
         ))}
       </nav>
-      {p.toolbar}
+
 
       {editMode && (
         <div className="flex flex-wrap gap-2">
