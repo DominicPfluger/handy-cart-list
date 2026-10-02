@@ -452,7 +452,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-2.5 py-1 text-[11px] font-semibold leading-tight text-foreground">
             {t("rk.reset")}
           </button>
-        </div>
       </div>
 
       {dietOpen && (
