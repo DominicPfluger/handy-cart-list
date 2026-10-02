@@ -661,10 +661,35 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                     ))}
                   </div>
                 )}
+                {suggestStep?.key === s.key && suggestPicks && (
+                  <div className="space-y-1 rounded-lg border border-primary/40 bg-background p-2">
+                    <p className="text-xs text-muted-foreground">{T("adm.stepSuggestDone", { n: suggestPicks.size })}</p>
+                    <div className="max-h-72 space-y-0.5 overflow-y-auto">
+                      {[...suggestPicks].map((id) => {
+                        const p = prodById.get(id);
+                        return (
+                          <label key={id} className="flex items-center gap-2 rounded-lg px-2 py-1 text-xs hover:bg-accent/40">
+                            <input type="checkbox" checked onChange={() => setSuggestPicks((x) => { const n = new Set(x); n.delete(id); return n; })} className="accent-primary" />
+                            <span className="min-w-0 flex-1 truncate text-foreground">{p?.emoji} {p?.name ?? id}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button size="sm" variant="ghost" onClick={() => { setSuggestStep(null); setSuggestPicks(null); }}>{T("adm.cancel")}</Button>
+                      <Button size="sm" disabled={busy} onClick={applySuggest}>{T("adm.apply")} ({suggestPicks.size})</Button>
+                    </div>
+                  </div>
+                )}
                 {pickerStep !== s.key ? (
-                  <button type="button" onClick={() => openPicker(s.key)} className="text-xs font-medium text-primary">
-                    {T("adm.fromCatalog")}
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button type="button" onClick={() => openPicker(s.key)} className="text-xs font-medium text-primary">
+                      {T("adm.fromCatalog")}
+                    </button>
+                    <button type="button" disabled={busy} onClick={() => { const row = (stepRows ?? []).find((x) => x.template_id === tplId && x.key === s.key); if (row) startSuggest(row); }} className="text-xs font-medium text-primary disabled:opacity-50">
+                      ✨ {T("adm.stepSuggest")}
+                    </button>
+                  </div>
                 ) : (
                   <div className="space-y-1.5 rounded-lg border border-primary/40 bg-background p-2">
                     <div className="flex items-center gap-2 text-xs">
