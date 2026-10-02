@@ -68,6 +68,7 @@ function RecipePage() {
   const [added, setAdded] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [portions, setPortions] = useState(1);
   const [speakRate] = useSpeakRate();
   const [speakLocale] = useSpeakLocale();
 
@@ -115,7 +116,7 @@ function RecipePage() {
       `${r.title}.`,
       ...(r.description ? [r.description] : []),
       translate(speakLocale, "rs.speakIngredients"),
-      ...items.map((i) => {
+      ...scaled.map((i) => {
         const qty = i.quantity
           ? (i.unit ? `${speakQuantity(i.quantity, i.unit ?? undefined, speakLocale)} ` : `${i.quantity} `)
           : "";
