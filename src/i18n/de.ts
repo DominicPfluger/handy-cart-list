@@ -577,6 +577,7 @@ export const de = {
   "adm.tab.languages": "Sprachen",
   "adm.tab.more": "Mehr",
   "loc.title": "Sprachen & Lokalisierungen",
+  "loc.builtin": "Eingerichtete Sprachen",
   "loc.suggest": "Vorschläge",
   "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
   "loc.hint": "Neue Sprache anlegen: Menüs, Texte und der ganze Katalog werden per KI übersetzt. Danach ist sie in der App wählbar. Neue Kategorien und Produkte werden automatisch in alle Sprachen übersetzt.",
