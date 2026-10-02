@@ -288,21 +288,6 @@ function MorePage() {
         )}
       </section>
 
-      {hiddenCategories.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="text-base font-semibold text-foreground">{t("more.hiddenCategories")}</h2>
-          <p className="text-sm text-muted-foreground">{t("more.hiddenCategoriesHint")}</p>
-          <div className="divide-y divide-border border-y border-border">
-            {hiddenCategories.map((department) => (
-              <div key={department.id} className="flex items-center justify-between gap-3 py-2.5">
-                <span className="min-w-0 text-sm text-foreground">{department.name}</span>
-                <Button variant="ghost" size="sm" onClick={() => restoreDepartment(department.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
       <footer className="flex flex-col items-center gap-1 pt-4 pb-2 text-center">
         <img src={appIcon.url} alt="Shoppi App-Icon" className="h-16 w-16 rounded-2xl shadow-sm" />
         <p className="mt-2 text-base font-semibold text-foreground">Shoppi</p>
