@@ -580,8 +580,10 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
 
       {mode !== "generator" && (
         <div className="flex items-center gap-3">
-          <span className="grid h-12 w-12 place-items-center rounded-2xl text-3xl" style={{ background: tpl.color }}>{tpl.emoji}</span>
           <h2 className="text-lg font-bold text-foreground">{catName}</h2>
+          <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-2xl text-3xl" style={{ background: tpl.color }}>
+            {tpl.image ? <img src={tpl.image} alt="" loading="lazy" className="h-full w-full object-cover" /> : tpl.emoji}
+          </span>
         </div>
       )}
 

@@ -65,8 +65,8 @@ function RecipesPage() {
               search={{ cat: x.id, recipe: undefined }}
               className="flex flex-col items-center gap-2 rounded-2xl bg-background p-4 text-center transition active:scale-[0.96]"
             >
-              <span className="grid h-16 w-16 place-items-center rounded-2xl text-4xl" style={{ background: x.color }} aria-hidden="true">
-                {x.emoji}
+              <span className="grid h-16 w-16 place-items-center overflow-hidden rounded-2xl text-4xl" style={{ background: x.color }} aria-hidden="true">
+                {x.image ? <img src={x.image} alt="" loading="lazy" className="h-full w-full object-cover" /> : x.emoji}
               </span>
               <span className="text-[13px] font-semibold leading-tight text-foreground">{templateLabel(x, t)}</span>
             </Link>
