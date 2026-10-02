@@ -17,3 +17,4 @@ Priorisierte Verbesserungen (Plan vom 2.10.2026 genehmigt):
 - [ ] 6. Schnellerer Start: Katalog in Häppchen laden
 
 Alle i18n-Texte in de.ts + 15 Lokale (messages.json).
+- [x] Admin-Panel: Rezeptverwaltung in zwei unabhängig aufklappbare Bereiche geteilt — „Rezept-Verwaltung" (Vorlagen, Zutatenbereiche, Oberkategorien, Beliebtes) und „Zutaten-Zuweisung" (Suche, Zuweisung, Aus Katalog, KI-Vorschläge), jeweils eigene Vorlagen-Auswahl.
