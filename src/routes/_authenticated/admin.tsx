@@ -387,28 +387,6 @@ function AdminPage() {
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
             onAdvanced={(kind, id) => setSel({ kind, id })}
-            toolbar={cur ? (
-              <div className="space-y-1">
-                <select value={mk} onChange={(e) => setMk(e.target.value)} aria-label={T("adm.marketOrder")}
-                  className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm md:max-w-xs">
-                  <option value="">{T("adm.marketGlobal")}</option>
-                  {MARKETS.map((m) => <option key={m} value={m}>{flagOf(m)} {m}</option>)}
-                </select>
-                {mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
-              </div>
-            ) : null}
-            sortControls={products.length > 1 ? (
-              <div className="flex gap-2">
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as typeof sortBy)} aria-label={T("adm.sortBy")}
-                  className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-3 text-sm">
-                  <option value="popularity">{T("adm.opt.popularity")}</option>
-                  <option value="price">{T("adm.opt.price")}</option>
-                  <option value="alphabetical">{T("adm.opt.alphabetical")}</option>
-                  <option value="similarity">{T("adm.opt.similarity")}</option>
-                </select>
-                <Button variant="outline" className="h-11 rounded-xl" disabled={busy} onClick={() => sortProducts()}>↕ {busy ? T("adm.working") : T("adm.sort")}</Button>
-              </div>
-            ) : null}
             below={cur ? (
               <>
                 <DeptAliasRows parentId={cur} depts={d.depts} onEdit={(id) => setSel({ kind: "department", id })} />
