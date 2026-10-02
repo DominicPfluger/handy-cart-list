@@ -494,7 +494,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 pb-20">
     <section className="space-y-4">
       <div className="flex items-start justify-between gap-2">
         {mode === "generator"
@@ -777,6 +777,16 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         )}
       </div>
     </section>
+    <div className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-[440px] border-t border-border bg-background/95 p-3 backdrop-blur">
+      <button
+        type="button"
+        onClick={() => summaryRef.current?.scrollIntoView({ behavior: "smooth" })}
+        disabled={!allRequiredDone}
+        className="w-full rounded-full bg-primary px-4 py-3 text-sm font-bold text-primary-foreground shadow-md transition active:scale-[0.98] disabled:opacity-50"
+      >
+        {t("rk.toRecipe", { n: chosen.length })}
+      </button>
+    </div>
     {saveDialog}
     </div>
   );
