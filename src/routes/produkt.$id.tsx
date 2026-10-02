@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,7 +10,8 @@ import { Button } from "../components/ui/button";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { ProductEmoji } from "../components/product-emoji";
 import { HeartIcon, PlusIcon } from "../components/icons";
-import { catalogQueryOptions, brandsFor } from "../lib/catalog-query";
+import { catalogQueryOptions, brandsFor, useCatalog } from "../lib/catalog-query";
+import { CachedImage } from "../components/catalog-icon";
 import { formatQuantity, getUnits } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
@@ -38,7 +39,7 @@ function ProductPage() {
   const { t } = useT();
   const navigate = useNavigate();
   const locale = getLocale();
-  const { data } = useSuspenseQuery(catalogQueryOptions(locale));
+  const data = useCatalog();
   const { isFavorite, toggleFavorite } = useShoppingList();
   const [adding, setAdding] = useState(false);
   const isAdmin = useIsAdmin();
@@ -100,8 +101,8 @@ function ProductPage() {
 
       <div className="mt-4 flex flex-col items-center text-center">
         <div className="grid h-28 w-28 place-items-center overflow-hidden rounded-3xl bg-primary-soft/25">
-          {product.imageUrl ? (
-            <img src={product.imageUrl} alt={product.name} className="h-full w-full object-cover" />
+          {product.imagePath ? (
+            <CachedImage key={product.imagePath} path={product.imagePath} signedUrl={product.imageUrl} className="h-full w-full object-cover" fallback={<ProductEmoji emoji={product.emoji} className="text-6xl" />} />
           ) : (
             <ProductEmoji emoji={product.emoji} className="text-6xl" />
           )}
