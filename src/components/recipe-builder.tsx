@@ -190,27 +190,33 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     });
   };
 
-  const popular = useMemo(() => RECIPE_TEMPLATES.flatMap((template) =>
-    POPULAR_RECIPES[template.id].map((combo, i) => {
-      const p: Picks = {};
-      const items: CatalogProduct[] = [];
-      for (const step of template.steps) {
-        const dbIds = catalog.recipeIngredients
-          .filter((r) => r.templateId === template.id && r.stepKey === step.key)
-          .map((r) => r.productId);
-        const ps = (combo[step.key] ?? [])
-          .map((n) => byBase.get(n))
-          .filter((x): x is CatalogProduct => !!x && (dbIds.length > 0 ? dbIds.includes(x.id) : step.ingredients.includes(x.baseName)));
-        p[step.key] = ps.map((x) => x.id);
-        items.push(...ps);
-      }
-      return { key: `${template.id}-${i}`, template, picks: p, items };
-    }).filter((r) => r.items.length > 0)
-  ), [byBase, catalog.recipeIngredients]);
+  const popular = useMemo(() => {
+    const dbPopular = catalog.recipePopular;
+    return templates.flatMap((template) => {
+      const combos = dbPopular.length > 0
+        ? dbPopular.filter((x) => x.templateId === template.id).sort((a, b) => a.sortOrder - b.sortOrder).map((x) => x.picks)
+        : (POPULAR_RECIPES[template.id] ?? []);
+      return combos.map((combo, i) => {
+        const p: Picks = {};
+        const items: CatalogProduct[] = [];
+        for (const step of template.steps) {
+          const dbIds = catalog.recipeIngredients
+            .filter((r) => r.templateId === template.id && r.stepKey === step.key)
+            .map((r) => r.productId);
+          const ps = (combo[step.key] ?? [])
+            .map((n) => byBase.get(n))
+            .filter((x): x is CatalogProduct => !!x && (dbIds.length > 0 ? dbIds.includes(x.id) : step.ingredients.includes(x.baseName)));
+          p[step.key] = ps.map((x) => x.id);
+          items.push(...ps);
+        }
+        return { key: `${template.id}-${i}`, template, picks: p, items };
+      }).filter((r) => r.items.length > 0);
+    });
+  }, [templates, byBase, catalog.recipeIngredients, catalog.recipePopular]);
 
   const visiblePopular = tpl
     ? popular.filter((r) => r.template.id === tpl.id)
-    : RECIPE_TEMPLATES.map((template) => popular.find((r) => r.template.id === template.id)).filter((r): r is (typeof popular)[number] => !!r);
+    : templates.map((template) => popular.find((r) => r.template.id === template.id)).filter((r): r is (typeof popular)[number] => !!r);
 
   const recent = useMemo(
     () => collections
@@ -249,7 +255,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   };
 
   const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => s.products.find((p) => p.id === id)!).filter(Boolean));
-  const catName = tpl ? t(`rk.cat.${tpl.id}` as MessageKey) : "";
+  const catName = tpl ? templateLabel(tpl, t) : "";
   const title = chosen.length
     ? `${catName}: ${chosen.slice(0, 3).map((p) => p.name).join(", ")}${chosen.length > 3 ? " …" : ""}`
     : "";
@@ -409,7 +415,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       <SectionTitle emoji="🆕" bg="#E3F0E4">{t("rk.recent")}</SectionTitle>
       {recent.length === 0 && <p className="text-sm text-muted-foreground">{t("rk.emptyCollection")}</p>}
       {recentShown.map((r) => {
-        const rt = RECIPE_TEMPLATES.find((x) => x.id === r.templateId);
+        const rt = templates.find((x) => x.id === r.templateId);
         return (
           <button key={r.id} onClick={() => rt && openRecipe(rt.id, r.picks)} className={LIST_CARD_CLASS}>
             <ListCardBody emoji={rt?.emoji ?? "🍽️"} color={rt?.color} title={r.title} badge={new Date(r.savedAt).toLocaleDateString()} />
@@ -432,7 +438,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           <ListCardBody
             emoji={r.template.emoji}
             color={r.template.color}
-            kicker={!tpl ? t(`rk.cat.${r.template.id}` as MessageKey) : undefined}
+            kicker={!tpl ? templateLabel(r.template, t) : undefined}
             title={`${r.items.slice(0, 3).map((p) => p.name).join(", ")}${r.items.length > 3 ? " …" : ""}`}
             badge={t("rk.ingredientsN", { n: r.items.length })}
           />
@@ -451,7 +457,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       collections={collections}
       userId={user.id}
       filterTemplate={tpl?.id ?? null}
-      onOpen={(id, p) => { const rt = RECIPE_TEMPLATES.find((x) => x.id === id); if (rt) openRecipe(rt.id, p); }}
+      onOpen={(id, p) => { const rt = templates.find((x) => x.id === id); if (rt) openRecipe(rt.id, p); }}
     />
   ) : null;
 
