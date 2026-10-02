@@ -20,6 +20,7 @@ export const catalogMediaStatus = createServerFn({ method: "GET" })
     await assertAdmin(context);
     const sb = context.supabase;
     const { count: noImage } = await sb.from("products").select("id", { count: "exact", head: true }).is("image_path", null);
+    const { count: missingIcons } = await sb.from("products").select("id", { count: "exact", head: true }).not("image_path", "is", null).is("icon_path", null);
     const { count: total } = await sb.from("products").select("id", { count: "exact", head: true });
     const marketEntries = await Promise.all(
       Object.keys(CURRENCIES).map(async (m) => {
@@ -28,7 +29,20 @@ export const catalogMediaStatus = createServerFn({ method: "GET" })
       }),
     );
     const markets = Object.fromEntries(marketEntries) as Record<string, number>;
-    return { total: total ?? 0, noImage: noImage ?? 0, priced: markets[data.market] ?? 0, markets };
+    return { total: total ?? 0, noImage: noImage ?? 0, missingIcons: missingIcons ?? 0, priced: markets[data.market] ?? 0, markets };
+  });
+
+/** Small, resumable batch of existing product images awaiting icon conversion in the admin browser. */
+export const listProductsMissingIcons = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ limit: z.number().int().min(1).max(20).default(10) }).parse(d))
+  .handler(async ({ context, data }) => {
+    await assertAdmin(context);
+    const { data: rows, error } = await context.supabase.from("products")
+      .select("id, image_path").not("image_path", "is", null).is("icon_path", null).order("id").limit(data.limit);
+    if (error) throw error;
+    return (rows ?? []).filter((row): row is { id: string; image_path: string } => Boolean(row.image_path))
+      .map((row) => ({ id: row.id, path: row.image_path }));
   });
 
 /** Dauerhafte Bildergalerie: alle Produkte mit Bild, durchsuchbar, seitenweise. */
@@ -80,17 +94,17 @@ export const generateProductImages = createServerFn({ method: "POST" })
 
     let done = 0;
     const errors: string[] = [];
-    const items: Array<{ id: string; name: string; url: string | null }> = [];
+    const items: Array<{ id: string; name: string; path: string; url: string | null }> = [];
     for (const p of list) {
       try {
         const bytes = await generateProductImage(p.name, p.emoji);
         const path = `products/${p.id}.png`;
         const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
         if (up.error) throw new Error(up.error.message);
-        const upd = await sb.from("products").update({ image_path: path }).eq("id", p.id);
+        const upd = await sb.from("products").update({ image_path: path, icon_path: null }).eq("id", p.id);
         if (upd.error) throw new Error(upd.error.message);
         const signed = await supabaseAdmin.storage.from("catalog-images").createSignedUrl(path, 3600);
-        items.push({ id: p.id, name: p.name, url: signed.data?.signedUrl ?? null });
+        items.push({ id: p.id, name: p.name, path, url: signed.data?.signedUrl ?? null });
         done++;
       } catch (e) {
         errors.push(`${p.name}: ${e instanceof Error ? e.message : String(e)}`);
@@ -117,7 +131,9 @@ export const generateImageFor = createServerFn({ method: "POST" })
     const path = `${table}/${p.id}.png`;
     const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
     if (up.error) throw new Error(up.error.message);
-    const upd = await context.supabase.from(table).update({ image_path: path }).eq("id", p.id);
+    const upd = data.kind === "product"
+      ? await context.supabase.from("products").update({ image_path: path, icon_path: null }).eq("id", p.id)
+      : await context.supabase.from("departments").update({ image_path: path }).eq("id", p.id);
     if (upd.error) throw new Error(upd.error.message);
     return { path };
   });

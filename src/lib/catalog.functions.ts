@@ -25,6 +25,8 @@ export interface CatalogProduct {
   /** Pfad im Bild-Speicher; signierte Adresse via getCatalogImageUrls */
   imagePath?: string | null;
   imageUrl: string | null;
+  iconPath?: string | null;
+  iconUrl?: string | null;
   defaultQuantity: number;
   defaultUnit: string;
   organicAvailable: boolean;
@@ -130,11 +132,11 @@ export const getCatalogImageUrls = createServerFn({ method: "GET" }).handler(asy
   const supabase = publicClient();
   const [deptRes, prodRes] = await Promise.all([
     supabase.from("departments").select("image_path").not("image_path", "is", null),
-    supabase.from("products").select("image_path").not("image_path", "is", null),
+    supabase.from("products").select("image_path, icon_path").or("image_path.not.is.null,icon_path.not.is.null"),
   ]);
   const paths = [
     ...((deptRes.data ?? []) as Array<{ image_path: string | null }>).map((r) => r.image_path),
-    ...((prodRes.data ?? []) as Array<{ image_path: string | null }>).map((r) => r.image_path),
+    ...((prodRes.data ?? []) as Array<{ image_path: string | null; icon_path: string | null }>).flatMap((r) => [r.image_path, r.icon_path]),
   ].filter((p): p is string => Boolean(p));
   const out: Record<string, string> = {};
   if (paths.length > 0) {
@@ -181,7 +183,7 @@ export const getCatalog = createServerFn({ method: "GET" })
       .order("sort_order", { ascending: true }),
     fetchAll(
       "products",
-      "id, department_id, name, emoji, image_path, default_quantity, default_unit, organic_available, variants, excluded_diets, markets, sort_order",
+      "id, department_id, name, emoji, image_path, icon_path, default_quantity, default_unit, organic_available, variants, excluded_diets, markets, sort_order",
       ["sort_order", "id"],
     ),
     supabase.from("product_headings").select("id, department_id, before_product_id, name"),
@@ -253,6 +255,8 @@ export const getCatalog = createServerFn({ method: "GET" })
       emoji: (r["emoji"] as string | null) ?? null,
       imagePath: (r["image_path"] as string | null) ?? null,
       imageUrl: null,
+      iconPath: (r["icon_path"] as string | null) ?? null,
+      iconUrl: null,
       defaultQuantity: Number(r["default_quantity"] ?? 1),
       defaultUnit: (r["default_unit"] as string) ?? "stueck",
       organicAvailable: (r["organic_available"] as boolean) ?? true,

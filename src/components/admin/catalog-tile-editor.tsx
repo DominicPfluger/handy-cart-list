@@ -7,6 +7,7 @@ import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
+import { saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
 import { estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
 import { suggestCategoryProducts, suggestImagePrompt, translateVariants } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
@@ -81,7 +82,8 @@ export function CatalogTileEditor(p: {
       setImgProg({ done: 0, total: list.length });
       try {
         for (let i = 0; i < list.length; i++) {
-          await genImgAll({ data: { id: list[i]!.id, kind: "product" } });
+          const result = await genImgAll({ data: { id: list[i]!.id, kind: "product" } });
+          await saveProductIconFromPath(list[i]!.id, result.path);
           setImgProg({ done: i + 1, total: list.length });
         }
       } finally { setImgProg(null); }
@@ -383,16 +385,22 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
 
   const upload = (file: File) => p.run(async () => {
     const blob = await prepareCategoryImage(file);
-    const path = `${table}/${effId!}.png`;
+    if (!effId) throw new Error(T("tile.nameRequired"));
+    const path = `${table}/${effId}.png`;
+    if (!isDept) await p.must(supabase.from("products").update({ icon_path: null }).eq("id", effId));
     const { error } = await supabase.storage.from("catalog-images").upload(path, blob, { contentType: "image/webp", upsert: true });
     if (error) throw new Error(error.message);
-    await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId!));
+    if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
+    else await saveProductIcon(effId, blob, path);
   });
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
       <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
-        {picking && effId && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(() => p.must(supabase.from(table).update({ image_path: path }).eq("id", effId))); }} />}
+        {picking && effId && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(async () => {
+          if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
+          else await saveProductIconFromPath(effId, path);
+        }); }} />}
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
@@ -412,8 +420,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 )}
               </div>
               <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(async () => {
-                await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
-                const { data } = await supabase.storage.from("catalog-images").createSignedUrl(`${table}/${effId}.png`, 600);
+                const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+                if (!isDept) await saveProductIconFromPath(effId, generated.path);
+                const { data } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
                 if (data?.signedUrl) setLarge(data.signedUrl);
               }, T("tile.imgDone"))}>✨ {T("tile.aiImage")}</Button>
             </div>

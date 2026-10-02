@@ -146,6 +146,7 @@ function AdminPage() {
   const refresh = async () => {
     await qc.invalidateQueries({ queryKey: ["admin-catalog"] });
     await qc.invalidateQueries({ queryKey: ["catalog"] });
+    await qc.invalidateQueries({ queryKey: ["catalog-images"] });
   };
   const run = async (fn: () => Promise<unknown>, ok = T("adm.saved")) => {
     setBusy(true);

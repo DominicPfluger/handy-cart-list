@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { keepPreviousData, useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { catalogMediaStatus, estimateCategoryPrices, generateProductImages, generateReferencePrices, listProductImages, listReferencePrices } from "@/lib/product-media.functions";
+import { catalogMediaStatus, estimateCategoryPrices, generateProductImages, generateReferencePrices, listProductImages, listProductsMissingIcons, listReferencePrices } from "@/lib/product-media.functions";
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
 import { formatRefPrice } from "@/hooks/use-reference-prices";
+import { saveProductIconFromPath } from "@/lib/product-icon";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -25,7 +26,40 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
   const [busy, setBusy] = useState<"img" | "price" | "allImg" | "catPrice" | null>(null);
   const [catId, setCatId] = useState("");
   const [allProgress, setAllProgress] = useState<{ done: number; total: number } | null>(null);
-  const [generated, setGenerated] = useState<Array<{ id: string; name: string; url: string | null }>>([]);
+  const [generated, setGenerated] = useState<Array<{ id: string; name: string; path: string; url: string | null }>>([]);
+  const [iconProgress, setIconProgress] = useState<{ done: number; total: number } | null>(null);
+  const [iconBusy, setIconBusy] = useState(false);
+  const iconBatch = useServerFn(listProductsMissingIcons);
+
+  const finishIcons = async (items: Array<{ id: string; path: string }>) => {
+    for (const item of items) await saveProductIconFromPath(item.id, item.path);
+    void qc.invalidateQueries({ queryKey: ["catalog"] });
+    void qc.invalidateQueries({ queryKey: ["catalog-images"] });
+  };
+
+  const backfillIcons = async () => {
+    setIconBusy(true);
+    let done = 0;
+    const total = status.data?.missingIcons ?? 0;
+    setIconProgress({ done, total });
+    try {
+      while (true) {
+        const batch = await iconBatch({ data: { limit: 10 } });
+        if (!batch.length) break;
+        for (const item of batch) {
+          await finishIcons([item]);
+          setIconProgress({ done: ++done, total });
+        }
+      }
+      toast.success(T("media.iconsDone", { n: done }));
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : String(error));
+    } finally {
+      setIconBusy(false);
+      setIconProgress(null);
+      refresh();
+    }
+  };
 
   /** Kategorien flach mit Einrückung nach Hierarchie für das Dropdown. */
   const deptOptions = (() => {
@@ -69,6 +103,7 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
     setBusy("img");
     try {
       const r = await genImages({ data: { limit: 5 } });
+      await finishIcons(r.items);
       if (r.errors.length > 0) toast.error(r.errors[0]!);
       setGenerated((g) => [...r.items, ...g].slice(0, 60));
       toast.success(T("media.imgDone", { n: r.done }));
@@ -88,6 +123,7 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
     try {
       for (;;) {
         const r = await genImages({ data: { limit: 5 } });
+        await finishIcons(r.items);
         totalDone += r.done;
         setAllProgress({ done: totalDone, total });
         setGenerated((g) => [...r.items, ...g].slice(0, 60));
@@ -145,6 +181,13 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
               : T("media.genAllImages")}
           </Button>
         </div>
+        {(s?.missingIcons ?? 0) > 0 && (
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+            <Button size="sm" variant="outline" disabled={busy !== null || iconBusy} onClick={() => void backfillIcons()}>
+              {iconBusy ? T("media.iconsProgress", { done: iconProgress?.done ?? 0, total: iconProgress?.total ?? 0 }) : T("media.iconsBackfill", { n: s?.missingIcons ?? 0 })}
+            </Button>
+          </div>
+        )}
         {generated.length > 0 && (
           <div className="mt-4 grid grid-cols-5 gap-2">
             {generated.map((g) => (

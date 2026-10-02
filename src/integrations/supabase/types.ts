@@ -848,6 +848,7 @@ export type Database = {
           department_id: string
           emoji: string | null
           excluded_diets: string[]
+          icon_path: string | null
           id: string
           image_path: string | null
           markets: string[]
@@ -864,6 +865,7 @@ export type Database = {
           department_id: string
           emoji?: string | null
           excluded_diets?: string[]
+          icon_path?: string | null
           id?: string
           image_path?: string | null
           markets?: string[]
@@ -880,6 +882,7 @@ export type Database = {
           department_id?: string
           emoji?: string | null
           excluded_diets?: string[]
+          icon_path?: string | null
           id?: string
           image_path?: string | null
           markets?: string[]

@@ -76,6 +76,7 @@ export function useCatalog(): Catalog {
         return {
           ...p,
           imageUrl: img(p.imagePath),
+          iconUrl: img(p.iconPath) ?? img(p.imagePath),
           sortOrder: p.marketOrder?.[market] ?? p.sortOrder,
           name: foreign ? `${name} ${p.markets!.map(flagOf).join("")}` : name,
         };
