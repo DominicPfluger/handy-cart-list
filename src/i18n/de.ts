@@ -811,6 +811,8 @@ export const de = {
   "adm.allCuisines": "Alle Küchen",
   "more.allMarkets": "Alle Märkte anzeigen",
   "more.iconSet": "Icon-Set",
+  "more.dietPreference": "Gewünschte Ernährungsform",
+  "more.dietNone": "Keine Einschränkung",
   "more.iconImages": "Pixelgrafiken",
   "more.iconSymbols": "SVG-Grafiken",
   "more.allMarketsSub": "Ganzer Katalog inkl. Produkte anderer Länder (mit Flagge)",
