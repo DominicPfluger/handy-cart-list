@@ -130,7 +130,7 @@ function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
 
   const body = (
     <>
-      <RecipePhoto path={r.image_path} emoji={tpl?.emoji} color={tpl?.color} className="h-16 w-16 shrink-0 rounded-xl" />
+      <RecipePhoto path={r.image_path} image={tpl?.image} emoji={tpl?.emoji} color={tpl?.color} className="h-16 w-16 shrink-0 rounded-xl" />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-bold text-foreground">{r.title}</span>
         <span className="block truncate text-xs text-muted-foreground">

@@ -418,7 +418,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         const rt = templates.find((x) => x.id === r.templateId);
         return (
           <button key={r.id} onClick={() => rt && openRecipe(rt.id, r.picks)} className={LIST_CARD_CLASS}>
-            <ListCardBody emoji={rt?.emoji ?? "🍽️"} color={rt?.color} title={r.title} badge={new Date(r.savedAt).toLocaleDateString()} />
+            <ListCardBody image={rt?.image} emoji={rt?.emoji ?? "🍽️"} color={rt?.color} title={r.title} badge={new Date(r.savedAt).toLocaleDateString()} />
           </button>
         );
       })}
