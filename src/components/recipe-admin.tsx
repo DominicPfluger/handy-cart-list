@@ -93,6 +93,8 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
 
   const groupTree = (parentId: string | null) => groups.filter((g) => g.parent_id === parentId).sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name));
   const descendants = (id: string): string[] => [id, ...groupTree(id).flatMap((g) => descendants(g.id))];
+  const groupRows = (parentId: string | null): Array<{ group: Group; depth: number }> =>
+    groupTree(parentId).flatMap((group) => [{ group, depth: 0 }, ...groupRows(group.id).map(({ group: child, depth }) => ({ group: child, depth: depth + 1 }))]);
   const startGroup = (parentId: string | null, group?: Group) => {
     setGroupFormOpen(true);
     setEditGroupId(group?.id ?? null);
@@ -109,7 +111,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const removeGroup = (g: Group) => {
     const ids = descendants(g.id);
     const count = rows.filter((r) => r.group_id && ids.includes(r.group_id)).length;
-    if (!window.confirm(`${T("adm.recipeGroupDelete", { name: g.name })}\n${count} ${T("adm.assigned")}`)) return;
+    if (!window.confirm(`${T("adm.recipeGroupDelete", { name: g.name })}\n${groupTree(g.id).length ? `${descendants(g.id).length - 1} ${T("adm.recipeGroupSub")}\n` : ""}${count} ${T("adm.assigned")}`)) return;
     void run(async () => {
       await deleteGroupFn({ data: { id: g.id } });
       await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
@@ -292,8 +294,9 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
             </div>
             {groupTree(null).map((parent) => (
               <div key={parent.id} className="space-y-1">
-                {[parent, ...groupTree(parent.id)].map((g) => (
-                  <div key={g.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", g.id); setDragGroup(g.id); }} onDragEnd={() => setDragGroup(null)} onDragOver={(e) => { if (dragGroup) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragGroup) void reorderGroup(dragGroup, g); setDragGroup(null); }} className={`flex items-center gap-1.5 border-b border-border/50 py-1 text-xs ${g.parent_id ? "pl-5" : "font-semibold"}`}>
+                {[{ group: parent, depth: 0 }, ...groupRows(parent.id).map(({ group, depth }) => ({ group, depth: depth + 1 }))].map(({ group: g, depth }) => (
+                  <div key={g.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", g.id); setDragGroup(g.id); }} onDragEnd={() => setDragGroup(null)} onDragOver={(e) => { if (dragGroup) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragGroup) void reorderGroup(dragGroup, g); setDragGroup(null); }} className={`flex items-center gap-1.5 border-b border-border/50 py-1 text-xs ${depth ? "pl-5" : "font-semibold"}`}>
+                    {depth > 1 && <span className="text-muted-foreground">{"› ".repeat(depth - 1)}</span>}
                     <span className="cursor-grab text-muted-foreground" title={T("adm.drag")}>⠿</span>
                     <span className="min-w-0 flex-1 break-words text-foreground">{g.emoji} {g.name}</span>
                     <Button size="sm" variant="ghost" disabled={busy} onClick={() => startGroup(g.parent_id, g)}>{T("adm.edit")}</Button>
@@ -385,7 +388,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                         <span className="min-w-0 flex-1 truncate text-foreground">{p?.emoji} {p?.name ?? r.product_id}</span>
                         <select aria-label={`${p?.name ?? r.product_id} · ${T("adm.recipeGroupTarget")}`} value={r.group_id ?? ""} disabled={busy} onChange={(e) => void assignGroup(r, e.target.value || null)} className="max-w-28 rounded border border-border bg-background p-1 text-xs text-foreground">
                           <option value="">{T("adm.recipeGroupNone")}</option>
-                          {groups.map((g) => <option key={g.id} value={g.id}>{g.parent_id ? `${groups.find((x) => x.id === g.parent_id)?.name ?? ""} › ` : ""}{g.name}</option>)}
+                          {groupRows(null).map(({ group: g, depth }) => <option key={g.id} value={g.id}>{depth ? `${groups.find((x) => x.id === g.parent_id)?.name ?? ""} › ` : ""}{g.name}</option>)}
                         </select>
                         <button type="button" disabled={busy || i === 0} onClick={() => move(s.key, r.product_id, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
                         <button type="button" disabled={busy || i === assigned.length - 1} onClick={() => move(s.key, r.product_id, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
