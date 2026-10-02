@@ -34,12 +34,12 @@ export const catalogQueryOptions = (locale: string) =>
     retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
   });
 
-/** Signierte Bild-Adressen – leichtgewichtig, wird vor Ablauf (60 Min) erneuert. */
+/** Signierte Bild-Adressen erneuern, bevor sie ablaufen; gespeicherte Dateien bleiben im Geräte-Cache. */
 export const catalogImagesQueryOptions = queryOptions({
   queryKey: ["catalog-images"],
   queryFn: () => getCatalogImageUrls(),
-  staleTime: 25 * 60 * 1000,
-  refetchInterval: 30 * 60 * 1000,
+  staleTime: 45 * 60 * 1000,
+  refetchInterval: 45 * 60 * 1000,
   retry: 2,
 });
 

@@ -78,7 +78,7 @@ define(['./workbox-caf3a6a6'], (function (workbox) { 'use strict';
    */
   workbox.precacheAndRoute([{
     "url": "/",
-    "revision": "0.sh4fmu81hi8"
+    "revision": "0.19i6cl0queo"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/"), {
@@ -88,7 +88,15 @@ define(['./workbox-caf3a6a6'], (function (workbox) { 'use strict';
     url
   }) => url.pathname.includes("/catalog-images/"), new workbox.CacheFirst({
     "cacheName": "shoppi-catalog-images",
-    plugins: [new workbox.ExpirationPlugin({
+    plugins: [{
+      cacheKeyWillBeUsed: async ({
+        request
+      }) => {
+        const url = new URL(request.url);
+        url.search = "";
+        return url.href;
+      }
+    }, new workbox.ExpirationPlugin({
       maxEntries: 500,
       maxAgeSeconds: 604800
     })]

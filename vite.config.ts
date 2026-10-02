@@ -37,10 +37,17 @@ export default defineConfig({
           // Katalog-Antworten und Bilder offline verfügbar halten
           runtimeCaching: [
             {
+              // Only large/admin images go through Workbox. Small icons use a
+              // stable-path CacheStorage key in the app instead of signed URLs.
               urlPattern: ({ url }) => url.pathname.includes("/catalog-images/"),
               handler: "CacheFirst",
               options: {
                 cacheName: "shoppi-catalog-images",
+                plugins: [{ cacheKeyWillBeUsed: async ({ request }) => {
+                  const url = new URL(request.url);
+                  url.search = "";
+                  return url.href;
+                } }],
                 expiration: { maxEntries: 500, maxAgeSeconds: 7 * 24 * 60 * 60 },
               },
             },

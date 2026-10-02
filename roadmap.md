@@ -3,6 +3,7 @@
 ## Offen
 
 ## Erledigt
+- Vorhandene Produktbilder in Abteilungseinzelansicht anzeigen; Geräte-Cache nach stabilem Bildpfad mit Symbol-Ersatz und gezielter Aktualisierung bei Bildänderungen.
 - Ernährungs- und Länderküchenfilter bei Non-Food/Near-Food in Abteilungen aussetzen.
 - Lade- und Startbildschirm in allen eingerichteten Sprachen übersetzen.
 - Gewünschte Ernährungsformen unter „Mehr“ voreinstellen; Abteilungen und Rezept-Generator übernehmen die gerätelokale Auswahl.

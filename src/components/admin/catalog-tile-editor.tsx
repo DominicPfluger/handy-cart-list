@@ -8,6 +8,7 @@ import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
+import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
 import { suggestCategoryProducts, suggestImagePrompt, translateVariants } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
@@ -430,6 +431,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (error) throw new Error(error.message);
     if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
     else await saveProductIcon(effId, blob, path);
+    await forgetCatalogImage(path);
     const { data: signed } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
     setImagePreview(signed?.signedUrl ?? null);
   });
@@ -440,6 +442,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     try {
       await p.run(async () => {
         await p.must(supabase.from("products").update({ image_path: null, icon_path: null }).eq("id", effId));
+        if (item && "image_path" in item && item.image_path) await forgetCatalogImage(item.image_path);
         setImagePreview(null);
         setLarge(null);
         await qc.invalidateQueries({ queryKey: ["admin-tile-imgs"] });
@@ -453,6 +456,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     try {
       await p.run(async () => {
         const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+        await forgetCatalogImage(generated.path);
         if (!isDept) await saveProductIconFromPath(effId, generated.path);
         const { data, error } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
         if (error) throw error;
