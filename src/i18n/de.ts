@@ -634,6 +634,8 @@ export const de = {
   "tile.newDeptAlias": "Alias-Kategorie",
   "tile.pickDeptAlias": "Kategorie als Alias hinzufügen",
   "tile.deptAliasSearch": "Kategorie suchen…",
+  "tile.deptProducts": "Produkte (ein Name pro Zeile)",
+  "tile.deptProductsPlaceholder": "z. B. Äpfel\nBananen\n…",
   "tile.newProd": "Neues Produkt",
   "tile.name": "Name",
   "tile.emoji": "Emoji",
