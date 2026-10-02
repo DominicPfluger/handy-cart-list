@@ -806,7 +806,6 @@ export const de = {
   "adm.cancel": "Abbrechen",
   "adm.select": "Auswählen",
   "adm.selectedCount": "{n} ausgewählt – zum Verschieben ziehen",
-  "adm.selectAll": "Alle",
   "adm.clearSelection": "Auswahl aufheben",
   "adm.multiTitle": "Mehrere Produkte — ein Name pro Zeile",
   "adm.searchingMissing": "Suche fehlende Produkte …",
