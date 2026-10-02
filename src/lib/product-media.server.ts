@@ -14,7 +14,8 @@ export async function generateProductImage(name: string, emoji: string | null, h
   const res = await fetch(`${GATEWAY}/images/generations`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}`, "X-Lovable-AIG-SDK": "fetch" },
-    body: JSON.stringify({ model: "openai/gpt-image-2.5-sunburst", prompt, size: "512x512", background: "transparent", output_format: "webp", output_compression: 75, quality: "medium" }),
+    // 512x512 wird vom Modell abgelehnt (Mindestauflösung) → kleinste erlaubte Grösse, stark komprimiert.
+    body: JSON.stringify({ model: "openai/gpt-image-2.5-sunburst", prompt, size: "1024x1024", background: "transparent", output_format: "webp", output_compression: 60, quality: "low" }),
   });
   if (!res.ok) {
     const body = await res.text().catch(() => "");
