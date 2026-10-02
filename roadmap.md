@@ -1,5 +1,7 @@
 # Roadmap
 
+- [ ] Rezept-Generator: Zutaten-Ebenen mit Emoji, Untergruppen inline, zehn Produkte je Ebene mit „Weitere anzeigen“; nur manuell zugeordnete Produkte in verwalteten Vorlagen.
+
 Priorisierte Verbesserungen (Plan vom 2.10.2026 genehmigt):
 
 - [x] 1. Schriftgrösse einstellbar (Mehr): Klein/Normal/Gross, gerätelokal (shoppi:font-size) — Browser-Test: 18px, bleibt nach Reload
