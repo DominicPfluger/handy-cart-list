@@ -850,7 +850,6 @@ export const de = {
   "more.fontSizeNormal": "Normal",
   "more.fontSizeLarge": "Gross",
   "list.quickAdd": "Produkt suchen oder selbst hinzufügen…",
-  "list.shopMode": "Einkaufs-Modus",
   "list.qtyMinus": "Weniger",
   "list.qtyPlus": "Mehr",
   "list.photoAdd": "Foto aufnehmen",
