@@ -27,8 +27,11 @@ export const DIET_EMOJI: Record<Diet, string> = {
 };
 
 const KEY = "shoppi:diet-filter";
+/** Herkunft der Auswahl: "pref" = unter „Mehr" voreingestellt, sonst z.B. im Suchfeld gesetzt. */
+const SRC_KEY = "shoppi:diet-filter-source";
 const EMPTY: Diet[] = [];
 let cache: Diet[] | null = null;
+let srcCache: string | null | undefined;
 const listeners = new Set<() => void>();
 
 function read(): Diet[] {
@@ -43,15 +46,34 @@ function read(): Diet[] {
   return cache!;
 }
 
-export function setDiets(next: Diet[]) {
+function readSource(): string | null {
+  if (typeof window === "undefined") return null;
+  if (srcCache === undefined) {
+    try {
+      srcCache = localStorage.getItem(SRC_KEY);
+    } catch {
+      srcCache = null;
+    }
+  }
+  return srcCache;
+}
+
+export function setDiets(next: Diet[], source?: "pref" | "search") {
   cache = next;
   localStorage.setItem(KEY, JSON.stringify(next));
+  if (!next.length) {
+    srcCache = null;
+    localStorage.removeItem(SRC_KEY);
+  } else if (source) {
+    srcCache = source;
+    localStorage.setItem(SRC_KEY, source);
+  }
   listeners.forEach((l) => l());
 }
 
-export function toggleDiet(d: Diet) {
+export function toggleDiet(d: Diet, source?: "pref" | "search") {
   const cur = read();
-  setDiets(cur.includes(d) ? cur.filter((x) => x !== d) : [...cur, d]);
+  setDiets(cur.includes(d) ? cur.filter((x) => x !== d) : [...cur, d], source);
 }
 
 export function useDietFilter(): Diet[] {
@@ -59,5 +81,14 @@ export function useDietFilter(): Diet[] {
     (l) => { listeners.add(l); return () => listeners.delete(l); },
     read,
     () => EMPTY,
+  );
+}
+
+/** "pref", wenn die Auswahl unter „Mehr" voreingestellt wurde — z.B. um den Filter im Suchfeld auszublenden. */
+export function useDietFilterSource(): "pref" | null {
+  return useSyncExternalStore(
+    (l) => { listeners.add(l); return () => listeners.delete(l); },
+    () => (readSource() === "pref" ? "pref" : null),
+    () => null,
   );
 }
