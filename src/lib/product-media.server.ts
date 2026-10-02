@@ -7,9 +7,10 @@ export async function generateProductImage(name: string, emoji: string | null, h
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("KI-Schlüssel fehlt");
   const extra = hint?.trim() ? ` The image must show: ${hint.trim()}.` : "";
-  const prompt =
+   const prompt =
     `Clean product photo of "${name}" (${emoji ?? "grocery item"}) for a shopping list app. ` +
-    "Single item, centered, isolated on a fully transparent background (no backdrop, no shadow plate), soft daylight, no text, no brand logos, no packaging labels with words, square composition." +
+    "Single item, centered, isolated on a fully transparent background (no backdrop, no shadow plate), soft daylight, no text, no brand logos, no packaging labels with words, square composition. " +
+    "No herbs, no garnishes or additions of any kind, no vessels or containers (no bowls, plates, pots, jars) — just the plain product itself." +
     extra;
   const res = await fetch(`${GATEWAY}/images/generations`, {
     method: "POST",
