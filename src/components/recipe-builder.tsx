@@ -76,7 +76,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
-  const [stepSearch, setStepSearch] = useState<Record<string, string>>({});
   const summaryRef = useRef<HTMLDivElement>(null);
   const [dietOpen, setDietOpen] = useState(false);
   const [cuisineOpen, setCuisineOpen] = useState(false);
@@ -158,7 +157,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const requiredSteps = steps.filter((s) => s.required || s.min > 0);
   const doneRequired = requiredSteps.filter(stepOk).length;
   const allRequiredDone = requiredSteps.every(stepOk);
-  useEffect(() => { setVisibleCount({}); setStepSearch({}); setOpenGroups({}); }, [tplId]);
+  useEffect(() => { setVisibleCount({}); setOpenGroups({}); }, [tplId]);
 
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
