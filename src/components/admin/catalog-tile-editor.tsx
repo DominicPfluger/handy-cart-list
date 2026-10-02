@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { getLocale, translate } from "@/i18n";
@@ -7,7 +7,7 @@ import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
-import { generateImageFor, listProductImages } from "@/lib/product-media.functions";
+import { estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
 import { suggestCategoryProducts, suggestImagePrompt, translateVariants } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
@@ -308,6 +308,10 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
   const [price, setPrice] = useState("");
+  const estAll = useServerFn(estimateProductPricesAllMarkets);
+  const qc = useQueryClient();
+  const [estimating, setEstimating] = useState(false);
+  const [estimates, setEstimates] = useState<Array<{ market: string; price: number; currency: string; unit_price: number | null; unit_basis: string | null }>>([]);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
   const heads = p.headings ?? [];
@@ -428,7 +432,32 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </div>
         )}
         {!isDept && (
-          <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 rounded-xl" />
+          <div className="space-y-2">
+            <div className="flex gap-2">
+              <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 flex-1 rounded-xl" />
+              {item && (
+                <Button variant="outline" className="h-11 rounded-xl" disabled={estimating} onClick={() => {
+                  if (!window.confirm(T("tile.estimateAllConfirm"))) return;
+                  setEstimating(true);
+                  void p.run(async () => {
+                    const r = await estAll({ data: { productId: item.id } });
+                    setEstimates(r.items);
+                    const mine = r.items.find((x) => x.market === currentMarket());
+                    if (mine) setPrice(String(mine.price));
+                    void qc.invalidateQueries();
+                    if (r.failed > 0) throw new Error(T("tile.estimateAllFailed", { n: r.failed }));
+                  }, T("tile.estimateAllDone")).finally(() => setEstimating(false));
+                }}>{estimating ? "…" : `✨ ${T("tile.estimateAll")}`}</Button>
+              )}
+            </div>
+            {estimates.length > 0 && (
+              <ul className="max-h-40 space-y-0.5 overflow-y-auto rounded-xl bg-muted p-2 text-xs text-foreground">
+                {estimates.map((e) => (
+                  <li key={e.market}>{e.market} · {e.currency} {e.price.toFixed(2)}{e.unit_price ? ` · ${e.currency} ${e.unit_price.toFixed(2)}/${e.unit_basis}` : ""}</li>
+                ))}
+              </ul>
+            )}
+          </div>
         )}
         {!isDept && item && heads.length > 0 && (
           <div className="space-y-1.5">

@@ -968,7 +968,11 @@
     "tile.suggestSort": "Sort",
     "tile.sortRelevance": "Relevance",
     "tile.sortAlpha": "Alphabetical",
-    "tile.sortLoaded": "Order loaded"
+    "tile.sortLoaded": "Order loaded",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1939,7 +1943,11 @@
     "tile.suggestSort": "Sort",
     "tile.sortRelevance": "Relevance",
     "tile.sortAlpha": "Alphabetical",
-    "tile.sortLoaded": "Order loaded"
+    "tile.sortLoaded": "Order loaded",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2910,7 +2918,11 @@
     "tile.suggestSort": "Sort",
     "tile.sortRelevance": "Relevance",
     "tile.sortAlpha": "Alphabetical",
-    "tile.sortLoaded": "Order loaded"
+    "tile.sortLoaded": "Order loaded",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3881,7 +3893,11 @@
     "tile.suggestSort": "Ordenar",
     "tile.sortRelevance": "Relevancia",
     "tile.sortAlpha": "Alfabético",
-    "tile.sortLoaded": "Orden de carga"
+    "tile.sortLoaded": "Orden de carga",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4852,7 +4868,11 @@
     "tile.suggestSort": "Ordenar",
     "tile.sortRelevance": "Relevancia",
     "tile.sortAlpha": "Alfabético",
-    "tile.sortLoaded": "Orden de carga"
+    "tile.sortLoaded": "Orden de carga",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5823,7 +5843,11 @@
     "tile.suggestSort": "Trier",
     "tile.sortRelevance": "Pertinence",
     "tile.sortAlpha": "Alphabétique",
-    "tile.sortLoaded": "Ordre de chargement"
+    "tile.sortLoaded": "Ordre de chargement",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6794,7 +6818,11 @@
     "tile.suggestSort": "Trier",
     "tile.sortRelevance": "Pertinence",
     "tile.sortAlpha": "Alphabétique",
-    "tile.sortLoaded": "Ordre de chargement"
+    "tile.sortLoaded": "Ordre de chargement",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7765,7 +7793,11 @@
     "tile.suggestSort": "Ordina",
     "tile.sortRelevance": "Rilevanza",
     "tile.sortAlpha": "Alfabetico",
-    "tile.sortLoaded": "Ordine di caricamento"
+    "tile.sortLoaded": "Ordine di caricamento",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8736,7 +8768,11 @@
     "tile.suggestSort": "Ordina",
     "tile.sortRelevance": "Rilevanza",
     "tile.sortAlpha": "Alfabetico",
-    "tile.sortLoaded": "Ordine di caricamento"
+    "tile.sortLoaded": "Ordine di caricamento",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9707,7 +9743,11 @@
     "tile.suggestSort": "Ordenar",
     "tile.sortRelevance": "Relevância",
     "tile.sortAlpha": "Alfabético",
-    "tile.sortLoaded": "Ordem de carregamento"
+    "tile.sortLoaded": "Ordem de carregamento",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10678,7 +10718,11 @@
     "tile.suggestSort": "Ordenar",
     "tile.sortRelevance": "Relevância",
     "tile.sortAlpha": "Alfabético",
-    "tile.sortLoaded": "Ordem de carregamento"
+    "tile.sortLoaded": "Ordem de carregamento",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11649,7 +11693,11 @@
     "tile.suggestSort": "Sorteren",
     "tile.sortRelevance": "Relevantie",
     "tile.sortAlpha": "Alfabetisch",
-    "tile.sortLoaded": "Laadvolgorde"
+    "tile.sortLoaded": "Laadvolgorde",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12620,7 +12668,11 @@
     "tile.suggestSort": "Sorteren",
     "tile.sortRelevance": "Relevantie",
     "tile.sortAlpha": "Alfabetisch",
-    "tile.sortLoaded": "Laadvolgorde"
+    "tile.sortLoaded": "Laadvolgorde",
+    "tile.estimateAll": "Estimate prices for all markets",
+    "tile.estimateAllConfirm": "Estimate reference prices for all markets with AI? Existing prices will be overwritten (uses AI credits).",
+    "tile.estimateAllDone": "Prices estimated",
+    "tile.estimateAllFailed": "{n} markets could not be estimated"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13051,7 +13103,11 @@
     "tile.suggestSort": "Sortieren",
     "tile.sortRelevance": "Relevanz",
     "tile.sortAlpha": "Alphabet",
-    "tile.sortLoaded": "Reihenfolge geladen"
+    "tile.sortLoaded": "Reihenfolge geladen",
+    "tile.estimateAll": "Preise für alle Märkte schätzen",
+    "tile.estimateAllConfirm": "Richtpreise für alle Märkte per KI schätzen? Vorhandene Preise werden überschrieben (verbraucht KI-Guthaben).",
+    "tile.estimateAllDone": "Preise geschätzt",
+    "tile.estimateAllFailed": "{n} Märkte konnten nicht geschätzt werden"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -13482,6 +13538,10 @@
     "tile.suggestSort": "Sortieren",
     "tile.sortRelevance": "Relevanz",
     "tile.sortAlpha": "Alphabet",
-    "tile.sortLoaded": "Reihenfolge geladen"
+    "tile.sortLoaded": "Reihenfolge geladen",
+    "tile.estimateAll": "Preise für alle Märkte schätzen",
+    "tile.estimateAllConfirm": "Richtpreise für alle Märkte per KI schätzen? Vorhandene Preise werden überschrieben (verbraucht KI-Guthaben).",
+    "tile.estimateAllDone": "Preise geschätzt",
+    "tile.estimateAllFailed": "{n} Märkte konnten nicht geschätzt werden"
   }
 }

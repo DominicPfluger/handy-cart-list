@@ -365,12 +365,16 @@ function AdminPage() {
       </div>
 
       <div className="flex gap-1.5 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["languages", "adm.tab.languages"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["markets", "adm.tab.markets"], ["more", "adm.tab.more"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["languages", "adm.tab.languages"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["markets", "adm.tab.markets"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
             {T(key)}
           </button>
         ))}
+        <Link to="/vorlese-texte" role="tab" aria-selected={false}
+          className="whitespace-nowrap rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-semibold text-muted-foreground transition-colors">
+          🔊 {T("stx.title")}
+        </Link>
         <button type="button" onClick={() => setPreview(true)}
           className="whitespace-nowrap rounded-full border border-primary px-3.5 py-1.5 text-sm font-semibold text-primary">
           👁 {T("tile.preview")}
@@ -513,13 +517,6 @@ function AdminPage() {
       </div>)}
 
       {preview && <CatalogPreview onClose={() => setPreview(false)} />}
-
-      {tab === "more" && (<div className="space-y-4">
-        <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
-
-          <span>🔊 {T("stx.title")}</span><span className="text-muted-foreground">›</span>
-        </Link>
-      </div>)}
     </div>
   );
 }

@@ -251,6 +251,31 @@ export const estimateCategoryPrices = createServerFn({ method: "POST" })
     return { done, total };
   });
 
+/** Schätzt den Richtpreis eines Produkts für alle aktiven Märkte und speichert ihn. */
+export const estimateProductPricesAllMarkets = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ productId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { estimatePrices } = await import("./product-media.server");
+    const sb = context.supabase;
+    const { data: prod, error } = await sb.from("products").select("id, name, default_quantity, default_unit").eq("id", data.productId).single();
+    if (error || !prod) throw new Error(error?.message ?? "Produkt nicht gefunden");
+    const { data: mk } = await sb.from("markets").select("code, currency, enabled").eq("enabled", true).order("sort_order");
+    const markets = ((mk ?? []) as Array<{ code: string; currency: string }>);
+    const list = markets.length > 0 ? markets : Object.entries(CURRENCIES).map(([code, currency]) => ({ code, currency }));
+    const results = await Promise.allSettled(list.map(async (m) => {
+      const [e] = await estimatePrices([prod as any], m.code);
+      if (!e || !(e.price > 0)) throw new Error("no price");
+      const row = { product_id: prod.id, market: m.code, price: e.price, currency: m.currency || CURRENCIES[m.code] || "EUR", pack_size: e.pack_size, pack_unit: e.pack_unit, unit_price: e.unit_price, unit_basis: e.unit_basis };
+      const { error: ue } = await sb.from("product_reference_prices").upsert(row, { onConflict: "product_id,market" });
+      if (ue) throw new Error(ue.message);
+      return { market: m.code, price: row.price, currency: row.currency, unit_price: row.unit_price, unit_basis: row.unit_basis };
+    }));
+    const items = results.flatMap((r) => (r.status === "fulfilled" ? [r.value] : []));
+    return { items, failed: results.length - items.length };
+  });
+
 /** Richtpreise eines Markts seitenweise (für Nachladen beim Scrollen). */
 export const listReferencePrices = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
