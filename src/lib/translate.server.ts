@@ -3,7 +3,7 @@ export const LOCALE_HINTS: Record<string, string> = {
   "en-GB": "British English (e.g. aubergine, courgette, coriander, biscuits, mince, crisps).",
   "en-CA": "Canadian English spelling and grocery terms.",
   "de-AT": "Austrian German grocery terms (Paradeiser, Erdäpfel, Karfiol, Kren, Marillen, Topfen, Schlagobers, Fisolen, Palatschinken, Ribisel, Semmel).",
-  "de-CH": "Swiss Standard German: never use ß (write ss). Swiss terms: Rüebli, Randen, Peperoni (bell pepper), Nüsslisalat, Rahm, Weggli, Glace, Poulet.",
+  "de-CH": "Swiss Standard German only — NEVER Swiss dialect (Mundart) in UI texts, menus or descriptions. Never use ß (write ss). Swiss grocery terms are allowed for product names only: Rüebli, Randen, Peperoni (bell pepper), Nüsslisalat, Rahm, Weggli, Glace, Poulet.",
   "es-ES": "Spanish of Spain (patatas, zumo, melocotón).",
   "es-MX": "Mexican Spanish (papas, jugo, durazno, ejotes, jitomate).",
   "fr-FR": "French of France.",
