@@ -414,14 +414,14 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           ? <Link to="/rezepte" className="shrink-0 text-xs font-semibold text-primary">← {t("rk.back")}</Link>
           : <button onClick={() => setTplId(null)} className="shrink-0 text-xs font-semibold text-primary">← {t("rk.back")}</button>}
       </div>
-      <div className="flex flex-wrap items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-1">
           <button
             type="button"
             onClick={() => setDietOpen((v) => !v)}
             aria-expanded={dietOpen}
             aria-label={t("diet.filter")}
             title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
-            className={`flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${diets.length ? "bg-primary text-primary-foreground" : "border border-border bg-background text-foreground"}`}
+            className={`flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-[11px] font-semibold leading-tight transition ${diets.length ? "bg-primary text-primary-foreground" : "border border-border bg-background text-foreground"}`}
           >
             <span className="text-sm leading-none">🥗</span>
             {t("diet.filter")}
@@ -432,7 +432,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             aria-expanded={cuisineOpen}
             aria-label={t("cuisine.filter")}
             title={`${t("cuisine.filter")}${cuisines.length ? ` · ${cuisines.length}` : ""}`}
-            className={`flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${cuisines.length ? "bg-primary text-primary-foreground" : "border border-border bg-background text-foreground"}`}
+            className={`flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-[11px] font-semibold leading-tight transition ${cuisines.length ? "bg-primary text-primary-foreground" : "border border-border bg-background text-foreground"}`}
           >
             <span className="text-sm leading-none">🌍</span>
             {t("cuisine.filter")}
@@ -440,16 +440,16 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           <button
             onClick={toggleOnlyFav}
             aria-pressed={onlyFav}
-            className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${
+            className={`rounded-full border px-2 py-1 text-[11px] font-semibold leading-tight transition ${
               onlyFav ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
             }`}
           >
             ♥ {t("rk.onlyFavorites")}
           </button>
-          <button onClick={surprise} className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
+          <button onClick={surprise} className="rounded-full bg-accent px-2 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
             {t("rk.surprise")}
           </button>
-          <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-2.5 py-1 text-[11px] font-semibold leading-tight text-foreground">
+          <button onClick={() => { setPicks({}); setAdded(false); }} className="rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
             {t("rk.reset")}
           </button>
       </div>
