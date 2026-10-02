@@ -4,6 +4,15 @@
  * Namen, die im Katalog (noch) fehlen, werden einfach ausgeblendet.
  * Die Zutatenlisten sind Platzhalter und werden später manuell gepflegt.
  */
+import muesliImg from "../assets/recipes/muesli.jpg";
+import smoothieImg from "../assets/recipes/smoothie.jpg";
+import salatImg from "../assets/recipes/salat.jpg";
+import sandwichImg from "../assets/recipes/sandwich.jpg";
+import pizzaImg from "../assets/recipes/pizza.jpg";
+import pfanneImg from "../assets/recipes/pfanne.jpg";
+import menuImg from "../assets/recipes/menu.jpg";
+import dessertImg from "../assets/recipes/dessert.jpg";
+
 export type RecipeStep = {
   key: string;
   label: string; // deutscher Schritt-Titel
@@ -27,6 +36,8 @@ export const STEP_EMOJIS: Record<string, string> = {
 export type RecipeTemplate = {
   id: "muesli" | "smoothie" | "salat" | "pizza" | "pfanne" | "menu" | "dessert" | "sandwich";
   emoji: string;
+  /** KI-Bild der Vorlage (nur eingebaute); Emoji bleibt Fallback. */
+  image?: string;
   color: string;
   /** Anzeigename bei eigenen (Datenbank-)Vorlagen; eingebaute nutzen die Sprachdateien. */
   name?: string;
