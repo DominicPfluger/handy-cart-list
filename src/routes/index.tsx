@@ -32,7 +32,6 @@ import { ExportListButton } from "../components/export-list-sheet";
 import { unitShort } from "../lib/units";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT } from "../i18n";
-import { ProductEmoji } from "../components/product-emoji";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 import { deptColor, deptColorByLabel } from "../lib/dept-colors";
 import { toast } from "sonner";

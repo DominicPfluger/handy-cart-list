@@ -7,7 +7,6 @@ import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { formatQuantity } from "../lib/units";
 import { useT } from "../i18n";
 import { ScanIcon } from "../components/icons";
-import { ProductEmoji } from "../components/product-emoji";
 import { ProductIcon } from "../components/catalog-icon";
 
 export const Route = createFileRoute("/scanner")({

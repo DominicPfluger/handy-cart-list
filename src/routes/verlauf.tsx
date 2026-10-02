@@ -2,9 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT, getLocale } from "../i18n";
-import { ProductEmoji } from "../components/product-emoji";
 import { ProductIcon } from "../components/catalog-icon";
-import { useCatalog } from "../lib/catalog-query";
+import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 import {
   AlertDialog,
@@ -18,6 +17,8 @@ import {
 } from "../components/ui/alert-dialog";
 
 export const Route = createFileRoute("/verlauf")({
+  ssr: false,
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
   head: () => ({
     meta: [
       { title: "Shoppi — Einkaufsverlauf" },

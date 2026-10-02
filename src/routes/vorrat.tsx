@@ -9,7 +9,6 @@ import { useAuthUser } from "@/hooks/use-auth-user";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProductEmoji } from "@/components/product-emoji";
-import { ProductIcon } from "@/components/catalog-icon";
 import { useIconSet } from "@/hooks/use-icon-set";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
@@ -52,6 +51,7 @@ function VorratPage() {
   const [query, setQuery] = useState("");
   const [adding, setAdding] = useState(false);
   const catalog = useCatalog();
+  const icons = new Map(catalog.products.map((product) => [product.id, product.iconUrl]));
 
   const q = query.trim().toLowerCase();
   const matches = useMemo(() => {
@@ -169,7 +169,7 @@ function VorratPage() {
           <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
             {pantry.items.map((item) => (
               <li key={item.id} className="flex items-center gap-3 px-3 py-2">
-                <Avatar emoji={item.emoji} imageUrl={item.imageUrl} size={30} />
+                <Avatar emoji={item.emoji} iconUrl={item.productId ? icons.get(item.productId) : null} imageUrl={item.imageUrl} size={30} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-foreground">
                     {item.name}

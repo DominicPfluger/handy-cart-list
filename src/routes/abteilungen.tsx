@@ -32,7 +32,6 @@ import {
 } from "../lib/catalog-query";
 import { formatQuantity } from "../lib/units";
 import { getLocale, useT } from "../i18n";
-import { ProductEmoji } from "../components/product-emoji";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 import { deptColor, deptColorStrong } from "../lib/dept-colors";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";

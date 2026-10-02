@@ -19,7 +19,6 @@ import {
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { formatQuantity } from "../lib/units";
 import { getLocale, useT } from "../i18n";
-import { ProductEmoji } from "../components/product-emoji";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 
 
