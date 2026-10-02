@@ -1054,6 +1054,7 @@ export type Database = {
           name: string
           parent_id: string | null
           sort_order: number
+          template_id: string | null
           updated_at: string
         }
         Insert: {
@@ -1063,6 +1064,7 @@ export type Database = {
           name: string
           parent_id?: string | null
           sort_order?: number
+          template_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -1072,6 +1074,7 @@ export type Database = {
           name?: string
           parent_id?: string | null
           sort_order?: number
+          template_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1080,6 +1083,13 @@ export type Database = {
             columns: ["parent_id"]
             isOneToOne: false
             referencedRelation: "recipe_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_groups_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "recipe_templates"
             referencedColumns: ["id"]
           },
         ]
