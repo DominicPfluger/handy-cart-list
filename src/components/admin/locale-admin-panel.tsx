@@ -110,6 +110,18 @@ export function LocaleAdminPanel() {
         {progress && <p className="text-sm font-semibold text-primary">{progress}</p>}
       </div>
 
+      <div className="space-y-1.5">
+        <h3 className="text-sm font-bold text-foreground">{t("loc.builtin")}</h3>
+        <ul className="divide-y divide-border">
+          {LOCALES.map((l) => (
+            <li key={l.id} className="flex items-center gap-2 py-2 text-sm">
+              <span className="text-xl">{l.flag}</span>
+              <div className="min-w-0 flex-1 font-semibold text-foreground">{l.label} <span className="font-normal text-muted-foreground">· {l.id}</span></div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {suggestions.length > 0 && (
         <div className="space-y-1.5">
           <h3 className="text-sm font-bold text-foreground">{t("loc.suggest")}</h3>
