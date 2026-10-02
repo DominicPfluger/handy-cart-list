@@ -1188,8 +1188,11 @@ export type Database = {
           items: Json
           owner_id: string
           picks: Json
+          price_class: string | null
           product_ids: string[]
+          satiety: string | null
           share_slug: string | null
+          spiciness: string | null
           template_id: string
           title: string
           updated_at: string
@@ -1204,8 +1207,11 @@ export type Database = {
           items?: Json
           owner_id: string
           picks?: Json
+          price_class?: string | null
           product_ids?: string[]
+          satiety?: string | null
           share_slug?: string | null
+          spiciness?: string | null
           template_id: string
           title: string
           updated_at?: string
@@ -1220,8 +1226,11 @@ export type Database = {
           items?: Json
           owner_id?: string
           picks?: Json
+          price_class?: string | null
           product_ids?: string[]
+          satiety?: string | null
           share_slug?: string | null
+          spiciness?: string | null
           template_id?: string
           title?: string
           updated_at?: string
