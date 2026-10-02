@@ -24,7 +24,8 @@ export type TileProd = { id: string; name: string; emoji: string | null; departm
 const COMMON_VARIANTS = ["Bio", "Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
 type Target = { kind: "department" | "product"; id: string | null } | null;
-type Drag = { kind: "department" | "product"; id: string; index: number; x: number; y: number; label: string } | null;
+type Drag = { kind: "department" | "product" | "heading"; id: string; index: number; x: number; y: number; label: string } | null;
+export type TileHeading = { id: string; name: string; before_product_id: string };
 
 export function CatalogTileEditor(p: {
   depts: TileDept[];
@@ -43,7 +44,14 @@ export function CatalogTileEditor(p: {
   remove: (kind: "department" | "product", id: string, name: string) => void;
   onSortRelevance?: (() => void) | undefined;
   busy?: boolean;
+  headings?: TileHeading[];
+  onAddHeading?: (name: string) => void;
+  onMoveHeading?: (id: string, beforeProductId: string) => void;
+  onRenameHeading?: (id: string, name: string) => void;
+  onDeleteHeading?: (id: string, name: string) => void;
 }) {
+  const [newTitle, setNewTitle] = useState<string | null>(null);
+  const headingBefore = useMemo(() => new Map((p.headings ?? []).map((h) => [h.before_product_id, h])), [p.headings]);
   const [editMode, setEditMode] = useState(true);
   const [target, setTarget] = useState<Target>(null);
   const [drag, setDrag] = useState<Drag>(null);
@@ -74,7 +82,7 @@ export function CatalogTileEditor(p: {
   const img = (path: string | null | undefined) => (path ? imgs.data?.get(path) : undefined);
 
   // ---------- Drag & Drop per Pointer (Maus + Touch) ----------
-  const startDrag = (e: React.PointerEvent, kind: "department" | "product", id: string, index: number, label: string) => {
+  const startDrag = (e: React.PointerEvent, kind: "department" | "product" | "heading", id: string, index: number, label: string) => {
     if (!editMode) return;
     e.preventDefault();
     moved.current = false;
@@ -98,6 +106,14 @@ export function CatalogTileEditor(p: {
     if (!d || !moved.current) return;
     const t = dropAt(e.clientX, e.clientY);
     if (!t || t.id === d.id) return;
+    if (d.kind === "heading") {
+      if (t.kind === "product") p.onMoveHeading?.(d.id, t.id);
+      return;
+    }
+    if (d.kind === "product" && t.kind === "heading") {
+      p.reorder("product", p.products, d.index, t.index);
+      return;
+    }
     const after = (() => { const r = t.el.getBoundingClientRect(); return d.kind === "product" ? e.clientY > r.top + r.height / 2 : e.clientX > r.left + r.width / 2; })();
     if (t.kind === "crumb") {
       const dest = t.id || null;
