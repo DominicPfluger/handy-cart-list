@@ -407,7 +407,9 @@ export const deleteRecipeGroup = createServerFn({ method: "POST" })
     const sb = context.supabase;
     const ids = [data.id];
     for (let index = 0; index < ids.length; index++) {
-      const { data: kids, error: readError } = await sb.from("recipe_groups").select("id").eq("parent_id", ids[index]);
+      const parentId = ids[index];
+      if (!parentId) continue;
+      const { data: kids, error: readError } = await sb.from("recipe_groups").select("id").eq("parent_id", parentId);
       if (readError) throw new Error(readError.message);
       ids.push(...((kids ?? []) as Array<{ id: string }>).map((k) => k.id));
     }
