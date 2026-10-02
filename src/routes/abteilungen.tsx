@@ -503,7 +503,7 @@ function DepartmentsPage() {
         </section>
       )}
 
-      {dietOpen && (
+      {dietOpen && showDietFilter && (
         <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
           <div className="mb-1 text-sm font-semibold text-foreground">{t("diet.title")}</div>
           <p className="mb-3 text-xs text-muted-foreground">{t("diet.hint")}</p>
