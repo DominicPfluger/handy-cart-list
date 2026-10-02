@@ -7,13 +7,14 @@ import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MARKETS } from "@/components/market-admin";
+import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
 /** KI-Bilder und KI-Richtpreise für den Katalog erzeugen (stapelweise); section wählt den Tab-Inhalt. */
 export function CatalogMediaPanel({ section }: { section: "images" | "prices" }) {
+  const MARKETS = useMarketCodes();
   const qc = useQueryClient();
   const statusFn = useServerFn(catalogMediaStatus);
   const genImages = useServerFn(generateProductImages);

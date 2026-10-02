@@ -20,7 +20,9 @@ import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
 import { signedCategoryImageUrl } from "@/lib/image-upload";
-import { MarketAdmin, MarketAdminsManager, MARKETS } from "@/components/market-admin";
+import { MarketAdmin, MarketAdminsManager } from "@/components/market-admin";
+import { useMarketCodes } from "@/hooks/use-markets";
+import { MarketsManager } from "@/components/admin/markets-manager";
 import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 import { ImportPanel } from "@/components/admin/import-panel";
@@ -81,6 +83,7 @@ type AdminData = Awaited<ReturnType<typeof loadAll>>;
 const TABLE = { department: "departments", product: "products" } as const;
 
 function AdminPage() {
+  const MARKETS = useMarketCodes();
   const qc = useQueryClient();
   const check = useServerFn(checkAdmin);
   const translate = useServerFn(translateMissing);
@@ -449,6 +452,7 @@ function AdminPage() {
       {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
 
       {tab === "more" && (<div className="space-y-4">
+        <MarketsManager />
         <MarketAdminsManager />
         <Link to="/vorlese-texte" className="flex items-center justify-between rounded-xl border border-border px-4 py-3 text-sm font-semibold text-foreground">
 
