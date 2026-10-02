@@ -494,7 +494,7 @@ function AdminPage() {
       </>)}
 
       {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel section="images" /></LoadingGate>}
-      {tab === "prices" && <LoadingGate d={d}><CatalogMediaPanel section="prices" /></LoadingGate>}
+      {tab === "prices" && <LoadingGate d={d}><CatalogMediaPanel section="prices" depts={d?.depts ?? []} /></LoadingGate>}
       {tab === "import" && (d ? <ImportPanel depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
 
 

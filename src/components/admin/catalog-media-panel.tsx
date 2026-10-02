@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { keepPreviousData, useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { catalogMediaStatus, generateProductImages, generateReferencePrices, listProductImages, listReferencePrices } from "@/lib/product-media.functions";
+import { catalogMediaStatus, estimateCategoryPrices, generateProductImages, generateReferencePrices, listProductImages, listReferencePrices } from "@/lib/product-media.functions";
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
@@ -14,16 +14,50 @@ import { formatRefPrice } from "@/hooks/use-reference-prices";
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
 /** KI-Bilder und KI-Richtpreise für den Katalog erzeugen (stapelweise); section wählt den Tab-Inhalt. */
-export function CatalogMediaPanel({ section }: { section: "images" | "prices" }) {
+export function CatalogMediaPanel({ section, depts = [] }: { section: "images" | "prices"; depts?: Array<{ id: string; name: string; parent_id: string | null }> }) {
   const MARKETS = useMarketCodes();
   const qc = useQueryClient();
   const statusFn = useServerFn(catalogMediaStatus);
   const genImages = useServerFn(generateProductImages);
   const genPrices = useServerFn(generateReferencePrices);
+  const estCat = useServerFn(estimateCategoryPrices);
   const [market, setMarket] = useState(getLocale().split("-")[1] ?? "CH");
-  const [busy, setBusy] = useState<"img" | "price" | "allImg" | null>(null);
+  const [busy, setBusy] = useState<"img" | "price" | "allImg" | "catPrice" | null>(null);
+  const [catId, setCatId] = useState("");
   const [allProgress, setAllProgress] = useState<{ done: number; total: number } | null>(null);
   const [generated, setGenerated] = useState<Array<{ id: string; name: string; url: string | null }>>([]);
+
+  /** Kategorien flach mit Einrückung nach Hierarchie für das Dropdown. */
+  const deptOptions = (() => {
+    const byParent = new Map<string | null, typeof depts>();
+    for (const d of depts) byParent.set(d.parent_id, [...(byParent.get(d.parent_id) ?? []), d]);
+    const out: Array<{ id: string; label: string }> = [];
+    const walk = (parent: string | null, depth: number) => {
+      for (const d of byParent.get(parent) ?? []) {
+        out.push({ id: d.id, label: `${" ".repeat(depth * 3)}${d.name}` });
+        walk(d.id, depth + 1);
+      }
+    };
+    walk(null, 0);
+    return out;
+  })();
+
+  const runCategoryPrices = async () => {
+    const dept = deptOptions.find((o) => o.id === catId);
+    if (!dept) return;
+    if (!window.confirm(T("price.catConfirm", { name: dept.label.trim(), market }))) return;
+    setBusy("catPrice");
+    try {
+      const r = await estCat({ data: { market, departmentId: catId, onlyMissing: true } });
+      toast.success(T("price.catDone", { done: r.done, total: r.total }));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(null);
+      refresh();
+      void qc.invalidateQueries({ queryKey: ["ref-price-list"] });
+    }
+  };
 
   const status = useQuery({
     queryKey: ["catalog-media-status", market],
@@ -167,6 +201,27 @@ export function CatalogMediaPanel({ section }: { section: "images" | "prices" })
             {busy === "price" ? T("media.working") : T("media.genPrices")}
           </Button>
         </div>
+
+        {deptOptions.length > 0 && (
+          <div className="mt-4 rounded-xl border border-border bg-background p-3">
+            <h3 className="text-sm font-semibold">{T("price.catTitle")}</h3>
+            <div className="mt-2 flex flex-wrap items-center gap-2">
+              <select
+                value={catId}
+                onChange={(e) => setCatId(e.target.value)}
+                className="h-11 min-w-[12rem] flex-1 rounded-lg border border-border bg-card px-3 text-sm"
+              >
+                <option value="">{T("price.catPick")}</option>
+                {deptOptions.map((o) => (
+                  <option key={o.id} value={o.id}>{o.label}</option>
+                ))}
+              </select>
+              <Button size="sm" variant="secondary" disabled={busy !== null || !catId} onClick={runCategoryPrices}>
+                {busy === "catPrice" ? T("media.working") : T("price.catRun")}
+              </Button>
+            </div>
+          </div>
+        )}
 
         <div className="mt-5 border-t border-border pt-4">
           <h3 className="text-sm font-semibold">{T("price.listTitle")}</h3>
