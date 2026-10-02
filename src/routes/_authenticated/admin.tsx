@@ -227,19 +227,20 @@ function AdminPage() {
   };
 
   /** Produkte nach Kriterium sortieren; Überschriften-Gruppen bleiben erhalten. */
-  const sortProducts = () => {
+  const sortProducts = (crit?: typeof sortBy) => {
+    const c = crit ?? sortBy;
     if (!cur || products.length < 2) return;
-    const label = T(`adm.crit.${sortBy}` as MessageKey);
+    const label = T(`adm.crit.${c}` as MessageKey);
     if (!confirm(T("adm.sortConfirm", { label }))) return;
     const anchors = new Set(headings.map((h) => h.before_product_id));
     const groups: (typeof products)[] = [];
     products.forEach((p, i) => { if (i === 0 || anchors.has(p.id)) groups.push([]); groups[groups.length - 1]!.push(p); });
     run(async () => {
       let ordered: (typeof products)[];
-      if (sortBy === "alphabetical") {
+      if (c === "alphabetical") {
         ordered = groups.map((g) => [...g].sort((a, b) => a.name.localeCompare(b.name, "de")));
       } else {
-        const r = await rank({ data: { path: pathText(), criterion: sortBy, groups: groups.map((g) => g.map((p) => p.name)), ...(mk ? { market: mk } : {}) } });
+        const r = await rank({ data: { path: pathText(), criterion: c, groups: groups.map((g) => g.map((p) => p.name)), ...(mk ? { market: mk } : {}) } });
         ordered = groups.map((g, gi) => {
           const pool = [...g];
           return r.groups[gi]!.map((n) => pool.splice(pool.findIndex((p) => p.name === n), 1)[0]!).concat(pool);
@@ -370,7 +371,8 @@ function AdminPage() {
       ) : view === "tiles" && d ? (
         <CatalogTileEditor depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={children} products={products}
           path={path(cur)} nm={nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
-          reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)} />
+          reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
+          onSortRelevance={products.length > 1 ? () => sortProducts("popularity") : undefined} busy={busy} />
       ) : (
         <>
           <nav className="flex flex-wrap items-center gap-1 text-sm">
@@ -457,7 +459,7 @@ function AdminPage() {
                       <option value="alphabetical">{T("adm.opt.alphabetical")}</option>
                       <option value="similarity">{T("adm.opt.similarity")}</option>
                     </select>
-                    <Button size="sm" variant="outline" className="h-8" disabled={busy} onClick={sortProducts}>{T("adm.sort")}</Button>
+                    <Button size="sm" variant="outline" className="h-8" disabled={busy} onClick={() => sortProducts()}>{T("adm.sort")}</Button>
                   </div>
                 )}
               </div>
@@ -502,6 +504,11 @@ function AdminPage() {
                   </div>
                 );
               })}
+              {products.length > 1 && (
+                <Button variant="outline" className="mt-2 w-full" disabled={busy} onClick={() => sortProducts("popularity")}>
+                  ↕ {busy ? T("adm.working") : T("adm.sortRelevance")}
+                </Button>
+              )}
             </section>
           )}
           {cur && d && <ProductAliasRows departmentId={cur} prods={d.prods} onEdit={(id) => setSel({ kind: "product", id })} />}

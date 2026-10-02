@@ -922,7 +922,8 @@
     "adm.tab.recipes": "Recipes & Cuisines",
     "adm.tab.more": "More",
     "loc.suggest": "Suggestions",
-    "loc.suggestHint": "Tap to add and translate the language."
+    "loc.suggestHint": "Tap to add and translate the language.",
+    "adm.sortRelevance": "Sort by relevance"
   },
   "en-GB": {
     "nav.departments": "Departments",
@@ -1847,7 +1848,8 @@
     "adm.tab.recipes": "Recipes & Cuisines",
     "adm.tab.more": "More",
     "loc.suggest": "Suggestions",
-    "loc.suggestHint": "Tap to add and translate the language."
+    "loc.suggestHint": "Tap to add and translate the language.",
+    "adm.sortRelevance": "Sort by relevance"
   },
   "en-CA": {
     "nav.departments": "Aisles",
@@ -2772,7 +2774,8 @@
     "adm.tab.recipes": "Recipes & Cuisines",
     "adm.tab.more": "More",
     "loc.suggest": "Suggestions",
-    "loc.suggestHint": "Tap to add and translate the language."
+    "loc.suggestHint": "Tap to add and translate the language.",
+    "adm.sortRelevance": "Sort by relevance"
   },
   "es-ES": {
     "nav.departments": "Secciones",
@@ -3697,7 +3700,8 @@
     "adm.tab.recipes": "Recetas y cocinas",
     "adm.tab.more": "Más",
     "loc.suggest": "Sugerencias",
-    "loc.suggestHint": "Toca para añadir y traducir el idioma."
+    "loc.suggestHint": "Toca para añadir y traducir el idioma.",
+    "adm.sortRelevance": "Ordenar por relevancia"
   },
   "es-MX": {
     "nav.departments": "Departamentos",
@@ -4622,7 +4626,8 @@
     "adm.tab.recipes": "Recetas y cocinas",
     "adm.tab.more": "Más",
     "loc.suggest": "Sugerencias",
-    "loc.suggestHint": "Toca para añadir y traducir el idioma."
+    "loc.suggestHint": "Toca para añadir y traducir el idioma.",
+    "adm.sortRelevance": "Ordenar por relevancia"
   },
   "fr-FR": {
     "nav.departments": "Rayons",
@@ -5547,7 +5552,8 @@
     "adm.tab.recipes": "Recettes et cuisines",
     "adm.tab.more": "Plus",
     "loc.suggest": "Suggestions",
-    "loc.suggestHint": "Touchez pour ajouter et traduire la langue."
+    "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
+    "adm.sortRelevance": "Trier par pertinence"
   },
   "fr-CA": {
     "nav.departments": "Rayons",
@@ -6472,7 +6478,8 @@
     "adm.tab.recipes": "Recettes et cuisines",
     "adm.tab.more": "Plus",
     "loc.suggest": "Suggestions",
-    "loc.suggestHint": "Touchez pour ajouter et traduire la langue."
+    "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
+    "adm.sortRelevance": "Trier par pertinence"
   },
   "it-IT": {
     "nav.departments": "Reparti",
@@ -7397,7 +7404,8 @@
     "adm.tab.recipes": "Ricette e cucine",
     "adm.tab.more": "Altro",
     "loc.suggest": "Suggerimenti",
-    "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua."
+    "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
+    "adm.sortRelevance": "Ordina per rilevanza"
   },
   "it-CH": {
     "nav.departments": "Reparti",
@@ -8322,7 +8330,8 @@
     "adm.tab.recipes": "Ricette e cucine",
     "adm.tab.more": "Altro",
     "loc.suggest": "Suggerimenti",
-    "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua."
+    "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
+    "adm.sortRelevance": "Ordina per rilevanza"
   },
   "pt-PT": {
     "nav.departments": "Secções",
@@ -9247,7 +9256,8 @@
     "adm.tab.recipes": "Receitas e cozinhas",
     "adm.tab.more": "Mais",
     "loc.suggest": "Sugestões",
-    "loc.suggestHint": "Toque para adicionar e traduzir o idioma."
+    "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
+    "adm.sortRelevance": "Ordenar por relevância"
   },
   "pt-BR": {
     "nav.departments": "Departamentos",
@@ -10172,7 +10182,8 @@
     "adm.tab.recipes": "Receitas e cozinhas",
     "adm.tab.more": "Mais",
     "loc.suggest": "Sugestões",
-    "loc.suggestHint": "Toque para adicionar e traduzir o idioma."
+    "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
+    "adm.sortRelevance": "Ordenar por relevância"
   },
   "nl-NL": {
     "nav.departments": "Afdelingen",
@@ -11097,7 +11108,8 @@
     "adm.tab.recipes": "Recepten & keukens",
     "adm.tab.more": "Meer",
     "loc.suggest": "Suggesties",
-    "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen."
+    "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
+    "adm.sortRelevance": "Sorteren op relevantie"
   },
   "nl-BE": {
     "nav.departments": "Afdelingen",
@@ -12022,7 +12034,8 @@
     "adm.tab.recipes": "Recepten & keukens",
     "adm.tab.more": "Meer",
     "loc.suggest": "Suggesties",
-    "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen."
+    "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
+    "adm.sortRelevance": "Sorteren op relevantie"
   },
   "de-AT": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12409,7 +12422,8 @@
     "adm.tab.recipes": "Rezepte & Küchen",
     "adm.tab.more": "Mehr",
     "loc.suggest": "Vorschläge",
-    "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen."
+    "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
+    "adm.sortRelevance": "Nach Relevanz sortieren"
   },
   "de-CH": {
     "rename.deleteCatalog": "Aus dem Katalog entfernen",
@@ -12796,6 +12810,7 @@
     "adm.tab.recipes": "Rezepte & Küchen",
     "adm.tab.more": "Mehr",
     "loc.suggest": "Vorschläge",
-    "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen."
+    "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
+    "adm.sortRelevance": "Nach Relevanz sortieren"
   }
 }

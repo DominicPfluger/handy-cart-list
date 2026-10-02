@@ -625,6 +625,7 @@ export const de = {
   "tile.delete": "Löschen",
   "tile.moved": "Verschoben",
   "tile.nameRequired": "Bitte einen Namen eingeben",
+  "adm.sortRelevance": "Nach Relevanz sortieren",
   "mk.sortRelevance": "Nach Relevanz im Markt sortieren",
   "mk.sortConfirm": "Produkte dieser Kategorie nach Relevanz in {market} neu sortieren?",
   "mk.sorted": "Nach Relevanz sortiert",
