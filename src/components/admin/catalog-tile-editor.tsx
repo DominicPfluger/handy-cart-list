@@ -8,7 +8,7 @@ import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { generateImageFor, listProductImages } from "@/lib/product-media.functions";
-import { suggestCategoryProducts } from "@/lib/admin.functions";
+import { suggestCategoryProducts, translateVariants } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,9 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
 export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null };
-export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null };
+export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null; variants?: string[] };
+
+const COMMON_VARIANTS = ["Bio", "Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
 type Target = { kind: "department" | "product"; id: string | null } | null;
 type Drag = { kind: "department" | "product"; id: string; index: number; x: number; y: number; label: string } | null;
@@ -227,6 +229,7 @@ export function CatalogTileEditor(p: {
 
 function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNullable<Target>; onClose: () => void; imgUrl: string | undefined }) {
   const genImg = useServerFn(generateImageFor);
+  const trVariants = useServerFn(translateVariants);
   const isDept = p.target.kind === "department";
   const item = p.target.id ? (isDept ? p.depts.find((d) => d.id === p.target.id) : p.products.find((x) => x.id === p.target.id)) : undefined;
   const prod = !isDept ? (item as TileProd | undefined) : undefined;
@@ -240,6 +243,17 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
   const [price, setPrice] = useState("");
+  const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
+  const [variantInput, setVariantInput] = useState("");
+  const addVariant = (v: string) => {
+    const vals = v.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+    setVariants((x) => {
+      const next = [...x];
+      for (const val of vals) if (!next.some((y) => y.toLowerCase() === val.toLowerCase())) next.push(val);
+      return next;
+    });
+    setVariantInput("");
+  };
   const effId = item?.id ?? newId ?? undefined;
   const table = isDept ? "departments" : "products";
 
@@ -250,18 +264,20 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
-        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never }).eq("id", item.id));
+        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, variants }).eq("id", item.id));
       if (item.name !== base.name) {
         await p.must(supabase.from("catalog_translations").delete().eq("entity_id", item.id).eq("is_manual", false));
         await p.translateIds([item.id]);
       }
+      if (!isDept) void trVariants({ data: { productId: item.id } }).catch(() => {});
     } else {
       const r = isDept
         ? await supabase.from("departments").insert({ ...base, parent_id: p.cur, sort_order: p.children.length + 1 }).select("id").single()
-        : await supabase.from("products").insert({ ...base, department_id: p.cur!, default_quantity: qty, default_unit: unit as never, sort_order: p.products.length + 1 }).select("id").single();
+        : await supabase.from("products").insert({ ...base, department_id: p.cur!, default_quantity: qty, default_unit: unit as never, variants, sort_order: p.products.length + 1 }).select("id").single();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
       await p.translateIds([id]);
+      if (!isDept) void trVariants({ data: { productId: id } }).catch(() => {});
       setNewId(id);
     }
     if (!isDept && id && price.trim() && !Number.isNaN(Number(price))) {
@@ -319,6 +335,44 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         )}
         {!isDept && (
           <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 rounded-xl" />
+        )}
+        {!isDept && (
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
+            {variants.length > 0 && (
+              <div className="divide-y divide-border rounded-lg border border-border">
+                {variants.map((v) => (
+                  <div key={v} className="flex items-center justify-between gap-2 px-3 py-1.5 text-sm">
+                    <span className="truncate">{v}</span>
+                    <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex items-start gap-2">
+              <textarea
+                value={variantInput}
+                rows={3}
+                placeholder={T("adm.variantPlaceholder")}
+                onChange={(e) => setVariantInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); addVariant(variantInput); } }}
+                className="min-h-[72px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              />
+              <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {COMMON_VARIANTS.map((cv) => {
+                const on = variants.some((x) => x.toLowerCase() === cv.toLowerCase());
+                return (
+                  <button key={cv} type="button" disabled={on} onClick={() => addVariant(cv)}
+                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-muted-foreground line-through" : "border-border bg-background text-muted-foreground"}`}>
+                    {on ? "✓ " : "+ "}{cv}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
+          </div>
         )}
         <div className="flex gap-2 pt-1">
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
