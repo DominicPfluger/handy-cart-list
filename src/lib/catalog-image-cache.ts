@@ -2,18 +2,19 @@
 const CACHE = "shoppi-catalog-artwork-v1";
 const MAX_ENTRIES = 500;
 const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
+const pending = new Map<string, Promise<Blob>>();
 
 function key(path: string): string {
   return `${location.origin}/__shoppi-catalog-artwork/${encodeURIComponent(path)}`;
 }
 
-export async function cachedCatalogImage(path: string, signedUrl?: string | null): Promise<string> {
+async function loadBlob(path: string, signedUrl?: string | null): Promise<Blob> {
   // CacheStorage works on ordinary browser visits as well as installed apps.
   const cache = "caches" in window ? await caches.open(CACHE).catch(() => null) : null;
   if (cache) {
     const hit = await cache.match(key(path));
     if (hit && Date.now() - Number(hit.headers.get("x-shoppi-saved") ?? 0) < MAX_AGE) {
-      return URL.createObjectURL(await hit.blob());
+      return hit.blob();
     }
   }
   if (!signedUrl) throw new Error("Image has not been cached yet");
@@ -30,7 +31,17 @@ export async function cachedCatalogImage(path: string, signedUrl?: string | null
       for (const old of keys.slice(0, Math.max(0, keys.length - MAX_ENTRIES))) await cache.delete(old);
     } catch { /* Private mode or storage quota: still show the image. */ }
   }
-  return URL.createObjectURL(blob);
+  return blob;
+}
+
+export async function cachedCatalogImage(path: string, signedUrl?: string | null): Promise<string> {
+  let task = pending.get(path);
+  if (!task) {
+    task = loadBlob(path, signedUrl);
+    pending.set(path, task);
+    void task.finally(() => { if (pending.get(path) === task) pending.delete(path); }).catch(() => {});
+  }
+  return URL.createObjectURL(await task);
 }
 
 export async function forgetCatalogImage(path: string): Promise<void> {
