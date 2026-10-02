@@ -178,20 +178,33 @@ function MorePage() {
               <p className="text-sm font-semibold text-foreground">{t("more.hiddenProducts")}</p>
               <p className="truncate text-xs text-muted-foreground">{t("more.hiddenProductsHint")}</p>
             </div>
-            {hiddenProducts.length > 0 && <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{hiddenProducts.length}</span>}
+            {(hiddenProducts.length + hiddenCategories.length) > 0 && <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{hiddenProducts.length + hiddenCategories.length}</span>}
             <span className="text-muted-foreground" aria-hidden="true">{hiddenOpen ? "▴" : "▾"}</span>
           </button>
           {hiddenOpen && (
             <div className="divide-y divide-border border-t border-border">
-              {hiddenProducts.length === 0 ? (
+              {hiddenProducts.length === 0 && hiddenCategories.length === 0 ? (
                 <p className="px-4 py-3 text-sm text-muted-foreground">{t("more.hiddenProductsEmpty")}</p>
               ) : (
-                hiddenProducts.map((product) => (
-                  <div key={product.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
-                    <span className="min-w-0 text-sm text-foreground">{product.name}</span>
-                    <Button variant="ghost" size="sm" onClick={() => restoreProduct(product.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
-                  </div>
-                ))
+                <>
+                  {hiddenProducts.map((product) => (
+                    <div key={product.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                      <span className="min-w-0 text-sm text-foreground">{product.name}</span>
+                      <Button variant="ghost" size="sm" onClick={() => restoreProduct(product.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
+                    </div>
+                  ))}
+                  {hiddenCategories.length > 0 && (
+                    <>
+                      <p className="px-4 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("more.hiddenCategories")}</p>
+                      {hiddenCategories.map((department) => (
+                        <div key={department.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                          <span className="min-w-0 text-sm text-foreground">{department.name}</span>
+                          <Button variant="ghost" size="sm" onClick={() => restoreDepartment(department.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </>
               )}
             </div>
           )}
@@ -274,21 +287,6 @@ function MorePage() {
           </Link>
         )}
       </section>
-
-      {hiddenCategories.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="text-base font-semibold text-foreground">{t("more.hiddenCategories")}</h2>
-          <p className="text-sm text-muted-foreground">{t("more.hiddenCategoriesHint")}</p>
-          <div className="divide-y divide-border border-y border-border">
-            {hiddenCategories.map((department) => (
-              <div key={department.id} className="flex items-center justify-between gap-3 py-2.5">
-                <span className="min-w-0 text-sm text-foreground">{department.name}</span>
-                <Button variant="ghost" size="sm" onClick={() => restoreDepartment(department.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       <footer className="flex flex-col items-center gap-1 pt-4 pb-2 text-center">
         <img src={appIcon.url} alt="Shoppi App-Icon" className="h-16 w-16 rounded-2xl shadow-sm" />
