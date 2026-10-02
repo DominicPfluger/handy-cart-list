@@ -1054,7 +1054,7 @@ export type Database = {
           name: string
           parent_id: string | null
           sort_order: number
-          template_id: string | null
+          template_id: string
           updated_at: string
         }
         Insert: {
@@ -1064,7 +1064,7 @@ export type Database = {
           name: string
           parent_id?: string | null
           sort_order?: number
-          template_id?: string | null
+          template_id: string
           updated_at?: string
         }
         Update: {
@@ -1074,7 +1074,7 @@ export type Database = {
           name?: string
           parent_id?: string | null
           sort_order?: number
-          template_id?: string | null
+          template_id?: string
           updated_at?: string
         }
         Relationships: [
