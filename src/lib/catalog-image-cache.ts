@@ -1,6 +1,6 @@
 /** Store catalog artwork by its storage path, not by expiring signed URL. */
 const CACHE = "shoppi-catalog-artwork-v1";
-const MAX_ENTRIES = 500;
+const MAX_ENTRIES = 2000;
 const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 const pending = new Map<string, Promise<Blob>>();
 
@@ -53,4 +53,28 @@ export async function forgetCatalogImage(path: string): Promise<void> {
   if (old) for (const request of await old.keys()) {
     if (new URL(request.url).pathname.endsWith(`/catalog-images/${path}`)) await old.delete(request);
   }
+}
+/** Lädt alle Katalogbilder im Hintergrund aufs Gerät (bereits gespeicherte werden übersprungen). */
+export type PreloadState = { running: boolean; done: number; total: number; failed: number };
+let preload: PreloadState = { running: false, done: 0, total: 0, failed: 0 };
+const listeners = new Set<() => void>();
+const emit = (next: Partial<PreloadState>) => { preload = { ...preload, ...next }; listeners.forEach((l) => l()); };
+export const preloadState = () => preload;
+export function subscribePreload(l: () => void) { listeners.add(l); return () => { listeners.delete(l); }; }
+
+export async function preloadCatalogImages(urls: Record<string, string>): Promise<void> {
+  if (preload.running) return;
+  const paths = Object.keys(urls);
+  emit({ running: true, done: 0, total: paths.length, failed: 0 });
+  let i = 0, done = 0, failed = 0;
+  const worker = async () => {
+    while (i < paths.length) {
+      const path = paths[i++]!;
+      try { const t = pending.get(path) ?? loadBlob(path, urls[path]); await t; } catch { failed++; }
+      done++;
+      emit({ done, failed });
+    }
+  };
+  await Promise.all(Array.from({ length: 4 }, worker));
+  emit({ running: false });
 }

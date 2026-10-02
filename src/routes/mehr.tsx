@@ -15,7 +15,10 @@ import {
 } from "../components/icons";
 import { useAllLocales, getExplicitLocale, getLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState, type ReactNode } from "react";
-import { EyeOff, Images } from "lucide-react";
+import { EyeOff, Images, Download } from "lucide-react";
+import { useSyncExternalStore } from "react";
+import { preloadCatalogImages, preloadState, subscribePreload } from "../lib/catalog-image-cache";
+import { getCatalogImageUrls } from "../lib/catalog.functions";
 import { setIconSet, useIconSet, type IconSet } from "../hooks/use-icon-set";
 import { setFontSize, useFontSize, type FontSize } from "../hooks/use-font-size";
 import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
@@ -251,6 +254,7 @@ function MorePage() {
         <MarketRow />
         <AllMarketsRow />
         <IconSetRow />
+        <PreloadImagesRow />
         <FontSizeRow />
         <DietPreferenceRow />
         <SpeakLocaleRow />
@@ -332,6 +336,36 @@ function IconSetRow() {
           <option value="symbols">{t("more.iconSymbols")}</option>
         </select>
       </label>
+    </div>
+  );
+}
+
+function PreloadImagesRow() {
+  const { t } = useT();
+  const st = useSyncExternalStore(subscribePreload, preloadState, preloadState);
+  const start = async () => {
+    try { await preloadCatalogImages(await getCatalogImageUrls()); toast.success(t("more.preloadDone")); }
+    catch { toast.error(t("more.preloadError")); }
+  };
+  const pct = st.total ? Math.round((st.done / st.total) * 100) : 0;
+  return (
+    <div className="flex w-full items-start gap-3 px-4 py-3.5">
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+        <Download className="h-5 w-5" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <span className="text-sm font-semibold text-foreground">{t("more.preload")}</span>
+        <p className="text-xs text-muted-foreground">{t("more.preloadHint")}</p>
+        {st.running || st.total > 0 ? (
+          <div className="mt-2">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-muted"><div className="h-full bg-primary transition-all" style={{ width: `${pct}%` }} /></div>
+            <p className="mt-1 text-xs text-muted-foreground">{st.done} / {st.total}</p>
+          </div>
+        ) : null}
+        <Button type="button" variant="outline" size="sm" className="mt-2" disabled={st.running} onClick={() => void start()}>
+          {st.running ? t("more.preloadRunning") : t("more.preloadStart")}
+        </Button>
+      </div>
     </div>
   );
 }
