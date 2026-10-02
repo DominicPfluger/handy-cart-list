@@ -366,6 +366,7 @@ export const getCatalog = createServerFn({ method: "GET" })
       sortOrder: (r["sort_order"] as number) ?? 0,
       enabled: (r["enabled"] as boolean) ?? true,
       baseName: r["id"] as string,
+      name: r["id"] as string,
       names: names.get(r["id"] as string) ?? {},
     })),
     recipeSteps: ((rsRes.data ?? []) as Array<Record<string, unknown>>).map((r) => ({
