@@ -1,0 +1,2 @@
+ALTER TABLE public.recipe_groups ADD COLUMN template_id text REFERENCES public.recipe_templates(id) ON DELETE CASCADE;
+CREATE INDEX IF NOT EXISTS recipe_groups_template_idx ON public.recipe_groups(template_id);

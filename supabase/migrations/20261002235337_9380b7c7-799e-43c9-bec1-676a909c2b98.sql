@@ -1,0 +1,1 @@
+ALTER TABLE public.recipe_groups ALTER COLUMN template_id SET NOT NULL;
