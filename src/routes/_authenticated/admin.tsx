@@ -246,27 +246,42 @@ function AdminPage() {
   };
 
   /** Überschrift verschieben: die ganze Gruppe (Überschrift + ihre Produkte bis zur nächsten Überschrift) wandert mit. */
-  const moveHeading = (headingId: string, beforeProductId: string) => {
+  /** insertAt = Einfügeposition in `products` (0..n); mode "title" = nur Überschrift, "group" = mit ihren Produkten. */
+  const moveHeading = (headingId: string, insertAt: number, mode: "title" | "group") => {
     const h = d?.heads.find((x) => x.id === headingId);
-    if (!h || h.before_product_id === beforeProductId || beforeProductId.startsWith("alias:")) return;
-    const anchors = new Set(d?.heads.filter((x) => x.id !== headingId).map((x) => x.before_product_id) ?? []);
+    if (!h) return;
+    const others = d?.heads.filter((x) => x.id !== headingId && x.department_id === h.department_id) ?? [];
+    const anchors = new Set(others.map((x) => x.before_product_id));
+    const firstOwn = (list: { id: string }[], from: number) => list.slice(from).find((p) => !p.id.startsWith("alias:"));
     const start = products.findIndex((p) => p.id === h.before_product_id);
-    if (start < 0) { // leere Gruppe: nur der Titel wandert
-      run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), T("adm.headingMoved"));
+    if (mode === "title" || start < 0) {
+      const anchor = firstOwn(products, insertAt);
+      if (!anchor) { toast.error(T("adm.headingMoveNoTarget")); return; }
+      if (anchor.id === h.before_product_id) return;
+      if (anchors.has(anchor.id)) { toast.error(T("adm.headingMoveTaken")); return; }
+      run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: anchor.id } }), T("adm.headingMoved"));
       return;
     }
     let end = start + 1;
     while (end < products.length && !anchors.has(products[end]!.id)) end++;
+    if (insertAt >= start && insertAt <= end) return; // gleiche Stelle
     const group = products.slice(start, end);
-    if (group.some((p) => p.id === beforeProductId)) return; // Ziel liegt in der eigenen Gruppe
-    if (!confirm(T("adm.headingMoveConfirm", { name: h.name, n: group.length }))) return;
     const rest = products.filter((p) => !group.includes(p));
-    const at = rest.findIndex((p) => p.id === beforeProductId);
-    const next = at < 0 ? [...rest, ...group] : [...rest.slice(0, at), ...group, ...rest.slice(at)];
+    const at = insertAt > start ? insertAt - group.length : insertAt;
+    const next = [...rest.slice(0, at), ...group, ...rest.slice(at)];
+    const anchor = firstOwn(group, 0);
+    if (!anchor) { toast.error(T("adm.headingMoveNoTarget")); return; }
     run(async () => {
       await saveOrder(next);
-      await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: group[0]!.id } });
+      await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: anchor.id } });
+      await qc.invalidateQueries({ queryKey: ALIAS_KEY });
     }, T("adm.headingMoved"));
+  };
+  /** Produkt wurde direkt unter eine Überschrift gezogen: Überschrift an dieses Produkt hängen. */
+  const setHeadingAnchor = (headingId: string, productId: string) => {
+    const h = d?.heads.find((x) => x.id === headingId);
+    if (!h || productId.startsWith("alias:")) return;
+    void run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: productId } }), T("adm.headingMoved"));
   };
 
   /** Produkt unter eine Überschrift verschieben (ans Ende der Gruppe; "" = ganz nach oben, vor die erste Überschrift). */
