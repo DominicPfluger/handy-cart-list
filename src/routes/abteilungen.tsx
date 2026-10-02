@@ -201,7 +201,6 @@ function DepartmentsPage() {
   const variantLabel = (product: CatalogProduct, v: string) => pickName(product.variantNames?.[v], locale, v);
   const matchedVariant = (product: CatalogProduct) =>
     (product.variants ?? []).find((v) => matchesProductSearch(variantLabel(product, v), normalizedQuery));
-  const normSyn = (s: string) => s.toLocaleLowerCase().replace(/ß/g, "ss");
   const matchedSynonym = (product: CatalogProduct) =>
     (product.synonyms ?? []).find((s) => matchesProductSearch(s, normalizedQuery));
   const searchResults = useMemo(() => {
