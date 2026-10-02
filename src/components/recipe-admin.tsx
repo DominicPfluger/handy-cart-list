@@ -65,6 +65,9 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const qc = useQueryClient();
   const { data } = useQuery({ queryKey: ["admin-recipe-ingredients"], queryFn: loadRecipeIngredients });
   const { data: groupData } = useQuery({ queryKey: ["admin-recipe-groups"], queryFn: loadRecipeGroups });
+  const { data: tplRows } = useQuery({ queryKey: ["admin-recipe-templates"], queryFn: loadTplRows });
+  const { data: stepRows } = useQuery({ queryKey: ["admin-recipe-steps"], queryFn: loadStepRows });
+  const { data: popRows } = useQuery({ queryKey: ["admin-recipe-popular"], queryFn: loadPopRows });
   const [open, setOpen] = useState(false);
   const [tplId, setTplId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -77,12 +80,20 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const sortFn = useServerFn(sortRecipeIngredients);
   const saveGroupFn = useServerFn(saveRecipeGroup);
   const deleteGroupFn = useServerFn(deleteRecipeGroup);
+  const suggestStepFn = useServerFn(suggestRecipeStepProducts);
   const [editGroupId, setEditGroupId] = useState<string | null>(null);
   const [groupFormOpen, setGroupFormOpen] = useState(false);
   const [groupParent, setGroupParent] = useState<string | null>(null);
   const [groupName, setGroupName] = useState("");
   const [groupEmoji, setGroupEmoji] = useState("");
   const [dragGroup, setDragGroup] = useState<string | null>(null);
+  // Vorlagen-/Oberkategorien-Verwaltung
+  const [manageOpen, setManageOpen] = useState(false);
+  const [tplForm, setTplForm] = useState<{ id: string; emoji: string } | null>(null);
+  const [stepForm, setStepForm] = useState<{ id: string | null; key: string; name: string; emoji: string; min: number; max: number; required: boolean } | null>(null);
+  const [popForm, setPopForm] = useState("");
+  const [suggestStep, setSuggestStep] = useState<StepRow | null>(null);
+  const [suggestPicks, setSuggestPicks] = useState<Set<string> | null>(null);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
   const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
@@ -92,7 +103,11 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     return out.join(" › ");
   };
 
-  const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
+  const templates = tplRows ?? [];
+  const stepsFor = (tid: string) => (stepRows ?? []).filter((s) => s.template_id === tid).sort((a, b) => a.sort_order - b.sort_order);
+  const steps = tplId ? stepsFor(tplId) : [];
+  const pops = tplId ? (popRows ?? []).filter((p) => p.template_id === tplId).sort((a, b) => a.sort_order - b.sort_order) : [];
+  const tpl = tplId ? { id: tplId, emoji: templates.find((x) => x.id === tplId)?.emoji ?? "🍽️", steps: steps.map((s) => ({ key: s.key, label: s.name })) } : null;
   const rows = data ?? [];
   const groups = groupData ?? [];
   const assignedFor = (stepKey: string) =>
