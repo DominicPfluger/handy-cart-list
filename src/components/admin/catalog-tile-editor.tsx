@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { Fragment, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -194,7 +194,7 @@ export function CatalogTileEditor(p: {
           <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); const n = newTitle.trim(); if (!n) return; p.onAddHeading!(n); setNewTitle(null); }}>
             <input autoFocus value={newTitle} maxLength={80} onChange={(e) => setNewTitle(e.target.value)} placeholder={T("adm.heading")}
               className="h-10 min-w-0 flex-1 rounded-xl border border-input bg-background px-3 text-sm" />
-            <button type="submit" className="rounded-xl bg-primary px-3 text-sm font-semibold text-primary-foreground">{T("common.save")}</button>
+            <button type="submit" className="rounded-xl bg-primary px-3 text-sm font-semibold text-primary-foreground">{T("adm.save")}</button>
             <button type="button" onClick={() => setNewTitle(null)} className="rounded-xl border border-border px-3 text-sm">✕</button>
           </form>
         )
@@ -218,7 +218,7 @@ export function CatalogTileEditor(p: {
                     onClick={click(() => { const n = window.prompt(T("adm.heading"), h.name)?.trim(); if (n && n !== h.name) p.onRenameHeading?.(h.id, n); })}
                     className="min-w-0 flex-1 truncate text-left text-sm font-bold text-foreground">{p.nm(h.id, h.name)}</button>
                   {editMode && (
-                    <button type="button" onClick={() => p.onDeleteHeading?.(h.id, h.name)} aria-label={T("common.delete")}
+                    <button type="button" onClick={() => p.onDeleteHeading?.(h.id, h.name)} aria-label={T("adm.delete")}
                       className="rounded-full px-2 text-xs text-muted-foreground">✕</button>
                   )}
                 </div>
