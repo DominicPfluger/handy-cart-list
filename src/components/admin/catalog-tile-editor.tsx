@@ -446,7 +446,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                     if (mine) setPrice(String(mine.price));
                     void qc.invalidateQueries();
                     if (r.failed > 0) throw new Error(T("tile.estimateAllFailed", { n: r.failed }));
-                  }, T("tile.estimateAllDone", { n: 0 })).finally(() => setEstimating(false));
+                  }, T("tile.estimateAllDone")).finally(() => setEstimating(false));
                 }}>{estimating ? "…" : `✨ ${T("tile.estimateAll")}`}</Button>
               )}
             </div>
