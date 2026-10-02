@@ -36,6 +36,7 @@ import { Route as RezepteIndexRouteImport } from './routes/rezepte.index'
 import { Route as RezepteGeneratorRouteImport } from './routes/rezepte.generator'
 import { Route as RezepteInspirationenRouteImport } from './routes/rezepte.inspirationen'
 import { Route as RezepteListenRouteImport } from './routes/rezepte.listen'
+import { Route as RezepteSuchenRouteImport } from './routes/rezepte.suchen'
 import { Route as ApiPublicCronImportSyncRouteImport } from './routes/api/public/cron/import-sync'
 import { Route as ApiPublicWebhooksRecipeEventsRouteImport } from './routes/api/public/webhooks/recipe-events'
 
@@ -175,6 +176,11 @@ const RezepteListenRoute = RezepteListenRouteImport.update({
   path: '/listen',
   getParentRoute: () => RezepteRoute,
 } as any)
+const RezepteSuchenRoute = RezepteSuchenRouteImport.update({
+  id: '/suchen',
+  path: '/suchen',
+  getParentRoute: () => RezepteRoute,
+} as any)
 const ApiPublicCronImportSyncRoute = ApiPublicCronImportSyncRouteImport.update({
   id: '/api/public/cron/import-sync',
   path: '/api/public/cron/import-sync',
@@ -213,6 +219,7 @@ export interface FileRoutesByFullPath {
   '/rezepte/generator': typeof RezepteGeneratorRoute
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
   '/rezepte/listen': typeof RezepteListenRoute
+  '/rezepte/suchen': typeof RezepteSuchenRoute
   '/rezepte/': typeof RezepteIndexRoute
   '/api/public/cron/import-sync': typeof ApiPublicCronImportSyncRoute
   '/api/public/webhooks/recipe-events': typeof ApiPublicWebhooksRecipeEventsRoute
@@ -242,6 +249,7 @@ export interface FileRoutesByTo {
   '/rezepte/generator': typeof RezepteGeneratorRoute
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
   '/rezepte/listen': typeof RezepteListenRoute
+  '/rezepte/suchen': typeof RezepteSuchenRoute
   '/rezepte': typeof RezepteIndexRoute
   '/api/public/cron/import-sync': typeof ApiPublicCronImportSyncRoute
   '/api/public/webhooks/recipe-events': typeof ApiPublicWebhooksRecipeEventsRoute
@@ -274,6 +282,7 @@ export interface FileRoutesById {
   '/rezepte/generator': typeof RezepteGeneratorRoute
   '/rezepte/inspirationen': typeof RezepteInspirationenRoute
   '/rezepte/listen': typeof RezepteListenRoute
+  '/rezepte/suchen': typeof RezepteSuchenRoute
   '/rezepte/': typeof RezepteIndexRoute
   '/api/public/cron/import-sync': typeof ApiPublicCronImportSyncRoute
   '/api/public/webhooks/recipe-events': typeof ApiPublicWebhooksRecipeEventsRoute
@@ -306,6 +315,7 @@ export interface FileRouteTypes {
     | '/rezepte/generator'
     | '/rezepte/inspirationen'
     | '/rezepte/listen'
+    | '/rezepte/suchen'
     | '/rezepte/'
     | '/api/public/cron/import-sync'
     | '/api/public/webhooks/recipe-events'
@@ -335,6 +345,7 @@ export interface FileRouteTypes {
     | '/rezepte/generator'
     | '/rezepte/inspirationen'
     | '/rezepte/listen'
+    | '/rezepte/suchen'
     | '/rezepte'
     | '/api/public/cron/import-sync'
     | '/api/public/webhooks/recipe-events'
@@ -366,6 +377,7 @@ export interface FileRouteTypes {
     | '/rezepte/generator'
     | '/rezepte/inspirationen'
     | '/rezepte/listen'
+    | '/rezepte/suchen'
     | '/rezepte/'
     | '/api/public/cron/import-sync'
     | '/api/public/webhooks/recipe-events'
@@ -587,6 +599,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RezepteListenRouteImport
       parentRoute: typeof RezepteRoute
     }
+    '/rezepte/suchen': {
+      id: '/rezepte/suchen'
+      path: '/suchen'
+      fullPath: '/rezepte/suchen'
+      preLoaderRoute: typeof RezepteSuchenRouteImport
+      parentRoute: typeof RezepteRoute
+    }
     '/api/public/cron/import-sync': {
       id: '/api/public/cron/import-sync'
       path: '/api/public/cron/import-sync'
@@ -623,6 +642,7 @@ interface RezepteRouteChildren {
   RezepteGeneratorRoute: typeof RezepteGeneratorRoute
   RezepteInspirationenRoute: typeof RezepteInspirationenRoute
   RezepteListenRoute: typeof RezepteListenRoute
+  RezepteSuchenRoute: typeof RezepteSuchenRoute
   RezepteIndexRoute: typeof RezepteIndexRoute
 }
 
@@ -630,6 +650,7 @@ const RezepteRouteChildren: RezepteRouteChildren = {
   RezepteGeneratorRoute: RezepteGeneratorRoute,
   RezepteInspirationenRoute: RezepteInspirationenRoute,
   RezepteListenRoute: RezepteListenRoute,
+  RezepteSuchenRoute: RezepteSuchenRoute,
   RezepteIndexRoute: RezepteIndexRoute,
 }
 
