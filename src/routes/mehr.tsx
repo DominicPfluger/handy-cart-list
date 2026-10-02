@@ -8,7 +8,6 @@ import {
   BellIcon,
   GearIcon,
   LeafIcon,
-  ScanIcon,
   ShareIcon,
   PlusIcon,
   HistoryIcon,
