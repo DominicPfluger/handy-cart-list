@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { getLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { catalogQueryOptions } from "../lib/catalog-query";
-import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
+import { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
 
 export const Route = createFileRoute("/rezepte/")({
   ssr: false,
@@ -31,6 +31,7 @@ const GENERATOR_ENTRY: RecipeEntry = { id: "rk-generator", to: "/rezepte/generat
 
 function RecipesPage() {
   const { t } = useT();
+  const templates = useRecipeTemplates();
 
   return (
     <div className="space-y-5">
@@ -57,7 +58,7 @@ function RecipesPage() {
         </Link>
 
         <div className="mt-6 grid grid-cols-2 gap-2.5">
-          {RECIPE_TEMPLATES.map((x) => (
+          {templates.map((x) => (
             <Link
               key={x.id}
               to="/rezepte/generator"
@@ -67,7 +68,7 @@ function RecipesPage() {
               <span className="grid h-16 w-16 place-items-center rounded-2xl text-4xl" style={{ background: x.color }} aria-hidden="true">
                 {x.emoji}
               </span>
-              <span className="text-[13px] font-semibold leading-tight text-foreground">{t(`rk.cat.${x.id}` as MessageKey)}</span>
+              <span className="text-[13px] font-semibold leading-tight text-foreground">{templateLabel(x, t)}</span>
             </Link>
           ))}
         </div>
