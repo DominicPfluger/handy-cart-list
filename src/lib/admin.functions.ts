@@ -688,3 +688,37 @@ export const suggestCategoryProducts = createServerFn({ method: "POST" })
       return [{ name: n, emoji: it.emoji.trim() || "🛒", quantity: it.quantity > 0 ? it.quantity : 1, unit: it.unit, existingId, relevance: Math.max(1, Math.min(100, Math.round(it.relevance || 50))) }];
     });
   });
+
+/** Führt ein Dublett-Produkt in ein Zielprodukt zusammen: Verweise umbiegen, Name als Synonym übernehmen, Quelle löschen. */
+export const mergeProducts = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw) => z.object({ keepId: z.string().uuid(), removeId: z.string().uuid() }).parse(raw))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    if (data.keepId === data.removeId) throw new Error("Gleiche Produkte");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = supabaseAdmin as any;
+    const { data: src } = await sb.from("products").select("id, name").eq("id", data.removeId).single();
+    if (!src) throw new Error("Quellprodukt nicht gefunden");
+    // Verweise auf das Zielprodukt umbiegen (Konflikte werden ignoriert)
+    for (const table of ["list_items", "pantry_items", "product_aliases", "product_brands", "product_cuisines", "product_reference_prices", "product_market_order", "product_market_exclusions", "recipe_ingredients", "import_candidates"]) {
+      const col = table === "import_candidates" ? "match_product_id" : "product_id";
+      await sb.from(table).update({ [col]: data.keepId }).eq(col, data.removeId);
+    }
+    // Fehlende Übersetzungen übernehmen
+    const { data: srcTr } = await sb.from("catalog_translations").select("locale, name, is_manual").eq("entity_type", "product").eq("entity_id", data.removeId);
+    const { data: dstTr } = await sb.from("catalog_translations").select("locale").eq("entity_type", "product").eq("entity_id", data.keepId);
+    const have = new Set((dstTr ?? []).map((r: any) => r.locale));
+    for (const t of srcTr ?? []) {
+      if (!have.has(t.locale)) await sb.from("catalog_translations").insert({ entity_type: "product", entity_id: data.keepId, locale: t.locale, name: t.name, is_manual: t.is_manual });
+    }
+    // Synonyme der Quelle + deren Name als Synonyme des Ziels übernehmen
+    const { data: srcSyn } = await sb.from("product_synonyms").select("locale, term").eq("product_id", data.removeId);
+    const terms = [...(srcSyn ?? []), { locale: "de-DE", term: src.name }];
+    for (const s of terms) {
+      await sb.from("product_synonyms").upsert({ product_id: data.keepId, locale: s.locale, term: s.term }, { onConflict: "product_id,locale,lower(term)", ignoreDuplicates: true });
+    }
+    const { error } = await sb.from("products").delete().eq("id", data.removeId);
+    if (error) throw new Error(error.message);
+    return { merged: src.name as string };
+  });
