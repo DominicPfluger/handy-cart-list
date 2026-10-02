@@ -395,8 +395,8 @@ function ListPage() {
               ))}
             </div>
           )}
-        </div>
-      )}
+      </div>
+
 
       {/* List grouped by category */}
       {items.length === 0 && hydrated && (
@@ -429,16 +429,15 @@ function ListPage() {
                   >
                     <button
                       onClick={() => toggleItem(item.id)}
-                      className={`grid shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
-                        shopMode ? "h-9 w-9" : "h-6 w-6"
-                      } ${
+                      className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
+
                         item.checked
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-muted-foreground/30 bg-transparent"
                       }`}
                       aria-label={item.checked ? t("list.uncheck") : t("list.check")}
                     >
-                      {item.checked && <CheckIcon className={shopMode ? "h-5 w-5" : "h-4 w-4"} />}
+                      {item.checked && <CheckIcon className="h-4 w-4" />}
                     </button>
                     {(() => {
                       // Farbe: über die Wurzelkategorie, sonst über den Gruppennamen (z. B. ältere Einträge mit eigenem Gruppenlabel)
@@ -457,7 +456,7 @@ function ListPage() {
                       );
                     })()}
                     <div className="min-w-0 flex-1">
-                      <p className={`break-words font-medium ${shopMode ? "text-lg" : "text-sm"} ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
+                      <p className={`break-words font-medium text-sm ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
                         {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
                       </p>
                       <p className="break-words text-xs text-muted-foreground">
@@ -469,7 +468,7 @@ function ListPage() {
                         </p>
                       )}
                     </div>
-                    {!shopMode && (() => {
+                    {(() => {
                       const product = item.productId ? productById.get(item.productId) : undefined;
                       const ids = product ? departmentIdsOf(product, data.productAliases ?? []) : [];
                       if (ids.length < 2) return null;
