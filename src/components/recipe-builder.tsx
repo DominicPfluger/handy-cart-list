@@ -62,6 +62,7 @@ export function templateLabel(tpl: RecipeTemplate, t: (k: MessageKey) => string)
 export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipeId, initialTemplateId }: { onTemplateChange?: (id: string | null) => void; mode?: "generator" | "lists" | "inspiration"; loadRecipeId?: string | undefined; initialTemplateId?: RecipeTemplate["id"] | undefined } = {}) {
   const { t } = useT();
   const catalog = useCatalog();
+  const templates = useRecipeTemplates();
   const { addCatalogItem, favorites } = useShoppingList();
   const [tplId, setTplIdRaw] = useState<RecipeTemplate["id"] | null>(initialTemplateId ?? null);
   const setTplId = (id: RecipeTemplate["id"] | null) => { setTplIdRaw(id); onTemplateChange?.(id); };
@@ -102,7 +103,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const PAGE = 12;
   const THRESHOLD = 18;
 
-  const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
+  const tpl = templates.find((x) => x.id === tplId) ?? null;
 
   // Ein gespeichertes/geteiltes Rezept in den Generator laden (Klick auf Community-Karte).
   const loadedRecipe = useQuery({
@@ -114,7 +115,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   useEffect(() => {
     const r = loadedRecipe.data;
     if (!r || loadedId === r.id || catalog.products.length === 0) return;
-    const template = RECIPE_TEMPLATES.find((x) => x.id === r.template_id);
+    const template = templates.find((x) => x.id === r.template_id);
     if (!template) return;
     const next: Picks = {};
     for (const item of r.items) {
@@ -134,7 +135,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setCustomTitle(r.title);
     setCustomDesc(r.description ?? "");
     setLoadedId(r.id);
-  }, [loadedRecipe.data, loadedId, catalog.products, catalog.recipeIngredients]);
+  }, [loadedRecipe.data, loadedId, catalog.products, catalog.recipeIngredients, templates]);
   const steps = useMemo(
     () => (tpl?.steps ?? []).map((s) => {
       // Zutaten aus dem Backend (Admin-gepflegt); Fallback: feste Liste aus dem Code.
