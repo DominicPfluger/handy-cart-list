@@ -4,7 +4,7 @@ import { z } from "zod";
 import { getLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { RecipeBuilder } from "../components/recipe-builder";
-import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
+import { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
 import { catalogQueryOptions } from "../lib/catalog-query";
 
 export const Route = createFileRoute("/rezepte/generator")({
@@ -33,16 +33,18 @@ export const Route = createFileRoute("/rezepte/generator")({
 
 function Page() {
   const { t } = useT();
+  const templates = useRecipeTemplates();
   const { recipe, cat } = Route.useSearch();
-  const initialTpl = cat ? RECIPE_TEMPLATES.find((x) => x.id === cat)?.id : undefined;
+  const initialTpl = cat ? templates.find((x) => x.id === cat)?.id : undefined;
   const [tplId, setTplId] = useState<string | null>(null);
   const shownTpl = tplId ?? initialTpl ?? null;
+  const shownTemplate = shownTpl ? templates.find((x) => x.id === shownTpl) : undefined;
   return (
     <div className="space-y-5">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-foreground">
-          {shownTpl
-            ? `${RECIPE_TEMPLATES.find((x) => x.id === shownTpl)?.emoji ?? ""} ${t(`rk.cat.${shownTpl}` as MessageKey)}`.trim()
+          {shownTemplate
+            ? `${shownTemplate.emoji} ${templateLabel(shownTemplate, t)}`.trim()
             : t("rec.entryGenTitle")}
         </h1>
       </div>

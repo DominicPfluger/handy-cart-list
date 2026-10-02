@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getLocale, translate } from "@/i18n";
 import { useServerFn } from "@tanstack/react-start";
-import { sortRecipeIngredients, saveRecipeGroup, deleteRecipeGroup } from "@/lib/admin.functions";
+import { sortRecipeIngredients, saveRecipeGroup, deleteRecipeGroup, suggestRecipeStepProducts } from "@/lib/admin.functions";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -15,6 +15,28 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 type Row = { id: string; template_id: string; step_key: string; product_id: string; sort_order: number; group_id: string | null };
 type Group = { id: string; parent_id: string | null; name: string; emoji: string | null; sort_order: number };
 type Dept = { id: string; name: string; parent_id: string | null; emoji?: string | null; sort_order?: number };
+type TplRow = { id: string; emoji: string; color: string; sort_order: number; enabled: boolean };
+type StepRow = { id: string; template_id: string; key: string; name: string; emoji: string | null; min: number; max: number; required: boolean; sort_order: number };
+type PopRow = { id: string; template_id: string; picks: Record<string, string[]>; sort_order: number };
+
+async function loadTplRows(): Promise<TplRow[]> {
+  const { data, error } = await supabase.from("recipe_templates").select("id, emoji, color, sort_order, enabled").order("sort_order");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as TplRow[];
+}
+async function loadStepRows(): Promise<StepRow[]> {
+  const { data, error } = await supabase.from("recipe_steps").select("id, template_id, key, name, emoji, min, max, required, sort_order").order("sort_order");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as StepRow[];
+}
+async function loadPopRows(): Promise<PopRow[]> {
+  const { data, error } = await supabase.from("recipe_popular").select("id, template_id, picks, sort_order").order("sort_order");
+  if (error) throw new Error(error.message);
+  return (data ?? []) as PopRow[];
+}
+/** Anzeigename einer Vorlage: eingebaute über i18n, eigene über ihre Kennung. */
+const tplLabel = (id: string) =>
+  RECIPE_TEMPLATES.some((b) => b.id === id) ? T(`rk.cat.${id}` as MessageKey) : id;
 type Prod = { id: string; name: string; department_id: string; emoji: string | null; sort_order?: number };
 
 async function loadRecipeIngredients() {
@@ -43,6 +65,9 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const qc = useQueryClient();
   const { data } = useQuery({ queryKey: ["admin-recipe-ingredients"], queryFn: loadRecipeIngredients });
   const { data: groupData } = useQuery({ queryKey: ["admin-recipe-groups"], queryFn: loadRecipeGroups });
+  const { data: tplRows } = useQuery({ queryKey: ["admin-recipe-templates"], queryFn: loadTplRows });
+  const { data: stepRows } = useQuery({ queryKey: ["admin-recipe-steps"], queryFn: loadStepRows });
+  const { data: popRows } = useQuery({ queryKey: ["admin-recipe-popular"], queryFn: loadPopRows });
   const [open, setOpen] = useState(false);
   const [tplId, setTplId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -55,12 +80,20 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const sortFn = useServerFn(sortRecipeIngredients);
   const saveGroupFn = useServerFn(saveRecipeGroup);
   const deleteGroupFn = useServerFn(deleteRecipeGroup);
+  const suggestStepFn = useServerFn(suggestRecipeStepProducts);
   const [editGroupId, setEditGroupId] = useState<string | null>(null);
   const [groupFormOpen, setGroupFormOpen] = useState(false);
   const [groupParent, setGroupParent] = useState<string | null>(null);
   const [groupName, setGroupName] = useState("");
   const [groupEmoji, setGroupEmoji] = useState("");
   const [dragGroup, setDragGroup] = useState<string | null>(null);
+  // Vorlagen-/Oberkategorien-Verwaltung
+  const [manageOpen, setManageOpen] = useState(false);
+  const [tplForm, setTplForm] = useState<{ id: string; emoji: string } | null>(null);
+  const [stepForm, setStepForm] = useState<{ id: string | null; key: string; name: string; emoji: string; min: number; max: number; required: boolean } | null>(null);
+  const [popForm, setPopForm] = useState("");
+  const [suggestStep, setSuggestStep] = useState<StepRow | null>(null);
+  const [suggestPicks, setSuggestPicks] = useState<Set<string> | null>(null);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
   const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
@@ -70,7 +103,11 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     return out.join(" › ");
   };
 
-  const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
+  const templates = tplRows ?? [];
+  const stepsFor = (tid: string) => (stepRows ?? []).filter((s) => s.template_id === tid).sort((a, b) => a.sort_order - b.sort_order);
+  const steps = tplId ? stepsFor(tplId) : [];
+  const pops = tplId ? (popRows ?? []).filter((p) => p.template_id === tplId).sort((a, b) => a.sort_order - b.sort_order) : [];
+  const tpl = tplId ? { id: tplId, emoji: templates.find((x) => x.id === tplId)?.emoji ?? "🍽️", steps: steps.map((s) => ({ key: s.key, label: s.name })) } : null;
   const rows = data ?? [];
   const groups = groupData ?? [];
   const assignedFor = (stepKey: string) =>
@@ -90,6 +127,130 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       setBusy(false);
     }
   };
+  const runTpl = (fn: () => Promise<unknown>) =>
+    run(async () => {
+      await fn();
+      await qc.invalidateQueries({ queryKey: ["admin-recipe-templates"] });
+      await qc.invalidateQueries({ queryKey: ["admin-recipe-steps"] });
+      await qc.invalidateQueries({ queryKey: ["admin-recipe-popular"] });
+    });
+
+  const saveTpl = () => runTpl(async () => {
+    if (!tplForm) return;
+    const id = tplForm.id.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "");
+    if (!id) return;
+    const emoji = tplForm.emoji.trim() || "🍽️";
+    const exists = templates.some((x) => x.id === id);
+    const q = exists
+      ? supabase.from("recipe_templates").update({ emoji }).eq("id", id)
+      : supabase.from("recipe_templates").insert({ id, emoji, sort_order: templates.length + 1 });
+    const { error } = await q;
+    if (error) throw new Error(error.message);
+    setTplForm(null);
+  });
+  const removeTpl = (t: TplRow) => {
+    if (!window.confirm(T("adm.tplDeleteConfirm", { name: tplLabel(t.id) }))) return;
+    void runTpl(async () => {
+      const { error } = await supabase.from("recipe_templates").delete().eq("id", t.id);
+      if (error) throw new Error(error.message);
+      if (tplId === t.id) setTplId(null);
+    });
+  };
+  const toggleTpl = (t: TplRow) => runTpl(async () => {
+    const { error } = await supabase.from("recipe_templates").update({ enabled: !t.enabled }).eq("id", t.id);
+    if (error) throw new Error(error.message);
+  });
+  const moveTpl = (t: TplRow, dir: -1 | 1) => runTpl(async () => {
+    const list = [...templates].sort((a, b) => a.sort_order - b.sort_order);
+    const i = list.findIndex((x) => x.id === t.id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= list.length) return;
+    const a = list[i]!, b = list[j]!;
+    const { error: e1 } = await supabase.from("recipe_templates").update({ sort_order: b.sort_order }).eq("id", a.id);
+    if (e1) throw new Error(e1.message);
+    const { error: e2 } = await supabase.from("recipe_templates").update({ sort_order: a.sort_order }).eq("id", b.id);
+    if (e2) throw new Error(e2.message);
+  });
+
+  const saveStep = () => runTpl(async () => {
+    if (!stepForm || !tplId) return;
+    const key = stepForm.key.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "");
+    const name = stepForm.name.trim();
+    if (!key || !name) return;
+    const payload = { template_id: tplId, key, name, emoji: stepForm.emoji.trim() || null, min: stepForm.min, max: stepForm.max, required: stepForm.required };
+    const q = stepForm.id
+      ? supabase.from("recipe_steps").update(payload).eq("id", stepForm.id)
+      : supabase.from("recipe_steps").insert({ ...payload, sort_order: steps.length + 1 });
+    const { error } = await q;
+    if (error) throw new Error(error.message);
+    setStepForm(null);
+  });
+  const removeStep = (s: StepRow) => {
+    if (!window.confirm(T("adm.stepDeleteConfirm", { name: s.name }))) return;
+    void runTpl(async () => {
+      const { error } = await supabase.from("recipe_steps").delete().eq("id", s.id);
+      if (error) throw new Error(error.message);
+    });
+  };
+  const moveStep = (s: StepRow, dir: -1 | 1) => runTpl(async () => {
+    const list = steps;
+    const i = list.findIndex((x) => x.id === s.id);
+    const j = i + dir;
+    if (i < 0 || j < 0 || j >= list.length) return;
+    const a = list[i]!, b = list[j]!;
+    const { error: e1 } = await supabase.from("recipe_steps").update({ sort_order: b.sort_order }).eq("id", a.id);
+    if (e1) throw new Error(e1.message);
+    const { error: e2 } = await supabase.from("recipe_steps").update({ sort_order: a.sort_order }).eq("id", b.id);
+    if (e2) throw new Error(e2.message);
+  });
+
+  const addPop = () => runTpl(async () => {
+    if (!tplId || !popForm.trim()) return;
+    const picks: Record<string, string[]> = {};
+    for (const part of popForm.split(";")) {
+      const [k, v] = part.split(":");
+      if (!k?.trim() || !v?.trim()) continue;
+      picks[k.trim()] = v.split(",").map((x) => x.trim()).filter(Boolean);
+    }
+    if (Object.keys(picks).length === 0) return;
+    const { error } = await supabase.from("recipe_popular").insert({ template_id: tplId, picks, sort_order: pops.length + 1 });
+    if (error) throw new Error(error.message);
+    setPopForm("");
+  });
+  const removePop = (p: PopRow) => {
+    if (!window.confirm(T("adm.popularDeleteConfirm"))) return;
+    void runTpl(async () => {
+      const { error } = await supabase.from("recipe_popular").delete().eq("id", p.id);
+      if (error) throw new Error(error.message);
+    });
+  };
+
+  /** KI-Vorschläge für eine Oberkategorie: erst bestätigen, dann Vorschläge zum Abhaken. */
+  const startSuggest = (s: StepRow) => {
+    if (!window.confirm(T("adm.stepSuggestConfirm", { name: s.name }))) return;
+    setBusy(true);
+    const assigned = new Set(assignedFor(s.key).map((r) => r.product_id));
+    const candidates = prods.filter((p) => !assigned.has(p.id)).slice(0, 400).map((p) => ({ id: p.id, name: p.name, path: path(p.department_id) }));
+    suggestStepFn({ data: { step: s.name, template: tplLabel(tplId!), candidates } })
+      .then((r) => { setSuggestStep(s); setSuggestPicks(new Set(r.ids)); })
+      .catch((e) => toast.error((e as Error).message))
+      .finally(() => setBusy(false));
+  };
+  const applySuggest = () => run(async () => {
+    if (!suggestStep || !suggestPicks) return;
+    const s = suggestStep;
+    let max = Math.max(0, ...assignedFor(s.key).map((r) => r.sort_order));
+    const add = [...suggestPicks];
+    if (add.length) {
+      const { error } = await supabase.from("recipe_ingredients").upsert(
+        add.map((product_id) => ({ template_id: tplId!, step_key: s.key, product_id, sort_order: ++max })),
+        { onConflict: "template_id,step_key,product_id" },
+      );
+      if (error) throw new Error(error.message);
+    }
+    setSuggestStep(null);
+    setSuggestPicks(null);
+  });
 
   const groupTree = (parentId: string | null) => groups.filter((g) => g.parent_id === parentId).sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name));
   const descendants = (id: string): string[] => [id, ...groupTree(id).flatMap((g) => descendants(g.id))];
@@ -272,18 +433,111 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       <div className="mt-3 space-y-3">
 
 
-      <div className="flex flex-wrap gap-1.5">
-        {RECIPE_TEMPLATES.map((x) => (
+      <div className="flex flex-wrap items-center gap-1.5">
+        {templates.map((x) => (
           <button
             key={x.id}
-            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); }}
+            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setStepForm(null); setSuggestStep(null); }}
             aria-pressed={tplId === x.id}
-            className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}
+            className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"} ${x.enabled ? "" : "opacity-50 line-through"}`}
           >
-            {x.emoji} {T(`rk.cat.${x.id}` as MessageKey)}
+            {x.emoji} {tplLabel(x.id)}
           </button>
         ))}
+        <button type="button" onClick={() => setManageOpen((v) => !v)} className={`rounded-full border px-2.5 py-1 text-xs ${manageOpen ? "border-primary bg-primary/15 text-foreground" : "border-dashed border-border bg-background text-muted-foreground"}`}>
+          ⚙️ {T("adm.tplManage")}
+        </button>
       </div>
+
+      {manageOpen && (
+        <div className="space-y-2 rounded-lg border border-border bg-background p-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-foreground">{T("adm.tplManage")}</span>
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => setTplForm({ id: "", emoji: "" })}>{T("adm.tplNew")}</Button>
+          </div>
+          {templates.map((t, i) => (
+            <div key={t.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+              <span className="min-w-0 flex-1 truncate text-foreground">{t.emoji} {tplLabel(t.id)} <span className="text-muted-foreground">({t.id})</span></span>
+              <button type="button" disabled={busy} onClick={() => toggleTpl(t)} className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${t.enabled ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
+                {t.enabled ? T("adm.tplEnabled") : T("adm.tplDisabled")}
+              </button>
+              <button type="button" disabled={busy || i === 0} onClick={() => moveTpl(t, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
+              <button type="button" disabled={busy || i === templates.length - 1} onClick={() => moveTpl(t, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
+              <Button size="sm" variant="ghost" disabled={busy} onClick={() => setTplForm({ id: t.id, emoji: t.emoji })}>{T("adm.edit")}</Button>
+              <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeTpl(t)}>{T("adm.delete")}</Button>
+            </div>
+          ))}
+          {tplForm && (
+            <div className="flex flex-wrap items-center gap-2">
+              <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={tplForm.id} onChange={(e) => setTplForm({ ...tplForm, id: e.target.value })} className="min-w-32 flex-1" disabled={templates.some((x) => x.id === tplForm.id)} />
+              <Input aria-label="Emoji" placeholder="Emoji" value={tplForm.emoji} onChange={(e) => setTplForm({ ...tplForm, emoji: e.target.value })} className="w-20" />
+              <Button size="sm" disabled={busy || !tplForm.id.trim()} onClick={saveTpl}>{T("adm.save")}</Button>
+              <Button size="sm" variant="ghost" onClick={() => setTplForm(null)}>{T("adm.cancel")}</Button>
+            </div>
+          )}
+
+          {tplId && (
+            <div className="space-y-2 border-t border-border pt-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-foreground">{tplLabel(tplId)}</span>
+                <Button size="sm" variant="outline" disabled={busy} onClick={() => setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true })}>{T("adm.stepNew")}</Button>
+              </div>
+              {steps.map((s, i) => (
+                <div key={s.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+                  <span className="min-w-0 flex-1 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
+                  <button type="button" disabled={busy || i === 0} onClick={() => moveStep(s, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
+                  <button type="button" disabled={busy || i === steps.length - 1} onClick={() => moveStep(s, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
+                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => setStepForm({ id: s.id, key: s.key, name: s.name, emoji: s.emoji ?? "", min: s.min, max: s.max, required: s.required })}>{T("adm.edit")}</Button>
+                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeStep(s)}>{T("adm.delete")}</Button>
+                </div>
+              ))}
+              {stepForm && (
+                <div className="space-y-2 rounded-lg border border-border p-2">
+                  <p className="text-xs font-semibold text-foreground">{stepForm.id ? T("adm.stepEdit") : T("adm.stepNew")}</p>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={stepForm.key} onChange={(e) => setStepForm({ ...stepForm, key: e.target.value })} className="w-28" disabled={!!stepForm.id} />
+                    <Input aria-label={T("add.name")} placeholder={T("add.name")} value={stepForm.name} onChange={(e) => setStepForm({ ...stepForm, name: e.target.value })} className="min-w-32 flex-1" />
+                    <Input aria-label="Emoji" placeholder="Emoji" value={stepForm.emoji} onChange={(e) => setStepForm({ ...stepForm, emoji: e.target.value })} className="w-16" />
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-foreground">
+                    <label className="flex items-center gap-1">{T("adm.stepMin")} <Input type="number" min={0} max={20} value={stepForm.min} onChange={(e) => setStepForm({ ...stepForm, min: Math.max(0, Number(e.target.value) || 0) })} className="w-16" /></label>
+                    <label className="flex items-center gap-1">{T("adm.stepMax")} <Input type="number" min={1} max={20} value={stepForm.max} onChange={(e) => setStepForm({ ...stepForm, max: Math.max(1, Number(e.target.value) || 1) })} className="w-16" /></label>
+                    <label className="flex items-center gap-1"><input type="checkbox" checked={stepForm.required} onChange={(e) => setStepForm({ ...stepForm, required: e.target.checked })} className="accent-primary" /> {T("adm.stepRequired")}</label>
+                    <Button size="sm" disabled={busy || !stepForm.key.trim() || !stepForm.name.trim()} onClick={saveStep}>{T("adm.save")}</Button>
+                    <Button size="sm" variant="ghost" onClick={() => setStepForm(null)}>{T("adm.cancel")}</Button>
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-1 border-t border-border pt-2">
+                <span className="text-xs font-semibold text-foreground">{T("adm.popular")}</span>
+                {pops.map((p) => (
+                  <div key={p.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+                    <span className="min-w-0 flex-1 truncate text-muted-foreground">{Object.entries(p.picks).map(([k, v]) => `${k}: ${v.join(", ")}`).join(" · ")}</span>
+                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => removePop(p)}>{T("adm.delete")}</Button>
+                  </div>
+                ))}
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input aria-label={T("adm.popularNew")} placeholder={T("adm.popularHint")} value={popForm} onChange={(e) => setPopForm(e.target.value)} className="min-w-40 flex-1" />
+                  <Button size="sm" disabled={busy || !popForm.trim()} onClick={addPop}>{T("adm.popularNew")}</Button>
+                </div>
+              </div>
+
+              <div className="space-y-1 border-t border-border pt-2">
+                <span className="text-xs font-semibold text-foreground">{T("adm.preview")}</span>
+                <div className="rounded-xl border border-border bg-card p-2">
+                  <p className="text-sm font-semibold text-foreground">{templates.find((x) => x.id === tplId)?.emoji} {tplLabel(tplId)}</p>
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {steps.map((s) => (
+                      <span key={s.id} className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-foreground">{s.emoji} {s.name} {s.required ? "*" : ""}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {tpl && (
         <div className="space-y-4">
@@ -407,10 +661,35 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                     ))}
                   </div>
                 )}
+                {suggestStep?.key === s.key && suggestPicks && (
+                  <div className="space-y-1 rounded-lg border border-primary/40 bg-background p-2">
+                    <p className="text-xs text-muted-foreground">{T("adm.stepSuggestDone", { n: suggestPicks.size })}</p>
+                    <div className="max-h-72 space-y-0.5 overflow-y-auto">
+                      {[...suggestPicks].map((id) => {
+                        const p = prodById.get(id);
+                        return (
+                          <label key={id} className="flex items-center gap-2 rounded-lg px-2 py-1 text-xs hover:bg-accent/40">
+                            <input type="checkbox" checked onChange={() => setSuggestPicks((x) => { const n = new Set(x); n.delete(id); return n; })} className="accent-primary" />
+                            <span className="min-w-0 flex-1 truncate text-foreground">{p?.emoji} {p?.name ?? id}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button size="sm" variant="ghost" onClick={() => { setSuggestStep(null); setSuggestPicks(null); }}>{T("adm.cancel")}</Button>
+                      <Button size="sm" disabled={busy} onClick={applySuggest}>{T("adm.apply")} ({suggestPicks.size})</Button>
+                    </div>
+                  </div>
+                )}
                 {pickerStep !== s.key ? (
-                  <button type="button" onClick={() => openPicker(s.key)} className="text-xs font-medium text-primary">
-                    {T("adm.fromCatalog")}
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button type="button" onClick={() => openPicker(s.key)} className="text-xs font-medium text-primary">
+                      {T("adm.fromCatalog")}
+                    </button>
+                    <button type="button" disabled={busy} onClick={() => { const row = (stepRows ?? []).find((x) => x.template_id === tplId && x.key === s.key); if (row) startSuggest(row); }} className="text-xs font-medium text-primary disabled:opacity-50">
+                      ✨ {T("adm.stepSuggest")}
+                    </button>
+                  </div>
                 ) : (
                   <div className="space-y-1.5 rounded-lg border border-primary/40 bg-background p-2">
                     <div className="flex items-center gap-2 text-xs">

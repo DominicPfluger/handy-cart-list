@@ -9,7 +9,7 @@ import {
 import { SortableContext, arrayMove, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useT } from "../i18n";
-import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
+import { useRecipeTemplates } from "../lib/use-recipe-templates";
 import { publishRecipe, shareLink, unpublishRecipe } from "../lib/recipes-api";
 import {
   applyLayout, refreshCollections, createCollection, deleteCollection, moveCollection, flattenTree, folderPath, deleteSavedWithUndo, renameCollection, renameSaved,
@@ -25,10 +25,11 @@ type Props = {
 
 function Row({ r, userId, draggable, onOpen }: { r: SavedRecipe; userId: string; draggable: boolean; onOpen: Props["onOpen"] }) {
   const { t } = useT();
+  const templates = useRecipeTemplates();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: r.id, disabled: !draggable });
   const [editing, setEditing] = useState(false);
   const [val, setVal] = useState(r.title);
-  const rt = RECIPE_TEMPLATES.find((x) => x.id === r.templateId);
+  const rt = templates.find((x) => x.id === r.templateId);
 
   const commit = () => { setEditing(false); if (val.trim() && val.trim() !== r.title) void renameSaved(r, val); else setVal(r.title); };
   const remove = async () => {

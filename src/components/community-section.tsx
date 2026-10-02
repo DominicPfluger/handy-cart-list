@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
-import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
+import { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
 import { RecipePhoto } from "../components/recipe-photo";
 import { setRecipeImage, uploadRecipeImage } from "../lib/recipe-images";
 import { useAuthUser } from "../hooks/use-auth-user";
@@ -15,6 +15,7 @@ import {
 
 export function CommunitySection() {
   const { t } = useT();
+  const templates = useRecipeTemplates();
   const { tab, author, name } = useSearch({ from: "/rezepte/inspirationen" });
   const navigate = useNavigate({ from: "/rezepte/inspirationen" });
   const user = useAuthUser();
@@ -60,9 +61,9 @@ export function CommunitySection() {
 
       <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
         <Chip active={!cat} onClick={() => setCat(null)}>{t("cm.allCats")}</Chip>
-        {RECIPE_TEMPLATES.map((tp) => (
+        {templates.map((tp) => (
           <Chip key={tp.id} active={cat === tp.id} onClick={() => setCat(cat === tp.id ? null : tp.id)}>
-            {tp.emoji} {t(`rk.cat.${tp.id}` as MessageKey)}
+            {tp.emoji} {templateLabel(tp, t)}
           </Chip>
         ))}
       </div>
@@ -94,8 +95,9 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
 function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
   const { t, locale } = useT();
   const qc = useQueryClient();
+  const templates = useRecipeTemplates();
   const [busy, setBusy] = useState(false);
-  const tpl = RECIPE_TEMPLATES.find((x) => x.id === r.template_id);
+  const tpl = templates.find((x) => x.id === r.template_id);
   const date = new Date(r.created_at).toLocaleDateString(locale);
 
   const toggle = async () => {

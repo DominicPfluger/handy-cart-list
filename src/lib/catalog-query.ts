@@ -87,6 +87,9 @@ export function useCatalog(): Catalog {
       departmentAliases: data.departmentAliases ?? [],
       productAliases: data.productAliases ?? [],
       recipeGroups: (data.recipeGroups ?? []).map((g) => ({ ...g, name: pickName(g.names, locale, g.baseName) })),
+      recipeTemplates: (data.recipeTemplates ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
+      recipeSteps: (data.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
+      recipePopular: data.recipePopular ?? [],
     };
   }, [data, images, locale, custom, own, allMarkets]);
 }

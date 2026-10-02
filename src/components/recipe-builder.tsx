@@ -1,8 +1,9 @@
 import { uploadRecipeImage } from "../lib/recipe-images";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
+import { matchesProductSearch } from "../lib/catalog-query";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { POPULAR_RECIPES, RECIPE_TEMPLATES, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
@@ -33,9 +34,13 @@ function shuffle<T>(a: T[]) {
   return r;
 }
 
+export { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
+import { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
+
 export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipeId, initialTemplateId }: { onTemplateChange?: (id: string | null) => void; mode?: "generator" | "lists" | "inspiration"; loadRecipeId?: string | undefined; initialTemplateId?: RecipeTemplate["id"] | undefined } = {}) {
   const { t } = useT();
   const catalog = useCatalog();
+  const templates = useRecipeTemplates();
   const { addCatalogItem, favorites } = useShoppingList();
   const [tplId, setTplIdRaw] = useState<RecipeTemplate["id"] | null>(initialTemplateId ?? null);
   const setTplId = (id: RecipeTemplate["id"] | null) => { setTplIdRaw(id); onTemplateChange?.(id); };
@@ -71,12 +76,15 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
   const [openIngredientGroups, setOpenIngredientGroups] = useState<Record<string, boolean>>({});
+  const [openStep, setOpenStep] = useState<string | null>(null);
+  const [stepSearch, setStepSearch] = useState<Record<string, string>>({});
+  const summaryRef = useRef<HTMLDivElement>(null);
   const [dietOpen, setDietOpen] = useState(false);
   const [cuisineOpen, setCuisineOpen] = useState(false);
   const PAGE = 12;
   const THRESHOLD = 18;
 
-  const tpl = RECIPE_TEMPLATES.find((x) => x.id === tplId) ?? null;
+  const tpl = templates.find((x) => x.id === tplId) ?? null;
 
   // Ein gespeichertes/geteiltes Rezept in den Generator laden (Klick auf Community-Karte).
   const loadedRecipe = useQuery({
@@ -88,7 +96,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   useEffect(() => {
     const r = loadedRecipe.data;
     if (!r || loadedId === r.id || catalog.products.length === 0) return;
-    const template = RECIPE_TEMPLATES.find((x) => x.id === r.template_id);
+    const template = templates.find((x) => x.id === r.template_id);
     if (!template) return;
     const next: Picks = {};
     for (const item of r.items) {
@@ -108,7 +116,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setCustomTitle(r.title);
     setCustomDesc(r.description ?? "");
     setLoadedId(r.id);
-  }, [loadedRecipe.data, loadedId, catalog.products, catalog.recipeIngredients]);
+  }, [loadedRecipe.data, loadedId, catalog.products, catalog.recipeIngredients, templates]);
   const steps = useMemo(
     () => (tpl?.steps ?? []).map((s) => {
       // Zutaten aus dem Backend (Admin-gepflegt); Fallback: feste Liste aus dem Code.
@@ -146,6 +154,18 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     [tpl, byBase, onlyFav, favIds, diets, cuisines, picks, catalog.recipeIngredients, catalog.products, catalog.recipeGroups],
   );
 
+  // Akkordeon: Pflicht-Schritte steuern Fortschritt und automatisches Weiterschalten.
+  const stepOk = (s: (typeof steps)[number]) => (picks[s.key] ?? []).length >= s.min;
+  const requiredSteps = steps.filter((s) => s.required || s.min > 0);
+  const doneRequired = requiredSteps.filter(stepOk).length;
+  const allRequiredDone = requiredSteps.every(stepOk);
+  // Beim Öffnen einer Vorlage den ersten offenen Pflicht-Schritt aufklappen.
+  useEffect(() => {
+    if (!tpl) { setOpenStep(null); return; }
+    setOpenStep((cur) => cur ?? (steps.find((s) => !stepOk(s) && (s.required || s.min > 0))?.key ?? steps[0]?.key ?? null));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tpl?.id]);
+
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
       const next = !v;
@@ -163,27 +183,33 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     });
   };
 
-  const popular = useMemo(() => RECIPE_TEMPLATES.flatMap((template) =>
-    POPULAR_RECIPES[template.id].map((combo, i) => {
-      const p: Picks = {};
-      const items: CatalogProduct[] = [];
-      for (const step of template.steps) {
-        const dbIds = catalog.recipeIngredients
-          .filter((r) => r.templateId === template.id && r.stepKey === step.key)
-          .map((r) => r.productId);
-        const ps = (combo[step.key] ?? [])
-          .map((n) => byBase.get(n))
-          .filter((x): x is CatalogProduct => !!x && (dbIds.length > 0 ? dbIds.includes(x.id) : step.ingredients.includes(x.baseName)));
-        p[step.key] = ps.map((x) => x.id);
-        items.push(...ps);
-      }
-      return { key: `${template.id}-${i}`, template, picks: p, items };
-    }).filter((r) => r.items.length > 0)
-  ), [byBase, catalog.recipeIngredients]);
+  const popular = useMemo(() => {
+    const dbPopular = catalog.recipePopular;
+    return templates.flatMap((template) => {
+      const combos = dbPopular.length > 0
+        ? dbPopular.filter((x) => x.templateId === template.id).sort((a, b) => a.sortOrder - b.sortOrder).map((x) => x.picks)
+        : (POPULAR_RECIPES[template.id] ?? []);
+      return combos.map((combo, i) => {
+        const p: Picks = {};
+        const items: CatalogProduct[] = [];
+        for (const step of template.steps) {
+          const dbIds = catalog.recipeIngredients
+            .filter((r) => r.templateId === template.id && r.stepKey === step.key)
+            .map((r) => r.productId);
+          const ps = (combo[step.key] ?? [])
+            .map((n) => byBase.get(n))
+            .filter((x): x is CatalogProduct => !!x && (dbIds.length > 0 ? dbIds.includes(x.id) : step.ingredients.includes(x.baseName)));
+          p[step.key] = ps.map((x) => x.id);
+          items.push(...ps);
+        }
+        return { key: `${template.id}-${i}`, template, picks: p, items };
+      }).filter((r) => r.items.length > 0);
+    });
+  }, [templates, byBase, catalog.recipeIngredients, catalog.recipePopular]);
 
   const visiblePopular = tpl
     ? popular.filter((r) => r.template.id === tpl.id)
-    : RECIPE_TEMPLATES.map((template) => popular.find((r) => r.template.id === template.id)).filter((r): r is (typeof popular)[number] => !!r);
+    : templates.map((template) => popular.find((r) => r.template.id === template.id)).filter((r): r is (typeof popular)[number] => !!r);
 
   const recent = useMemo(
     () => collections
@@ -206,7 +232,14 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       const cur = prev[stepKey] ?? [];
       if (cur.includes(id)) return { ...prev, [stepKey]: cur.filter((x) => x !== id) };
       const next = max === 1 ? [id] : cur.length >= max ? [...cur.slice(1), id] : [...cur, id];
-      return { ...prev, [stepKey]: next };
+      const updated = { ...prev, [stepKey]: next };
+      // Pflicht-Schritt erfüllt → nächsten offenen Pflicht-Schritt aufklappen.
+      const step = steps.find((s) => s.key === stepKey);
+      if (step && (step.required || step.min > 0) && next.length >= step.min) {
+        const nxt = steps.find((s) => s.key !== stepKey && (s.required || s.min > 0) && (updated[s.key] ?? []).length < s.min);
+        if (nxt) setOpenStep(nxt.key);
+      }
+      return updated;
     });
   };
 
@@ -222,7 +255,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   };
 
   const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => s.products.find((p) => p.id === id)!).filter(Boolean));
-  const catName = tpl ? t(`rk.cat.${tpl.id}` as MessageKey) : "";
+  const catName = tpl ? templateLabel(tpl, t) : "";
   const title = chosen.length
     ? `${catName}: ${chosen.slice(0, 3).map((p) => p.name).join(", ")}${chosen.length > 3 ? " …" : ""}`
     : "";
@@ -382,7 +415,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       <SectionTitle emoji="🆕" bg="#E3F0E4">{t("rk.recent")}</SectionTitle>
       {recent.length === 0 && <p className="text-sm text-muted-foreground">{t("rk.emptyCollection")}</p>}
       {recentShown.map((r) => {
-        const rt = RECIPE_TEMPLATES.find((x) => x.id === r.templateId);
+        const rt = templates.find((x) => x.id === r.templateId);
         return (
           <button key={r.id} onClick={() => rt && openRecipe(rt.id, r.picks)} className={LIST_CARD_CLASS}>
             <ListCardBody emoji={rt?.emoji ?? "🍽️"} color={rt?.color} title={r.title} badge={new Date(r.savedAt).toLocaleDateString()} />
@@ -405,7 +438,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           <ListCardBody
             emoji={r.template.emoji}
             color={r.template.color}
-            kicker={!tpl ? t(`rk.cat.${r.template.id}` as MessageKey) : undefined}
+            kicker={!tpl ? templateLabel(r.template, t) : undefined}
             title={`${r.items.slice(0, 3).map((p) => p.name).join(", ")}${r.items.length > 3 ? " …" : ""}`}
             badge={t("rk.ingredientsN", { n: r.items.length })}
           />
@@ -424,7 +457,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       collections={collections}
       userId={user.id}
       filterTemplate={tpl?.id ?? null}
-      onOpen={(id, p) => { const rt = RECIPE_TEMPLATES.find((x) => x.id === id); if (rt) openRecipe(rt.id, p); }}
+      onOpen={(id, p) => { const rt = templates.find((x) => x.id === id); if (rt) openRecipe(rt.id, p); }}
     />
   ) : null;
 
@@ -439,7 +472,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 pb-20">
     <section className="space-y-4">
       <div className="flex items-start justify-between gap-2">
         {mode === "generator"
@@ -552,21 +585,75 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         </div>
       )}
 
-      {steps.map((s) => (
-        <div key={s.key} className="space-y-2">
-          <p className="text-sm font-semibold text-foreground">
-            {s.label}{" "}
-            <span className="text-xs font-normal text-muted-foreground">
-              ({s.max >= 99 ? t("rk.pickAny") : s.max === 1 ? t("rk.pickOne") : t("rk.pick", { min: s.min, max: s.max })})
+      {requiredSteps.length > 0 && (
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs font-semibold text-foreground">
+            <span>{t("rk.progress", { done: doneRequired, total: requiredSteps.length })}</span>
+            <span className="text-muted-foreground">{Math.round((doneRequired / requiredSteps.length) * 100)} %</span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-muted">
+            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(doneRequired / requiredSteps.length) * 100}%` }} />
+          </div>
+        </div>
+      )}
+
+      {steps.map((s) => {
+        const sel0 = picks[s.key] ?? [];
+        const isReq = s.required || s.min > 0;
+        const satisfied = sel0.length >= s.min;
+        const missing = isReq && !satisfied;
+        const isOpen = openStep === s.key;
+        return (
+        <div key={s.key} className={`overflow-hidden rounded-2xl border transition ${missing ? "border-destructive/60" : "border-border"} bg-card`}>
+          <button
+            type="button"
+            aria-expanded={isOpen}
+            onClick={() => setOpenStep(isOpen ? null : s.key)}
+            className="flex w-full items-center gap-2 px-3 py-2.5 text-left"
+          >
+            <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-[11px] font-bold ${satisfied ? "bg-primary text-primary-foreground" : missing ? "bg-destructive/15 text-destructive" : "bg-muted text-muted-foreground"}`}>
+              {satisfied ? "✓" : sel0.length}
             </span>
-          </p>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-semibold text-foreground">
+                {s.label}{" "}
+                <span className="text-xs font-normal text-muted-foreground">
+                  ({s.max >= 99 ? t("rk.pickAny") : s.max === 1 ? t("rk.pickOne") : t("rk.pick", { min: s.min, max: s.max })})
+                </span>
+              </span>
+              {!isOpen && sel0.length > 0 && (
+                <span className="mt-0.5 flex flex-wrap gap-1">
+                  {sel0.map((id) => {
+                    const p = s.products.find((x) => x.id === id);
+                    return p ? <span key={id} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-foreground">{p.emoji} {p.name}</span> : null;
+                  })}
+                </span>
+              )}
+            </span>
+            <span className="shrink-0 text-muted-foreground">{isOpen ? "▲" : "▼"}</span>
+          </button>
+          {isOpen && (
+          <div className="space-y-2 border-t border-border px-3 py-3">
+          {s.products.length >= 8 && (
+            <input
+              value={stepSearch[s.key] ?? ""}
+              onChange={(e) => setStepSearch((x) => ({ ...x, [s.key]: e.target.value }))}
+              placeholder={t("rk.stepSearch")}
+              aria-label={t("rk.stepSearch")}
+              className="w-full rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground outline-none focus:border-primary"
+            />
+          )}
           {s.products.length === 0 ? (
             <p className="text-xs text-muted-foreground">{t("rk.empty")}</p>
           ) : (
             (() => {
               const sel = picks[s.key] ?? [];
-              const hasGroups = s.groups.length > 0;
-              const other = s.products.filter((p) => !s.groupByProduct.get(p.id) || !s.groups.some((g) => g.id === s.groupByProduct.get(p.id)));
+              const q = (stepSearch[s.key] ?? "").trim();
+              const pool = q
+                ? s.products.filter((p) => matchesProductSearch(p.name, q) || (p.variants ?? []).some((v) => matchesProductSearch(v, q)) || (p.synonyms ?? []).some((v) => matchesProductSearch(v, q)))
+                : s.products;
+              const hasGroups = s.groups.length > 0 && !q;
+              const other = pool.filter((p) => !s.groupByProduct.get(p.id) || !s.groups.some((g) => g.id === s.groupByProduct.get(p.id)));
               const renderIngredients = (current: typeof s.products, groupKey: string) => {
                 const countKey = `${s.key}:${groupKey}`;
                 const vis = visibleCount[countKey] ?? PAGE;
@@ -603,9 +690,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   )}
                 </div>;
               };
-              if (!hasGroups) return renderIngredients(s.products, "all");
+              if (!hasGroups) return renderIngredients(pool, "all");
               return <div className="space-y-1">
-                {[...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: s.products.filter((p) => s.groupByProduct.get(p.id) === g.id) })), ...(other.length ? [{ key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: other }] : [])].map((group) => {
+                {[...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: pool.filter((p) => s.groupByProduct.get(p.id) === g.id) })), ...(other.length ? [{ key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: other }] : [])].map((group) => {
                   const key = `${s.key}:${group.key}`;
                   const expanded = !!openIngredientGroups[key];
                   return <div key={key}>
@@ -618,10 +705,13 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               </div>;
             })()
           )}
+          </div>
+          )}
         </div>
-      ))}
+        );
+      })}
 
-      <div className="rounded-2xl bg-primary-soft/40 p-4">
+      <div ref={summaryRef} className="scroll-mt-24 rounded-2xl bg-primary-soft/40 p-4">
         <p className="text-xs font-semibold uppercase tracking-wide text-primary">{t("rk.yourRecipe")}</p>
         {chosen.length === 0 ? (
           <p className="mt-1 text-sm text-muted-foreground">{t("rk.nothing")}</p>
@@ -665,6 +755,16 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         )}
       </div>
     </section>
+    <div className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-[440px] border-t border-border bg-background/95 p-3 backdrop-blur">
+      <button
+        type="button"
+        onClick={() => summaryRef.current?.scrollIntoView({ behavior: "smooth" })}
+        disabled={!allRequiredDone}
+        className="w-full rounded-full bg-primary px-4 py-3 text-sm font-bold text-primary-foreground shadow-md transition active:scale-[0.98] disabled:opacity-50"
+      >
+        {t("rk.toRecipe", { n: chosen.length })}
+      </button>
+    </div>
     {saveDialog}
     </div>
   );

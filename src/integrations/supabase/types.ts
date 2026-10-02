@@ -1129,6 +1129,41 @@ export type Database = {
           },
         ]
       }
+      recipe_popular: {
+        Row: {
+          created_at: string
+          id: string
+          picks: Json
+          sort_order: number
+          template_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          picks?: Json
+          sort_order?: number
+          template_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          picks?: Json
+          sort_order?: number
+          template_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_popular_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "recipe_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recipe_ratings: {
         Row: {
           created_at: string
@@ -1208,6 +1243,86 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      recipe_steps: {
+        Row: {
+          created_at: string
+          emoji: string | null
+          id: string
+          key: string
+          max: number
+          min: number
+          name: string
+          required: boolean
+          sort_order: number
+          template_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          key: string
+          max?: number
+          min?: number
+          name: string
+          required?: boolean
+          sort_order?: number
+          template_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          key?: string
+          max?: number
+          min?: number
+          name?: string
+          required?: boolean
+          sort_order?: number
+          template_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_steps_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "recipe_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recipe_templates: {
+        Row: {
+          color: string | null
+          created_at: string
+          emoji: string | null
+          enabled: boolean
+          id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          emoji?: string | null
+          enabled?: boolean
+          id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          emoji?: string | null
+          enabled?: boolean
+          id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       recipes: {
         Row: {
