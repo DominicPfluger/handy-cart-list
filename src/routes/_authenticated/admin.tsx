@@ -690,28 +690,30 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
   );
 }
 
-type Suggestion = { name: string; emoji: string; reason: string; scope: "global" | "market" };
+type Suggestion = { name: string; emoji: string; reason: string; scope: "global" | "market"; source?: string };
 
-function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market }: {
+function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path }: {
   onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>) => void; onCancel: () => void;
-  onSuggest: (typed: string[]) => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string;
+  onSuggest: (typed: string[], mode: "web" | "ai") => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string; path?: string;
 }) {
   const [mkOnly, setMkOnly] = useState<Set<string>>(new Set());
   const [text, setText] = useState("");
   const [sugs, setSugs] = useState<Suggestion[] | null>(null);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [loadingS, setLoadingS] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(!!autoSuggest);
+  const [mode, setMode] = useState<"web" | "ai">("web");
   const fetchS = async () => {
+    setConfirmOpen(false);
     setLoadingS(true);
     try {
       const typed = text.split("\n").map((l) => l.trim()).filter(Boolean);
-      const r = await onSuggest(typed);
+      const r = await onSuggest(typed, mode);
       setSugs(r); setPicked(new Set(r.map((x) => x.name)));
       setMkOnly((s) => { const n = new Set(s); r.forEach((x) => { if (x.scope === "market") n.add(x.name); }); return n; });
     } catch (e) { toast.error((e as Error).message); }
     finally { setLoadingS(false); }
   };
-  useEffect(() => { if (autoSuggest) void fetchS(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const takeOver = () => {
     const add = (sugs ?? []).filter((x) => picked.has(x.name)).map((x) => x.name);
     setText((t) => [...t.split("\n").map((l) => l.trim()).filter(Boolean), ...add].join("\n"));
