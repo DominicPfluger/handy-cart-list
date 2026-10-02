@@ -443,6 +443,7 @@ export const de = {
   "rs.speak": "Rezept vorlesen",
   "rs.speakStop": "Vorlesen stoppen",
   "rs.speakIngredients": "Zutaten",
+  "rs.portions": "Portionen",
   "rs.expand": "Aufklappen",
   "rs.collapse": "Zuklappen",
   "rs.newFolder": "+ Neuer Ordner",
