@@ -326,6 +326,18 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const effId = item?.id ?? newId ?? undefined;
   const table = isDept ? "departments" : "products";
 
+  // KI-Vorschlag für den Bildtext einer Kategorie, abgeleitet aus den enthaltenen Produkten.
+  const [suggesting, setSuggesting] = useState(false);
+  const loadSuggestion = (overwrite: boolean) => {
+    if (!isDept || !effId) return;
+    setSuggesting(true);
+    void suggestPrompt({ data: { departmentId: effId } })
+      .then((r) => { if (r.prompt) setHint((h) => (overwrite || !h.trim() ? r.prompt : h)); })
+      .catch(() => {})
+      .finally(() => setSuggesting(false));
+  };
+  useEffect(() => { loadSuggestion(false); }, [effId, isDept]);
+
   const save = async () => {
     await p.run(async () => {
     if (!name.trim()) throw new Error(T("tile.nameRequired"));
@@ -384,7 +396,12 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
                 <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
               </div>
-              <Input aria-label={T("tile.aiHint")} placeholder={T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 rounded-xl text-sm" />
+              <div className="flex gap-2">
+                <Input aria-label={T("tile.aiHint")} placeholder={suggesting ? T("tile.aiSuggestLoading") : T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 flex-1 rounded-xl text-sm" />
+                {isDept && (
+                  <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true)}>↻</Button>
+                )}
+              </div>
               <Button size="sm" variant="outline" className="self-start" onClick={() => p.run(async () => {
                 await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
                 const { data } = await supabase.storage.from("catalog-images").createSignedUrl(`${table}/${effId}.png`, 600);
