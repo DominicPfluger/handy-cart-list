@@ -264,18 +264,20 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
-        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never }).eq("id", item.id));
+        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, variants }).eq("id", item.id));
       if (item.name !== base.name) {
         await p.must(supabase.from("catalog_translations").delete().eq("entity_id", item.id).eq("is_manual", false));
         await p.translateIds([item.id]);
       }
+      if (!isDept) void trVariants({ data: { productId: item.id } }).catch(() => {});
     } else {
       const r = isDept
         ? await supabase.from("departments").insert({ ...base, parent_id: p.cur, sort_order: p.children.length + 1 }).select("id").single()
-        : await supabase.from("products").insert({ ...base, department_id: p.cur!, default_quantity: qty, default_unit: unit as never, sort_order: p.products.length + 1 }).select("id").single();
+        : await supabase.from("products").insert({ ...base, department_id: p.cur!, default_quantity: qty, default_unit: unit as never, variants, sort_order: p.products.length + 1 }).select("id").single();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
       await p.translateIds([id]);
+      if (!isDept) void trVariants({ data: { productId: id } }).catch(() => {});
       setNewId(id);
     }
     if (!isDept && id && price.trim() && !Number.isNaN(Number(price))) {
