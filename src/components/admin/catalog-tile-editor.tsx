@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useRef, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,7 +8,7 @@ import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { generateImageFor, listProductImages } from "@/lib/product-media.functions";
-import { suggestCategoryProducts, translateVariants } from "@/lib/admin.functions";
+import { suggestCategoryProducts, suggestImagePrompt, translateVariants } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -289,6 +289,7 @@ export function CatalogTileEditor(p: {
 function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNullable<Target>; onClose: () => void; imgUrl: string | undefined }) {
   const genImg = useServerFn(generateImageFor);
   const trVariants = useServerFn(translateVariants);
+  const suggestPrompt = useServerFn(suggestImagePrompt);
   const isDept = p.target.kind === "department";
   const item = p.target.id ? (isDept ? p.depts.find((d) => d.id === p.target.id) : p.products.find((x) => x.id === p.target.id)) : undefined;
   const prod = !isDept ? (item as TileProd | undefined) : undefined;
