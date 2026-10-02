@@ -301,7 +301,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const effId = item?.id ?? newId ?? undefined;
   const table = isDept ? "departments" : "products";
 
-  const save = () => p.run(async () => {
+  const save = async () => {
+    await p.run(async () => {
     if (!name.trim()) throw new Error(T("tile.nameRequired"));
     const base = { name: name.trim(), emoji: emoji.trim() || null };
     let id = item?.id;
@@ -330,7 +331,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     }
     // Bei neuen Einträgen offen lassen, damit gleich ein Bild ergänzt werden kann.
     if (item) p.onClose();
-  });
+    });
+    if (!isDept && item && headingSel !== curHeadingId) p.onAssignHeading?.(item.id, headingSel);
+  };
 
   const upload = (file: File) => p.run(async () => {
     const blob = await prepareCategoryImage(file);
