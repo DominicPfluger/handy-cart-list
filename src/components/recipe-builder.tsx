@@ -3,7 +3,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
-import { matchesProductSearch } from "../lib/catalog-query";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { POPULAR_RECIPES, RECIPE_TEMPLATES, STEP_EMOJIS, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
@@ -76,7 +75,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
-  const [stepSearch, setStepSearch] = useState<Record<string, string>>({});
   const summaryRef = useRef<HTMLDivElement>(null);
   const [dietOpen, setDietOpen] = useState(false);
   const [cuisineOpen, setCuisineOpen] = useState(false);
@@ -158,7 +156,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const requiredSteps = steps.filter((s) => s.required || s.min > 0);
   const doneRequired = requiredSteps.filter(stepOk).length;
   const allRequiredDone = requiredSteps.every(stepOk);
-  useEffect(() => { setVisibleCount({}); setStepSearch({}); setOpenGroups({}); }, [tplId]);
+  useEffect(() => { setVisibleCount({}); setOpenGroups({}); }, [tplId]);
 
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
@@ -614,25 +612,13 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             </span>
           </div>
           <div className="space-y-2 border-t border-border px-3 py-3">
-          {s.products.length >= 8 && (
-            <input
-              value={stepSearch[s.key] ?? ""}
-              onChange={(e) => setStepSearch((x) => ({ ...x, [s.key]: e.target.value }))}
-              placeholder={t("rk.stepSearch")}
-              aria-label={t("rk.stepSearch")}
-              className="w-full rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground outline-none focus:border-primary"
-            />
-          )}
           {s.products.length === 0 ? (
             <p className="text-xs text-muted-foreground">{t("rk.empty")}</p>
           ) : (
             (() => {
               const sel = picks[s.key] ?? [];
-              const q = (stepSearch[s.key] ?? "").trim();
-              const pool = q
-                ? s.products.filter((p) => matchesProductSearch(p.name, q) || (p.variants ?? []).some((v) => matchesProductSearch(v, q)) || (p.synonyms ?? []).some((v) => matchesProductSearch(v, q)))
-                : s.products;
-              const hasGroups = s.groups.length > 0 && !q;
+              const pool = s.products;
+              const hasGroups = s.groups.length > 0;
               const groups = hasGroups
                 ? [...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: pool.filter((p) => s.groupByProduct.get(p.id) === g.id) })),
                     { key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: pool.filter((p) => !s.groups.some((g) => g.id === s.groupByProduct.get(p.id))) }].filter((g) => g.products.length > 0)
@@ -656,13 +642,13 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               if (!hasGroups) {
                 const ordered = groups.flatMap((g) => g.products);
                 const limit = visibleCount[s.key] ?? PAGE;
-                const expanded = limit >= ordered.length || !!q;
+                const expanded = limit >= ordered.length;
                 const shownIds = new Set(ordered.slice(0, expanded ? ordered.length : limit).map((p) => p.id));
                 for (const id of sel) shownIds.add(id);
                 const hiddenCount = ordered.filter((p) => !shownIds.has(p.id)).length;
                 return <div className="space-y-3">
                   {ordered.filter((p) => shownIds.has(p.id)).map(chip)}
-                  {!q && ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
+                  {ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
                     onClick={() => setVisibleCount((x) => ({ ...x, [s.key]: expanded ? PAGE : Math.min(ordered.length, limit + PAGE) }))}
                     className="text-xs font-medium text-primary" aria-expanded={expanded}>
                     {expanded ? t("rk.showLess") : t("rk.showMore", { count: Math.min(hiddenCount, PAGE) })}
@@ -694,7 +680,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   const gKey = `${s.key}:${group.key}`;
                   const gOpen = !!openGroups[gKey];
                   const gLimit = visibleCount[gKey] ?? PAGE;
-                  const gExpanded = gLimit >= group.products.length || !!q;
+                  const gExpanded = gLimit >= group.products.length;
                   const shownIds = new Set(group.products.slice(0, gExpanded ? group.products.length : gLimit).map((p) => p.id));
                   for (const id of sel) if (group.products.some((p) => p.id === id)) shownIds.add(id);
                   const shown = gOpen ? group.products.filter((p) => shownIds.has(p.id)) : group.products.filter((p) => sel.includes(p.id));
@@ -705,7 +691,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                       <div className="flex flex-wrap items-center gap-2">
                         {shown.map(chip)}
                       </div>
-                      {gOpen && !q && gHidden > 0 && (
+                      {gOpen && gHidden > 0 && (
                         <Button variant="ghost" size="sm" type="button"
                           onClick={() => setVisibleCount((x) => ({ ...x, [gKey]: gExpanded ? PAGE : Math.min(group.products.length, gLimit + PAGE) }))}
                           className="mt-1 text-xs font-medium text-primary" aria-expanded={gExpanded}>
