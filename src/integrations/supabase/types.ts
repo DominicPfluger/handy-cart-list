@@ -1340,6 +1340,7 @@ export type Database = {
           satiety: string | null
           share_slug: string | null
           spiciness: string | null
+          taste: string | null
           template_id: string
           title: string
           updated_at: string
@@ -1359,6 +1360,7 @@ export type Database = {
           satiety?: string | null
           share_slug?: string | null
           spiciness?: string | null
+          taste?: string | null
           template_id: string
           title: string
           updated_at?: string
@@ -1378,6 +1380,7 @@ export type Database = {
           satiety?: string | null
           share_slug?: string | null
           spiciness?: string | null
+          taste?: string | null
           template_id?: string
           title?: string
           updated_at?: string
