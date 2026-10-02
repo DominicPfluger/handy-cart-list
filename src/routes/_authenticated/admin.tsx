@@ -688,7 +688,7 @@ function Editor(p: {
                     onDrop={(e) => {
                       e.preventDefault();
                       if (vDrag === null || vDrag === vi) { setVDrag(null); setVOver(null); return; }
-                      setVariants((x) => { const next = [...x]; const [movedV] = next.splice(vDrag, 1); next.splice(vi, 0, movedV); return next; });
+                      setVariants((x) => { const next = [...x]; const movedV = next[vDrag]!; next.splice(vDrag, 1); next.splice(vi, 0, movedV); return next; });
                       setVDrag(null); setVOver(null);
                     }}
                     onDragEnd={() => { setVDrag(null); setVOver(null); }}
