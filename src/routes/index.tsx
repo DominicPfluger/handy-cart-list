@@ -19,6 +19,7 @@ import {
 } from "../lib/catalog-query";
 import { getLocale, pickName } from "../i18n";
 import { deleteItemPhotos } from "../lib/item-photo-store";
+import { ItemPhoto } from "../components/item-photo";
 import {
   CheckIcon,
   PlusIcon,
@@ -403,6 +404,7 @@ function ListPage() {
                         </p>
                       )}
                     </div>
+                    <ItemPhoto itemId={item.id} readOnly />
                     {(() => {
                       const product = item.productId ? productById.get(item.productId) : undefined;
                       const ids = product ? departmentIdsOf(product, data.productAliases ?? []) : [];

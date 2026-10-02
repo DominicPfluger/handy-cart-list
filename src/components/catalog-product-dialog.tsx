@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { prepareItemPhoto } from "../lib/item-photo-store";
 import { brandsFor, departmentIdsOf, pathTo, useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { getUnits, formatQuantity, type UnitId } from "../lib/units";
@@ -57,6 +58,25 @@ export function CatalogProductDialog({
   const [unit, setUnit] = useState<UnitId>("stueck");
   const [organic, setOrganic] = useState(false);
   const [note, setNote] = useState("");
+  const [photo, setPhoto] = useState<Blob | undefined>(undefined);
+  const [photoUrl, setPhotoUrl] = useState<string | undefined>(undefined);
+  const [photoBusy, setPhotoBusy] = useState(false);
+  const photoInput = useRef<HTMLInputElement>(null);
+  useEffect(() => () => { if (photoUrl) URL.revokeObjectURL(photoUrl); }, [photoUrl]);
+  const pickPhoto = async (file: File | undefined) => {
+    if (!file) return;
+    setPhotoBusy(true);
+    try {
+      const blob = await prepareItemPhoto(file);
+      setPhoto(blob);
+      setPhotoUrl(URL.createObjectURL(blob));
+    } catch {
+      /* Foto konnte nicht verarbeitet werden */
+    } finally {
+      setPhotoBusy(false);
+    }
+  };
+  const clearPhoto = () => { setPhoto(undefined); setPhotoUrl(undefined); };
   const [selected, setSelected] = useState<string[]>([]);
   const [custom, setCustom] = useState<string[]>([]);
   const [customInput, setCustomInput] = useState("");
@@ -70,6 +90,8 @@ export function CatalogProductDialog({
     setUnit((favQty?.unit ?? product.defaultUnit) as UnitId);
     setOrganic(false);
     setNote("");
+    setPhoto(undefined);
+    setPhotoUrl(undefined);
     setSelected([]);
     setCustom([]);
     setCustomInput("");
@@ -115,6 +137,7 @@ export function CatalogProductDialog({
       groupLabel: chosenDept?.name ?? groupLabel,
       groupEmoji: (chosenDept ? chosenDept.emoji : groupEmoji) ?? undefined,
       note,
+      photo,
     });
     if (chosenDept) setPreferred(product.id, chosenDept.id);
     onOpenChange(false);
@@ -276,6 +299,29 @@ export function CatalogProductDialog({
             placeholder={t("dlg.notePlaceholder")}
             maxLength={120}
             className="h-11 rounded-xl bg-card"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>{t("dlg.photoNote")}</Label>
+          <div className="flex items-center gap-3">
+            {photoUrl && (
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-border">
+                <img src={photoUrl} alt="" className="h-full w-full object-cover" />
+                <button type="button" onClick={clearPhoto} aria-label={t("dlg.photoRemove")} className="absolute right-0.5 top-0.5 grid h-6 w-6 place-items-center rounded-full bg-background/90 text-xs text-foreground">✕</button>
+              </div>
+            )}
+            <Button type="button" variant="outline" onClick={() => photoInput.current?.click()} disabled={photoBusy} className="h-11 flex-1 rounded-xl">
+              {photoBusy ? "…" : `📷 ${t("dlg.photoTake")}`}
+            </Button>
+          </div>
+          <input
+            ref={photoInput}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            className="hidden"
+            onChange={(e) => { pickPhoto(e.target.files?.[0]); e.target.value = ""; }}
           />
         </div>
 
