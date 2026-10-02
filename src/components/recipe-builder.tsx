@@ -164,7 +164,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setOpenStep((cur) => cur ?? (steps.find((s) => !stepOk(s) && (s.required || s.min > 0))?.key ?? steps[0]?.key ?? null));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tpl?.id]);
-  useEffect(() => { setVisibleCount({}); setStepSearch({}); setOpenGroups({}); }, [tplId]);
+  useEffect(() => { setVisibleCount({}); setStepSearch({}); }, [tplId]);
 
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
