@@ -6,7 +6,7 @@ import { cachedCatalogImage } from "../lib/catalog-image-cache";
 function CachedImage({ path, signedUrl, className, fallback }: { path?: string | null; signedUrl?: string | null; className: string; fallback: React.ReactNode }) {
   const [url, setUrl] = useState<string | null>(null);
   useEffect(() => {
-    if (!path || !signedUrl) return;
+    if (!path) return;
     let active = true;
     let objectUrl: string | null = null;
     cachedCatalogImage(path, signedUrl).then((result) => {
@@ -23,7 +23,7 @@ export function ProductIcon({ emoji, iconUrl, iconPath, className = "h-full w-fu
   emoji?: string | null | undefined; iconUrl?: string | null | undefined; iconPath?: string | null | undefined; className?: string; symbolClassName?: string; fallback?: string;
 }) {
   const mode = useIconSet();
-  return mode === "images" && iconUrl && iconPath
+  return mode === "images" && iconPath
     ? <CachedImage key={iconPath} path={iconPath} signedUrl={iconUrl} className={className} fallback={<ProductEmoji emoji={emoji} fallback={fallback} className={symbolClassName} />} />
     : <ProductEmoji emoji={emoji} fallback={fallback} className={symbolClassName} />;
 }
@@ -32,7 +32,7 @@ export function DepartmentIcon({ emoji, imageUrl, imagePath, className = "max-h-
   emoji?: string | null | undefined; imageUrl?: string | null | undefined; imagePath?: string | null | undefined; className?: string; symbolClassName?: string;
 }) {
   const mode = useIconSet();
-  return mode === "images" && imageUrl && imagePath
+  return mode === "images" && imagePath
     ? <CachedImage key={imagePath} path={imagePath} signedUrl={imageUrl} className={className} fallback={<span aria-hidden="true" className={symbolClassName}>{emoji ?? "🧺"}</span>} />
     : <span aria-hidden="true" className={symbolClassName}>{emoji ?? "🧺"}</span>;
 }
