@@ -8,6 +8,7 @@
 
 Priorisierte Verbesserungen (Plan vom 2.10.2026 genehmigt):
 
+- [x] Rezept-Suche (/rezepte/suchen): Filter nach Sättigung, Schärfe und Preisklasse mit Trefferliste öffentlicher Rezepte (Eigenschaften-Badges, Zurücksetzen, Leerzustand) — Browser-Test OK, Typcheck + Build OK
 - [x] 1. Schriftgrösse einstellbar (Mehr): Klein/Normal/Gross, gerätelokal (shoppi:font-size) — Browser-Test: 18px, bleibt nach Reload
 - [x] 2. Schneller erfassen & abhaken: Schnell-Chips aus Kauf-Historie, Mengen +/− am Eintrag, Einkaufs-Modus mit Wake Lock — Browser-Test OK
 - [x] 3. Foto pro Listeneintrag: IndexedDB lokal, WebP ≤200 KB, Tipp = gross — Browser-Test: Aufnahme, Miniatur, Grossansicht, Löschen OK
