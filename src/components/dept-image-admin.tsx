@@ -5,6 +5,7 @@ import { prepareCategoryImage, uploadCategoryImage, deleteCategoryImage, signedC
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
+import { ZoomableImage } from "@/components/admin/zoomable-image";
 
 const T = (key: MessageKey) => translate(getLocale(), key);
 
@@ -59,7 +60,7 @@ export function DeptImageEditor({ deptId, imagePath, onChanged }: { deptId: stri
       <h3 className="text-sm font-semibold text-foreground">{T("adm.image")}</h3>
       <div className="flex items-center gap-3">
         <div className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl border border-border bg-background">
-          {preview ? <img src={preview} alt="" className="h-full w-full object-contain" /> : <span className="text-2xl text-muted-foreground">🖼️</span>}
+          {preview ? <ZoomableImage src={preview} className="h-full w-full object-contain" /> : <span className="text-2xl text-muted-foreground">🖼️</span>}
         </div>
         <div className="flex flex-1 flex-col gap-1.5">
           <Button size="sm" variant="outline" disabled={busy} onClick={() => fileRef.current?.click()}>

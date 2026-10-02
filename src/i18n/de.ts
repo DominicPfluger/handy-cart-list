@@ -662,6 +662,7 @@ export const de = {
   "adm.imageDone": "Bild gespeichert",
   "adm.imageError": "Bild konnte nicht gespeichert werden",
   "adm.imageHint": "Wird automatisch auf 512 × 512 px zugeschnitten und als PNG gespeichert.",
+  "adm.imgDblHint": "Bild durch Doppelklick vergrössern.",
   "adm.edit": "Bearbeiten",
   "adm.new.department": "Neue Kategorie",
   "adm.new.product": "Neues Produkt",

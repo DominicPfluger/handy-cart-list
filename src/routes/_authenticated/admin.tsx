@@ -18,6 +18,8 @@ import { DeptAliasEditor, DeptAliasRows } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductAliasEditor, ProductAliasRows } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
+import { ZoomableImage } from "@/components/admin/zoomable-image";
+import { signedCategoryImageUrl } from "@/lib/image-upload";
 import { MarketAdmin, MarketAdminsManager, MARKETS } from "@/components/market-admin";
 import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
@@ -808,6 +810,14 @@ function Editor(p: {
   };
   const tr = data.tr.get(sel.id) ?? {};
   const title = T(`adm.edit.${sel.kind}` as MessageKey);
+  const [prodImgUrl, setProdImgUrl] = useState<string | null>(null);
+  useEffect(() => {
+    let alive = true;
+    setProdImgUrl(null);
+    if (!prod?.image_path) return;
+    signedCategoryImageUrl(prod.image_path).then((u) => { if (alive) setProdImgUrl(u); });
+    return () => { alive = false; };
+  }, [prod?.image_path]);
 
   return (
     <div className="fixed inset-0 z-[60] flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
@@ -826,6 +836,14 @@ function Editor(p: {
             {sel.kind === "department" && <option value="">{T("adm.topLevel")}</option>}
             {p.deptOptions.filter((o) => o.id !== sel.id).map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
           </select>
+        )}
+        {prod && prodImgUrl && (
+          <div className="flex items-center gap-3">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background">
+              <ZoomableImage src={prodImgUrl} className="h-full w-full object-contain" />
+            </div>
+            <p className="text-[11px] text-muted-foreground">{T("adm.imgDblHint")}</p>
+          </div>
         )}
         {prod && (
           <div className="grid grid-cols-2 gap-2">

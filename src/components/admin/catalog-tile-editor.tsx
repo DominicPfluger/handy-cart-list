@@ -12,6 +12,7 @@ import { suggestCategoryProducts } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -45,6 +46,7 @@ export function CatalogTileEditor(p: {
   const [target, setTarget] = useState<Target>(null);
   const [drag, setDrag] = useState<Drag>(null);
   const [over, setOver] = useState<string | null>(null);
+  const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
   const moved = useRef(false);
   const deptById = useMemo(() => new Map(p.depts.map((d) => [d.id, d])), [p.depts]);
@@ -144,8 +146,9 @@ export function CatalogTileEditor(p: {
               <button type="button" aria-label={p.nm(c.id, c.name)}
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
                 onClick={click(() => p.setCur(c.id))}
+                onDoubleClick={() => { const u = img(c.image_path); if (u) setZoom(u); }}
                 className={`flex h-16 w-full items-center justify-center overflow-hidden rounded-xl text-4xl ${editMode ? "cursor-grab touch-none" : ""}`}>
-                {img(c.image_path) ? <img src={img(c.image_path)} alt="" className="h-full w-full object-cover" /> : c.emoji ?? "📁"}
+                {img(c.image_path) ? <ZoomableImage src={img(c.image_path)!} className="h-full w-full object-cover" /> : c.emoji ?? "📁"}
               </button>
               <span className="line-clamp-2 text-center text-[13px] font-bold leading-tight text-foreground">{p.nm(c.id, c.name)}</span>
               {editMode && (
@@ -170,9 +173,9 @@ export function CatalogTileEditor(p: {
             return (
               <div key={x.id} data-drop="product" data-id={x.id} data-index={i}
                 className={`flex items-center gap-3 px-3 py-2 ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? "bg-primary-soft" : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
-                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers}
+                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers} onDoubleClick={() => { const u = img(x.image_path); if (u) setZoom(u); }}
                   className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl ${editMode ? "cursor-grab touch-none" : ""}`}>
-                  {img(x.image_path) ? <img src={img(x.image_path)} alt="" className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
+                  {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
                 </span>
                 <button type="button" disabled={!editMode} onClick={click(() => setTarget({ kind: "product", id: x.id }))} className="min-w-0 flex-1 text-left">
                   <div className="truncate text-sm font-semibold text-foreground">{p.nm(x.id, x.name)}</div>
@@ -216,6 +219,8 @@ export function CatalogTileEditor(p: {
         <ItemSheet key={`${target.kind}:${target.id}`} {...p} target={target} onClose={() => setTarget(null)}
           imgUrl={target.id ? img(target.kind === "department" ? deptById.get(target.id)?.image_path : p.products.find((x) => x.id === target.id)?.image_path) : undefined} />
       )}
+
+      {zoom && <ImageZoomOverlay src={zoom} open onClose={() => setZoom(null)} />}
     </div>
   );
 }
@@ -282,7 +287,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
-            {p.imgUrl ? <img src={p.imgUrl} alt="" className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
+            {p.imgUrl ? <ZoomableImage src={p.imgUrl} className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
           </div>
           {effId && (
             <div className="flex flex-1 flex-col gap-2">
