@@ -285,6 +285,61 @@ function AdminPage() {
   };
 
   /** Produkt unter eine Überschrift verschieben (ans Ende der Gruppe; "" = ganz nach oben, vor die erste Überschrift). */
+  /** Produkt an Position `to` (0..n in `list`) einfügen und der Überschrift `headingId` ("" = keine) zuordnen.
+   *  Danach wird jede Überschrift auf das erste eigene Produkt ihrer Gruppe neu verankert. */
+  const moveProduct = (list: { id: string }[], productId: string, to: number, headingId: string) => {
+    const from = list.findIndex((x) => x.id === productId);
+    if (from < 0) return;
+    const isOwn = (id: string) => !id.startsWith("alias:");
+    // Gruppen vor dem Verschieben ermitteln
+    const anchorIdx = headings.map((h) => ({ h, i: list.findIndex((x) => x.id === h.before_product_id) })).filter((x) => x.i >= 0).sort((a, b) => a.i - b.i);
+    const members = new Map<string, Set<string>>();
+    anchorIdx.forEach(({ h, i }, k) => {
+      const end = anchorIdx[k + 1]?.i ?? list.length;
+      members.set(h.id, new Set(list.slice(i, end).map((x) => x.id)));
+    });
+    for (const s of members.values()) s.delete(productId);
+    if (headingId) members.get(headingId)?.add(productId);
+    const rest = list.filter((x) => x.id !== productId);
+    const at = Math.max(0, Math.min(to > from ? to - 1 : to, rest.length));
+    const next = [...rest.slice(0, at), list[from]!, ...rest.slice(at)];
+    const changed = next.some((x, i) => x.id !== list[i]!.id);
+    // Neue Anker
+    const used = new Set<string>();
+    const updates: { h: Head; anchor: string }[] = [];
+    for (const { h } of anchorIdx) {
+      const m = members.get(h.id)!;
+      let anchor = next.find((x) => m.has(x.id) && isOwn(x.id))?.id;
+      if (!anchor) {
+        // Leere Gruppe: Überschrift bleibt an ihrer Stelle, vor dem nächsten eigenen Produkt
+        const oldPos = list.findIndex((x) => x.id === h.before_product_id);
+        const after = list.slice(oldPos + 1).find((x) => isOwn(x.id) && x.id !== productId && !used.has(x.id));
+        anchor = after?.id ?? h.before_product_id;
+      }
+      used.add(anchor);
+      if (anchor !== h.before_product_id) updates.push({ h, anchor });
+    }
+    if (!changed && updates.length === 0) return;
+    const pos = new Map(next.map((x, i) => [x.id, i + 1]));
+    if (!mk) {
+      qc.setQueryData(["admin-catalog"], (old: Record<string, unknown> | undefined) => {
+        if (!old) return old;
+        const prods = (old["prods"] as Array<{ id: string; sort_order: number }>).map((x) => (pos.has(x.id) ? { ...x, sort_order: pos.get(x.id)! } : x));
+        prods.sort((a, b) => a.sort_order - b.sort_order || (a.id < b.id ? -1 : 1));
+        const up = new Map(updates.map((u) => [u.h.id, u.anchor]));
+        const heads = (old["heads"] as Head[] | undefined)?.map((h) => (up.has(h.id) ? { ...h, before_product_id: up.get(h.id)! } : h));
+        return { ...old, prods, ...(heads ? { heads } : {}) };
+      });
+    }
+    qc.setQueryData(ALIAS_KEY, (old: Array<{ id: string; sort_order: number }> | undefined) =>
+      old?.map((a) => (pos.has(`alias:${a.id}`) ? { ...a, sort_order: pos.get(`alias:${a.id}`)! } : a)));
+    run(async () => {
+      if (changed) await saveOrder(next);
+      for (const u of updates) await saveH({ data: { id: u.h.id, departmentId: u.h.department_id, beforeProductId: u.anchor } });
+      await qc.invalidateQueries({ queryKey: ALIAS_KEY });
+    }, T("adm.orderSaved"));
+  };
+
   const assignHeading = async (productId: string, headingId: string) => {
     const prod0 = d?.prods.find((x) => x.id === productId);
     if (!d || !prod0) return;
@@ -546,6 +601,7 @@ function AdminPage() {
             }, T("adm.created")); }}
             onRemoveDeptAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("department_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY }); }, T("adm.deleted")); }}
             onMoveHeading={moveHeading}
+            onMoveProduct={(id, to, headingId) => moveProduct(products, id, to, headingId)}
             onAssignHeading={(productId, headingId) => run(() => assignHeading(productId, headingId), T("adm.saved"))}
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
