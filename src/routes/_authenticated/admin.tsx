@@ -228,20 +228,19 @@ function AdminPage() {
 
   /** Produkte nach Kriterium sortieren; Überschriften-Gruppen bleiben erhalten. */
   const sortProducts = (crit?: typeof sortBy) => {
-    const sortBy_ = crit ?? sortBy;
+    const c = crit ?? sortBy;
     if (!cur || products.length < 2) return;
-    const sortBy = sortBy_;
-    const label = T(`adm.crit.${sortBy}` as MessageKey);
+    const label = T(`adm.crit.${c}` as MessageKey);
     if (!confirm(T("adm.sortConfirm", { label }))) return;
     const anchors = new Set(headings.map((h) => h.before_product_id));
     const groups: (typeof products)[] = [];
     products.forEach((p, i) => { if (i === 0 || anchors.has(p.id)) groups.push([]); groups[groups.length - 1]!.push(p); });
     run(async () => {
       let ordered: (typeof products)[];
-      if (sortBy === "alphabetical") {
+      if (c === "alphabetical") {
         ordered = groups.map((g) => [...g].sort((a, b) => a.name.localeCompare(b.name, "de")));
       } else {
-        const r = await rank({ data: { path: pathText(), criterion: sortBy, groups: groups.map((g) => g.map((p) => p.name)), ...(mk ? { market: mk } : {}) } });
+        const r = await rank({ data: { path: pathText(), criterion: c, groups: groups.map((g) => g.map((p) => p.name)), ...(mk ? { market: mk } : {}) } });
         ordered = groups.map((g, gi) => {
           const pool = [...g];
           return r.groups[gi]!.map((n) => pool.splice(pool.findIndex((p) => p.name === n), 1)[0]!).concat(pool);
