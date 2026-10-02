@@ -3,7 +3,7 @@ import { useT } from "@/i18n";
 
 /** Zeigt den Katalog im Handy-Rahmen wie in der App-Abteilungsansicht. */
 export function CatalogPreview({ onClose }: { onClose: () => void }) {
-  const T = useT();
+  const { t: T } = useT();
   return (
     <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-3 bg-foreground/60 p-4" onClick={onClose}>
       <div className="flex w-full max-w-[400px] items-center justify-between text-background">
