@@ -282,7 +282,9 @@ export function CatalogMediaPanel({ section, depts = [] }: { section: "images" |
 
         <div className="mt-3 flex flex-wrap gap-2">
           <Button size="sm" disabled={busy !== null} onClick={runPrices}>
-            {busy === "price" ? T("media.working") : T("media.genPrices")}
+            {busy === "price"
+              ? (priceProg ? T("media.priceProgress", priceProg) : T("media.working"))
+              : markets.size > 1 ? T("media.genPricesMulti", { n: markets.size }) : T("media.genPrices")}
           </Button>
         </div>
 
