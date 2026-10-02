@@ -12,7 +12,7 @@ import { suggestCategoryProducts } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ZoomableImage } from "@/components/admin/zoomable-image";
+import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -46,6 +46,7 @@ export function CatalogTileEditor(p: {
   const [target, setTarget] = useState<Target>(null);
   const [drag, setDrag] = useState<Drag>(null);
   const [over, setOver] = useState<string | null>(null);
+  const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
   const moved = useRef(false);
   const deptById = useMemo(() => new Map(p.depts.map((d) => [d.id, d])), [p.depts]);
