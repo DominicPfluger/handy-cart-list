@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
 import { RecipeTraitsAdmin } from "@/components/recipe-traits-admin";
-import { RecipeAdmin } from "@/components/recipe-admin";
+import { RecipeAdmin, RecipeAssignAdmin } from "@/components/recipe-admin";
 import { DeptAliasEditor, KEY as DEPT_ALIAS_KEY, loadAliases as loadDeptAliases } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
@@ -667,7 +667,7 @@ function AdminPage() {
       {tab === "import" && (d ? <ImportPanel depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
 
 
-      {tab === "recipes" && (d ? <><RecipeAdmin depts={d.depts} prods={d.prods} /><RecipeTraitsAdmin /><CuisineAdmin depts={d.depts} prods={d.prods} /></> : <LoadingGate d={d}>{null}</LoadingGate>)}
+      {tab === "recipes" && (d ? <><RecipeAdmin depts={d.depts} prods={d.prods} /><RecipeAssignAdmin depts={d.depts} prods={d.prods} /><RecipeTraitsAdmin /><CuisineAdmin depts={d.depts} prods={d.prods} /></> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
       {tab === "health" && <LoadingGate d={d}><CatalogHealthPanel depts={d!.depts} prods={d!.prods} tr={d!.tr} onEdit={(id) => setSel({ kind: "product", id })} /></LoadingGate>}
 

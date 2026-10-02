@@ -1145,7 +1145,9 @@
     "adm.recipeTraitsHint": "{n} recipes without complete properties. Changes are saved immediately.",
     "adm.recipeTraitsSearch": "Search recipe…",
     "adm.recipeTraitsOnlyMissing": "Incomplete only",
-    "adm.recipeTraitsNone": "No recipes found."
+    "adm.recipeTraitsNone": "No recipes found.",
+    "adm.recipeManage": "Recipe management",
+    "adm.recipeAssign": "Ingredient assignment"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2293,7 +2295,9 @@
     "adm.recipeTraitsHint": "{n} recipes without complete properties. Changes are saved immediately.",
     "adm.recipeTraitsSearch": "Search recipe…",
     "adm.recipeTraitsOnlyMissing": "Incomplete only",
-    "adm.recipeTraitsNone": "No recipes found."
+    "adm.recipeTraitsNone": "No recipes found.",
+    "adm.recipeManage": "Recipe management",
+    "adm.recipeAssign": "Ingredient assignment"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3441,7 +3445,9 @@
     "adm.recipeTraitsHint": "{n} recipes without complete properties. Changes are saved immediately.",
     "adm.recipeTraitsSearch": "Search recipe…",
     "adm.recipeTraitsOnlyMissing": "Incomplete only",
-    "adm.recipeTraitsNone": "No recipes found."
+    "adm.recipeTraitsNone": "No recipes found.",
+    "adm.recipeManage": "Recipe management",
+    "adm.recipeAssign": "Ingredient assignment"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4589,7 +4595,9 @@
     "adm.recipeTraitsHint": "{n} recetas sin propiedades completas. Los cambios se guardan al instante.",
     "adm.recipeTraitsSearch": "Buscar receta…",
     "adm.recipeTraitsOnlyMissing": "Solo incompletas",
-    "adm.recipeTraitsNone": "No se encontraron recetas."
+    "adm.recipeTraitsNone": "No se encontraron recetas.",
+    "adm.recipeManage": "Gestión de recetas",
+    "adm.recipeAssign": "Asignación de ingredientes"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5737,7 +5745,9 @@
     "adm.recipeTraitsHint": "{n} recetas sin propiedades completas. Los cambios se guardan al instante.",
     "adm.recipeTraitsSearch": "Buscar receta…",
     "adm.recipeTraitsOnlyMissing": "Solo incompletas",
-    "adm.recipeTraitsNone": "No se encontraron recetas."
+    "adm.recipeTraitsNone": "No se encontraron recetas.",
+    "adm.recipeManage": "Gestión de recetas",
+    "adm.recipeAssign": "Asignación de ingredientes"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6885,7 +6895,9 @@
     "adm.recipeTraitsHint": "{n} recettes sans propriétés complètes. Les modifications sont enregistrées immédiatement.",
     "adm.recipeTraitsSearch": "Rechercher une recette…",
     "adm.recipeTraitsOnlyMissing": "Incomplètes uniquement",
-    "adm.recipeTraitsNone": "Aucune recette trouvée."
+    "adm.recipeTraitsNone": "Aucune recette trouvée.",
+    "adm.recipeManage": "Gestion des recettes",
+    "adm.recipeAssign": "Attribution des ingrédients"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8033,7 +8045,9 @@
     "adm.recipeTraitsHint": "{n} recettes sans propriétés complètes. Les modifications sont enregistrées immédiatement.",
     "adm.recipeTraitsSearch": "Rechercher une recette…",
     "adm.recipeTraitsOnlyMissing": "Incomplètes uniquement",
-    "adm.recipeTraitsNone": "Aucune recette trouvée."
+    "adm.recipeTraitsNone": "Aucune recette trouvée.",
+    "adm.recipeManage": "Gestion des recettes",
+    "adm.recipeAssign": "Attribution des ingrédients"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9181,7 +9195,9 @@
     "adm.recipeTraitsHint": "{n} ricette senza proprietà complete. Le modifiche vengono salvate subito.",
     "adm.recipeTraitsSearch": "Cerca ricetta…",
     "adm.recipeTraitsOnlyMissing": "Solo incomplete",
-    "adm.recipeTraitsNone": "Nessuna ricetta trovata."
+    "adm.recipeTraitsNone": "Nessuna ricetta trovata.",
+    "adm.recipeManage": "Gestione ricette",
+    "adm.recipeAssign": "Assegnazione ingredienti"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10329,7 +10345,9 @@
     "adm.recipeTraitsHint": "{n} ricette senza proprietà complete. Le modifiche vengono salvate subito.",
     "adm.recipeTraitsSearch": "Cerca ricetta…",
     "adm.recipeTraitsOnlyMissing": "Solo incomplete",
-    "adm.recipeTraitsNone": "Nessuna ricetta trovata."
+    "adm.recipeTraitsNone": "Nessuna ricetta trovata.",
+    "adm.recipeManage": "Gestione ricette",
+    "adm.recipeAssign": "Assegnazione ingredienti"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11477,7 +11495,9 @@
     "adm.recipeTraitsHint": "{n} receitas sem propriedades completas. As alterações são guardadas de imediato.",
     "adm.recipeTraitsSearch": "Procurar receita…",
     "adm.recipeTraitsOnlyMissing": "Só incompletas",
-    "adm.recipeTraitsNone": "Nenhuma receita encontrada."
+    "adm.recipeTraitsNone": "Nenhuma receita encontrada.",
+    "adm.recipeManage": "Gestão de receitas",
+    "adm.recipeAssign": "Atribuição de ingredientes"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12625,7 +12645,9 @@
     "adm.recipeTraitsHint": "{n} receitas sem propriedades completas. As alterações são guardadas de imediato.",
     "adm.recipeTraitsSearch": "Procurar receita…",
     "adm.recipeTraitsOnlyMissing": "Só incompletas",
-    "adm.recipeTraitsNone": "Nenhuma receita encontrada."
+    "adm.recipeTraitsNone": "Nenhuma receita encontrada.",
+    "adm.recipeManage": "Gestão de receitas",
+    "adm.recipeAssign": "Atribuição de ingredientes"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13773,7 +13795,9 @@
     "adm.recipeTraitsHint": "{n} recepten zonder volledige eigenschappen. Wijzigingen worden direct opgeslagen.",
     "adm.recipeTraitsSearch": "Recept zoeken…",
     "adm.recipeTraitsOnlyMissing": "Alleen onvolledige",
-    "adm.recipeTraitsNone": "Geen recepten gevonden."
+    "adm.recipeTraitsNone": "Geen recepten gevonden.",
+    "adm.recipeManage": "Receptenbeheer",
+    "adm.recipeAssign": "Ingrediënten toewijzen"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14921,7 +14945,9 @@
     "adm.recipeTraitsHint": "{n} recepten zonder volledige eigenschappen. Wijzigingen worden direct opgeslagen.",
     "adm.recipeTraitsSearch": "Recept zoeken…",
     "adm.recipeTraitsOnlyMissing": "Alleen onvolledige",
-    "adm.recipeTraitsNone": "Geen recepten gevonden."
+    "adm.recipeTraitsNone": "Geen recepten gevonden.",
+    "adm.recipeManage": "Receptenbeheer",
+    "adm.recipeAssign": "Ingrediënten toewijzen"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15531,7 +15557,9 @@
     "adm.recipeTraitsHint": "{n} Rezepte ohne vollständige Eigenschaften. Änderungen werden sofort gespeichert.",
     "adm.recipeTraitsSearch": "Rezept suchen …",
     "adm.recipeTraitsOnlyMissing": "Nur unvollständige",
-    "adm.recipeTraitsNone": "Keine Rezepte gefunden."
+    "adm.recipeTraitsNone": "Keine Rezepte gefunden.",
+    "adm.recipeManage": "Rezept-Verwaltung",
+    "adm.recipeAssign": "Zutaten-Zuweisung"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16141,6 +16169,8 @@
     "adm.recipeTraitsHint": "{n} Rezepte ohne vollständige Eigenschaften. Änderungen werden sofort gespeichert.",
     "adm.recipeTraitsSearch": "Rezept suchen …",
     "adm.recipeTraitsOnlyMissing": "Nur unvollständige",
-    "adm.recipeTraitsNone": "Keine Rezepte gefunden."
+    "adm.recipeTraitsNone": "Keine Rezepte gefunden.",
+    "adm.recipeManage": "Rezept-Verwaltung",
+    "adm.recipeAssign": "Zutaten-Zuweisung"
   }
 }
