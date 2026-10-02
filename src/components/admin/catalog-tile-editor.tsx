@@ -42,10 +42,6 @@ export function CatalogTileEditor(p: {
   translateIds: (ids?: string[]) => Promise<number>;
   reorder: (kind: "department" | "product", list: { id: string }[], from: number, to: number) => void;
   remove: (kind: "department" | "product", id: string, name: string) => void;
-  /** Markt-Auswahl o. ä. direkt unter der Pfadnavigation. */
-  toolbar?: React.ReactNode;
-  /** Sortier-Steuerung unter der Produktliste. */
-  sortControls?: React.ReactNode;
   /** Zusätzlicher Inhalt unter dem Editor (z. B. Aliase). */
   below?: React.ReactNode;
   /** Öffnet die erweiterte Bearbeitung (Übersetzungen, Marken, Aliase …). */
@@ -154,7 +150,7 @@ export function CatalogTileEditor(p: {
           </span>
         ))}
       </nav>
-      {p.toolbar}
+
 
       {editMode && (
         <div className="flex flex-wrap gap-2">
@@ -243,7 +239,6 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
-      {p.cur && editMode && p.sortControls}
       {p.below}
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
