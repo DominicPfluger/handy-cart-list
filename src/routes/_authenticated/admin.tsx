@@ -31,6 +31,7 @@ import { ImportPanel } from "@/components/admin/import-panel";
 import { CatalogMediaPanel } from "@/components/admin/catalog-media-panel";
 import { CatalogTileEditor } from "@/components/admin/catalog-tile-editor";
 import { LocaleAdminPanel } from "@/components/admin/locale-admin-panel";
+import { CatalogHealthPanel } from "@/components/admin/catalog-health-panel";
 import { useReferencePrices } from "@/hooks/use-reference-prices";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -107,7 +108,7 @@ function AdminPage() {
   const [busy, setBusy] = useState(false);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
   /** Aktiver Admin-Bereich (Tabs). */
-  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "languages" | "markets" | "more">("catalog");
+  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "languages" | "markets" | "health" | "more">("catalog");
   const [preview, setPreview] = useState(false);
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: true }));
@@ -511,7 +512,7 @@ function AdminPage() {
       </div>
 
       <div className="flex gap-1.5 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["languages", "adm.tab.languages"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["markets", "adm.tab.markets"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["languages", "adm.tab.languages"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["markets", "adm.tab.markets"], ["health", "adm.tab.health"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
             {T(key)}
@@ -665,6 +666,7 @@ function AdminPage() {
 
       {tab === "recipes" && (d ? <><RecipeAdmin depts={d.depts} prods={d.prods} /><CuisineAdmin depts={d.depts} prods={d.prods} /></> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
+      {tab === "health" && <LoadingGate d={d}><CatalogHealthPanel depts={d!.depts} prods={d!.prods} tr={d!.tr} onEdit={(id) => setSel({ kind: "product", id })} /></LoadingGate>}
 
       {tab === "markets" && (<div className="space-y-4">
         <MarketsManager />
