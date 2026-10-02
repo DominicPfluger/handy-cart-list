@@ -64,6 +64,7 @@ export function CatalogTileEditor(p: {
   const [target, setTarget] = useState<Target>(null);
   const [drag, setDrag] = useState<Drag>(null);
   const [over, setOver] = useState<string | null>(null);
+  const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
   const [preview, setPreview] = useState(false);
@@ -126,6 +127,10 @@ export function CatalogTileEditor(p: {
     if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 6) moved.current = true;
     setDrag({ ...drag, x: e.clientX, y: e.clientY });
     const t = dropAt(e.clientX, e.clientY);
+    if (t && t.kind === "product" && drag.kind === "product") {
+      const r = t.el.getBoundingClientRect();
+      setOverPos(e.clientY > r.top + r.height / 2 ? "after" : "before");
+    } else setOverPos(null);
     setOver(t ? `${t.kind}:${t.id}` : null);
   };
   const onUp = (e: React.PointerEvent) => {
@@ -265,7 +270,7 @@ export function CatalogTileEditor(p: {
                 </div>
               )}
               <div data-drop="product" data-id={x.id} data-index={i}
-                className={`flex items-center gap-3 px-3 py-2 ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? "bg-primary-soft" : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
+                className={`flex items-center gap-3 px-3 py-2 ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
                 <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers} onDoubleClick={() => { const u = img(x.image_path); if (u) setZoom(u); }}
                   className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl ${editMode ? "cursor-grab touch-none" : ""}`}>
                   {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
