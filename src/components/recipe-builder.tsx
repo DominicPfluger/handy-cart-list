@@ -323,7 +323,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   <button key={v} type="button" role="radio" aria-checked={traits[g] === v}
                     onClick={() => setTraits((o) => ({ ...o, [g]: v }))}
                     className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${traits[g] === v ? "border-primary bg-primary text-primary-foreground" : missing ? "border-destructive bg-card text-foreground" : "border-border bg-card text-foreground"}`}>
-                    {t(`rk.${g}.${v}`)}
+                    {t(`rk.${g}.${v}` as Parameters<typeof t>[0])}
                   </button>
                 ))}
               </div>
