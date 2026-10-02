@@ -178,6 +178,79 @@ export const generateReferencePrices = createServerFn({ method: "POST" })
     return { done: rows.length, remaining: have.size + rows.length };
   });
 
+/** Schätzt KI-Richtpreise für ALLE Produkte einer Kategorie (inkl. Unterkategorien) im gewählten Markt auf einmal. */
+export const estimateCategoryPrices = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({ market: z.string().length(2), departmentId: z.string().uuid(), onlyMissing: z.boolean().default(true) }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { estimatePrices } = await import("./product-media.server");
+    const sb = context.supabase;
+    const currency = CURRENCIES[data.market] ?? "EUR";
+
+    // Kategorie + alle Unterkategorien rekursiv einsammeln
+    const { data: depts } = await sb.from("departments").select("id, parent_id");
+    const children = new Map<string | null, string[]>();
+    for (const d of (depts ?? []) as Array<{ id: string; parent_id: string | null }>) {
+      children.set(d.parent_id, [...(children.get(d.parent_id) ?? []), d.id]);
+    }
+    const deptIds: string[] = [];
+    const stack = [data.departmentId];
+    while (stack.length > 0) {
+      const id = stack.pop()!;
+      deptIds.push(id);
+      stack.push(...(children.get(id) ?? []));
+    }
+
+    const { data: prods } = await sb
+      .from("products")
+      .select("id, name, default_quantity, default_unit")
+      .in("department_id", deptIds)
+      .order("sort_order");
+    let list = (prods ?? []) as Array<{ id: string; name: string; default_quantity: number; default_unit: string }>;
+    const total = list.length;
+    if (total === 0) return { done: 0, total: 0 };
+
+    if (data.onlyMissing) {
+      const { data: existing } = await sb.from("product_reference_prices").select("product_id").eq("market", data.market).in("product_id", list.map((p) => p.id));
+      const have = new Set(((existing ?? []) as Array<{ product_id: string }>).map((r) => r.product_id));
+      list = list.filter((p) => !have.has(p.id));
+    }
+    if (list.length === 0) return { done: 0, total };
+
+    // in Blöcken von 50 schätzen (KI-Limit), dann upserten
+    let done = 0;
+    for (let i = 0; i < list.length; i += 50) {
+      const chunk = list.slice(i, i + 50);
+      const estimates = await estimatePrices(chunk, data.market);
+      const byKey = new Map(estimates.map((e) => [e.key, e]));
+      const rows = chunk
+        .map((p) => {
+          const e = byKey.get(p.id);
+          if (!e || !(e.price > 0)) return null;
+          return {
+            product_id: p.id,
+            market: data.market,
+            price: e.price,
+            currency,
+            pack_size: e.pack_size,
+            pack_unit: e.pack_unit,
+            unit_price: e.unit_price,
+            unit_basis: e.unit_basis,
+          };
+        })
+        .filter((r): r is NonNullable<typeof r> => r !== null);
+      if (rows.length > 0) {
+        const { error } = await sb.from("product_reference_prices").upsert(rows, { onConflict: "product_id,market" });
+        if (error) throw new Error(error.message);
+        done += rows.length;
+      }
+    }
+    return { done, total };
+  });
+
 /** Richtpreise eines Markts seitenweise (für Nachladen beim Scrollen). */
 export const listReferencePrices = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
