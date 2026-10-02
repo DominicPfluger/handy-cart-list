@@ -343,15 +343,6 @@ function ListPage() {
             }))}
           />
           <button
-            onClick={() => setShopMode((v) => !v)}
-            aria-pressed={shopMode}
-            aria-label={t("list.shopMode")}
-            title={t("list.shopMode")}
-            className={`grid h-9 w-9 shrink-0 place-items-center rounded-full text-lg transition active:scale-90 ${shopMode ? "bg-primary text-primary-foreground" : "text-primary active:bg-muted"}`}
-          >
-            <span aria-hidden="true">🛒</span>
-          </button>
-          <button
             onClick={() => shareList({ ...activeList, items: activeList.items.map((i) => ({ ...i, name: displayName(i), quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : i.quantity })) })}
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
             aria-label={t("list.share")}
