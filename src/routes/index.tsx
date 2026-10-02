@@ -8,7 +8,6 @@ import {
   getCategory,
   type ListItem,
 } from "../hooks/use-shopping-list";
-import type { ProductFrequency } from "../hooks/use-purchase-history";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
 import {
@@ -215,7 +214,7 @@ function ListPage() {
   const currency = referencePrices?.values().next().value?.currency ?? MARKET_CURRENCY[currentMarket()] ?? "EUR";
 
   // ---- Smarte Vorschläge (aus dem Einkaufsverlauf) & Einkauf abschliessen ----
-  const { addPurchase, stats } = usePurchaseHistory();
+  const { addPurchase } = usePurchaseHistory();
   const finishShopping = () => {
     const bought = items.filter((i) => i.checked);
     if (bought.length === 0) return;
@@ -230,65 +229,6 @@ function ListPage() {
     deleteItemPhotos(items.filter((i) => i.checked).map((i) => i.id)).catch(() => {});
     clearChecked();
   };
-
-  // ---- Schnell erfassen: Chips aus dem Einkaufsverlauf ----
-  const [quick, setQuick] = useState("");
-  const chipCandidates = useMemo(() => {
-    const q = quick.trim().toLowerCase();
-    if (!q) return [] as ProductFrequency[];
-    const onList = new Set(items.map((i) => i.productId ?? i.name.toLowerCase()));
-    // Sortierschlüssel nach Abteilungsreihenfolge (Kategoriepfad, dann Produktposition)
-    const deptIdx = new Map(departments.map((d, i) => [d.id, i]));
-    const prodIdx = new Map(orderedProducts.map((p, i) => [p.id, i]));
-    const keyOf = (productId?: string): number[] => {
-      const p = productId ? productById.get(productId) : undefined;
-      const leaf = p?.departmentId ? deptById.get(p.departmentId) : undefined;
-      if (!p || !leaf) return [Number.MAX_SAFE_INTEGER];
-      return [...chainOf(leaf).map((d) => deptIdx.get(d.id) ?? 9999), prodIdx.get(p.id) ?? 0];
-    };
-    const cmp = (a: number[], b: number[]) => {
-      for (let i = 0; i < Math.max(a.length, b.length); i++) {
-        const d = (a[i] ?? -1) - (b[i] ?? -1);
-        if (d) return d;
-      }
-      return 0;
-    };
-    const nameOf = (p: ProductFrequency) =>
-      (p.productId && productById.get(p.productId)?.name) || p.name;
-    const hist = stats.top
-      .filter((p) => !onList.has(p.productId ?? p.name.toLowerCase()) && nameOf(p).toLowerCase().includes(q))
-      .sort((a, b) => cmp(keyOf(a.productId), keyOf(b.productId)))
-      .slice(0, 6);
-    if (q.length <= 3) return hist;
-    // Ab 4 Buchstaben: gesamten Katalog durchsuchen (nach Verlauf)
-    const seen = new Set(hist.map((h) => h.productId ?? h.name.toLowerCase()));
-    const cat: ProductFrequency[] = orderedProducts
-      .filter((p) => !onList.has(p.id) && !seen.has(p.id) && p.name.toLowerCase().includes(q))
-      .sort((a, b) => cmp(keyOf(a.id), keyOf(b.id)))
-      .slice(0, 12)
-      .map((p) => ({ name: p.name, productId: p.id, emoji: p.emoji ?? undefined, count: 0 }) as ProductFrequency);
-    return [...hist, ...cat];
-  }, [quick, stats.top, items, departments, orderedProducts, productById, deptById]);
-  const addQuick = (entry: { name: string; productId?: string | undefined }) => {
-    const product = entry.productId ? productById.get(entry.productId) : undefined;
-    if (product) {
-      addCatalogItem({
-        productId: product.id,
-        name: product.name,
-        quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
-        unit: product.defaultUnit,
-        organic: false,
-        emoji: product.emoji,
-        imageUrl: product.imageUrl,
-      });
-      toast.success(t("common.addedToList", { name: product.name }));
-    } else {
-      addItem(entry.name, "", "sonstiges");
-      toast.success(t("common.addedToList", { name: entry.name }));
-    }
-    setQuick("");
-  };
-
 
   return (
     <div className="space-y-5">
@@ -391,39 +331,6 @@ function ListPage() {
         </div>
       </div>
 
-      {/* Schnell erfassen: Suchfeld + Chips aus dem Einkaufsverlauf */}
-      <div className="space-y-2">
-          <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4">
-            <span aria-hidden="true" className="text-muted-foreground">🔍</span>
-            <input
-              value={quick}
-              onChange={(e) => setQuick(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key !== "Enter") return;
-                e.preventDefault();
-                if (quick.trim()) addQuick(chipCandidates[0] ?? { name: quick.trim() });
-              }}
-              placeholder={t("list.quickAdd")}
-              aria-label={t("list.quickAdd")}
-              className="h-11 min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
-            />
-          </div>
-          {chipCandidates.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {chipCandidates.map((p) => (
-                <button
-                  key={p.productId ?? p.name}
-                  onClick={() => addQuick(p)}
-                  className="flex max-w-full items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-foreground transition active:scale-95"
-                >
-                  <span aria-hidden="true">{p.emoji ?? "🛒"}</span>
-                  <span className="min-w-0 break-words text-left">{p.productId && productById.get(p.productId) ? productById.get(p.productId)!.name : p.name}</span>
-                  <PlusIcon className="h-3 w-3 shrink-0 text-primary" />
-                </button>
-              ))}
-            </div>
-          )}
-      </div>
 
 
       {/* List grouped by category */}
