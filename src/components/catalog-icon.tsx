@@ -2,7 +2,7 @@ import { ProductEmoji } from "./product-emoji";
 import { useIconSet } from "../hooks/use-icon-set";
 
 export function ProductIcon({ emoji, iconUrl, className = "h-full w-full object-contain", symbolClassName = "text-3xl", fallback = "🛒" }: {
-  emoji?: string | null; iconUrl?: string | null; className?: string; symbolClassName?: string; fallback?: string;
+  emoji?: string | null | undefined; iconUrl?: string | null | undefined; className?: string; symbolClassName?: string; fallback?: string;
 }) {
   const mode = useIconSet();
   return mode === "images" && iconUrl
@@ -11,7 +11,7 @@ export function ProductIcon({ emoji, iconUrl, className = "h-full w-full object-
 }
 
 export function DepartmentIcon({ emoji, imageUrl, className = "max-h-[74%] max-w-[74%] object-contain", symbolClassName = "text-5xl" }: {
-  emoji?: string | null; imageUrl?: string | null; className?: string; symbolClassName?: string;
+  emoji?: string | null | undefined; imageUrl?: string | null | undefined; className?: string; symbolClassName?: string;
 }) {
   const mode = useIconSet();
   return mode === "images" && imageUrl

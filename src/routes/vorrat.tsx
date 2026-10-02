@@ -28,7 +28,7 @@ export const Route = createFileRoute("/vorrat")({
   component: VorratPage,
 });
 
-function Avatar({ emoji, imageUrl, iconUrl, size = 34 }: { emoji?: string | null | undefined; imageUrl?: string | null | undefined; iconUrl?: string | null; size?: number }) {
+function Avatar({ emoji, imageUrl, iconUrl, size = 34 }: { emoji?: string | null | undefined; imageUrl?: string | null | undefined; iconUrl?: string | null | undefined; size?: number }) {
   const mode = useIconSet();
   if (mode === "images" && (iconUrl || imageUrl)) {
     return (
