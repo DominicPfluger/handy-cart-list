@@ -243,6 +243,17 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
   const [price, setPrice] = useState("");
+  const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
+  const [variantInput, setVariantInput] = useState("");
+  const addVariant = (v: string) => {
+    const vals = v.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+    setVariants((x) => {
+      const next = [...x];
+      for (const val of vals) if (!next.some((y) => y.toLowerCase() === val.toLowerCase())) next.push(val);
+      return next;
+    });
+    setVariantInput("");
+  };
   const effId = item?.id ?? newId ?? undefined;
   const table = isDept ? "departments" : "products";
 
