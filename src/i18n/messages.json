@@ -1140,7 +1140,12 @@
     "rec.searchAll": "All",
     "rec.searchClear": "Reset",
     "rec.searchCount": "{n} recipes found",
-    "rec.searchEmpty": "No recipes found — try different filters."
+    "rec.searchEmpty": "No recipes found — try different filters.",
+    "adm.recipeTraits": "Recipe properties",
+    "adm.recipeTraitsHint": "{n} recipes without complete properties. Changes are saved immediately.",
+    "adm.recipeTraitsSearch": "Search recipe…",
+    "adm.recipeTraitsOnlyMissing": "Incomplete only",
+    "adm.recipeTraitsNone": "No recipes found."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2283,7 +2288,12 @@
     "rec.searchAll": "All",
     "rec.searchClear": "Reset",
     "rec.searchCount": "{n} recipes found",
-    "rec.searchEmpty": "No recipes found — try different filters."
+    "rec.searchEmpty": "No recipes found — try different filters.",
+    "adm.recipeTraits": "Recipe properties",
+    "adm.recipeTraitsHint": "{n} recipes without complete properties. Changes are saved immediately.",
+    "adm.recipeTraitsSearch": "Search recipe…",
+    "adm.recipeTraitsOnlyMissing": "Incomplete only",
+    "adm.recipeTraitsNone": "No recipes found."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3426,7 +3436,12 @@
     "rec.searchAll": "All",
     "rec.searchClear": "Reset",
     "rec.searchCount": "{n} recipes found",
-    "rec.searchEmpty": "No recipes found — try different filters."
+    "rec.searchEmpty": "No recipes found — try different filters.",
+    "adm.recipeTraits": "Recipe properties",
+    "adm.recipeTraitsHint": "{n} recipes without complete properties. Changes are saved immediately.",
+    "adm.recipeTraitsSearch": "Search recipe…",
+    "adm.recipeTraitsOnlyMissing": "Incomplete only",
+    "adm.recipeTraitsNone": "No recipes found."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4569,7 +4584,12 @@
     "rec.searchAll": "Todos",
     "rec.searchClear": "Restablecer",
     "rec.searchCount": "{n} recetas encontradas",
-    "rec.searchEmpty": "No se encontraron recetas; prueba otros criterios."
+    "rec.searchEmpty": "No se encontraron recetas; prueba otros criterios.",
+    "adm.recipeTraits": "Propiedades de recetas",
+    "adm.recipeTraitsHint": "{n} recetas sin propiedades completas. Los cambios se guardan al instante.",
+    "adm.recipeTraitsSearch": "Buscar receta…",
+    "adm.recipeTraitsOnlyMissing": "Solo incompletas",
+    "adm.recipeTraitsNone": "No se encontraron recetas."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5712,7 +5732,12 @@
     "rec.searchAll": "Todos",
     "rec.searchClear": "Restablecer",
     "rec.searchCount": "{n} recetas encontradas",
-    "rec.searchEmpty": "No se encontraron recetas; prueba otros criterios."
+    "rec.searchEmpty": "No se encontraron recetas; prueba otros criterios.",
+    "adm.recipeTraits": "Propiedades de recetas",
+    "adm.recipeTraitsHint": "{n} recetas sin propiedades completas. Los cambios se guardan al instante.",
+    "adm.recipeTraitsSearch": "Buscar receta…",
+    "adm.recipeTraitsOnlyMissing": "Solo incompletas",
+    "adm.recipeTraitsNone": "No se encontraron recetas."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6855,7 +6880,12 @@
     "rec.searchAll": "Tout",
     "rec.searchClear": "Réinitialiser",
     "rec.searchCount": "{n} recettes trouvées",
-    "rec.searchEmpty": "Aucune recette trouvée — essaie d'autres critères."
+    "rec.searchEmpty": "Aucune recette trouvée — essaie d'autres critères.",
+    "adm.recipeTraits": "Propriétés des recettes",
+    "adm.recipeTraitsHint": "{n} recettes sans propriétés complètes. Les modifications sont enregistrées immédiatement.",
+    "adm.recipeTraitsSearch": "Rechercher une recette…",
+    "adm.recipeTraitsOnlyMissing": "Incomplètes uniquement",
+    "adm.recipeTraitsNone": "Aucune recette trouvée."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7998,7 +8028,12 @@
     "rec.searchAll": "Tout",
     "rec.searchClear": "Réinitialiser",
     "rec.searchCount": "{n} recettes trouvées",
-    "rec.searchEmpty": "Aucune recette trouvée — essaie d'autres critères."
+    "rec.searchEmpty": "Aucune recette trouvée — essaie d'autres critères.",
+    "adm.recipeTraits": "Propriétés des recettes",
+    "adm.recipeTraitsHint": "{n} recettes sans propriétés complètes. Les modifications sont enregistrées immédiatement.",
+    "adm.recipeTraitsSearch": "Rechercher une recette…",
+    "adm.recipeTraitsOnlyMissing": "Incomplètes uniquement",
+    "adm.recipeTraitsNone": "Aucune recette trouvée."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9141,7 +9176,12 @@
     "rec.searchAll": "Tutti",
     "rec.searchClear": "Reimposta",
     "rec.searchCount": "{n} ricette trovate",
-    "rec.searchEmpty": "Nessuna ricetta trovata — prova altri criteri."
+    "rec.searchEmpty": "Nessuna ricetta trovata — prova altri criteri.",
+    "adm.recipeTraits": "Proprietà delle ricette",
+    "adm.recipeTraitsHint": "{n} ricette senza proprietà complete. Le modifiche vengono salvate subito.",
+    "adm.recipeTraitsSearch": "Cerca ricetta…",
+    "adm.recipeTraitsOnlyMissing": "Solo incomplete",
+    "adm.recipeTraitsNone": "Nessuna ricetta trovata."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10284,7 +10324,12 @@
     "rec.searchAll": "Tutti",
     "rec.searchClear": "Reimposta",
     "rec.searchCount": "{n} ricette trovate",
-    "rec.searchEmpty": "Nessuna ricetta trovata — prova altri criteri."
+    "rec.searchEmpty": "Nessuna ricetta trovata — prova altri criteri.",
+    "adm.recipeTraits": "Proprietà delle ricette",
+    "adm.recipeTraitsHint": "{n} ricette senza proprietà complete. Le modifiche vengono salvate subito.",
+    "adm.recipeTraitsSearch": "Cerca ricetta…",
+    "adm.recipeTraitsOnlyMissing": "Solo incomplete",
+    "adm.recipeTraitsNone": "Nessuna ricetta trovata."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11427,7 +11472,12 @@
     "rec.searchAll": "Todos",
     "rec.searchClear": "Redefinir",
     "rec.searchCount": "{n} receitas encontradas",
-    "rec.searchEmpty": "Nenhuma receita encontrada — tenta outros critérios."
+    "rec.searchEmpty": "Nenhuma receita encontrada — tenta outros critérios.",
+    "adm.recipeTraits": "Propriedades das receitas",
+    "adm.recipeTraitsHint": "{n} receitas sem propriedades completas. As alterações são guardadas de imediato.",
+    "adm.recipeTraitsSearch": "Procurar receita…",
+    "adm.recipeTraitsOnlyMissing": "Só incompletas",
+    "adm.recipeTraitsNone": "Nenhuma receita encontrada."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12570,7 +12620,12 @@
     "rec.searchAll": "Todos",
     "rec.searchClear": "Redefinir",
     "rec.searchCount": "{n} receitas encontradas",
-    "rec.searchEmpty": "Nenhuma receita encontrada — tenta outros critérios."
+    "rec.searchEmpty": "Nenhuma receita encontrada — tenta outros critérios.",
+    "adm.recipeTraits": "Propriedades das receitas",
+    "adm.recipeTraitsHint": "{n} receitas sem propriedades completas. As alterações são guardadas de imediato.",
+    "adm.recipeTraitsSearch": "Procurar receita…",
+    "adm.recipeTraitsOnlyMissing": "Só incompletas",
+    "adm.recipeTraitsNone": "Nenhuma receita encontrada."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13713,7 +13768,12 @@
     "rec.searchAll": "Alle",
     "rec.searchClear": "Opnieuw instellen",
     "rec.searchCount": "{n} recepten gevonden",
-    "rec.searchEmpty": "Geen recepten gevonden — probeer andere eigenschappen."
+    "rec.searchEmpty": "Geen recepten gevonden — probeer andere eigenschappen.",
+    "adm.recipeTraits": "Recepteigenschappen",
+    "adm.recipeTraitsHint": "{n} recepten zonder volledige eigenschappen. Wijzigingen worden direct opgeslagen.",
+    "adm.recipeTraitsSearch": "Recept zoeken…",
+    "adm.recipeTraitsOnlyMissing": "Alleen onvolledige",
+    "adm.recipeTraitsNone": "Geen recepten gevonden."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14856,7 +14916,12 @@
     "rec.searchAll": "Alle",
     "rec.searchClear": "Opnieuw instellen",
     "rec.searchCount": "{n} recepten gevonden",
-    "rec.searchEmpty": "Geen recepten gevonden — probeer andere eigenschappen."
+    "rec.searchEmpty": "Geen recepten gevonden — probeer andere eigenschappen.",
+    "adm.recipeTraits": "Recepteigenschappen",
+    "adm.recipeTraitsHint": "{n} recepten zonder volledige eigenschappen. Wijzigingen worden direct opgeslagen.",
+    "adm.recipeTraitsSearch": "Recept zoeken…",
+    "adm.recipeTraitsOnlyMissing": "Alleen onvolledige",
+    "adm.recipeTraitsNone": "Geen recepten gevonden."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15461,7 +15526,12 @@
     "rec.searchAll": "Alle",
     "rec.searchClear": "Zurücksetzen",
     "rec.searchCount": "{n} Rezepte gefunden",
-    "rec.searchEmpty": "Keine Rezepte gefunden — versuche andere Eigenschaften."
+    "rec.searchEmpty": "Keine Rezepte gefunden — versuche andere Eigenschaften.",
+    "adm.recipeTraits": "Rezept-Eigenschaften",
+    "adm.recipeTraitsHint": "{n} Rezepte ohne vollständige Eigenschaften. Änderungen werden sofort gespeichert.",
+    "adm.recipeTraitsSearch": "Rezept suchen …",
+    "adm.recipeTraitsOnlyMissing": "Nur unvollständige",
+    "adm.recipeTraitsNone": "Keine Rezepte gefunden."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16066,6 +16136,11 @@
     "rec.searchAll": "Alle",
     "rec.searchClear": "Zurücksetzen",
     "rec.searchCount": "{n} Rezepte gefunden",
-    "rec.searchEmpty": "Keine Rezepte gefunden — versuche andere Eigenschaften."
+    "rec.searchEmpty": "Keine Rezepte gefunden — versuche andere Eigenschaften.",
+    "adm.recipeTraits": "Rezept-Eigenschaften",
+    "adm.recipeTraitsHint": "{n} Rezepte ohne vollständige Eigenschaften. Änderungen werden sofort gespeichert.",
+    "adm.recipeTraitsSearch": "Rezept suchen …",
+    "adm.recipeTraitsOnlyMissing": "Nur unvollständige",
+    "adm.recipeTraitsNone": "Keine Rezepte gefunden."
   }
 }
