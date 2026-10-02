@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import { useT } from "../i18n";
-import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
+import { useRecipeTemplates } from "../lib/use-recipe-templates";
 import { RecipePhoto } from "./recipe-photo";
 import { fetchFeed, type FeedOrder, type FeedRecipe } from "../lib/recipes-api";
 import { useShoppingList } from "../hooks/use-shopping-list";
@@ -38,7 +38,8 @@ export function ListCardBody({ photo, emoji, color, kicker, title, sub, badge }:
 export const LIST_CARD_CLASS = "flex w-full items-center gap-3 rounded-2xl border border-border bg-card p-3 transition active:scale-[0.99]";
 
 function Card({ r, badge }: { r: FeedRecipe; badge: string }) {
-  const tpl = RECIPE_TEMPLATES.find((x) => x.id === r.template_id);
+  const templates = useRecipeTemplates();
+  const tpl = templates.find((x) => x.id === r.template_id);
   return (
     <Link to="/rezept/$slug" params={{ slug: r.share_slug ?? "" }} className={LIST_CARD_CLASS}>
       <ListCardBody photo={r.image_path} emoji={tpl?.emoji} color={tpl?.color} title={r.title} sub={r.description} badge={badge} />
