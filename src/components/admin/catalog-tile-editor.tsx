@@ -457,6 +457,29 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [enrichStatus, setEnrichStatus] = useState("");
   const [enrichErrors, setEnrichErrors] = useState<string[]>([]);
   const [estimates, setEstimates] = useState<Array<{ market: string; price: number; currency: string; unit_price: number | null; unit_basis: string | null }>>([]);
+  // Manuelle Richtpreise je Markt (ohne KI, keine Credits).
+  const [mkts, setMkts] = useState<{ code: string; name: string; flag: string; currency: string }[]>([]);
+  const [mp, setMp] = useState<Record<string, string>>({});
+  const [mpOrig, setMpOrig] = useState<Record<string, string>>({});
+  const [mpOpen, setMpOpen] = useState(false);
+  useEffect(() => {
+    if (isDept) return;
+    let off = false;
+    void (async () => {
+      const [m, pr] = await Promise.all([
+        supabase.from("markets").select("code, name, flag, currency").eq("enabled", true).order("sort_order"),
+        prod ? supabase.from("product_reference_prices").select("market, price").eq("product_id", prod.id) : Promise.resolve({ data: [] as { market: string; price: number }[] }),
+      ]);
+      if (off) return;
+      setMkts(m.data ?? []);
+      const o: Record<string, string> = {};
+      for (const r of pr.data ?? []) o[r.market] = String(r.price);
+      setMpOrig(o); setMp(o);
+      const cur = o[currentMarket()];
+      if (cur) setPrice((x) => x || cur);
+    })();
+    return () => { off = true; };
+  }, [isDept, prod?.id]);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
   const [prodLines, setProdLines] = useState("");
@@ -557,9 +580,22 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         }
       }
     }
-    if (!isDept && id && price.trim() && !Number.isNaN(Number(price))) {
-      const market = currentMarket();
-      await p.must(supabase.from("product_reference_prices").upsert({ product_id: id, market, price: Number(price), currency: MARKET_CCY[market] ?? "EUR" }, { onConflict: "product_id,market" }));
+    if (!isDept && id) {
+      const cm = currentMarket();
+      const vals: Record<string, string> = { ...mp, ...(price.trim() || mpOrig[cm] ? { [cm]: price } : {}) };
+      let changed = false;
+      for (const [market, raw] of Object.entries(vals)) {
+        const v = raw.trim().replace(",", ".");
+        if (v === (mpOrig[market] ?? "")) continue;
+        changed = true;
+        if (!v) {
+          await p.must(supabase.from("product_reference_prices").delete().eq("product_id", id).eq("market", market));
+        } else if (!Number.isNaN(Number(v))) {
+          const ccy = mkts.find((m) => m.code === market)?.currency ?? MARKET_CCY[market] ?? "EUR";
+          await p.must(supabase.from("product_reference_prices").upsert({ product_id: id, market, price: Number(v), currency: ccy, observed_at: new Date().toISOString() }, { onConflict: "product_id,market" }));
+        }
+      }
+      if (changed) void qc.invalidateQueries();
     }
     // Bei neuen Einträgen offen lassen, damit gleich ein Bild ergänzt werden kann.
     if (item) p.onClose();
