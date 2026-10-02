@@ -583,7 +583,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               };
               if (!hasGroups) return renderIngredients(s.products, "all");
               return <div className="space-y-1">
-                {[...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: s.products.filter((p) => s.groupByProduct.get(p.id) === g.id) })), ...(other.length ? [{ key: "other", name: t("rk.otherGroup"), emoji: null, products: other }] : [])].map((group) => {
+                {[...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: s.products.filter((p) => s.groupByProduct.get(p.id) === g.id) })), ...(other.length ? [{ key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: other }] : [])].map((group) => {
                   const key = `${s.key}:${group.key}`;
                   const expanded = !!openIngredientGroups[key];
                   return <div key={key}>

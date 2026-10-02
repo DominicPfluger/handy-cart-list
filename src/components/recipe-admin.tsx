@@ -303,7 +303,6 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                     <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeGroup(g)}>{T("adm.delete")}</Button>
                   </div>
                 ))}
-                <Button size="sm" variant="ghost" className="ml-4" disabled={busy} onClick={() => startGroup(parent.id)}>{T("adm.recipeGroupSub")}</Button>
               </div>
             ))}
             {groupFormOpen && <div className="flex flex-wrap items-center gap-2">
