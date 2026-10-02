@@ -72,6 +72,8 @@ function DepartmentsPage() {
   const hiddenIds = useHiddenDepartments();
   const hiddenProductIds = useHiddenProducts();
   const diets = useDietFilter();
+  const dietSource = useDietFilterSource();
+  const showDietFilter = !(diets.length > 0 && dietSource === "pref");
   const [dietOpen, setDietOpen] = useState(false);
   const cuisineSel = useCuisineFilter();
   const cuisines = useMemo(() => cuisineSel.filter((id) => data.cuisines.some((c) => c.id === id)), [cuisineSel, data.cuisines]);
