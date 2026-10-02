@@ -20,6 +20,7 @@ import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { formatQuantity } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
+import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 
 
 export const Route = createFileRoute("/favoriten")({
@@ -67,7 +68,7 @@ function toCatalogProduct(favorite: FavoriteProduct): CatalogProduct {
 }
 
 function ProductThumb({ product }: { product: CatalogProduct }) {
-  return <ProductEmoji emoji={product.emoji} className="text-3xl" />;
+  return <ProductIcon emoji={product.emoji} iconUrl={product.iconUrl} symbolClassName="text-3xl" />;
 }
 
 function FavoritesPage() {
@@ -422,7 +423,7 @@ function FavoritesPage() {
             <section key={department.id}>
               <div className="mb-3 flex items-center justify-between gap-3">
                 <h2 className="text-base font-semibold text-foreground">
-                  <span className="mr-1.5" aria-hidden="true">{department.emoji ?? "🧺"}</span>
+                  <span className="mr-1.5 inline-grid h-5 w-5 align-middle place-items-center"><DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl} className="h-5 w-5 object-contain" symbolClassName="text-base" /></span>
                   {department.name}
                 </h2>
               </div>

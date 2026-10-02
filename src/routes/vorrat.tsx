@@ -9,6 +9,8 @@ import { useAuthUser } from "@/hooks/use-auth-user";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProductEmoji } from "@/components/product-emoji";
+import { ProductIcon } from "@/components/catalog-icon";
+import { useIconSet } from "@/hooks/use-icon-set";
 import { toast } from "sonner";
 import { Trash2 } from "lucide-react";
 
@@ -27,11 +29,12 @@ export const Route = createFileRoute("/vorrat")({
   component: VorratPage,
 });
 
-function Avatar({ emoji, imageUrl, size = 34 }: { emoji?: string | null | undefined; imageUrl?: string | null | undefined; size?: number }) {
-  if (imageUrl) {
+function Avatar({ emoji, imageUrl, iconUrl, size = 34 }: { emoji?: string | null | undefined; imageUrl?: string | null | undefined; iconUrl?: string | null; size?: number }) {
+  const mode = useIconSet();
+  if (mode === "images" && (iconUrl || imageUrl)) {
     return (
       <img
-        src={imageUrl}
+        src={iconUrl || imageUrl || undefined}
         alt=""
         className="shrink-0 object-contain"
         style={{ width: size, height: size }}
@@ -117,7 +120,7 @@ function VorratPage() {
           <ul className="divide-y overflow-hidden rounded-2xl border border-border bg-card">
             {matches.map((p) => (
               <li key={p.id} className="flex items-center gap-3 px-3 py-2">
-                <Avatar emoji={p.emoji} imageUrl={p.imageUrl} />
+                <Avatar emoji={p.emoji} iconUrl={p.iconUrl} imageUrl={p.imageUrl} />
                 <span className="min-w-0 flex-1 truncate text-sm text-foreground">{p.name}</span>
                 <Button
                   type="button"

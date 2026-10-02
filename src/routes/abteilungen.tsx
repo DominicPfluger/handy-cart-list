@@ -33,6 +33,7 @@ import {
 import { formatQuantity } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { ProductEmoji } from "../components/product-emoji";
+import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 import { deptColor, deptColorStrong } from "../lib/dept-colors";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
 import { VoiceInputButton } from "../components/voice-input";
@@ -60,16 +61,11 @@ export const Route = createFileRoute("/abteilungen")({
 });
 
 function ProductThumb({ product }: { product: CatalogProduct }) {
-  return product.iconUrl
-    ? <img src={product.iconUrl} alt="" draggable={false} className="h-full w-full object-contain" />
-    : <ProductEmoji emoji={product.emoji} className="text-4xl" />;
+  return <ProductIcon emoji={product.emoji} iconUrl={product.iconUrl} symbolClassName="text-4xl" />;
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
-  if (department.imageUrl) {
-    return <img src={department.imageUrl} alt="" draggable={false} className="max-h-[74%] max-w-[74%] object-contain" />;
-  }
-  return <span className="text-5xl" aria-hidden="true">{department.emoji ?? "🧺"}</span>;
+  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl} />;
 }
 
 function DepartmentsPage() {

@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Erledigt
+- Icon-Auswahl unter „Mehr“: gerätelokal zwischen generierten Katalogbildern und bisherigen Symbolen wechseln; kleine Icons in App-Ansichten folgen der Auswahl.
 - Rezept-Generator: Zutaten je Rezeptschritt nach admin-gepflegten Gruppen mit zweiter Auswahl-Ebene; nicht gruppierte Zutaten unter „Weitere“, bisherige flache Ansicht ohne Gruppen bleibt erhalten.
 - Kleine Produkt-Icons: Abteilungen und Einkaufslisten verwenden separate komprimierte WebP-Icons; Upload, KI-Bilder und Galerie-Auswahl erstellen sie, bestehende Bilder lassen sich unter „Bilder“ nachträglich aufbereiten.
 - KI-Produktbilder: Admin-Panel „KI-Bilder & Richtpreise" erzeugt stapelweise Bilder (5 pro Lauf) → Storage catalog-images/products/{id}.png, image_path gesetzt. Verifiziert: 5 Bilder erzeugt.
