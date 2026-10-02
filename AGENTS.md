@@ -15,7 +15,7 @@
 - Department diet/cuisine filters exempt non-food root categories by stable catalog base names. Why: localized and nested non-food products remain visible without changing saved preferences.
 - Catalog routes `ssr: false`. Why: SSR-embedded catalog caused 'aborted' blank screens.
 - Brands: `product_brands` (locales = market codes); chosen brand appended as "Name · Marke". Why: same for cloud/local lists.
-- Recipe creator groups ingredients within each step using recipe_groups and recipe_ingredients.group_id, falling back to flat lists for ungrouped steps. Why: browse ingredient families without changing selection rules.
+- Recipe creator shows recipe_groups inline within each recipe step, limits the initial product view per step, and uses only admin-assigned ingredients for managed templates. Why: preserve ingredient families without nested accordions or surprise defaults.
 - Aliases: `department_aliases`/`product_aliases` show items in extra places; data lives once; list category = list_items.group_label. Why: single source of truth.
 - Read-aloud: own language (default de-DE) + admin templates in `speech_texts`. Why: mother tongue regardless of UI.
 - Recipe folders nest via recipe_folders.parent_id (DB trigger blocks cycles); deleting a folder moves its recipes and subfolders up one level. Why: themed sorting without data loss.
