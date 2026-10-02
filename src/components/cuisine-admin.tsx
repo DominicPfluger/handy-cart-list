@@ -120,13 +120,21 @@ export function CuisineAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] })
     } catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
   };
 
-  const move = (c: Cuisine, dir: -1 | 1) => run(async () => {
+  const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [overIdx, setOverIdx] = useState<number | null>(null);
+
+  const dropCuisine = (targetIdx: number) => {
+    const start = dragIdx;
+    setDragIdx(null); setOverIdx(null);
+    if (start === null || start === targetIdx) return;
     const list = [...(data?.cuisines ?? [])];
-    const i = list.findIndex((x) => x.id === c.id), j = i + dir;
-    if (j < 0 || j >= list.length) return;
-    [list[i], list[j]] = [list[j]!, list[i]!];
-    await Promise.all(list.map((x, k) => supabase.from("cuisines").update({ sort_order: k }).eq("id", x.id)));
-  });
+    if (start < 0 || start >= list.length) return;
+    const [moved] = list.splice(start, 1);
+    list.splice(targetIdx, 0, moved!);
+    run(async () => {
+      await Promise.all(list.map((x, k) => supabase.from("cuisines").update({ sort_order: k }).eq("id", x.id)));
+    });
+  };
 
   return (
     <section className="rounded-xl border border-border bg-card p-3">
