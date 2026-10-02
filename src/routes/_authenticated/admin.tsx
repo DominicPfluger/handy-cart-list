@@ -313,6 +313,15 @@ function AdminPage() {
   const headingBefore = new Map(headings.map((h) => [h.before_product_id, h]));
   const selName = sel ? (sel.kind === "department" ? deptById.get(sel.id)?.name : sel.kind === "product" ? d?.prods.find((p) => p.id === sel.id)?.name : d?.heads.find((h) => h.id === sel.id)?.name) ?? "" : "";
 
+  const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>) => run(async () => {
+    if (!cur) return;
+    const rows = names.map((name, i) => ({ department_id: cur, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: products.length + i + 1 }));
+    const r = await supabase.from("products").insert(rows).select("id");
+    if (r.error) throw new Error(r.error.message);
+    await translateIds((r.data ?? []).map((x) => x.id as string));
+    setBulk(false);
+  }, T("adm.created"));
+
   return (
     <div className="space-y-4 pb-10">
       <div className="flex items-center justify-between gap-2">
@@ -371,15 +380,22 @@ function AdminPage() {
           ))}
         </div>
       ) : view === "tiles" && d ? (
-        <CatalogTileEditor depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={children} products={products}
-          path={path(cur)} nm={nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
-          reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
-          onSortRelevance={products.length > 1 ? () => sortProducts("popularity") : undefined} busy={busy}
-          headings={headings}
-          onAddHeading={(name) => { if (cur && products[0]) void run(() => saveH({ data: { departmentId: cur, beforeProductId: products[0]!.id, name } }), T("adm.created")); }}
-          onMoveHeading={moveHeading}
-          onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
-          onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }} />
+        <>
+          <CatalogTileEditor depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={children} products={products}
+            path={path(cur)} nm={nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
+            reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
+            onSortRelevance={products.length > 1 ? () => sortProducts("popularity") : undefined} busy={busy}
+            headings={headings}
+            onAddHeading={(name) => { if (cur && products[0]) void run(() => saveH({ data: { departmentId: cur, beforeProductId: products[0]!.id, name } }), T("adm.created")); }}
+            onMoveHeading={moveHeading}
+            onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
+            onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
+            onBulkAdd={cur ? () => setBulk("plain") : undefined} />
+          {bulk && (
+            <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
+              onSubmit={handleBulkSubmit} />
+          )}
+        </>
       ) : (
         <>
           <nav className="flex flex-wrap items-center gap-1 text-sm">
@@ -420,13 +436,7 @@ function AdminPage() {
 
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
-              onSubmit={(names, emoji, qty, unit, mkOnly) => run(async () => {
-                const rows = names.map((name, i) => ({ department_id: cur!, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: products.length + i + 1 }));
-                const r = await supabase.from("products").insert(rows).select("id");
-                if (r.error) throw new Error(r.error.message);
-                await translateIds((r.data ?? []).map((x) => x.id as string));
-                setBulk(false);
-              }, T("adm.created"))} />
+              onSubmit={handleBulkSubmit} />
           )}
 
           {children.length > 0 && (

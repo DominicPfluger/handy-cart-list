@@ -49,6 +49,7 @@ export function CatalogTileEditor(p: {
   onMoveHeading?: (id: string, beforeProductId: string) => void;
   onRenameHeading?: (id: string, name: string) => void;
   onDeleteHeading?: (id: string, name: string) => void;
+  onBulkAdd?: (() => void) | undefined;
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const headingBefore = useMemo(() => new Map((p.headings ?? []).map((h) => [h.before_product_id, h])), [p.headings]);
@@ -191,6 +192,12 @@ export function CatalogTileEditor(p: {
             <button type="button" onClick={() => setTarget({ kind: "product", id: null })}
               className="flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-sm font-semibold text-primary">
               <span className="text-2xl">+</span>{T("tile.newProd")}
+            </button>
+          )}
+          {editMode && p.cur && p.onBulkAdd && (
+            <button type="button" onClick={p.onBulkAdd}
+              className="flex min-h-28 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border text-sm font-semibold text-primary">
+              <span className="text-2xl">+</span>{T("adm.multi")}
             </button>
           )}
         </div>
