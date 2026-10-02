@@ -643,6 +643,7 @@ export const de = {
   "adm.rowSub": "{s} Unterkat. · {p} Produkte",
   "adm.sortBy": "Sortierkriterium",
   "adm.marketOrder": "Reihenfolge für Markt",
+  "adm.marketChoice": "Marktwahl",
   "adm.marketGlobal": "🌍 Global",
   "adm.marketOrderHint": "Marktrelevanz {m}: Verschieben und Sortieren gelten nur für diesen Markt.",
   "adm.marketUnavailable": "nicht im Markt",
