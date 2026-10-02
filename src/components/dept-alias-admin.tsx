@@ -10,8 +10,8 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 type Alias = { id: string; department_id: string; parent_id: string; sort_order: number };
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null };
 
-const KEY = ["admin-dept-aliases"];
-async function loadAliases() {
+export const KEY = ["admin-dept-aliases"];
+export async function loadAliases() {
   const { data, error } = await supabase.from("department_aliases").select("id, department_id, parent_id, sort_order").order("sort_order");
   if (error) throw new Error(error.message);
   return (data ?? []) as Alias[];
