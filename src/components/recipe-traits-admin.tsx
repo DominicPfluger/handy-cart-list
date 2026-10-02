@@ -39,7 +39,7 @@ export function RecipeTraitsAdmin() {
   async function setTrait(r: Row, g: TraitGroup, v: string) {
     const value = v || null;
     qc.setQueryData<Row[]>(KEY, (old) => old?.map((x) => (x.id === r.id ? { ...x, [g]: value } : x)));
-    const { error } = await supabase.from("recipes").update({ [g]: value }).eq("id", r.id);
+    const { error } = await supabase.from("recipes").update({ [g]: value } as { satiety?: string | null }).eq("id", r.id);
     if (error) { toast.error(error.message); qc.invalidateQueries({ queryKey: KEY }); }
   }
 
