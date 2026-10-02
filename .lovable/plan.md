@@ -10,9 +10,10 @@ Die per Checkbox gewählten Funktionen, in sinnvoller Reihenfolge.
 
 ## 2. Foto pro Listeneintrag
 
-- Kamera-/Bild-Knopf am Listeneintrag; Foto wird komprimiert (max. ca. 200 KB, WebP) in einen neuen Storage-Bereich `list-item-photos` hochgeladen.
-- `list_items` erhält eine Spalte `photo_path`; Foto erscheint klein am Eintrag, per Tipp gross.
-- Geteilte Listen: Foto ist für alle Listen-Mitglieder sichtbar.
+- Kamera-/Bild-Knopf am Listeneintrag; Foto wird komprimiert (max. ca. 200 KB, WebP) und **nur lokal auf dem Gerät** gespeichert (IndexedDB) — kein Cloud-Upload.
+- Foto erscheint klein am Eintrag, per Tipp gross; Zuordnung über die lokale Eintrags-ID.
+- Geteilte Listen: Foto bleibt gerätelokal, andere Mitglieder sehen nur den Texteintrag.
+- Keine Datenbank- oder Storage-Änderung nötig.
 
 ## 3. Portionen-Rechner (Rezepte)
 
@@ -43,7 +44,7 @@ Alle neuen Texte in Deutsch und den 15 weiteren App-Sprachen.
 
 ## Technische Hinweise
 
-- Neue DB-Spalte: `list_items.photo_path` (Migration mit GRANT/RLS-Prüfung; Policy über `can_access_list`). Neuer Storage-Bucket `list-item-photos` (privat, Zugriff über Listen-Mitgliedschaft).
+- Foto pro Eintrag: IndexedDB (gerätelokal), komprimiertes WebP; Schlüssel = Listen-/Eintrags-ID, automatisches Aufräumen gelöschter Einträge.
 - Einkaufs-Modus: `navigator.wakeLock` (mit Fallback ohne), Umschalter in der Listen-Ansicht.
 - Portionen-Rechner: reine Client-Logik auf `recipes.items` (jsonb), keine Schema-Änderung.
 - Katalog-Gesundheit: Abfragen über bestehende Tabellen (`products`, `product_reference_prices`, `catalog_translations`), serverseitig aggregiert.
