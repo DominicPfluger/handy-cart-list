@@ -1,0 +1,2 @@
+CREATE POLICY "Admins read all recipes" ON public.recipes FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'admin'));
+CREATE POLICY "Admins update recipes" ON public.recipes FOR UPDATE TO authenticated USING (public.has_role(auth.uid(), 'admin')) WITH CHECK (public.has_role(auth.uid(), 'admin'));
