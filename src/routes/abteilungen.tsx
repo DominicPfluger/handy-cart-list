@@ -515,7 +515,7 @@ function DepartmentsPage() {
                   key={d}
                   type="button"
                   aria-pressed={on}
-                  onClick={() => toggleDiet(d)}
+                  onClick={() => toggleDiet(d, "search")}
                   className={`flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-medium leading-none ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-foreground"}`}
                 >
                   <span className="text-base leading-none">{DIET_EMOJI[d]}</span>
