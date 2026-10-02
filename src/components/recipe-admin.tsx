@@ -61,7 +61,7 @@ async function loadRecipeGroups(): Promise<Group[]> {
   return (data ?? []) as Group[];
 }
 
-/** Bereich „Rezept-Zutaten" im Admin-Panel: pro Rezept-Schritt Produkte per Checkbox zuweisen. */
+/** Bereich „Rezept-Verwaltung“: Vorlagen, Zutatenbereiche (Schritte), Oberkategorien, beliebte Kombinationen. */
 export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) {
   const qc = useQueryClient();
   const { data } = useQuery({ queryKey: ["admin-recipe-ingredients"], queryFn: loadRecipeIngredients });
@@ -72,20 +72,10 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [open, setOpen] = useState(false);
   const [stepsOpen, setStepsOpen] = useState(true);
   const [groupsOpen, setGroupsOpen] = useState(false);
-  const [ingredientOpen, setIngredientOpen] = useState<Record<string, boolean>>({});
   const [tplId, setTplId] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
-  const [pickerStep, setPickerStep] = useState<string | null>(null);
-  const [pickerDept, setPickerDept] = useState<string | null>(null);
-  const [pickerSearch, setPickerSearch] = useState("");
-  const [pickerSel, setPickerSel] = useState<Set<string>>(new Set());
-  const [dragRow, setDragRow] = useState<string | null>(null);
-  const [dropAt, setDropAt] = useState<{ id: string; pos: "top" | "bottom" } | null>(null);
-  const sortFn = useServerFn(sortRecipeIngredients);
   const saveGroupFn = useServerFn(saveRecipeGroup);
   const deleteGroupFn = useServerFn(deleteRecipeGroup);
-  const suggestStepFn = useServerFn(suggestRecipeStepProducts);
   const [editGroupId, setEditGroupId] = useState<string | null>(null);
   const [groupFormOpen, setGroupFormOpen] = useState(false);
   const [groupParent, setGroupParent] = useState<string | null>(null);
@@ -97,28 +87,13 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [tplForm, setTplForm] = useState<{ id: string; emoji: string } | null>(null);
   const [stepForm, setStepForm] = useState<{ id: string | null; key: string; name: string; emoji: string; min: number; max: number; required: boolean } | null>(null);
   const [popForm, setPopForm] = useState("");
-  const [suggestStep, setSuggestStep] = useState<StepRow | null>(null);
-  const [suggestPicks, setSuggestPicks] = useState<Set<string> | null>(null);
-
-  const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
-  const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
-  const path = (id: string) => {
-    const out: string[] = [];
-    for (let d = deptById.get(id); d; d = d.parent_id ? deptById.get(d.parent_id) : undefined) out.unshift(d.name);
-    return out.join(" › ");
-  };
 
   const templates = tplRows ?? [];
   const stepsFor = (tid: string) => (stepRows ?? []).filter((s) => s.template_id === tid).sort((a, b) => a.sort_order - b.sort_order);
   const steps = tplId ? stepsFor(tplId) : [];
   const pops = tplId ? (popRows ?? []).filter((p) => p.template_id === tplId).sort((a, b) => a.sort_order - b.sort_order) : [];
-  const tpl = tplId ? { id: tplId, emoji: templates.find((x) => x.id === tplId)?.emoji ?? "🍽️", steps: steps.map((s) => ({ key: s.key, label: s.name })) } : null;
   const rows = data ?? [];
   const groups = groupData ?? [];
-  const assignedFor = (stepKey: string) =>
-    rows
-      .filter((r) => r.template_id === tplId && r.step_key === stepKey)
-      .sort((a, b) => a.sort_order - b.sort_order);
 
   const run = async (fn: () => Promise<unknown>) => {
     setBusy(true);
@@ -230,33 +205,6 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     });
   };
 
-  /** KI-Vorschläge für eine Oberkategorie: erst bestätigen, dann Vorschläge zum Abhaken. */
-  const startSuggest = (s: StepRow) => {
-    if (!window.confirm(T("adm.stepSuggestConfirm", { name: s.name }))) return;
-    setBusy(true);
-    const assigned = new Set(assignedFor(s.key).map((r) => r.product_id));
-    const candidates = prods.filter((p) => !assigned.has(p.id)).slice(0, 400).map((p) => ({ id: p.id, name: p.name, path: path(p.department_id) }));
-    suggestStepFn({ data: { step: s.name, template: tplLabel(tplId!), candidates } })
-      .then((r) => { setSuggestStep(s); setSuggestPicks(new Set(r.ids)); })
-      .catch((e) => toast.error((e as Error).message))
-      .finally(() => setBusy(false));
-  };
-  const applySuggest = () => run(async () => {
-    if (!suggestStep || !suggestPicks) return;
-    const s = suggestStep;
-    let max = Math.max(0, ...assignedFor(s.key).map((r) => r.sort_order));
-    const add = [...suggestPicks];
-    if (add.length) {
-      const { error } = await supabase.from("recipe_ingredients").upsert(
-        add.map((product_id) => ({ template_id: tplId!, step_key: s.key, product_id, sort_order: ++max })),
-        { onConflict: "template_id,step_key,product_id" },
-      );
-      if (error) throw new Error(error.message);
-    }
-    setSuggestStep(null);
-    setSuggestPicks(null);
-  });
-
   const groupTree = (parentId: string | null) => groups.filter((g) => g.parent_id === parentId).sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name));
   const descendants = (id: string): string[] => [id, ...groupTree(id).flatMap((g) => descendants(g.id))];
   const groupRows = (parentId: string | null): Array<{ group: Group; depth: number }> =>
@@ -300,6 +248,250 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     }
     await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
   });
+
+  return (
+    <section className="rounded-xl border border-border bg-card p-3">
+      <Button type="button" variant="ghost" aria-expanded={open} aria-controls="recipe-admin-content" onClick={() => setOpen((v) => !v)} className="flex h-auto w-full items-center justify-between px-0 text-left hover:bg-transparent">
+        <span className="text-sm font-semibold text-foreground">🍽️ {T("adm.recipeManage")}</span>
+        <span aria-hidden="true" className="text-xs text-muted-foreground">{open ? "▲" : "▼"}</span>
+      </Button>
+      <div id="recipe-admin-content" className={`mt-3 space-y-3 ${open ? "" : "hidden"}`}>
+
+      <div className="flex flex-wrap items-center gap-1.5">
+        {templates.map((x) => (
+          <button
+            key={x.id}
+            onClick={() => { setTplId(x.id); setStepForm(null); }}
+            aria-pressed={tplId === x.id}
+            className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"} ${x.enabled ? "" : "opacity-50 line-through"}`}
+          >
+            {x.emoji} {tplLabel(x.id)}
+          </button>
+        ))}
+        <Button type="button" variant="outline" size="sm" aria-expanded={manageOpen} aria-controls="recipe-admin-templates" onClick={() => setManageOpen((v) => !v)} className={`h-auto rounded-full px-2.5 py-1 text-xs ${manageOpen ? "border-primary bg-primary/15 text-foreground" : "border-dashed border-border bg-background text-muted-foreground"}`}>
+          ⚙️ {T("adm.tplManage")} <span aria-hidden="true">{manageOpen ? "▲" : "▼"}</span>
+        </Button>
+      </div>
+
+        <div id="recipe-admin-templates" className={`space-y-2 rounded-lg border border-border bg-background p-2 ${manageOpen ? "" : "hidden"}`}>
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-foreground">{T("adm.tplManage")}</span>
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => setTplForm({ id: "", emoji: "" })}>{T("adm.tplNew")}</Button>
+          </div>
+          {templates.map((t, i) => (
+            <div key={t.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+              <span className="min-w-0 flex-1 truncate text-foreground">{t.emoji} {tplLabel(t.id)} <span className="text-muted-foreground">({t.id})</span></span>
+              <button type="button" disabled={busy} onClick={() => toggleTpl(t)} className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${t.enabled ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
+                {t.enabled ? T("adm.tplEnabled") : T("adm.tplDisabled")}
+              </button>
+              <button type="button" disabled={busy || i === 0} onClick={() => moveTpl(t, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
+              <button type="button" disabled={busy || i === templates.length - 1} onClick={() => moveTpl(t, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
+              <Button size="sm" variant="ghost" disabled={busy} onClick={() => setTplForm({ id: t.id, emoji: t.emoji })}>{T("adm.edit")}</Button>
+              <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeTpl(t)}>{T("adm.delete")}</Button>
+            </div>
+          ))}
+          {tplForm && (
+            <div className="flex flex-wrap items-center gap-2">
+              <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={tplForm.id} onChange={(e) => setTplForm({ ...tplForm, id: e.target.value })} className="min-w-32 flex-1" disabled={templates.some((x) => x.id === tplForm.id)} />
+              <Input aria-label="Emoji" placeholder="Emoji" value={tplForm.emoji} onChange={(e) => setTplForm({ ...tplForm, emoji: e.target.value })} className="w-20" />
+              <Button size="sm" disabled={busy || !tplForm.id.trim()} onClick={saveTpl}>{T("adm.save")}</Button>
+              <Button size="sm" variant="ghost" onClick={() => setTplForm(null)}>{T("adm.cancel")}</Button>
+            </div>
+          )}
+
+          {tplId && (
+            <div className="space-y-2 border-t border-border pt-2">
+              <div className="space-y-1 border-t border-border pt-2">
+                <span className="text-xs font-semibold text-foreground">{T("adm.popular")}</span>
+                {pops.map((p) => (
+                  <div key={p.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+                    <span className="min-w-0 flex-1 truncate text-muted-foreground">{Object.entries(p.picks).map(([k, v]) => `${k}: ${v.join(", ")}`).join(" · ")}</span>
+                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => removePop(p)}>{T("adm.delete")}</Button>
+                  </div>
+                ))}
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input aria-label={T("adm.popularNew")} placeholder={T("adm.popularHint")} value={popForm} onChange={(e) => setPopForm(e.target.value)} className="min-w-40 flex-1" />
+                  <Button size="sm" disabled={busy || !popForm.trim()} onClick={addPop}>{T("adm.popularNew")}</Button>
+                </div>
+              </div>
+
+              <div className="space-y-1 border-t border-border pt-2">
+                <span className="text-xs font-semibold text-foreground">{T("adm.preview")}</span>
+                <div className="rounded-xl border border-border bg-card p-2">
+                  <p className="text-sm font-semibold text-foreground">{templates.find((x) => x.id === tplId)?.emoji} {tplLabel(tplId)}</p>
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {steps.map((s) => (
+                      <span key={s.id} className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-foreground">{s.emoji} {s.name} {s.required ? "*" : ""}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+
+      {tplId && (
+        <div className="space-y-4">
+          <div className="space-y-2 border-b border-border pb-4">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+              <Button type="button" variant="ghost" aria-expanded={stepsOpen} aria-controls="recipe-admin-steps" onClick={() => setStepsOpen((v) => !v)} className="h-auto min-w-0 justify-start gap-2 px-0 text-left text-sm font-semibold hover:bg-transparent">
+                <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{stepsOpen ? "▲" : "▼"}</span>
+                <span className="min-w-0 truncate">{tplLabel(tplId)} · {T("adm.tplManage")}</span>
+              </Button>
+              <Button size="sm" variant="outline" disabled={busy} onClick={() => { setStepsOpen(true); setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true }); }}>{T("adm.stepNew")}</Button>
+            </div>
+            <div id="recipe-admin-steps" className={`space-y-2 ${stepsOpen ? "" : "hidden"}`}>
+            {steps.map((s, i) => (
+              <div key={s.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+                <span className="min-w-0 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
+                <span className="flex shrink-0 items-center">
+                  <Button size="icon" variant="ghost" disabled={busy || i === 0} onClick={() => moveStep(s, -1)} title="↑" aria-label="↑">▲</Button>
+                  <Button size="icon" variant="ghost" disabled={busy || i === steps.length - 1} onClick={() => moveStep(s, 1)} title="↓" aria-label="↓">▼</Button>
+                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => setStepForm({ id: s.id, key: s.key, name: s.name, emoji: s.emoji ?? "", min: s.min, max: s.max, required: s.required })}>{T("adm.edit")}</Button>
+                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeStep(s)}>{T("adm.delete")}</Button>
+                </span>
+              </div>
+            ))}
+            {stepForm && (
+              <div className="space-y-2 rounded-lg border border-border p-2">
+                <p className="text-xs font-semibold text-foreground">{stepForm.id ? T("adm.stepEdit") : T("adm.stepNew")}</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={stepForm.key} onChange={(e) => setStepForm({ ...stepForm, key: e.target.value })} className="w-28" disabled={!!stepForm.id} />
+                  <Input aria-label={T("add.name")} placeholder={T("add.name")} value={stepForm.name} onChange={(e) => setStepForm({ ...stepForm, name: e.target.value })} className="min-w-32 flex-1" />
+                  <Input aria-label="Emoji" placeholder="Emoji" value={stepForm.emoji} onChange={(e) => setStepForm({ ...stepForm, emoji: e.target.value })} className="w-16" />
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-xs text-foreground">
+                  <label className="flex items-center gap-1">{T("adm.stepMin")} <Input type="number" min={0} max={20} value={stepForm.min} onChange={(e) => setStepForm({ ...stepForm, min: Math.max(0, Number(e.target.value) || 0) })} className="w-16" /></label>
+                  <label className="flex items-center gap-1">{T("adm.stepMax")} <Input type="number" min={1} max={20} value={stepForm.max} onChange={(e) => setStepForm({ ...stepForm, max: Math.max(1, Number(e.target.value) || 1) })} className="w-16" /></label>
+                  <label className="flex items-center gap-1"><input type="checkbox" checked={stepForm.required} onChange={(e) => setStepForm({ ...stepForm, required: e.target.checked })} className="accent-primary" /> {T("adm.stepRequired")}</label>
+                  <Button size="sm" disabled={busy || !stepForm.key.trim() || !stepForm.name.trim()} onClick={saveStep}>{T("adm.save")}</Button>
+                  <Button size="sm" variant="ghost" onClick={() => setStepForm(null)}>{T("adm.cancel")}</Button>
+                </div>
+              </div>
+            )}
+            </div>
+          </div>
+          <div className="space-y-2 border-b border-border pb-4">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+              <Button type="button" variant="ghost" aria-expanded={groupsOpen} aria-controls="recipe-admin-groups" onClick={() => setGroupsOpen((v) => !v)} className="h-auto min-w-0 justify-start gap-2 px-0 text-left text-sm font-semibold hover:bg-transparent">
+                <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{groupsOpen ? "▲" : "▼"}</span>
+                <span className="min-w-0 truncate">{T("adm.recipeGroups")}</span>
+              </Button>
+              <Button size="sm" variant="outline" disabled={busy} onClick={() => { setGroupsOpen(true); startGroup(null); }}>{T("adm.recipeGroupNew")}</Button>
+            </div>
+            <div id="recipe-admin-groups" className={`space-y-2 ${groupsOpen ? "" : "hidden"}`}>
+            {groupTree(null).map((parent) => (
+              <div key={parent.id} className="space-y-1">
+                {[{ group: parent, depth: 0 }, ...groupRows(parent.id).map(({ group, depth }) => ({ group, depth: depth + 1 }))].map(({ group: g, depth }) => (
+                  <div key={g.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", g.id); setDragGroup(g.id); }} onDragEnd={() => setDragGroup(null)} onDragOver={(e) => { if (dragGroup) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragGroup) void reorderGroup(dragGroup, g); setDragGroup(null); }} className={`flex items-center gap-1.5 border-b border-border/50 py-1 text-xs ${depth ? "pl-5" : "font-semibold"}`}>
+                    {depth > 1 && <span className="text-muted-foreground">{"› ".repeat(depth - 1)}</span>}
+                    <span className="cursor-grab text-muted-foreground" title={T("adm.drag")}>⠿</span>
+                    <span className="min-w-0 flex-1 break-words text-foreground">{g.emoji} {g.name}</span>
+                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => startGroup(g.parent_id, g)}>{T("adm.edit")}</Button>
+                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeGroup(g)}>{T("adm.delete")}</Button>
+                  </div>
+                ))}
+              </div>
+            ))}
+            {groupFormOpen && <div className="flex flex-wrap items-center gap-2">
+              <Input aria-label={T("add.name")} placeholder={T("add.name")} value={groupName} onChange={(e) => setGroupName(e.target.value)} className="min-w-32 flex-1" />
+              <Input aria-label="Emoji" placeholder="Emoji" value={groupEmoji} onChange={(e) => setGroupEmoji(e.target.value)} className="w-20" />
+              <Button size="sm" disabled={busy || !groupName.trim()} onClick={saveGroup}>{T("adm.save")}</Button>
+              <Button size="sm" variant="ghost" onClick={() => { setGroupFormOpen(false); setGroupName(""); setGroupParent(null); setEditGroupId(null); }}>{T("adm.cancel")}</Button>
+            </div>}
+            </div>
+          </div>
+        </div>
+      )}
+      </div>
+    </section>
+  );
+}
+
+/** Bereich „Zutaten-Zuweisung“: pro Rezept-Schritt Produkte per Checkbox zuweisen, suchen, sortieren. */
+export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) {
+  const qc = useQueryClient();
+  const { data } = useQuery({ queryKey: ["admin-recipe-ingredients"], queryFn: loadRecipeIngredients });
+  const { data: groupData } = useQuery({ queryKey: ["admin-recipe-groups"], queryFn: loadRecipeGroups });
+  const { data: tplRows } = useQuery({ queryKey: ["admin-recipe-templates"], queryFn: loadTplRows });
+  const { data: stepRows } = useQuery({ queryKey: ["admin-recipe-steps"], queryFn: loadStepRows });
+  const [open, setOpen] = useState(false);
+  const [ingredientOpen, setIngredientOpen] = useState<Record<string, boolean>>({});
+  const [tplId, setTplId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [pickerStep, setPickerStep] = useState<string | null>(null);
+  const [pickerDept, setPickerDept] = useState<string | null>(null);
+  const [pickerSearch, setPickerSearch] = useState("");
+  const [pickerSel, setPickerSel] = useState<Set<string>>(new Set());
+  const [dragRow, setDragRow] = useState<string | null>(null);
+  const [dropAt, setDropAt] = useState<{ id: string; pos: "top" | "bottom" } | null>(null);
+  const sortFn = useServerFn(sortRecipeIngredients);
+  const suggestStepFn = useServerFn(suggestRecipeStepProducts);
+  const [suggestStep, setSuggestStep] = useState<StepRow | null>(null);
+  const [suggestPicks, setSuggestPicks] = useState<Set<string> | null>(null);
+
+  const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
+  const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
+  const path = (id: string) => {
+    const out: string[] = [];
+    for (let d = deptById.get(id); d; d = d.parent_id ? deptById.get(d.parent_id) : undefined) out.unshift(d.name);
+    return out.join(" › ");
+  };
+
+  const templates = tplRows ?? [];
+  const steps = tplId ? (stepRows ?? []).filter((s) => s.template_id === tplId).sort((a, b) => a.sort_order - b.sort_order) : [];
+  const tpl = tplId ? { id: tplId, steps: steps.map((s) => ({ key: s.key, label: s.name })) } : null;
+  const rows = data ?? [];
+  const groups = groupData ?? [];
+  const assignedFor = (stepKey: string) =>
+    rows
+      .filter((r) => r.template_id === tplId && r.step_key === stepKey)
+      .sort((a, b) => a.sort_order - b.sort_order);
+  const groupTree = (parentId: string | null) => groups.filter((g) => g.parent_id === parentId).sort((a, b) => a.sort_order - b.sort_order || a.name.localeCompare(b.name));
+  const groupRows = (parentId: string | null): Array<{ group: Group; depth: number }> =>
+    groupTree(parentId).flatMap((group) => [{ group, depth: 0 }, ...groupRows(group.id).map(({ group: child, depth }) => ({ group: child, depth: depth + 1 }))]);
+
+  const run = async (fn: () => Promise<unknown>) => {
+    setBusy(true);
+    try {
+      await fn();
+      await qc.invalidateQueries({ queryKey: ["admin-recipe-ingredients"] });
+      qc.invalidateQueries({ queryKey: ["catalog"] });
+    } catch (e) {
+      toast.error((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  /** KI-Vorschläge für eine Oberkategorie: erst bestätigen, dann Vorschläge zum Abhaken. */
+  const startSuggest = (s: StepRow) => {
+    if (!window.confirm(T("adm.stepSuggestConfirm", { name: s.name }))) return;
+    setBusy(true);
+    const assigned = new Set(assignedFor(s.key).map((r) => r.product_id));
+    const candidates = prods.filter((p) => !assigned.has(p.id)).slice(0, 400).map((p) => ({ id: p.id, name: p.name, path: path(p.department_id) }));
+    suggestStepFn({ data: { step: s.name, template: tplLabel(tplId!), candidates } })
+      .then((r) => { setSuggestStep(s); setSuggestPicks(new Set(r.ids)); })
+      .catch((e) => toast.error((e as Error).message))
+      .finally(() => setBusy(false));
+  };
+  const applySuggest = () => run(async () => {
+    if (!suggestStep || !suggestPicks) return;
+    const s = suggestStep;
+    let max = Math.max(0, ...assignedFor(s.key).map((r) => r.sort_order));
+    const add = [...suggestPicks];
+    if (add.length) {
+      const { error } = await supabase.from("recipe_ingredients").upsert(
+        add.map((product_id) => ({ template_id: tplId!, step_key: s.key, product_id, sort_order: ++max })),
+        { onConflict: "template_id,step_key,product_id" },
+      );
+      if (error) throw new Error(error.message);
+    }
+    setSuggestStep(null);
+    setSuggestPicks(null);
+  });
+
   const assignGroup = (row: Row, id: string | null) => run(async () => {
     const { error } = await supabase.from("recipe_ingredients").update({ group_id: id }).eq("id", row.id);
     if (error) throw new Error(error.message);
@@ -432,161 +624,29 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       setPickerSearch("");
     });
 
-
-
   return (
     <section className="rounded-xl border border-border bg-card p-3">
-      <Button type="button" variant="ghost" aria-expanded={open} aria-controls="recipe-admin-content" onClick={() => setOpen((v) => !v)} className="flex h-auto w-full items-center justify-between px-0 text-left hover:bg-transparent">
-        <span className="text-sm font-semibold text-foreground">🍽️ {T("adm.recipeIngredients")}</span>
+      <Button type="button" variant="ghost" aria-expanded={open} aria-controls="recipe-assign-content" onClick={() => setOpen((v) => !v)} className="flex h-auto w-full items-center justify-between px-0 text-left hover:bg-transparent">
+        <span className="text-sm font-semibold text-foreground">🧺 {T("adm.recipeAssign")}</span>
         <span aria-hidden="true" className="text-xs text-muted-foreground">{open ? "▲" : "▼"}</span>
       </Button>
-      <div id="recipe-admin-content" className={`mt-3 space-y-3 ${open ? "" : "hidden"}`}>
-
+      <div id="recipe-assign-content" className={`mt-3 space-y-3 ${open ? "" : "hidden"}`}>
 
       <div className="flex flex-wrap items-center gap-1.5">
         {templates.map((x) => (
           <button
             key={x.id}
-            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setPickerSearch(""); setStepForm(null); setSuggestStep(null); }}
+            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setPickerSearch(""); setSuggestStep(null); }}
             aria-pressed={tplId === x.id}
             className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"} ${x.enabled ? "" : "opacity-50 line-through"}`}
           >
             {x.emoji} {tplLabel(x.id)}
           </button>
         ))}
-        <Button type="button" variant="outline" size="sm" aria-expanded={manageOpen} aria-controls="recipe-admin-templates" onClick={() => setManageOpen((v) => !v)} className={`h-auto rounded-full px-2.5 py-1 text-xs ${manageOpen ? "border-primary bg-primary/15 text-foreground" : "border-dashed border-border bg-background text-muted-foreground"}`}>
-          ⚙️ {T("adm.tplManage")} <span aria-hidden="true">{manageOpen ? "▲" : "▼"}</span>
-        </Button>
       </div>
-
-        <div id="recipe-admin-templates" className={`space-y-2 rounded-lg border border-border bg-background p-2 ${manageOpen ? "" : "hidden"}`}>
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-foreground">{T("adm.tplManage")}</span>
-            <Button size="sm" variant="outline" disabled={busy} onClick={() => setTplForm({ id: "", emoji: "" })}>{T("adm.tplNew")}</Button>
-          </div>
-          {templates.map((t, i) => (
-            <div key={t.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
-              <span className="min-w-0 flex-1 truncate text-foreground">{t.emoji} {tplLabel(t.id)} <span className="text-muted-foreground">({t.id})</span></span>
-              <button type="button" disabled={busy} onClick={() => toggleTpl(t)} className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${t.enabled ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
-                {t.enabled ? T("adm.tplEnabled") : T("adm.tplDisabled")}
-              </button>
-              <button type="button" disabled={busy || i === 0} onClick={() => moveTpl(t, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
-              <button type="button" disabled={busy || i === templates.length - 1} onClick={() => moveTpl(t, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
-              <Button size="sm" variant="ghost" disabled={busy} onClick={() => setTplForm({ id: t.id, emoji: t.emoji })}>{T("adm.edit")}</Button>
-              <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeTpl(t)}>{T("adm.delete")}</Button>
-            </div>
-          ))}
-          {tplForm && (
-            <div className="flex flex-wrap items-center gap-2">
-              <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={tplForm.id} onChange={(e) => setTplForm({ ...tplForm, id: e.target.value })} className="min-w-32 flex-1" disabled={templates.some((x) => x.id === tplForm.id)} />
-              <Input aria-label="Emoji" placeholder="Emoji" value={tplForm.emoji} onChange={(e) => setTplForm({ ...tplForm, emoji: e.target.value })} className="w-20" />
-              <Button size="sm" disabled={busy || !tplForm.id.trim()} onClick={saveTpl}>{T("adm.save")}</Button>
-              <Button size="sm" variant="ghost" onClick={() => setTplForm(null)}>{T("adm.cancel")}</Button>
-            </div>
-          )}
-
-          {tplId && (
-            <div className="space-y-2 border-t border-border pt-2">
-              <div className="space-y-1 border-t border-border pt-2">
-                <span className="text-xs font-semibold text-foreground">{T("adm.popular")}</span>
-                {pops.map((p) => (
-                  <div key={p.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
-                    <span className="min-w-0 flex-1 truncate text-muted-foreground">{Object.entries(p.picks).map(([k, v]) => `${k}: ${v.join(", ")}`).join(" · ")}</span>
-                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => removePop(p)}>{T("adm.delete")}</Button>
-                  </div>
-                ))}
-                <div className="flex flex-wrap items-center gap-2">
-                  <Input aria-label={T("adm.popularNew")} placeholder={T("adm.popularHint")} value={popForm} onChange={(e) => setPopForm(e.target.value)} className="min-w-40 flex-1" />
-                  <Button size="sm" disabled={busy || !popForm.trim()} onClick={addPop}>{T("adm.popularNew")}</Button>
-                </div>
-              </div>
-
-              <div className="space-y-1 border-t border-border pt-2">
-                <span className="text-xs font-semibold text-foreground">{T("adm.preview")}</span>
-                <div className="rounded-xl border border-border bg-card p-2">
-                  <p className="text-sm font-semibold text-foreground">{templates.find((x) => x.id === tplId)?.emoji} {tplLabel(tplId)}</p>
-                  <div className="mt-1 flex flex-wrap gap-1">
-                    {steps.map((s) => (
-                      <span key={s.id} className="rounded-full bg-muted px-2 py-0.5 text-[10px] text-foreground">{s.emoji} {s.name} {s.required ? "*" : ""}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
 
       {tpl && (
         <div className="space-y-4">
-          <div className="space-y-2 border-b border-border pb-4">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
-              <Button type="button" variant="ghost" aria-expanded={stepsOpen} aria-controls="recipe-admin-steps" onClick={() => setStepsOpen((v) => !v)} className="h-auto min-w-0 justify-start gap-2 px-0 text-left text-sm font-semibold hover:bg-transparent">
-                <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{stepsOpen ? "▲" : "▼"}</span>
-                <span className="min-w-0 truncate">{tplLabel(tplId!)} · {T("adm.tplManage")}</span>
-              </Button>
-              <Button size="sm" variant="outline" disabled={busy} onClick={() => { setStepsOpen(true); setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true }); }}>{T("adm.stepNew")}</Button>
-            </div>
-            <div id="recipe-admin-steps" className={`space-y-2 ${stepsOpen ? "" : "hidden"}`}>
-            {steps.map((s, i) => (
-              <div key={s.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/50 py-1 text-xs">
-                <span className="min-w-0 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
-                <span className="flex shrink-0 items-center">
-                  <Button size="icon" variant="ghost" disabled={busy || i === 0} onClick={() => moveStep(s, -1)} title="↑" aria-label="↑">▲</Button>
-                  <Button size="icon" variant="ghost" disabled={busy || i === steps.length - 1} onClick={() => moveStep(s, 1)} title="↓" aria-label="↓">▼</Button>
-                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => setStepForm({ id: s.id, key: s.key, name: s.name, emoji: s.emoji ?? "", min: s.min, max: s.max, required: s.required })}>{T("adm.edit")}</Button>
-                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeStep(s)}>{T("adm.delete")}</Button>
-                </span>
-              </div>
-            ))}
-            {stepForm && (
-              <div className="space-y-2 rounded-lg border border-border p-2">
-                <p className="text-xs font-semibold text-foreground">{stepForm.id ? T("adm.stepEdit") : T("adm.stepNew")}</p>
-                <div className="flex flex-wrap items-center gap-2">
-                  <Input aria-label={T("adm.tplId")} placeholder={T("adm.tplId")} value={stepForm.key} onChange={(e) => setStepForm({ ...stepForm, key: e.target.value })} className="w-28" disabled={!!stepForm.id} />
-                  <Input aria-label={T("add.name")} placeholder={T("add.name")} value={stepForm.name} onChange={(e) => setStepForm({ ...stepForm, name: e.target.value })} className="min-w-32 flex-1" />
-                  <Input aria-label="Emoji" placeholder="Emoji" value={stepForm.emoji} onChange={(e) => setStepForm({ ...stepForm, emoji: e.target.value })} className="w-16" />
-                </div>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-foreground">
-                  <label className="flex items-center gap-1">{T("adm.stepMin")} <Input type="number" min={0} max={20} value={stepForm.min} onChange={(e) => setStepForm({ ...stepForm, min: Math.max(0, Number(e.target.value) || 0) })} className="w-16" /></label>
-                  <label className="flex items-center gap-1">{T("adm.stepMax")} <Input type="number" min={1} max={20} value={stepForm.max} onChange={(e) => setStepForm({ ...stepForm, max: Math.max(1, Number(e.target.value) || 1) })} className="w-16" /></label>
-                  <label className="flex items-center gap-1"><input type="checkbox" checked={stepForm.required} onChange={(e) => setStepForm({ ...stepForm, required: e.target.checked })} className="accent-primary" /> {T("adm.stepRequired")}</label>
-                  <Button size="sm" disabled={busy || !stepForm.key.trim() || !stepForm.name.trim()} onClick={saveStep}>{T("adm.save")}</Button>
-                  <Button size="sm" variant="ghost" onClick={() => setStepForm(null)}>{T("adm.cancel")}</Button>
-                </div>
-              </div>
-            )}
-            </div>
-          </div>
-          <div className="space-y-2 border-b border-border pb-4">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
-              <Button type="button" variant="ghost" aria-expanded={groupsOpen} aria-controls="recipe-admin-groups" onClick={() => setGroupsOpen((v) => !v)} className="h-auto min-w-0 justify-start gap-2 px-0 text-left text-sm font-semibold hover:bg-transparent">
-                <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{groupsOpen ? "▲" : "▼"}</span>
-                <span className="min-w-0 truncate">{T("adm.recipeGroups")}</span>
-              </Button>
-              <Button size="sm" variant="outline" disabled={busy} onClick={() => { setGroupsOpen(true); startGroup(null); }}>{T("adm.recipeGroupNew")}</Button>
-            </div>
-            <div id="recipe-admin-groups" className={`space-y-2 ${groupsOpen ? "" : "hidden"}`}>
-            {groupTree(null).map((parent) => (
-              <div key={parent.id} className="space-y-1">
-                {[{ group: parent, depth: 0 }, ...groupRows(parent.id).map(({ group, depth }) => ({ group, depth: depth + 1 }))].map(({ group: g, depth }) => (
-                  <div key={g.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", g.id); setDragGroup(g.id); }} onDragEnd={() => setDragGroup(null)} onDragOver={(e) => { if (dragGroup) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragGroup) void reorderGroup(dragGroup, g); setDragGroup(null); }} className={`flex items-center gap-1.5 border-b border-border/50 py-1 text-xs ${depth ? "pl-5" : "font-semibold"}`}>
-                    {depth > 1 && <span className="text-muted-foreground">{"› ".repeat(depth - 1)}</span>}
-                    <span className="cursor-grab text-muted-foreground" title={T("adm.drag")}>⠿</span>
-                    <span className="min-w-0 flex-1 break-words text-foreground">{g.emoji} {g.name}</span>
-                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => startGroup(g.parent_id, g)}>{T("adm.edit")}</Button>
-                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeGroup(g)}>{T("adm.delete")}</Button>
-                  </div>
-                ))}
-              </div>
-            ))}
-            {groupFormOpen && <div className="flex flex-wrap items-center gap-2">
-              <Input aria-label={T("add.name")} placeholder={T("add.name")} value={groupName} onChange={(e) => setGroupName(e.target.value)} className="min-w-32 flex-1" />
-              <Input aria-label="Emoji" placeholder="Emoji" value={groupEmoji} onChange={(e) => setGroupEmoji(e.target.value)} className="w-20" />
-              <Button size="sm" disabled={busy || !groupName.trim()} onClick={saveGroup}>{T("adm.save")}</Button>
-              <Button size="sm" variant="ghost" onClick={() => { setGroupFormOpen(false); setGroupName(""); setGroupParent(null); setEditGroupId(null); }}>{T("adm.cancel")}</Button>
-            </div>}
-            </div>
-          </div>
           <Input
             aria-label={T("adm.recipeIngredientSearch")}
             placeholder={T("adm.recipeIngredientSearch")}
@@ -788,4 +848,3 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     </section>
   );
 }
-
