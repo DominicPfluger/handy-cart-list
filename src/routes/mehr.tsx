@@ -222,6 +222,7 @@ function MorePage() {
 
       {/* Sprache & Admin */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <DietPreferenceRow />
         <label className="flex w-full items-center gap-3 px-4 py-3.5">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
             <GearIcon className="h-5 w-5" />
@@ -245,7 +246,6 @@ function MorePage() {
         <IconSetRow />
         <PreloadImagesRow />
         <FontSizeRow />
-        <DietPreferenceRow />
         <SpeakLocaleRow />
         <SpeakRateRow />
         {isAdmin && (
