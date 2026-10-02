@@ -1015,7 +1015,10 @@
     "adm.headingMoveOnly": "Heading only",
     "adm.headingMoveGroup": "Heading with {n} products",
     "adm.headingMoveNoTarget": "No product follows here – only possible with products.",
-    "adm.headingMoveTaken": "A heading is already at this position."
+    "adm.headingMoveTaken": "A heading is already at this position.",
+    "adm.headingMovePos": "Choose position",
+    "adm.headingMoveBefore": "Before \"{name}\"",
+    "adm.headingMoveEnd": "At the very end"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2033,7 +2036,10 @@
     "adm.headingMoveOnly": "Heading only",
     "adm.headingMoveGroup": "Heading with {n} products",
     "adm.headingMoveNoTarget": "No product follows here – only possible with products.",
-    "adm.headingMoveTaken": "A heading is already at this position."
+    "adm.headingMoveTaken": "A heading is already at this position.",
+    "adm.headingMovePos": "Choose position",
+    "adm.headingMoveBefore": "Before \"{name}\"",
+    "adm.headingMoveEnd": "At the very end"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3051,7 +3057,10 @@
     "adm.headingMoveOnly": "Heading only",
     "adm.headingMoveGroup": "Heading with {n} products",
     "adm.headingMoveNoTarget": "No product follows here – only possible with products.",
-    "adm.headingMoveTaken": "A heading is already at this position."
+    "adm.headingMoveTaken": "A heading is already at this position.",
+    "adm.headingMovePos": "Choose position",
+    "adm.headingMoveBefore": "Before \"{name}\"",
+    "adm.headingMoveEnd": "At the very end"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4069,7 +4078,10 @@
     "adm.headingMoveOnly": "Solo el título",
     "adm.headingMoveGroup": "Título con {n} productos",
     "adm.headingMoveNoTarget": "Aquí no sigue ningún producto – solo posible con productos.",
-    "adm.headingMoveTaken": "Ya hay un título en esta posición."
+    "adm.headingMoveTaken": "Ya hay un título en esta posición.",
+    "adm.headingMovePos": "Elegir posición",
+    "adm.headingMoveBefore": "Antes de \"{name}\"",
+    "adm.headingMoveEnd": "Al final de todo"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5087,7 +5099,10 @@
     "adm.headingMoveOnly": "Solo el título",
     "adm.headingMoveGroup": "Título con {n} productos",
     "adm.headingMoveNoTarget": "Aquí no sigue ningún producto – solo posible con productos.",
-    "adm.headingMoveTaken": "Ya hay un título en esta posición."
+    "adm.headingMoveTaken": "Ya hay un título en esta posición.",
+    "adm.headingMovePos": "Elegir posición",
+    "adm.headingMoveBefore": "Antes de \"{name}\"",
+    "adm.headingMoveEnd": "Al final de todo"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6105,7 +6120,10 @@
     "adm.headingMoveOnly": "Titre seulement",
     "adm.headingMoveGroup": "Titre avec {n} produits",
     "adm.headingMoveNoTarget": "Aucun produit ne suit ici – possible uniquement avec les produits.",
-    "adm.headingMoveTaken": "Un titre se trouve déjà à cet endroit."
+    "adm.headingMoveTaken": "Un titre se trouve déjà à cet endroit.",
+    "adm.headingMovePos": "Choisir la position",
+    "adm.headingMoveBefore": "Avant « {name} »",
+    "adm.headingMoveEnd": "Tout à la fin"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7123,7 +7141,10 @@
     "adm.headingMoveOnly": "Titre seulement",
     "adm.headingMoveGroup": "Titre avec {n} produits",
     "adm.headingMoveNoTarget": "Aucun produit ne suit ici – possible uniquement avec les produits.",
-    "adm.headingMoveTaken": "Un titre se trouve déjà à cet endroit."
+    "adm.headingMoveTaken": "Un titre se trouve déjà à cet endroit.",
+    "adm.headingMovePos": "Choisir la position",
+    "adm.headingMoveBefore": "Avant « {name} »",
+    "adm.headingMoveEnd": "Tout à la fin"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8141,7 +8162,10 @@
     "adm.headingMoveOnly": "Solo titolo",
     "adm.headingMoveGroup": "Titolo con {n} prodotti",
     "adm.headingMoveNoTarget": "Nessun prodotto segue qui – possibile solo con i prodotti.",
-    "adm.headingMoveTaken": "In questa posizione c’è già un titolo."
+    "adm.headingMoveTaken": "In questa posizione c’è già un titolo.",
+    "adm.headingMovePos": "Scegli la posizione",
+    "adm.headingMoveBefore": "Prima di \"{name}\"",
+    "adm.headingMoveEnd": "Alla fine"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9159,7 +9183,10 @@
     "adm.headingMoveOnly": "Solo titolo",
     "adm.headingMoveGroup": "Titolo con {n} prodotti",
     "adm.headingMoveNoTarget": "Nessun prodotto segue qui – possibile solo con i prodotti.",
-    "adm.headingMoveTaken": "In questa posizione c’è già un titolo."
+    "adm.headingMoveTaken": "In questa posizione c’è già un titolo.",
+    "adm.headingMovePos": "Scegli la posizione",
+    "adm.headingMoveBefore": "Prima di \"{name}\"",
+    "adm.headingMoveEnd": "Alla fine"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10177,7 +10204,10 @@
     "adm.headingMoveOnly": "Só o título",
     "adm.headingMoveGroup": "Título com {n} produtos",
     "adm.headingMoveNoTarget": "Nenhum produto segue aqui – só possível com produtos.",
-    "adm.headingMoveTaken": "Já existe um título nesta posição."
+    "adm.headingMoveTaken": "Já existe um título nesta posição.",
+    "adm.headingMovePos": "Escolher posição",
+    "adm.headingMoveBefore": "Antes de \"{name}\"",
+    "adm.headingMoveEnd": "No fim de tudo"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11195,7 +11225,10 @@
     "adm.headingMoveOnly": "Só o título",
     "adm.headingMoveGroup": "Título com {n} produtos",
     "adm.headingMoveNoTarget": "Nenhum produto segue aqui – só possível com produtos.",
-    "adm.headingMoveTaken": "Já existe um título nesta posição."
+    "adm.headingMoveTaken": "Já existe um título nesta posição.",
+    "adm.headingMovePos": "Escolher posição",
+    "adm.headingMoveBefore": "Antes de \"{name}\"",
+    "adm.headingMoveEnd": "No fim de tudo"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12213,7 +12246,10 @@
     "adm.headingMoveOnly": "Alleen kop",
     "adm.headingMoveGroup": "Kop met {n} producten",
     "adm.headingMoveNoTarget": "Hier volgt geen product – alleen mogelijk met producten.",
-    "adm.headingMoveTaken": "Op deze plek staat al een kop."
+    "adm.headingMoveTaken": "Op deze plek staat al een kop.",
+    "adm.headingMovePos": "Positie kiezen",
+    "adm.headingMoveBefore": "Voor \"{name}\"",
+    "adm.headingMoveEnd": "Helemaal onderaan"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13231,7 +13267,10 @@
     "adm.headingMoveOnly": "Alleen kop",
     "adm.headingMoveGroup": "Kop met {n} producten",
     "adm.headingMoveNoTarget": "Hier volgt geen product – alleen mogelijk met producten.",
-    "adm.headingMoveTaken": "Op deze plek staat al een kop."
+    "adm.headingMoveTaken": "Op deze plek staat al een kop.",
+    "adm.headingMovePos": "Positie kiezen",
+    "adm.headingMoveBefore": "Voor \"{name}\"",
+    "adm.headingMoveEnd": "Helemaal onderaan"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13709,7 +13748,10 @@
     "adm.headingMoveOnly": "Nur Überschrift",
     "adm.headingMoveGroup": "Überschrift mit {n} Produkten",
     "adm.headingMoveNoTarget": "Hier folgt kein Produkt – nur mit Produkten möglich.",
-    "adm.headingMoveTaken": "An dieser Stelle steht bereits eine Überschrift."
+    "adm.headingMoveTaken": "An dieser Stelle steht bereits eine Überschrift.",
+    "adm.headingMovePos": "Position wählen",
+    "adm.headingMoveBefore": "Vor „{name}“",
+    "adm.headingMoveEnd": "Ganz ans Ende"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14187,6 +14229,9 @@
     "adm.headingMoveOnly": "Nur Überschrift",
     "adm.headingMoveGroup": "Überschrift mit {n} Produkten",
     "adm.headingMoveNoTarget": "Hier folgt kein Produkt – nur mit Produkten möglich.",
-    "adm.headingMoveTaken": "An dieser Stelle steht bereits eine Überschrift."
+    "adm.headingMoveTaken": "An dieser Stelle steht bereits eine Überschrift.",
+    "adm.headingMovePos": "Position wählen",
+    "adm.headingMoveBefore": "Vor „{name}“",
+    "adm.headingMoveEnd": "Ganz ans Ende"
   }
 }
