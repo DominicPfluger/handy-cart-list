@@ -360,6 +360,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [estimates, setEstimates] = useState<Array<{ market: string; price: number; currency: string; unit_price: number | null; unit_basis: string | null }>>([]);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
+  const [prodLines, setProdLines] = useState("");
   const heads = p.headings ?? [];
   const curHeadingId = (() => {
     if (!prod) return "";
@@ -420,6 +421,16 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       if (!isDept) void trVariants({ data: { productId: id } }).catch(() => {});
       setNewId(id);
       if (isNewProduct) createdId = id;
+      if (isDept && id) {
+        const deptId = id;
+        const names = [...new Set(prodLines.split(/\r?\n/).map((l) => l.trim()).filter(Boolean))];
+        if (names.length) {
+          const rows = names.map((n, i) => ({ department_id: deptId, name: n, default_quantity: 1, default_unit: "stueck" as never, sort_order: i + 1 }));
+          const ins = await supabase.from("products").insert(rows).select("id");
+          if (ins.error) throw new Error(ins.error.message);
+          await p.translateIds((ins.data ?? []).map((x) => x.id as string));
+        }
+      }
     }
     if (!isDept && id && price.trim() && !Number.isNaN(Number(price))) {
       const market = currentMarket();
@@ -544,6 +555,19 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           <Input aria-label={T("tile.emoji")} placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} className="h-11 w-16 rounded-xl text-center text-xl" />
           <Input aria-label={T("tile.name")} placeholder={T("tile.name")} value={name} onChange={(e) => setName(e.target.value)} className="h-11 flex-1 rounded-xl" />
         </div>
+        {isDept && !item && (
+          <div className="space-y-1">
+            <h3 className="text-sm font-semibold text-foreground">{T("tile.deptProducts")}</h3>
+            <textarea
+              rows={5}
+              value={prodLines}
+              onChange={(e) => setProdLines(e.target.value)}
+              placeholder={T("tile.deptProductsPlaceholder")}
+              className="min-h-[96px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            />
+            {prodLines.trim() && <p className="text-[11px] text-muted-foreground">{T("adm.detected", { n: new Set(prodLines.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)).size })}</p>}
+          </div>
+        )}
         {!isDept && (
           <div className="flex gap-2">
             <Input aria-label={T("tile.qty")} type="number" min={0} step="any" value={qty} onChange={(e) => setQty(Number(e.target.value))} className="h-11 w-24 rounded-xl" />

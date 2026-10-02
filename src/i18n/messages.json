@@ -999,7 +999,9 @@
     "more.marketAuto": "Automatic (from language)",
     "tile.newDeptAlias": "Alias category",
     "tile.pickDeptAlias": "Add category as alias",
-    "tile.deptAliasSearch": "Search categories…"
+    "tile.deptAliasSearch": "Search categories…",
+    "tile.deptProducts": "Products (one name per line)",
+    "tile.deptProductsPlaceholder": "e.g. Apples\nBananas\n…"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2001,7 +2003,9 @@
     "more.marketAuto": "Automatic (from language)",
     "tile.newDeptAlias": "Alias category",
     "tile.pickDeptAlias": "Add category as alias",
-    "tile.deptAliasSearch": "Search categories…"
+    "tile.deptAliasSearch": "Search categories…",
+    "tile.deptProducts": "Products (one name per line)",
+    "tile.deptProductsPlaceholder": "e.g. Apples\nBananas\n…"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3003,7 +3007,9 @@
     "more.marketAuto": "Automatic (from language)",
     "tile.newDeptAlias": "Alias category",
     "tile.pickDeptAlias": "Add category as alias",
-    "tile.deptAliasSearch": "Search categories…"
+    "tile.deptAliasSearch": "Search categories…",
+    "tile.deptProducts": "Products (one name per line)",
+    "tile.deptProductsPlaceholder": "e.g. Apples\nBananas\n…"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4005,7 +4011,9 @@
     "more.marketAuto": "Automático (según el idioma)",
     "tile.newDeptAlias": "Categoría alias",
     "tile.pickDeptAlias": "Añadir categoría como alias",
-    "tile.deptAliasSearch": "Buscar categorías…"
+    "tile.deptAliasSearch": "Buscar categorías…",
+    "tile.deptProducts": "Productos (un nombre por línea)",
+    "tile.deptProductsPlaceholder": "p. ej. Manzanas\nPlátanos\n…"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5007,7 +5015,9 @@
     "more.marketAuto": "Automático (según el idioma)",
     "tile.newDeptAlias": "Categoría alias",
     "tile.pickDeptAlias": "Añadir categoría como alias",
-    "tile.deptAliasSearch": "Buscar categorías…"
+    "tile.deptAliasSearch": "Buscar categorías…",
+    "tile.deptProducts": "Productos (un nombre por línea)",
+    "tile.deptProductsPlaceholder": "p. ej. Manzanas\nPlátanos\n…"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6009,7 +6019,9 @@
     "more.marketAuto": "Automatique (selon la langue)",
     "tile.newDeptAlias": "Catégorie alias",
     "tile.pickDeptAlias": "Ajouter une catégorie comme alias",
-    "tile.deptAliasSearch": "Rechercher des catégories…"
+    "tile.deptAliasSearch": "Rechercher des catégories…",
+    "tile.deptProducts": "Produits (un nom par ligne)",
+    "tile.deptProductsPlaceholder": "p. ex. Pommes\nBananes\n…"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7011,7 +7023,9 @@
     "more.marketAuto": "Automatique (selon la langue)",
     "tile.newDeptAlias": "Catégorie alias",
     "tile.pickDeptAlias": "Ajouter une catégorie comme alias",
-    "tile.deptAliasSearch": "Rechercher des catégories…"
+    "tile.deptAliasSearch": "Rechercher des catégories…",
+    "tile.deptProducts": "Produits (un nom par ligne)",
+    "tile.deptProductsPlaceholder": "p. ex. Pommes\nBananes\n…"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8013,7 +8027,9 @@
     "more.marketAuto": "Automatico (dalla lingua)",
     "tile.newDeptAlias": "Categoria alias",
     "tile.pickDeptAlias": "Aggiungi categoria come alias",
-    "tile.deptAliasSearch": "Cerca categorie…"
+    "tile.deptAliasSearch": "Cerca categorie…",
+    "tile.deptProducts": "Prodotti (un nome per riga)",
+    "tile.deptProductsPlaceholder": "es. Mele\nBanane\n…"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9015,7 +9031,9 @@
     "more.marketAuto": "Automatico (dalla lingua)",
     "tile.newDeptAlias": "Categoria alias",
     "tile.pickDeptAlias": "Aggiungi categoria come alias",
-    "tile.deptAliasSearch": "Cerca categorie…"
+    "tile.deptAliasSearch": "Cerca categorie…",
+    "tile.deptProducts": "Prodotti (un nome per riga)",
+    "tile.deptProductsPlaceholder": "es. Mele\nBanane\n…"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10017,7 +10035,9 @@
     "more.marketAuto": "Automático (conforme o idioma)",
     "tile.newDeptAlias": "Categoria alias",
     "tile.pickDeptAlias": "Adicionar categoria como alias",
-    "tile.deptAliasSearch": "Procurar categorias…"
+    "tile.deptAliasSearch": "Procurar categorias…",
+    "tile.deptProducts": "Produtos (um nome por linha)",
+    "tile.deptProductsPlaceholder": "ex. Maçãs\nBananas\n…"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11019,7 +11039,9 @@
     "more.marketAuto": "Automático (conforme o idioma)",
     "tile.newDeptAlias": "Categoria alias",
     "tile.pickDeptAlias": "Adicionar categoria como alias",
-    "tile.deptAliasSearch": "Buscar categorias…"
+    "tile.deptAliasSearch": "Buscar categorias…",
+    "tile.deptProducts": "Produtos (um nome por linha)",
+    "tile.deptProductsPlaceholder": "ex. Maçãs\nBananas\n…"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12021,7 +12043,9 @@
     "more.marketAuto": "Automatisch (uit taal)",
     "tile.newDeptAlias": "Aliascategorie",
     "tile.pickDeptAlias": "Categorie als alias toevoegen",
-    "tile.deptAliasSearch": "Categorieën zoeken…"
+    "tile.deptAliasSearch": "Categorieën zoeken…",
+    "tile.deptProducts": "Producten (één naam per regel)",
+    "tile.deptProductsPlaceholder": "bv. Appels\nBananen\n…"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13023,7 +13047,9 @@
     "more.marketAuto": "Automatisch (uit taal)",
     "tile.newDeptAlias": "Aliascategorie",
     "tile.pickDeptAlias": "Categorie als alias toevoegen",
-    "tile.deptAliasSearch": "Categorieën zoeken…"
+    "tile.deptAliasSearch": "Categorieën zoeken…",
+    "tile.deptProducts": "Producten (één naam per regel)",
+    "tile.deptProductsPlaceholder": "bv. Appels\nBananen\n…"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13485,7 +13511,9 @@
     "more.marketAuto": "Automatisch (aus Sprache)",
     "tile.newDeptAlias": "Alias-Kategorie",
     "tile.pickDeptAlias": "Kategorie als Alias hinzufügen",
-    "tile.deptAliasSearch": "Kategorie suchen…"
+    "tile.deptAliasSearch": "Kategorie suchen…",
+    "tile.deptProducts": "Produkte (ein Name pro Zeile)",
+    "tile.deptProductsPlaceholder": "z. B. Äpfel\nBananen\n…"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13947,6 +13975,8 @@
     "more.marketAuto": "Automatisch (us de Sproch)",
     "tile.newDeptAlias": "Alias-Kategorie",
     "tile.pickDeptAlias": "Kategorie als Alias hinzufügen",
-    "tile.deptAliasSearch": "Kategorie suchen…"
+    "tile.deptAliasSearch": "Kategorie suchen…",
+    "tile.deptProducts": "Produkte (ein Name pro Zeile)",
+    "tile.deptProductsPlaceholder": "z. B. Äpfel\nBananen\n…"
   }
 }
