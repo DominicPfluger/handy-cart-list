@@ -113,3 +113,16 @@ async function encode(bitmap: ImageBitmap, edge: number, quality: number): Promi
   if (!blob) throw new Error("Bild konnte nicht konvertiert werden");
   return blob;
 }
+
+/** Zieht ein Foto auf eine neue Eintrags-ID um (z. B. temporäre ID → Cloud-ID). */
+export async function moveItemPhoto(fromId: string, toId: string): Promise<void> {
+  if (fromId === toId) return;
+  const blob = await getItemPhoto(fromId);
+  if (!blob) return;
+  try {
+    await putItemPhoto(toId, blob);
+    await deleteItemPhoto(fromId);
+  } catch {
+    /* ignore */
+  }
+}

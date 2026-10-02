@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { translate, getLocale } from "../i18n";
+import { moveItemPhoto, putItemPhoto } from "../lib/item-photo-store";
 import {
   getMyLists,
   createCloudList,
@@ -150,6 +151,8 @@ export interface AddCatalogItemInput {
   groupLabel?: string | undefined;
   groupEmoji?: string | undefined;
   note?: string | undefined;
+  /** Fotonotiz: bleibt gerätelokal (IndexedDB), wird nicht hochgeladen. */
+  photo?: Blob | undefined;
 }
 
 const t = (key: MessageKey, vars?: Record<string, string | number>) =>
@@ -882,10 +885,7 @@ function useCloudLists(
         { fn: "addItems", data: payload },
         () => addCloudItems({ data: payload }).then((res) => {
           const row = (res.items as CloudRow[])[0];
-          if (!row) return;
-          const next = rowToItem(row);
-          if (!input.photo) return replaceItemLocally(item.id, next);
-          return photoSaved.then(() => moveItemPhoto(item.id, next.id)).then(() => replaceItemLocally(item.id, next));
+          if (row) replaceItemLocally(item.id, rowToItem(row));
         })
       );
     },
