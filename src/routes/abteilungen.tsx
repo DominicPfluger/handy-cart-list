@@ -478,6 +478,7 @@ function DepartmentsPage() {
         >
           🌍
         </button>
+        )}
       </div>
 
       {cuisineOpen && !filtersHiddenByDept && (
