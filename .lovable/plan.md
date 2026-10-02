@@ -10,9 +10,10 @@ Die per Checkbox gewählten Funktionen, in sinnvoller Reihenfolge.
 
 ## 2. Foto pro Listeneintrag
 
-- Kamera-/Bild-Knopf am Listeneintrag; Foto wird komprimiert (max. ca. 200 KB, WebP) in einen neuen Storage-Bereich `list-item-photos` hochgeladen.
-- `list_items` erhält eine Spalte `photo_path`; Foto erscheint klein am Eintrag, per Tipp gross.
-- Geteilte Listen: Foto ist für alle Listen-Mitglieder sichtbar.
+- Kamera-/Bild-Knopf am Listeneintrag; Foto wird komprimiert (max. ca. 200 KB, WebP) und **nur lokal auf dem Gerät** gespeichert (IndexedDB) — kein Cloud-Upload.
+- Foto erscheint klein am Eintrag, per Tipp gross; Zuordnung über die lokale Eintrags-ID.
+- Geteilte Listen: Foto bleibt gerätelokal, andere Mitglieder sehen nur den Texteintrag.
+- Keine Datenbank- oder Storage-Änderung nötig.
 
 ## 3. Portionen-Rechner (Rezepte)
 
