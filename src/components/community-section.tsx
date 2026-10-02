@@ -15,6 +15,7 @@ import {
 
 export function CommunitySection() {
   const { t } = useT();
+  const templates = useRecipeTemplates();
   const { tab, author, name } = useSearch({ from: "/rezepte/inspirationen" });
   const navigate = useNavigate({ from: "/rezepte/inspirationen" });
   const user = useAuthUser();
