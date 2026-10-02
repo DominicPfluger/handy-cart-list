@@ -61,7 +61,7 @@ export function CatalogTileEditor(p: {
   productAliasOptions?: { id: string; label: string }[];
   onAddProductAlias?: (productId: string) => void;
   headings?: TileHeading[];
-  onAddHeading?: (name: string) => void;
+  onAddHeading?: (name: string, insertAt: number) => void;
   onMoveHeading?: (id: string, insertAt: number, mode: "title" | "group") => void;
   onSetHeadingAnchor?: (headingId: string, productId: string) => void;
   /** Produkt an Position `to` (0..n) einfügen und Überschrift `headingId` ("" = keine) zuordnen. */
@@ -75,6 +75,7 @@ export function CatalogTileEditor(p: {
   onTranslateMissing?: () => void;
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
+  const [newTitlePos, setNewTitlePos] = useState(0);
   const headingBefore = useMemo(() => new Map((p.headings ?? []).map((h) => [h.before_product_id, h])), [p.headings]);
   const editMode = true;
   const [target, setTarget] = useState<Target>(null);
@@ -262,7 +263,7 @@ export function CatalogTileEditor(p: {
           <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "department", id: null })}>+ {T("tile.newCat")}</Button>
           {p.onAddDeptAlias && <Button size="sm" variant="outline" disabled={!p.cur} title={!p.cur ? T("tile.pickDeptAlias") : undefined} onClick={() => { setAliasSearch(""); setAliasPick(true); }}>+ {T("tile.newDeptAlias")}</Button>}
           {p.cur && p.onAddHeading && p.products.length > 0 && (
-            <Button size="sm" variant="outline" onClick={() => setNewTitle("")}>+ {T("adm.heading")}</Button>
+            <Button size="sm" variant="outline" onClick={() => { setNewTitle(""); setNewTitlePos(0); }}>+ {T("adm.heading")}</Button>
           )}
           {p.cur && <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "product", id: null })}>+ {T("tile.newProd")}</Button>}
           {p.cur && p.onAddProductAlias && <Button size="sm" variant="outline" onClick={() => { setProdAliasSearch(""); setProdAliasPick(true); }}>+ {T("tile.newProdAlias")}</Button>}
@@ -305,12 +306,22 @@ export function CatalogTileEditor(p: {
       )}
 
       {p.cur && p.onAddHeading && newTitle !== null && (
-        <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); const n = newTitle.trim(); if (!n) return; p.onAddHeading!(n); setNewTitle(null); }}>
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setNewTitle(null)}>
+          <form className="flex w-full max-w-sm flex-col gap-2 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}
+            onSubmit={(e) => { e.preventDefault(); const n = newTitle.trim(); if (!n) return; p.onAddHeading!(n, newTitlePos); setNewTitle(null); }}>
+            <p className="text-sm font-bold text-foreground">{T("adm.headingNew")}</p>
             <input autoFocus value={newTitle} maxLength={80} onChange={(e) => setNewTitle(e.target.value)} placeholder={T("adm.heading")}
-              className="h-10 min-w-0 flex-1 rounded-xl border border-input bg-background px-3 text-sm" />
-            <button type="submit" className="rounded-xl bg-primary px-3 text-sm font-semibold text-primary-foreground">{T("adm.save")}</button>
-            <button type="button" onClick={() => setNewTitle(null)} className="rounded-xl border border-border px-3 text-sm">✕</button>
+              className="h-10 w-full rounded-xl border border-input bg-background px-3 text-sm" />
+            <label className="text-xs font-medium text-muted-foreground" htmlFor="headnew-pos">{T("adm.headingMovePos")}</label>
+            <select id="headnew-pos" value={newTitlePos} onChange={(e) => setNewTitlePos(Number(e.target.value))} className="h-11 w-full rounded-xl border border-input bg-background px-2 text-sm">
+              {p.products.map((x, i) => (
+                <option key={x.id} value={i}>{T("adm.headingMoveBefore", { name: p.nm(x.id, x.name) })}</option>
+              ))}
+            </select>
+            <Button type="submit">{T("adm.save")}</Button>
+            <Button type="button" variant="ghost" onClick={() => setNewTitle(null)}>{T("adm.cancel")}</Button>
           </form>
+        </div>
       )}
 
       {p.cur && (

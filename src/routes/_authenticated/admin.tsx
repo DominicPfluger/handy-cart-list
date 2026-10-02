@@ -585,7 +585,7 @@ function AdminPage() {
             reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
             busy={busy}
             headings={headings}
-            onAddHeading={(name) => { const first = products.find((x) => !x.id.startsWith("alias:")); if (cur && first) void run(() => saveH({ data: { departmentId: cur, beforeProductId: first.id, name } }), T("adm.created")); }}
+            onAddHeading={(name, insertAt) => { const anchor = products.slice(insertAt).find((x) => !x.id.startsWith("alias:")); if (cur && anchor) void run(() => saveH({ data: { departmentId: cur, beforeProductId: anchor.id, name } }), T("adm.created")); else toast.error(T("adm.headingMoveNoTarget")); }}
             onRemoveAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("product_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }, T("adm.deleted")); }}
             productAliasOptions={productAliasOptions}
             onAddProductAlias={(productId) => { if (!cur) return; void run(async () => {
