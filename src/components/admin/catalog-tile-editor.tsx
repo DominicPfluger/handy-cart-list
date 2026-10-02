@@ -38,7 +38,7 @@ export function CatalogTileEditor(p: {
   translateIds: (ids?: string[]) => Promise<number>;
   reorder: (kind: "department" | "product", list: { id: string }[], from: number, to: number) => void;
   remove: (kind: "department" | "product", id: string, name: string) => void;
-  onSortRelevance?: () => void;
+  onSortRelevance?: (() => void) | undefined;
   busy?: boolean;
 }) {
   const [editMode, setEditMode] = useState(true);
