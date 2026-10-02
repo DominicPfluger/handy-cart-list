@@ -146,6 +146,7 @@ export function CatalogTileEditor(p: {
               <button type="button" aria-label={p.nm(c.id, c.name)}
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
                 onClick={click(() => p.setCur(c.id))}
+                onDoubleClick={() => { const u = img(c.image_path); if (u) setZoom(u); }}
                 className={`flex h-16 w-full items-center justify-center overflow-hidden rounded-xl text-4xl ${editMode ? "cursor-grab touch-none" : ""}`}>
                 {img(c.image_path) ? <ZoomableImage src={img(c.image_path)!} className="h-full w-full object-cover" /> : c.emoji ?? "📁"}
               </button>
