@@ -175,6 +175,27 @@ export const suggestProducts = createServerFn({ method: "POST" })
     return { items: r.items.filter((x) => x.name.trim() && !have.has(x.name.trim().toLowerCase())).map((x) => ({ ...x, name: x.name.trim(), scope: data.market && x.scope === "market" ? "market" as const : "global" as const })) };
   });
 
+/** KI-Vorschlag für den Bildtext (hint) eines Kategorie-Bildes, abgeleitet aus den Produkten der Kategorie. */
+export const suggestImagePrompt = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ departmentId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { data: dept } = await context.supabase.from("departments").select("name, emoji").eq("id", data.departmentId).single();
+    const { data: prods } = await context.supabase.from("products").select("name").eq("department_id", data.departmentId).order("sort_order").limit(30);
+    if (!dept || !prods?.length) return { prompt: "" };
+    const { aiJson } = await import("./translate.server");
+    const r = await aiJson<{ prompt: string }>(
+      "Du erstellst Bildbeschreibungen für Kategorie-Bilder einer Einkaufslisten-App. " +
+        "Formuliere aus Kategoriename und enthaltenen Produkten eine kurze, bildbeschreibende Stichwort-Zeile (max. 120 Zeichen, Deutsch): " +
+        "die typischsten Produkte nennen, Stil: appetitliches Produktfoto, heller einfarbiger Hintergrund. Nur die Zeile, keine Erklärung.",
+      JSON.stringify({ kategorie: dept.name, produkte: prods.map((x) => x.name) }),
+      "image_prompt",
+      { type: "object", additionalProperties: false, required: ["prompt"], properties: { prompt: { type: "string" } } },
+    );
+    return { prompt: r.prompt.trim().slice(0, 300) };
+  });
+
 /** KI-Relevanz-Sortierung: pro Gruppe (Überschrift) die Namen nach Relevanz ordnen. */
 export const rankProducts = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
