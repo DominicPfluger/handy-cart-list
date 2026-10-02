@@ -219,25 +219,25 @@ function ListPage() {
       />
 
       {/* List switcher */}
-      <div className="-mx-5 flex gap-2 overflow-x-auto px-5 no-scrollbar" role="tablist" aria-label={t("list.lists")}>
+      <div className="flex flex-wrap gap-2" role="tablist" aria-label={t("list.lists")}>
         {lists.map((l) => (
           <button
             key={l.id}
             role="tab"
             aria-selected={l.id === activeList.id}
             onClick={() => setActiveListId(l.id)}
-            className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-semibold transition ${
+            className={`max-w-full rounded-full px-4 py-1.5 text-xs font-semibold transition ${
               l.id === activeList.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
             }`}
           >
-            {l.name}
+            <span className="line-clamp-2 break-words text-left">{l.name}</span>
           </button>
         ))}
         <button
           onClick={() => setManagerOpen(true)}
-          className="flex shrink-0 items-center gap-1 rounded-full border border-dashed border-primary/40 px-3 py-1.5 text-xs font-semibold text-primary"
+          className="flex items-center gap-1 rounded-full border border-dashed border-primary/40 px-3 py-1.5 text-xs font-semibold text-primary"
         >
-          <PlusIcon className="h-3.5 w-3.5" /> {t("list.lists")}
+          <PlusIcon className="h-3.5 w-3.5 shrink-0" /> {t("list.lists")}
         </button>
       </div>
 
