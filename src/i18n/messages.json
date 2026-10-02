@@ -1055,7 +1055,13 @@
     "rk.price_class.standard": "Standard",
     "rk.price_class.upscale": "Upscale",
     "rk.price_class.exquisite": "Exquisite",
-    "rk.traitsRequired": "Please choose satiety, spiciness and price range"
+    "rk.traitsRequired": "Please choose satiety, spiciness and price range",
+    "more.preload": "Preload all images",
+    "more.preloadHint": "Downloads all product and category images to this device once (approx. 15 MB). Visible offline afterwards.",
+    "more.preloadStart": "Preload now",
+    "more.preloadRunning": "Loading in background …",
+    "more.preloadDone": "All images saved on this device",
+    "more.preloadError": "Images could not be loaded"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2113,7 +2119,13 @@
     "rk.price_class.standard": "Standard",
     "rk.price_class.upscale": "Upscale",
     "rk.price_class.exquisite": "Exquisite",
-    "rk.traitsRequired": "Please choose satiety, spiciness and price range"
+    "rk.traitsRequired": "Please choose satiety, spiciness and price range",
+    "more.preload": "Preload all images",
+    "more.preloadHint": "Downloads all product and category images to this device once (approx. 15 MB). Visible offline afterwards.",
+    "more.preloadStart": "Preload now",
+    "more.preloadRunning": "Loading in background …",
+    "more.preloadDone": "All images saved on this device",
+    "more.preloadError": "Images could not be loaded"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3171,7 +3183,13 @@
     "rk.price_class.standard": "Standard",
     "rk.price_class.upscale": "Upscale",
     "rk.price_class.exquisite": "Exquisite",
-    "rk.traitsRequired": "Please choose satiety, spiciness and price range"
+    "rk.traitsRequired": "Please choose satiety, spiciness and price range",
+    "more.preload": "Preload all images",
+    "more.preloadHint": "Downloads all product and category images to this device once (approx. 15 MB). Visible offline afterwards.",
+    "more.preloadStart": "Preload now",
+    "more.preloadRunning": "Loading in background …",
+    "more.preloadDone": "All images saved on this device",
+    "more.preloadError": "Images could not be loaded"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4229,7 +4247,13 @@
     "rk.price_class.standard": "Estándar",
     "rk.price_class.upscale": "Superior",
     "rk.price_class.exquisite": "Exquisito",
-    "rk.traitsRequired": "Elige saciedad, picante y precio"
+    "rk.traitsRequired": "Elige saciedad, picante y precio",
+    "more.preload": "Precargar todas las imágenes",
+    "more.preloadHint": "Descarga una vez todas las imágenes de productos y categorías al dispositivo (aprox. 15 MB). Luego visibles sin conexión.",
+    "more.preloadStart": "Precargar ahora",
+    "more.preloadRunning": "Cargando en segundo plano …",
+    "more.preloadDone": "Todas las imágenes guardadas en el dispositivo",
+    "more.preloadError": "No se pudieron cargar las imágenes"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5287,7 +5311,13 @@
     "rk.price_class.standard": "Estándar",
     "rk.price_class.upscale": "Superior",
     "rk.price_class.exquisite": "Exquisito",
-    "rk.traitsRequired": "Elige saciedad, picante y precio"
+    "rk.traitsRequired": "Elige saciedad, picante y precio",
+    "more.preload": "Precargar todas las imágenes",
+    "more.preloadHint": "Descarga una vez todas las imágenes de productos y categorías al dispositivo (aprox. 15 MB). Luego visibles sin conexión.",
+    "more.preloadStart": "Precargar ahora",
+    "more.preloadRunning": "Cargando en segundo plano …",
+    "more.preloadDone": "Todas las imágenes guardadas en el dispositivo",
+    "more.preloadError": "No se pudieron cargar las imágenes"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6345,7 +6375,13 @@
     "rk.price_class.standard": "Standard",
     "rk.price_class.upscale": "Haut de gamme",
     "rk.price_class.exquisite": "Exquis",
-    "rk.traitsRequired": "Choisis satiété, piquant et gamme de prix"
+    "rk.traitsRequired": "Choisis satiété, piquant et gamme de prix",
+    "more.preload": "Précharger toutes les images",
+    "more.preloadHint": "Télécharge une fois toutes les images de produits et catégories sur l'appareil (env. 15 Mo). Visibles ensuite hors ligne.",
+    "more.preloadStart": "Précharger maintenant",
+    "more.preloadRunning": "Chargement en arrière-plan …",
+    "more.preloadDone": "Toutes les images sont enregistrées sur l'appareil",
+    "more.preloadError": "Impossible de charger les images"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7403,7 +7439,13 @@
     "rk.price_class.standard": "Standard",
     "rk.price_class.upscale": "Haut de gamme",
     "rk.price_class.exquisite": "Exquis",
-    "rk.traitsRequired": "Choisis satiété, piquant et gamme de prix"
+    "rk.traitsRequired": "Choisis satiété, piquant et gamme de prix",
+    "more.preload": "Précharger toutes les images",
+    "more.preloadHint": "Télécharge une fois toutes les images de produits et catégories sur l'appareil (env. 15 Mo). Visibles ensuite hors ligne.",
+    "more.preloadStart": "Précharger maintenant",
+    "more.preloadRunning": "Chargement en arrière-plan …",
+    "more.preloadDone": "Toutes les images sont enregistrées sur l'appareil",
+    "more.preloadError": "Impossible de charger les images"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8461,7 +8503,13 @@
     "rk.price_class.standard": "Standard",
     "rk.price_class.upscale": "Raffinato",
     "rk.price_class.exquisite": "Squisito",
-    "rk.traitsRequired": "Scegli sazietà, piccantezza e fascia di prezzo"
+    "rk.traitsRequired": "Scegli sazietà, piccantezza e fascia di prezzo",
+    "more.preload": "Precarica tutte le immagini",
+    "more.preloadHint": "Scarica una volta tutte le immagini di prodotti e categorie sul dispositivo (ca. 15 MB). Poi visibili anche offline.",
+    "more.preloadStart": "Precarica ora",
+    "more.preloadRunning": "Caricamento in background …",
+    "more.preloadDone": "Tutte le immagini salvate sul dispositivo",
+    "more.preloadError": "Impossibile caricare le immagini"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9519,7 +9567,13 @@
     "rk.price_class.standard": "Standard",
     "rk.price_class.upscale": "Raffinato",
     "rk.price_class.exquisite": "Squisito",
-    "rk.traitsRequired": "Scegli sazietà, piccantezza e fascia di prezzo"
+    "rk.traitsRequired": "Scegli sazietà, piccantezza e fascia di prezzo",
+    "more.preload": "Precarica tutte le immagini",
+    "more.preloadHint": "Scarica una volta tutte le immagini di prodotti e categorie sul dispositivo (ca. 15 MB). Poi visibili anche offline.",
+    "more.preloadStart": "Precarica ora",
+    "more.preloadRunning": "Caricamento in background …",
+    "more.preloadDone": "Tutte le immagini salvate sul dispositivo",
+    "more.preloadError": "Impossibile caricare le immagini"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10577,7 +10631,13 @@
     "rk.price_class.standard": "Padrão",
     "rk.price_class.upscale": "Sofisticado",
     "rk.price_class.exquisite": "Requintado",
-    "rk.traitsRequired": "Escolhe saciedade, picância e faixa de preço"
+    "rk.traitsRequired": "Escolhe saciedade, picância e faixa de preço",
+    "more.preload": "Pré-carregar todas as imagens",
+    "more.preloadHint": "Transfere uma vez todas as imagens de produtos e categorias para o dispositivo (aprox. 15 MB). Depois visíveis offline.",
+    "more.preloadStart": "Pré-carregar agora",
+    "more.preloadRunning": "A carregar em segundo plano …",
+    "more.preloadDone": "Todas as imagens guardadas no dispositivo",
+    "more.preloadError": "Não foi possível carregar as imagens"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11635,7 +11695,13 @@
     "rk.price_class.standard": "Padrão",
     "rk.price_class.upscale": "Sofisticado",
     "rk.price_class.exquisite": "Requintado",
-    "rk.traitsRequired": "Escolhe saciedade, picância e faixa de preço"
+    "rk.traitsRequired": "Escolhe saciedade, picância e faixa de preço",
+    "more.preload": "Pré-carregar todas as imagens",
+    "more.preloadHint": "Transfere uma vez todas as imagens de produtos e categorias para o dispositivo (aprox. 15 MB). Depois visíveis offline.",
+    "more.preloadStart": "Pré-carregar agora",
+    "more.preloadRunning": "A carregar em segundo plano …",
+    "more.preloadDone": "Todas as imagens guardadas no dispositivo",
+    "more.preloadError": "Não foi possível carregar as imagens"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12693,7 +12759,13 @@
     "rk.price_class.standard": "Standaard",
     "rk.price_class.upscale": "Luxe",
     "rk.price_class.exquisite": "Exquis",
-    "rk.traitsRequired": "Kies verzadiging, pittigheid en prijsklasse"
+    "rk.traitsRequired": "Kies verzadiging, pittigheid en prijsklasse",
+    "more.preload": "Alle afbeeldingen vooraf laden",
+    "more.preloadHint": "Downloadt alle product- en categorieafbeeldingen één keer naar het apparaat (ca. 15 MB). Daarna ook offline zichtbaar.",
+    "more.preloadStart": "Nu vooraf laden",
+    "more.preloadRunning": "Laden op de achtergrond …",
+    "more.preloadDone": "Alle afbeeldingen op het apparaat opgeslagen",
+    "more.preloadError": "Afbeeldingen konden niet worden geladen"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13751,7 +13823,13 @@
     "rk.price_class.standard": "Standaard",
     "rk.price_class.upscale": "Luxe",
     "rk.price_class.exquisite": "Exquis",
-    "rk.traitsRequired": "Kies verzadiging, pittigheid en prijsklasse"
+    "rk.traitsRequired": "Kies verzadiging, pittigheid en prijsklasse",
+    "more.preload": "Alle afbeeldingen vooraf laden",
+    "more.preloadHint": "Downloadt alle product- en categorieafbeeldingen één keer naar het apparaat (ca. 15 MB). Daarna ook offline zichtbaar.",
+    "more.preloadStart": "Nu vooraf laden",
+    "more.preloadRunning": "Laden op de achtergrond …",
+    "more.preloadDone": "Alle afbeeldingen op het apparaat opgeslagen",
+    "more.preloadError": "Afbeeldingen konden niet worden geladen"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14269,7 +14347,13 @@
     "rk.price_class.standard": "Standard",
     "rk.price_class.upscale": "Gehoben",
     "rk.price_class.exquisite": "Exquisit",
-    "rk.traitsRequired": "Bitte Sättigung, Schärfe und Preisklasse wählen"
+    "rk.traitsRequired": "Bitte Sättigung, Schärfe und Preisklasse wählen",
+    "more.preload": "Alle Bilder vorladen",
+    "more.preloadHint": "Lädt alle Produkt- und Kategoriebilder einmal aufs Gerät (ca. 15 MB). Danach auch offline sichtbar.",
+    "more.preloadStart": "Jetzt vorladen",
+    "more.preloadRunning": "Lädt im Hintergrund …",
+    "more.preloadDone": "Alle Bilder sind auf dem Gerät gespeichert",
+    "more.preloadError": "Bilder konnten nicht geladen werden"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14787,6 +14871,12 @@
     "rk.price_class.standard": "Standard",
     "rk.price_class.upscale": "Gehoben",
     "rk.price_class.exquisite": "Exquisit",
-    "rk.traitsRequired": "Bitte Sättigung, Schärfe und Preisklasse wählen"
+    "rk.traitsRequired": "Bitte Sättigung, Schärfe und Preisklasse wählen",
+    "more.preload": "Alle Bilder vorladen",
+    "more.preloadHint": "Lädt alle Produkt- und Kategoriebilder einmal aufs Gerät (ca. 15 MB). Danach auch offline sichtbar.",
+    "more.preloadStart": "Jetzt vorladen",
+    "more.preloadRunning": "Lädt im Hintergrund …",
+    "more.preloadDone": "Alle Bilder sind auf dem Gerät gespeichert",
+    "more.preloadError": "Bilder konnten nicht geladen werden"
   }
 }
