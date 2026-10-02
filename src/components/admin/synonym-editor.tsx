@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { getLocale, translate } from "@/i18n";
+import { getLocale, useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -9,7 +9,7 @@ type Row = { id: string; term: string; locale: string };
 
 /** Synonyme eines Produkts (pro Sprache) – finden das Produkt in der Suche. */
 export function ProductSynonymEditor({ productId }: { productId: string }) {
-  const T = translate;
+  const T = useT();
   const locale = getLocale();
   const [rows, setRows] = useState<Row[]>([]);
   const [input, setInput] = useState("");

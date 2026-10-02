@@ -31,7 +31,7 @@ import {
   type CatalogProduct,
 } from "../lib/catalog-query";
 import { formatQuantity } from "../lib/units";
-import { getLocale, pickName, translate, useT } from "../i18n";
+import { getLocale, pickName, useT } from "../i18n";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 import { deptColor, deptColorStrong, rootOf } from "../lib/dept-colors";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
@@ -686,7 +686,7 @@ function DepartmentsPage() {
                       <span>{product.name}</span>
                     </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                       {normalizedQuery && synonymHint(product) ? `${translate("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
+                       {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
                     </p>
                   </div>
