@@ -229,6 +229,7 @@ export function CatalogTileEditor(p: {
 
 function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNullable<Target>; onClose: () => void; imgUrl: string | undefined }) {
   const genImg = useServerFn(generateImageFor);
+  const trVariants = useServerFn(translateVariants);
   const isDept = p.target.kind === "department";
   const item = p.target.id ? (isDept ? p.depts.find((d) => d.id === p.target.id) : p.products.find((x) => x.id === p.target.id)) : undefined;
   const prod = !isDept ? (item as TileProd | undefined) : undefined;
