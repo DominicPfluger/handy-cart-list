@@ -503,12 +503,7 @@ function AdminPage() {
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
-            onAdvanced={(kind, id) => setSel({ kind, id })}
-            below={cur ? (
-              <>
-                <DeptAliasRows parentId={cur} depts={d.depts} onEdit={(id) => setSel({ kind: "department", id })} />
-              </>
-            ) : null} />
+            onAdvanced={(kind, id) => setSel({ kind, id })} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
               onSubmit={handleBulkSubmit} />
