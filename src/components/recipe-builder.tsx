@@ -414,7 +414,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           ? <Link to="/rezepte" className="shrink-0 text-xs font-semibold text-primary">← {t("rk.back")}</Link>
           : <button onClick={() => setTplId(null)} className="shrink-0 text-xs font-semibold text-primary">← {t("rk.back")}</button>}
       </div>
-      <div className="flex items-center gap-1 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => setDietOpen((v) => !v)}
