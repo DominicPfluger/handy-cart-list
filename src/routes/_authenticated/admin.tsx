@@ -681,6 +681,15 @@ function Editor(p: {
             <UnitSelect value={unit} onChange={setUnit} />
           </div>
         )}
+        {prod && deptHeads.length > 0 && (
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-foreground">{T("adm.headingAssign")}</h3>
+            <select value={headingSel} onChange={(e) => setHeadingSel(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
+              <option value="">{T("adm.noHeading")}</option>
+              {deptHeads.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}
+            </select>
+          </div>
+        )}
         {prod && (
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-foreground">{T("adm.diets")}</h3>
@@ -778,7 +787,7 @@ function Editor(p: {
           <Button className="flex-1" disabled={p.busy || !name.trim()} onClick={() => p.onSave({
             name: name.trim(), emoji, before,
             ...(sel.kind !== "heading" ? { parent } : {}),
-            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, diets, variants } : {}),
+            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, diets, variants, heading: headingSel } : {}),
           })}>{T("adm.save")}</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
