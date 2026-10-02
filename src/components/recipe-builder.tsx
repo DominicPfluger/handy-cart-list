@@ -607,21 +607,75 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         </div>
       )}
 
-      {steps.map((s) => (
-        <div key={s.key} className="space-y-2">
-          <p className="text-sm font-semibold text-foreground">
-            {s.label}{" "}
-            <span className="text-xs font-normal text-muted-foreground">
-              ({s.max >= 99 ? t("rk.pickAny") : s.max === 1 ? t("rk.pickOne") : t("rk.pick", { min: s.min, max: s.max })})
+      {requiredSteps.length > 0 && (
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs font-semibold text-foreground">
+            <span>{t("rk.progress", { done: doneRequired, total: requiredSteps.length })}</span>
+            <span className="text-muted-foreground">{Math.round((doneRequired / requiredSteps.length) * 100)} %</span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-muted">
+            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${(doneRequired / requiredSteps.length) * 100}%` }} />
+          </div>
+        </div>
+      )}
+
+      {steps.map((s) => {
+        const sel0 = picks[s.key] ?? [];
+        const isReq = s.required || s.min > 0;
+        const satisfied = sel0.length >= s.min;
+        const missing = isReq && !satisfied;
+        const isOpen = openStep === s.key;
+        return (
+        <div key={s.key} className={`overflow-hidden rounded-2xl border transition ${missing ? "border-destructive/60" : "border-border"} bg-card`}>
+          <button
+            type="button"
+            aria-expanded={isOpen}
+            onClick={() => setOpenStep(isOpen ? null : s.key)}
+            className="flex w-full items-center gap-2 px-3 py-2.5 text-left"
+          >
+            <span className={`grid h-6 w-6 shrink-0 place-items-center rounded-full text-[11px] font-bold ${satisfied ? "bg-primary text-primary-foreground" : missing ? "bg-destructive/15 text-destructive" : "bg-muted text-muted-foreground"}`}>
+              {satisfied ? "✓" : sel0.length}
             </span>
-          </p>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm font-semibold text-foreground">
+                {s.label}{" "}
+                <span className="text-xs font-normal text-muted-foreground">
+                  ({s.max >= 99 ? t("rk.pickAny") : s.max === 1 ? t("rk.pickOne") : t("rk.pick", { min: s.min, max: s.max })})
+                </span>
+              </span>
+              {!isOpen && sel0.length > 0 && (
+                <span className="mt-0.5 flex flex-wrap gap-1">
+                  {sel0.map((id) => {
+                    const p = s.products.find((x) => x.id === id);
+                    return p ? <span key={id} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-foreground">{p.emoji} {p.name}</span> : null;
+                  })}
+                </span>
+              )}
+            </span>
+            <span className="shrink-0 text-muted-foreground">{isOpen ? "▲" : "▼"}</span>
+          </button>
+          {isOpen && (
+          <div className="space-y-2 border-t border-border px-3 py-3">
+          {s.products.length >= 8 && (
+            <input
+              value={stepSearch[s.key] ?? ""}
+              onChange={(e) => setStepSearch((x) => ({ ...x, [s.key]: e.target.value }))}
+              placeholder={t("rk.stepSearch")}
+              aria-label={t("rk.stepSearch")}
+              className="w-full rounded-full border border-border bg-background px-3 py-1.5 text-xs text-foreground outline-none focus:border-primary"
+            />
+          )}
           {s.products.length === 0 ? (
             <p className="text-xs text-muted-foreground">{t("rk.empty")}</p>
           ) : (
             (() => {
               const sel = picks[s.key] ?? [];
-              const hasGroups = s.groups.length > 0;
-              const other = s.products.filter((p) => !s.groupByProduct.get(p.id) || !s.groups.some((g) => g.id === s.groupByProduct.get(p.id)));
+              const q = (stepSearch[s.key] ?? "").trim();
+              const pool = q
+                ? s.products.filter((p) => matchesProductSearch(p.name, q) || (p.variants ?? []).some((v) => matchesProductSearch(v, q)) || (p.synonyms ?? []).some((v) => matchesProductSearch(v, q)))
+                : s.products;
+              const hasGroups = s.groups.length > 0 && !q;
+              const other = pool.filter((p) => !s.groupByProduct.get(p.id) || !s.groups.some((g) => g.id === s.groupByProduct.get(p.id)));
               const renderIngredients = (current: typeof s.products, groupKey: string) => {
                 const countKey = `${s.key}:${groupKey}`;
                 const vis = visibleCount[countKey] ?? PAGE;
