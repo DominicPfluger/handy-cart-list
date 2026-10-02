@@ -206,6 +206,7 @@ export function CatalogTileEditor(p: {
             className="h-[min(820px,85vh)] w-full max-w-[400px] rounded-3xl border-8 border-foreground bg-background shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           />
+        </div>
       )}
 
       {(p.children.length > 0 || editMode) && (
