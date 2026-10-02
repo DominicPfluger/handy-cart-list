@@ -197,7 +197,6 @@ export function CatalogTileEditor(p: {
             <button type="submit" className="rounded-xl bg-primary px-3 text-sm font-semibold text-primary-foreground">{T("adm.save")}</button>
             <button type="button" onClick={() => setNewTitle(null)} className="rounded-xl border border-border px-3 text-sm">✕</button>
           </form>
-        )
       )}
 
       {p.cur && (
