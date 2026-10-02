@@ -11,6 +11,7 @@ export function useRecipeTemplates(): RecipeTemplate[] {
     if (dbT.length === 0) return RECIPE_TEMPLATES;
     return dbT.map((x) => ({
       id: x.id as RecipeTemplate["id"],
+      image: RECIPE_TEMPLATES.find((b) => b.id === x.id)?.image,
       emoji: x.emoji ?? "🍽️",
       color: x.color ?? "oklch(0.93 0.04 120)",
       name: x.name,
