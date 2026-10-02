@@ -1130,7 +1130,11 @@
     "adm.popularDeleteConfirm": "Delete this combination?",
     "adm.exportTxt": "Export as text file",
     "media.genPricesMulti": "Estimate 50 prices ({n} markets)",
-    "media.priceProgress": "{market} · {done} of {total} markets"
+    "media.priceProgress": "{market} · {done} of {total} markets",
+    "rec.entrySearchTitle": "Search Recipes",
+    "rec.entrySearchDesc": "Find recipes that match your criteria – for example ingredients, diet or category.",
+    "rec.searchTitle": "Search Recipes",
+    "rec.searchSoon": "Search by specific criteria will be available here soon."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2263,7 +2267,11 @@
     "adm.popularDeleteConfirm": "Delete this combination?",
     "adm.exportTxt": "Export as text file",
     "media.genPricesMulti": "Estimate 50 prices ({n} markets)",
-    "media.priceProgress": "{market} · {done} of {total} markets"
+    "media.priceProgress": "{market} · {done} of {total} markets",
+    "rec.entrySearchTitle": "Search Recipes",
+    "rec.entrySearchDesc": "Find recipes that match your criteria – for example ingredients, diet or category.",
+    "rec.searchTitle": "Search Recipes",
+    "rec.searchSoon": "Search by specific criteria will be available here soon."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3396,7 +3404,11 @@
     "adm.popularDeleteConfirm": "Delete this combination?",
     "adm.exportTxt": "Export as text file",
     "media.genPricesMulti": "Estimate 50 prices ({n} markets)",
-    "media.priceProgress": "{market} · {done} of {total} markets"
+    "media.priceProgress": "{market} · {done} of {total} markets",
+    "rec.entrySearchTitle": "Search Recipes",
+    "rec.entrySearchDesc": "Find recipes that match your criteria – for example ingredients, diet or category.",
+    "rec.searchTitle": "Search Recipes",
+    "rec.searchSoon": "Search by specific criteria will be available here soon."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4529,7 +4541,11 @@
     "adm.popularDeleteConfirm": "¿Eliminar esta combinación?",
     "adm.exportTxt": "Exportar como archivo de texto",
     "media.genPricesMulti": "Estimar 50 precios ({n} mercados)",
-    "media.priceProgress": "{market} · {done} de {total} mercados"
+    "media.priceProgress": "{market} · {done} de {total} mercados",
+    "rec.entrySearchTitle": "Buscar recetas",
+    "rec.entrySearchDesc": "Encuentra recetas según tus criterios, por ejemplo ingredientes, dieta o categoría.",
+    "rec.searchTitle": "Buscar recetas",
+    "rec.searchSoon": "La búsqueda por criterios específicos estará disponible aquí pronto."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5662,7 +5678,11 @@
     "adm.popularDeleteConfirm": "¿Eliminar esta combinación?",
     "adm.exportTxt": "Exportar como archivo de texto",
     "media.genPricesMulti": "Estimar 50 precios ({n} mercados)",
-    "media.priceProgress": "{market} · {done} de {total} mercados"
+    "media.priceProgress": "{market} · {done} de {total} mercados",
+    "rec.entrySearchTitle": "Buscar recetas",
+    "rec.entrySearchDesc": "Encuentra recetas según tus criterios, por ejemplo ingredientes, dieta o categoría.",
+    "rec.searchTitle": "Buscar recetas",
+    "rec.searchSoon": "La búsqueda por criterios específicos estará disponible aquí pronto."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6795,7 +6815,11 @@
     "adm.popularDeleteConfirm": "Supprimer cette combinaison ?",
     "adm.exportTxt": "Exporter en fichier texte",
     "media.genPricesMulti": "Estimer 50 prix ({n} marchés)",
-    "media.priceProgress": "{market} · {done} sur {total} marchés"
+    "media.priceProgress": "{market} · {done} sur {total} marchés",
+    "rec.entrySearchTitle": "Rechercher des recettes",
+    "rec.entrySearchDesc": "Trouvez des recettes selon vos critères – par exemple ingrédients, régime ou catégorie.",
+    "rec.searchTitle": "Rechercher des recettes",
+    "rec.searchSoon": "La recherche par critères spécifiques sera bientôt disponible ici."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7928,7 +7952,11 @@
     "adm.popularDeleteConfirm": "Supprimer cette combinaison ?",
     "adm.exportTxt": "Exporter en fichier texte",
     "media.genPricesMulti": "Estimer 50 prix ({n} marchés)",
-    "media.priceProgress": "{market} · {done} sur {total} marchés"
+    "media.priceProgress": "{market} · {done} sur {total} marchés",
+    "rec.entrySearchTitle": "Rechercher des recettes",
+    "rec.entrySearchDesc": "Trouvez des recettes selon vos critères – par exemple ingrédients, régime ou catégorie.",
+    "rec.searchTitle": "Rechercher des recettes",
+    "rec.searchSoon": "La recherche par critères spécifiques sera bientôt disponible ici."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9061,7 +9089,11 @@
     "adm.popularDeleteConfirm": "Eliminare questa combinazione?",
     "adm.exportTxt": "Esporta come file di testo",
     "media.genPricesMulti": "Stima 50 prezzi ({n} mercati)",
-    "media.priceProgress": "{market} · {done} di {total} mercati"
+    "media.priceProgress": "{market} · {done} di {total} mercati",
+    "rec.entrySearchTitle": "Cerca ricette",
+    "rec.entrySearchDesc": "Trova ricette in base ai tuoi criteri, ad esempio ingredienti, dieta o categoria.",
+    "rec.searchTitle": "Cerca ricette",
+    "rec.searchSoon": "La ricerca per criteri specifici sarà presto disponibile qui."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10194,7 +10226,11 @@
     "adm.popularDeleteConfirm": "Eliminare questa combinazione?",
     "adm.exportTxt": "Esporta come file di testo",
     "media.genPricesMulti": "Stima 50 prezzi ({n} mercati)",
-    "media.priceProgress": "{market} · {done} di {total} mercati"
+    "media.priceProgress": "{market} · {done} di {total} mercati",
+    "rec.entrySearchTitle": "Cerca ricette",
+    "rec.entrySearchDesc": "Trova ricette in base ai tuoi criteri, ad esempio ingredienti, dieta o categoria.",
+    "rec.searchTitle": "Cerca ricette",
+    "rec.searchSoon": "La ricerca per criteri specifici sarà presto disponibile qui."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11327,7 +11363,11 @@
     "adm.popularDeleteConfirm": "Eliminar esta combinação?",
     "adm.exportTxt": "Exportar como ficheiro de texto",
     "media.genPricesMulti": "Estimar 50 preços ({n} mercados)",
-    "media.priceProgress": "{market} · {done} de {total} mercados"
+    "media.priceProgress": "{market} · {done} de {total} mercados",
+    "rec.entrySearchTitle": "Procurar receitas",
+    "rec.entrySearchDesc": "Encontre receitas segundo os seus critérios – por exemplo ingredientes, dieta ou categoria.",
+    "rec.searchTitle": "Procurar receitas",
+    "rec.searchSoon": "A pesquisa por critérios específicos estará disponível aqui em breve."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12460,7 +12500,11 @@
     "adm.popularDeleteConfirm": "Eliminar esta combinação?",
     "adm.exportTxt": "Exportar como arquivo de texto",
     "media.genPricesMulti": "Estimar 50 preços ({n} mercados)",
-    "media.priceProgress": "{market} · {done} de {total} mercados"
+    "media.priceProgress": "{market} · {done} de {total} mercados",
+    "rec.entrySearchTitle": "Procurar receitas",
+    "rec.entrySearchDesc": "Encontre receitas segundo os seus critérios – por exemplo ingredientes, dieta ou categoria.",
+    "rec.searchTitle": "Procurar receitas",
+    "rec.searchSoon": "A pesquisa por critérios específicos estará disponível aqui em breve."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13593,7 +13637,11 @@
     "adm.popularDeleteConfirm": "Deze combinatie verwijderen?",
     "adm.exportTxt": "Exporteren als tekstbestand",
     "media.genPricesMulti": "50 prijzen schatten ({n} markten)",
-    "media.priceProgress": "{market} · {done} van {total} markten"
+    "media.priceProgress": "{market} · {done} van {total} markten",
+    "rec.entrySearchTitle": "Recepten zoeken",
+    "rec.entrySearchDesc": "Vind recepten die aan jouw criteria voldoen – bijvoorbeeld ingrediënten, dieet of categorie.",
+    "rec.searchTitle": "Recepten zoeken",
+    "rec.searchSoon": "Zoeken op specifieke criteria is hier binnenkort beschikbaar."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14726,7 +14774,11 @@
     "adm.popularDeleteConfirm": "Deze combinatie verwijderen?",
     "adm.exportTxt": "Exporteren als tekstbestand",
     "media.genPricesMulti": "50 prijzen schatten ({n} markten)",
-    "media.priceProgress": "{market} · {done} van {total} markten"
+    "media.priceProgress": "{market} · {done} van {total} markten",
+    "rec.entrySearchTitle": "Recepten zoeken",
+    "rec.entrySearchDesc": "Vind recepten die aan jouw criteria voldoen – bijvoorbeeld ingrediënten, dieet of categorie.",
+    "rec.searchTitle": "Recepten zoeken",
+    "rec.searchSoon": "Zoeken op specifieke criteria is hier binnenkort beschikbaar."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15321,7 +15373,11 @@
     "adm.popularDeleteConfirm": "Diese Kombination löschen?",
     "adm.exportTxt": "Als Textdatei exportieren",
     "media.genPricesMulti": "50 Preise schätzen ({n} Märkte)",
-    "media.priceProgress": "{market} · {done} von {total} Märkten"
+    "media.priceProgress": "{market} · {done} von {total} Märkten",
+    "rec.entrySearchTitle": "Rezepte suchen",
+    "rec.entrySearchDesc": "Finde Rezepte gezielt nach deinen Kriterien – zum Beispiel Zutaten, Ernährungsform oder Kategorie.",
+    "rec.searchTitle": "Rezepte suchen",
+    "rec.searchSoon": "Die Suche nach spezifischen Kriterien wird hier in Kürze verfügbar sein."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15916,6 +15972,10 @@
     "adm.popularDeleteConfirm": "Diese Kombination löschen?",
     "adm.exportTxt": "Als Textdatei exportieren",
     "media.genPricesMulti": "50 Preise schätzen ({n} Märkte)",
-    "media.priceProgress": "{market} · {done} von {total} Märkten"
+    "media.priceProgress": "{market} · {done} von {total} Märkten",
+    "rec.entrySearchTitle": "Rezepte suchen",
+    "rec.entrySearchDesc": "Finde Rezepte gezielt nach deinen Kriterien – zum Beispiel Zutaten, Ernährungsform oder Kategorie.",
+    "rec.searchTitle": "Rezepte suchen",
+    "rec.searchSoon": "Die Suche nach spezifischen Kriterien wird hier in Kürze verfügbar sein."
   }
 }
