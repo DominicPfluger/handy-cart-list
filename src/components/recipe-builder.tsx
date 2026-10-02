@@ -655,41 +655,87 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 ? [...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: pool.filter((p) => s.groupByProduct.get(p.id) === g.id) })),
                     { key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: pool.filter((p) => !s.groups.some((g) => g.id === s.groupByProduct.get(p.id))) }].filter((g) => g.products.length > 0)
                 : [{ key: "all", name: "", emoji: null, products: pool }];
-              const ordered = groups.flatMap((g) => g.products);
-              const limit = visibleCount[s.key] ?? PAGE;
-              const expanded = limit >= ordered.length || !!q;
-              const shownIds = new Set(ordered.slice(0, expanded ? ordered.length : limit).map((p) => p.id));
-              for (const id of sel) shownIds.add(id);
-              const hiddenCount = ordered.filter((p) => !shownIds.has(p.id)).length;
+              const chip = (p: CatalogProduct) => {
+                const on = sel.includes(p.id);
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => { setSavedMsg(false); toggle(s.key, p.id, s.max); }}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition active:scale-95 ${
+                      on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
+                    }`}
+                  >
+                    {p.emoji ? <ProductEmoji emoji={p.emoji} className="mr-1" /> : null}{p.name}
+                  </button>
+                );
+              };
+              if (!hasGroups) {
+                const ordered = groups.flatMap((g) => g.products);
+                const limit = visibleCount[s.key] ?? PAGE;
+                const expanded = limit >= ordered.length || !!q;
+                const shownIds = new Set(ordered.slice(0, expanded ? ordered.length : limit).map((p) => p.id));
+                for (const id of sel) shownIds.add(id);
+                const hiddenCount = ordered.filter((p) => !shownIds.has(p.id)).length;
+                return <div className="space-y-3">
+                  {ordered.filter((p) => shownIds.has(p.id)).map(chip)}
+                  {!q && ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
+                    onClick={() => setVisibleCount((x) => ({ ...x, [s.key]: expanded ? PAGE : Math.min(ordered.length, limit + PAGE) }))}
+                    className="text-xs font-medium text-primary" aria-expanded={expanded}>
+                    {expanded ? t("rk.showLess") : t("rk.showMore", { count: Math.min(hiddenCount, PAGE) })}
+                  </Button>}
+                </div>;
+              }
+              // Kategorien: Zutaten erscheinen erst beim Antippen; Gewählte bleiben immer sichtbar.
+              const groupOf = (id: string) => {
+                const gid = s.groupByProduct.get(id);
+                return gid && groups.some((g) => g.key === gid) ? gid : "other";
+              };
+              const stashedSel = sel.filter((id) => {
+                const g = groups.find((x) => x.key === groupOf(id));
+                return !g || !openGroups[`${s.key}:${g.key}`];
+              });
               return <div className="space-y-3">
                 {groups.map((group) => {
+                  const gKey = `${s.key}:${group.key}`;
+                  const open = !!openGroups[gKey];
+                  const gLimit = visibleCount[gKey] ?? PAGE;
+                  const gExpanded = gLimit >= group.products.length;
+                  const shownIds = new Set(group.products.slice(0, gExpanded ? group.products.length : gLimit).map((p) => p.id));
+                  for (const id of sel) if (group.products.some((p) => p.id === id)) shownIds.add(id);
                   const shown = group.products.filter((p) => shownIds.has(p.id));
-                  if (!shown.length) return null;
-                  return <div key={group.key} className="flex flex-wrap items-center gap-2">
-                    {hasGroups && <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-foreground">{group.emoji && <span aria-hidden="true" className="mr-1">{group.emoji}</span>}{group.name}</span>}
-                    {shown.map((p) => {
-                      const on = sel.includes(p.id);
-                      return (
+                  const gHidden = group.products.length - shown.length;
+                  return (
+                    <div key={group.key}>
+                      <div className="flex flex-wrap items-center gap-2">
                         <button
-                          key={p.id}
                           type="button"
-                          aria-pressed={on}
-                          onClick={() => { setSavedMsg(false); toggle(s.key, p.id, s.max); }}
-                          className={`rounded-full border px-3 py-1.5 text-xs font-medium transition active:scale-95 ${
-                            on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
-                          }`}
+                          aria-expanded={open}
+                          onClick={() => setOpenGroups((x) => ({ ...x, [gKey]: !open }))}
+                          className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-foreground"
                         >
-                          {p.emoji ? <ProductEmoji emoji={p.emoji} className="mr-1" /> : null}{p.name}
+                          {group.emoji && <span aria-hidden="true" className="mr-1">{group.emoji}</span>}
+                          {group.name}
+                          <span aria-hidden="true" className="ml-1 text-[10px] text-muted-foreground">{open ? "▲" : "▼"}</span>
                         </button>
-                      );
-                    })}
-                  </div>;
+                        {open && shown.map(chip)}
+                      </div>
+                      {open && gHidden > 0 && (
+                        <Button variant="ghost" size="sm" type="button"
+                          onClick={() => setVisibleCount((x) => ({ ...x, [gKey]: gExpanded ? PAGE : Math.min(group.products.length, gLimit + PAGE) }))}
+                          className="mt-1 text-xs font-medium text-primary" aria-expanded={gExpanded}>
+                          {gExpanded ? t("rk.showLess") : t("rk.showMore", { count: Math.min(gHidden, PAGE) })}
+                        </Button>
+                      )}
+                    </div>
+                  );
                 })}
-                {!q && ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
-                  onClick={() => setVisibleCount((x) => ({ ...x, [s.key]: expanded ? PAGE : Math.min(ordered.length, limit + PAGE) }))}
-                  className="text-xs font-medium text-primary" aria-expanded={expanded}>
-                  {expanded ? t("rk.showLess") : t("rk.showMore", { count: Math.min(hiddenCount, PAGE) })}
-                </Button>}
+                {stashedSel.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-2 border-t border-border pt-2">
+                    {stashedSel.map((id) => pool.find((p) => p.id === id)).filter((p): p is CatalogProduct => !!p).map(chip)}
+                  </div>
+                )}
               </div>;
             })()
           )}
