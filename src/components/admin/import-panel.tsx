@@ -8,7 +8,7 @@ import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MARKETS } from "@/components/market-admin";
+import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -24,6 +24,7 @@ type Source = { id: string; name: string; url: string; market: string; interval:
 type Edit = { on: boolean; action: "create" | "link"; name: string; dept: string; emoji: string; price: string };
 
 export function ImportPanel({ depts, prods }: { depts: Dept[]; prods: Prod[] }) {
+  const MARKETS = useMarketCodes();
   const qc = useQueryClient();
   const scan = useServerFn(scanImportUrl);
   const accept = useServerFn(acceptImportCandidates);

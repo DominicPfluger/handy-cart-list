@@ -480,6 +480,39 @@ export type Database = {
         }
         Relationships: []
       }
+      markets: {
+        Row: {
+          code: string
+          created_at: string
+          currency: string
+          enabled: boolean
+          flag: string
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          currency?: string
+          enabled?: boolean
+          flag?: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          currency?: string
+          enabled?: boolean
+          flag?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pantry_items: {
         Row: {
           added_at: string
@@ -1251,6 +1284,47 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      supermarkets: {
+        Row: {
+          created_at: string
+          emoji: string | null
+          enabled: boolean
+          id: string
+          market_code: string
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          emoji?: string | null
+          enabled?: boolean
+          id?: string
+          market_code: string
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          emoji?: string | null
+          enabled?: boolean
+          id?: string
+          market_code?: string
+          name?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supermarkets_market_code_fkey"
+            columns: ["market_code"]
+            isOneToOne: false
+            referencedRelation: "markets"
+            referencedColumns: ["code"]
+          },
+        ]
       }
       ui_translations: {
         Row: {
