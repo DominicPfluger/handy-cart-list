@@ -69,6 +69,9 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const { data: stepRows } = useQuery({ queryKey: ["admin-recipe-steps"], queryFn: loadStepRows });
   const { data: popRows } = useQuery({ queryKey: ["admin-recipe-popular"], queryFn: loadPopRows });
   const [open, setOpen] = useState(false);
+  const [stepsOpen, setStepsOpen] = useState(true);
+  const [groupsOpen, setGroupsOpen] = useState(false);
+  const [ingredientOpen, setIngredientOpen] = useState<Record<string, boolean>>({});
   const [tplId, setTplId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
@@ -425,12 +428,11 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
 
   return (
     <section className="rounded-xl border border-border bg-card p-3">
-      <button type="button" onClick={() => { setOpen((v) => !v); if (open) setTplId(null); }} className="flex w-full items-center justify-between text-left">
+      <Button type="button" variant="ghost" aria-expanded={open} aria-controls="recipe-admin-content" onClick={() => setOpen((v) => !v)} className="flex h-auto w-full items-center justify-between px-0 text-left hover:bg-transparent">
         <span className="text-sm font-semibold text-foreground">🍽️ {T("adm.recipeIngredients")}</span>
-        <span className="text-xs text-muted-foreground">{open ? "▲" : "▼"}</span>
-      </button>
-      {open && (
-      <div className="mt-3 space-y-3">
+        <span aria-hidden="true" className="text-xs text-muted-foreground">{open ? "▲" : "▼"}</span>
+      </Button>
+      <div id="recipe-admin-content" hidden={!open} className="mt-3 space-y-3">
 
 
       <div className="flex flex-wrap items-center gap-1.5">
@@ -444,13 +446,12 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
             {x.emoji} {tplLabel(x.id)}
           </button>
         ))}
-        <button type="button" onClick={() => setManageOpen((v) => !v)} className={`rounded-full border px-2.5 py-1 text-xs ${manageOpen ? "border-primary bg-primary/15 text-foreground" : "border-dashed border-border bg-background text-muted-foreground"}`}>
-          ⚙️ {T("adm.tplManage")}
-        </button>
+        <Button type="button" variant="outline" size="sm" aria-expanded={manageOpen} aria-controls="recipe-admin-templates" onClick={() => setManageOpen((v) => !v)} className={`h-auto rounded-full px-2.5 py-1 text-xs ${manageOpen ? "border-primary bg-primary/15 text-foreground" : "border-dashed border-border bg-background text-muted-foreground"}`}>
+          ⚙️ {T("adm.tplManage")} <span aria-hidden="true">{manageOpen ? "▲" : "▼"}</span>
+        </Button>
       </div>
 
-      {manageOpen && (
-        <div className="space-y-2 rounded-lg border border-border bg-background p-2">
+        <div id="recipe-admin-templates" hidden={!manageOpen} className="space-y-2 rounded-lg border border-border bg-background p-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-foreground">{T("adm.tplManage")}</span>
             <Button size="sm" variant="outline" disabled={busy} onClick={() => setTplForm({ id: "", emoji: "" })}>{T("adm.tplNew")}</Button>
@@ -506,15 +507,18 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
             </div>
           )}
         </div>
-      )}
 
       {tpl && (
         <div className="space-y-4">
           <div className="space-y-2 border-b border-border pb-4">
-            <div className="flex items-center justify-between gap-2">
-              <span className="min-w-0 text-sm font-semibold text-foreground">{tplLabel(tplId!)} · {T("adm.tplManage")}</span>
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+              <Button type="button" variant="ghost" aria-expanded={stepsOpen} aria-controls="recipe-admin-steps" onClick={() => setStepsOpen((v) => !v)} className="h-auto min-w-0 justify-start gap-2 px-0 text-left text-sm font-semibold hover:bg-transparent">
+                <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{stepsOpen ? "▲" : "▼"}</span>
+                <span className="min-w-0 truncate">{tplLabel(tplId!)} · {T("adm.tplManage")}</span>
+              </Button>
               <Button size="sm" variant="outline" disabled={busy} onClick={() => setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true })}>{T("adm.stepNew")}</Button>
             </div>
+            <div id="recipe-admin-steps" hidden={!stepsOpen} className="space-y-2">
             {steps.map((s, i) => (
               <div key={s.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/50 py-1 text-xs">
                 <span className="min-w-0 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
@@ -543,12 +547,17 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                 </div>
               </div>
             )}
+            </div>
           </div>
           <div className="space-y-2 border-b border-border pb-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="mr-auto text-sm font-semibold text-foreground">{T("adm.recipeGroups")}</span>
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+              <Button type="button" variant="ghost" aria-expanded={groupsOpen} aria-controls="recipe-admin-groups" onClick={() => setGroupsOpen((v) => !v)} className="h-auto min-w-0 justify-start gap-2 px-0 text-left text-sm font-semibold hover:bg-transparent">
+                <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{groupsOpen ? "▲" : "▼"}</span>
+                <span className="min-w-0 truncate">{T("adm.recipeGroups")}</span>
+              </Button>
               <Button size="sm" variant="outline" disabled={busy} onClick={() => startGroup(null)}>{T("adm.recipeGroupNew")}</Button>
             </div>
+            <div id="recipe-admin-groups" hidden={!groupsOpen} className="space-y-2">
             {groupTree(null).map((parent) => (
               <div key={parent.id} className="space-y-1">
                 {[{ group: parent, depth: 0 }, ...groupRows(parent.id).map(({ group, depth }) => ({ group, depth: depth + 1 }))].map(({ group: g, depth }) => (
@@ -568,6 +577,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
               <Button size="sm" disabled={busy || !groupName.trim()} onClick={saveGroup}>{T("adm.save")}</Button>
               <Button size="sm" variant="ghost" onClick={() => { setGroupFormOpen(false); setGroupName(""); setGroupParent(null); setEditGroupId(null); }}>{T("adm.cancel")}</Button>
             </div>}
+            </div>
           </div>
           <Input
             placeholder={T("adm.search")}
@@ -582,11 +592,15 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
             const candidates = q
               ? prods.filter((p) => !assignedIds.has(p.id) && (p.name.toLowerCase().includes(q) || path(p.department_id).toLowerCase().includes(q))).slice(0, 20)
               : [];
+            const sectionKey = `${tplId}:${s.key}`;
+            const expanded = ingredientOpen[sectionKey] ?? false;
             return (
               <div key={s.key} className="space-y-1.5">
-                <p className="text-xs font-semibold text-foreground">
-                  {s.label} <span className="font-normal text-muted-foreground">({assigned.length})</span>
-                </p>
+                <Button type="button" variant="ghost" aria-expanded={expanded} aria-controls={`recipe-admin-ingredient-${sectionKey}`} onClick={() => setIngredientOpen((prev) => ({ ...prev, [sectionKey]: !expanded }))} className="h-auto w-full justify-start gap-2 px-0 text-left text-xs font-semibold hover:bg-transparent">
+                  <span aria-hidden="true" className="shrink-0 text-muted-foreground">{expanded ? "▲" : "▼"}</span>
+                  <span className="min-w-0 truncate">{s.label} <span className="font-normal text-muted-foreground">({assigned.length})</span></span>
+                </Button>
+                <div id={`recipe-admin-ingredient-${sectionKey}`} hidden={!expanded} className="space-y-1.5">
                 {assigned.length > 1 && (
                   <select
                     value=""
@@ -741,13 +755,13 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                     </div>
                   </div>
                 )}
+                </div>
               </div>
             );
           })}
         </div>
       )}
       </div>
-      )}
     </section>
   );
 }
