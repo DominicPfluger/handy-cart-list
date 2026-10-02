@@ -75,7 +75,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     return m;
   }, [catalog.products]);
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const [openStep, setOpenStep] = useState<string | null>(null);
   const [stepSearch, setStepSearch] = useState<Record<string, string>>({});
   const summaryRef = useRef<HTMLDivElement>(null);
