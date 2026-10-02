@@ -44,6 +44,7 @@ export function useRecipeTemplates(): RecipeTemplate[] {
       id: x.id as RecipeTemplate["id"],
       emoji: x.emoji ?? "🍽️",
       color: x.color ?? "oklch(0.93 0.04 120)",
+      name: x.name,
       steps: catalog.recipeSteps
         .filter((s) => s.templateId === x.id)
         .sort((a, b) => a.sortOrder - b.sortOrder)
