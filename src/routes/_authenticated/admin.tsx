@@ -92,7 +92,7 @@ function AdminPage() {
   const suggest = useServerFn(suggestProducts);
   const trVariants = useServerFn(translateVariants);
   const rank = useServerFn(rankProducts);
-  const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity">("popularity");
+  const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity" | "marketRelevance">("popularity");
   /** "" = globale Reihenfolge, sonst Marktcode (z. B. CH) für marktspezifische Relevanz. */
   const [mk, setMk] = useState<string>("");
   /** Anzeigesprache des Katalogs im Admin (nur Anzeige, Bearbeitung bleibt Deutsch). */
@@ -196,10 +196,28 @@ function AdminPage() {
     ));
   };
 
+  /** Überschrift verschieben: die ganze Gruppe (Überschrift + ihre Produkte bis zur nächsten Überschrift) wandert mit. */
   const moveHeading = (headingId: string, beforeProductId: string) => {
     const h = d?.heads.find((x) => x.id === headingId);
     if (!h || h.before_product_id === beforeProductId) return;
-    run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), T("adm.headingMoved"));
+    const anchors = new Set(d?.heads.filter((x) => x.id !== headingId).map((x) => x.before_product_id) ?? []);
+    const start = products.findIndex((p) => p.id === h.before_product_id);
+    if (start < 0) { // leere Gruppe: nur der Titel wandert
+      run(() => saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId } }), T("adm.headingMoved"));
+      return;
+    }
+    let end = start + 1;
+    while (end < products.length && !anchors.has(products[end]!.id)) end++;
+    const group = products.slice(start, end);
+    if (group.some((p) => p.id === beforeProductId)) return; // Ziel liegt in der eigenen Gruppe
+    if (!confirm(T("adm.headingMoveConfirm", { name: h.name, n: group.length }))) return;
+    const rest = products.filter((p) => !group.includes(p));
+    const at = rest.findIndex((p) => p.id === beforeProductId);
+    const next = at < 0 ? [...rest, ...group] : [...rest.slice(0, at), ...group, ...rest.slice(at)];
+    run(async () => {
+      await saveOrder(next);
+      await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: group[0]!.id } });
+    }, T("adm.headingMoved"));
   };
 
   const nm = (id: string, base: string) => viewLoc === "de-DE" ? base : d?.tr.get(id)?.[viewLoc]?.name ?? base;
