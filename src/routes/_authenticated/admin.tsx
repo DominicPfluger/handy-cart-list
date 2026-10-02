@@ -404,8 +404,9 @@ function AdminPage() {
     const sib = new Set((d?.depts ?? []).filter((x) => x.parent_id === parent && x.id !== cur).map((x) => x.id));
     return (d?.prods ?? []).filter((x) => sib.has(x.department_id)).map((x) => x.name);
   };
-  const loadSuggestions = async (typed: string[]) => {
-    const r = await suggest({ data: { path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: [...typed, ...siblingNames()].slice(0, 400), ...(mk ? { market: mk } : {}) } });
+  const loadSuggestions = async (typed: string[], mode: "web" | "ai") => {
+    const r = await suggest({ data: { mode, path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: [...typed, ...siblingNames()].slice(0, 400), ...(mk ? { market: mk } : {}) } });
+    if (r.webFailed) toast.info(T("adm.suggestWebFailed"));
     return r.items;
   };
 
@@ -735,9 +736,26 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path 
         className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm"
       />
       <div className="space-y-2 rounded-lg bg-muted/50 p-2">
-        <Button type="button" size="sm" variant="outline" className="w-full" disabled={loadingS} onClick={fetchS}>
+        <Button type="button" size="sm" variant="outline" className="w-full" disabled={loadingS} onClick={() => setConfirmOpen(true)}>
           {loadingS ? T("adm.searchingMissing") : "✨ " + T("adm.suggestMissing")}
         </Button>
+        {confirmOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-foreground/40 p-4" onClick={() => setConfirmOpen(false)}>
+            <div role="dialog" aria-modal="true" className="w-full max-w-sm space-y-3 rounded-xl bg-background p-4 shadow-lg" onClick={(e) => e.stopPropagation()}>
+              <p className="text-sm font-semibold">{T("adm.suggestConfirmTitle")}</p>
+              {path && <p className="text-xs text-muted-foreground">{path}{market ? ` · ${flagOf(market)} ${market}` : ""}</p>}
+              <div className="space-y-1.5 text-sm">
+                <label className="flex items-start gap-2"><input type="radio" checked={mode === "web"} onChange={() => setMode("web")} className="mt-1" /><span>{T("adm.suggestModeWeb")}</span></label>
+                <label className="flex items-start gap-2"><input type="radio" checked={mode === "ai"} onChange={() => setMode("ai")} className="mt-1" /><span>{T("adm.suggestModeAi")}</span></label>
+              </div>
+              <p className="text-xs text-muted-foreground">{mode === "web" ? T("adm.suggestCostWeb") : T("adm.suggestCostAi")}</p>
+              <div className="flex gap-2">
+                <Button className="flex-1" onClick={() => void fetchS()}>{T("adm.suggestStart")}</Button>
+                <Button variant="ghost" onClick={() => setConfirmOpen(false)}>{T("adm.cancel")}</Button>
+              </div>
+            </div>
+          </div>
+        )}
         {sugs && sugs.length === 0 && <p className="text-xs text-muted-foreground">{T("adm.noMore")}</p>}
         {sugs && sugs.length > 0 && (
           <>
@@ -748,7 +766,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path 
                     <input type="checkbox" checked={picked.has(x.name)}
                       onChange={(e) => setPicked((s) => { const n = new Set(s); if (e.target.checked) n.add(x.name); else n.delete(x.name); return n; })} />
                     <span>{x.emoji}</span><span>{x.name}</span>
-                    <span className="ml-auto truncate text-xs text-muted-foreground">{x.reason}</span>
+                    <span className="ml-auto truncate text-xs text-muted-foreground">{x.source ? `${x.source} · ` : ""}{x.reason}</span>
                     {market && (
                       <button type="button" className="shrink-0 rounded-full border px-2 text-xs"
                         onClick={(e) => { e.preventDefault(); setMkOnly((s) => { const n = new Set(s); if (n.has(x.name)) n.delete(x.name); else n.add(x.name); return n; }); }}>

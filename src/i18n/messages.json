@@ -1066,7 +1066,14 @@
     "adm.synonyms": "Synonyms",
     "adm.synonymPlaceholder": "e.g. passion fruit (comma separates)",
     "adm.synonymsHint": "Other names that find this product in search. Applies to the current language.",
-    "search.alsoKnownAs": "also: {name}"
+    "search.alsoKnownAs": "also: {name}",
+    "adm.suggestConfirmTitle": "Search for missing products?",
+    "adm.suggestModeWeb": "With web search (more accurate, costlier)",
+    "adm.suggestModeAi": "AI only (cheaper)",
+    "adm.suggestCostWeb": "Uses credits: 1 web search + 1 AI evaluation.",
+    "adm.suggestCostAi": "Uses credits: 1 AI evaluation.",
+    "adm.suggestStart": "Start search",
+    "adm.suggestWebFailed": "Web search found nothing – suggestions come from AI only."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2135,7 +2142,14 @@
     "adm.synonyms": "Synonyms",
     "adm.synonymPlaceholder": "e.g. passion fruit (comma separates)",
     "adm.synonymsHint": "Other names that find this product in search. Applies to the current language.",
-    "search.alsoKnownAs": "also: {name}"
+    "search.alsoKnownAs": "also: {name}",
+    "adm.suggestConfirmTitle": "Search for missing products?",
+    "adm.suggestModeWeb": "With web search (more accurate, costlier)",
+    "adm.suggestModeAi": "AI only (cheaper)",
+    "adm.suggestCostWeb": "Uses credits: 1 web search + 1 AI evaluation.",
+    "adm.suggestCostAi": "Uses credits: 1 AI evaluation.",
+    "adm.suggestStart": "Start search",
+    "adm.suggestWebFailed": "Web search found nothing – suggestions come from AI only."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3204,7 +3218,14 @@
     "adm.synonyms": "Synonyms",
     "adm.synonymPlaceholder": "e.g. passion fruit (comma separates)",
     "adm.synonymsHint": "Other names that find this product in search. Applies to the current language.",
-    "search.alsoKnownAs": "also: {name}"
+    "search.alsoKnownAs": "also: {name}",
+    "adm.suggestConfirmTitle": "Search for missing products?",
+    "adm.suggestModeWeb": "With web search (more accurate, costlier)",
+    "adm.suggestModeAi": "AI only (cheaper)",
+    "adm.suggestCostWeb": "Uses credits: 1 web search + 1 AI evaluation.",
+    "adm.suggestCostAi": "Uses credits: 1 AI evaluation.",
+    "adm.suggestStart": "Start search",
+    "adm.suggestWebFailed": "Web search found nothing – suggestions come from AI only."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4273,7 +4294,14 @@
     "adm.synonyms": "Sinónimos",
     "adm.synonymPlaceholder": "p. ej. fruta de la pasión (coma separa)",
     "adm.synonymsHint": "Otros nombres con los que se encuentra el producto en la búsqueda. Aplica al idioma actual.",
-    "search.alsoKnownAs": "también: {name}"
+    "search.alsoKnownAs": "también: {name}",
+    "adm.suggestConfirmTitle": "¿Buscar productos que faltan?",
+    "adm.suggestModeWeb": "Con búsqueda web (más precisa, más cara)",
+    "adm.suggestModeAi": "Solo IA (más barata)",
+    "adm.suggestCostWeb": "Consume créditos: 1 búsqueda web + 1 evaluación de IA.",
+    "adm.suggestCostAi": "Consume créditos: 1 evaluación de IA.",
+    "adm.suggestStart": "Iniciar búsqueda",
+    "adm.suggestWebFailed": "La búsqueda web no encontró nada: las sugerencias vienen solo de la IA."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5342,7 +5370,14 @@
     "adm.synonyms": "Sinónimos",
     "adm.synonymPlaceholder": "p. ej. fruta de la pasión (coma separa)",
     "adm.synonymsHint": "Otros nombres con los que se encuentra el producto en la búsqueda. Aplica al idioma actual.",
-    "search.alsoKnownAs": "también: {name}"
+    "search.alsoKnownAs": "también: {name}",
+    "adm.suggestConfirmTitle": "¿Buscar productos que faltan?",
+    "adm.suggestModeWeb": "Con búsqueda web (más precisa, más cara)",
+    "adm.suggestModeAi": "Solo IA (más barata)",
+    "adm.suggestCostWeb": "Consume créditos: 1 búsqueda web + 1 evaluación de IA.",
+    "adm.suggestCostAi": "Consume créditos: 1 evaluación de IA.",
+    "adm.suggestStart": "Iniciar búsqueda",
+    "adm.suggestWebFailed": "La búsqueda web no encontró nada: las sugerencias vienen solo de la IA."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6411,7 +6446,14 @@
     "adm.synonyms": "Synonymes",
     "adm.synonymPlaceholder": "p. ex. fruit de la passion (virgule sépare)",
     "adm.synonymsHint": "Autres noms permettant de trouver le produit dans la recherche. S’applique à la langue actuelle.",
-    "search.alsoKnownAs": "aussi : {name}"
+    "search.alsoKnownAs": "aussi : {name}",
+    "adm.suggestConfirmTitle": "Rechercher les produits manquants ?",
+    "adm.suggestModeWeb": "Avec recherche web (plus précise, plus chère)",
+    "adm.suggestModeAi": "IA seule (moins chère)",
+    "adm.suggestCostWeb": "Consomme des crédits : 1 recherche web + 1 analyse IA.",
+    "adm.suggestCostAi": "Consomme des crédits : 1 analyse IA.",
+    "adm.suggestStart": "Lancer la recherche",
+    "adm.suggestWebFailed": "La recherche web n’a rien trouvé – suggestions de l’IA uniquement."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7480,7 +7522,14 @@
     "adm.synonyms": "Synonymes",
     "adm.synonymPlaceholder": "p. ex. fruit de la passion (virgule sépare)",
     "adm.synonymsHint": "Autres noms permettant de trouver le produit dans la recherche. S’applique à la langue actuelle.",
-    "search.alsoKnownAs": "aussi : {name}"
+    "search.alsoKnownAs": "aussi : {name}",
+    "adm.suggestConfirmTitle": "Rechercher les produits manquants ?",
+    "adm.suggestModeWeb": "Avec recherche web (plus précise, plus chère)",
+    "adm.suggestModeAi": "IA seule (moins chère)",
+    "adm.suggestCostWeb": "Consomme des crédits : 1 recherche web + 1 analyse IA.",
+    "adm.suggestCostAi": "Consomme des crédits : 1 analyse IA.",
+    "adm.suggestStart": "Lancer la recherche",
+    "adm.suggestWebFailed": "La recherche web n’a rien trouvé – suggestions de l’IA uniquement."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8549,7 +8598,14 @@
     "adm.synonyms": "Sinonimi",
     "adm.synonymPlaceholder": "es. frutto della passione (virgola separa)",
     "adm.synonymsHint": "Altri nomi con cui il prodotto viene trovato nella ricerca. Vale per la lingua attuale.",
-    "search.alsoKnownAs": "anche: {name}"
+    "search.alsoKnownAs": "anche: {name}",
+    "adm.suggestConfirmTitle": "Cercare prodotti mancanti?",
+    "adm.suggestModeWeb": "Con ricerca web (più precisa, più costosa)",
+    "adm.suggestModeAi": "Solo IA (più economica)",
+    "adm.suggestCostWeb": "Consuma crediti: 1 ricerca web + 1 analisi IA.",
+    "adm.suggestCostAi": "Consuma crediti: 1 analisi IA.",
+    "adm.suggestStart": "Avvia ricerca",
+    "adm.suggestWebFailed": "La ricerca web non ha trovato nulla – suggerimenti solo dall’IA."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9618,7 +9674,14 @@
     "adm.synonyms": "Sinonimi",
     "adm.synonymPlaceholder": "es. frutto della passione (virgola separa)",
     "adm.synonymsHint": "Altri nomi con cui il prodotto viene trovato nella ricerca. Vale per la lingua attuale.",
-    "search.alsoKnownAs": "anche: {name}"
+    "search.alsoKnownAs": "anche: {name}",
+    "adm.suggestConfirmTitle": "Cercare prodotti mancanti?",
+    "adm.suggestModeWeb": "Con ricerca web (più precisa, più costosa)",
+    "adm.suggestModeAi": "Solo IA (più economica)",
+    "adm.suggestCostWeb": "Consuma crediti: 1 ricerca web + 1 analisi IA.",
+    "adm.suggestCostAi": "Consuma crediti: 1 analisi IA.",
+    "adm.suggestStart": "Avvia ricerca",
+    "adm.suggestWebFailed": "La ricerca web non ha trovato nulla – suggerimenti solo dall’IA."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10687,7 +10750,14 @@
     "adm.synonyms": "Sinónimos",
     "adm.synonymPlaceholder": "ex. maracujá (vírgula separa)",
     "adm.synonymsHint": "Outros nomes que encontram o produto na pesquisa. Aplica-se ao idioma atual.",
-    "search.alsoKnownAs": "também: {name}"
+    "search.alsoKnownAs": "também: {name}",
+    "adm.suggestConfirmTitle": "Procurar produtos em falta?",
+    "adm.suggestModeWeb": "Com pesquisa web (mais precisa, mais cara)",
+    "adm.suggestModeAi": "Só IA (mais barata)",
+    "adm.suggestCostWeb": "Consome créditos: 1 pesquisa web + 1 análise de IA.",
+    "adm.suggestCostAi": "Consome créditos: 1 análise de IA.",
+    "adm.suggestStart": "Iniciar pesquisa",
+    "adm.suggestWebFailed": "A pesquisa web não encontrou nada – sugestões apenas da IA."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11756,7 +11826,14 @@
     "adm.synonyms": "Sinônimos",
     "adm.synonymPlaceholder": "ex. maracujá (vírgula separa)",
     "adm.synonymsHint": "Outros nomes que encontram o produto na pesquisa. Aplica-se ao idioma atual.",
-    "search.alsoKnownAs": "também: {name}"
+    "search.alsoKnownAs": "também: {name}",
+    "adm.suggestConfirmTitle": "Procurar produtos em falta?",
+    "adm.suggestModeWeb": "Com pesquisa web (mais precisa, mais cara)",
+    "adm.suggestModeAi": "Só IA (mais barata)",
+    "adm.suggestCostWeb": "Consome créditos: 1 pesquisa web + 1 análise de IA.",
+    "adm.suggestCostAi": "Consome créditos: 1 análise de IA.",
+    "adm.suggestStart": "Iniciar pesquisa",
+    "adm.suggestWebFailed": "A pesquisa web não encontrou nada – sugestões apenas da IA."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12825,7 +12902,14 @@
     "adm.synonyms": "Synoniemen",
     "adm.synonymPlaceholder": "bv. passievrucht (komma scheidt)",
     "adm.synonymsHint": "Andere namen waarmee het product in de zoekfunctie wordt gevonden. Geldt voor de huidige taal.",
-    "search.alsoKnownAs": "ook: {name}"
+    "search.alsoKnownAs": "ook: {name}",
+    "adm.suggestConfirmTitle": "Ontbrekende producten zoeken?",
+    "adm.suggestModeWeb": "Met webzoekopdracht (nauwkeuriger, duurder)",
+    "adm.suggestModeAi": "Alleen AI (goedkoper)",
+    "adm.suggestCostWeb": "Verbruikt credits: 1 webzoekopdracht + 1 AI-analyse.",
+    "adm.suggestCostAi": "Verbruikt credits: 1 AI-analyse.",
+    "adm.suggestStart": "Zoeken starten",
+    "adm.suggestWebFailed": "Webzoekopdracht vond niets – suggesties komen alleen van AI."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13894,7 +13978,14 @@
     "adm.synonyms": "Synoniemen",
     "adm.synonymPlaceholder": "bv. passievrucht (komma scheidt)",
     "adm.synonymsHint": "Andere namen waarmee het product in de zoekfunctie wordt gevonden. Geldt voor de huidige taal.",
-    "search.alsoKnownAs": "ook: {name}"
+    "search.alsoKnownAs": "ook: {name}",
+    "adm.suggestConfirmTitle": "Ontbrekende producten zoeken?",
+    "adm.suggestModeWeb": "Met webzoekopdracht (nauwkeuriger, duurder)",
+    "adm.suggestModeAi": "Alleen AI (goedkoper)",
+    "adm.suggestCostWeb": "Verbruikt credits: 1 webzoekopdracht + 1 AI-analyse.",
+    "adm.suggestCostAi": "Verbruikt credits: 1 AI-analyse.",
+    "adm.suggestStart": "Zoeken starten",
+    "adm.suggestWebFailed": "Webzoekopdracht vond niets – suggesties komen alleen van AI."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14423,7 +14514,14 @@
     "adm.synonyms": "Synonyme",
     "adm.synonymPlaceholder": "z. B. Passionsfrucht (Komma trennt)",
     "adm.synonymsHint": "Weitere Namen, unter denen das Produkt in der Suche gefunden wird. Gilt für die aktuelle Sprache.",
-    "search.alsoKnownAs": "auch: {name}"
+    "search.alsoKnownAs": "auch: {name}",
+    "adm.suggestConfirmTitle": "Fehlende Produkte suchen?",
+    "adm.suggestModeWeb": "Mit Websuche (genauer, teurer)",
+    "adm.suggestModeAi": "Nur KI (günstiger)",
+    "adm.suggestCostWeb": "Verbraucht Credits: 1 Websuche + 1 KI-Auswertung.",
+    "adm.suggestCostAi": "Verbraucht Credits: 1 KI-Auswertung.",
+    "adm.suggestStart": "Suche starten",
+    "adm.suggestWebFailed": "Websuche ergab nichts – Vorschläge stammen nur von der KI."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14952,6 +15050,13 @@
     "adm.synonyms": "Synonyme",
     "adm.synonymPlaceholder": "z. B. Passionsfrucht (Komma trennt)",
     "adm.synonymsHint": "Weitere Namen, unter denen das Produkt in der Suche gefunden wird. Gilt für die aktuelle Sprache.",
-    "search.alsoKnownAs": "auch: {name}"
+    "search.alsoKnownAs": "auch: {name}",
+    "adm.suggestConfirmTitle": "Fehlende Produkte suchen?",
+    "adm.suggestModeWeb": "Mit Websuche (genauer, teurer)",
+    "adm.suggestModeAi": "Nur KI (günstiger)",
+    "adm.suggestCostWeb": "Verbraucht Credits: 1 Websuche + 1 KI-Auswertung.",
+    "adm.suggestCostAi": "Verbraucht Credits: 1 KI-Auswertung.",
+    "adm.suggestStart": "Suche starten",
+    "adm.suggestWebFailed": "Websuche ergab nichts – Vorschläge stammen nur von der KI."
   }
 }
