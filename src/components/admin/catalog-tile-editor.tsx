@@ -147,6 +147,10 @@ export function CatalogTileEditor(p: {
     if (t && t.kind === "product" && drag.kind === "product") {
       const r = t.el.getBoundingClientRect();
       setOverPos(e.clientY > r.top + r.height / 2 ? "after" : "before");
+    } else if (t && t.kind === "department" && drag.kind === "department") {
+      const r = t.el.getBoundingClientRect();
+      const frac = (e.clientX - r.left) / r.width;
+      setOverPos(frac >= 0.35 && frac <= 0.65 && !drag.id.startsWith("deptalias:") ? null : frac > 0.5 ? "after" : "before");
     } else setOverPos(null);
     setOver(t ? `${t.kind}:${t.id}` : null);
   };
@@ -165,7 +169,7 @@ export function CatalogTileEditor(p: {
       return;
     }
     const isAlias = d.id.startsWith("alias:") || d.id.startsWith("deptalias:");
-    if (isAlias && (t.kind === "crumb" || t.kind === "department")) return;
+    if (isAlias && (t.kind === "crumb" || (t.kind === "department" && d.kind !== "department"))) return;
     const after = (() => { const r = t.el.getBoundingClientRect(); return d.kind === "product" ? e.clientY > r.top + r.height / 2 : e.clientX > r.left + r.width / 2; })();
     if (t.kind === "crumb") {
       const dest = t.id || null;
@@ -179,7 +183,8 @@ export function CatalogTileEditor(p: {
       // Mitte der Kachel = in diese Kategorie hineinverschieben, Rand = umsortieren.
       const r = t.el.getBoundingClientRect();
       const frac = (e.clientX - r.left) / r.width;
-      const into = frac > 0.25 && frac < 0.75;
+      // Nur ein schmaler Mittelbereich verschachtelt; sonst wird umsortiert.
+      const into = frac >= 0.35 && frac <= 0.65 && !isAlias && !t.id.startsWith("deptalias:");
       if (into) {
         // Nicht in die eigene Unterkategorie verschieben (würde einen Kreis erzeugen).
         let cur: TileDept | undefined = deptById.get(t.id);
@@ -240,7 +245,7 @@ export function CatalogTileEditor(p: {
           {p.children.map((c, i) => (
             <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
               style={{ background: rootColorByName(rootName(c)) }}
-              className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? "ring-2 ring-primary" : ""}`}>
+              className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""}`}>
               <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
                 onClick={click(() => p.setCur(c.dept_id ?? c.id))}
