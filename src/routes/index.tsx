@@ -342,7 +342,7 @@ function ListPage() {
           return (
             <div key={group.key}>
               <div className="mb-2 flex items-center gap-1.5">
-                <span className="grid h-6 w-6 shrink-0 place-items-center"><DepartmentIcon emoji={group.emoji} imageUrl={group.root?.imageUrl} className="h-6 w-6 object-contain" symbolClassName="text-lg" /></span>
+                <span className="grid h-6 w-6 shrink-0 place-items-center"><DepartmentIcon emoji={group.emoji} imageUrl={group.root?.imageUrl} imagePath={group.root?.imagePath} className="h-6 w-6 object-contain" symbolClassName="text-lg" /></span>
                 <h2 className="text-sm font-semibold text-foreground">{group.label}</h2>
               </div>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
@@ -378,7 +378,7 @@ function ListPage() {
                     >
                         {(() => {
                           const product = item.productId ? productById.get(item.productId) : undefined;
-                          return <ProductIcon emoji={item.emoji} iconUrl={product?.iconUrl} symbolClassName="text-[19px]" />;
+                          return <ProductIcon emoji={item.emoji} iconUrl={product?.iconUrl} iconPath={product?.iconPath} symbolClassName="text-[19px]" />;
                         })()}
                     </div>
                       );

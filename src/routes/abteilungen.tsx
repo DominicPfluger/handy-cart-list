@@ -60,11 +60,11 @@ export const Route = createFileRoute("/abteilungen")({
 });
 
 function ProductThumb({ product }: { product: CatalogProduct }) {
-  return <ProductIcon emoji={product.emoji} iconUrl={product.iconUrl} symbolClassName="text-4xl" />;
+  return <ProductIcon emoji={product.emoji} iconUrl={product.iconUrl} iconPath={product.iconPath} symbolClassName="text-4xl" />;
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
-  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl} />;
+  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl} imagePath={department.imagePath} />;
 }
 
 function DepartmentsPage() {
