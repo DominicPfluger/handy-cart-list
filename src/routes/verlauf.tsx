@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT, getLocale } from "../i18n";
-import { ProductEmoji } from "../components/product-emoji";
+import { ProductIcon } from "../components/catalog-icon";
+import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 import {
   AlertDialog,
@@ -16,6 +17,8 @@ import {
 } from "../components/ui/alert-dialog";
 
 export const Route = createFileRoute("/verlauf")({
+  ssr: false,
+  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
   head: () => ({
     meta: [
       { title: "Shoppi — Einkaufsverlauf" },
@@ -30,6 +33,8 @@ export const Route = createFileRoute("/verlauf")({
 });
 
 function HistoryPage() {
+  const catalog = useCatalog();
+  const icons = new Map(catalog.products.map((product) => [product.id, product.iconUrl]));
   const { t } = useT();
   const { history, hydrated, clearHistory, stats } = usePurchaseHistory();
   const [confirmClear, setConfirmClear] = useState(false);
@@ -71,7 +76,7 @@ function HistoryPage() {
                 {stats.top.slice(0, 10).map((p) => (
                   <div key={p.productId ?? p.name} className="flex items-center gap-3">
                     <div className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary-soft/25">
-                      <ProductEmoji emoji={p.emoji} className="text-base" />
+                      <ProductIcon emoji={p.emoji} iconUrl={p.productId ? icons.get(p.productId) : null} symbolClassName="text-base" />
                     </div>
                     <span className="min-w-0 flex-1 truncate text-sm text-foreground">{p.name}</span>
                     <span className="shrink-0 text-xs font-semibold text-muted-foreground">{t("hist.times", { n: p.count })}</span>

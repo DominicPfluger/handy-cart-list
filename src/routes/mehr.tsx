@@ -15,7 +15,8 @@ import {
 } from "../components/icons";
 import { useAllLocales, getExplicitLocale, getLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState, type ReactNode } from "react";
-import { EyeOff } from "lucide-react";
+import { EyeOff, Images } from "lucide-react";
+import { setIconSet, useIconSet, type IconSet } from "../hooks/use-icon-set";
 import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
@@ -244,6 +245,7 @@ function MorePage() {
           </div>
         </label>
         <AllMarketsRow />
+        <IconSetRow />
         <SpeakLocaleRow />
         <SpeakRateRow />
         {isAdmin && (
@@ -304,6 +306,29 @@ function MorePage() {
           <Link to="/start" className="text-primary underline-offset-2 hover:underline">{t("land.siteLink")}</Link>
         </nav>
       </footer>
+    </div>
+  );
+}
+
+function IconSetRow() {
+  const { t } = useT();
+  const selected = useIconSet();
+  return (
+    <div className="flex w-full items-start gap-3 px-4 py-3.5">
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+        <Images className="h-5 w-5" />
+      </div>
+      <fieldset className="min-w-0 flex-1">
+        <legend className="text-sm font-semibold text-foreground">{t("more.iconSet")}</legend>
+        <div className="mt-2 grid grid-cols-2 gap-2">
+          {(["images", "symbols"] as const).map((option: IconSet) => (
+            <label key={option} className={`flex min-h-12 cursor-pointer items-center gap-2 rounded-lg border px-2.5 py-2 text-xs font-medium text-foreground ${selected === option ? "border-primary bg-primary-soft/40" : "border-border bg-background"}`}>
+              <input type="radio" name="icon-set" value={option} checked={selected === option} onChange={() => setIconSet(option)} className="shrink-0 accent-primary" />
+              <span className="min-w-0 break-words">{t(option === "images" ? "more.iconImages" : "more.iconSymbols")}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
     </div>
   );
 }

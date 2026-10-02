@@ -24,3 +24,4 @@
 - Admin tile view (catalog-tile-editor.tsx) reuses admin.tsx data + save/reorder/remove callbacks. Why: one write path for list and tile editing.
 - Admin-created locales live in app_locales + ui_translations, loaded at runtime by src/i18n; server translation targets = built-in + app_locales (targetLocales). Why: add languages without redeploy.
 - Product images keep a full image_path and a separate 64px icon_path; icons are compressed in the admin browser, including after AI generation, with a resumable backfill. Why: list rows should not download full-size images or lose detail-page imagery.
+- Small catalog and list icons share a device-local image/symbol preference; full product photos remain unchanged. Why: one visual choice should apply consistently without changing shared catalog data.
