@@ -100,6 +100,37 @@ export interface RecipeGroup {
   names: Record<string, string>;
 }
 
+export interface RecipeTemplateRow {
+  id: string;
+  emoji: string | null;
+  color: string | null;
+  sortOrder: number;
+  enabled: boolean;
+  baseName: string;
+  names: Record<string, string>;
+}
+
+export interface RecipeStepRow {
+  id: string;
+  templateId: string;
+  key: string;
+  name: string;
+  emoji: string | null;
+  min: number;
+  max: number;
+  required: boolean;
+  sortOrder: number;
+  baseName: string;
+  names: Record<string, string>;
+}
+
+export interface RecipePopularRow {
+  id: string;
+  templateId: string;
+  picks: Record<string, string[]>;
+  sortOrder: number;
+}
+
 export interface Catalog {
   departments: CatalogDepartment[];
   products: CatalogProduct[];
@@ -109,6 +140,9 @@ export interface Catalog {
   recipeGroups: RecipeGroup[];
   departmentAliases: DepartmentAlias[];
   productAliases: ProductAlias[];
+  recipeTemplates: RecipeTemplateRow[];
+  recipeSteps: RecipeStepRow[];
+  recipePopular: RecipePopularRow[];
 }
 
 function publicClient() {
@@ -200,6 +234,9 @@ export const getCatalog = createServerFn({ method: "GET" })
     fetchAll("product_market_exclusions", "product_id, market", ["id"]),
     fetchAll("product_market_order", "product_id, market, sort_order", ["id"]),
     fetchAll("variant_translations", "product_id, variant, locale, name", ["id"], "locale"),
+    supabase.from("recipe_templates").select("id, emoji, color, sort_order, enabled").order("sort_order", { ascending: true }),
+    supabase.from("recipe_steps").select("id, template_id, key, name, emoji, min, max, required, sort_order").order("sort_order", { ascending: true }),
+    supabase.from("recipe_popular").select("id, template_id, picks, sort_order").order("sort_order", { ascending: true }),
   ]);
   const synRes = await fetchAll("product_synonyms", "product_id, term", ["id"]);
   const synonyms = new Map<string, string[]>();
