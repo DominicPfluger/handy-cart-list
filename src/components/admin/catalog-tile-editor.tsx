@@ -10,7 +10,7 @@ import { prepareCategoryImage } from "@/lib/image-upload";
 import { saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
 import { toast } from "sonner";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
-import { estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
+import { estimateProductPrice, estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
 import { suggestCategoryProducts, suggestImagePrompt, translateVariants } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
@@ -451,6 +451,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [newId, setNewId] = useState<string | null>(null);
   const [price, setPrice] = useState("");
   const estAll = useServerFn(estimateProductPricesAllMarkets);
+  const estOneFn = useServerFn(estimateProductPrice);
+  const [estOne, setEstOne] = useState<string | null>(null);
   const qc = useQueryClient();
   const [estimating, setEstimating] = useState(false);
   const [enriching, setEnriching] = useState(false);
@@ -796,12 +798,33 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       const isCur = m.code === currentMarket();
                       const v = isCur ? price : (mp[m.code] ?? "");
                       return (
-                        <label key={m.code} className="flex items-center gap-2 text-sm">
+                        <div key={m.code} className="flex items-center gap-2 text-sm">
                           <span className="w-6 text-center">{m.flag}</span>
                           <span className="flex-1 truncate text-foreground">{m.name}</span>
                           <span className="w-10 text-xs text-muted-foreground">{m.currency}</span>
                           <Input aria-label={`${m.name} ${m.currency}`} type="number" min={0} step="any" value={v} onChange={(e) => (isCur ? setPrice(e.target.value) : setMp((o) => ({ ...o, [m.code]: e.target.value })))} className="h-9 w-28 rounded-lg" />
-                        </label>
+                          {item && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              aria-label={T("tile.estimateMarket", { market: m.name })}
+                              title={T("tile.estimateMarket", { market: m.name })}
+                              disabled={estOne === m.code}
+                              onClick={() => {
+                                setEstOne(m.code);
+                                void p.run(async () => {
+                                  const r = await estOneFn({ data: { productId: item.id, market: m.code } });
+                                  if (isCur) setPrice(String(r.price));
+                                  else setMp((o) => ({ ...o, [m.code]: String(r.price) }));
+                                }, T("tile.estimateDone")).finally(() => setEstOne(null));
+                              }}
+                              className="h-9 w-9 shrink-0 rounded-lg px-0"
+                            >
+                              {estOne === m.code ? "…" : "✨"}
+                            </Button>
+                          )}
+                        </div>
                       );
                     })}
                   </div>
