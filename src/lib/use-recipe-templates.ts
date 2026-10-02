@@ -25,5 +25,5 @@ export function useRecipeTemplates(): RecipeTemplate[] {
 /** Name einer Vorlage: eingebaute IDs über die Sprachdateien, eigene über den Katalog-Namen. */
 export function templateLabel(tpl: RecipeTemplate, t: (k: MessageKey) => string): string {
   const builtin = (RECIPE_TEMPLATES as ReadonlyArray<{ id: string }>).some((x) => x.id === tpl.id);
-  return builtin ? t(`rk.cat.${tpl.id}` as MessageKey) : ((tpl as unknown as { name?: string }).name ?? tpl.id);
+  return builtin ? t(`rk.cat.${tpl.id}` as MessageKey) : (tpl.name ?? tpl.id);
 }

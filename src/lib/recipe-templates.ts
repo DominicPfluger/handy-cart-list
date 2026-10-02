@@ -16,6 +16,8 @@ export type RecipeTemplate = {
   id: "muesli" | "smoothie" | "salat" | "pizza" | "pfanne" | "menu" | "dessert" | "sandwich";
   emoji: string;
   color: string;
+  /** Anzeigename bei eigenen (Datenbank-)Vorlagen; eingebaute nutzen die Sprachdateien. */
+  name?: string;
   steps: RecipeStep[];
 };
 
