@@ -582,6 +582,8 @@ export const de = {
   "adm.tab.recipes": "Rezepte & Küchen",
   "adm.tab.languages": "Sprachen",
   "tile.estimateAll": "Preise für alle Märkte schätzen",
+  "tile.marketPrices": "Preise je Markt",
+  "tile.marketPricesHint": "Manuell eintragen (ohne KI). Leeres Feld entfernt den Preis. Wird beim Speichern übernommen.",
   "tile.estimateAllConfirm": "Richtpreise für alle Märkte per KI schätzen? Vorhandene Preise werden überschrieben (verbraucht KI-Guthaben).",
   "tile.estimateAllDone": "Preise geschätzt",
   "tile.estimateAllFailed": "{n} Märkte konnten nicht geschätzt werden",

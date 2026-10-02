@@ -1031,7 +1031,9 @@
     "adm.headingMoveTaken": "A heading is already at this position.",
     "adm.headingMovePos": "Choose position",
     "adm.headingMoveBefore": "Before \"{name}\"",
-    "adm.headingMoveEnd": "At the very end"
+    "adm.headingMoveEnd": "At the very end",
+    "tile.marketPrices": "Prices per market",
+    "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2065,7 +2067,9 @@
     "adm.headingMoveTaken": "A heading is already at this position.",
     "adm.headingMovePos": "Choose position",
     "adm.headingMoveBefore": "Before \"{name}\"",
-    "adm.headingMoveEnd": "At the very end"
+    "adm.headingMoveEnd": "At the very end",
+    "tile.marketPrices": "Prices per market",
+    "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3099,7 +3103,9 @@
     "adm.headingMoveTaken": "A heading is already at this position.",
     "adm.headingMovePos": "Choose position",
     "adm.headingMoveBefore": "Before \"{name}\"",
-    "adm.headingMoveEnd": "At the very end"
+    "adm.headingMoveEnd": "At the very end",
+    "tile.marketPrices": "Prices per market",
+    "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4133,7 +4139,9 @@
     "adm.headingMoveTaken": "Ya hay un título en esta posición.",
     "adm.headingMovePos": "Elegir posición",
     "adm.headingMoveBefore": "Antes de \"{name}\"",
-    "adm.headingMoveEnd": "Al final de todo"
+    "adm.headingMoveEnd": "Al final de todo",
+    "tile.marketPrices": "Precios por mercado",
+    "tile.marketPricesHint": "Introducir manualmente (sin IA). Un campo vacío elimina el precio. Se aplica al guardar."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5167,7 +5175,9 @@
     "adm.headingMoveTaken": "Ya hay un título en esta posición.",
     "adm.headingMovePos": "Elegir posición",
     "adm.headingMoveBefore": "Antes de \"{name}\"",
-    "adm.headingMoveEnd": "Al final de todo"
+    "adm.headingMoveEnd": "Al final de todo",
+    "tile.marketPrices": "Precios por mercado",
+    "tile.marketPricesHint": "Introducir manualmente (sin IA). Un campo vacío elimina el precio. Se aplica al guardar."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6201,7 +6211,9 @@
     "adm.headingMoveTaken": "Un titre se trouve déjà à cet endroit.",
     "adm.headingMovePos": "Choisir la position",
     "adm.headingMoveBefore": "Avant « {name} »",
-    "adm.headingMoveEnd": "Tout à la fin"
+    "adm.headingMoveEnd": "Tout à la fin",
+    "tile.marketPrices": "Prix par marché",
+    "tile.marketPricesHint": "Saisie manuelle (sans IA). Un champ vide supprime le prix. Appliqué à l’enregistrement."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7235,7 +7247,9 @@
     "adm.headingMoveTaken": "Un titre se trouve déjà à cet endroit.",
     "adm.headingMovePos": "Choisir la position",
     "adm.headingMoveBefore": "Avant « {name} »",
-    "adm.headingMoveEnd": "Tout à la fin"
+    "adm.headingMoveEnd": "Tout à la fin",
+    "tile.marketPrices": "Prix par marché",
+    "tile.marketPricesHint": "Saisie manuelle (sans IA). Un champ vide supprime le prix. Appliqué à l’enregistrement."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -8269,7 +8283,9 @@
     "adm.headingMoveTaken": "In questa posizione c’è già un titolo.",
     "adm.headingMovePos": "Scegli la posizione",
     "adm.headingMoveBefore": "Prima di \"{name}\"",
-    "adm.headingMoveEnd": "Alla fine"
+    "adm.headingMoveEnd": "Alla fine",
+    "tile.marketPrices": "Prezzi per mercato",
+    "tile.marketPricesHint": "Inserimento manuale (senza IA). Un campo vuoto rimuove il prezzo. Applicato al salvataggio."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9303,7 +9319,9 @@
     "adm.headingMoveTaken": "In questa posizione c’è già un titolo.",
     "adm.headingMovePos": "Scegli la posizione",
     "adm.headingMoveBefore": "Prima di \"{name}\"",
-    "adm.headingMoveEnd": "Alla fine"
+    "adm.headingMoveEnd": "Alla fine",
+    "tile.marketPrices": "Prezzi per mercato",
+    "tile.marketPricesHint": "Inserimento manuale (senza IA). Un campo vuoto rimuove il prezzo. Applicato al salvataggio."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -10337,7 +10355,9 @@
     "adm.headingMoveTaken": "Já existe um título nesta posição.",
     "adm.headingMovePos": "Escolher posição",
     "adm.headingMoveBefore": "Antes de \"{name}\"",
-    "adm.headingMoveEnd": "No fim de tudo"
+    "adm.headingMoveEnd": "No fim de tudo",
+    "tile.marketPrices": "Preços por mercado",
+    "tile.marketPricesHint": "Introduzir manualmente (sem IA). Um campo vazio remove o preço. Aplicado ao guardar."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11371,7 +11391,9 @@
     "adm.headingMoveTaken": "Já existe um título nesta posição.",
     "adm.headingMovePos": "Escolher posição",
     "adm.headingMoveBefore": "Antes de \"{name}\"",
-    "adm.headingMoveEnd": "No fim de tudo"
+    "adm.headingMoveEnd": "No fim de tudo",
+    "tile.marketPrices": "Preços por mercado",
+    "tile.marketPricesHint": "Introduzir manualmente (sem IA). Um campo vazio remove o preço. Aplicado ao guardar."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -12405,7 +12427,9 @@
     "adm.headingMoveTaken": "Op deze plek staat al een kop.",
     "adm.headingMovePos": "Positie kiezen",
     "adm.headingMoveBefore": "Voor \"{name}\"",
-    "adm.headingMoveEnd": "Helemaal onderaan"
+    "adm.headingMoveEnd": "Helemaal onderaan",
+    "tile.marketPrices": "Prijzen per markt",
+    "tile.marketPricesHint": "Handmatig invoeren (zonder AI). Een leeg veld verwijdert de prijs. Toegepast bij opslaan."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13439,7 +13463,9 @@
     "adm.headingMoveTaken": "Op deze plek staat al een kop.",
     "adm.headingMovePos": "Positie kiezen",
     "adm.headingMoveBefore": "Voor \"{name}\"",
-    "adm.headingMoveEnd": "Helemaal onderaan"
+    "adm.headingMoveEnd": "Helemaal onderaan",
+    "tile.marketPrices": "Prijzen per markt",
+    "tile.marketPricesHint": "Handmatig invoeren (zonder AI). Een leeg veld verwijdert de prijs. Toegepast bij opslaan."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -13933,7 +13959,9 @@
     "adm.headingMoveTaken": "An dieser Stelle steht bereits eine Überschrift.",
     "adm.headingMovePos": "Position wählen",
     "adm.headingMoveBefore": "Vor „{name}“",
-    "adm.headingMoveEnd": "Ganz ans Ende"
+    "adm.headingMoveEnd": "Ganz ans Ende",
+    "tile.marketPrices": "Preise je Markt",
+    "tile.marketPricesHint": "Manuell eintragen (ohne KI). Leeres Feld entfernt den Preis. Wird beim Speichern übernommen."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -14427,6 +14455,8 @@
     "adm.headingMoveTaken": "An dieser Stelle steht bereits eine Überschrift.",
     "adm.headingMovePos": "Position wählen",
     "adm.headingMoveBefore": "Vor „{name}“",
-    "adm.headingMoveEnd": "Ganz ans Ende"
+    "adm.headingMoveEnd": "Ganz ans Ende",
+    "tile.marketPrices": "Preise je Markt",
+    "tile.marketPricesHint": "Manuell eintragen (ohne KI). Leeres Feld entfernt den Preis. Wird beim Speichern übernommen."
   }
 }
