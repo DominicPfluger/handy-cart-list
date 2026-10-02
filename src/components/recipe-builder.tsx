@@ -664,9 +664,8 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 {groups.map((group) => {
                   const shown = group.products.filter((p) => shownIds.has(p.id));
                   if (!shown.length) return null;
-                  return <div key={group.key} className="space-y-1.5">
-                    {hasGroups && <p className="text-xs font-semibold text-muted-foreground">{group.emoji && <span aria-hidden="true">{group.emoji} </span>}{group.name}</p>}
-                    <div className="flex flex-wrap gap-2">
+                  return <div key={group.key} className="flex flex-wrap items-center gap-2">
+                    {hasGroups && <span className="inline-flex shrink-0 items-center whitespace-nowrap rounded-full border border-border bg-muted px-3 py-1.5 text-xs font-semibold text-foreground">{group.emoji && <span aria-hidden="true" className="mr-1">{group.emoji}</span>}{group.name}</span>}
                     {shown.map((p) => {
                       const on = sel.includes(p.id);
                       return (
@@ -683,7 +682,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                         </button>
                       );
                     })}
-                    </div>
                   </div>;
                 })}
                 {!q && ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
