@@ -125,7 +125,7 @@ function AdminPage() {
     return out;
   };
   const children = (d?.depts ?? []).filter((x) => x.parent_id === cur);
-  const products = useMemo(() => {
+  const ownProducts = useMemo(() => {
     const base = (d?.prods ?? []).filter((x) => x.department_id === cur);
     if (!mk || !d) return base;
     const avail = base.filter((p) => (p.markets.length === 0 || p.markets.includes(mk)) && !d.excl.has(`${p.id}|${mk}`));
@@ -140,6 +140,19 @@ function AdminPage() {
     });
     return [...avail, ...rest];
   }, [d, cur, mk]);
+  const aliasQ = useQuery({ queryKey: ALIAS_KEY, queryFn: loadAliases });
+  // Alias-Produkte an ihrer Alias-Position einmischen (wie in der App-Abteilungsansicht).
+  const products = useMemo(() => {
+    if (!cur || !d) return ownProducts;
+    const byId = new Map(d.prods.map((x) => [x.id, x]));
+    const extra = (aliasQ.data ?? []).filter((a) => a.department_id === cur).flatMap((a) => {
+      const p = byId.get(a.product_id);
+      return p && p.department_id !== cur ? [{ ...p, id: `alias:${a.id}`, sort_order: a.sort_order, alias_id: a.id, product_id: p.id }] : [];
+    });
+    if (!extra.length) return ownProducts;
+    if (mk) return [...ownProducts, ...extra];
+    return [...ownProducts, ...extra].sort((a, b) => a.sort_order - b.sort_order);
+  }, [ownProducts, aliasQ.data, cur, d, mk]);
   const unavailable = (p: Prod) => Boolean(mk && d && ((p.markets.length > 0 && !p.markets.includes(mk)) || d.excl.has(`${p.id}|${mk}`)));
   const headings = (d?.heads ?? []).filter((x) => x.department_id === cur);
 
@@ -184,13 +197,24 @@ function AdminPage() {
         return { ...old, [key]: arr };
       });
     }
-    run(() => kind === "product" ? saveOrder(next) : Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id)))), T("adm.orderSaved"));
+    if (kind === "product") {
+      qc.setQueryData(ALIAS_KEY, (old: Array<{ id: string; sort_order: number }> | undefined) =>
+        old?.map((a) => (pos.has(`alias:${a.id}`) ? { ...a, sort_order: pos.get(`alias:${a.id}`)! } : a)));
+    }
+    run(async () => {
+      if (kind === "product") { await saveOrder(next); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }
+      else await Promise.all(next.map((x, i) => must(supabase.from(TABLE[kind]).update({ sort_order: i + 1 }).eq("id", x.id))));
+    }, T("adm.orderSaved"));
   };
 
-  /** Produkt-Reihenfolge speichern: global in products, sonst pro Markt in product_market_order. */
-  const saveOrder = async (list: { id: string }[]) => {
+  /** Produkt-Reihenfolge speichern: global in products, sonst pro Markt in product_market_order. Aliase: product_aliases. */
+  const saveOrder = async (all: { id: string }[]) => {
+    const aliases = all.map((x, i) => [x.id, i + 1] as const).filter(([id]) => id.startsWith("alias:"));
+    await Promise.all(aliases.map(([id, n]) => must(supabase.from("product_aliases").update({ sort_order: n }).eq("id", id.slice(6)))));
+    const list = all.filter((x) => !x.id.startsWith("alias:"));
     if (!mk) {
-      await Promise.all(list.map((x, i) => must(supabase.from("products").update({ sort_order: i + 1 }).eq("id", x.id))));
+      await Promise.all(all.map((x, i) => [x, i + 1] as const).filter(([x]) => !x.id.startsWith("alias:"))
+        .map(([x, n]) => must(supabase.from("products").update({ sort_order: n }).eq("id", x.id))));
       return;
     }
     await must(supabase.from("product_market_order").upsert(
