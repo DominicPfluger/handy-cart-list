@@ -16,6 +16,7 @@ Im Admin-Bereich (Tab „Katalog") verschwindet die Listenansicht komplett. Kate
 4. **Erweiterte Bearbeitung**: Im Bearbeiten-Fenster der Kachel ein Knopf „Erweitert", der den bisherigen vollständigen Editor öffnet — Übersetzungen pro Sprache, Neu-Übersetzen, Ernährungsfilter, Varianten, Marken, Aliase, Kategorie-Bild, in andere Kategorie verschieben.
 
 ## Was sonst erhalten bleibt
+- **Pfadnavigation** (Katalog › Kategorie › Unterkategorie) bleibt — die Kachelansicht zeigt sie bereits oben.
 - **„+ Mehrere Produkte" / „✨ Vorschläge"** öffnen wie bisher das Bulk-Formular aus dem Kachel-Editor.
 - **Suche**: Treffer springen in die passende Kategorie der Kachelansicht und öffnen die erweiterte Bearbeitung.
 - Alle anderen Tabs (Rezepte & Küchen, Bilder, Preise, Import, Märkte, Sprachen, Mehr) bleiben unberührt.
