@@ -22,6 +22,7 @@ Die acht Rezept-Vorlagen (Müsli, Smoothie, Salat, Sandwiches, Pizza, Pfannegeri
 - Bilder als ES6-Imports eingebunden (werden mit dem Build ausgeliefert, kein Download nötig)
 - Keine neuen Texte, keine Übersetzungen nötig
 - Keine Änderung an Auswahl, Schritten oder gespeicherten Rezepten
+- Die Zutaten-Bereiche (Teig, Sauce, Käse, Fleisch …) bleiben wie aktuell umgesetzt immer aufgeklappt: nur Rahmen, keine Pfeile — daran ändert dieser Plan nichts
 
 ## Prüfung
 - Typcheck + Build
