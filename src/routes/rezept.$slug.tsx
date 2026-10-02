@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { scaleQuantity } from "../lib/scale-quantity";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useT, translate } from "../i18n";
@@ -67,6 +68,7 @@ function RecipePage() {
   const [added, setAdded] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [portions, setPortions] = useState(1);
   const [speakRate] = useSpeakRate();
   const [speakLocale] = useSpeakLocale();
 
@@ -80,6 +82,7 @@ function RecipePage() {
     },
   });
   const items = r.items.map((i) => ({ ...i, name: i.name || names?.get(i.productId)?.name || "", emoji: i.emoji ?? names?.get(i.productId)?.emoji }));
+  const scaled = useMemo(() => items.map((i) => ({ ...i, quantity: i.quantity ? scaleQuantity(i.quantity, portions) : i.quantity })), [items, portions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const stats = useQuery({
     queryKey: ["recipe-stats", r.id],
@@ -113,7 +116,7 @@ function RecipePage() {
       `${r.title}.`,
       ...(r.description ? [r.description] : []),
       translate(speakLocale, "rs.speakIngredients"),
-      ...items.map((i) => {
+      ...scaled.map((i) => {
         const qty = i.quantity
           ? (i.unit ? `${speakQuantity(i.quantity, i.unit ?? undefined, speakLocale)} ` : `${i.quantity} `)
           : "";
@@ -138,7 +141,7 @@ function RecipePage() {
   };
 
   const addAll = () => {
-    for (const i of items) {
+    for (const i of scaled) {
       addCatalogItem({ productId: i.productId, name: i.name, quantity: i.quantity || "1", unit: i.unit ?? "stueck", organic: false, emoji: i.emoji ?? undefined });
     }
     setAdded(true);
@@ -196,8 +199,18 @@ function RecipePage() {
       </div>
 
       <section className="rounded-2xl bg-primary-soft/40 p-4">
+        <div className="mb-3 flex items-center justify-between">
+          <span className="text-sm font-semibold text-foreground">{t("rs.portions")}</span>
+          <div className="flex items-center gap-3">
+            <button type="button" onClick={() => setPortions((p) => Math.max(1, p - 1))} disabled={portions <= 1}
+              aria-label="-" className="grid h-9 w-9 place-items-center rounded-full border border-border text-lg font-bold text-primary disabled:opacity-40">−</button>
+            <span className="min-w-6 text-center text-sm font-bold text-foreground">{portions}</span>
+            <button type="button" onClick={() => setPortions((p) => Math.min(8, p + 1))} disabled={portions >= 8}
+              aria-label="+" className="grid h-9 w-9 place-items-center rounded-full border border-border text-lg font-bold text-primary disabled:opacity-40">+</button>
+          </div>
+        </div>
         <ul className="space-y-1 text-sm text-foreground">
-          {items.map((i) => <li key={i.productId}>{i.emoji ? `${i.emoji} ` : "• "}{i.name}{i.quantity ? ` — ${i.quantity}` : ""}</li>)}
+          {scaled.map((i) => <li key={i.productId}>{i.emoji ? `${i.emoji} ` : "• "}{i.name}{i.quantity ? ` — ${i.quantity}` : ""}</li>)}
         </ul>
         <button onClick={addAll} disabled={added} className="mt-3 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60">
           {added ? `✓ ${t("rk.added")}` : t("rk.addAll", { n: items.length })}

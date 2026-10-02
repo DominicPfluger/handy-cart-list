@@ -237,6 +237,8 @@ export function CatalogTileEditor(p: {
 
   const dragHandlers = { onPointerMove: onMove, onPointerUp: onUp, onPointerCancel: () => { setDrag(null); setOver(null); setOverPos(null); } };
   const click = (fn: () => void) => () => { if (moved.current) { moved.current = false; return; } fn(); };
+  // Icon-Klick öffnet den Dialog erst nach kurzer Verzögerung — ein Doppelklick (Zoom) kann ihn abbrechen
+  const iconClickTimer = useRef<number | null>(null);
 
   return (
     <div className="space-y-3">
@@ -337,7 +339,7 @@ export function CatalogTileEditor(p: {
               )}
               <div data-drop="product" data-id={x.id} data-index={i}
                 className={`flex items-center gap-3 px-3 py-2 ${x.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
-                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers} onDoubleClick={() => { const u = img(x.image_path); if (u) setZoom(u); }}
+                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, x.emoji ?? "•")} {...dragHandlers} onClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (moved.current) { moved.current = false; return; } if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
                   className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl ${editMode ? "cursor-grab touch-none" : ""}`}>
                   {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
                 </span>
