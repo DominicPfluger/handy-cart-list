@@ -50,6 +50,8 @@ export function CatalogTileEditor(p: {
   headings?: TileHeading[];
   onAddHeading?: (name: string) => void;
   onMoveHeading?: (id: string, beforeProductId: string) => void;
+  /** Ordnet ein Produkt einer Überschrift zu ("" = vor die erste Überschrift). */
+  onAssignHeading?: (productId: string, headingId: string) => void;
   onRenameHeading?: (id: string, name: string) => void;
   onDeleteHeading?: (id: string, name: string) => void;
   onBulkAdd?: (() => void) | undefined;
@@ -278,6 +280,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [price, setPrice] = useState("");
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
+  const heads = p.headings ?? [];
+  const curHeadingId = (() => {
+    if (!prod) return "";
+    const idx = p.products.findIndex((x) => x.id === prod.id);
+    let curH = "";
+    for (const h of heads) { const ai = p.products.findIndex((x) => x.id === h.before_product_id); if (ai >= 0 && ai <= idx) curH = h.id; }
+    return curH;
+  })();
+  const [headingSel, setHeadingSel] = useState(curHeadingId);
   const addVariant = (v: string) => {
     const vals = v.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
     setVariants((x) => {
@@ -290,7 +301,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const effId = item?.id ?? newId ?? undefined;
   const table = isDept ? "departments" : "products";
 
-  const save = () => p.run(async () => {
+  const save = async () => {
+    await p.run(async () => {
     if (!name.trim()) throw new Error(T("tile.nameRequired"));
     const base = { name: name.trim(), emoji: emoji.trim() || null };
     let id = item?.id;
@@ -319,7 +331,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     }
     // Bei neuen Einträgen offen lassen, damit gleich ein Bild ergänzt werden kann.
     if (item) p.onClose();
-  });
+    });
+    if (!isDept && item && headingSel !== curHeadingId) p.onAssignHeading?.(item.id, headingSel);
+  };
 
   const upload = (file: File) => p.run(async () => {
     const blob = await prepareCategoryImage(file);
@@ -368,6 +382,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         )}
         {!isDept && (
           <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 rounded-xl" />
+        )}
+        {!isDept && item && heads.length > 0 && (
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-foreground">{T("adm.headingAssign")}</h3>
+            <select aria-label={T("adm.headingAssign")} value={headingSel} onChange={(e) => setHeadingSel(e.target.value)} className="h-11 w-full rounded-xl border border-input bg-background px-2 text-sm">
+              <option value="">{T("adm.noHeading")}</option>
+              {heads.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}
+            </select>
+          </div>
         )}
         {!isDept && (
           <div className="space-y-1.5">

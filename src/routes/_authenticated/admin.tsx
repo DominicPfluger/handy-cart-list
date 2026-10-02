@@ -220,6 +220,35 @@ function AdminPage() {
     }, T("adm.headingMoved"));
   };
 
+  /** Produkt unter eine Überschrift verschieben (ans Ende der Gruppe; "" = ganz nach oben, vor die erste Überschrift). */
+  const assignHeading = async (productId: string, headingId: string) => {
+    const prod0 = d?.prods.find((x) => x.id === productId);
+    if (!d || !prod0) return;
+    const list = d.prods.filter((x) => x.department_id === prod0.department_id).slice().sort((a, b) => a.sort_order - b.sort_order);
+    const heads = d.heads.filter((h) => h.department_id === prod0.department_id);
+    const myIdx = list.findIndex((x) => x.id === productId);
+    let curH = "";
+    for (const h of heads) { const ai = list.findIndex((x) => x.id === h.before_product_id); if (ai >= 0 && ai <= myIdx) curH = h.id; }
+    if (headingId === curH) return;
+    const follower = list[myIdx + 1];
+    const anchored = heads.filter((h) => h.before_product_id === productId);
+    const rest = list.filter((x) => x.id !== productId);
+    let at = 0;
+    if (headingId) {
+      const h = heads.find((x) => x.id === headingId)!;
+      let ai = rest.findIndex((x) => x.id === h.before_product_id);
+      if (ai < 0) ai = follower ? rest.findIndex((x) => x.id === follower.id) : 0;
+      if (ai < 0) ai = 0;
+      let end = rest.length;
+      for (const o of heads) { if (o.id === h.id || o.before_product_id === productId) continue; const oi = rest.findIndex((x) => x.id === o.before_product_id); if (oi > ai && oi < end) end = oi; }
+      at = end;
+    }
+    await saveOrder([...rest.slice(0, at), prod0, ...rest.slice(at)]);
+    for (const h of anchored) {
+      if (follower) await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: follower.id } });
+    }
+  };
+
   const nm = (id: string, base: string) => viewLoc === "de-DE" ? base : d?.tr.get(id)?.[viewLoc]?.name ?? base;
   const pathText = () => path(cur).map((p) => p.name).join(" › ");
   /** Produkte aus Nachbarkategorien (gleiche Oberkategorie), damit nichts doppelt vorgeschlagen wird. */
@@ -404,6 +433,7 @@ function AdminPage() {
             headings={headings}
             onAddHeading={(name) => { if (cur && products[0]) void run(() => saveH({ data: { departmentId: cur, beforeProductId: products[0]!.id, name } }), T("adm.created")); }}
             onMoveHeading={moveHeading}
+            onAssignHeading={(productId, headingId) => run(() => assignHeading(productId, headingId), T("adm.saved"))}
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
@@ -440,6 +470,7 @@ function AdminPage() {
               if (patch.variants) upd['variants'] = patch.variants;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
               if (sel.kind === "product" && patch.variants) void trVariants({ data: { productId: sel.id } }).catch(() => {});
+              if (sel.kind === "product" && patch.heading !== undefined) await assignHeading(sel.id, patch.heading);
             }
           })}
           onTr={(locale, value, prev) => {
@@ -592,7 +623,7 @@ function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) 
   );
 }
 
-type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[]; variants?: string[] };
+type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[]; variants?: string[]; heading?: string };
 
 const COMMON_VARIANTS = ["Bio", "Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
@@ -614,6 +645,16 @@ function Editor(p: {
   const [qty, setQty] = useState(String(prod?.default_quantity ?? 1));
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [before, setBefore] = useState(head?.before_product_id ?? "");
+  const deptProds = prod ? data.prods.filter((x) => x.department_id === prod.department_id).slice().sort((a, b) => a.sort_order - b.sort_order) : [];
+  const deptHeads = prod ? data.heads.filter((h) => h.department_id === prod.department_id) : [];
+  const curHeadingId = (() => {
+    if (!prod) return "";
+    const idx = deptProds.findIndex((x) => x.id === prod.id);
+    let curH = "";
+    for (const h of deptHeads) { const ai = deptProds.findIndex((x) => x.id === h.before_product_id); if (ai >= 0 && ai <= idx) curH = h.id; }
+    return curH;
+  })();
+  const [headingSel, setHeadingSel] = useState(curHeadingId);
   const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
@@ -669,6 +710,15 @@ function Editor(p: {
           <div className="grid grid-cols-2 gap-2">
             <Input inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} />
             <UnitSelect value={unit} onChange={setUnit} />
+          </div>
+        )}
+        {prod && deptHeads.length > 0 && (
+          <div className="space-y-1.5">
+            <h3 className="text-sm font-semibold text-foreground">{T("adm.headingAssign")}</h3>
+            <select value={headingSel} onChange={(e) => setHeadingSel(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
+              <option value="">{T("adm.noHeading")}</option>
+              {deptHeads.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}
+            </select>
           </div>
         )}
         {prod && (
@@ -768,7 +818,7 @@ function Editor(p: {
           <Button className="flex-1" disabled={p.busy || !name.trim()} onClick={() => p.onSave({
             name: name.trim(), emoji, before,
             ...(sel.kind !== "heading" ? { parent } : {}),
-            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, diets, variants } : {}),
+            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, diets, variants, heading: headingSel } : {}),
           })}>{T("adm.save")}</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
