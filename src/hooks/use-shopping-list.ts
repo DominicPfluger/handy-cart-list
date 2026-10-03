@@ -476,6 +476,7 @@ interface CloudListsApi {
   renameList: (id: string, name: string) => void;
   deleteList: (id: string) => void;
   reorderLists: (fromId: string, toId: string) => void;
+  reorderTemplates: (fromId: string, toId: string) => void;
   setItems: (fn: (prev: ListItem[]) => ListItem[]) => void;
   addItem: (name: string, quantity: string, category: ListItem["category"], user_?: string) => void;
   addCatalogItem: (input: AddCatalogItemInput, user_?: string) => void;
