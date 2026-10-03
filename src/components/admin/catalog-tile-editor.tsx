@@ -73,6 +73,9 @@ export function CatalogTileEditor(p: {
   onRenameHeading?: (id: string, name: string) => void;
   onDeleteHeading?: (id: string, name: string) => void;
   onBulkAdd?: (() => void) | undefined;
+  imageEditor?: { kind: "product"; id: string } | null;
+  imageEditorProduct?: TileProd | undefined;
+  onCloseImageEditor?: () => void;
   /** Ergänzt fehlende Übersetzungen per KI (ganzer Katalog). */
   onTranslateMissing?: () => void;
 }) {
@@ -543,22 +546,25 @@ export function CatalogTileEditor(p: {
         <div className="pointer-events-none fixed z-50 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-card px-3 py-2 text-2xl shadow-lg" style={{ left: drag.x, top: drag.y }}>{drag.label}</div>
       )}
 
-      {target && (
-        <ItemSheet key={`${target.kind}:${target.id}`} {...p} target={target} onClose={() => setTarget(null)}
-          imgUrl={target.id ? img(target.kind === "department" ? deptById.get(target.id)?.image_path : p.products.find((x) => x.id === target.id)?.image_path) : undefined} />
-      )}
+      {(() => {
+        const active = p.imageEditor ?? target;
+        if (!active) return null;
+        return <ItemSheet key={`${active.kind}:${active.id}`} {...p} target={active} imageOnly={Boolean(p.imageEditor)}
+          onClose={() => { if (p.imageEditor) p.onCloseImageEditor?.(); else setTarget(null); }}
+          imgUrl={active.id ? img(active.kind === "department" ? deptById.get(active.id)?.image_path : p.products.find((x) => x.id === active.id)?.image_path ?? p.imageEditorProduct?.image_path) : undefined} />;
+      })()}
 
       {zoom && <ImageZoomOverlay src={zoom} open onClose={() => setZoom(null)} />}
     </div>
   );
 }
 
-function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNullable<Target>; onClose: () => void; imgUrl: string | undefined }) {
+function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNullable<Target>; onClose: () => void; imgUrl: string | undefined; imageOnly?: boolean }) {
   const genImg = useServerFn(generateImageFor);
   const trVariants = useServerFn(translateVariants);
   const suggestPrompt = useServerFn(suggestImagePrompt);
   const isDept = p.target.kind === "department";
-  const item = p.target.id ? (isDept ? p.depts.find((d) => d.id === p.target.id) : p.products.find((x) => x.id === p.target.id)) : undefined;
+  const item = p.target.id ? (isDept ? p.depts.find((d) => d.id === p.target.id) : p.products.find((x) => x.id === p.target.id) ?? p.imageEditorProduct) : undefined;
   const prod = !isDept ? (item as TileProd | undefined) : undefined;
   const [name, setName] = useState(item?.name ?? "");
   const [emoji, setEmoji] = useState(item?.emoji ?? "");
@@ -566,6 +572,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [hint, setHint] = useState("");
   const [imgOpts, setImgOpts] = useState<AiImageOpts>(DEFAULT_AI_IMAGE_OPTS);
+  const [iconHint, setIconHint] = useState("");
+  const [iconImgOpts, setIconImgOpts] = useState<AiImageOpts>(DEFAULT_AI_IMAGE_OPTS);
   const [large, setLarge] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null | undefined>(undefined);
   const [imageBusy, setImageBusy] = useState(false);
@@ -642,6 +650,14 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const effId = item?.id ?? newId ?? undefined;
   // Reload whenever the preview changes so "icon like preview" always uses the current image.
   useEffect(() => { if (effId) void loadIcon(effId); }, [effId, imagePreview]);
+  useEffect(() => {
+    if (!p.imageOnly || !p.imageEditorProduct?.image_path) return;
+    let alive = true;
+    void supabase.storage.from("catalog-images").createSignedUrl(p.imageEditorProduct.image_path, 600).then(({ data }) => {
+      if (alive && data?.signedUrl) setImagePreview(data.signedUrl);
+    });
+    return () => { alive = false; };
+  }, [p.imageOnly, p.imageEditorProduct?.image_path]);
   const table = isDept ? "departments" : "products";
 
   // KI-Vorschlag für den Bildtext einer Kategorie, abgeleitet aus den enthaltenen Produkten.
@@ -837,18 +853,16 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       await qc.invalidateQueries({ queryKey: ["catalog"] });
     });
   };
-  /** Erzeugt ein KI-Bild und verwendet es für Vorschaubild und Icon (mit Credits-Bestätigung). */
+  /** Erzeugt ein KI-Bild für das Icon (mit Credits-Bestätigung). */
   const aiIcon = async () => {
     if (!effId) return;
     if (!window.confirm(T("adm.variantImageAiConfirm", { name: name.trim() || T("adm.iconImage") }))) return;
     setImageBusy(true);
     try {
       await p.run(async () => {
-        const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined, opts: imgOpts } });
+        const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", iconOnly: true, hint: iconHint.trim() || undefined, opts: iconImgOpts } });
         await forgetCatalogImage(generated.path);
         await saveCustomIconFromPath(isDept ? "department" : "product", effId, generated.path);
-        const { data } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
-        if (data?.signedUrl) { setImagePreview(data.signedUrl); setImgPath(generated.path); }
         await loadIcon(effId);
         await qc.invalidateQueries({ queryKey: ["catalog"] });
       }, T("tile.imgDone"));
@@ -856,8 +870,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   };
 
   return (
-    <div className="fixed inset-0 z-40 flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
-      <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
+    <div className={`fixed inset-0 ${p.imageOnly ? "z-[70]" : "z-40"} flex items-end justify-center bg-foreground/30`} onClick={p.onClose}>
+      <div role="dialog" aria-modal="true" aria-label={p.imageOnly ? T("adm.previewImage") : T("tile.editItem")} className="max-h-[calc(100dvh-1rem)] w-full max-w-[440px] overflow-x-hidden overflow-y-auto overscroll-contain rounded-t-3xl bg-background p-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:max-h-[90dvh] sm:p-5" onClick={(e) => e.stopPropagation()}>
+        <div className="space-y-3">
         {picking && effId && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(async () => {
           if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
           else await saveProductIconFromPath(effId, path);
@@ -865,12 +880,12 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           setImagePreview(signed?.signedUrl ?? null);
         }); }} />}
         {iconPicking && effId && <ImagePicker onClose={() => setIconPicking(false)} onPick={(path) => pickIcon(path)} />}
-        <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
+        <div className="flex items-center justify-between gap-2"><h2 className="text-lg font-bold text-foreground">{p.imageOnly ? T("adm.previewImage") : item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2><Button type="button" variant="ghost" size="icon" aria-label={T("adm.close")} onClick={p.onClose}>✕</Button></div>
         {enrichStatus && <div role="status" className="text-sm text-foreground">{enriching && <span aria-hidden="true">⏳ </span>}{enrichStatus}</div>}
         {enrichErrors.length > 0 && <ul className="max-h-24 overflow-auto text-xs text-destructive">{enrichErrors.map((error) => <li key={error}>{error}</li>)}</ul>}
         {effId && (
           <div className="space-y-2 rounded-xl border border-border p-2">
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-2xl">
                 {iconInfo.url ? <img src={iconInfo.url} alt="" className="h-full w-full object-contain" /> : emoji || (isDept ? "📁" : "🛒")}
               </div>
@@ -887,15 +902,22 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               <Button size="sm" variant="outline" disabled={p.busy} onClick={() => setIconPicking(true)}>🖼️ {T("adm.iconPick")}</Button>
               <Button size="sm" variant="outline" disabled={imageBusy || p.busy} onClick={() => void aiIcon()}>{imageBusy ? T("adm.working") : `✨ ${T("adm.iconAi")}`}</Button>
             </div>
+            <details className="rounded-xl border border-border p-2">
+              <summary className="cursor-pointer select-none text-sm font-medium text-foreground">✨ {T("tile.aiOptions")}</summary>
+              <div className="mt-2 space-y-2">
+                <Input aria-label={`${T("adm.iconImage")} · ${T("tile.aiHint")}`} placeholder={T("tile.aiHint")} value={iconHint} onChange={(e) => setIconHint(e.target.value)} className="h-10 w-full rounded-xl text-sm" />
+                <AiImageOptionSelects value={iconImgOpts} onChange={setIconImgOpts} />
+              </div>
+            </details>
           </div>
         )}
         {effId && <p className="-mb-1 text-sm font-semibold text-foreground">{T("adm.previewImage")}</p>}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-start gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
             {(imagePreview === undefined ? p.imgUrl : imagePreview) ? <ZoomableImage src={(imagePreview === undefined ? p.imgUrl : imagePreview) ?? ""} className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
           </div>
           {effId && (
-            <div className="flex flex-1 flex-col gap-2">
+            <div className="flex min-w-0 flex-1 flex-col gap-2">
               <div className="flex flex-wrap gap-2">
                 <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
                 <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
@@ -944,11 +966,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </div>
           )}
         </div>
-        <div className="flex gap-2">
+        {!p.imageOnly && <div className="flex gap-2">
           <Input aria-label={T("tile.emoji")} placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} className="h-11 w-16 rounded-xl text-center text-xl" />
           <Input aria-label={T("tile.name")} placeholder={T("tile.name")} value={name} onChange={(e) => setName(e.target.value)} className="h-11 flex-1 rounded-xl" />
-        </div>
-        {isDept && !item && (
+        </div>}
+        {!p.imageOnly && isDept && !item && (
           <div className="space-y-1">
             <h3 className="text-sm font-semibold text-foreground">{T("tile.deptProducts")}</h3>
             <textarea
@@ -961,7 +983,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             {prodLines.trim() && <p className="text-[11px] text-muted-foreground">{T("adm.detected", { n: new Set(prodLines.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)).size })}</p>}
           </div>
         )}
-        {!isDept && (
+        {!p.imageOnly && !isDept && (
           <div className="flex gap-2">
             <Input aria-label={T("tile.qty")} type="number" min={0} step="any" value={qty} onChange={(e) => setQty(Number(e.target.value))} className="h-11 w-24 rounded-xl" />
             <select aria-label={T("tile.unit")} value={unit} onChange={(e) => setUnit(e.target.value)} className="h-11 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
@@ -969,7 +991,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </select>
           </div>
         )}
-        {!isDept && (
+        {!p.imageOnly && !isDept && (
           <div className="space-y-2">
             <div className="flex gap-2">
               <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 flex-1 rounded-xl" />
@@ -1040,7 +1062,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             )}
           </div>
         )}
-        {!isDept && item && heads.length > 0 && (
+        {!p.imageOnly && !isDept && item && heads.length > 0 && (
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-foreground">{T("adm.headingAssign")}</h3>
             <select aria-label={T("adm.headingAssign")} value={headingSel} onChange={(e) => setHeadingSel(e.target.value)} className="h-11 w-full rounded-xl border border-input bg-background px-2 text-sm">
@@ -1049,7 +1071,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </select>
           </div>
         )}
-        {!isDept && (
+        {!p.imageOnly && !isDept && (
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
             {variants.length > 0 && (
@@ -1103,11 +1125,12 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
           </div>
         )}
-        <div className="flex gap-2 pt-1">
+        {!p.imageOnly && <div className="flex flex-wrap gap-2 pt-1">
           {item && p.onAdvanced && <Button variant="outline" className="h-11 rounded-xl" onClick={() => { p.onAdvanced!(p.target.kind, item.id); p.onClose(); }}>⚙ {T("tile.advanced")}</Button>}
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
           <Button variant="outline" className="h-11 rounded-xl" onClick={p.onClose}>{T("common.cancel")}</Button>
           <Button className="h-11 flex-1 rounded-xl" disabled={enriching} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
+        </div>}
         </div>
       </div>
       {large && (
