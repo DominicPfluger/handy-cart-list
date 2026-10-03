@@ -937,7 +937,7 @@ export const de = {
   "adm.recipeSortAlpha": "Alphabetisch",
   "adm.recipeSortConfirm": "Reihenfolge dieses Schritts per KI neu sortieren? Gilt für alle Nutzer.",
   "adm.recipeSortDone": "Neu sortiert",
-  "adm.recipeGroups": "Rezept-Kategorien",
+  "adm.recipeGroups": "Zutaten-Kategorien",
   "adm.recipeGroupNew": "+ Oberkategorie",
   "adm.recipeGroupSub": "+ Unterkategorie",
   "adm.recipeGroupNone": "— ohne Kategorie —",
