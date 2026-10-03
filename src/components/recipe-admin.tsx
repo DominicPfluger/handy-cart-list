@@ -412,8 +412,12 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                     {depth > 1 && <span className="text-muted-foreground">{"› ".repeat(depth - 1)}</span>}
                     <span className="cursor-grab text-muted-foreground" title={T("adm.drag")}>⠿</span>
                     <span className="min-w-0 flex-1 break-words text-foreground">{g.emoji} {g.name}</span>
-                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => startGroup(g.parent_id, g)}>{T("adm.edit")}</Button>
-                    <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeGroup(g)}>{T("adm.delete")}</Button>
+                    <Button type="button" variant="ghost" size="icon" disabled={busy} aria-label={T("adm.edit")} title={T("adm.edit")} onClick={() => startGroup(g.parent_id, g)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                      <Pencil className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button type="button" variant="ghost" size="icon" disabled={busy} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => removeGroup(g)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
                   </div>
                 ))}
               </div>
