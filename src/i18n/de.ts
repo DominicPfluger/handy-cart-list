@@ -958,7 +958,7 @@ export const de = {
   "adm.recipeSortConfirm": "Reihenfolge dieses Schritts per KI neu sortieren? Gilt für alle Nutzer.",
   "adm.recipeSortDone": "Neu sortiert",
   "adm.recipeGroups": "Zutaten-Kategorien",
-  "adm.recipeGroupNew": "+ Oberkategorie",
+  "adm.recipeGroupNew": "+ Neue Zutaten-Kategorie",
   "adm.recipeGroupSub": "+ Unterkategorie",
   "adm.recipeGroupNone": "— ohne Kategorie —",
   "adm.recipeGroupTarget": "Ziel-Kategorie",
