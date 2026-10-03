@@ -287,6 +287,36 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit }: {
           })}
         </ul>
       </section>
+      {copyOpen && <CatalogTextDialog text={buildCatalogText()} onClose={() => setCopyOpen(false)} />}
+    </div>
+  );
+}
+
+/** Dialog: gesamter Katalog als kopierbarer Text. */
+function CatalogTextDialog(p: { text: string; onClose: () => void }) {
+  const { t: T } = useT();
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(p.text);
+      setCopied(true);
+      toast.success(T("export.copied"));
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error(T("export.copyFailed"));
+    }
+  };
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={p.onClose}>
+      <div className="flex w-full max-w-sm flex-col gap-3 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+        <p className="text-sm font-bold text-foreground">{T("adm.copyCatalogTitle")}</p>
+        <textarea readOnly value={p.text} rows={14}
+          className="w-full rounded-xl border border-input bg-background px-3 py-2 font-mono text-xs" />
+        <div className="flex gap-2">
+          <Button variant="outline" className="flex-1" onClick={p.onClose}>{T("adm.cancel")}</Button>
+          <Button className="flex-1" onClick={() => void copy()}>{copied ? "✓ " : ""}{T("share.copyText")}</Button>
+        </div>
+      </div>
     </div>
   );
 }
