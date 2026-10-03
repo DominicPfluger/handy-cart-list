@@ -29,3 +29,5 @@
 - [x] Rezepte-Admin: Bereich „Vorlagen & Oberkategorien" → „Vorlagen", Button „Neue Oberkategorie" → „Neue Vorlage" (16 Sprachen)
 
 - [x] Admin-Katalog: Produktzeilen mit Zieh-Griff (⠿ neben Bild), Stift (Bearbeiten-Dialog) und Papierkorb (Löschen mit Bestätigung) ergänzt
+
+- Admin-Katalog: Varianten-Schnelldialog (Tags-Icon pro Produktzeile, mehrzeilig, dedupe, translateVariants)
