@@ -25,7 +25,6 @@ export const de = {
   "dept.variantDuplicate": "Diese Variante gibt es bereits.",
   "dept.removeVariant": "Eigene Variante {name} entfernen",
   "dept.details": "Details",
-  "dept.productVariants": "Produktvarianten",
   "adm.variantImage": "Variantenbild",
   "adm.variantImageUpload": "Bild hochladen",
   "adm.variantImageRemove": "Bild löschen",
