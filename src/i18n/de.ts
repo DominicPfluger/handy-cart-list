@@ -858,6 +858,7 @@ export const de = {
   "adm.headingMoveNoTarget": "Hier folgt kein Produkt – nur mit Produkten möglich.",
   "adm.headingMoveTaken": "An dieser Stelle steht bereits eine Überschrift.",
   "adm.sort": "Sortieren",
+  "adm.sortGroup": "Einträge dieser Überschrift sortieren",
   "adm.noProducts": "Keine Produkte in dieser Kategorie.",
   "adm.drag": "Ziehen",
   "adm.retranslated": "Neu übersetzt",
