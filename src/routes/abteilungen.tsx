@@ -13,7 +13,7 @@ import { hideDepartment, useHiddenDepartments } from "../hooks/use-hidden-depart
 import { useHiddenProducts } from "../hooks/use-hidden-products";
 import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dialog";
 import { useShoppingList } from "../hooks/use-shopping-list";
-import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter, useDietFilterSource } from "../hooks/use-diet-filter";
+import { useDietFilter } from "../hooks/use-diet-filter";
 import {
   catalogQueryOptions,
   useCatalog,
@@ -71,9 +71,6 @@ function DepartmentsPage() {
   const hiddenIds = useHiddenDepartments();
   const hiddenProductIds = useHiddenProducts();
   const diets = useDietFilter();
-  const dietSource = useDietFilterSource();
-  const showDietFilter = !(diets.length > 0 && dietSource === "pref");
-  const [dietOpen, setDietOpen] = useState(false);
   const deptIds = useMemo(() => new Set(data.departments.map((d) => d.id)), [data.departments]);
   const { products: orderedProducts, move: moveProduct } = useProductOrder(data.products, deptIds);
   const { departments: orderedDepartments, move } = useDepartmentOrder(data.departments);
@@ -127,11 +124,6 @@ function DepartmentsPage() {
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const { preferred: preferredDept } = usePreferredDept();
   const [currentId, setCurrentId] = useState<string | null>(null);
-  // In Non-Food-/Near-Food-Abteilungen haben Ernährungs- und Küchenfilter keine Wirkung → Knöpfe ausblenden
-  const filtersHiddenByDept = currentId !== null && filterExemptDepartments.has(currentId);
-  useEffect(() => {
-    if (filtersHiddenByDept) { setDietOpen(false); }
-  }, [filtersHiddenByDept]);
   const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
@@ -487,49 +479,7 @@ function DepartmentsPage() {
           onResult={handleVoiceResult}
           className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
         />
-        {showDietFilter && !filtersHiddenByDept && (
-          <button
-            type="button"
-            onClick={() => { setDietOpen((v) => !v); }}
-            aria-expanded={dietOpen}
-            aria-label={t("diet.filter")}
-            title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
-            className={`shrink-0 rounded-lg px-0.5 py-1.5 text-base leading-none ${diets.length ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
-          >
-            🥗
-          </button>
-        )}
       </div>
-
-
-      {dietOpen && showDietFilter && !filtersHiddenByDept && (
-        <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
-          <div className="mb-1 text-sm font-semibold text-foreground">{t("diet.title")}</div>
-          <p className="mb-3 text-xs text-muted-foreground">{t("diet.hint")}</p>
-          <div className="flex flex-wrap gap-2">
-            {DIETS.map((d) => {
-              const on = diets.includes(d);
-              return (
-                <button
-                  key={d}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => toggleDiet(d, "search")}
-                  className={`flex h-9 items-center gap-1.5 rounded-full border px-3 text-xs font-medium leading-none ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-foreground"}`}
-                >
-                  <span className="text-base leading-none">{DIET_EMOJI[d]}</span>
-                  {t(`diet.${d}`)}
-                </button>
-              );
-            })}
-          </div>
-          {diets.length > 0 && (
-            <Button type="button" variant="ghost" size="sm" className="mt-2 px-2 text-primary" onClick={() => setDiets([])}>
-              {t("diet.reset")}
-            </Button>
-          )}
-        </section>
-      )}
 
       {!normalizedQuery && breadcrumbs.length > 0 && (
         <nav aria-label={t("dept.breadcrumb")} className="no-scrollbar flex items-center gap-1 overflow-x-auto text-xs">
