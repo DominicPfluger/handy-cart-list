@@ -135,7 +135,17 @@ export const generateProductImages = createServerFn({ method: "POST" })
 export const generateImageFor = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
-    z.object({ id: z.string().uuid(), kind: z.enum(["product", "department"]).default("product"), hint: z.string().max(300).optional() }).parse(d),
+    z.object({
+      id: z.string().uuid(),
+      kind: z.enum(["product", "department"]).default("product"),
+      hint: z.string().max(300).optional(),
+      opts: z.object({
+        style: z.enum(["photo", "illustration"]).optional(),
+        background: z.enum(["transparent", "white", "gradient"]).optional(),
+        view: z.enum(["front", "top", "side"]).optional(),
+        count: z.enum(["single", "group"]).optional(),
+      }).optional(),
+    }).parse(d),
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
