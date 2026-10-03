@@ -220,7 +220,7 @@ export const suggestVariants = createServerFn({ method: "POST" })
     const path: string[] = [];
     let dep: string | null = prod.department_id;
     for (let i = 0; dep && i < 5; i++) {
-      const { data: d } = await context.supabase.from("departments").select("name, parent_id").eq("id", dep).single();
+      const { data: d }: { data: { name: string; parent_id: string | null } | null } = await context.supabase.from("departments").select("name, parent_id").eq("id", dep).single();
       if (!d) break;
       path.unshift(d.name); dep = d.parent_id;
     }
