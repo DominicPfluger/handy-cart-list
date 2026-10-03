@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 import {
   DndContext, DragOverlay, KeyboardSensor, PointerSensor, TouchSensor, closestCorners,
   useDroppable, useSensor, useSensors, type DragEndEvent, type DragOverEvent, type DragStartEvent,
@@ -10,7 +10,9 @@ import { SortableContext, arrayMove, sortableKeyboardCoordinates, useSortable, v
 import { CSS } from "@dnd-kit/utilities";
 import { useT } from "../i18n";
 import { useRecipeTemplates } from "../lib/use-recipe-templates";
-import { publishRecipe, shareLink, unpublishRecipe } from "../lib/recipes-api";
+import { publishRecipe, shareLink, unpublishRecipe, fetchRecipe, updateRecipeItems, type RecipeItem } from "../lib/recipes-api";
+import { QuantityInput, isValidQty } from "./quantity-input";
+import { formatQuantity } from "../lib/units";
 import {
   applyLayout, refreshCollections, createCollection, deleteCollection, moveCollection, flattenTree, folderPath, deleteSavedWithUndo, renameCollection, renameSaved,
   type RecipeCollection, type SavedRecipe,
