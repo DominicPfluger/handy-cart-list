@@ -511,6 +511,18 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
     setBulkGroup("");
   });
 
+  /** Alle gewählten Zeilen auf einmal aus dem Zutatenbereich entfernen. */
+  const bulkDeleteRows = (ids: string[]) => {
+    if (!ids.length) return;
+    if (!window.confirm(T("adm.bulkDeleteConfirm", { n: ids.length }))) return;
+    void run(async () => {
+      const { error } = await supabase.from("recipe_ingredients").delete().in("id", ids);
+      if (error) throw new Error(error.message);
+      setSelRows(new Set());
+      setBulkGroup("");
+    });
+  };
+
   const toggle = (stepKey: string, productId: string, on: boolean) =>
     run(async () => {
       if (on) {
@@ -679,6 +691,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                 {groupRows(null).map(({ group: g, depth }) => <option key={g.id} value={g.id}>{depth ? `${groups.find((x) => x.id === g.parent_id)?.name ?? ""} › ` : ""}{g.name}</option>)}
               </select>
               <Button size="sm" disabled={busy} onClick={() => void bulkAssignGroup([...selRows], bulkGroup || null)}>{T("adm.bulkAssign")}</Button>
+              <Button size="sm" variant="destructive" disabled={busy} onClick={() => bulkDeleteRows([...selRows])}>{T("adm.bulkDelete")}</Button>
               <Button size="sm" variant="ghost" disabled={busy} onClick={() => { setSelRows(new Set()); setBulkGroup(""); }}>{T("adm.clearSelection")}</Button>
             </div>
           )}

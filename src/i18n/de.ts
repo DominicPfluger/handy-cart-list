@@ -841,6 +841,8 @@ export const de = {
   "adm.fromCatalog": "+ Aus Katalog",
   "adm.selectAll": "Alle auswählen",
   "adm.bulkAssign": "Zuweisen",
+  "adm.bulkDelete": "Löschen",
+  "adm.bulkDeleteConfirm": "{n} Zutaten aus dem Bereich entfernen?",
   "adm.bulkSelected": "{n} ausgewählt",
   "adm.selectRow": "Zeile auswählen",
   "adm.exportTxt": "Als Textdatei exportieren",

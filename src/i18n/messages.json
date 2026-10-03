@@ -1162,6 +1162,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assign",
+    "adm.bulkDelete": "Delete",
+    "adm.bulkDeleteConfirm": "Remove {n} ingredients from this section?",
     "adm.selectRow": "Select row",
     "adm.bulkSelected": "{n} selected",
     "rk.tasteMax": "max. {n}"
@@ -2329,6 +2331,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assign",
+    "adm.bulkDelete": "Delete",
+    "adm.bulkDeleteConfirm": "Remove {n} ingredients from this section?",
     "adm.selectRow": "Select row",
     "adm.bulkSelected": "{n} selected",
     "rk.tasteMax": "max. {n}"
@@ -3496,6 +3500,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assign",
+    "adm.bulkDelete": "Delete",
+    "adm.bulkDeleteConfirm": "Remove {n} ingredients from this section?",
     "adm.selectRow": "Select row",
     "adm.bulkSelected": "{n} selected",
     "rk.tasteMax": "max. {n}"
@@ -4663,6 +4669,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Estándar",
     "adm.bulkAssign": "Asignar",
+    "adm.bulkDelete": "Eliminar",
+    "adm.bulkDeleteConfirm": "¿Quitar {n} ingredientes de la sección?",
     "adm.selectRow": "Seleccionar fila",
     "adm.bulkSelected": "{n} seleccionados",
     "rk.tasteMax": "máx. {n}"
@@ -5830,6 +5838,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Estándar",
     "adm.bulkAssign": "Asignar",
+    "adm.bulkDelete": "Eliminar",
+    "adm.bulkDeleteConfirm": "¿Quitar {n} ingredientes de la sección?",
     "adm.selectRow": "Seleccionar fila",
     "adm.bulkSelected": "{n} seleccionados",
     "rk.tasteMax": "máx. {n}"
@@ -6997,6 +7007,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Attribuer",
+    "adm.bulkDelete": "Supprimer",
+    "adm.bulkDeleteConfirm": "Retirer {n} ingrédients de la section ?",
     "adm.selectRow": "Sélectionner la ligne",
     "adm.bulkSelected": "{n} sélectionnés",
     "rk.tasteMax": "max. {n}"
@@ -8164,6 +8176,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Attribuer",
+    "adm.bulkDelete": "Supprimer",
+    "adm.bulkDeleteConfirm": "Retirer {n} ingrédients de la section ?",
     "adm.selectRow": "Sélectionner la ligne",
     "adm.bulkSelected": "{n} sélectionnés",
     "rk.tasteMax": "max. {n}"
@@ -9331,6 +9345,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assegna",
+    "adm.bulkDelete": "Elimina",
+    "adm.bulkDeleteConfirm": "Rimuovere {n} ingredienti dalla sezione?",
     "adm.selectRow": "Seleziona riga",
     "adm.bulkSelected": "{n} selezionati",
     "rk.tasteMax": "max. {n}"
@@ -10498,6 +10514,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assegna",
+    "adm.bulkDelete": "Elimina",
+    "adm.bulkDeleteConfirm": "Rimuovere {n} ingredienti dalla sezione?",
     "adm.selectRow": "Seleziona riga",
     "adm.bulkSelected": "{n} selezionati",
     "rk.tasteMax": "max. {n}"
@@ -11665,6 +11683,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Padrão",
     "adm.bulkAssign": "Atribuir",
+    "adm.bulkDelete": "Eliminar",
+    "adm.bulkDeleteConfirm": "Remover {n} ingredientes da secção?",
     "adm.selectRow": "Selecionar linha",
     "adm.bulkSelected": "{n} selecionados",
     "rk.tasteMax": "máx. {n}"
@@ -12832,6 +12852,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Padrão",
     "adm.bulkAssign": "Atribuir",
+    "adm.bulkDelete": "Eliminar",
+    "adm.bulkDeleteConfirm": "Remover {n} ingredientes da seção?",
     "adm.selectRow": "Selecionar linha",
     "adm.bulkSelected": "{n} selecionados",
     "rk.tasteMax": "máx. {n}"
@@ -13999,6 +14021,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standaard",
     "adm.bulkAssign": "Toewijzen",
+    "adm.bulkDelete": "Verwijderen",
+    "adm.bulkDeleteConfirm": "{n} ingrediënten uit de sectie verwijderen?",
     "adm.selectRow": "Rij selecteren",
     "adm.bulkSelected": "{n} geselecteerd",
     "rk.tasteMax": "max. {n}"
@@ -15166,6 +15190,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standaard",
     "adm.bulkAssign": "Toewijzen",
+    "adm.bulkDelete": "Verwijderen",
+    "adm.bulkDeleteConfirm": "{n} ingrediënten uit de sectie verwijderen?",
     "adm.selectRow": "Rij selecteren",
     "adm.bulkSelected": "{n} geselecteerd",
     "rk.tasteMax": "max. {n}"
@@ -15795,6 +15821,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Zuweisen",
+    "adm.bulkDelete": "Löschen",
+    "adm.bulkDeleteConfirm": "{n} Zutaten aus dem Bereich entfernen?",
     "adm.selectRow": "Zeile auswählen",
     "adm.bulkSelected": "{n} ausgewählt",
     "rk.tasteMax": "max. {n}"
@@ -16424,6 +16452,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Zuweisen",
+    "adm.bulkDelete": "Löschen",
+    "adm.bulkDeleteConfirm": "{n} Zutaten aus dem Bereich entfernen?",
     "adm.selectRow": "Zeile auswählen",
     "adm.bulkSelected": "{n} ausgewählt",
     "rk.tasteMax": "max. {n}"
