@@ -78,7 +78,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const summaryRef = useRef<HTMLDivElement>(null);
-  const [dietOpen, setDietOpen] = useState(false);
   const [cuisineOpen, setCuisineOpen] = useState(false);
   const PAGE = 10;
 
@@ -142,7 +141,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       const visible = base.filter((p) => {
         if (picked.includes(p.id)) return true;
         if (onlyFav && !favIds.has(p.id)) return false;
-        if (diets.length && p.excludedDiets.some((d) => (diets as string[]).includes(d))) return false;
         if (cuisines.length && !p.cuisineIds.some((c) => cuisines.includes(c))) return false;
         return true;
       });
