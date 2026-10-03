@@ -764,7 +764,7 @@ function AdminPage() {
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
               headings={headings} products={products}
-              curDept={cur}
+              curDept={cur ?? undefined}
               deptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
               onSubmit={handleBulkSubmit} />
           )}
