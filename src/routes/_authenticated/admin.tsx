@@ -498,9 +498,26 @@ function AdminPage() {
 
   const selName = sel ? (sel.kind === "department" ? deptById.get(sel.id)?.name : sel.kind === "product" ? d?.prods.find((p) => p.id === sel.id)?.name : d?.heads.find((h) => h.id === sel.id)?.name) ?? "" : "";
 
-  const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>) => run(async () => {
+  const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string) => run(async () => {
     if (!cur) return;
-    const rows = names.map((name, i) => ({ department_id: cur, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: products.length + i + 1 }));
+    // Einfügeposition bestimmen: "end" = ans Ende, "top" = ganz oben, sonst Überschriften-ID = ans Ende ihrer Gruppe
+    let insertAt = products.length;
+    if (pos === "top") insertAt = 0;
+    else if (pos !== "end") {
+      const h = headings.find((x) => x.id === pos);
+      const a = h ? products.findIndex((x) => x.id === h.before_product_id) : -1;
+      if (a >= 0) {
+        const nextAnchor = headings
+          .map((x) => products.findIndex((p) => p.id === x.before_product_id))
+          .filter((i) => i > a)
+          .sort((x, y) => x - y)[0];
+        insertAt = nextAnchor ?? products.length;
+      }
+    }
+    // Bestehende Produkte ab der Einfügestelle nach hinten schieben
+    const shifted = products.slice(insertAt).filter((x) => !x.id.startsWith("alias:"));
+    await Promise.all(shifted.map((x, i) => must(supabase.from("products").update({ sort_order: insertAt + names.length + i + 1 }).eq("id", x.id))));
+    const rows = names.map((name, i) => ({ department_id: cur, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: insertAt + i + 1 }));
     const r = await supabase.from("products").insert(rows).select("id");
     if (r.error) throw new Error(r.error.message);
     await translateIds((r.data ?? []).map((x) => x.id as string));
@@ -616,6 +633,7 @@ function AdminPage() {
             onAdvanced={(kind, id) => setSel({ kind, id })} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
+              headings={headings} products={products}
               onSubmit={handleBulkSubmit} />
           )}
         </>
