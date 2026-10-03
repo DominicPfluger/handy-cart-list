@@ -5,6 +5,7 @@
 - [ ] Browser-Tests nachholen: recipe-traits-admin, Varianten-Auswahl
 
 ## Erledigt (Auswahl)
+- [x] Eigene Produktvarianten in der Abteilungsansicht pro Gerät anlegen, suchen, favorisieren, zur Liste hinzufügen und entfernen (Desktop/Mobil Browser-getestet).
 - „… nach Wahl" auch pro Oberkategorie im Rezept-Generator (Browser-getestet)
 - Geschmack: Mehrfachauswahl bis zu 3 (Generator, Suche, Admin; Browser-getestet)
 - Admin-Rezeptverwaltung aufklappbar, Zutatensuche, Massen-Zuordnung, „Alle auswählen" in Katalogsuche

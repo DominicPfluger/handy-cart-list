@@ -4,6 +4,7 @@ import { getLocale, pickName, useLocale } from "../i18n";
 import { getCatalog, getCatalogImageUrls, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct, type CatalogCuisine } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
+import { usePersonalVariants } from "../hooks/use-personal-variants";
 import { useAllMarkets } from "../hooks/use-all-markets";
 
 /** Ländercode des Marktes aus der Sprachvariante (de-CH → CH). */
@@ -55,6 +56,7 @@ export function useCatalog(): Catalog {
   const { data: images } = useQuery(catalogImagesQueryOptions);
   const custom = useCustomNames();
   const own = useCustomCatalog();
+  const personalVariants = usePersonalVariants();
   const allMarkets = useAllMarkets();
   return useMemo(() => {
     const market = marketOf(locale);
@@ -75,6 +77,7 @@ export function useCatalog(): Catalog {
         const foreign = p.markets?.length && !p.markets.includes(market);
         return {
           ...p,
+          variants: [...p.variants, ...(personalVariants[p.id] ?? []).filter((v) => !p.variants.some((catalogVariant) => catalogVariant.toLocaleLowerCase() === v.toLocaleLowerCase()))],
           imageUrl: img(p.imagePath),
           iconUrl: img(p.iconPath),
           variantImages: p.variantImages
@@ -94,7 +97,7 @@ export function useCatalog(): Catalog {
       recipeSteps: (data.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
       recipePopular: data.recipePopular ?? [],
     };
-  }, [data, images, locale, custom, own, allMarkets]);
+  }, [data, images, locale, custom, own, allMarkets, personalVariants]);
 }
 
 export type { Catalog, CatalogCuisine, CatalogDepartment, CatalogHeading, CatalogProduct };
