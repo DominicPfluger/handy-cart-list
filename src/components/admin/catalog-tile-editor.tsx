@@ -773,7 +773,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const upload = (file: File) => p.run(async () => {
     const blob = await prepareCategoryImage(file);
     if (!effId) throw new Error(T("tile.nameRequired"));
-    const path = `${table}/${effId}.png`;
+    const path = `${table}/${effId}-${crypto.randomUUID()}.webp`;
     if (!isDept) await p.must(supabase.from("products").update({ icon_path: null }).eq("id", effId));
     const { error } = await supabase.storage.from("catalog-images").upload(path, blob, { contentType: "image/webp", upsert: true });
     if (error) throw new Error(error.message);
