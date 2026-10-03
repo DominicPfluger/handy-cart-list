@@ -169,7 +169,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const requiredSteps = steps.filter((s) => s.required || s.min > 0);
   const doneRequired = requiredSteps.filter(stepOk).length;
   const allRequiredDone = requiredSteps.every(stepOk);
-  useEffect(() => { setVisibleCount({}); setOpenGroups({}); }, [tplId]);
+  useEffect(() => { setVisibleCount({}); setOpenGroups({}); setQty({}); }, [tplId]);
 
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
@@ -227,7 +227,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const popularShown = showAllPopular ? visiblePopular : visiblePopular.slice(0, 5);
 
   const openRecipe = (id: RecipeTemplate["id"], p: Picks) => {
-    setTplId(id); setPicks(p); setVariants({}); setAdded(false); setSavedMsg(false);
+    setTplId(id); setPicks(p); setVariants({}); setQty({}); setAdded(false); setSavedMsg(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -539,7 +539,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           <button onClick={surprise} className="shrink-0 whitespace-nowrap rounded-full bg-accent px-2 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
             {t("rk.surprise")}
           </button>
-          <button onClick={() => { setPicks({}); setVariants({}); setAdded(false); }} className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
+          <button onClick={() => { setPicks({}); setVariants({}); setQty({}); setAdded(false); }} className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
             {t("rk.reset")}
           </button>
       </div>
