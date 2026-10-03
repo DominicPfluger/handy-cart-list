@@ -579,7 +579,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     setIconInfo({ url: signed, custom: Boolean((data as { icon_custom?: boolean } | null)?.icon_custom) });
     setImgPath((data as { image_path: string | null } | null)?.image_path ?? null);
   };
-  useEffect(() => { if (p.target.id) void loadIcon(p.target.id); }, [p.target.id]);
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
@@ -640,6 +639,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     setVariantInput("");
   };
   const effId = item?.id ?? newId ?? undefined;
+  // Reload whenever the preview changes so "icon like preview" always uses the current image.
+  useEffect(() => { if (effId) void loadIcon(effId); }, [effId, imagePreview]);
   const table = isDept ? "departments" : "products";
 
   // KI-Vorschlag für den Bildtext einer Kategorie, abgeleitet aus den enthaltenen Produkten.
@@ -817,12 +818,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
 
   /** Übernimmt das grosse Vorschaubild als eigenes Icon („Beide Bilder gleich"). */
   const useImageAsIcon = async () => {
-    if (!effId || !imgPath) return;
+    if (!effId) return;
     await p.run(async () => {
-      await saveCustomIconFromPath(isDept ? "department" : "product", effId, imgPath);
+      const { data } = await supabase.from(isDept ? "departments" : "products").select("image_path").eq("id", effId).single();
+      const current = (data as { image_path: string | null } | null)?.image_path;
+      if (!current) throw new Error(T("tile.noImage"));
+      await saveCustomIconFromPath(isDept ? "department" : "product", effId, current);
       await loadIcon(effId);
       await qc.invalidateQueries({ queryKey: ["catalog"] });
-    });
+    }, T("adm.iconUseImageDone"));
   };
   const pickIcon = (path: string) => {
     setIconPicking(false);
