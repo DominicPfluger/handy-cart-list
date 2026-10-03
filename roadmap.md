@@ -51,3 +51,5 @@
 - [x] Admin: Stift neben Zieh-Griff (Papierkorb bleibt rechts) + Icon-Funktionen im Bild-Dialog (Beide Bilder gleich, Bild auswählen, KI-Bild, Entfernen) — Browser-getestet: Zeile ⠿/Stift/Bild/…/Papierkorb, Dialog zeigt alle vier Aktionen, „Beide Bilder gleich" übernimmt das Vorschaubild als Icon, Entfernen setzt zurück auf Auto-Icon
 - [x] Admin-Produktliste: Stift zurück nach rechts (vor Varianten-Knopf); Ziehen per langem Drücken (~0,5 s) aufs Produktbild zusätzlich zum ⠿-Griff; kurzes Tippen öffnet weiterhin den Bild-Dialog (2026-10-03)
 - [x] Admin: KI-Bild-Optionen im Bild-Dialog (Stichworte, Stil, Hintergrund, Ansicht, Anzahl) — erledigt 2026-10-03
+
+- [x] Abteilungsansicht: kein grosses Vorschaubild mehr über der aufgeklappten Variantenliste (2026-10-03)

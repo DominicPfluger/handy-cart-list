@@ -723,11 +723,6 @@ function DepartmentsPage() {
                 </div>
                 {expandedId === product.id && product.variants.length > 0 && (
                   <div className="border-t border-dashed border-border bg-muted/30 py-1 pl-8 pr-2.5">
-                    {product.imagePath && (
-                      <div className="my-1.5 flex h-40 items-center justify-center overflow-hidden rounded-xl bg-background">
-                        <DepartmentIcon emoji={product.emoji} imageUrl={product.imageUrl} imagePath={product.imagePath} className="h-full w-full object-contain" />
-                      </div>
-                    )}
                     {product.variants.map((v) => {
                       const vi = product.variantImages?.[v];
                       const vName = variantLabel(product, v);
