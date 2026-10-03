@@ -81,7 +81,7 @@ export function CuisineAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] })
   const save = useServerFn(saveCuisine);
   const del = useServerFn(deleteCuisine);
   const suggest = useServerFn(suggestCuisineProducts);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const [selId, setSelId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [newName, setNewName] = useState("");
