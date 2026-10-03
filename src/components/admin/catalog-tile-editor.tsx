@@ -556,8 +556,8 @@ export function CatalogTileEditor(p: {
       {(() => {
         const active = p.imageEditor ?? target;
         if (!active) return null;
-        return <ItemSheet key={`${active.kind}:${active.id}`} {...p} target={active} imageOnly={Boolean(p.imageEditor)}
-          onClose={() => { if (p.imageEditor) p.onCloseImageEditor?.(); else setTarget(null); }}
+        return <ItemSheet key={`${active.kind}:${active.id}`} {...p} target={active} imageOnly={Boolean(p.imageEditor)} openPrices={priceFocus && !p.imageEditor}
+          onClose={() => { setPriceFocus(false); if (p.imageEditor) p.onCloseImageEditor?.(); else setTarget(null); }}
           imgUrl={active.id ? img(active.kind === "department" ? deptById.get(active.id)?.image_path : p.products.find((x) => x.id === active.id)?.image_path ?? p.imageEditorProduct?.image_path) : undefined} />;
       })()}
 
@@ -566,7 +566,7 @@ export function CatalogTileEditor(p: {
   );
 }
 
-function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNullable<Target>; onClose: () => void; imgUrl: string | undefined; imageOnly?: boolean }) {
+function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNullable<Target>; onClose: () => void; imgUrl: string | undefined; imageOnly?: boolean; openPrices?: boolean }) {
   const genImg = useServerFn(generateImageFor);
   const trVariants = useServerFn(translateVariants);
   const suggestPrompt = useServerFn(suggestImagePrompt);
