@@ -19,3 +19,4 @@
 
 - [x] Mengenangaben in Rezepten manuell bearbeiten (Generator-Übersicht + Stift-Dialog bei eigenen Rezepten; Browser-getestet)
 - [x] Rezept-Admin: „Aus Katalog" neben Suchfeld, KI-Vorschläge (✨) komplett entfernt (Browser-getestet)
+- [x] Rezept-Admin: Vorlagen & Zutatenbereiche per Drag & Drop sortierbar, Pfeile entfernt (Browser-getestet)

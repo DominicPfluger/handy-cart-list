@@ -82,6 +82,8 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [groupName, setGroupName] = useState("");
   const [groupEmoji, setGroupEmoji] = useState("");
   const [dragGroup, setDragGroup] = useState<string | null>(null);
+  const [dragTpl, setDragTpl] = useState<string | null>(null);
+  const [dragStep, setDragStep] = useState<string | null>(null);
   // Vorlagen-/Oberkategorien-Verwaltung
   const [manageOpen, setManageOpen] = useState(false);
   const [tplForm, setTplForm] = useState<{ id: string; emoji: string } | null>(null);
@@ -140,16 +142,21 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     const { error } = await supabase.from("recipe_templates").update({ enabled: !t.enabled }).eq("id", t.id);
     if (error) throw new Error(error.message);
   });
-  const moveTpl = (t: TplRow, dir: -1 | 1) => runTpl(async () => {
+  const reorderTpl = (sourceId: string, target: TplRow) => runTpl(async () => {
     const list = [...templates].sort((a, b) => a.sort_order - b.sort_order);
-    const i = list.findIndex((x) => x.id === t.id);
-    const j = i + dir;
-    if (i < 0 || j < 0 || j >= list.length) return;
-    const a = list[i]!, b = list[j]!;
-    const { error: e1 } = await supabase.from("recipe_templates").update({ sort_order: b.sort_order }).eq("id", a.id);
-    if (e1) throw new Error(e1.message);
-    const { error: e2 } = await supabase.from("recipe_templates").update({ sort_order: a.sort_order }).eq("id", b.id);
-    if (e2) throw new Error(e2.message);
+    const from = list.findIndex((x) => x.id === sourceId);
+    const to = list.findIndex((x) => x.id === target.id);
+    if (from < 0 || to < 0 || from === to) return;
+    const next = [...list];
+    const [moved] = next.splice(from, 1);
+    if (!moved) return;
+    next.splice(to, 0, moved);
+    for (let i = 0; i < next.length; i++) {
+      const row = next[i];
+      if (!row) continue;
+      const { error } = await supabase.from("recipe_templates").update({ sort_order: i + 1 }).eq("id", row.id);
+      if (error) throw new Error(error.message);
+    }
   });
 
   const saveStep = () => runTpl(async () => {
@@ -172,16 +179,21 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       if (error) throw new Error(error.message);
     });
   };
-  const moveStep = (s: StepRow, dir: -1 | 1) => runTpl(async () => {
+  const reorderStep = (sourceId: string, target: StepRow) => runTpl(async () => {
     const list = steps;
-    const i = list.findIndex((x) => x.id === s.id);
-    const j = i + dir;
-    if (i < 0 || j < 0 || j >= list.length) return;
-    const a = list[i]!, b = list[j]!;
-    const { error: e1 } = await supabase.from("recipe_steps").update({ sort_order: b.sort_order }).eq("id", a.id);
-    if (e1) throw new Error(e1.message);
-    const { error: e2 } = await supabase.from("recipe_steps").update({ sort_order: a.sort_order }).eq("id", b.id);
-    if (e2) throw new Error(e2.message);
+    const from = list.findIndex((x) => x.id === sourceId);
+    const to = list.findIndex((x) => x.id === target.id);
+    if (from < 0 || to < 0 || from === to) return;
+    const next = [...list];
+    const [moved] = next.splice(from, 1);
+    if (!moved) return;
+    next.splice(to, 0, moved);
+    for (let i = 0; i < next.length; i++) {
+      const row = next[i];
+      if (!row) continue;
+      const { error } = await supabase.from("recipe_steps").update({ sort_order: i + 1 }).eq("id", row.id);
+      if (error) throw new Error(error.message);
+    }
   });
 
   const addPop = () => runTpl(async () => {
@@ -279,14 +291,13 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
             <span className="text-xs font-semibold text-foreground">{T("adm.tplManage")}</span>
             <Button size="sm" variant="outline" disabled={busy} onClick={() => setTplForm({ id: "", emoji: "" })}>{T("adm.tplNew")}</Button>
           </div>
-          {templates.map((t, i) => (
-            <div key={t.id} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+          {templates.map((t) => (
+            <div key={t.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", t.id); setDragTpl(t.id); }} onDragEnd={() => setDragTpl(null)} onDragOver={(e) => { if (dragTpl) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragTpl) void reorderTpl(dragTpl, t); setDragTpl(null); }} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+              <span className="cursor-grab text-muted-foreground" title={T("adm.drag")}>⠿</span>
               <span className="min-w-0 flex-1 truncate text-foreground">{t.emoji} {tplLabel(t.id)} <span className="text-muted-foreground">({t.id})</span></span>
               <button type="button" disabled={busy} onClick={() => toggleTpl(t)} className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${t.enabled ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
                 {t.enabled ? T("adm.tplEnabled") : T("adm.tplDisabled")}
               </button>
-              <button type="button" disabled={busy || i === 0} onClick={() => moveTpl(t, -1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
-              <button type="button" disabled={busy || i === templates.length - 1} onClick={() => moveTpl(t, 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
               <Button size="sm" variant="ghost" disabled={busy} onClick={() => setTplForm({ id: t.id, emoji: t.emoji })}>{T("adm.edit")}</Button>
               <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeTpl(t)}>{T("adm.delete")}</Button>
             </div>
@@ -342,12 +353,13 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
               <Button size="sm" variant="outline" disabled={busy} onClick={() => { setStepsOpen(true); setStepForm({ id: null, key: "", name: "", emoji: "", min: 1, max: 1, required: true }); }}>{T("adm.stepNew")}</Button>
             </div>
             <div id="recipe-admin-steps" className={`space-y-2 ${stepsOpen ? "" : "hidden"}`}>
-            {steps.map((s, i) => (
-              <div key={s.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/50 py-1 text-xs">
-                <span className="min-w-0 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
+            {steps.map((s) => (
+              <div key={s.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", s.id); setDragStep(s.id); }} onDragEnd={() => setDragStep(null)} onDragOver={(e) => { if (dragStep) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragStep) void reorderStep(dragStep, s); setDragStep(null); }} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+                <span className="flex min-w-0 items-center gap-1.5">
+                  <span className="cursor-grab text-muted-foreground" title={T("adm.drag")}>⠿</span>
+                  <span className="min-w-0 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
+                </span>
                 <span className="flex shrink-0 items-center">
-                  <Button size="icon" variant="ghost" disabled={busy || i === 0} onClick={() => moveStep(s, -1)} title="↑" aria-label="↑">▲</Button>
-                  <Button size="icon" variant="ghost" disabled={busy || i === steps.length - 1} onClick={() => moveStep(s, 1)} title="↓" aria-label="↓">▼</Button>
                   <Button size="sm" variant="ghost" disabled={busy} onClick={() => setStepForm({ id: s.id, key: s.key, name: s.name, emoji: s.emoji ?? "", min: s.min, max: s.max, required: s.required })}>{T("adm.edit")}</Button>
                   <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeStep(s)}>{T("adm.delete")}</Button>
                 </span>
