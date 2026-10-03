@@ -612,7 +612,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [mkts, setMkts] = useState<{ code: string; name: string; flag: string; currency: string }[]>([]);
   const [mp, setMp] = useState<Record<string, string>>({});
   const [mpOrig, setMpOrig] = useState<Record<string, string>>({});
-  const [mpOpen, setMpOpen] = useState(false);
+  const [mpOpen, setMpOpen] = useState(Boolean(p.openPrices));
+  const priceRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (p.openPrices) priceRef.current?.scrollIntoView({ block: "start" });
+  }, [p.openPrices]);
   useEffect(() => {
     if (isDept) return;
     let off = false;
@@ -1022,7 +1026,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               )}
             </div>
             {mkts.length > 0 && (
-              <div className="rounded-xl border border-border">
+              <div ref={priceRef} className="rounded-xl border border-border">
                 <button type="button" onClick={() => setMpOpen((v) => !v)} className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold text-foreground">
                   <span>{T("tile.marketPrices")} ({Object.values({ ...mp, [currentMarket()]: price }).filter((v) => v.trim()).length}/{mkts.length})</span>
                   <span className="text-muted-foreground">{mpOpen ? "▾" : "▸"}</span>
