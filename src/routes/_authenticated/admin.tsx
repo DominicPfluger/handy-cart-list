@@ -864,12 +864,14 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
 
 type Suggestion = { name: string; emoji: string; reason: string; scope: "global" | "market"; source?: string | undefined };
 
-function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path, headings = [], products = [] }: {
-  onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, ai?: { hint: string; opts: AiImageOpts }) => void; onCancel: () => void;
+function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path, deptOptions, curDept, headings = [], products = [] }: {
+  onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, deptId: string, ai?: { hint: string; opts: AiImageOpts }) => void; onCancel: () => void;
   onSuggest: (typed: string[], mode: "web" | "ai", count: number) => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string; path?: string;
+  deptOptions: { id: string; label: string }[]; curDept?: string;
   headings?: Head[]; products?: { id: string }[];
 }) {
   const [pos, setPos] = useState("end");
+  const [deptId, setDeptId] = useState("");
   const [mkOnly, setMkOnly] = useState<Set<string>>(new Set());
   const [text, setText] = useState("");
   const [sugs, setSugs] = useState<Suggestion[] | null>(null);
