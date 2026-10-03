@@ -231,7 +231,12 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const saveGroup = () => run(async () => {
     if (!groupName.trim()) return;
     if (!tplId) return;
-    await saveGroupFn({ data: { templateId: tplId, id: editGroupId ?? undefined, parentId: groupParent, name: groupName.trim(), emoji: groupEmoji.trim() || null, sortOrder: groupTree(groupParent).length + 1 } });
+    const multi = !editGroupId && !groupParent;
+    const names = multi ? groupName.split("\n").map((n) => n.trim()).filter(Boolean) : [groupName.trim()];
+    let sortOrder = groupTree(groupParent).length + 1;
+    for (const name of names) {
+      await saveGroupFn({ data: { templateId: tplId, id: editGroupId ?? undefined, parentId: groupParent, name, emoji: groupEmoji.trim() || null, sortOrder: sortOrder++ } });
+    }
     await qc.invalidateQueries({ queryKey: ["admin-recipe-groups"] });
     setGroupFormOpen(false); setGroupName(""); setEditGroupId(null); setGroupParent(null); setGroupEmoji("");
   });
@@ -406,8 +411,12 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
                 ))}
               </div>
             ))}
-            {groupFormOpen && <div className="flex flex-wrap items-center gap-2">
-              <Input aria-label={T("add.name")} placeholder={T("add.name")} value={groupName} onChange={(e) => setGroupName(e.target.value)} className="min-w-32 flex-1" />
+            {groupFormOpen && <div className="flex flex-wrap items-start gap-2">
+              {!editGroupId && !groupParent ? (
+                <textarea aria-label={T("add.name")} placeholder={T("add.name")} value={groupName} onChange={(e) => setGroupName(e.target.value)} rows={4} className="min-w-32 flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm" />
+              ) : (
+                <Input aria-label={T("add.name")} placeholder={T("add.name")} value={groupName} onChange={(e) => setGroupName(e.target.value)} className="min-w-32 flex-1" />
+              )}
               <Input aria-label="Emoji" placeholder="Emoji" value={groupEmoji} onChange={(e) => setGroupEmoji(e.target.value)} className="w-20" />
               <Button size="sm" disabled={busy || !groupName.trim()} onClick={saveGroup}>{T("adm.save")}</Button>
               <Button size="sm" variant="ghost" onClick={() => { setGroupFormOpen(false); setGroupName(""); setGroupParent(null); setEditGroupId(null); }}>{T("adm.cancel")}</Button>
