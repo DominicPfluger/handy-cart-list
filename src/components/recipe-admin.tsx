@@ -793,33 +793,10 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                     ))}
                   </div>
                 )}
-                {suggestStep?.key === s.key && suggestPicks && (
-                  <div className="space-y-1 rounded-lg border border-primary/40 bg-background p-2">
-                    <p className="text-xs text-muted-foreground">{T("adm.stepSuggestDone", { n: suggestPicks.size })}</p>
-                    <div className="max-h-72 space-y-0.5 overflow-y-auto">
-                      {[...suggestPicks].map((id) => {
-                        const p = prodById.get(id);
-                        return (
-                          <label key={id} className="flex items-center gap-2 rounded-lg px-2 py-1 text-xs hover:bg-accent/40">
-                            <input type="checkbox" checked onChange={() => setSuggestPicks((x) => { const n = new Set(x); n.delete(id); return n; })} className="accent-primary" />
-                            <span className="min-w-0 flex-1 truncate text-foreground">{p?.emoji} {p?.name ?? id}</span>
-                          </label>
-                        );
-                      })}
-                    </div>
-                    <div className="flex justify-end gap-2">
-                      <Button size="sm" variant="ghost" onClick={() => { setSuggestStep(null); setSuggestPicks(null); }}>{T("adm.cancel")}</Button>
-                      <Button size="sm" disabled={busy} onClick={applySuggest}>{T("adm.apply")} ({suggestPicks.size})</Button>
-                    </div>
-                  </div>
-                )}
                 {pickerStep !== s.key ? (
                   <div className="flex items-center gap-3">
                     <button type="button" onClick={() => openPicker(s.key)} className="text-xs font-medium text-primary">
                       {T("adm.fromCatalog")}
-                    </button>
-                    <button type="button" disabled={busy} onClick={() => { const row = (stepRows ?? []).find((x) => x.template_id === tplId && x.key === s.key); if (row) startSuggest(row); }} className="text-xs font-medium text-primary disabled:opacity-50">
-                      ✨ {T("adm.stepSuggest")}
                     </button>
                   </div>
                 ) : (
@@ -828,15 +805,15 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                       {pickerDept && (
                         <button type="button" onClick={() => setPickerDept(deptById.get(pickerDept)?.parent_id ?? null)} className="px-1 text-muted-foreground">←</button>
                       )}
-                      <span className="min-w-0 flex-1 truncate font-semibold text-foreground">{pickerDept ? path(pickerDept) : T("adm.fromCatalog")}</span>
+                      <span className="shrink-0 truncate font-semibold text-foreground">{pickerDept ? path(pickerDept) : T("adm.fromCatalog")}</span>
+                      <Input
+                        aria-label={T("adm.recipeIngredientSearch")}
+                        placeholder={T("adm.recipeIngredientSearch")}
+                        value={pickerSearch}
+                        onChange={(e) => setPickerSearch(e.target.value)}
+                        className="h-9 min-w-0 flex-1"
+                      />
                     </div>
-                    <Input
-                      aria-label={T("adm.recipeIngredientSearch")}
-                      placeholder={T("adm.recipeIngredientSearch")}
-                      value={pickerSearch}
-                      onChange={(e) => setPickerSearch(e.target.value)}
-                      className="h-9"
-                    />
                     <div className="max-h-72 space-y-0.5 overflow-y-auto">
                       {pickerQuery && pickerMatches.length > 0 && (() => {
                         const ids = pickerMatches.map((p) => p.id);
