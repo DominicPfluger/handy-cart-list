@@ -589,10 +589,25 @@ function AdminPage() {
     }, T("adm.deleted"));
   };
 
+  const undoBackupFn = useServerFn(undoBulkBackup);
+
   const deleteSelected = (sel: { productIds: string[]; productAliasIds: string[] }) => {
     const n = sel.productIds.length + sel.productAliasIds.length;
     if (!n || !confirm(T("adm.deleteSelectedConfirm", { n }))) return;
+    const backupFn = useServerFnRef.current;
     run(async () => {
+      // Vor der Löschung Sicherungspunkt anlegen, damit sich die Aktion zurücknehmen lässt
+      const backupId = await backupFn({ data: {
+        label: T("adm.bulkDeleteLabel"),
+        deletes: [
+          ...(sel.productAliasIds.length ? [{ table: "product_aliases", filterColumn: "id", filterIds: sel.productAliasIds }] : []),
+          ...(sel.productIds.length ? [
+            { table: "products", filterColumn: "id", filterIds: sel.productIds },
+            { table: "product_headings", filterColumn: "before_product_id", filterIds: sel.productIds },
+            { table: "catalog_translations", filterColumn: "entity_id", filterIds: sel.productIds },
+          ] : []),
+        ],
+      } });
       for (const id of sel.productAliasIds) await must(supabase.from("product_aliases").delete().eq("id", id));
       for (const id of sel.productIds) {
         await must(supabase.from("product_headings").delete().eq("before_product_id", id));
@@ -600,7 +615,14 @@ function AdminPage() {
         await must(supabase.from("catalog_translations").delete().eq("entity_id", id));
       }
       await qc.invalidateQueries({ queryKey: ALIAS_KEY });
-    }, T("adm.deleted"));
+      if (backupId) {
+        toast.success(T("adm.deleted"), {
+          action: { label: T("adm.undo"), onClick: () => { void undoBackupFn({ data: { id: backupId } }).then(() => { toast.success(T("adm.undone")); void refresh(); }); } },
+        });
+      } else {
+        toast.success(T("adm.deleted"));
+      }
+    }, null);
   };
 
   const results = useMemo(() => {
