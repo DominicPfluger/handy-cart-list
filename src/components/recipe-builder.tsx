@@ -680,27 +680,8 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   </Button>}
                 </div>;
               }
-              // Kategorie-Schalter bleiben in einer einzigen scrollbaren Reihe; Zutaten darunter ohne weitere Akkordeon-Ebene.
-              return <div className="space-y-2">
-                <div className="flex min-w-0 flex-wrap gap-2" role="group">
-                  {groups.map((group) => {
-                    const gKey = `${s.key}:${group.key}`;
-                    const gOpen = !!openGroups[gKey];
-                    return <Button
-                      key={group.key}
-                      variant="outline"
-                      size="sm"
-                      type="button"
-                      aria-expanded={gOpen}
-                      onClick={() => setOpenGroups((x) => ({ ...x, [gKey]: !gOpen }))}
-                      className={`h-auto shrink-0 gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${gOpen ? "border-primary bg-primary-soft/50 text-foreground" : "border-border bg-muted text-foreground"}`}
-                    >
-                      {group.emoji && <span aria-hidden="true">{group.emoji}</span>}
-                      {group.name}
-                      <span aria-hidden="true" className="text-muted-foreground">{gOpen ? "▴" : "▾"}</span>
-                    </Button>;
-                  })}
-                </div>
+              // Zutaten erscheinen direkt neben ihrer Oberkategorie in derselben umbruchenden Reihe.
+              return <div className="flex min-w-0 flex-wrap items-center gap-2" role="group">
                 {groups.map((group) => {
                   const gKey = `${s.key}:${group.key}`;
                   const gOpen = !!openGroups[gKey];
@@ -712,26 +693,40 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   const gHidden = group.products.length - shown.length;
                   const gAny = group.key !== "other" ? anyProduct(s, group) : null;
                   const gAnyOn = gAny ? sel.includes(gAny.id) : false;
-                  if (!shown.length && !gOpen && !gAnyOn) return null;
+                  const catBtn = (
+                    <Button
+                      key={group.key}
+                      variant="outline"
+                      size="sm"
+                      type="button"
+                      aria-expanded={gOpen}
+                      onClick={() => setOpenGroups((x) => ({ ...x, [gKey]: !gOpen }))}
+                      className={`h-auto shrink-0 gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${gOpen ? "border-primary bg-primary-soft/50 text-foreground" : "border-border bg-muted text-foreground"}`}
+                    >
+                      {group.emoji && <span aria-hidden="true">{group.emoji}</span>}
+                      {group.name}
+                      <span aria-hidden="true" className="text-muted-foreground">{gOpen ? "▴" : "▾"}</span>
+                    </Button>
+                  );
+                  if (!shown.length && !gOpen && !gAnyOn) return catBtn;
                   return (
-                    <div key={group.key} className="space-y-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        {gAny && gOpen && (
-                          <button type="button" aria-pressed={gAnyOn} onClick={() => { setSavedMsg(false); toggle(s.key, gAny.id, s.max); }}
-                            className={`rounded-full border border-dashed px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${gAnyOn ? "border-primary bg-primary text-primary-foreground" : "border-primary/60 bg-card text-foreground"}`}>
-                            <span aria-hidden="true" className="mr-1">{gAny.emoji}</span>{gAny.name}
-                          </button>
-                        )}
-                        {shown.map(chip)}
-                      </div>
+                    <span key={group.key} className="inline-flex min-w-0 flex-wrap items-center gap-2">
+                      {catBtn}
+                      {gAny && gOpen && (
+                        <button type="button" aria-pressed={gAnyOn} onClick={() => { setSavedMsg(false); toggle(s.key, gAny.id, s.max); }}
+                          className={`rounded-full border border-dashed px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${gAnyOn ? "border-primary bg-primary text-primary-foreground" : "border-primary/60 bg-card text-foreground"}`}>
+                          <span aria-hidden="true" className="mr-1">{gAny.emoji}</span>{gAny.name}
+                        </button>
+                      )}
+                      {shown.map(chip)}
                       {gOpen && gHidden > 0 && (
                         <Button variant="ghost" size="sm" type="button"
                           onClick={() => setVisibleCount((x) => ({ ...x, [gKey]: gExpanded ? PAGE : Math.min(group.products.length, gLimit + PAGE) }))}
-                          className="mt-1 text-xs font-medium text-primary" aria-expanded={gExpanded}>
+                          className="h-auto shrink-0 text-xs font-medium text-primary" aria-expanded={gExpanded}>
                           {gExpanded ? t("rk.showLess") : t("rk.showMore", { count: Math.min(gHidden, PAGE) })}
                         </Button>
                       )}
-                    </div>
+                    </span>
                   );
                 })}
               </div>;
