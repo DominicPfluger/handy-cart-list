@@ -1224,7 +1224,8 @@
     "adm.aiImagesConfirm": "Generate AI images for {n} new products? This uses credits.",
     "adm.aiImagesProgress": "Generating AI image {i} of {n} …",
     "adm.iconUseImageDone": "Icon applied",
-    "tile.noImage": "No preview image available"
+    "tile.noImage": "No preview image available",
+    "dept.productVariants": "Product variants"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2451,7 +2452,8 @@
     "adm.aiImagesConfirm": "Generate AI images for {n} new products? This uses credits.",
     "adm.aiImagesProgress": "Generating AI image {i} of {n} …",
     "adm.iconUseImageDone": "Icon applied",
-    "tile.noImage": "No preview image available"
+    "tile.noImage": "No preview image available",
+    "dept.productVariants": "Product variants"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3678,7 +3680,8 @@
     "adm.aiImagesConfirm": "Generate AI images for {n} new products? This uses credits.",
     "adm.aiImagesProgress": "Generating AI image {i} of {n} …",
     "adm.iconUseImageDone": "Icon applied",
-    "tile.noImage": "No preview image available"
+    "tile.noImage": "No preview image available",
+    "dept.productVariants": "Product variants"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4905,7 +4908,8 @@
     "adm.aiImagesConfirm": "¿Generar imágenes con IA para {n} productos nuevos? Esto consume créditos.",
     "adm.aiImagesProgress": "Generando imagen IA {i} de {n} …",
     "adm.iconUseImageDone": "Icono aplicado",
-    "tile.noImage": "No hay imagen de vista previa"
+    "tile.noImage": "No hay imagen de vista previa",
+    "dept.productVariants": "Variantes del producto"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6132,7 +6136,8 @@
     "adm.aiImagesConfirm": "¿Generar imágenes con IA para {n} productos nuevos? Esto consume créditos.",
     "adm.aiImagesProgress": "Generando imagen IA {i} de {n} …",
     "adm.iconUseImageDone": "Icono aplicado",
-    "tile.noImage": "No hay imagen de vista previa"
+    "tile.noImage": "No hay imagen de vista previa",
+    "dept.productVariants": "Variantes del producto"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7359,7 +7364,8 @@
     "adm.aiImagesConfirm": "Générer des images IA pour {n} nouveaux produits ? Cela consomme des crédits.",
     "adm.aiImagesProgress": "Génération de l'image IA {i} sur {n} …",
     "adm.iconUseImageDone": "Icône appliquée",
-    "tile.noImage": "Aucune image d'aperçu"
+    "tile.noImage": "Aucune image d'aperçu",
+    "dept.productVariants": "Variantes du produit"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8586,7 +8592,8 @@
     "adm.aiImagesConfirm": "Générer des images IA pour {n} nouveaux produits ? Cela consomme des crédits.",
     "adm.aiImagesProgress": "Génération de l'image IA {i} sur {n} …",
     "adm.iconUseImageDone": "Icône appliquée",
-    "tile.noImage": "Aucune image d'aperçu"
+    "tile.noImage": "Aucune image d'aperçu",
+    "dept.productVariants": "Variantes du produit"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9813,7 +9820,8 @@
     "adm.aiImagesConfirm": "Generare immagini IA per {n} nuovi prodotti? Consuma crediti.",
     "adm.aiImagesProgress": "Generazione immagine IA {i} di {n} …",
     "adm.iconUseImageDone": "Icona applicata",
-    "tile.noImage": "Nessuna immagine di anteprima"
+    "tile.noImage": "Nessuna immagine di anteprima",
+    "dept.productVariants": "Varianti del prodotto"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11040,7 +11048,8 @@
     "adm.aiImagesConfirm": "Generare immagini IA per {n} nuovi prodotti? Consuma crediti.",
     "adm.aiImagesProgress": "Generazione immagine IA {i} di {n} …",
     "adm.iconUseImageDone": "Icona applicata",
-    "tile.noImage": "Nessuna immagine di anteprima"
+    "tile.noImage": "Nessuna immagine di anteprima",
+    "dept.productVariants": "Varianti del prodotto"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12267,7 +12276,8 @@
     "adm.aiImagesConfirm": "Gerar imagens com IA para {n} novos produtos? Isto consome créditos.",
     "adm.aiImagesProgress": "A gerar imagem IA {i} de {n} …",
     "adm.iconUseImageDone": "Ícone aplicado",
-    "tile.noImage": "Sem imagem de pré-visualização"
+    "tile.noImage": "Sem imagem de pré-visualização",
+    "dept.productVariants": "Variedades do produto"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13494,7 +13504,8 @@
     "adm.aiImagesConfirm": "Gerar imagens com IA para {n} novos produtos? Isto consome créditos.",
     "adm.aiImagesProgress": "A gerar imagem IA {i} de {n} …",
     "adm.iconUseImageDone": "Ícone aplicado",
-    "tile.noImage": "Sem imagem de pré-visualização"
+    "tile.noImage": "Sem imagem de pré-visualização",
+    "dept.productVariants": "Variedades do produto"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14721,7 +14732,8 @@
     "adm.aiImagesConfirm": "AI-afbeeldingen maken voor {n} nieuwe producten? Dit verbruikt credits.",
     "adm.aiImagesProgress": "AI-afbeelding {i} van {n} wordt gemaakt …",
     "adm.iconUseImageDone": "Icoon toegepast",
-    "tile.noImage": "Geen voorbeeldafbeelding"
+    "tile.noImage": "Geen voorbeeldafbeelding",
+    "dept.productVariants": "Productvarianten"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15948,7 +15960,8 @@
     "adm.aiImagesConfirm": "AI-afbeeldingen maken voor {n} nieuwe producten? Dit verbruikt credits.",
     "adm.aiImagesProgress": "AI-afbeelding {i} van {n} wordt gemaakt …",
     "adm.iconUseImageDone": "Icoon toegepast",
-    "tile.noImage": "Geen voorbeeldafbeelding"
+    "tile.noImage": "Geen voorbeeldafbeelding",
+    "dept.productVariants": "Productvarianten"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16636,7 +16649,8 @@
     "adm.aiImagesConfirm": "Für {n} neue Produkte KI-Bilder erzeugen? Dies verbraucht Credits.",
     "adm.aiImagesProgress": "KI-Bild {i} von {n} wird erzeugt …",
     "adm.iconUseImageDone": "Icon übernommen",
-    "tile.noImage": "Kein Vorschaubild vorhanden"
+    "tile.noImage": "Kein Vorschaubild vorhanden",
+    "dept.productVariants": "Produktvarianten"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17324,6 +17338,7 @@
     "adm.aiImagesConfirm": "Für {n} neue Produkte KI-Bilder erzeugen? Dies verbraucht Credits.",
     "adm.aiImagesProgress": "KI-Bild {i} von {n} wird erzeugt …",
     "adm.iconUseImageDone": "Icon übernommen",
-    "tile.noImage": "Kein Vorschaubild vorhanden"
+    "tile.noImage": "Kein Vorschaubild vorhanden",
+    "dept.productVariants": "Produktvarianten"
   }
 }
