@@ -145,6 +145,8 @@ export type Database = {
           color: string | null
           created_at: string
           emoji: string | null
+          icon_custom: boolean
+          icon_path: string | null
           id: string
           image_path: string | null
           name: string
@@ -156,6 +158,8 @@ export type Database = {
           color?: string | null
           created_at?: string
           emoji?: string | null
+          icon_custom?: boolean
+          icon_path?: string | null
           id?: string
           image_path?: string | null
           name: string
@@ -167,6 +171,8 @@ export type Database = {
           color?: string | null
           created_at?: string
           emoji?: string | null
+          icon_custom?: boolean
+          icon_path?: string | null
           id?: string
           image_path?: string | null
           name?: string
@@ -918,6 +924,7 @@ export type Database = {
           department_id: string
           emoji: string | null
           excluded_diets: string[]
+          icon_custom: boolean
           icon_path: string | null
           id: string
           image_path: string | null
@@ -935,6 +942,7 @@ export type Database = {
           department_id: string
           emoji?: string | null
           excluded_diets?: string[]
+          icon_custom?: boolean
           icon_path?: string | null
           id?: string
           image_path?: string | null
@@ -952,6 +960,7 @@ export type Database = {
           department_id?: string
           emoji?: string | null
           excluded_diets?: string[]
+          icon_custom?: boolean
           icon_path?: string | null
           id?: string
           image_path?: string | null

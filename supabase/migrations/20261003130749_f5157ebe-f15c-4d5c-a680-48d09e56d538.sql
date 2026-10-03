@@ -1,0 +1,2 @@
+ALTER TABLE public.departments ADD COLUMN IF NOT EXISTS icon_path text, ADD COLUMN IF NOT EXISTS icon_custom boolean NOT NULL DEFAULT false;
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS icon_custom boolean NOT NULL DEFAULT false;
