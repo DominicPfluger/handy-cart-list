@@ -457,7 +457,7 @@ export function CatalogTileEditor(p: {
           )}
         </div>
       )}
-      {p.cur && (p.products.length > 0 || p.children.length > 0) && (
+      {p.cur && p.products.length > 0 && (
         <label className="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm font-medium text-foreground">
           <input
             ref={allSelRef}
