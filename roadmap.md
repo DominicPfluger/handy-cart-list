@@ -42,3 +42,4 @@
 - [x] Admin-Tabs: Märkte direkt neben Sprachen eingeordnet
 
 - [x] Admin-Katalog: Schnell-KI-Bild-Knopf (✨) pro Produktzeile mit Credits-Bestätigung, Ladezustand, Icon-Komprimierung
+- Mengeneinheit „Artikel" (Art.) hinzugefügt: Enum-Wert in der Datenbank, Einheitenliste und Übersetzungen in allen 16 Sprachen.
