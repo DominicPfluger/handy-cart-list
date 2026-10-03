@@ -75,3 +75,5 @@
 - [x] Überschriften-Gruppen einzeln sortieren: ↕-Knopf pro Überschrift (Admin), sortiert nur die Einträge unterhalb nach aktivem Kriterium; Browser-Test „Frische Kräuter" alphabetisch OK (2026-10-03)
 - [x] Überschriften-Sortierung: Kriterien-Dialog mit Ähnlichkeit (KI), Relevanz (KI), Alphabetisch (lokal), Preis (lokal aus gespeicherten DB-Preisen, ohne KI); Browser-Tests in Frische Kräuter + Hülsenfrüchte OK (2026-10-03)
 - [x] Admin-Katalog: Master-Checkbox „Alle auswählen" oberhalb der Produktauflistung (alle markieren/leeren, Strich bei Teilauswahl; Browser-Test in Frische Kräuter OK) (2026-10-03)
+
+- [x] KI-Variantenvorschläge im Produkt-Bearbeiten-Dialog (EditSheet, admin.tsx): ✨-Knopf, Bestätigung mit Anzahl 5/10/15, Chips-Auswahl, Übernehmen in Varianten-Liste; Browser-Test mit Paprika Rosenscharf OK (Vorschläge erzeugt, einzelner Chip abgewählt, übernommen — nicht gespeichert).
