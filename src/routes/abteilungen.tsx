@@ -565,9 +565,9 @@ function DepartmentsPage() {
         </nav>
       )}
 
-      {!normalizedQuery && current?.iconPath && current.imagePath && (
+      {!normalizedQuery && !!(current?.imagePath || current?.iconPath) && (
         <div className="flex h-36 items-center justify-center overflow-hidden rounded-2xl bg-muted">
-          <DepartmentIcon emoji={current.emoji} imageUrl={current.imageUrl} imagePath={current.imagePath} className="h-full w-full object-cover" />
+          <DepartmentIcon emoji={current.emoji} imageUrl={current.imageUrl ?? current.iconUrl} imagePath={current.imagePath ?? current.iconPath} className="h-full w-full object-cover" />
         </div>
       )}
 
