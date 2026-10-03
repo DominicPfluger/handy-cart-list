@@ -7,7 +7,7 @@ import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
-import { saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
+import { clearCustomIcon, saveCustomIcon, saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
 import { toast } from "sonner";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPrice, estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
@@ -545,6 +545,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [large, setLarge] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null | undefined>(undefined);
   const [imageBusy, setImageBusy] = useState(false);
+  const iconFileRef = useRef<HTMLInputElement>(null);
+  const [iconInfo, setIconInfo] = useState<{ url: string | null; custom: boolean }>({ url: null, custom: false });
+  const loadIcon = async (id: string) => {
+    const { data } = await supabase.from(isDept ? "departments" : "products").select("icon_path, icon_custom").eq("id", id).single();
+    const path = (data as { icon_path: string | null } | null)?.icon_path ?? null;
+    const signed = path ? (await supabase.storage.from("catalog-images").createSignedUrl(path, 600)).data?.signedUrl ?? null : null;
+    setIconInfo({ url: signed, custom: Boolean((data as { icon_custom?: boolean } | null)?.icon_custom) });
+  };
+  useEffect(() => { if (p.target.id) void loadIcon(p.target.id); }, [p.target.id]);
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
@@ -790,6 +799,21 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         {enrichStatus && <div role="status" className="text-sm text-foreground">{enriching && <span aria-hidden="true">⏳ </span>}{enrichStatus}</div>}
         {enrichErrors.length > 0 && <ul className="max-h-24 overflow-auto text-xs text-destructive">{enrichErrors.map((error) => <li key={error}>{error}</li>)}</ul>}
+        {effId && (
+          <div className="flex items-center gap-3 rounded-xl border border-border p-2">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-2xl">
+              {iconInfo.url ? <img src={iconInfo.url} alt="" className="h-full w-full object-contain" /> : emoji || (isDept ? "📁" : "🛒")}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground">{T("adm.iconImage")}</p>
+              {!iconInfo.custom && <p className="text-[11px] text-muted-foreground">{T("adm.iconAutoHint")}</p>}
+            </div>
+            <Button size="sm" variant="outline" onClick={() => iconFileRef.current?.click()}>{T("tile.upload")}</Button>
+            {iconInfo.custom && <Button size="sm" variant="ghost" className="text-destructive" onClick={() => { if (window.confirm(T("tile.removeImageConfirm"))) void p.run(async () => { await clearCustomIcon(isDept ? "department" : "product", effId); await loadIcon(effId); await qc.invalidateQueries({ queryKey: ["catalog"] }); }); }}>✕</Button>}
+            <input ref={iconFileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void p.run(async () => { await saveCustomIcon(isDept ? "department" : "product", effId, f); await loadIcon(effId); await qc.invalidateQueries({ queryKey: ["catalog"] }); }); }} />
+          </div>
+        )}
+        {effId && <p className="-mb-1 text-sm font-semibold text-foreground">{T("adm.previewImage")}</p>}
         <div className="flex items-center gap-3">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
             {(imagePreview === undefined ? p.imgUrl : imagePreview) ? <ZoomableImage src={(imagePreview === undefined ? p.imgUrl : imagePreview) ?? ""} className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
