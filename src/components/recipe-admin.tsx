@@ -431,6 +431,8 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
   const suggestStepFn = useServerFn(suggestRecipeStepProducts);
   const [suggestStep, setSuggestStep] = useState<StepRow | null>(null);
   const [suggestPicks, setSuggestPicks] = useState<Set<string> | null>(null);
+  const [selRows, setSelRows] = useState<Set<string>>(new Set());
+  const [bulkGroup, setBulkGroup] = useState("");
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
   const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
@@ -496,6 +498,17 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
   const assignGroup = (row: Row, id: string | null) => run(async () => {
     const { error } = await supabase.from("recipe_ingredients").update({ group_id: id }).eq("id", row.id);
     if (error) throw new Error(error.message);
+  });
+
+  const toggleSelRow = (id: string) =>
+    setSelRows((x) => { const n = new Set(x); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  /** Allen gewählten Zeilen auf einmal eine Rezept-Kategorie zuweisen (oder entfernen). */
+  const bulkAssignGroup = (ids: string[], groupId: string | null) => run(async () => {
+    if (!ids.length) return;
+    const { error } = await supabase.from("recipe_ingredients").update({ group_id: groupId }).in("id", ids);
+    if (error) throw new Error(error.message);
+    setSelRows(new Set());
+    setBulkGroup("");
   });
 
   const toggle = (stepKey: string, productId: string, on: boolean) =>
