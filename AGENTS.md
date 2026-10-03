@@ -27,3 +27,4 @@
 - Product images keep a full image_path and a separate 64px icon_path; icons are compressed in the admin browser, including after AI generation, with a resumable backfill. Why: list rows should not download full-size images or lose detail-page imagery.
 - Small catalog and list icons share a device-local image/symbol preference; full product photos remain unchanged. Why: one visual choice should apply consistently without changing shared catalog data.
 - Displayed catalog icons use bounded device CacheStorage keyed by stable image path, with symbol fallback; expiring signed links only authorize cache misses. Why: image links rotate while artwork should download once per device.
+- Vorlagen in "Listen bearbeiten" sind per Drag & Drop sortierbar (reorderTemplates, sort_order auf shopping_lists). Why: gleiche Bedienung wie bei Listen.
