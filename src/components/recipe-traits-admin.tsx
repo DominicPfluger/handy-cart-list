@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Input } from "@/components/ui/input";
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
-import { RECIPE_TRAITS, TRAIT_GROUPS, type TraitGroup } from "@/lib/recipe-traits";
+import { RECIPE_TRAITS, TRAIT_GROUPS, splitTaste, toggleTaste, type TraitGroup } from "@/lib/recipe-traits";
 import { normalizeSearch } from "@/lib/catalog-query";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -67,7 +67,21 @@ export function RecipeTraitsAdmin() {
                 <li key={r.id} className="py-2">
                   <div className="mb-1 text-sm font-medium">{r.title}{!r.is_public && <span className="ml-2 text-xs text-muted-foreground">🔒</span>}</div>
                   <div className="flex flex-wrap gap-2">
-                    {TRAIT_GROUPS.map((g) => (
+                    {TRAIT_GROUPS.map((g) => g === "taste" ? (
+                      <span key={g} role="group" aria-label={T(`rk.${g}` as MessageKey)} className={`inline-flex flex-wrap items-center gap-1 rounded-md border px-1.5 py-1 ${r.taste ? "border-border" : "border-destructive"}`}>
+                        <span className="text-xs text-muted-foreground">{RECIPE_TRAITS.taste.emoji}</span>
+                        {RECIPE_TRAITS.taste.values.map((v) => {
+                          const on = splitTaste(r.taste).includes(v);
+                          return (
+                            <button key={v} type="button" aria-pressed={on}
+                              onClick={() => setTrait(r, "taste", toggleTaste(r.taste, v) ?? "")}
+                              className={`rounded-full border px-2 py-0.5 text-[11px] font-medium ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground"}`}>
+                              {T(`rk.taste.${v}` as MessageKey)}
+                            </button>
+                          );
+                        })}
+                      </span>
+                    ) : (
                       <select key={g} aria-label={T(`rk.${g}` as MessageKey)} value={r[g] ?? ""}
                         onChange={(e) => setTrait(r, g, e.target.value)}
                         className={`rounded-md border bg-background px-2 py-1 text-sm ${r[g] ? "border-border" : "border-destructive"}`}>
