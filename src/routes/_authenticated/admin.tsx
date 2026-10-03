@@ -654,9 +654,6 @@ function AdminPage() {
             <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={() => sortProducts()}>↕ {busy ? T("adm.working") : T("adm.sort")}</Button>
           </div>
         )}
-        {cur && headings.length > 0 && !mk && (
-          <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={headingsToSubcategories}>📂 {T("adm.headingsToSub")}</Button>
-        )}
         <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 min-w-[10rem] flex-1 rounded-xl" />
       </div>
       {cur && mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
