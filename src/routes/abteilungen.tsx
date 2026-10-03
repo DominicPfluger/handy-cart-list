@@ -6,14 +6,12 @@ import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { Button } from "../components/ui/button";
-import { BoltIcon, HeartIcon, PencilIcon, PlusIcon, ScanIcon, SearchIcon, TrashIcon } from "../components/icons";
+import { BoltIcon, HeartIcon, PlusIcon, ScanIcon, SearchIcon, TrashIcon } from "../components/icons";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "../components/ui/alert-dialog";
 import { deleteCustomEntry, isCustomId } from "../hooks/use-custom-catalog";
 import { hideDepartment, useHiddenDepartments } from "../hooks/use-hidden-departments";
 import { useHiddenProducts } from "../hooks/use-hidden-products";
-import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dialog";
-import { useCustomNames } from "../hooks/use-custom-names";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter, useDietFilterSource } from "../hooks/use-diet-filter";
 import {
@@ -23,7 +21,6 @@ import {
   compareByName,
   brandsFor,
   matchesProductSearch,
-  originalName,
   productsOf,
   productsIn,
   type CatalogDepartment,
@@ -138,7 +135,6 @@ function DepartmentsPage() {
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string | undefined>(undefined);
   const [selectedVariant, setSelectedVariant] = useState<string | undefined>(undefined);
-  const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
   const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
   const isAdmin = useIsAdmin();
@@ -146,9 +142,6 @@ function DepartmentsPage() {
   const navigate = useNavigate();
   const saveHeadingFn = useServerFn(saveHeading);
   const headingBefore = useMemo(() => new Map(data.headings.map((h) => [h.beforeProductId, h])), [data.headings]);
-  const customNames = useCustomNames();
-  const openRename = (e: CatalogDepartment | CatalogProduct, kind: "product" | "department") =>
-    setRenameTarget({ id: e.id, name: e.name, originalName: originalName(e), isCustom: e.id in customNames, kind });
 
   const current = departments.find((department) => department.id === currentId) ?? null;
   const deptById = useMemo(() => new Map(departments.map((d) => [d.id, d])), [departments]);
@@ -548,8 +541,7 @@ function DepartmentsPage() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={() => { if (index === breadcrumbs.length - 1) openRename(department, "department"); else openDepartment(department.id); }}
-                aria-label={index === breadcrumbs.length - 1 ? t("rename.action", { name: department.name }) : undefined}
+                onClick={() => openDepartment(department.id)}
                 data-drop="crumb"
                 data-id={department.id}
                 className={`${index === breadcrumbs.length - 1 ? "px-2 font-semibold text-primary" : "px-2 text-muted-foreground"} ${drag?.target?.kind === "into" && drag.target.id === department.id ? "ring-2 ring-primary" : ""}`}
@@ -603,9 +595,6 @@ function DepartmentsPage() {
                 <span className="flex min-h-14 w-full items-center justify-center gap-2 bg-background px-3 py-2 transition-colors group-hover/tile:bg-[var(--tile-strong)]">
                   <span className="min-w-0 text-center whitespace-normal text-[13px] font-bold leading-4 text-foreground">{department.name}</span>
                 </span>
-              </Button>
-              <Button type="button" variant="ghost" size="icon" aria-label={t("rename.action", { name: department.name })} title={t("rename.action", { name: department.name })} onClick={() => openRename(department, "department")} className="absolute right-1 top-1 z-10 mr-9 h-9 w-9 bg-card/90 text-muted-foreground transition-opacity hover:text-foreground focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
-                <PencilIcon className="h-4 w-4" />
               </Button>
               <Button type="button" variant="ghost" size="icon" aria-label={t("dept.remove", { name: department.name })} title={t("dept.remove", { name: department.name })} onClick={() => setRemoveTarget(department)} className="absolute right-1 top-1 z-10 h-9 w-9 bg-card/90 text-muted-foreground transition-opacity hover:text-destructive focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
                 <TrashIcon className="h-4 w-4" />
@@ -681,11 +670,6 @@ function DepartmentsPage() {
                     <button type="button" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="inline-flex max-w-full text-left text-sm font-semibold text-foreground">
                       <span className="truncate">{product.name}</span>
                     </button>
-                    {isAdmin && (
-                      <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} title={t("rename.action", { name: product.name })} className="ml-1.5 inline-flex align-middle text-muted-foreground hover:text-foreground">
-                        <PencilIcon className="h-3.5 w-3.5" />
-                      </button>
-                    )}
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
@@ -851,7 +835,6 @@ function DepartmentsPage() {
         </>
       )}
 
-      <RenameDialog target={renameTarget} onClose={() => setRenameTarget(null)} />
       <AlertDialog open={!!removeTarget} onOpenChange={(open) => { if (!open) setRemoveTarget(null); }}>
         <AlertDialogContent className="max-w-[calc(100%-2rem)] rounded-lg">
           <AlertDialogHeader>
