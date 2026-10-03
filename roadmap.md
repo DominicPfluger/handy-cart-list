@@ -1,11 +1,11 @@
 # Roadmap
 
 ## Offen
-- [ ] Rezepte beim Speichern mehreren Länderküchen zuordnen und in der Suche zuerst danach filtern; Eigenschaften einzeln rahmen und im Browser prüfen.
 - [ ] DB-Security-Hinweise (10 ältere, vorher vorhanden) separat beheben — auf Nutzer-Entscheid wartend
 - [ ] Browser-Tests nachholen: recipe-traits-admin, Varianten-Auswahl
 
 ## Erledigt (Auswahl)
+- [x] Rezepte beim Speichern optional mehreren Länderküchen zuordnen; Suche filtert zuerst nach Länderküchen, Eigenschaften jeweils im eigenen Rahmen (Mobil/Desktop und öffentliches Testrezept mit zwei Küchen geprüft; Testrezepte entfernt).
 - [x] Favorisierte Produktvarianten in der passenden Kategorie anzeigen; Schnell-Hinzufügen, Mengen-Dialog und neue Liste erhalten die Variante (Browser-geprüft).
 - [x] Marktwahl in „Mehr“ steuert Produkt-Sichtbarkeit, Marktreihenfolge und Marken unabhängig von der Sprache; DE/CH/Automatisch und Marken in der Produktdetailseite im Browser geprüft. Aktuell sind noch keine marktspezifischen Produkte oder Sortierungen hinterlegt.
 - [x] Eigene Varianten nur in der Produktdetailansicht anlegen; in der Abteilungsansicht weiterhin verwenden. Anlegen, Dublettenprüfung, Schnell-Hinzufügen und Entfernen auf Handy und Desktop geprüft; Admin-Werkzeuge bleiben getrennt.
