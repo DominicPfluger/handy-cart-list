@@ -133,7 +133,7 @@ function DepartmentsPage() {
   // In Non-Food-/Near-Food-Abteilungen haben Ernährungs- und Küchenfilter keine Wirkung → Knöpfe ausblenden
   const filtersHiddenByDept = currentId !== null && filterExemptDepartments.has(currentId);
   useEffect(() => {
-    if (filtersHiddenByDept) { setDietOpen(false); setCuisineOpen(false); }
+    if (filtersHiddenByDept) { setDietOpen(false); }
   }, [filtersHiddenByDept]);
   const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
   const [query, setQuery] = useState("");
@@ -477,7 +477,7 @@ function DepartmentsPage() {
         {showDietFilter && !filtersHiddenByDept && (
           <button
             type="button"
-            onClick={() => { setDietOpen((v) => !v); setCuisineOpen(false); }}
+            onClick={() => { setDietOpen((v) => !v); }}
             aria-expanded={dietOpen}
             aria-label={t("diet.filter")}
             title={`${t("diet.filter")}${diets.length ? ` · ${diets.length}` : ""}`}
