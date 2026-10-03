@@ -32,7 +32,7 @@ import {
 import { formatQuantity } from "../lib/units";
 import { getLocale, pickName, useT } from "../i18n";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
-import { deptColor, deptColorStrong, rootOf } from "../lib/dept-colors";
+import { deptColor, deptColorStrong, isNonFoodRootName, rootOf } from "../lib/dept-colors";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
 import { VoiceInputButton } from "../components/voice-input";
 import { useIsAdmin } from "../hooks/use-is-admin";
