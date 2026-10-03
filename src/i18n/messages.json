@@ -934,7 +934,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Languages",
     "adm.tab.markets": "Markets",
-    "adm.tab.recipes": "Recipes & Cuisines",
+    "adm.tab.recipes": "Recipe Generator",
     "adm.tab.more": "More",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Tap to add and translate the language.",
@@ -1166,7 +1166,8 @@
     "adm.bulkDeleteConfirm": "Remove {n} ingredients from this section?",
     "adm.selectRow": "Select row",
     "adm.bulkSelected": "{n} selected",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Cuisines"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2103,7 +2104,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Languages",
     "adm.tab.markets": "Markets",
-    "adm.tab.recipes": "Recipes & Cuisines",
+    "adm.tab.recipes": "Recipe Generator",
     "adm.tab.more": "More",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Tap to add and translate the language.",
@@ -2335,7 +2336,8 @@
     "adm.bulkDeleteConfirm": "Remove {n} ingredients from this section?",
     "adm.selectRow": "Select row",
     "adm.bulkSelected": "{n} selected",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Cuisines"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3272,7 +3274,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Languages",
     "adm.tab.markets": "Markets",
-    "adm.tab.recipes": "Recipes & Cuisines",
+    "adm.tab.recipes": "Recipe Generator",
     "adm.tab.more": "More",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Tap to add and translate the language.",
@@ -3504,7 +3506,8 @@
     "adm.bulkDeleteConfirm": "Remove {n} ingredients from this section?",
     "adm.selectRow": "Select row",
     "adm.bulkSelected": "{n} selected",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Cuisines"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4441,7 +4444,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Idiomas",
     "adm.tab.markets": "Mercados",
-    "adm.tab.recipes": "Recetas y cocinas",
+    "adm.tab.recipes": "Generador de recetas",
     "adm.tab.more": "Más",
     "loc.suggest": "Sugerencias",
     "loc.suggestHint": "Toca para añadir y traducir el idioma.",
@@ -4673,7 +4676,8 @@
     "adm.bulkDeleteConfirm": "¿Quitar {n} ingredientes de la sección?",
     "adm.selectRow": "Seleccionar fila",
     "adm.bulkSelected": "{n} seleccionados",
-    "rk.tasteMax": "máx. {n}"
+    "rk.tasteMax": "máx. {n}",
+    "adm.tab.cuisines": "Cocinas del mundo"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5610,7 +5614,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Idiomas",
     "adm.tab.markets": "Mercados",
-    "adm.tab.recipes": "Recetas y cocinas",
+    "adm.tab.recipes": "Generador de recetas",
     "adm.tab.more": "Más",
     "loc.suggest": "Sugerencias",
     "loc.suggestHint": "Toca para añadir y traducir el idioma.",
@@ -5842,7 +5846,8 @@
     "adm.bulkDeleteConfirm": "¿Quitar {n} ingredientes de la sección?",
     "adm.selectRow": "Seleccionar fila",
     "adm.bulkSelected": "{n} seleccionados",
-    "rk.tasteMax": "máx. {n}"
+    "rk.tasteMax": "máx. {n}",
+    "adm.tab.cuisines": "Cocinas del mundo"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6779,7 +6784,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Langues",
     "adm.tab.markets": "Marchés",
-    "adm.tab.recipes": "Recettes et cuisines",
+    "adm.tab.recipes": "Générateur de recettes",
     "adm.tab.more": "Plus",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
@@ -7011,7 +7016,8 @@
     "adm.bulkDeleteConfirm": "Retirer {n} ingrédients de la section ?",
     "adm.selectRow": "Sélectionner la ligne",
     "adm.bulkSelected": "{n} sélectionnés",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Cuisines du monde"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7948,7 +7954,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Langues",
     "adm.tab.markets": "Marchés",
-    "adm.tab.recipes": "Recettes et cuisines",
+    "adm.tab.recipes": "Générateur de recettes",
     "adm.tab.more": "Plus",
     "loc.suggest": "Suggestions",
     "loc.suggestHint": "Touchez pour ajouter et traduire la langue.",
@@ -8180,7 +8186,8 @@
     "adm.bulkDeleteConfirm": "Retirer {n} ingrédients de la section ?",
     "adm.selectRow": "Sélectionner la ligne",
     "adm.bulkSelected": "{n} sélectionnés",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Cuisines du monde"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9117,7 +9124,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Lingue",
     "adm.tab.markets": "Mercati",
-    "adm.tab.recipes": "Ricette e cucine",
+    "adm.tab.recipes": "Generatore di ricette",
     "adm.tab.more": "Altro",
     "loc.suggest": "Suggerimenti",
     "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
@@ -9349,7 +9356,8 @@
     "adm.bulkDeleteConfirm": "Rimuovere {n} ingredienti dalla sezione?",
     "adm.selectRow": "Seleziona riga",
     "adm.bulkSelected": "{n} selezionati",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Cucine del mondo"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10286,7 +10294,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Lingue",
     "adm.tab.markets": "Mercati",
-    "adm.tab.recipes": "Ricette e cucine",
+    "adm.tab.recipes": "Generatore di ricette",
     "adm.tab.more": "Altro",
     "loc.suggest": "Suggerimenti",
     "loc.suggestHint": "Tocca per aggiungere e tradurre la lingua.",
@@ -10518,7 +10526,8 @@
     "adm.bulkDeleteConfirm": "Rimuovere {n} ingredienti dalla sezione?",
     "adm.selectRow": "Seleziona riga",
     "adm.bulkSelected": "{n} selezionati",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Cucine del mondo"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11455,7 +11464,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Idiomas",
     "adm.tab.markets": "Mercados",
-    "adm.tab.recipes": "Receitas e cozinhas",
+    "adm.tab.recipes": "Gerador de receitas",
     "adm.tab.more": "Mais",
     "loc.suggest": "Sugestões",
     "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
@@ -11687,7 +11696,8 @@
     "adm.bulkDeleteConfirm": "Remover {n} ingredientes da secção?",
     "adm.selectRow": "Selecionar linha",
     "adm.bulkSelected": "{n} selecionados",
-    "rk.tasteMax": "máx. {n}"
+    "rk.tasteMax": "máx. {n}",
+    "adm.tab.cuisines": "Cozinhas do mundo"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12624,7 +12634,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Idiomas",
     "adm.tab.markets": "Mercados",
-    "adm.tab.recipes": "Receitas e cozinhas",
+    "adm.tab.recipes": "Gerador de receitas",
     "adm.tab.more": "Mais",
     "loc.suggest": "Sugestões",
     "loc.suggestHint": "Toque para adicionar e traduzir o idioma.",
@@ -12856,7 +12866,8 @@
     "adm.bulkDeleteConfirm": "Remover {n} ingredientes da seção?",
     "adm.selectRow": "Selecionar linha",
     "adm.bulkSelected": "{n} selecionados",
-    "rk.tasteMax": "máx. {n}"
+    "rk.tasteMax": "máx. {n}",
+    "adm.tab.cuisines": "Cozinhas do mundo"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13793,7 +13804,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Talen",
     "adm.tab.markets": "Markten",
-    "adm.tab.recipes": "Recepten & keukens",
+    "adm.tab.recipes": "Receptengenerator",
     "adm.tab.more": "Meer",
     "loc.suggest": "Suggesties",
     "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
@@ -14025,7 +14036,8 @@
     "adm.bulkDeleteConfirm": "{n} ingrediënten uit de sectie verwijderen?",
     "adm.selectRow": "Rij selecteren",
     "adm.bulkSelected": "{n} geselecteerd",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Wereldkeukens"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14962,7 +14974,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Talen",
     "adm.tab.markets": "Markten",
-    "adm.tab.recipes": "Recepten & keukens",
+    "adm.tab.recipes": "Receptengenerator",
     "adm.tab.more": "Meer",
     "loc.suggest": "Suggesties",
     "loc.suggestHint": "Tik om de taal toe te voegen en te vertalen.",
@@ -15194,7 +15206,8 @@
     "adm.bulkDeleteConfirm": "{n} ingrediënten uit de sectie verwijderen?",
     "adm.selectRow": "Rij selecteren",
     "adm.bulkSelected": "{n} geselecteerd",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Wereldkeukens"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15591,7 +15604,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Sprachen",
     "adm.tab.markets": "Märkte",
-    "adm.tab.recipes": "Rezepte & Küchen",
+    "adm.tab.recipes": "Rezept-Generator",
     "adm.tab.more": "Mehr",
     "loc.suggest": "Vorschläge",
     "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
@@ -15825,7 +15838,8 @@
     "adm.bulkDeleteConfirm": "{n} Zutaten aus dem Bereich entfernen?",
     "adm.selectRow": "Zeile auswählen",
     "adm.bulkSelected": "{n} ausgewählt",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Länderküchen"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16222,7 +16236,7 @@
     "adm.tab.import": "Import",
     "adm.tab.languages": "Sprachen",
     "adm.tab.markets": "Märkte",
-    "adm.tab.recipes": "Rezepte & Küchen",
+    "adm.tab.recipes": "Rezept-Generator",
     "adm.tab.more": "Mehr",
     "loc.suggest": "Vorschläge",
     "loc.suggestHint": "Antippen, um die Sprache anzulegen und zu übersetzen.",
@@ -16456,6 +16470,7 @@
     "adm.bulkDeleteConfirm": "{n} Zutaten aus dem Bereich entfernen?",
     "adm.selectRow": "Zeile auswählen",
     "adm.bulkSelected": "{n} ausgewählt",
-    "rk.tasteMax": "max. {n}"
+    "rk.tasteMax": "max. {n}",
+    "adm.tab.cuisines": "Länderküchen"
   }
 }
