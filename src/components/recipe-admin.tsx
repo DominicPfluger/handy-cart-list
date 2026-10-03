@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Pencil, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { RECIPE_TEMPLATES } from "@/lib/recipe-templates";
 import { normalizeSearch } from "@/lib/catalog-query";
@@ -299,12 +300,16 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
           {templates.map((t) => (
             <div key={t.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", t.id); setDragTpl(t.id); }} onDragEnd={() => setDragTpl(null)} onDragOver={(e) => { if (dragTpl) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragTpl) void reorderTpl(dragTpl, t); setDragTpl(null); }} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
               <span className="cursor-grab text-muted-foreground" title={T("adm.drag")}>⠿</span>
+              <Button type="button" variant="ghost" size="icon" disabled={busy} aria-label={T("adm.edit")} title={T("adm.edit")} onClick={() => setTplForm({ id: t.id, emoji: t.emoji })} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                <Pencil className="h-3.5 w-3.5" />
+              </Button>
+              <Button type="button" variant="ghost" size="icon" disabled={busy} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => removeTpl(t)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
               <span className="min-w-0 flex-1 truncate text-foreground">{t.emoji} {tplLabel(t.id)} <span className="text-muted-foreground">({t.id})</span></span>
               <button type="button" disabled={busy} onClick={() => toggleTpl(t)} className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${t.enabled ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
                 {t.enabled ? T("adm.tplEnabled") : T("adm.tplDisabled")}
               </button>
-              <Button size="sm" variant="ghost" disabled={busy} onClick={() => setTplForm({ id: t.id, emoji: t.emoji })}>{T("adm.edit")}</Button>
-              <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeTpl(t)}>{T("adm.delete")}</Button>
             </div>
           ))}
           {tplForm && (
@@ -359,14 +364,16 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
             </div>
             <div id="recipe-admin-steps" className={`space-y-2 ${stepsOpen ? "" : "hidden"}`}>
             {steps.map((s) => (
-              <div key={s.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", s.id); setDragStep(s.id); }} onDragEnd={() => setDragStep(null)} onDragOver={(e) => { if (dragStep) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragStep) void reorderStep(dragStep, s); setDragStep(null); }} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/50 py-1 text-xs">
+              <div key={s.id} draggable={!busy} onDragStart={(e) => { e.dataTransfer.setData("text/plain", s.id); setDragStep(s.id); }} onDragEnd={() => setDragStep(null)} onDragOver={(e) => { if (dragStep) e.preventDefault(); }} onDrop={(e) => { e.preventDefault(); if (dragStep) void reorderStep(dragStep, s); setDragStep(null); }} className="flex items-center gap-1.5 border-b border-border/50 py-1 text-xs">
                 <span className="flex min-w-0 items-center gap-1.5">
                   <span className="cursor-grab text-muted-foreground" title={T("adm.drag")}>⠿</span>
+                  <Button type="button" variant="ghost" size="icon" disabled={busy} aria-label={T("adm.edit")} title={T("adm.edit")} onClick={() => setStepForm({ id: s.id, key: s.key, name: s.name, emoji: s.emoji ?? "", min: s.min, max: s.max, required: s.required })} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button type="button" variant="ghost" size="icon" disabled={busy} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => removeStep(s)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
                   <span className="min-w-0 truncate text-foreground">{s.emoji} {s.name} <span className="text-muted-foreground">({s.min}–{s.max}{s.required ? ` · ${T("adm.stepRequired")}` : ""})</span></span>
-                </span>
-                <span className="flex shrink-0 items-center">
-                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => setStepForm({ id: s.id, key: s.key, name: s.name, emoji: s.emoji ?? "", min: s.min, max: s.max, required: s.required })}>{T("adm.edit")}</Button>
-                  <Button size="sm" variant="ghost" disabled={busy} onClick={() => removeStep(s)}>{T("adm.delete")}</Button>
                 </span>
               </div>
             ))}
