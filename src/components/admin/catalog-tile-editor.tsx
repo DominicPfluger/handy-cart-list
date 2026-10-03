@@ -24,9 +24,9 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
 /** Alias-Kategorien: id = "deptalias:<aliasId>", alias_id + dept_id (Original) gesetzt. */
-export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; alias_id?: string; dept_id?: string };
+export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; icon_path?: string | null; alias_id?: string; dept_id?: string };
 /** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
-export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null; variants?: string[]; alias_id?: string; product_id?: string };
+export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null; icon_path?: string | null; variants?: string[]; alias_id?: string; product_id?: string };
 
 const COMMON_VARIANTS = ["Bio", "Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
@@ -146,7 +146,7 @@ export function CatalogTileEditor(p: {
     return c.name;
   };
 
-  const paths = [...p.children.map((c) => c.image_path), ...p.products.map((x) => x.image_path)].filter((x): x is string => Boolean(x));
+  const paths = [...p.children.map((c) => c.image_path), ...p.products.flatMap((x) => [x.icon_path ?? x.image_path, x.image_path])].filter((x, i, a): x is string => Boolean(x) && a.indexOf(x) === i);
   const imgs = useQuery({
     queryKey: ["admin-tile-imgs", paths.join("|")],
     enabled: paths.length > 0,
@@ -453,7 +453,7 @@ export function CatalogTileEditor(p: {
                   onPointerCancel={() => { if (lpTimer.current !== null) { window.clearTimeout(lpTimer.current); lpTimer.current = null; } setDrag(null); setOver(null); setOverPos(null); }}
                   onClick={() => { if (lpFired.current) { lpFired.current = false; return; } if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
                   className="flex h-11 w-11 shrink-0 touch-none select-none items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl">
-                  {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
+                  {img(x.icon_path ?? x.image_path) ? <ZoomableImage src={img(x.icon_path ?? x.image_path)!} className="h-full w-full object-contain" /> : x.emoji ?? "🛒"}
                 </span>
                 <button type="button" disabled={!editMode} onClick={click(() => x.alias_id ? p.onAdvanced?.("product", pid) : setTarget({ kind: "product", id: x.id }))} className="min-w-0 flex-1 text-left">
                   <div className="truncate text-sm font-semibold text-foreground" title={p.nm(pid, x.name)}>{p.nm(pid, x.name)}{x.alias_id && <span className="ml-1 text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</div>
