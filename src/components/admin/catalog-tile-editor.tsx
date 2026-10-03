@@ -894,12 +894,49 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
                 <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
               </div>
-              <div className="flex gap-2">
-                <Input aria-label={T("tile.aiHint")} placeholder={suggesting ? T("tile.aiSuggestLoading") : isDept ? T("tile.aiHintEmpty") : T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 flex-1 rounded-xl text-sm" />
-                {isDept && (
-                  <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true, [...picked])}>↻</Button>
-                )}
-              </div>
+              <details className="rounded-xl border border-border p-2">
+                <summary className="cursor-pointer select-none text-sm font-medium text-foreground">✨ {T("tile.aiOptions")}</summary>
+                <div className="mt-2 space-y-2">
+                  <div className="flex gap-2">
+                    <Input aria-label={T("tile.aiHint")} placeholder={suggesting ? T("tile.aiSuggestLoading") : isDept ? T("tile.aiHintEmpty") : T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 flex-1 rounded-xl text-sm" />
+                    {isDept && (
+                      <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true, [...picked])}>↻</Button>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <label className="space-y-1 text-xs text-muted-foreground">
+                      <span>{T("tile.aiStyle")}</span>
+                      <select value={imgOpts.style} onChange={(e) => setImgOpts((o) => ({ ...o, style: e.target.value as typeof o.style }))} className="h-9 w-full rounded-xl border border-input bg-background px-2 text-sm text-foreground">
+                        <option value="photo">{T("tile.aiStylePhoto")}</option>
+                        <option value="illustration">{T("tile.aiStyleIllustration")}</option>
+                      </select>
+                    </label>
+                    <label className="space-y-1 text-xs text-muted-foreground">
+                      <span>{T("tile.aiBackground")}</span>
+                      <select value={imgOpts.background} onChange={(e) => setImgOpts((o) => ({ ...o, background: e.target.value as typeof o.background }))} className="h-9 w-full rounded-xl border border-input bg-background px-2 text-sm text-foreground">
+                        <option value="transparent">{T("tile.aiBgTransparent")}</option>
+                        <option value="white">{T("tile.aiBgWhite")}</option>
+                        <option value="gradient">{T("tile.aiBgGradient")}</option>
+                      </select>
+                    </label>
+                    <label className="space-y-1 text-xs text-muted-foreground">
+                      <span>{T("tile.aiView")}</span>
+                      <select value={imgOpts.view} onChange={(e) => setImgOpts((o) => ({ ...o, view: e.target.value as typeof o.view }))} className="h-9 w-full rounded-xl border border-input bg-background px-2 text-sm text-foreground">
+                        <option value="front">{T("tile.aiViewFront")}</option>
+                        <option value="top">{T("tile.aiViewTop")}</option>
+                        <option value="side">{T("tile.aiViewSide")}</option>
+                      </select>
+                    </label>
+                    <label className="space-y-1 text-xs text-muted-foreground">
+                      <span>{T("tile.aiCount")}</span>
+                      <select value={imgOpts.count} onChange={(e) => setImgOpts((o) => ({ ...o, count: e.target.value as typeof o.count }))} className="h-9 w-full rounded-xl border border-input bg-background px-2 text-sm text-foreground">
+                        <option value="single">{T("tile.aiCountSingle")}</option>
+                        <option value="group">{T("tile.aiCountGroup")}</option>
+                      </select>
+                    </label>
+                  </div>
+                </div>
+              </details>
               {isDept && effId && pickList.length > 0 && (
                 <details className="rounded-xl border border-border p-2 text-sm">
                   <summary className="cursor-pointer select-none font-medium text-foreground">
