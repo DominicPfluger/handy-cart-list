@@ -2,21 +2,39 @@ import { aiJson } from "./translate.server";
 
 const GATEWAY = "https://ai.gateway.lovable.dev/v1";
 
+export type ImageGenOpts = {
+  style?: "photo" | "illustration" | undefined;
+  background?: "transparent" | "white" | "gradient" | undefined;
+  view?: "front" | "top" | "side" | undefined;
+  count?: "single" | "group" | undefined;
+};
+
 /** Erzeugt ein Produktbild (komprimiertes WebP mit transparentem Hintergrund) über das Lovable-KI-Bildmodell. */
-export async function generateProductImage(name: string, emoji: string | null, hint?: string): Promise<Uint8Array> {
+export async function generateProductImage(name: string, emoji: string | null, hint?: string, opts?: ImageGenOpts): Promise<Uint8Array> {
   const apiKey = process.env["LOVABLE_API_KEY"];
   if (!apiKey) throw new Error("KI-Schlüssel fehlt");
   const extra = hint?.trim() ? ` The image must show: ${hint.trim()}.` : "";
+  const style = opts?.style === "illustration" ? "Flat friendly vector illustration style, clean shapes, soft colors. " : "Clean product photo of ";
+  const subject = opts?.style === "illustration" ? `"${name}" (${emoji ?? "grocery item"}) for a shopping list app. ` : `"${name}" (${emoji ?? "grocery item"}) for a shopping list app. `;
+  const bg =
+    opts?.background === "white" ? "isolated on a pure white background (no backdrop, no shadow plate)" :
+    opts?.background === "gradient" ? "on a soft, subtle pastel gradient background that fits a green shopping app (no text)" :
+    "isolated on a fully transparent background (no backdrop, no shadow plate)";
+  const view =
+    opts?.view === "top" ? "viewed slightly from above, " :
+    opts?.view === "side" ? "viewed from the side, " : "";
+  const count = opts?.count === "group" ? "Small group of 2-3 items, arranged together, " : "Single item, ";
    const prompt =
-    `Clean product photo of "${name}" (${emoji ?? "grocery item"}) for a shopping list app. ` +
-    "Single item, centered, isolated on a fully transparent background (no backdrop, no shadow plate), soft daylight, no text, no brand logos, no packaging labels with words, square composition. " +
+    `${style}${subject}` +
+    `${count}centered, ${view}${bg}, soft daylight, no text, no brand logos, no packaging labels with words, square composition. ` +
     "No herbs, no garnishes or additions of any kind, no vessels or containers (no bowls, plates, pots, jars) — just the plain product itself." +
     extra;
+  const transparent = !opts?.background || opts.background === "transparent";
   const res = await fetch(`${GATEWAY}/images/generations`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}`, "X-Lovable-AIG-SDK": "fetch" },
     // 512x512 wird vom Modell abgelehnt (Mindestauflösung) → kleinste erlaubte Grösse, stark komprimiert.
-    body: JSON.stringify({ model: "openai/gpt-image-2.5-sunburst", prompt, size: "1024x1024", background: "transparent", output_format: "webp", output_compression: 60, quality: "low" }),
+    body: JSON.stringify({ model: "openai/gpt-image-2.5-sunburst", prompt, size: "1024x1024", ...(transparent ? { background: "transparent" } : {}), output_format: "webp", output_compression: 60, quality: "low" }),
   });
   if (!res.ok) {
     const body = await res.text().catch(() => "");

@@ -135,7 +135,17 @@ export const generateProductImages = createServerFn({ method: "POST" })
 export const generateImageFor = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) =>
-    z.object({ id: z.string().uuid(), kind: z.enum(["product", "department"]).default("product"), hint: z.string().max(300).optional() }).parse(d),
+    z.object({
+      id: z.string().uuid(),
+      kind: z.enum(["product", "department"]).default("product"),
+      hint: z.string().max(300).optional(),
+      opts: z.object({
+        style: z.enum(["photo", "illustration"]).optional(),
+        background: z.enum(["transparent", "white", "gradient"]).optional(),
+        view: z.enum(["front", "top", "side"]).optional(),
+        count: z.enum(["single", "group"]).optional(),
+      }).optional(),
+    }).parse(d),
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
@@ -144,7 +154,7 @@ export const generateImageFor = createServerFn({ method: "POST" })
     const table = data.kind === "department" ? "departments" : "products";
     const { data: p, error } = await context.supabase.from(table).select("id, name, emoji").eq("id", data.id).single();
     if (error || !p) throw new Error(data.kind === "department" ? "Kategorie nicht gefunden" : "Produkt nicht gefunden");
-    const bytes = await generateProductImage(p.name, p.emoji, data.hint);
+    const bytes = await generateProductImage(p.name, p.emoji, data.hint, data.opts);
     // A new path makes the replacement visible immediately, even with cached signed URLs.
     const path = `${table}/${p.id}-${crypto.randomUUID()}.webp`;
     const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
