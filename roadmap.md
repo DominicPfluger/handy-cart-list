@@ -13,3 +13,4 @@
 - Rezept-Eigenschaften (Sättigung, Schärfe, Preisklasse, Geschmack) Pflicht + Suche + Admin
 - Varianten-Auswahl im Generator, „nach Wahl" pro Bereich
 - Oberkategorien je Rezept-Art, Bereichs-Verwaltung im Admin
+- Zutaten-Zuweisung: Alphabetisch-Sortierung je Bereich (lokal, ohne KI/Credits)
