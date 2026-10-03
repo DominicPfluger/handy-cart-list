@@ -63,3 +63,4 @@
 - [x] Favoritenansicht: Produkt-Icons (kleine Bilder) statt nur Emoji; Einstellung Bilder/Symbole wird respektiert (Handy/Desktop Browser-getestet) — erledigt 2026-10-03
 
 - [x] 2026-10-03 Abteilungsansicht: Produktbild und -name oeffnen immer die Detailseite; Varianten klappen nur ueber den „Varianten (n)"-Link auf; Umbenennen fuer Admins per Stift-Icon neben dem Namen.
+- [x] Admin-Produktauflistung zeigt pro Produkt das kleine Icon statt des grossen Vorschaubilds (Fallback: Vorschaubild, dann Emoji); Doppelklick-Zoom bleibt beim grossen Bild (Browser-Test Zwiebeln & Lauchgemüse).
