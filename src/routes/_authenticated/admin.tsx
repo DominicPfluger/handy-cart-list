@@ -415,8 +415,8 @@ function AdminPage() {
     const sib = new Set((d?.depts ?? []).filter((x) => x.parent_id === parent && x.id !== cur).map((x) => x.id));
     return (d?.prods ?? []).filter((x) => sib.has(x.department_id)).map((x) => x.name);
   };
-  const loadSuggestions = async (typed: string[], mode: "web" | "ai") => {
-    const r = await suggest({ data: { mode, path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: [...typed, ...siblingNames()].slice(0, 400), ...(mk ? { market: mk } : {}) } });
+  const loadSuggestions = async (typed: string[], mode: "web" | "ai", count: number) => {
+    const r = await suggest({ data: { mode, count, path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: [...typed, ...siblingNames()].slice(0, 400), ...(mk ? { market: mk } : {}) } });
     if (r.webFailed) toast.info(T("adm.suggestWebFailed"));
     return r.items;
   };
