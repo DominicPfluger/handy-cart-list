@@ -1003,7 +1003,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
         )}
       </div>
       <div className="flex gap-2">
-        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit, mkOnly, pos, aiOn ? { hint: aiHint.trim(), opts: aiOpts } : undefined)}>
+        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit, mkOnly, pos, deptId || curDept || "", aiOn ? { hint: aiHint.trim(), opts: aiOpts } : undefined)}>
           {T("adm.createN", { n: names.length })}
         </Button>
         <Button variant="ghost" onClick={onCancel}>{T("adm.cancel")}</Button>
