@@ -476,6 +476,7 @@ interface CloudListsApi {
   renameList: (id: string, name: string) => void;
   deleteList: (id: string) => void;
   reorderLists: (fromId: string, toId: string) => void;
+  reorderTemplates: (fromId: string, toId: string) => void;
   setItems: (fn: (prev: ListItem[]) => ListItem[]) => void;
   addItem: (name: string, quantity: string, category: ListItem["category"], user_?: string) => void;
   addCatalogItem: (input: AddCatalogItemInput, user_?: string) => void;
@@ -810,6 +811,23 @@ function useCloudLists(
     [user]
   );
 
+  const reorderTemplates = useCallback(
+    (fromId: string, toId: string) => {
+      setCloudLists((prev) => {
+        const from = prev.findIndex((l) => l.id === fromId);
+        const to = prev.findIndex((l) => l.id === toId);
+        if (from < 0 || to < 0) return prev;
+        const next = [...prev];
+        const [moved] = next.splice(from, 1);
+        next.splice(to, 0, moved!);
+        const order = next.filter((l) => l.isTemplate).map((l) => l.id);
+        runCloud({ fn: "updateList", data: { id: moved!.id, order } }, () => updateCloudList({ data: { id: moved!.id, order } }));
+        return next;
+      });
+    },
+    [user]
+  );
+
   const saveAsTemplate = useCallback(
     (id: string) => {
       const source = cloudLists.find((l) => l.id === id);
@@ -1047,6 +1065,7 @@ function useCloudLists(
     renameList,
     deleteList,
     reorderLists,
+    reorderTemplates,
     setItems,
     saveAsTemplate,
     createFromTemplate,
@@ -1265,6 +1284,18 @@ export function useShoppingList() {
     },
     [localTemplates, persistLocalTemplates]
   );
+  const reorderTemplatesLocal = useCallback(
+    (fromId: string, toId: string) => {
+      const from = localTemplates.findIndex((l) => l.id === fromId);
+      const to = localTemplates.findIndex((l) => l.id === toId);
+      if (from < 0 || to < 0) return;
+      const next = [...localTemplates];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved!);
+      persistLocalTemplates(next);
+    },
+    [localTemplates, persistLocalTemplates]
+  );
 
   if (!user) {
     return {
@@ -1278,6 +1309,7 @@ export function useShoppingList() {
       renameList: local.renameList,
       deleteList: local.deleteList,
       reorderLists: local.reorderLists,
+      reorderTemplates: reorderTemplatesLocal,
       saveAsTemplate: saveAsTemplateLocal,
       createFromTemplate: createFromTemplateLocal,
       deleteTemplate: deleteTemplateLocal,
@@ -1315,6 +1347,7 @@ export function useShoppingList() {
     renameList: cloud.renameList,
     deleteList: cloud.deleteList,
     reorderLists: cloud.reorderLists,
+    reorderTemplates: cloud.reorderTemplates,
     saveAsTemplate: cloud.saveAsTemplate,
     createFromTemplate: cloud.createFromTemplate,
     deleteTemplate: cloud.deleteList,

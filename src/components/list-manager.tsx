@@ -36,6 +36,7 @@ interface Props {
   onSaveAsTemplate: (id: string) => void;
   onCreateFromTemplate: (templateId: string) => void;
   onDeleteTemplate: (templateId: string) => void;
+  onReorderTemplates: (fromId: string, toId: string) => void;
 }
 
 export async function shareList(list: ShoppingList) {
@@ -157,6 +158,61 @@ function Row({
   );
 }
 
+function TemplateRow({
+  tpl,
+  onCreateFromTemplate,
+  onDeleteTemplate,
+}: {
+  tpl: ShoppingList;
+  onCreateFromTemplate: () => void;
+  onDeleteTemplate: () => void;
+}) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: tpl.id });
+  const { t } = useT();
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 20 : undefined }}
+      className={`flex items-center gap-2 rounded-2xl border border-dashed border-border bg-card px-2 py-2 ${isDragging ? "shadow-lg" : ""}`}
+    >
+      <button
+        {...attributes}
+        {...listeners}
+        className="grid h-9 w-7 shrink-0 cursor-grab touch-none place-items-center text-muted-foreground active:cursor-grabbing"
+        aria-label={t("lm.move")}
+      >
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+          {[6, 12, 18].map((y) => (
+            <g key={y}>
+              <circle cx="9" cy={y} r="1.6" />
+              <circle cx="15" cy={y} r="1.6" />
+            </g>
+          ))}
+        </svg>
+      </button>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium text-foreground">{tpl.name}</p>
+        <p className="text-xs text-muted-foreground">{t("rk.ingredientsN", { n: tpl.items.length })}</p>
+      </div>
+      <button
+        onClick={onCreateFromTemplate}
+        className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
+      >
+        <PlusIcon className="h-3.5 w-3.5" /> {t("lm.create")}
+      </button>
+      <button
+        onClick={() => {
+          if (confirm(t("lm.deleteTemplateConfirm", { name: tpl.name }))) onDeleteTemplate();
+        }}
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-coral active:bg-muted"
+        aria-label={t("lm.deleteTemplate")}
+      >
+        <TrashIcon className="h-[18px] w-[18px]" />
+      </button>
+    </div>
+  );
+}
+
 export function ListManager(props: Props) {
   const { open, onClose, lists, activeId, templates } = props;
   const { t } = useT();
@@ -237,34 +293,17 @@ export function ListManager(props: Props) {
           <div className="mt-5">
             <h3 className="mb-1 text-sm font-semibold text-muted-foreground">{t("lm.templates")}</h3>
             <p className="mb-2 text-xs text-muted-foreground">{t("lm.templatesHint")}</p>
-            <div className="space-y-2">
-              {templates.map((tpl) => (
-                <div key={tpl.id} className="flex items-center gap-2 rounded-2xl border border-dashed border-border bg-card px-3 py-2">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-foreground">{tpl.name}</p>
-                    <p className="text-xs text-muted-foreground">{t("rk.ingredientsN", { n: tpl.items.length })}</p>
-                  </div>
-                  <button
-                    onClick={() => {
-                      props.onCreateFromTemplate(tpl.id);
-                      onClose();
-                    }}
-                    className="flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"
-                  >
-                    <PlusIcon className="h-3.5 w-3.5" /> {t("lm.create")}
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (confirm(t("lm.deleteTemplateConfirm", { name: tpl.name }))) props.onDeleteTemplate(tpl.id);
-                    }}
-                    className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-coral active:bg-muted"
-                    aria-label={t("lm.deleteTemplate")}
-                  >
-                    <TrashIcon className="h-[18px] w-[18px]" />
-                  </button>
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e: DragEndEvent) => {
+              if (e.over && e.active.id !== e.over.id) props.onReorderTemplates(String(e.active.id), String(e.over.id));
+            }}>
+              <SortableContext items={templates.map((tpl) => tpl.id)} strategy={verticalListSortingStrategy}>
+                <div className="space-y-2">
+                  {templates.map((tpl) => (
+                    <TemplateRow key={tpl.id} tpl={tpl} onCreateFromTemplate={() => { props.onCreateFromTemplate(tpl.id); onClose(); }} onDeleteTemplate={() => props.onDeleteTemplate(tpl.id)} />
+                  ))}
                 </div>
-              ))}
-            </div>
+              </SortableContext>
+            </DndContext>
           </div>
         )}
       </div>
