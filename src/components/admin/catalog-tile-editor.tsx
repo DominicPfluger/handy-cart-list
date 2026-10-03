@@ -75,6 +75,7 @@ export function CatalogTileEditor(p: {
   /** Einträge unterhalb dieser Überschrift nach dem gewählten Kriterium sortieren. */
   onSortHeading?: (id: string) => void;
   onBulkAdd?: (() => void) | undefined;
+  onBulkTree?: (() => void) | undefined;
   /** Überschriften der Abteilung in Unterkategorien umwandeln (nur wenn möglich). */
   onHeadingsToSub?: (() => void) | undefined;
   imageEditor?: { kind: "product"; id: string } | null;
@@ -347,6 +348,7 @@ export function CatalogTileEditor(p: {
           {p.cur && <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "product", id: null })}>+ {T("tile.newProd")}</Button>}
           {p.cur && p.onAddProductAlias && <Button size="sm" variant="outline" onClick={() => { setProdAliasSearch(""); setProdAliasPick(true); }}>+ {T("tile.newProdAlias")}</Button>}
           {p.cur && p.onBulkAdd && <Button size="sm" variant="outline" onClick={p.onBulkAdd}>+ {T("adm.multi")}</Button>}
+          {p.cur && p.onBulkTree && <Button size="sm" variant="outline" onClick={p.onBulkTree}>📂 {T("adm.bulkTree")}</Button>}
           {p.onHeadingsToSub && <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onHeadingsToSub}>📂 {T("adm.headingsToSub")}</Button>}
           {p.cur && <Button size="sm" variant="outline" onClick={() => setSuggesting(true)}>✨ {T("tile.suggest")}</Button>}
           {p.cur && p.products.length > 0 && (
