@@ -72,3 +72,4 @@
 
 - [x] Preisschaetz-Knopf (Tag-Icon) in Admin-Produktzeile oeffnet Bearbeiten-Dialog direkt bei aufgeklapptem Preisbereich (catalog-tile-editor.tsx, i18n adm.estimatePrice, Browser-Test OK)
 - [x] KI-Vorschläge für Produktvarianten im Varianten-Dialog (Admin)
+- [x] Überschriften-Gruppen einzeln sortieren: ↕-Knopf pro Überschrift (Admin), sortiert nur die Einträge unterhalb nach aktivem Kriterium; Browser-Test „Frische Kräuter" alphabetisch OK (2026-10-03)
