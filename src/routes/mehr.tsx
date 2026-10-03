@@ -89,11 +89,6 @@ function MorePage() {
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("nav.more")}</h1>
       </div>
 
-      {/* Ernährungsform — erster Eintrag */}
-      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
-        <DietPreferenceRow />
-      </section>
-
       {/* Gemeinsam section */}
       <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
         <div className="flex items-center gap-2">
