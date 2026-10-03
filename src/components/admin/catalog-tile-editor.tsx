@@ -444,20 +444,32 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
-      {p.cur && selected.size > 0 && (
+      {p.cur && selCount > 0 && (
         <div className="flex items-center gap-2 rounded-xl bg-primary-soft px-3 py-2 text-sm">
-          <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: selected.size })}</span>
-          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set(p.products.map((x) => x.id)))}>{T("adm.selectAll")}</Button>
-          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>{T("adm.clearSelection")}</Button>
+          <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: selCount })}</span>
+          <Button size="sm" variant="ghost" onClick={selectAll}>{T("adm.selectAll")}</Button>
+          <Button size="sm" variant="ghost" onClick={clearSelection}>{T("adm.clearSelection")}</Button>
+          {p.onDeleteSelected && (
+            <Button size="sm" variant="destructive" onClick={() => {
+              const productIds: string[] = []; const productAliasIds: string[] = [];
+              for (const id of selected) (id.startsWith("alias:") ? productAliasIds : productIds).push(id.startsWith("alias:") ? id.slice(6) : id);
+              const deptIds: string[] = []; const deptAliasIds: string[] = [];
+              for (const id of selectedDepts) (id.startsWith("alias:") ? deptAliasIds : deptIds).push(id.startsWith("alias:") ? id.slice(6) : id);
+              p.onDeleteSelected!({ productIds, deptIds, productAliasIds, deptAliasIds });
+              clearSelection();
+            }}>
+              <Trash2 className="mr-1 h-3.5 w-3.5" />{T("adm.deleteSelected")}
+            </Button>
+          )}
         </div>
       )}
-      {p.cur && p.products.length > 0 && (
+      {p.cur && (p.products.length > 0 || p.children.length > 0) && (
         <label className="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm font-medium text-foreground">
           <input
             ref={allSelRef}
             type="checkbox"
             checked={allSelected}
-            onChange={() => setSelected(allSelected ? new Set() : new Set(p.products.map((x) => x.id)))}
+            onChange={() => (allSelected ? clearSelection() : selectAll())}
             className="h-4 w-4 shrink-0 accent-primary"
             aria-label={T("adm.selectAll")}
           />
