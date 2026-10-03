@@ -67,7 +67,7 @@ function toCatalogProduct(favorite: FavoriteProduct): CatalogProduct {
 }
 
 function ProductThumb({ product }: { product: CatalogProduct }) {
-  return <ProductIcon emoji={product.emoji} iconUrl={product.iconUrl} symbolClassName="text-3xl" />;
+  return <ProductIcon emoji={product.emoji} iconUrl={product.iconUrl} iconPath={product.iconPath} symbolClassName="text-3xl" />;
 }
 
 function FavoritesPage() {
