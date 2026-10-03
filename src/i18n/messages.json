@@ -1238,7 +1238,12 @@
     "adm.variantSuggestApply": "Apply",
     "adm.variantSuggestNone": "No new variants found.",
     "adm.sortGroup": "Sort entries under this heading",
-    "adm.sortGroupTitle": "Sort entries under this heading by"
+    "adm.sortGroupTitle": "Sort entries under this heading by",
+    "tile.genAllTitle": "Generate AI images for category",
+    "tile.genAllMissing": "Only missing images ({n})",
+    "tile.genAllEverything": "Regenerate all products ({n})",
+    "tile.genAllHint": "Additional details (optional)",
+    "tile.genAllStart": "Generate"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2479,7 +2484,12 @@
     "adm.variantSuggestApply": "Apply",
     "adm.variantSuggestNone": "No new variants found.",
     "adm.sortGroup": "Sort entries under this heading",
-    "adm.sortGroupTitle": "Sort entries under this heading by"
+    "adm.sortGroupTitle": "Sort entries under this heading by",
+    "tile.genAllTitle": "Generate AI images for category",
+    "tile.genAllMissing": "Only missing images ({n})",
+    "tile.genAllEverything": "Regenerate all products ({n})",
+    "tile.genAllHint": "Additional details (optional)",
+    "tile.genAllStart": "Generate"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3720,7 +3730,12 @@
     "adm.variantSuggestApply": "Apply",
     "adm.variantSuggestNone": "No new variants found.",
     "adm.sortGroup": "Sort entries under this heading",
-    "adm.sortGroupTitle": "Sort entries under this heading by"
+    "adm.sortGroupTitle": "Sort entries under this heading by",
+    "tile.genAllTitle": "Generate AI images for category",
+    "tile.genAllMissing": "Only missing images ({n})",
+    "tile.genAllEverything": "Regenerate all products ({n})",
+    "tile.genAllHint": "Additional details (optional)",
+    "tile.genAllStart": "Generate"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4961,7 +4976,12 @@
     "adm.variantSuggestApply": "Aplicar",
     "adm.variantSuggestNone": "No se encontraron variantes nuevas.",
     "adm.sortGroup": "Ordenar las entradas de este encabezado",
-    "adm.sortGroupTitle": "Ordenar las entradas de este encabezado por"
+    "adm.sortGroupTitle": "Ordenar las entradas de este encabezado por",
+    "tile.genAllTitle": "Generar imágenes IA para la categoría",
+    "tile.genAllMissing": "Solo imágenes faltantes ({n})",
+    "tile.genAllEverything": "Regenerar todos los productos ({n})",
+    "tile.genAllHint": "Detalles adicionales (opcional)",
+    "tile.genAllStart": "Generar"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6202,7 +6222,12 @@
     "adm.variantSuggestApply": "Aplicar",
     "adm.variantSuggestNone": "No se encontraron variantes nuevas.",
     "adm.sortGroup": "Ordenar las entradas de este encabezado",
-    "adm.sortGroupTitle": "Ordenar las entradas de este encabezado por"
+    "adm.sortGroupTitle": "Ordenar las entradas de este encabezado por",
+    "tile.genAllTitle": "Generar imágenes IA para la categoría",
+    "tile.genAllMissing": "Solo imágenes faltantes ({n})",
+    "tile.genAllEverything": "Regenerar todos los productos ({n})",
+    "tile.genAllHint": "Detalles adicionales (opcional)",
+    "tile.genAllStart": "Generar"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7443,7 +7468,12 @@
     "adm.variantSuggestApply": "Reprendre",
     "adm.variantSuggestNone": "Aucune nouvelle variante trouvée.",
     "adm.sortGroup": "Trier les entrées sous ce titre",
-    "adm.sortGroupTitle": "Trier les entrées de ce titre par"
+    "adm.sortGroupTitle": "Trier les entrées de ce titre par",
+    "tile.genAllTitle": "Générer des images IA pour la catégorie",
+    "tile.genAllMissing": "Images manquantes uniquement ({n})",
+    "tile.genAllEverything": "Régénérer tous les produits ({n})",
+    "tile.genAllHint": "Précisions supplémentaires (facultatif)",
+    "tile.genAllStart": "Générer"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8684,7 +8714,12 @@
     "adm.variantSuggestApply": "Reprendre",
     "adm.variantSuggestNone": "Aucune nouvelle variante trouvée.",
     "adm.sortGroup": "Trier les entrées sous ce titre",
-    "adm.sortGroupTitle": "Trier les entrées de ce titre par"
+    "adm.sortGroupTitle": "Trier les entrées de ce titre par",
+    "tile.genAllTitle": "Générer des images IA pour la catégorie",
+    "tile.genAllMissing": "Images manquantes uniquement ({n})",
+    "tile.genAllEverything": "Régénérer tous les produits ({n})",
+    "tile.genAllHint": "Précisions supplémentaires (facultatif)",
+    "tile.genAllStart": "Générer"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9925,7 +9960,12 @@
     "adm.variantSuggestApply": "Applica",
     "adm.variantSuggestNone": "Nessuna nuova variante trovata.",
     "adm.sortGroup": "Ordina le voci sotto questo titolo",
-    "adm.sortGroupTitle": "Ordina le voci di questa intestazione per"
+    "adm.sortGroupTitle": "Ordina le voci di questa intestazione per",
+    "tile.genAllTitle": "Genera immagini IA per la categoria",
+    "tile.genAllMissing": "Solo immagini mancanti ({n})",
+    "tile.genAllEverything": "Rigenera tutti i prodotti ({n})",
+    "tile.genAllHint": "Dettagli aggiuntivi (facoltativo)",
+    "tile.genAllStart": "Genera"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11166,7 +11206,12 @@
     "adm.variantSuggestApply": "Applica",
     "adm.variantSuggestNone": "Nessuna nuova variante trovata.",
     "adm.sortGroup": "Ordina le voci sotto questo titolo",
-    "adm.sortGroupTitle": "Ordina le voci di questa intestazione per"
+    "adm.sortGroupTitle": "Ordina le voci di questa intestazione per",
+    "tile.genAllTitle": "Genera immagini IA per la categoria",
+    "tile.genAllMissing": "Solo immagini mancanti ({n})",
+    "tile.genAllEverything": "Rigenera tutti i prodotti ({n})",
+    "tile.genAllHint": "Dettagli aggiuntivi (facoltativo)",
+    "tile.genAllStart": "Genera"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12407,7 +12452,12 @@
     "adm.variantSuggestApply": "Aplicar",
     "adm.variantSuggestNone": "Nenhuma variante nova encontrada.",
     "adm.sortGroup": "Ordenar as entradas deste cabeçalho",
-    "adm.sortGroupTitle": "Ordenar as entradas deste cabeçalho por"
+    "adm.sortGroupTitle": "Ordenar as entradas deste cabeçalho por",
+    "tile.genAllTitle": "Gerar imagens IA para a categoria",
+    "tile.genAllMissing": "Apenas imagens em falta ({n})",
+    "tile.genAllEverything": "Regenerar todos os produtos ({n})",
+    "tile.genAllHint": "Detalhes adicionais (opcional)",
+    "tile.genAllStart": "Gerar"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13648,7 +13698,12 @@
     "adm.variantSuggestApply": "Aplicar",
     "adm.variantSuggestNone": "Nenhuma variante nova encontrada.",
     "adm.sortGroup": "Ordenar as entradas deste cabeçalho",
-    "adm.sortGroupTitle": "Ordenar as entradas deste cabeçalho por"
+    "adm.sortGroupTitle": "Ordenar as entradas deste cabeçalho por",
+    "tile.genAllTitle": "Gerar imagens IA para a categoria",
+    "tile.genAllMissing": "Apenas imagens em falta ({n})",
+    "tile.genAllEverything": "Regenerar todos os produtos ({n})",
+    "tile.genAllHint": "Detalhes adicionais (opcional)",
+    "tile.genAllStart": "Gerar"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14889,7 +14944,12 @@
     "adm.variantSuggestApply": "Overnemen",
     "adm.variantSuggestNone": "Geen nieuwe varianten gevonden.",
     "adm.sortGroup": "Items onder deze kop sorteren",
-    "adm.sortGroupTitle": "Items onder deze kop sorteren op"
+    "adm.sortGroupTitle": "Items onder deze kop sorteren op",
+    "tile.genAllTitle": "AI-afbeeldingen voor categorie maken",
+    "tile.genAllMissing": "Alleen ontbrekende afbeeldingen ({n})",
+    "tile.genAllEverything": "Alle producten opnieuw maken ({n})",
+    "tile.genAllHint": "Aanvullende details (optioneel)",
+    "tile.genAllStart": "Maken"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16130,7 +16190,12 @@
     "adm.variantSuggestApply": "Overnemen",
     "adm.variantSuggestNone": "Geen nieuwe varianten gevonden.",
     "adm.sortGroup": "Items onder deze kop sorteren",
-    "adm.sortGroupTitle": "Items onder deze kop sorteren op"
+    "adm.sortGroupTitle": "Items onder deze kop sorteren op",
+    "tile.genAllTitle": "AI-afbeeldingen voor categorie maken",
+    "tile.genAllMissing": "Alleen ontbrekende afbeeldingen ({n})",
+    "tile.genAllEverything": "Alle producten opnieuw maken ({n})",
+    "tile.genAllHint": "Aanvullende details (optioneel)",
+    "tile.genAllStart": "Maken"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16832,7 +16897,12 @@
     "adm.variantSuggestApply": "Übernehmen",
     "adm.variantSuggestNone": "Keine neuen Varianten gefunden.",
     "adm.sortGroup": "Einträge dieser Überschrift sortieren",
-    "adm.sortGroupTitle": "Einträge dieser Überschrift sortieren nach"
+    "adm.sortGroupTitle": "Einträge dieser Überschrift sortieren nach",
+    "tile.genAllTitle": "KI-Bilder für Kategorie erzeugen",
+    "tile.genAllMissing": "Nur fehlende Bilder ({n})",
+    "tile.genAllEverything": "Alle Produkte neu erzeugen ({n})",
+    "tile.genAllHint": "Ergänzende Angaben (optional)",
+    "tile.genAllStart": "Erzeugen"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17534,6 +17604,11 @@
     "adm.variantSuggestApply": "Übernehmen",
     "adm.variantSuggestNone": "Keine neuen Varianten gefunden.",
     "adm.sortGroup": "Einträge dieser Überschrift sortieren",
-    "adm.sortGroupTitle": "Einträge dieser Überschrift sortieren nach"
+    "adm.sortGroupTitle": "Einträge dieser Überschrift sortieren nach",
+    "tile.genAllTitle": "KI-Bilder für Kategorie erzeugen",
+    "tile.genAllMissing": "Nur fehlende Bilder ({n})",
+    "tile.genAllEverything": "Alle Produkte neu erzeugen ({n})",
+    "tile.genAllHint": "Ergänzende Angaben (optional)",
+    "tile.genAllStart": "Erzeugen"
   }
 }
