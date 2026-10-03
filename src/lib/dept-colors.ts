@@ -29,6 +29,17 @@ const ROOT_COLORS: Record<string, string> = {
   "Party-Artikel": "var(--cat-party)",
 };
 
+/** Wurzelkategorien ohne Lebensmittel — Ernährungs- und Länderküchenfilter greifen dort nicht. */
+export const NON_FOOD_ROOTS: ReadonlySet<string> = new Set([
+  "Körperpflege", "Haushalt", "Tierbedarf", "Apotheke & Drogerie", "Büroartikel",
+  "Autozubehör", "Elektronik", "Kleidung & Textilien", "Küchenutensilien", "Tabak & Dampfen",
+]);
+
+/** Prüft anhand des deutschen Basisnamens, ob eine Wurzelkategorie Non-Food ist. */
+export function isNonFoodRootName(name: string): boolean {
+  return NON_FOOD_ROOTS.has(name);
+}
+
 /** Wurzelkategorie einer Kategorie ermitteln (steigt den parentId-Baum hinauf). */
 export function rootOf(
   department: CatalogDepartment,
