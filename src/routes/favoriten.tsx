@@ -127,6 +127,21 @@ function FavoritesPage() {
     return current ?? null;
   };
 
+  /** Gespeicherte Kategorie (auch Alias) vor der aktuellen Gerätepräferenz berücksichtigen. */
+  const groupOfRow = (row: FavRow): CatalogDepartment | undefined => {
+    const p = row.product;
+    if (!p.departmentId) return undefined;
+    const ids = departmentIdsOf(p, data.productAliases ?? []);
+    const lbl = row.favorite.groupLabel;
+    if (lbl) for (const id of ids) {
+      const d = deptById.get(id);
+      if (d && (d.name === lbl || d.baseName === lbl || Object.values(d.names).includes(lbl))) return d;
+    }
+    const pref = preferredDept[p.id];
+    if (pref && ids.includes(pref) && deptById.get(pref)) return deptById.get(pref);
+    return deptById.get(p.departmentId);
+  };
+
   /** Gruppierte Favoriten je Hauptabteilung + Favoriten ohne Katalogprodukt. */
   const { entriesByRoot, looseFavorites } = useMemo(() => {
     const byRoot = new Map<string, FavEntry[]>();
@@ -138,7 +153,7 @@ function FavoritesPage() {
         loose.push(row);
         continue;
       }
-      const leaf = deptById.get(product.departmentId) ?? null;
+      const leaf = groupOfRow(row) ?? null;
       const root = leaf ? rootOf(leaf) : null;
       if (!root) {
         loose.push(row);
@@ -150,7 +165,7 @@ function FavoritesPage() {
     }
     return { entriesByRoot: byRoot, looseFavorites: loose };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [favorites, deptById, productById, departments]);
+  }, [favorites, deptById, productById, departments, data.productAliases, preferredDept]);
 
   /** Sortierung innerhalb einer Kategorie analog zur Abteilungsansicht:
    *  zuerst nach Kategorie (sortOrder), dann nach Produkt (sortOrder). */
@@ -235,21 +250,6 @@ function FavoritesPage() {
   const categoryLabel = (product: CatalogProduct, fallback: string | undefined): string => {
     const leaf = product.departmentId ? deptById.get(product.departmentId) : undefined;
     return leaf?.name ?? fallback ?? "";
-  };
-
-  /** Listen-Kategorie eines Favoriten: gespeicherte Alias-Kategorie, sonst bevorzugte, sonst Original. */
-  const groupOfRow = (row: FavRow): CatalogDepartment | undefined => {
-    const p = row.product;
-    if (!p.departmentId) return undefined;
-    const ids = departmentIdsOf(p, data.productAliases ?? []);
-    const lbl = row.favorite.groupLabel;
-    if (lbl) for (const id of ids.slice(1)) {
-      const d = deptById.get(id);
-      if (d && (d.name === lbl || d.baseName === lbl || Object.values(d.names).includes(lbl))) return d;
-    }
-    const pref = preferredDept[p.id];
-    if (pref && ids.includes(pref) && deptById.get(pref)) return deptById.get(pref);
-    return deptById.get(p.departmentId);
   };
 
   const quickAdd = (row: FavRow) => {
