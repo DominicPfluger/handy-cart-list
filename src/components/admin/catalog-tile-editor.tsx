@@ -439,6 +439,20 @@ export function CatalogTileEditor(p: {
           <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>{T("adm.clearSelection")}</Button>
         </div>
       )}
+      {p.cur && p.products.length > 0 && (
+        <label className="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm font-medium text-foreground">
+          <input
+            ref={(el) => { if (allSelRef.current !== el) { allSelRef.current = el; if (el) el.indeterminate = !allSelected && selected.size > 0; } }}
+            type="checkbox"
+            checked={allSelected}
+            onChange={() => setSelected(allSelected ? new Set() : new Set(p.products.map((x) => x.id)))}
+            className="h-4 w-4 shrink-0 accent-primary"
+            aria-label={T("adm.selectAll")}
+          />
+          {T("adm.selectAll")}
+        </label>
+      )}
+
       {p.cur && (
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
           {p.products.map((x, i) => {
