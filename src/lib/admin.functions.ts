@@ -763,8 +763,14 @@ export const mergeProducts = createServerFn({ method: "POST" })
 
 type BackupGroup = { table: string; filterColumn: string; filterIds: string[]; rows: Record<string, unknown>[] };
 type BackupPayload = { deletes?: BackupGroup[]; created?: { table: string; ids: string[] }[] };
-/** Tabellenname kommt dynamisch aus den Sicherungsdaten — daher der Cast. */
-const table = (sb: { from: (t: string) => unknown }, name: string) => sb.from(name);
+type LooseResult = { data: Record<string, unknown>[] | null; error: { message: string } | null };
+/** Dynamische Tabellennamen (Sicherungsdaten) entgehen so der strikten Typprüfung. */
+type LooseTable = {
+  select(c: string): { in(c: string, v: string[]): PromiseLike<LooseResult> };
+  delete(): { in(c: string, v: string[]): PromiseLike<LooseResult> };
+  insert(rows: Record<string, unknown>[]): PromiseLike<LooseResult>;
+};
+const loose = (sb: { from(t: string): unknown }) => sb as unknown as { from(t: string): LooseTable };
 
 /** Vor einer Massenlöschung die betroffenen Zeilen sichern (null = nichts zu löschen). */
 export const createBulkBackup = createServerFn({ method: "POST" })
@@ -784,14 +790,14 @@ export const createBulkBackup = createServerFn({ method: "POST" })
     const sb = context.supabase;
     const deletes: BackupGroup[] = [];
     for (const g of data.deletes) {
-      const { data: rows, error } = await sb.from(g.table).select("*").in(g.filterColumn, g.filterIds);
+      const { data: rows, error } = await loose(sb).from(g.table).select("*").in(g.filterColumn, g.filterIds);
       if (error) throw new Error(error.message);
       if (rows?.length) deletes.push({ table: g.table, filterColumn: g.filterColumn, filterIds: g.filterIds, rows });
     }
     if (!deletes.length) return null;
     const { data: row, error } = await sb
       .from("admin_backups")
-      .insert({ user_id: context.userId, label: data.label, payload: { deletes } })
+      .insert({ user_id: context.userId, label: data.label, payload: { deletes } as never })
       .select("id")
       .single();
     if (error) throw new Error(error.message);
@@ -811,14 +817,14 @@ export const undoBulkBackup = createServerFn({ method: "POST" })
     // Neu angelegte Einträge entfernen (Produkte inkl. ihrer Übersetzungen)
     for (const c of payload.created ?? []) {
       if (c.table === "products") await sb.from("catalog_translations").delete().in("entity_id", c.ids);
-      const { error: e } = await sb.from(c.table).delete().in("id", c.ids);
+      const { error: e } = await loose(sb).from(c.table).delete().in("id", c.ids);
       if (e) throw new Error(e.message);
     }
     // Gelöschte Originalzeilen wiederherstellen
     for (const g of payload.deletes ?? []) {
       if (!g.rows?.length) continue;
-      await sb.from(g.table).delete().in(g.filterColumn, g.filterIds);
-      const { error: e } = await sb.from(g.table).insert(g.rows);
+      await loose(sb).from(g.table).delete().in(g.filterColumn, g.filterIds);
+      const { error: e } = await loose(sb).from(g.table).insert(g.rows);
       if (e) throw new Error(e.message);
     }
     const { error: delErr } = await sb.from("admin_backups").delete().eq("id", data.id);

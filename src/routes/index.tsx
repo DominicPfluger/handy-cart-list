@@ -197,7 +197,7 @@ function ListPage() {
   const estimate = useMemo(() => items.reduce((acc, item) => {
     const product = item.productId ? productById.get(item.productId) : undefined;
     const ref = item.productId ? referencePrices?.get(item.productId) : undefined;
-    const amount = product && ref ? priceForItem(item, product, Number(ref.price)) : null;
+    const amount = product && ref ? priceForItem({ quantity: item.quantity, unit: item.unit ?? "" }, product, Number(ref.price)) : null;
     if (amount === null) acc.missing += 1;
     else acc.value += amount;
     return acc;
@@ -223,7 +223,7 @@ function ListPage() {
         quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : "",
         checked: i.checked,
         emoji: i.emoji || product?.emoji || "🛒",
-        color: color ?? undefined,
+        ...(color ? { color } : {}),
       };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
