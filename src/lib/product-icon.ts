@@ -71,6 +71,15 @@ export async function saveCustomIcon(kind: IconKind, id: string, source: Blob): 
   return path;
 }
 
+/** Saves an existing catalog image (preview image or picker selection) as the custom icon. */
+export async function saveCustomIconFromPath(kind: IconKind, id: string, path: string): Promise<void> {
+  const { data, error } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
+  if (error || !data?.signedUrl) throw error ?? new Error("Bild nicht verfügbar");
+  const response = await fetch(data.signedUrl);
+  if (!response.ok) throw new Error(`Bild konnte nicht geladen werden (${response.status})`);
+  await saveCustomIcon(kind, id, await response.blob());
+}
+
 /** Removes a custom icon; products fall back to the auto icon of their preview image. */
 export async function clearCustomIcon(kind: IconKind, id: string): Promise<void> {
   const { data, error } = await supabase.from(iconTable(kind)).select("image_path").eq("id", id).single();

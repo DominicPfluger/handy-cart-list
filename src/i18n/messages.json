@@ -1197,7 +1197,10 @@
     "adm.copyListTitle": "List “{name}”",
     "adm.iconImage": "Icon (small)",
     "adm.previewImage": "Preview image (large)",
-    "adm.iconAutoHint": "Created automatically from the preview image"
+    "adm.iconAutoHint": "Created automatically from the preview image",
+    "adm.iconUseImage": "Use same image for both",
+    "adm.iconPick": "Choose image",
+    "adm.iconAi": "AI image"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2397,7 +2400,10 @@
     "adm.copyListTitle": "List “{name}”",
     "adm.iconImage": "Icon (small)",
     "adm.previewImage": "Preview image (large)",
-    "adm.iconAutoHint": "Created automatically from the preview image"
+    "adm.iconAutoHint": "Created automatically from the preview image",
+    "adm.iconUseImage": "Use same image for both",
+    "adm.iconPick": "Choose image",
+    "adm.iconAi": "AI image"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3597,7 +3603,10 @@
     "adm.copyListTitle": "List “{name}”",
     "adm.iconImage": "Icon (small)",
     "adm.previewImage": "Preview image (large)",
-    "adm.iconAutoHint": "Created automatically from the preview image"
+    "adm.iconAutoHint": "Created automatically from the preview image",
+    "adm.iconUseImage": "Use same image for both",
+    "adm.iconPick": "Choose image",
+    "adm.iconAi": "AI image"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4797,7 +4806,10 @@
     "adm.copyListTitle": "Lista «{name}»",
     "adm.iconImage": "Icono (pequeño)",
     "adm.previewImage": "Imagen de vista previa (grande)",
-    "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa"
+    "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa",
+    "adm.iconUseImage": "Usar la misma imagen",
+    "adm.iconPick": "Elegir imagen",
+    "adm.iconAi": "Imagen con IA"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5997,7 +6009,10 @@
     "adm.copyListTitle": "Lista «{name}»",
     "adm.iconImage": "Icono (pequeño)",
     "adm.previewImage": "Imagen de vista previa (grande)",
-    "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa"
+    "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa",
+    "adm.iconUseImage": "Usar la misma imagen",
+    "adm.iconPick": "Elegir imagen",
+    "adm.iconAi": "Imagen con IA"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7197,7 +7212,10 @@
     "adm.copyListTitle": "Liste « {name} »",
     "adm.iconImage": "Icône (petite)",
     "adm.previewImage": "Image d’aperçu (grande)",
-    "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu"
+    "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu",
+    "adm.iconUseImage": "Même image pour les deux",
+    "adm.iconPick": "Choisir une image",
+    "adm.iconAi": "Image par IA"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8397,7 +8415,10 @@
     "adm.copyListTitle": "Liste « {name} »",
     "adm.iconImage": "Icône (petite)",
     "adm.previewImage": "Image d’aperçu (grande)",
-    "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu"
+    "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu",
+    "adm.iconUseImage": "Même image pour les deux",
+    "adm.iconPick": "Choisir une image",
+    "adm.iconAi": "Image par IA"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9597,7 +9618,10 @@
     "adm.copyListTitle": "Lista «{name}»",
     "adm.iconImage": "Icona (piccola)",
     "adm.previewImage": "Immagine di anteprima (grande)",
-    "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima"
+    "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima",
+    "adm.iconUseImage": "Stessa immagine per entrambi",
+    "adm.iconPick": "Scegli immagine",
+    "adm.iconAi": "Immagine IA"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10797,7 +10821,10 @@
     "adm.copyListTitle": "Lista «{name}»",
     "adm.iconImage": "Icona (piccola)",
     "adm.previewImage": "Immagine di anteprima (grande)",
-    "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima"
+    "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima",
+    "adm.iconUseImage": "Stessa immagine per entrambi",
+    "adm.iconPick": "Scegli immagine",
+    "adm.iconAi": "Immagine IA"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11997,7 +12024,10 @@
     "adm.copyListTitle": "Lista «{name}»",
     "adm.iconImage": "Ícone (pequeno)",
     "adm.previewImage": "Imagem de pré-visualização (grande)",
-    "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização"
+    "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização",
+    "adm.iconUseImage": "Mesma imagem para ambos",
+    "adm.iconPick": "Escolher imagem",
+    "adm.iconAi": "Imagem de IA"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13197,7 +13227,10 @@
     "adm.copyListTitle": "Lista «{name}»",
     "adm.iconImage": "Ícone (pequeno)",
     "adm.previewImage": "Imagem de pré-visualização (grande)",
-    "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização"
+    "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização",
+    "adm.iconUseImage": "Mesma imagem para ambos",
+    "adm.iconPick": "Escolher imagem",
+    "adm.iconAi": "Imagem de IA"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14397,7 +14430,10 @@
     "adm.copyListTitle": "Lijst “{name}”",
     "adm.iconImage": "Pictogram (klein)",
     "adm.previewImage": "Voorbeeldafbeelding (groot)",
-    "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding"
+    "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding",
+    "adm.iconUseImage": "Beide afbeeldingen gelijk",
+    "adm.iconPick": "Afbeelding kiezen",
+    "adm.iconAi": "AI-afbeelding"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15597,7 +15633,10 @@
     "adm.copyListTitle": "Lijst “{name}”",
     "adm.iconImage": "Pictogram (klein)",
     "adm.previewImage": "Voorbeeldafbeelding (groot)",
-    "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding"
+    "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding",
+    "adm.iconUseImage": "Beide afbeeldingen gelijk",
+    "adm.iconPick": "Afbeelding kiezen",
+    "adm.iconAi": "AI-afbeelding"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16258,7 +16297,10 @@
     "unitS.artikel": "Art.",
     "adm.iconImage": "Icon (klein)",
     "adm.previewImage": "Vorschaubild (gross)",
-    "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt"
+    "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt",
+    "adm.iconUseImage": "Beide Bilder gleich",
+    "adm.iconPick": "Bild auswählen",
+    "adm.iconAi": "KI-Bild"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16919,6 +16961,9 @@
     "unitS.artikel": "Art.",
     "adm.iconImage": "Icon (klein)",
     "adm.previewImage": "Vorschaubild (gross)",
-    "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt"
+    "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt",
+    "adm.iconUseImage": "Beide Bilder gleich",
+    "adm.iconPick": "Bild auswählen",
+    "adm.iconAi": "KI-Bild"
   }
 }
