@@ -32,6 +32,13 @@ export async function makeProductIcon(source: Blob): Promise<Blob> {
 
 /** Commits the icon after upload; an old icon is hidden first to avoid displaying stale imagery. */
 export async function saveProductIcon(productId: string, source: Blob, imagePath: string): Promise<void> {
+  const { data: cur } = await supabase.from("products").select("icon_custom").eq("id", productId).single();
+  if (cur?.icon_custom) {
+    const { error } = await supabase.from("products").update({ image_path: imagePath }).eq("id", productId);
+    if (error) throw error;
+    await forgetCatalogImage(imagePath);
+    return;
+  }
   const { error: clearError } = await supabase.from("products").update({ icon_path: null }).eq("id", productId);
   if (clearError) throw clearError;
   const icon = await makeProductIcon(source);
@@ -49,4 +56,26 @@ export async function saveProductIconFromPath(productId: string, path: string): 
   const response = await fetch(data.signedUrl);
   if (!response.ok) throw new Error(`Bild konnte nicht geladen werden (${response.status})`);
   await saveProductIcon(productId, await response.blob(), path);
+}
+type IconKind = "product" | "department";
+const iconTable = (k: IconKind) => (k === "product" ? "products" : "departments");
+
+/** Separately uploaded icon; never overwritten by later preview images. */
+export async function saveCustomIcon(kind: IconKind, id: string, source: Blob): Promise<string> {
+  const icon = await makeProductIcon(source);
+  const path = `${kind}-icons/${id}-${crypto.randomUUID()}.webp`;
+  const { error: uploadError } = await supabase.storage.from("catalog-images").upload(path, icon, { contentType: "image/webp" });
+  if (uploadError) throw uploadError;
+  const { error } = await supabase.from(iconTable(kind)).update({ icon_path: path, icon_custom: true }).eq("id", id);
+  if (error) throw error;
+  return path;
+}
+
+/** Removes a custom icon; products fall back to the auto icon of their preview image. */
+export async function clearCustomIcon(kind: IconKind, id: string): Promise<void> {
+  const { data, error } = await supabase.from(iconTable(kind)).select("image_path").eq("id", id).single();
+  if (error) throw error;
+  const { error: e2 } = await supabase.from(iconTable(kind)).update({ icon_path: null, icon_custom: false }).eq("id", id);
+  if (e2) throw e2;
+  if (kind === "product" && data?.image_path) await saveProductIconFromPath(id, data.image_path);
 }

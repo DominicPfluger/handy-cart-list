@@ -10,6 +10,8 @@ export interface CatalogDepartment {
   /** Pfad im Bild-Speicher; signierte Adresse via getCatalogImageUrls */
   imagePath?: string | null;
   imageUrl: string | null;
+  iconPath?: string | null;
+  iconUrl?: string | null;
   sortOrder: number;
   /** Deutscher Ausgangsname */
   baseName: string;
@@ -172,12 +174,12 @@ function publicClient() {
 export const getCatalogImageUrls = createServerFn({ method: "GET" }).handler(async (): Promise<Record<string, string>> => {
   const supabase = publicClient();
   const [deptRes, prodRes, varRes] = await Promise.all([
-    supabase.from("departments").select("image_path").not("image_path", "is", null),
+    supabase.from("departments").select("image_path, icon_path").or("image_path.not.is.null,icon_path.not.is.null"),
     supabase.from("products").select("image_path, icon_path").or("image_path.not.is.null,icon_path.not.is.null"),
     supabase.from("product_variant_images").select("image_path, icon_path"),
   ]);
   const paths = [
-    ...((deptRes.data ?? []) as Array<{ image_path: string | null }>).map((r) => r.image_path),
+    ...((deptRes.data ?? []) as Array<{ image_path: string | null; icon_path: string | null }>).flatMap((r) => [r.image_path, r.icon_path]),
     ...((prodRes.data ?? []) as Array<{ image_path: string | null; icon_path: string | null }>).flatMap((r) => [r.image_path, r.icon_path]),
     ...((varRes.data ?? []) as Array<{ image_path: string | null; icon_path: string | null }>).flatMap((r) => [r.image_path, r.icon_path]),
   ].filter((p): p is string => Boolean(p));
@@ -222,7 +224,7 @@ export const getCatalog = createServerFn({ method: "GET" })
   const [deptRes, prodRes, headRes, trRes, cuiRes, pcRes, brRes, riRes, rgRes, daRes, paRes, exRes, moRes, vtRes, rtRes, rsRes, rpRes] = await Promise.all([
     supabase
       .from("departments")
-      .select("id, parent_id, name, emoji, color, image_path, sort_order")
+      .select("id, parent_id, name, emoji, color, image_path, icon_path, sort_order")
       .order("sort_order", { ascending: true }),
     fetchAll(
       "products",
@@ -302,6 +304,8 @@ export const getCatalog = createServerFn({ method: "GET" })
       color: (r["color"] as string | null) ?? null,
       imagePath: (r["image_path"] as string | null) ?? null,
       imageUrl: null,
+      iconPath: (r["icon_path"] as string | null) ?? null,
+      iconUrl: null,
       sortOrder: (r["sort_order"] as number) ?? 0,
       baseName: r["name"] as string,
       names: names.get(r["id"] as string) ?? {},

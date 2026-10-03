@@ -69,7 +69,7 @@ export function useCatalog(): Catalog {
       sortOrder: 10000 + i, baseName: p.name, names: {},
     }));
     return {
-      departments: [...data.departments, ...ownDepts].map((d) => ({ ...d, imageUrl: img(d.imagePath), name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
+      departments: [...data.departments, ...ownDepts].map((d) => ({ ...d, imageUrl: img(d.imagePath), iconUrl: img(d.iconPath), name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
       products: [...data.products.filter((p) => allMarkets || inMarket(p, market)), ...ownProducts].map((p) => {
         const name = custom[p.id] ?? pickName(p.names, locale, p.baseName);
         const foreign = p.markets?.length && !p.markets.includes(market);

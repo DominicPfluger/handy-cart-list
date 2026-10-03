@@ -63,7 +63,7 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
-  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl} imagePath={department.imagePath} />;
+  return <DepartmentIcon emoji={department.emoji} imageUrl={department.iconUrl ?? department.imageUrl} imagePath={department.iconPath ?? department.imagePath} />;
 }
 
 function DepartmentsPage() {
@@ -547,6 +547,12 @@ function DepartmentsPage() {
         </nav>
       )}
 
+      {!normalizedQuery && current?.iconPath && current.imagePath && (
+        <div className="flex h-36 items-center justify-center overflow-hidden rounded-2xl bg-muted">
+          <DepartmentIcon emoji={current.emoji} imageUrl={current.imageUrl} imagePath={current.imagePath} className="h-full w-full object-cover" />
+        </div>
+      )}
+
       {!normalizedQuery && childDepartments.length > 0 && (
         <section>
           <div className="mb-3 flex items-end justify-between">
@@ -717,6 +723,11 @@ function DepartmentsPage() {
                 </div>
                 {expandedId === product.id && product.variants.length > 0 && (
                   <div className="border-t border-dashed border-border bg-muted/30 py-1 pl-8 pr-2.5">
+                    {product.imagePath && (
+                      <div className="my-1.5 flex h-40 items-center justify-center overflow-hidden rounded-xl bg-background">
+                        <DepartmentIcon emoji={product.emoji} imageUrl={product.imageUrl} imagePath={product.imagePath} className="h-full w-full object-contain" />
+                      </div>
+                    )}
                     {product.variants.map((v) => {
                       const vi = product.variantImages?.[v];
                       const vName = variantLabel(product, v);
