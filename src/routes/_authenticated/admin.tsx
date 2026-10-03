@@ -1,3 +1,4 @@
+import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -987,6 +988,7 @@ function Editor(p: {
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
                       <span className="truncate">{v}</span>
                     </span>
+                    {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} variant={v} />}
                     <button
                       type="button"
                       aria-label={`${v} entfernen`}

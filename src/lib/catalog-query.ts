@@ -77,6 +77,9 @@ export function useCatalog(): Catalog {
           ...p,
           imageUrl: img(p.imagePath),
           iconUrl: img(p.iconPath),
+          variantImages: p.variantImages
+            ? Object.fromEntries(Object.entries(p.variantImages).map(([v, x]) => [v, { ...x, imageUrl: img(x.imagePath), iconUrl: img(x.iconPath) }]))
+            : {},
           sortOrder: p.marketOrder?.[market] ?? p.sortOrder,
           name: foreign ? `${name} ${p.markets!.map(flagOf).join("")}` : name,
         };

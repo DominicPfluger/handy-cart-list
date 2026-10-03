@@ -407,20 +407,23 @@ function DepartmentsPage() {
     return () => window.removeEventListener("shoppi:abteilungen-reset", reset);
   }, []);
 
-  const quickAdd = (product: CatalogProduct, group: CatalogDepartment | null) => {
+  const quickAdd = (product: CatalogProduct, group: CatalogDepartment | null, variant?: string) => {
+    const name = variant ? `${product.name} · ${variantLabel(product, variant)}` : product.name;
+    const vi = variant ? product.variantImages?.[variant] : undefined;
     addCatalogItem({
       productId: product.id,
-      name: product.name,
+      name,
       quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
       unit: product.defaultUnit,
       organic: false,
       emoji: product.emoji,
-      imageUrl: product.imageUrl,
+      imageUrl: vi?.imageUrl ?? product.imageUrl,
       groupLabel: group?.name,
       groupEmoji: group?.emoji ?? undefined,
     });
-    toast.success(t("common.addedToList", { name: product.name }));
+    toast.success(t("common.addedToList", { name }));
   };
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   /** Gesprochene Zutaten im Katalog finden und hinzufügen. */
   const handleVoiceResult = (text: string) => {
@@ -644,7 +647,12 @@ function DepartmentsPage() {
                     onPointerUp={draggable ? cancelPress : undefined}
                     onPointerLeave={draggable ? cancelPress : undefined}
                     onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
-                    onClick={() => { if (!suppressClick.current) navigate({ to: "/produkt/$id", params: { id: product.id } }); }}
+                    aria-expanded={product.variants.length > 0 ? expandedId === product.id : undefined}
+                    onClick={() => {
+                      if (suppressClick.current) return;
+                      if (product.variants.length > 0) setExpandedId((id) => (id === product.id ? null : product.id));
+                      else navigate({ to: "/produkt/$id", params: { id: product.id } });
+                    }}
                     className={`grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25 ${draggable ? "cursor-grab touch-none" : "cursor-pointer"}`}
                   >
                     <ProductThumb product={product} />
@@ -653,6 +661,11 @@ function DepartmentsPage() {
                     <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} className="inline-flex text-left text-sm font-semibold text-foreground">
                       <span>{product.name}</span>
                     </button>
+                    {product.variants.length > 0 && (
+                      <button type="button" onClick={() => setExpandedId((id) => (id === product.id ? null : product.id))} aria-expanded={expandedId === product.id} aria-label={t("dept.variants", { count: product.variants.length })} className="ml-1.5 text-xs text-primary">
+                        {t("dept.variants", { count: product.variants.length })} {expandedId === product.id ? "▴" : "▾"}
+                      </button>
+                    )}
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
@@ -701,6 +714,27 @@ function DepartmentsPage() {
                   <span aria-hidden className="w-1.5 shrink-0" />
                   </div>
                 </div>
+                {expandedId === product.id && product.variants.length > 0 && (
+                  <div className="border-t border-dashed border-border bg-muted/30 py-1 pl-8 pr-2.5">
+                    {product.variants.map((v) => {
+                      const vi = product.variantImages?.[v];
+                      return (
+                        <div key={v} className="flex items-center gap-2.5 py-1.5">
+                          <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-primary-soft/25">
+                            <ProductIcon emoji={product.emoji} iconUrl={vi?.iconUrl ?? vi?.imageUrl ?? product.iconUrl} iconPath={vi?.iconPath ?? vi?.imagePath ?? product.iconPath} symbolClassName="text-2xl" />
+                          </div>
+                          <span className="min-w-0 flex-1 truncate text-sm text-foreground">{variantLabel(product, v)}</span>
+                          <Button type="button" variant="ghost" size="icon" aria-label={t("common.quickAdd", { name: `${product.name} · ${variantLabel(product, v)}` })} onClick={() => quickAdd(product, group, v)} className="h-8 w-8 rounded-full text-primary">
+                            <PlusIcon className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      );
+                    })}
+                    <button type="button" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="py-1.5 text-xs font-medium text-primary">
+                      {t("dept.details")} →
+                    </button>
+                  </div>
+                )}
                 </Fragment>
               );
             })}
