@@ -1176,7 +1176,11 @@
     "adm.selectRow": "Select row",
     "adm.bulkSelected": "{n} selected",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Cuisines"
+    "adm.tab.cuisines": "Cuisines",
+    "adm.posLabel": "Position",
+    "adm.posEnd": "At the end of the list",
+    "adm.posTop": "At the very top",
+    "adm.posUnder": "Under “{name}”"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2355,7 +2359,11 @@
     "adm.selectRow": "Select row",
     "adm.bulkSelected": "{n} selected",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Cuisines"
+    "adm.tab.cuisines": "Cuisines",
+    "adm.posLabel": "Position",
+    "adm.posEnd": "At the end of the list",
+    "adm.posTop": "At the very top",
+    "adm.posUnder": "Under “{name}”"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3534,7 +3542,11 @@
     "adm.selectRow": "Select row",
     "adm.bulkSelected": "{n} selected",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Cuisines"
+    "adm.tab.cuisines": "Cuisines",
+    "adm.posLabel": "Position",
+    "adm.posEnd": "At the end of the list",
+    "adm.posTop": "At the very top",
+    "adm.posUnder": "Under “{name}”"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4713,7 +4725,11 @@
     "adm.selectRow": "Seleccionar fila",
     "adm.bulkSelected": "{n} seleccionados",
     "rk.tasteMax": "máx. {n}",
-    "adm.tab.cuisines": "Cocinas del mundo"
+    "adm.tab.cuisines": "Cocinas del mundo",
+    "adm.posLabel": "Posición",
+    "adm.posEnd": "Al final de la lista",
+    "adm.posTop": "Al principio",
+    "adm.posUnder": "Debajo de «{name}»"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5892,7 +5908,11 @@
     "adm.selectRow": "Seleccionar fila",
     "adm.bulkSelected": "{n} seleccionados",
     "rk.tasteMax": "máx. {n}",
-    "adm.tab.cuisines": "Cocinas del mundo"
+    "adm.tab.cuisines": "Cocinas del mundo",
+    "adm.posLabel": "Posición",
+    "adm.posEnd": "Al final de la lista",
+    "adm.posTop": "Al principio",
+    "adm.posUnder": "Debajo de «{name}»"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7071,7 +7091,11 @@
     "adm.selectRow": "Sélectionner la ligne",
     "adm.bulkSelected": "{n} sélectionnés",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Cuisines du monde"
+    "adm.tab.cuisines": "Cuisines du monde",
+    "adm.posLabel": "Position",
+    "adm.posEnd": "À la fin de la liste",
+    "adm.posTop": "Tout en haut",
+    "adm.posUnder": "Sous « {name} »"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8250,7 +8274,11 @@
     "adm.selectRow": "Sélectionner la ligne",
     "adm.bulkSelected": "{n} sélectionnés",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Cuisines du monde"
+    "adm.tab.cuisines": "Cuisines du monde",
+    "adm.posLabel": "Position",
+    "adm.posEnd": "À la fin de la liste",
+    "adm.posTop": "Tout en haut",
+    "adm.posUnder": "Sous « {name} »"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9429,7 +9457,11 @@
     "adm.selectRow": "Seleziona riga",
     "adm.bulkSelected": "{n} selezionati",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Cucine del mondo"
+    "adm.tab.cuisines": "Cucine del mondo",
+    "adm.posLabel": "Posizione",
+    "adm.posEnd": "Alla fine della lista",
+    "adm.posTop": "All'inizio",
+    "adm.posUnder": "Sotto «{name}»"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10608,7 +10640,11 @@
     "adm.selectRow": "Seleziona riga",
     "adm.bulkSelected": "{n} selezionati",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Cucine del mondo"
+    "adm.tab.cuisines": "Cucine del mondo",
+    "adm.posLabel": "Posizione",
+    "adm.posEnd": "Alla fine della lista",
+    "adm.posTop": "All'inizio",
+    "adm.posUnder": "Sotto «{name}»"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11787,7 +11823,11 @@
     "adm.selectRow": "Selecionar linha",
     "adm.bulkSelected": "{n} selecionados",
     "rk.tasteMax": "máx. {n}",
-    "adm.tab.cuisines": "Cozinhas do mundo"
+    "adm.tab.cuisines": "Cozinhas do mundo",
+    "adm.posLabel": "Posição",
+    "adm.posEnd": "No fim da lista",
+    "adm.posTop": "No topo",
+    "adm.posUnder": "Debaixo de «{name}»"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12966,7 +13006,11 @@
     "adm.selectRow": "Selecionar linha",
     "adm.bulkSelected": "{n} selecionados",
     "rk.tasteMax": "máx. {n}",
-    "adm.tab.cuisines": "Cozinhas do mundo"
+    "adm.tab.cuisines": "Cozinhas do mundo",
+    "adm.posLabel": "Posição",
+    "adm.posEnd": "No final da lista",
+    "adm.posTop": "No topo",
+    "adm.posUnder": "Abaixo de «{name}»"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14145,7 +14189,11 @@
     "adm.selectRow": "Rij selecteren",
     "adm.bulkSelected": "{n} geselecteerd",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Wereldkeukens"
+    "adm.tab.cuisines": "Wereldkeukens",
+    "adm.posLabel": "Positie",
+    "adm.posEnd": "Onderaan de lijst",
+    "adm.posTop": "Helemaal bovenaan",
+    "adm.posUnder": "Onder „{name}“"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15324,7 +15372,11 @@
     "adm.selectRow": "Rij selecteren",
     "adm.bulkSelected": "{n} geselecteerd",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Wereldkeukens"
+    "adm.tab.cuisines": "Wereldkeukens",
+    "adm.posLabel": "Positie",
+    "adm.posEnd": "Onderaan de lijst",
+    "adm.posTop": "Helemaal bovenaan",
+    "adm.posUnder": "Onder „{name}“"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15964,7 +16016,11 @@
     "adm.selectRow": "Zeile auswählen",
     "adm.bulkSelected": "{n} ausgewählt",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Länderküchen"
+    "adm.tab.cuisines": "Länderküchen",
+    "adm.posLabel": "Position",
+    "adm.posEnd": "Am Ende der Liste",
+    "adm.posTop": "Ganz oben",
+    "adm.posUnder": "Unter „{name}“"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16604,6 +16660,10 @@
     "adm.selectRow": "Zeile auswählen",
     "adm.bulkSelected": "{n} ausgewählt",
     "rk.tasteMax": "max. {n}",
-    "adm.tab.cuisines": "Länderküchen"
+    "adm.tab.cuisines": "Länderküchen",
+    "adm.posLabel": "Position",
+    "adm.posEnd": "Am Ende der Liste",
+    "adm.posTop": "Ganz oben",
+    "adm.posUnder": "Unter „{name}“"
   }
 }

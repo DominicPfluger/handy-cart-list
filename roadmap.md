@@ -22,3 +22,4 @@
 - [x] Rezept-Admin: Vorlagen & Zutatenbereiche per Drag & Drop sortierbar, Pfeile entfernt (Browser-getestet)
 - Rezept-Admin: Mehrere Oberkategorien gleichzeitig per Zeilenumbruch anlegen; Bereich „Rezept-Kategorien" in „Zutaten-Kategorien" umbenannt (16 Sprachen); Browser-getestet
 - Listen-Verwaltung: Vorlagen per Drag & Drop sortierbar (Zieh-Griff wie bei Listen), Löschen-Knopf bleibt
+- Admin „Mehrere Produkte": Positions-Auswahl (Ende/oben/unter Überschrift) bei Abteilungen mit Überschriften
