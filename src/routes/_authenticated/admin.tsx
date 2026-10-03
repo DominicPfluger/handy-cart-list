@@ -23,6 +23,7 @@ import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
 import { signedCategoryImageUrl } from "@/lib/image-upload";
+import { isNonFoodRootName } from "@/lib/dept-colors";
 import { MarketAdmin, MarketAdminsManager } from "@/components/market-admin";
 import { useMarketCodes } from "@/hooks/use-markets";
 import { MarketsManager } from "@/components/admin/markets-manager";
@@ -949,6 +950,15 @@ function Editor(p: {
   const dept = sel.kind === "department" ? data.depts.find((x) => x.id === sel.id) : undefined;
   const prod = sel.kind === "product" ? data.prods.find((x) => x.id === sel.id) : undefined;
   const head = sel.kind === "heading" ? data.heads.find((x) => x.id === sel.id) : undefined;
+  // Non-Food-Produkte (Wurzelkategorie ohne Lebensmittel): Länderküchen-Auswahl ausblenden
+  const prodNonFood = (() => {
+    if (!prod) return false;
+    const byId = new Map(data.depts.map((x) => [x.id, x]));
+    let cur = byId.get(prod.department_id);
+    let guard = 0;
+    while (cur?.parent_id && guard++ < 20) cur = byId.get(cur.parent_id);
+    return cur ? isNonFoodRootName(cur.name) : false;
+  })();
   const [name, setName] = useState(p.name);
   const [emoji, setEmoji] = useState(dept?.emoji ?? prod?.emoji ?? "");
   const [parent, setParent] = useState(dept?.parent_id ?? prod?.department_id ?? "");
@@ -1134,7 +1144,7 @@ function Editor(p: {
         {dept && <DeptImageEditor deptId={dept.id} imagePath={dept.image_path} onChanged={p.onImageChanged} />}
         {dept && <DeptAliasEditor dept={dept} depts={data.depts} options={p.deptOptions} />}
         {prod && <ProductAliasEditor product={prod} prods={data.prods} options={p.deptOptions} />}
-        {prod && <ProductCuisinePicker productId={prod.id} />}
+        {prod && !prodNonFood && <ProductCuisinePicker productId={prod.id} />}
         {prod && <ProductSynonymEditor key={`syn-${prod.id}`} productId={prod.id} />}
         {prod && <ProductBrandEditor key={prod.id} productId={prod.id} productName={prod.name} path={data.depts.find((x) => x.id === prod.department_id)?.name ?? ""} />}
 

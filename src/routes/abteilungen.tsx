@@ -32,7 +32,7 @@ import {
 import { formatQuantity } from "../lib/units";
 import { getLocale, pickName, useT } from "../i18n";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
-import { deptColor, deptColorStrong, rootOf } from "../lib/dept-colors";
+import { deptColor, deptColorStrong, isNonFoodRootName, rootOf } from "../lib/dept-colors";
 import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog";
 import { VoiceInputButton } from "../components/voice-input";
 import { useIsAdmin } from "../hooks/use-is-admin";
@@ -95,11 +95,7 @@ function DepartmentsPage() {
   const departments = useMemo(() => orderedDepartments.filter((d) => !removedIds.has(d.id)), [orderedDepartments, removedIds]);
   const filterExemptDepartments = useMemo(() => {
     const byId = new Map(orderedDepartments.map((d) => [d.id, d]));
-    const exemptRoots = new Set([
-      "Körperpflege", "Haushalt", "Tierbedarf", "Apotheke & Drogerie", "Büroartikel",
-      "Autozubehör", "Elektronik", "Kleidung & Textilien", "Küchenutensilien", "Tabak & Dampfen",
-    ]);
-    return new Set(orderedDepartments.filter((d) => exemptRoots.has(rootOf(d, byId).baseName)).map((d) => d.id));
+    return new Set(orderedDepartments.filter((d) => isNonFoodRootName(rootOf(d, byId).baseName)).map((d) => d.id));
   }, [orderedDepartments]);
   const products = useMemo(
     () => orderedProducts.filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId) && (filterExemptDepartments.has(p.departmentId) || !diets.length || !p.excludedDiets.some((d) => (diets as string[]).includes(d)))),
