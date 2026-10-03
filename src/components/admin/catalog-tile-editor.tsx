@@ -1051,6 +1051,14 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </div>
           )}
         </div>
+        {!p.imageOnly && !isDept && !item && (
+          <label className="flex items-center gap-2 text-sm">
+            <span className="shrink-0 text-muted-foreground">{T("adm.category")}</span>
+            <select aria-label={T("adm.category")} value={newDept || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
+              {newDeptOpts.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+            </select>
+          </label>
+        )}
         {!p.imageOnly && <div className="flex gap-2">
           <Input aria-label={T("tile.emoji")} placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} className="h-11 w-16 rounded-xl text-center text-xl" />
           <Input aria-label={T("tile.name")} placeholder={T("tile.name")} value={name} onChange={(e) => setName(e.target.value)} className="h-11 flex-1 rounded-xl" />
