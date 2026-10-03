@@ -22,6 +22,7 @@
 - Variant favorites retain their composite favorite key while resolving the base catalog product for category, imagery, and list transfers. Why: keep variant identity without losing catalog placement.
 - Read-aloud: own language (default de-DE) + admin templates in `speech_texts`. Why: mother tongue regardless of UI.
 - Recipe folders nest via recipe_folders.parent_id (DB trigger blocks cycles); deleting a folder moves its recipes and subfolders up one level. Why: themed sorting without data loss.
+- Recipe cuisines are explicit, optional many-to-many recipe assignments, independent of the device-local ingredient cuisine filter. Why: shared recipe search must not infer cuisines from personal ingredient preferences.
 
 ## Landingpage
 - Erster Besuch auf `/` zeigt die Landingpage (`src/components/landing/landing-page.tsx`, Flag `shoppi:landing-seen` via `src/lib/landing.ts`); danach direkt die Einkaufsliste. Die Website-Variante liegt auf `/start` mit eigenem head(). Warum: öffentliche Seite unter der künftigen Domain, App-Entscheid bleibt geräte-lokal.

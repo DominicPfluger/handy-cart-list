@@ -1,20 +1,21 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useT } from "../i18n";
+import { pickName, useLocale, useT } from "../i18n";
 import { RECIPE_TRAITS, TRAIT_GROUPS, TASTE_MAX, splitTaste, toggleTaste, type TraitGroup } from "../lib/recipe-traits";
 import { fetchTraitRecipes } from "../lib/recipes-api";
 import { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
 import { ListCardBody, LIST_CARD_CLASS } from "../components/recipe-feed";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/rezepte/suchen")({
   ssr: false,
   head: () => ({
     meta: [
       { title: "Shoppi — Rezepte suchen" },
-      { name: "description", content: "Rezepte nach Sättigung, Schärfe und Preisklasse finden." },
+      { name: "description", content: "Rezepte nach Länderküche, Sättigung, Schärfe, Preisklasse, Geschmack und Schwierigkeit finden." },
       { property: "og:title", content: "Shoppi — Rezepte suchen" },
-      { property: "og:description", content: "Rezepte nach Sättigung, Schärfe und Preisklasse finden." },
+      { property: "og:description", content: "Rezepte nach Länderküche, Sättigung, Schärfe, Preisklasse, Geschmack und Schwierigkeit finden." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -29,7 +30,22 @@ const EMPTY_FILTERS: Filters = { satiety: null, spiciness: null, price_class: nu
 function RecipeSearchPage() {
   const { t } = useT();
   const templates = useRecipeTemplates();
+  const locale = useLocale();
+  const { data: cuisines = [] } = useQuery({
+    queryKey: ["recipe-search-cuisines", locale],
+    queryFn: async () => {
+      const [cuisinesRes, namesRes] = await Promise.all([
+        supabase.from("cuisines").select("id, name, emoji").order("sort_order"),
+        supabase.from("catalog_translations").select("entity_id, name").eq("entity_type", "cuisine").eq("locale", locale),
+      ]);
+      if (cuisinesRes.error) throw cuisinesRes.error;
+      if (namesRes.error) throw namesRes.error;
+      const names = new Map((namesRes.data ?? []).map((r) => [r.entity_id, r.name]));
+      return (cuisinesRes.data ?? []).map((c) => ({ ...c, name: pickName({ [locale]: names.get(c.id) ?? c.name }, locale, c.name) }));
+    },
+  });
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
+  const [cuisineIds, setCuisineIds] = useState<string[]>([]);
 
   const { data, isLoading } = useQuery({
     queryKey: ["recipe-trait-search"],
@@ -38,9 +54,9 @@ function RecipeSearchPage() {
   });
 
   const all = data ?? [];
-  const active = TRAIT_GROUPS.some((g) => filters[g]);
+  const active = cuisineIds.length > 0 || TRAIT_GROUPS.some((g) => filters[g]);
   const results = active
-    ? all.filter((r) => TRAIT_GROUPS.every((g) => {
+    ? all.filter((r) => (cuisineIds.length === 0 || r.recipe_cuisines.some((c) => cuisineIds.includes(c.cuisine_id))) && TRAIT_GROUPS.every((g) => {
         const f = filters[g];
         if (!f) return true;
         if (g === "taste") return splitTaste(r.taste).some((v) => splitTaste(f).includes(v));
@@ -61,12 +77,29 @@ function RecipeSearchPage() {
         <p className="mt-1 text-sm text-muted-foreground">{t("rec.searchIntro")}</p>
       </div>
 
-      <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
+      <div className="space-y-3">
+        <div role="group" aria-label={t("cuisine.filter")} className="space-y-2 rounded-2xl border border-border bg-card p-4">
+          <p className="text-xs font-bold text-foreground">🌍 {t("cuisine.filter")}</p>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" aria-pressed={cuisineIds.length === 0} onClick={() => setCuisineIds([])}
+              className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${cuisineIds.length === 0 ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
+              {t("rec.searchAll")}
+            </button>
+            {cuisines.map((c) => {
+              const on = cuisineIds.includes(c.id);
+              return <button key={c.id} type="button" aria-pressed={on}
+                onClick={() => setCuisineIds((ids) => on ? ids.filter((id) => id !== c.id) : [...ids, c.id])}
+                className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
+                {c.emoji} {c.name}
+              </button>;
+            })}
+          </div>
+        </div>
         {TRAIT_GROUPS.map((g) => {
           const multi = g === "taste";
           const sel = multi ? splitTaste(filters.taste) : [];
           return (
-          <div key={g} role={multi ? "group" : "radiogroup"} aria-label={t(`rk.${g}` as Parameters<typeof t>[0])} className="space-y-1.5">
+          <div key={g} role={multi ? "group" : "radiogroup"} aria-label={t(`rk.${g}` as Parameters<typeof t>[0])} className="space-y-1.5 rounded-2xl border border-border bg-card p-4">
             <p className="text-xs font-bold text-foreground">
               {RECIPE_TRAITS[g].emoji} {t(`rk.${g}` as Parameters<typeof t>[0])}
               {multi && <span className="ml-1 font-normal text-muted-foreground">({t("rk.tasteMax", { n: TASTE_MAX })})</span>}
@@ -96,7 +129,7 @@ function RecipeSearchPage() {
           );
         })}
         {active ? (
-          <button type="button" onClick={() => setFilters(EMPTY_FILTERS)} className="text-sm font-semibold text-primary">
+          <button type="button" onClick={() => { setFilters(EMPTY_FILTERS); setCuisineIds([]); }} className="text-sm font-semibold text-primary">
             {t("rec.searchClear")}
           </button>
         ) : null}

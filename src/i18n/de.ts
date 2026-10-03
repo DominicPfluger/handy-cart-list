@@ -270,6 +270,7 @@ export const de = {
   "rec.searchTitle": "Rezepte suchen",
   "rec.searchSoon": "Die Suche nach spezifischen Kriterien wird hier in Kürze verfügbar sein.",
   "rec.searchIntro": "Rezepte nach Sättigung, Schärfe und Preisklasse finden.",
+  "rec.recipeCuisines": "Länderküchen (optional)",
   "rec.searchAll": "Alle",
   "rec.searchClear": "Zurücksetzen",
   "rec.searchCount": "{n} Rezepte gefunden",

@@ -1055,6 +1055,45 @@ export type Database = {
           },
         ]
       }
+      recipe_cuisines: {
+        Row: {
+          created_at: string
+          cuisine_id: string
+          id: string
+          recipe_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cuisine_id: string
+          id?: string
+          recipe_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cuisine_id?: string
+          id?: string
+          recipe_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_cuisines_cuisine_id_fkey"
+            columns: ["cuisine_id"]
+            isOneToOne: false
+            referencedRelation: "cuisines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recipe_cuisines_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recipe_folders: {
         Row: {
           created_at: string
