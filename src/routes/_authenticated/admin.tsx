@@ -812,7 +812,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
     setLoadingS(true);
     try {
       const typed = text.split("\n").map((l) => l.trim()).filter(Boolean);
-      const r = await onSuggest(typed, mode);
+      const r = await onSuggest(typed, mode, count);
       setSugs(r); setPicked(new Set(r.map((x) => x.name)));
       setMkOnly((s) => { const n = new Set(s); r.forEach((x) => { if (x.scope === "market") n.add(x.name); }); return n; });
     } catch (e) { toast.error((e as Error).message); }
