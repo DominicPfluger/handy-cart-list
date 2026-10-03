@@ -200,6 +200,19 @@ function DepartmentsPage() {
     (product.variants ?? []).find((v) => matchesProductSearch(variantLabel(product, v), normalizedQuery));
   const matchedSynonym = (product: CatalogProduct) =>
     (product.synonyms ?? []).find((s) => matchesProductSearch(s, normalizedQuery));
+  // Bezeichnungen aus verwandten Sprachvarianten (gleicher Sprachstamm, z. B. de/de-CH/de-AT)
+  const langStem = locale.split("-")[0];
+  const matchedLocaleName = (product: CatalogProduct) => {
+    for (const [loc, name] of Object.entries(product.names ?? {})) {
+      if (loc !== locale && loc.split("-")[0] === langStem && matchesProductSearch(name, normalizedQuery)) return name;
+    }
+    for (const v of product.variants ?? []) {
+      for (const [loc, name] of Object.entries(product.variantNames?.[v] ?? {})) {
+        if (loc !== locale && loc.split("-")[0] === langStem && matchesProductSearch(name, normalizedQuery)) return name;
+      }
+    }
+    return undefined;
+  };
   const searchResults = useMemo(() => {
     if (!normalizedQuery) return [];
     // Rang der Abteilung = Position in der Baumstruktur (Tiefensuche nach sortOrder)
@@ -218,7 +231,7 @@ function DepartmentsPage() {
     const big = Number.MAX_SAFE_INTEGER;
     return orderedProducts
       .filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId))
-      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || matchesProductSearch(product.baseName ?? "", normalizedQuery) || brandsFor(product).some((b) => matchesProductSearch(b, normalizedQuery)) || !!matchedVariant(product) || !!matchedSynonym(product))
+      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || matchesProductSearch(product.baseName ?? "", normalizedQuery) || brandsFor(product).some((b) => matchesProductSearch(b, normalizedQuery)) || !!matchedVariant(product) || !!matchedSynonym(product) || !!matchedLocaleName(product))
       .sort((a, b) => (deptRank.get(a.departmentId) ?? big) - (deptRank.get(b.departmentId) ?? big) || (order.get(a.id) ?? big) - (order.get(b.id) ?? big));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [departments, orderedProducts, hiddenProductIds, removedIds, normalizedQuery]);
@@ -226,7 +239,7 @@ function DepartmentsPage() {
   const matchedBrand = (product: CatalogProduct) =>
     matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) ? undefined : brandsFor(product).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
   const synonymHint = (product: CatalogProduct) =>
-    matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) || matchedBrand(product) ? undefined : matchedSynonym(product);
+    matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) || matchedBrand(product) ? undefined : matchedSynonym(product) ?? matchedLocaleName(product);
 
   const groupFor = (product: CatalogProduct) => {
     // Alias-Produkt in der aktuellen Kategorie → aktuelle Kategorie; Suche/Spracheingabe → bevorzugte Kategorie
