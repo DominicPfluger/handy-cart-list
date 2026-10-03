@@ -10,7 +10,7 @@ import { normalizeSearch } from "@/lib/catalog-query";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
-type Row = { id: string; title: string; is_public: boolean; satiety: string | null; spiciness: string | null; price_class: string | null; taste: string | null };
+type Row = { id: string; title: string; is_public: boolean; satiety: string | null; spiciness: string | null; price_class: string | null; taste: string | null; difficulty: string | null };
 const KEY = ["admin-recipe-traits"];
 
 export function RecipeTraitsAdmin() {
@@ -23,7 +23,7 @@ export function RecipeTraitsAdmin() {
     enabled: open,
     queryFn: async () => {
       const { data, error } = await supabase.from("recipes")
-        .select("id, title, is_public, satiety, spiciness, price_class, taste")
+        .select("id, title, is_public, satiety, spiciness, price_class, taste, difficulty")
         .order("created_at", { ascending: false }).limit(1000);
       if (error) throw error;
       return (data ?? []) as Row[];

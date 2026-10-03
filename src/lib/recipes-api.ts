@@ -35,7 +35,7 @@ export function makeSlug() {
 export async function createRecipe(input: {
   ownerId: string; authorName?: string | undefined; title: string; description?: string | null | undefined; templateId: string;
   picks: Record<string, string[]>; items: RecipeItem[]; isPublic?: boolean | undefined; imagePath?: string | null | undefined;
-  satiety?: string | null | undefined; spiciness?: string | null | undefined; priceClass?: string | null | undefined; taste?: string | null | undefined;
+  satiety?: string | null | undefined; spiciness?: string | null | undefined; priceClass?: string | null | undefined; taste?: string | null | undefined; difficulty?: string | null | undefined;
 }) {
   const { data, error } = await supabase.from("recipes").insert({
     owner_id: input.ownerId,
@@ -52,6 +52,7 @@ export async function createRecipe(input: {
     spiciness: input.spiciness ?? null,
     price_class: input.priceClass ?? null,
     taste: input.taste ?? null,
+    difficulty: input.difficulty ?? null,
     share_slug: input.isPublic ? makeSlug() : null,
   }).select("id, share_slug").single();
   if (error) throw error;
@@ -150,12 +151,12 @@ export async function fetchRecipe(id: string): Promise<CommunityRecipe | null> {
 export type TraitRecipe = {
   id: string; title: string; description: string | null; template_id: string; share_slug: string;
   author_name: string | null; created_at: string; image_path: string | null;
-  satiety: string | null; spiciness: string | null; price_class: string | null; taste: string | null;
+  satiety: string | null; spiciness: string | null; price_class: string | null; taste: string | null; difficulty: string | null;
 };
 
 export async function fetchTraitRecipes(): Promise<TraitRecipe[]> {
   const { data, error } = await supabase.from("recipes")
-    .select("id, title, description, template_id, share_slug, author_name, created_at, image_path, satiety, spiciness, price_class, taste")
+    .select("id, title, description, template_id, share_slug, author_name, created_at, image_path, satiety, spiciness, price_class, taste, difficulty")
     .eq("is_public", true).not("share_slug", "is", null)
     .order("created_at", { ascending: false }).limit(300);
   if (error) throw error;

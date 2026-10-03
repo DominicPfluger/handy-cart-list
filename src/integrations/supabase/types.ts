@@ -1339,6 +1339,7 @@ export type Database = {
           author_name: string | null
           created_at: string
           description: string | null
+          difficulty: string | null
           id: string
           image_path: string | null
           is_public: boolean
@@ -1359,6 +1360,7 @@ export type Database = {
           author_name?: string | null
           created_at?: string
           description?: string | null
+          difficulty?: string | null
           id?: string
           image_path?: string | null
           is_public?: boolean
@@ -1379,6 +1381,7 @@ export type Database = {
           author_name?: string | null
           created_at?: string
           description?: string | null
+          difficulty?: string | null
           id?: string
           image_path?: string | null
           is_public?: boolean
