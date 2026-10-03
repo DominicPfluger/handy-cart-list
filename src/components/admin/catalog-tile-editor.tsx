@@ -16,6 +16,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
+import { Pencil, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -408,8 +409,9 @@ export function CatalogTileEditor(p: {
               <div data-drop="product" data-id={x.id} data-index={i}
                 className={`flex items-center gap-3 px-3 py-2 ${x.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
                 <input type="checkbox" checked={selected.has(x.id)} onChange={() => toggleSel(x.id)} aria-label={T("adm.select")} className="h-4 w-4 shrink-0 accent-primary" />
-                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, (x.emoji ?? "•") + (selected.has(x.id) && selected.size > 1 ? ` +${selected.size - 1}` : ""))} {...dragHandlers} onClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (moved.current) { moved.current = false; return; } if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
-                  className={`flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl ${editMode ? "cursor-grab touch-none" : ""}`}>
+                <span onPointerDown={(e) => startDrag(e, "product", x.id, i, (x.emoji ?? "•") + (selected.has(x.id) && selected.size > 1 ? ` +${selected.size - 1}` : ""))} {...dragHandlers} aria-label={T("adm.drag")} title={T("adm.drag")} className="cursor-grab touch-none select-none px-0.5 text-base text-muted-foreground">⠿</span>
+                <span onClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
+                  className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl">
                   {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
                 </span>
                 <button type="button" disabled={!editMode} onClick={click(() => x.alias_id ? p.onAdvanced?.("product", pid) : setTarget({ kind: "product", id: x.id }))} className="min-w-0 flex-1 text-left">
@@ -419,6 +421,12 @@ export function CatalogTileEditor(p: {
                     {price ? ` · ${formatRefPrice(price)}` : ""}
                   </div>
                 </button>
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                  <Pencil className="h-3.5 w-3.5" />
+                </Button>
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
                 {editMode && x.alias_id && (
                   <button type="button" onClick={() => p.onRemoveAlias?.(x.alias_id!, p.nm(pid, x.name))} aria-label={T("adm.delete")}
                     className="rounded-full px-2 text-xs text-destructive">✕</button>
