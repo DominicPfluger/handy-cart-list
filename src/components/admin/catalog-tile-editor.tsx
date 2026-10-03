@@ -795,7 +795,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     } else {
       const r = isDept
         ? await supabase.from("departments").insert({ ...base, parent_id: p.cur, sort_order: p.children.length + 1 }).select("id").single()
-        : await supabase.from("products").insert({ ...base, department_id: p.cur!, default_quantity: qty, default_unit: unit as never, variants, sort_order: p.products.length + 1 }).select("id").single();
+        : await (async () => {
+            const targetDept = newDept || p.cur!;
+            // Fremde Kategorie: ans Ende dieser Kategorie (höchster sort_order + 1)
+            const nextSort = targetDept === p.cur
+              ? p.products.length + 1
+              : await supabase.from("products").select("sort_order").eq("department_id", targetDept).order("sort_order", { ascending: false }).limit(1)
+                  .then(({ data }) => ((data?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1);
+            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, variants, sort_order: nextSort }).select("id").single();
+          })();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
       if (!isNewProduct) await p.translateIds([id]);
