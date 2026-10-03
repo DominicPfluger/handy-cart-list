@@ -1,6 +1,6 @@
 # Admin: Stift/Papierkorb neben Zieh-Griff + Icon-Funktionen im Bild-Dialog
 
-## Teil 1 — Produktzeile: Bearbeiten und Löschen neben dem Zieh-Griff
+## Teil 1 — Produktzeile: Stift neben dem Zieh-Griff, Papierkorb bleibt rechts
 
 Aktuelle Zeile im Admin-Katalog (`src/components/admin/catalog-tile-editor.tsx`, Zeilen 421–452):
 
@@ -8,13 +8,14 @@ Aktuelle Zeile im Admin-Katalog (`src/components/admin/catalog-tile-editor.tsx`,
 [Checkbox] [⠿] [Bild] [Name …………] [✏️] [🏷] [✨] [🗑]
 ```
 
-Neu — Stift und Papierkorb rücken links neben den Zieh-Griff:
+Neu — nur der Stift rückt links neben den Zieh-Griff; der Papierkorb bleibt rechts:
 
 ```
-[Checkbox] [⠿] [✏️] [🗑] [Bild] [Name …………] [🏷] [✨]
+[Checkbox] [⠿] [✏️] [Bild] [Name …………] [🏷] [✨] [🗑]
 ```
 
-- Die beiden bestehenden Buttons (Pencil, Trash2) ausschneiden und direkt nach dem Zieh-Griff-Span vor dem Bild einfügen.
+- Nur den Pencil-Button ausschneiden und direkt nach dem Zieh-Griff-Span vor dem Bild einfügen.
+- Trash2 bleibt am rechten Zeilenende (wie heute).
 - Funktionalität unverändert: gleiche Handler, `disabled={!editMode}`, Löschen mit Bestätigungsfrage. Varianten- (🏷) und KI-Bild-Knopf (✨) bleiben rechts.
 
 ## Teil 2 — Bild-Dialog: Icon (klein) mit voller Funktionsleiste
