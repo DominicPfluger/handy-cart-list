@@ -272,7 +272,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     }
     return null;
   };
-  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => id.startsWith("any:") ? resolveAny(s, id) : s.products.find((p) => p.id === id)!).filter(Boolean))
+  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => (id.startsWith("any:") ? resolveAny(s, id) : s.products.find((p) => p.id === id)) ?? null).filter((p): p is CatalogProduct => !!p))
     .map((p) => { const v = variants[p.id]; return v && p.variants?.includes(v) ? { ...p, name: `${p.name} · ${vName(p, v)}`, chosenVariant: v } : p; }) as (CatalogProduct & { chosenVariant?: string })[];
   const catName = tpl ? templateLabel(tpl, t) : "";
   const title = chosen.length
