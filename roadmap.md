@@ -27,3 +27,5 @@
 - Abteilungsansicht: Produktvarianten mit Herz (Favorit), Blitz (Schnell hinzufügen) und grünem Plus (Produkt-hinzufügen-Dialog, Variante vorgewählt).
 
 - [x] Rezepte-Admin: Bereich „Vorlagen & Oberkategorien" → „Vorlagen", Button „Neue Oberkategorie" → „Neue Vorlage" (16 Sprachen)
+
+- [x] Admin-Katalog: Produktzeilen mit Zieh-Griff (⠿ neben Bild), Stift (Bearbeiten-Dialog) und Papierkorb (Löschen mit Bestätigung) ergänzt
