@@ -855,6 +855,12 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
                 <label className="flex items-start gap-2"><input type="radio" checked={mode === "ai"} onChange={() => setMode("ai")} className="mt-1" /><span>{T("adm.suggestModeAi")}</span></label>
               </div>
               <p className="text-xs text-muted-foreground">{mode === "web" ? T("adm.suggestCostWeb") : T("adm.suggestCostAi")}</p>
+              <label className="flex items-center justify-between gap-2 text-sm">
+                <span>{T("adm.suggestCount")}</span>
+                <select value={count} onChange={(e) => setCount(Number(e.target.value))} className="rounded-lg border border-input bg-background px-2 py-1 text-sm">
+                  {[5, 10, 15, 20, 25].map((n) => <option key={n} value={n}>{n}</option>)}
+                </select>
+              </label>
               <div className="flex gap-2">
                 <Button className="flex-1" onClick={() => void fetchS()}>{T("adm.suggestStart")}</Button>
                 <Button variant="ghost" onClick={() => setConfirmOpen(false)}>{T("adm.cancel")}</Button>
