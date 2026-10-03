@@ -806,9 +806,6 @@ function DepartmentsPage() {
                         </div>
                       );
                     })}
-                    <Button type="button" variant="link" size="sm" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="px-0 text-xs">
-                      {t("dept.details")} →
-                    </Button>
                   </div>
                 )}
                 </Fragment>
