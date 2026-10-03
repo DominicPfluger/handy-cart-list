@@ -972,7 +972,13 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
         <UnitSelect value={unit} onChange={setUnit} />
       </div>
       <p className="text-xs text-muted-foreground">{T("adm.detected", { n: names.length })}</p>
-      {headings.length > 0 && (
+      <label className="flex items-center gap-2 text-sm">
+        <span className="shrink-0 text-muted-foreground">{T("adm.category")}</span>
+        <select aria-label={T("adm.category")} value={deptId || curDept || ""} onChange={(e) => setDeptId(e.target.value)} className="h-9 min-w-0 flex-1 rounded-lg border border-input bg-background px-2 text-sm">
+          {deptOptions.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+        </select>
+      </label>
+      {headings.length > 0 && (!deptId || deptId === curDept) && (
         <label className="flex items-center gap-2 text-sm">
           <span className="shrink-0 text-muted-foreground">{T("adm.posLabel")}</span>
           <select value={pos} onChange={(e) => setPos(e.target.value)} className="h-9 min-w-0 flex-1 rounded-lg border border-input bg-background px-2 text-sm">
