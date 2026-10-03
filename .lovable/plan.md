@@ -6,18 +6,19 @@ Der „↕"-Knopf an einer Überschrift soll nicht mehr das global gewählte Sor
 - **Ähnlichkeit** (KI)
 - **Relevanz** (KI)
 - **Alphabetisch** (lokal, ohne KI/Credits)
-- **Preis** (KI)
+- **Preis** (lokal, anhand der in der Datenbank gespeicherten Preise — **keine** KI)
 
 ## Umsetzung
 
 1. **Kriterien-Dialog pro Überschrift**
    - Klick auf „↕" öffnet einen kleinen Dialog (statt sofort `confirm`) mit den vier Optionen als Auswahl-Schaltflächen, plus „Abbrechen".
-   - Bei den drei KI-Kriterien folgt nach der Wahl die bestehende Credits-Bestätigung (`adm.sortConfirm`); bei „Alphabetisch" entfällt sie (kein KI-Verbrauch) bzw. es kommt nur die kurze Bestätigung.
+   - Nur bei den zwei KI-Kriterien (Ähnlichkeit, Relevanz) folgt die bestehende Credits-Bestätigung (`adm.sortConfirm`); bei „Alphabetisch" und „Preis" wird direkt sortiert (kein KI-Verbrauch).
 
 2. **Sortierlogik** (`sortHeadingGroup` in `src/routes/_authenticated/admin.tsx`)
    - Bekommt das gewählte Kriterium als Parameter statt `sortBy`.
    - `alphabetical`: lokale Sortierung (`localeCompare "de"`).
-   - `similarity`, `price`: KI-Rangfolge über `rankProducts` mit diesem Kriterium.
+   - `price`: lokale Sortierung aufsteigend nach dem gespeicherten Preis des Produkts (bereits geladene `prices`-Map im Katalog-Editor, aus `product_reference_prices` bzw. den manuellen Marktpreisen; beim gewählten Markt dessen Preis, sonst der globale Referenzpreis). Produkte ohne Preis ans Ende.
+   - `similarity`: KI-Rangfolge über `rankProducts` mit Kriterium `similarity`.
    - `relevance`: KI-Rangfolge mit Kriterium `popularity` (wie bisher bei „Relevanz").
    - Danach wie bisher: `saveOrder` nur für die Gruppe, Überschrift an das neue erste Produkt hängen (`saveH`), bei gewähltem Markt keine Überschriften-Verschiebung.
 
@@ -29,4 +30,4 @@ Der „↕"-Knopf an einer Überschrift soll nicht mehr das global gewählte Sor
 - Keine Datenbank-Änderungen.
 
 ## Test
-- Browser-Test in „Frische Kräuter": Dialog öffnet sich mit vier Optionen; „Alphabetisch" sortiert lokal ohne KI; ein KI-Kriterium (Relevanz) sortiert nach Bestätigung; andere Überschriften-Gruppen bleiben unverändert.
+- Browser-Test in „Frische Kräuter": Dialog öffnet sich mit vier Optionen; „Alphabetisch" und „Preis" sortieren lokal ohne KI-Aufruf; „Relevanz" sortiert nach Bestätigung per KI; andere Überschriften-Gruppen bleiben unverändert.
