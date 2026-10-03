@@ -30,7 +30,7 @@ function loadIgnored(): Set<string> {
 export function CatalogHealthPanel({ depts, prods, tr, onEdit }: {
   depts: Dept[]; prods: Prod[]; tr: Tr; onEdit: (productId: string) => void;
 }) {
-  const { t: T } = useT();
+  const { t: T, locale } = useT();
   const qc = useQueryClient();
   const merge = useServerFn(mergeProducts);
   const [ignored, setIgnored] = useState<Set<string>>(loadIgnored);
@@ -38,6 +38,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit }: {
   const [busy, setBusy] = useState(false);
   const [openGap, setOpenGap] = useState<string | null>(null);
   const [synSearch, setSynSearch] = useState("");
+  const [copyOpen, setCopyOpen] = useState(false);
 
   const syns = useQuery({
     queryKey: ["health-synonyms"],
