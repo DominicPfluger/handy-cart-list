@@ -574,6 +574,22 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
       }
     });
 
+  /** Alphabetisch nach Produktnamen sortieren — lokal, ohne KI. */
+  const sortAlpha = (stepKey: string) => {
+    const list = assignedFor(stepKey);
+    if (list.length < 2) return;
+    run(async () => {
+      const ordered = [...list].sort((a, b) =>
+        (prodById.get(a.product_id)?.name ?? a.product_id).localeCompare(prodById.get(b.product_id)?.name ?? b.product_id, "de"));
+      for (let k = 0; k < ordered.length; k++) {
+        if (ordered[k]!.sort_order === k + 1) continue;
+        const { error } = await supabase.from("recipe_ingredients").update({ sort_order: k + 1 }).eq("id", ordered[k]!.id);
+        if (error) throw new Error(error.message);
+      }
+      toast.success(T("adm.recipeSortDone"));
+    });
+  };
+
   const sortStep = (stepKey: string, stepLabel: string, criterion: "popularity" | "relevance") => {
     const list = assignedFor(stepKey);
     if (list.length < 2) return;
@@ -721,13 +737,14 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                   <select
                     value=""
                     disabled={busy}
-                    onChange={(e) => { const v = e.target.value as "popularity" | "relevance"; if (v) sortStep(s.key, s.label, v); }}
+                    onChange={(e) => { const v = e.target.value as "popularity" | "relevance" | "alpha"; if (v === "alpha") sortAlpha(s.key); else if (v) sortStep(s.key, s.label, v); }}
                     className="rounded-md border border-border bg-background px-1.5 py-1 text-[11px] text-foreground"
                     aria-label={T("adm.recipeSortBy")}
                   >
                     <option value="">{T("adm.recipeSortBy")}</option>
                     <option value="popularity">{T("adm.recipeSortPopularity")}</option>
                     <option value="relevance">{T("adm.recipeSortRelevance")}</option>
+                    <option value="alpha">{T("adm.recipeSortAlpha")}</option>
                   </select>
                 )}
                 {assigned.length > 0 && (() => {

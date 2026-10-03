@@ -926,6 +926,7 @@ export const de = {
   "adm.variantPlaceholder": "Neue Variante…",
   "adm.recipeSortPopularity": "Beliebtheit",
   "adm.recipeSortRelevance": "Relevanz",
+  "adm.recipeSortAlpha": "Alphabetisch",
   "adm.recipeSortConfirm": "Reihenfolge dieses Schritts per KI neu sortieren? Gilt für alle Nutzer.",
   "adm.recipeSortDone": "Neu sortiert",
   "adm.recipeGroups": "Rezept-Kategorien",
