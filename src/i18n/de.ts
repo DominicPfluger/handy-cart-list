@@ -909,7 +909,7 @@ export const de = {
   "adm.recipeTraitsSearch": "Rezept suchen …",
   "adm.recipeTraitsOnlyMissing": "Nur unvollständige",
   "adm.recipeTraitsNone": "Keine Rezepte gefunden.",
-  "adm.tplManage": "Vorlagen",
+  "adm.tplManage": "Rezept-Kategorien",
   "adm.tplNew": "Neue Vorlage",
   "adm.tplId": "Kennung (klein, ohne Leerzeichen)",
   "adm.tplEnabled": "Aktiv",
