@@ -12,6 +12,23 @@ const CURRENCIES: Record<string, string> = {
   GB: "GBP", US: "USD", CA: "CAD", MX: "MXN", BR: "BRL",
 };
 
+/** Erzeugt ein KI-Bild für eine Produktvariante und liefert den Speicherpfad (Speichern der Zuordnung macht der Client). */
+export const generateVariantImage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ productId: z.string().uuid(), variant: z.string().min(1).max(120) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { generateProductImage } = await import("./product-media.server");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: p, error } = await context.supabase.from("products").select("id, name, emoji").eq("id", data.productId).single();
+    if (error || !p) throw new Error("Produkt nicht gefunden");
+    const bytes = await generateProductImage(`${p.name} – ${data.variant}`, p.emoji, `the "${data.variant}" variety of ${p.name}`);
+    const path = `variants/${p.id}-${crypto.randomUUID()}.webp`;
+    const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
+    if (up.error) throw new Error(up.error.message);
+    return { path };
+  });
+
 /** Status: wie viele Produkte noch Bild bzw. Richtpreis (je Markt, global) brauchen. */
 export const catalogMediaStatus = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])

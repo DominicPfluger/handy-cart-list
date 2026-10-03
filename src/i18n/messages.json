@@ -1180,7 +1180,14 @@
     "adm.posLabel": "Position",
     "adm.posEnd": "At the end of the list",
     "adm.posTop": "At the very top",
-    "adm.posUnder": "Under “{name}”"
+    "adm.posUnder": "Under “{name}”",
+    "dept.variants": "{count} variants",
+    "dept.details": "Details",
+    "adm.variantImage": "Variant image",
+    "adm.variantImageUpload": "Upload image",
+    "adm.variantImageRemove": "Delete image",
+    "adm.variantImageSaved": "Variant image saved",
+    "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2363,7 +2370,14 @@
     "adm.posLabel": "Position",
     "adm.posEnd": "At the end of the list",
     "adm.posTop": "At the very top",
-    "adm.posUnder": "Under “{name}”"
+    "adm.posUnder": "Under “{name}”",
+    "dept.variants": "{count} variants",
+    "dept.details": "Details",
+    "adm.variantImage": "Variant image",
+    "adm.variantImageUpload": "Upload image",
+    "adm.variantImageRemove": "Delete image",
+    "adm.variantImageSaved": "Variant image saved",
+    "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3546,7 +3560,14 @@
     "adm.posLabel": "Position",
     "adm.posEnd": "At the end of the list",
     "adm.posTop": "At the very top",
-    "adm.posUnder": "Under “{name}”"
+    "adm.posUnder": "Under “{name}”",
+    "dept.variants": "{count} variants",
+    "dept.details": "Details",
+    "adm.variantImage": "Variant image",
+    "adm.variantImageUpload": "Upload image",
+    "adm.variantImageRemove": "Delete image",
+    "adm.variantImageSaved": "Variant image saved",
+    "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4729,7 +4750,14 @@
     "adm.posLabel": "Posición",
     "adm.posEnd": "Al final de la lista",
     "adm.posTop": "Al principio",
-    "adm.posUnder": "Debajo de «{name}»"
+    "adm.posUnder": "Debajo de «{name}»",
+    "dept.variants": "{count} variantes",
+    "dept.details": "Detalles",
+    "adm.variantImage": "Imagen de variante",
+    "adm.variantImageUpload": "Subir imagen",
+    "adm.variantImageRemove": "Eliminar imagen",
+    "adm.variantImageSaved": "Imagen de variante guardada",
+    "adm.variantImageAiConfirm": "¿Generar imagen IA para «{name}»? Consume créditos."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5912,7 +5940,14 @@
     "adm.posLabel": "Posición",
     "adm.posEnd": "Al final de la lista",
     "adm.posTop": "Al principio",
-    "adm.posUnder": "Debajo de «{name}»"
+    "adm.posUnder": "Debajo de «{name}»",
+    "dept.variants": "{count} variantes",
+    "dept.details": "Detalles",
+    "adm.variantImage": "Imagen de variante",
+    "adm.variantImageUpload": "Subir imagen",
+    "adm.variantImageRemove": "Eliminar imagen",
+    "adm.variantImageSaved": "Imagen de variante guardada",
+    "adm.variantImageAiConfirm": "¿Generar imagen IA para «{name}»? Consume créditos."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7095,7 +7130,14 @@
     "adm.posLabel": "Position",
     "adm.posEnd": "À la fin de la liste",
     "adm.posTop": "Tout en haut",
-    "adm.posUnder": "Sous « {name} »"
+    "adm.posUnder": "Sous « {name} »",
+    "dept.variants": "{count} variantes",
+    "dept.details": "Détails",
+    "adm.variantImage": "Image de variante",
+    "adm.variantImageUpload": "Téléverser une image",
+    "adm.variantImageRemove": "Supprimer l’image",
+    "adm.variantImageSaved": "Image de variante enregistrée",
+    "adm.variantImageAiConfirm": "Générer une image IA pour « {name} » ? Cela consomme des crédits."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8278,7 +8320,14 @@
     "adm.posLabel": "Position",
     "adm.posEnd": "À la fin de la liste",
     "adm.posTop": "Tout en haut",
-    "adm.posUnder": "Sous « {name} »"
+    "adm.posUnder": "Sous « {name} »",
+    "dept.variants": "{count} variantes",
+    "dept.details": "Détails",
+    "adm.variantImage": "Image de variante",
+    "adm.variantImageUpload": "Téléverser une image",
+    "adm.variantImageRemove": "Supprimer l’image",
+    "adm.variantImageSaved": "Image de variante enregistrée",
+    "adm.variantImageAiConfirm": "Générer une image IA pour « {name} » ? Cela consomme des crédits."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9461,7 +9510,14 @@
     "adm.posLabel": "Posizione",
     "adm.posEnd": "Alla fine della lista",
     "adm.posTop": "All'inizio",
-    "adm.posUnder": "Sotto «{name}»"
+    "adm.posUnder": "Sotto «{name}»",
+    "dept.variants": "{count} varianti",
+    "dept.details": "Dettagli",
+    "adm.variantImage": "Immagine variante",
+    "adm.variantImageUpload": "Carica immagine",
+    "adm.variantImageRemove": "Elimina immagine",
+    "adm.variantImageSaved": "Immagine variante salvata",
+    "adm.variantImageAiConfirm": "Generare un'immagine IA per «{name}»? Consuma crediti."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10644,7 +10700,14 @@
     "adm.posLabel": "Posizione",
     "adm.posEnd": "Alla fine della lista",
     "adm.posTop": "All'inizio",
-    "adm.posUnder": "Sotto «{name}»"
+    "adm.posUnder": "Sotto «{name}»",
+    "dept.variants": "{count} varianti",
+    "dept.details": "Dettagli",
+    "adm.variantImage": "Immagine variante",
+    "adm.variantImageUpload": "Carica immagine",
+    "adm.variantImageRemove": "Elimina immagine",
+    "adm.variantImageSaved": "Immagine variante salvata",
+    "adm.variantImageAiConfirm": "Generare un'immagine IA per «{name}»? Consuma crediti."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11827,7 +11890,14 @@
     "adm.posLabel": "Posição",
     "adm.posEnd": "No fim da lista",
     "adm.posTop": "No topo",
-    "adm.posUnder": "Debaixo de «{name}»"
+    "adm.posUnder": "Debaixo de «{name}»",
+    "dept.variants": "{count} variantes",
+    "dept.details": "Detalhes",
+    "adm.variantImage": "Imagem da variante",
+    "adm.variantImageUpload": "Carregar imagem",
+    "adm.variantImageRemove": "Eliminar imagem",
+    "adm.variantImageSaved": "Imagem da variante guardada",
+    "adm.variantImageAiConfirm": "Gerar imagem IA para «{name}»? Isto consome créditos."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13010,7 +13080,14 @@
     "adm.posLabel": "Posição",
     "adm.posEnd": "No final da lista",
     "adm.posTop": "No topo",
-    "adm.posUnder": "Abaixo de «{name}»"
+    "adm.posUnder": "Abaixo de «{name}»",
+    "dept.variants": "{count} variantes",
+    "dept.details": "Detalhes",
+    "adm.variantImage": "Imagem da variante",
+    "adm.variantImageUpload": "Carregar imagem",
+    "adm.variantImageRemove": "Eliminar imagem",
+    "adm.variantImageSaved": "Imagem da variante guardada",
+    "adm.variantImageAiConfirm": "Gerar imagem IA para «{name}»? Isto consome créditos."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14193,7 +14270,14 @@
     "adm.posLabel": "Positie",
     "adm.posEnd": "Onderaan de lijst",
     "adm.posTop": "Helemaal bovenaan",
-    "adm.posUnder": "Onder „{name}“"
+    "adm.posUnder": "Onder „{name}“",
+    "dept.variants": "{count} varianten",
+    "dept.details": "Details",
+    "adm.variantImage": "Variantafbeelding",
+    "adm.variantImageUpload": "Afbeelding uploaden",
+    "adm.variantImageRemove": "Afbeelding verwijderen",
+    "adm.variantImageSaved": "Variantafbeelding opgeslagen",
+    "adm.variantImageAiConfirm": "AI-afbeelding maken voor „{name}”? Dit kost credits."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15376,7 +15460,14 @@
     "adm.posLabel": "Positie",
     "adm.posEnd": "Onderaan de lijst",
     "adm.posTop": "Helemaal bovenaan",
-    "adm.posUnder": "Onder „{name}“"
+    "adm.posUnder": "Onder „{name}“",
+    "dept.variants": "{count} varianten",
+    "dept.details": "Details",
+    "adm.variantImage": "Variantafbeelding",
+    "adm.variantImageUpload": "Afbeelding uploaden",
+    "adm.variantImageRemove": "Afbeelding verwijderen",
+    "adm.variantImageSaved": "Variantafbeelding opgeslagen",
+    "adm.variantImageAiConfirm": "AI-afbeelding maken voor „{name}”? Dit kost credits."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16020,7 +16111,14 @@
     "adm.posLabel": "Position",
     "adm.posEnd": "Am Ende der Liste",
     "adm.posTop": "Ganz oben",
-    "adm.posUnder": "Unter „{name}“"
+    "adm.posUnder": "Unter „{name}“",
+    "dept.variants": "{count} Varianten",
+    "dept.details": "Details",
+    "adm.variantImage": "Variantenbild",
+    "adm.variantImageUpload": "Bild hochladen",
+    "adm.variantImageRemove": "Bild löschen",
+    "adm.variantImageSaved": "Variantenbild gespeichert",
+    "adm.variantImageAiConfirm": "KI-Bild für „{name}“ erzeugen? Dies verbraucht Credits."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16664,6 +16762,13 @@
     "adm.posLabel": "Position",
     "adm.posEnd": "Am Ende der Liste",
     "adm.posTop": "Ganz oben",
-    "adm.posUnder": "Unter „{name}“"
+    "adm.posUnder": "Unter „{name}“",
+    "dept.variants": "{count} Varianten",
+    "dept.details": "Details",
+    "adm.variantImage": "Variantenbild",
+    "adm.variantImageUpload": "Bild hochladen",
+    "adm.variantImageRemove": "Bild löschen",
+    "adm.variantImageSaved": "Variantenbild gespeichert",
+    "adm.variantImageAiConfirm": "KI-Bild für „{name}“ erzeugen? Dies verbraucht Credits."
   }
 }
