@@ -103,7 +103,8 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     for (const item of r.items) {
       if (item.productId.startsWith("any:")) {
         const k = item.productId.slice(4);
-        if (template.steps.some((s) => s.key === k)) (next[k] ??= []).push(item.productId);
+        const st = template.steps.find((s) => s.key === k || k.startsWith(`${s.key}:`));
+        if (st) (next[st.key] ??= []).push(item.productId);
         continue;
       }
       const step = template.steps.find((s) => {
@@ -256,11 +257,22 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setVariants({});
   };
 
-  const anyProduct = (s: (typeof steps)[number]) => ({
-    id: `any:${s.key}`, name: t("rk.anyOf", { name: s.label }), emoji: s.emoji || STEP_EMOJIS[s.key] || "🍽️",
+  const anyProduct = (s: (typeof steps)[number], group?: { key: string; name: string; emoji: string | null }) => ({
+    id: group ? `any:${s.key}:${group.key}` : `any:${s.key}`, name: t("rk.anyOf", { name: group ? group.name : s.label }), emoji: group?.emoji || s.emoji || STEP_EMOJIS[s.key] || "🍽️",
     defaultQuantity: 1, defaultUnit: "stueck", departmentId: "", imageUrl: undefined,
   }) as unknown as CatalogProduct;
-  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => id.startsWith("any:") ? anyProduct(s) : s.products.find((p) => p.id === id)!).filter(Boolean))
+  // Löst eine „any:"-Kennung auf: Bereich (any:step) oder Oberkategorie (any:step:gruppe).
+  const resolveAny = (s: (typeof steps)[number], id: string) => {
+    if (!id.startsWith("any:")) return null;
+    const rest = id.slice(4);
+    if (rest === s.key) return anyProduct(s);
+    if (rest.startsWith(`${s.key}:`)) {
+      const g = s.groups.find((x) => x.id === rest.slice(s.key.length + 1));
+      return g ? anyProduct(s, { key: g.id, name: g.name, emoji: g.emoji }) : null;
+    }
+    return null;
+  };
+  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => id.startsWith("any:") ? resolveAny(s, id) : s.products.find((p) => p.id === id)!).filter(Boolean))
     .map((p) => { const v = variants[p.id]; return v && p.variants?.includes(v) ? { ...p, name: `${p.name} · ${vName(p, v)}`, chosenVariant: v } : p; }) as (CatalogProduct & { chosenVariant?: string })[];
   const catName = tpl ? templateLabel(tpl, t) : "";
   const title = chosen.length
