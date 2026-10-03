@@ -16,6 +16,9 @@ export interface ExportItem {
   productId: string;
   defaultQuantity: number;
   defaultUnit: string;
+  /** Menge/Einheit im gespeicherten Format (für die Preissumme). */
+  priceQuantity?: string;
+  priceUnit?: string;
 }
 export interface ExportGroup {
   label: string;
@@ -83,7 +86,11 @@ export function ExportListButton({ title, groups }: { title: string; groups: Exp
         for (const g of groups) for (const i of g.items) {
           const p = prices.get(i.productId);
           if (!p) continue;
-          const v = priceForItem({ quantity: i.quantity, unit: i.unit }, { defaultQuantity: i.defaultQuantity, defaultUnit: i.defaultUnit }, p.price);
+          const v = priceForItem(
+            { quantity: i.priceQuantity ?? i.quantity, unit: i.priceUnit ?? i.unit },
+            { defaultQuantity: i.defaultQuantity, defaultUnit: i.defaultUnit },
+            p.price,
+          );
           if (v == null) continue;
           total += v; items++; currency = p.currency;
         }
