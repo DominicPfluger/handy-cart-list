@@ -564,6 +564,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [qty, setQty] = useState(prod?.default_quantity ?? 1);
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [hint, setHint] = useState("");
+  const [imgOpts, setImgOpts] = useState<{ style: "photo" | "illustration"; background: "transparent" | "white" | "gradient"; view: "front" | "top" | "side"; count: "single" | "group" }>({ style: "photo", background: "transparent", view: "front", count: "single" });
   const [large, setLarge] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null | undefined>(undefined);
   const [imageBusy, setImageBusy] = useState(false);
