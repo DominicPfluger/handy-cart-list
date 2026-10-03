@@ -803,7 +803,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     setImageBusy(true);
     try {
       await p.run(async () => {
-        const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+        const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined, opts: imgOpts } });
         await forgetCatalogImage(generated.path);
         if (!isDept) await saveProductIconFromPath(effId, generated.path);
         const { data, error } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
@@ -837,7 +837,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     setImageBusy(true);
     try {
       await p.run(async () => {
-        const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+        const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined, opts: imgOpts } });
         await forgetCatalogImage(generated.path);
         await saveCustomIconFromPath(isDept ? "department" : "product", effId, generated.path);
         const { data } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
