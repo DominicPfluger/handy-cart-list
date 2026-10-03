@@ -810,6 +810,23 @@ function useCloudLists(
     [user]
   );
 
+  const reorderTemplates = useCallback(
+    (fromId: string, toId: string) => {
+      setCloudLists((prev) => {
+        const from = prev.findIndex((l) => l.id === fromId);
+        const to = prev.findIndex((l) => l.id === toId);
+        if (from < 0 || to < 0) return prev;
+        const next = [...prev];
+        const [moved] = next.splice(from, 1);
+        next.splice(to, 0, moved!);
+        const order = next.filter((l) => l.isTemplate).map((l) => l.id);
+        runCloud({ fn: "updateList", data: { id: moved!.id, order } }, () => updateCloudList({ data: { id: moved!.id, order } }));
+        return next;
+      });
+    },
+    [user]
+  );
+
   const saveAsTemplate = useCallback(
     (id: string) => {
       const source = cloudLists.find((l) => l.id === id);
