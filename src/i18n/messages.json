@@ -1110,7 +1110,7 @@
     "adm.health.pairs": "{n} pairs",
     "adm.health.open": "Edit",
     "adm.select": "Select",
-    "adm.selectedCount": "{n} selected – drag to move",
+    "adm.selectedCount": "{n} selected",
     "adm.clearSelection": "Clear selection",
     "rk.progress": "{done} of {total} categories",
     "rk.toRecipe": "To recipe ({n} ingredients)",
@@ -1160,7 +1160,10 @@
     "rk.taste.fruity": "Fruity",
     "rk.anyOf": "{name} of your choice",
     "rk.variant": "Variant",
-    "rk.variantStandard": "Standard"
+    "rk.variantStandard": "Standard",
+    "adm.bulkAssign": "Assign",
+    "adm.selectRow": "Select row",
+    "adm.bulkSelected": "{n} selected"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2273,7 +2276,7 @@
     "adm.health.pairs": "{n} pairs",
     "adm.health.open": "Edit",
     "adm.select": "Select",
-    "adm.selectedCount": "{n} selected – drag to move",
+    "adm.selectedCount": "{n} selected",
     "adm.clearSelection": "Clear selection",
     "rk.progress": "{done} of {total} categories",
     "rk.toRecipe": "To recipe ({n} ingredients)",
@@ -2323,7 +2326,10 @@
     "rk.taste.fruity": "Fruity",
     "rk.anyOf": "{name} of your choice",
     "rk.variant": "Variant",
-    "rk.variantStandard": "Standard"
+    "rk.variantStandard": "Standard",
+    "adm.bulkAssign": "Assign",
+    "adm.selectRow": "Select row",
+    "adm.bulkSelected": "{n} selected"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3436,7 +3442,7 @@
     "adm.health.pairs": "{n} pairs",
     "adm.health.open": "Edit",
     "adm.select": "Select",
-    "adm.selectedCount": "{n} selected – drag to move",
+    "adm.selectedCount": "{n} selected",
     "adm.clearSelection": "Clear selection",
     "rk.progress": "{done} of {total} categories",
     "rk.toRecipe": "To recipe ({n} ingredients)",
@@ -3486,7 +3492,10 @@
     "rk.taste.fruity": "Fruity",
     "rk.anyOf": "{name} of your choice",
     "rk.variant": "Variant",
-    "rk.variantStandard": "Standard"
+    "rk.variantStandard": "Standard",
+    "adm.bulkAssign": "Assign",
+    "adm.selectRow": "Select row",
+    "adm.bulkSelected": "{n} selected"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4599,7 +4608,7 @@
     "adm.health.pairs": "{n} pares",
     "adm.health.open": "Editar",
     "adm.select": "Seleccionar",
-    "adm.selectedCount": "{n} seleccionados – arrastra para mover",
+    "adm.selectedCount": "{n} seleccionados",
     "adm.clearSelection": "Quitar selección",
     "rk.progress": "{done} de {total} categorías",
     "rk.toRecipe": "A la receta ({n} ingredientes)",
@@ -4649,7 +4658,10 @@
     "rk.taste.fruity": "Frutal",
     "rk.anyOf": "{name} a elección",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Estándar"
+    "rk.variantStandard": "Estándar",
+    "adm.bulkAssign": "Asignar",
+    "adm.selectRow": "Seleccionar fila",
+    "adm.bulkSelected": "{n} seleccionados"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5762,7 +5774,7 @@
     "adm.health.pairs": "{n} pares",
     "adm.health.open": "Editar",
     "adm.select": "Seleccionar",
-    "adm.selectedCount": "{n} seleccionados – arrastra para mover",
+    "adm.selectedCount": "{n} seleccionados",
     "adm.clearSelection": "Quitar selección",
     "rk.progress": "{done} de {total} categorías",
     "rk.toRecipe": "A la receta ({n} ingredientes)",
@@ -5812,7 +5824,10 @@
     "rk.taste.fruity": "Frutal",
     "rk.anyOf": "{name} a elección",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Estándar"
+    "rk.variantStandard": "Estándar",
+    "adm.bulkAssign": "Asignar",
+    "adm.selectRow": "Seleccionar fila",
+    "adm.bulkSelected": "{n} seleccionados"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6925,8 +6940,8 @@
     "adm.health.pairs": "{n} paires",
     "adm.health.open": "Modifier",
     "adm.select": "Sélectionner",
-    "adm.selectedCount": "{n} sélectionné(s) – glisser pour déplacer",
-    "adm.clearSelection": "Désélectionner",
+    "adm.selectedCount": "{n} sélectionnés",
+    "adm.clearSelection": "Effacer la sélection",
     "rk.progress": "{done} sur {total} catégories",
     "rk.toRecipe": "Vers la recette ({n} ingrédients)",
     "rk.stepSearch": "Rechercher dans cette catégorie …",
@@ -6975,7 +6990,10 @@
     "rk.taste.fruity": "Fruité",
     "rk.anyOf": "{name} au choix",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Standard"
+    "rk.variantStandard": "Standard",
+    "adm.bulkAssign": "Attribuer",
+    "adm.selectRow": "Sélectionner la ligne",
+    "adm.bulkSelected": "{n} sélectionnés"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8088,8 +8106,8 @@
     "adm.health.pairs": "{n} paires",
     "adm.health.open": "Modifier",
     "adm.select": "Sélectionner",
-    "adm.selectedCount": "{n} sélectionné(s) – glisser pour déplacer",
-    "adm.clearSelection": "Désélectionner",
+    "adm.selectedCount": "{n} sélectionnés",
+    "adm.clearSelection": "Effacer la sélection",
     "rk.progress": "{done} sur {total} catégories",
     "rk.toRecipe": "Vers la recette ({n} ingrédients)",
     "rk.stepSearch": "Rechercher dans cette catégorie …",
@@ -8138,7 +8156,10 @@
     "rk.taste.fruity": "Fruité",
     "rk.anyOf": "{name} au choix",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Standard"
+    "rk.variantStandard": "Standard",
+    "adm.bulkAssign": "Attribuer",
+    "adm.selectRow": "Sélectionner la ligne",
+    "adm.bulkSelected": "{n} sélectionnés"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9251,8 +9272,8 @@
     "adm.health.pairs": "{n} coppie",
     "adm.health.open": "Modifica",
     "adm.select": "Seleziona",
-    "adm.selectedCount": "{n} selezionati – trascina per spostare",
-    "adm.clearSelection": "Annulla selezione",
+    "adm.selectedCount": "{n} selezionati",
+    "adm.clearSelection": "Deseleziona",
     "rk.progress": "{done} di {total} categorie",
     "rk.toRecipe": "Alla ricetta ({n} ingredienti)",
     "rk.stepSearch": "Cerca in questa categoria …",
@@ -9301,7 +9322,10 @@
     "rk.taste.fruity": "Fruttato",
     "rk.anyOf": "{name} a scelta",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Standard"
+    "rk.variantStandard": "Standard",
+    "adm.bulkAssign": "Assegna",
+    "adm.selectRow": "Seleziona riga",
+    "adm.bulkSelected": "{n} selezionati"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10414,8 +10438,8 @@
     "adm.health.pairs": "{n} coppie",
     "adm.health.open": "Modifica",
     "adm.select": "Seleziona",
-    "adm.selectedCount": "{n} selezionati – trascina per spostare",
-    "adm.clearSelection": "Annulla selezione",
+    "adm.selectedCount": "{n} selezionati",
+    "adm.clearSelection": "Deseleziona",
     "rk.progress": "{done} di {total} categorie",
     "rk.toRecipe": "Alla ricetta ({n} ingredienti)",
     "rk.stepSearch": "Cerca in questa categoria …",
@@ -10464,7 +10488,10 @@
     "rk.taste.fruity": "Fruttato",
     "rk.anyOf": "{name} a scelta",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Standard"
+    "rk.variantStandard": "Standard",
+    "adm.bulkAssign": "Assegna",
+    "adm.selectRow": "Seleziona riga",
+    "adm.bulkSelected": "{n} selezionati"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11577,7 +11604,7 @@
     "adm.health.pairs": "{n} pares",
     "adm.health.open": "Editar",
     "adm.select": "Selecionar",
-    "adm.selectedCount": "{n} selecionados – arraste para mover",
+    "adm.selectedCount": "{n} selecionados",
     "adm.clearSelection": "Limpar seleção",
     "rk.progress": "{done} de {total} categorias",
     "rk.toRecipe": "Para a receita ({n} ingredientes)",
@@ -11627,7 +11654,10 @@
     "rk.taste.fruity": "Frutado",
     "rk.anyOf": "{name} à escolha",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Padrão"
+    "rk.variantStandard": "Padrão",
+    "adm.bulkAssign": "Atribuir",
+    "adm.selectRow": "Selecionar linha",
+    "adm.bulkSelected": "{n} selecionados"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12740,7 +12770,7 @@
     "adm.health.pairs": "{n} pares",
     "adm.health.open": "Editar",
     "adm.select": "Selecionar",
-    "adm.selectedCount": "{n} selecionados – arraste para mover",
+    "adm.selectedCount": "{n} selecionados",
     "adm.clearSelection": "Limpar seleção",
     "rk.progress": "{done} de {total} categorias",
     "rk.toRecipe": "Para a receita ({n} ingredientes)",
@@ -12790,7 +12820,10 @@
     "rk.taste.fruity": "Frutado",
     "rk.anyOf": "{name} à escolha",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Padrão"
+    "rk.variantStandard": "Padrão",
+    "adm.bulkAssign": "Atribuir",
+    "adm.selectRow": "Selecionar linha",
+    "adm.bulkSelected": "{n} selecionados"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13903,7 +13936,7 @@
     "adm.health.pairs": "{n} paren",
     "adm.health.open": "Bewerken",
     "adm.select": "Selecteren",
-    "adm.selectedCount": "{n} geselecteerd – sleep om te verplaatsen",
+    "adm.selectedCount": "{n} geselecteerd",
     "adm.clearSelection": "Selectie wissen",
     "rk.progress": "{done} van {total} categorieën",
     "rk.toRecipe": "Naar recept ({n} ingrediënten)",
@@ -13953,7 +13986,10 @@
     "rk.taste.fruity": "Fruitig",
     "rk.anyOf": "{name} naar keuze",
     "rk.variant": "Variant",
-    "rk.variantStandard": "Standaard"
+    "rk.variantStandard": "Standaard",
+    "adm.bulkAssign": "Toewijzen",
+    "adm.selectRow": "Rij selecteren",
+    "adm.bulkSelected": "{n} geselecteerd"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15066,7 +15102,7 @@
     "adm.health.pairs": "{n} paren",
     "adm.health.open": "Bewerken",
     "adm.select": "Selecteren",
-    "adm.selectedCount": "{n} geselecteerd – sleep om te verplaatsen",
+    "adm.selectedCount": "{n} geselecteerd",
     "adm.clearSelection": "Selectie wissen",
     "rk.progress": "{done} van {total} categorieën",
     "rk.toRecipe": "Naar recept ({n} ingrediënten)",
@@ -15116,7 +15152,10 @@
     "rk.taste.fruity": "Fruitig",
     "rk.anyOf": "{name} naar keuze",
     "rk.variant": "Variant",
-    "rk.variantStandard": "Standaard"
+    "rk.variantStandard": "Standaard",
+    "adm.bulkAssign": "Toewijzen",
+    "adm.selectRow": "Rij selecteren",
+    "adm.bulkSelected": "{n} geselecteerd"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15690,7 +15729,7 @@
     "adm.health.pairs": "{n} Paare",
     "adm.health.open": "Bearbeiten",
     "adm.select": "Auswählen",
-    "adm.selectedCount": "{n} ausgewählt – zum Verschieben ziehen",
+    "adm.selectedCount": "{n} ausgewählt",
     "adm.selectAll": "Alle",
     "adm.clearSelection": "Auswahl aufheben",
     "rk.progress": "{done} von {total} Kategorien",
@@ -15741,7 +15780,10 @@
     "rk.taste.fruity": "Fruchtig",
     "rk.anyOf": "{name} nach Wahl",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Standard"
+    "rk.variantStandard": "Standard",
+    "adm.bulkAssign": "Zuweisen",
+    "adm.selectRow": "Zeile auswählen",
+    "adm.bulkSelected": "{n} ausgewählt"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16315,7 +16357,7 @@
     "adm.health.pairs": "{n} Paare",
     "adm.health.open": "Bearbeiten",
     "adm.select": "Auswählen",
-    "adm.selectedCount": "{n} ausgewählt – zum Verschieben ziehen",
+    "adm.selectedCount": "{n} ausgewählt",
     "adm.selectAll": "Alle",
     "adm.clearSelection": "Auswahl aufheben",
     "rk.progress": "{done} von {total} Kategorien",
@@ -16366,6 +16408,9 @@
     "rk.taste.fruity": "Fruchtig",
     "rk.anyOf": "{name} nach Wahl",
     "rk.variant": "Variante",
-    "rk.variantStandard": "Standard"
+    "rk.variantStandard": "Standard",
+    "adm.bulkAssign": "Zuweisen",
+    "adm.selectRow": "Zeile auswählen",
+    "adm.bulkSelected": "{n} ausgewählt"
   }
 }

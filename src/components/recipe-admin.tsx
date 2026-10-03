@@ -431,6 +431,8 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
   const suggestStepFn = useServerFn(suggestRecipeStepProducts);
   const [suggestStep, setSuggestStep] = useState<StepRow | null>(null);
   const [suggestPicks, setSuggestPicks] = useState<Set<string> | null>(null);
+  const [selRows, setSelRows] = useState<Set<string>>(new Set());
+  const [bulkGroup, setBulkGroup] = useState("");
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
   const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
@@ -496,6 +498,17 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
   const assignGroup = (row: Row, id: string | null) => run(async () => {
     const { error } = await supabase.from("recipe_ingredients").update({ group_id: id }).eq("id", row.id);
     if (error) throw new Error(error.message);
+  });
+
+  const toggleSelRow = (id: string) =>
+    setSelRows((x) => { const n = new Set(x); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  /** Allen gewählten Zeilen auf einmal eine Rezept-Kategorie zuweisen (oder entfernen). */
+  const bulkAssignGroup = (ids: string[], groupId: string | null) => run(async () => {
+    if (!ids.length) return;
+    const { error } = await supabase.from("recipe_ingredients").update({ group_id: groupId }).in("id", ids);
+    if (error) throw new Error(error.message);
+    setSelRows(new Set());
+    setBulkGroup("");
   });
 
   const toggle = (stepKey: string, productId: string, on: boolean) =>
@@ -637,7 +650,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
         {templates.map((x) => (
           <button
             key={x.id}
-            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setPickerSearch(""); setSuggestStep(null); }}
+            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setPickerSearch(""); setSuggestStep(null); setSelRows(new Set()); setBulkGroup(""); }}
             aria-pressed={tplId === x.id}
             className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"} ${x.enabled ? "" : "opacity-50 line-through"}`}
           >
@@ -657,6 +670,17 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
           />
           {search.trim() && !prods.some((p) => normalizeSearch(p.name).includes(normalizeSearch(search)) || normalizeSearch(path(p.department_id)).includes(normalizeSearch(search))) && (
             <p className="text-xs text-muted-foreground">{T("adm.noHits")}</p>
+          )}
+          {selRows.size > 0 && (
+            <div className="flex flex-wrap items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-2.5 py-2 text-xs">
+              <span className="font-semibold text-foreground">{T("adm.bulkSelected", { n: selRows.size })}</span>
+              <select aria-label={T("adm.recipeGroupTarget")} value={bulkGroup} disabled={busy} onChange={(e) => setBulkGroup(e.target.value)} className="max-w-44 rounded border border-border bg-background p-1 text-xs text-foreground">
+                <option value="">{T("adm.recipeGroupNone")}</option>
+                {groupRows(null).map(({ group: g, depth }) => <option key={g.id} value={g.id}>{depth ? `${groups.find((x) => x.id === g.parent_id)?.name ?? ""} › ` : ""}{g.name}</option>)}
+              </select>
+              <Button size="sm" disabled={busy} onClick={() => void bulkAssignGroup([...selRows], bulkGroup || null)}>{T("adm.bulkAssign")}</Button>
+              <Button size="sm" variant="ghost" disabled={busy} onClick={() => { setSelRows(new Set()); setBulkGroup(""); }}>{T("adm.clearSelection")}</Button>
+            </div>
           )}
           {tpl.steps.map((s) => {
             const assigned = assignedFor(s.key);
@@ -689,6 +713,16 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                     <option value="relevance">{T("adm.recipeSortRelevance")}</option>
                   </select>
                 )}
+                {assigned.length > 0 && (() => {
+                  const ids = assigned.map((r) => r.id);
+                  const chosen = ids.filter((id) => selRows.has(id)).length;
+                  return (
+                    <label className="flex items-center gap-2 px-1 text-[11px] font-semibold text-foreground">
+                      <input type="checkbox" checked={chosen === ids.length} ref={(el) => { if (el) el.indeterminate = chosen > 0 && chosen < ids.length; }} onChange={(e) => setSelRows((x) => { const n = new Set(x); for (const id of ids) { if (e.target.checked) n.add(id); else n.delete(id); } return n; })} className="accent-primary" />
+                      {T("adm.selectAll")} <span className="font-normal text-muted-foreground">({chosen}/{ids.length})</span>
+                    </label>
+                  );
+                })()}
                 <div className="space-y-1">
                   {visibleAssigned.map((r) => {
                     const p = prodById.get(r.product_id);
@@ -730,6 +764,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                           className="-my-1 -ml-1.5 cursor-grab select-none px-1.5 py-1 text-sm text-muted-foreground active:cursor-grabbing"
                           aria-label={T("adm.drag")}
                         >⠿</span>
+                        <input type="checkbox" aria-label={T("adm.selectRow")} checked={selRows.has(r.id)} disabled={busy} onChange={() => toggleSelRow(r.id)} className="accent-primary" />
                         <input type="checkbox" checked disabled={busy} onChange={() => toggle(s.key, r.product_id, false)} className="accent-primary" />
                         <span className="min-w-0 flex-1 truncate text-foreground">{p?.emoji} {p?.name ?? r.product_id}</span>
                         <select aria-label={`${p?.name ?? r.product_id} · ${T("adm.recipeGroupTarget")}`} value={r.group_id ?? ""} disabled={busy} onChange={(e) => void assignGroup(r, e.target.value || null)} className="max-w-28 rounded border border-border bg-background p-1 text-xs text-foreground">
