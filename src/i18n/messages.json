@@ -1243,7 +1243,13 @@
     "tile.genAllMissing": "Only missing images ({n})",
     "tile.genAllEverything": "Regenerate all products ({n})",
     "tile.genAllHint": "Additional details (optional)",
-    "tile.genAllStart": "Generate"
+    "tile.genAllStart": "Generate",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2489,7 +2495,13 @@
     "tile.genAllMissing": "Only missing images ({n})",
     "tile.genAllEverything": "Regenerate all products ({n})",
     "tile.genAllHint": "Additional details (optional)",
-    "tile.genAllStart": "Generate"
+    "tile.genAllStart": "Generate",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3735,7 +3747,13 @@
     "tile.genAllMissing": "Only missing images ({n})",
     "tile.genAllEverything": "Regenerate all products ({n})",
     "tile.genAllHint": "Additional details (optional)",
-    "tile.genAllStart": "Generate"
+    "tile.genAllStart": "Generate",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4981,7 +4999,13 @@
     "tile.genAllMissing": "Solo imágenes faltantes ({n})",
     "tile.genAllEverything": "Regenerar todos los productos ({n})",
     "tile.genAllHint": "Detalles adicionales (opcional)",
-    "tile.genAllStart": "Generar"
+    "tile.genAllStart": "Generar",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6227,7 +6251,13 @@
     "tile.genAllMissing": "Solo imágenes faltantes ({n})",
     "tile.genAllEverything": "Regenerar todos los productos ({n})",
     "tile.genAllHint": "Detalles adicionales (opcional)",
-    "tile.genAllStart": "Generar"
+    "tile.genAllStart": "Generar",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7473,7 +7503,13 @@
     "tile.genAllMissing": "Images manquantes uniquement ({n})",
     "tile.genAllEverything": "Régénérer tous les produits ({n})",
     "tile.genAllHint": "Précisions supplémentaires (facultatif)",
-    "tile.genAllStart": "Générer"
+    "tile.genAllStart": "Générer",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8719,7 +8755,13 @@
     "tile.genAllMissing": "Images manquantes uniquement ({n})",
     "tile.genAllEverything": "Régénérer tous les produits ({n})",
     "tile.genAllHint": "Précisions supplémentaires (facultatif)",
-    "tile.genAllStart": "Générer"
+    "tile.genAllStart": "Générer",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9965,7 +10007,13 @@
     "tile.genAllMissing": "Solo immagini mancanti ({n})",
     "tile.genAllEverything": "Rigenera tutti i prodotti ({n})",
     "tile.genAllHint": "Dettagli aggiuntivi (facoltativo)",
-    "tile.genAllStart": "Genera"
+    "tile.genAllStart": "Genera",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11211,7 +11259,13 @@
     "tile.genAllMissing": "Solo immagini mancanti ({n})",
     "tile.genAllEverything": "Rigenera tutti i prodotti ({n})",
     "tile.genAllHint": "Dettagli aggiuntivi (facoltativo)",
-    "tile.genAllStart": "Genera"
+    "tile.genAllStart": "Genera",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12457,7 +12511,13 @@
     "tile.genAllMissing": "Apenas imagens em falta ({n})",
     "tile.genAllEverything": "Regenerar todos os produtos ({n})",
     "tile.genAllHint": "Detalhes adicionais (opcional)",
-    "tile.genAllStart": "Gerar"
+    "tile.genAllStart": "Gerar",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13703,7 +13763,13 @@
     "tile.genAllMissing": "Apenas imagens em falta ({n})",
     "tile.genAllEverything": "Regenerar todos os produtos ({n})",
     "tile.genAllHint": "Detalhes adicionais (opcional)",
-    "tile.genAllStart": "Gerar"
+    "tile.genAllStart": "Gerar",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14949,7 +15015,13 @@
     "tile.genAllMissing": "Alleen ontbrekende afbeeldingen ({n})",
     "tile.genAllEverything": "Alle producten opnieuw maken ({n})",
     "tile.genAllHint": "Aanvullende details (optioneel)",
-    "tile.genAllStart": "Maken"
+    "tile.genAllStart": "Maken",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16195,7 +16267,13 @@
     "tile.genAllMissing": "Alleen ontbrekende afbeeldingen ({n})",
     "tile.genAllEverything": "Alle producten opnieuw maken ({n})",
     "tile.genAllHint": "Aanvullende details (optioneel)",
-    "tile.genAllStart": "Maken"
+    "tile.genAllStart": "Maken",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16902,7 +16980,13 @@
     "tile.genAllMissing": "Nur fehlende Bilder ({n})",
     "tile.genAllEverything": "Alle Produkte neu erzeugen ({n})",
     "tile.genAllHint": "Ergänzende Angaben (optional)",
-    "tile.genAllStart": "Erzeugen"
+    "tile.genAllStart": "Erzeugen",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17609,6 +17693,12 @@
     "tile.genAllMissing": "Nur fehlende Bilder ({n})",
     "tile.genAllEverything": "Alle Produkte neu erzeugen ({n})",
     "tile.genAllHint": "Ergänzende Angaben (optional)",
-    "tile.genAllStart": "Erzeugen"
+    "tile.genAllStart": "Erzeugen",
+    "adm.bulkTree": "Create categories & products",
+    "adm.bulkTreeHint": "First line = new subcategory, following lines = products. An empty line starts a new subcategory.",
+    "adm.bulkTreePreview": "{cats} subcategories, {n} products",
+    "adm.bulkTreeDone": "Created {cats} subcategories and {n} products",
+    "adm.bulkTreeExists": "exists",
+    "adm.bulkTreeCreate": "Create"
   }
 }

@@ -1,3 +1,4 @@
+import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -115,6 +116,7 @@ function AdminPage() {
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
+  const [bulkTree, setBulkTree] = useState(false);
   const [sortDlg, setSortDlg] = useState<string | null>(null);
   /** Aktiver Admin-Bereich (Tabs). */
   const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "more">("catalog");
@@ -536,6 +538,37 @@ function AdminPage() {
     }, T("adm.headingsToSubDone", { cats: groups.length, n }));
   };
 
+  const createTree = (blocks: TreeBlock[]) => {
+    if (!cur || !d) return;
+    const n = blocks.reduce((s, b) => s + b.items.length, 0);
+    run(async () => {
+      const children = d.depts.filter((x) => x.parent_id === cur);
+      let order = children.reduce((m, x) => Math.max(m, x.sort_order), 0);
+      const newIds: string[] = [];
+      for (const b of blocks) {
+        let target = children.find((x) => x.name.trim().toLowerCase() === b.name.toLowerCase());
+        let start = 0;
+        if (target) {
+          start = d.prods.filter((x) => x.department_id === target!.id).reduce((m, x) => Math.max(m, x.sort_order), 0);
+        } else {
+          const r = await supabase.from("departments").insert({ name: b.name, parent_id: cur, sort_order: ++order }).select("id, name, emoji, parent_id, sort_order, image_path").single();
+          if (r.error) throw new Error(r.error.message);
+          target = r.data as Dept;
+          children.push(target);
+          newIds.push(target.id);
+        }
+        if (b.items.length) {
+          const tid = target.id;
+          const r = await supabase.from("products").insert(b.items.map((name, i) => ({ department_id: tid, name, sort_order: start + i + 1 }))).select("id");
+          if (r.error) throw new Error(r.error.message);
+          newIds.push(...(r.data ?? []).map((x) => x.id as string));
+        }
+      }
+      if (newIds.length) await translateIds(newIds);
+      setBulkTree(false);
+    }, T("adm.bulkTreeDone", { cats: blocks.length, n }));
+  };
+
   const remove = (s: NonNullable<Sel>, name: string) => {
     if (!confirm(T("adm.deleteConfirm", { name }))) return;
     run(async () => {
@@ -758,6 +791,7 @@ function AdminPage() {
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onSortHeading={(id) => setSortDlg(id)}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
+            onBulkTree={cur ? () => setBulkTree(true) : undefined}
             onHeadingsToSub={cur && headings.length > 0 && !mk ? headingsToSubcategories : undefined}
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
             onAdvanced={(kind, id) => setSel({ kind, id })} />
@@ -767,6 +801,10 @@ function AdminPage() {
               curDept={cur ?? undefined}
               deptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
               onSubmit={handleBulkSubmit} />
+          )}
+          {bulkTree && cur && (
+            <BulkTreeForm existing={d.depts.filter((x) => x.parent_id === cur).map((x) => x.name)}
+              onCancel={() => setBulkTree(false)} onSubmit={createTree} />
           )}
         </>
       ) : null}
