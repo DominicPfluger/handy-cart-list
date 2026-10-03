@@ -16,3 +16,5 @@
 - Zutaten-Zuweisung: Alphabetisch-Sortierung je Bereich (lokal, ohne KI/Credits)
 - Ernährungsformenfilter im Rezept-Generator entfernt (Knopf + Panel; Zutaten werden dort ungefiltert angezeigt; Länderküchenfilter bleibt)
 - Rezept-Generator: Zutaten erscheinen beim Aufklappen direkt neben der grauen Oberkategorie in derselben umbruchenden Reihe (Browser-getestet, Desktop + 390 px, kein horizontales Scrollen).
+
+- [x] Mengenangaben in Rezepten manuell bearbeiten (Generator-Übersicht + Stift-Dialog bei eigenen Rezepten; Browser-getestet)

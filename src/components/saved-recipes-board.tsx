@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
+import { Trash2, Pencil } from "lucide-react";
 import {
   DndContext, DragOverlay, KeyboardSensor, PointerSensor, TouchSensor, closestCorners,
   useDroppable, useSensor, useSensors, type DragEndEvent, type DragOverEvent, type DragStartEvent,
@@ -10,7 +10,9 @@ import { SortableContext, arrayMove, sortableKeyboardCoordinates, useSortable, v
 import { CSS } from "@dnd-kit/utilities";
 import { useT } from "../i18n";
 import { useRecipeTemplates } from "../lib/use-recipe-templates";
-import { publishRecipe, shareLink, unpublishRecipe } from "../lib/recipes-api";
+import { publishRecipe, shareLink, unpublishRecipe, fetchRecipe, updateRecipeItems, type RecipeItem } from "../lib/recipes-api";
+import { QuantityInput, isValidQty } from "./quantity-input";
+import { formatQuantity } from "../lib/units";
 import {
   applyLayout, refreshCollections, createCollection, deleteCollection, moveCollection, flattenTree, folderPath, deleteSavedWithUndo, renameCollection, renameSaved,
   type RecipeCollection, type SavedRecipe,
@@ -30,6 +32,28 @@ function Row({ r, userId, draggable, onOpen }: { r: SavedRecipe; userId: string;
   const [editing, setEditing] = useState(false);
   const [val, setVal] = useState(r.title);
   const rt = templates.find((x) => x.id === r.templateId);
+  const [qtyOpen, setQtyOpen] = useState(false);
+  const [qtyItems, setQtyItems] = useState<RecipeItem[] | null>(null);
+  const [qtyBusy, setQtyBusy] = useState(false);
+
+  const openQty = async () => {
+    setQtyOpen(true);
+    setQtyItems(null);
+    try {
+      const rec = await fetchRecipe(r.recipeId);
+      setQtyItems(rec?.items ?? []);
+    } catch { toast.error(t("cloud.error")); setQtyOpen(false); }
+  };
+  const saveQty = async () => {
+    if (!qtyItems || qtyBusy) return;
+    setQtyBusy(true);
+    try {
+      await updateRecipeItems(r.recipeId, qtyItems);
+      toast.success(t("rs.qtySaved"));
+      setQtyOpen(false);
+    } catch { toast.error(t("cloud.error")); }
+    finally { setQtyBusy(false); }
+  };
 
   const commit = () => { setEditing(false); if (val.trim() && val.trim() !== r.title) void renameSaved(r, val); else setVal(r.title); };
   const remove = async () => {
@@ -84,12 +108,50 @@ function Row({ r, userId, draggable, onOpen }: { r: SavedRecipe; userId: string;
           className="px-1 text-sm"
         >{r.isPublic ? "🌍" : "🔒"}</button>
       )}
+      {r.isOwn && (
+        <button onClick={() => void openQty()} aria-label={t("rs.editQty")} title={t("rs.editQty")} className="px-1 text-muted-foreground transition active:text-primary"><Pencil size={16} /></button>
+      )}
       {r.isOwn ? (
         <button onClick={() => void share()} aria-label={t("rs.share")} className="px-1 text-sm">🔗</button>
       ) : r.shareSlug ? (
         <Link to="/rezept/$slug" params={{ slug: r.shareSlug }} aria-label={t("rs.open")} className="px-1 text-sm">↗</Link>
       ) : null}
       <button onClick={() => void remove()} aria-label={t("rs.deleteRecipe")} className="px-2 text-muted-foreground transition active:text-destructive"><Trash2 size={16} /></button>
+      {qtyOpen && (
+        <div className="fixed inset-0 z-[60] flex items-end justify-center bg-foreground/40" onClick={() => setQtyOpen(false)}>
+          <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-base font-bold text-foreground">{t("rs.editQty")} — {r.title}</h3>
+            {qtyItems === null ? (
+              <p className="text-sm text-muted-foreground">…</p>
+            ) : (
+              <ul className="max-h-[50vh] space-y-2 overflow-y-auto">
+                {qtyItems.map((it, idx) => (
+                  <li key={`${it.productId}-${idx}`} className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-foreground">
+                    <span className="min-w-0 flex-1 truncate">{it.emoji ? `${it.emoji} ` : ""}{it.name}{it.variant ? ` · ${it.variant}` : ""}</span>
+                    {it.productId.startsWith("any:") ? (
+                      <span className="text-xs text-muted-foreground">{it.quantity}</span>
+                    ) : (
+                      <QuantityInput
+                        value={{ qty: String(Number(it.quantity.replace(",", ".").replace(/[^\d.,-]/g, "")) || it.quantity), unit: it.unit ?? "stueck" }}
+                        onChange={(v) => setQtyItems((prev) => prev?.map((x, i) => i === idx ? { ...x, quantity: isValidQty(v) ? formatQuantity(v.qty, v.unit) : x.quantity, unit: v.unit } : x) ?? prev)}
+                        ariaLabel={`${t("rs.quantity")}: ${it.name}`}
+                      />
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="flex gap-2">
+              <button type="button" onClick={() => setQtyOpen(false)} className="flex-1 rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground">
+                {t("common.cancel")}
+              </button>
+              <button type="button" onClick={() => void saveQty()} disabled={!qtyItems || qtyBusy} className="flex-1 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">
+                {t("common.save")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { SavedRecipesBoard } from "./saved-recipes-board";
 import { RECIPE_TRAITS, TRAIT_GROUPS, TASTE_MAX, splitTaste, toggleTaste, type RecipeTraits } from "../lib/recipe-traits";
 import { SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
+import { QuantityInput, isValidQty, type QtyValue } from "./quantity-input";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -46,6 +47,9 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const locale = useLocale();
   // Gewählte Produkt-Variante je Zutat (leer = Standard).
   const [variants, setVariants] = useState<Record<string, string>>({});
+  // Eigene Mengen je Zutat (überschreiben die Produkt-Standardmenge nur für dieses Rezept).
+  const [qty, setQty] = useState<Record<string, QtyValue>>({});
+  const qtyOf = (p: CatalogProduct): QtyValue => qty[p.id] ?? { qty: String(p.defaultQuantity), unit: p.defaultUnit };
   const vName = (p: CatalogProduct, v: string) => pickName(p.variantNames?.[v], locale, v);
   const [added, setAdded] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
@@ -165,7 +169,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const requiredSteps = steps.filter((s) => s.required || s.min > 0);
   const doneRequired = requiredSteps.filter(stepOk).length;
   const allRequiredDone = requiredSteps.every(stepOk);
-  useEffect(() => { setVisibleCount({}); setOpenGroups({}); }, [tplId]);
+  useEffect(() => { setVisibleCount({}); setOpenGroups({}); setQty({}); }, [tplId]);
 
   const toggleOnlyFav = () => {
     setOnlyFav((v) => {
@@ -223,7 +227,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const popularShown = showAllPopular ? visiblePopular : visiblePopular.slice(0, 5);
 
   const openRecipe = (id: RecipeTemplate["id"], p: Picks) => {
-    setTplId(id); setPicks(p); setVariants({}); setAdded(false); setSavedMsg(false);
+    setTplId(id); setPicks(p); setVariants({}); setQty({}); setAdded(false); setSavedMsg(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -251,6 +255,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     }
     setPicks(p);
     setVariants({});
+    setQty({});
   };
 
   const anyProduct = (s: (typeof steps)[number], group?: { key: string; name: string; emoji: string | null }) => ({
@@ -279,11 +284,12 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     for (const p of chosen) {
       if (p.id.startsWith("any:")) { addItem(p.name, "1", "sonstiges"); continue; }
       const g = catalog.departments.find((d) => d.id === p.departmentId);
+      const q = qtyOf(p);
       addCatalogItem({
         productId: p.id,
         name: p.name,
-        quantity: formatQuantity(p.defaultQuantity, p.defaultUnit),
-        unit: p.defaultUnit,
+        quantity: isValidQty(q) ? formatQuantity(q.qty, q.unit) : formatQuantity(p.defaultQuantity, p.defaultUnit),
+        unit: isValidQty(q) ? q.unit : p.defaultUnit,
         organic: false,
         emoji: p.emoji,
         imageUrl: p.imageUrl,
@@ -294,9 +300,15 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setAdded(true);
   };
 
-  const recipeItems = (): RecipeItem[] => chosen.map((p) => ({
-    productId: p.id, name: p.name, ...(p.chosenVariant ? { variant: p.chosenVariant } : {}), emoji: p.emoji, quantity: formatQuantity(p.defaultQuantity, p.defaultUnit), unit: p.defaultUnit,
-  }));
+  const recipeItems = (): RecipeItem[] => chosen.map((p) => {
+    const q = qtyOf(p);
+    const own = !p.id.startsWith("any:") && isValidQty(q);
+    return {
+      productId: p.id, name: p.name, ...(p.chosenVariant ? { variant: p.chosenVariant } : {}), emoji: p.emoji,
+      quantity: own ? formatQuantity(q.qty, q.unit) : formatQuantity(p.defaultQuantity, p.defaultUnit),
+      unit: own ? q.unit : p.defaultUnit,
+    };
+  });
 
   const doSave = async (collectionId: string | null) => {
     if (!tpl || !user || busy) return;
@@ -527,7 +539,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           <button onClick={surprise} className="shrink-0 whitespace-nowrap rounded-full bg-accent px-2 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
             {t("rk.surprise")}
           </button>
-          <button onClick={() => { setPicks({}); setVariants({}); setAdded(false); }} className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
+          <button onClick={() => { setPicks({}); setVariants({}); setQty({}); setAdded(false); }} className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
             {t("rk.reset")}
           </button>
       </div>
@@ -744,9 +756,20 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         ) : (
           <>
             <p className="mt-1 text-sm font-semibold text-foreground">{title}</p>
-            <ul className="mt-2 space-y-0.5 text-xs text-muted-foreground">
+            <ul className="mt-2 space-y-1.5 text-xs text-muted-foreground">
               {chosen.map((p) => (
-                <li key={p.id}>• {p.name} — {formatQuantity(p.defaultQuantity, p.defaultUnit)}</li>
+                <li key={p.id} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className="min-w-0">• {p.name}</span>
+                  {p.id.startsWith("any:") ? (
+                    <span>— {formatQuantity(p.defaultQuantity, p.defaultUnit)}</span>
+                  ) : (
+                    <QuantityInput
+                      value={qtyOf(p)}
+                      onChange={(v) => setQty((prev) => ({ ...prev, [p.id]: v }))}
+                      ariaLabel={`${t("rs.quantity")}: ${p.name}`}
+                    />
+                  )}
+                </li>
               ))}
             </ul>
             {user && (
