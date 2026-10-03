@@ -368,17 +368,24 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         />
         {TRAIT_GROUPS.map((g) => {
           const missing = traitsError && !traits[g];
+          const multi = g === "taste";
+          const tasteSel = multi ? splitTaste(traits.taste) : [];
           return (
-            <div key={g} role="radiogroup" aria-label={t(`rk.${g}`)} aria-required="true" className="space-y-1.5">
-              <p className={`text-xs font-bold ${missing ? "text-destructive" : "text-foreground"}`}>{RECIPE_TRAITS[g].emoji} {t(`rk.${g}`)} *</p>
+            <div key={g} role={multi ? "group" : "radiogroup"} aria-label={t(`rk.${g}`)} aria-required="true" className="space-y-1.5">
+              <p className={`text-xs font-bold ${missing ? "text-destructive" : "text-foreground"}`}>
+                {RECIPE_TRAITS[g].emoji} {t(`rk.${g}`)} *{multi && <span className="ml-1 font-normal text-muted-foreground">({t("rk.tasteMax", { n: TASTE_MAX })})</span>}
+              </p>
               <div className="flex flex-wrap gap-1.5">
-                {RECIPE_TRAITS[g].values.map((v) => (
-                  <button key={v} type="button" role="radio" aria-checked={traits[g] === v}
-                    onClick={() => setTraits((o) => ({ ...o, [g]: v }))}
-                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${traits[g] === v ? "border-primary bg-primary text-primary-foreground" : missing ? "border-destructive bg-card text-foreground" : "border-border bg-card text-foreground"}`}>
-                    {t(`rk.${g}.${v}` as Parameters<typeof t>[0])}
-                  </button>
-                ))}
+                {RECIPE_TRAITS[g].values.map((v) => {
+                  const on = multi ? tasteSel.includes(v) : traits[g] === v;
+                  return (
+                    <button key={v} type="button" role={multi ? "checkbox" : "radio"} aria-checked={on}
+                      onClick={() => setTraits((o) => ({ ...o, [g]: multi ? toggleTaste(o.taste, v) : v }))}
+                      className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${on ? "border-primary bg-primary text-primary-foreground" : missing ? "border-destructive bg-card text-foreground" : "border-border bg-card text-foreground"}`}>
+                      {t(`rk.${g}.${v}` as Parameters<typeof t>[0])}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           );
