@@ -33,3 +33,4 @@
 - Admin-Katalog: Varianten-Schnelldialog (Tags-Icon pro Produktzeile, mehrzeilig, dedupe, translateVariants)
 - [x] Admin-Tab „Rezept-Generator“ → „Rezept-Verwaltung“ (adm.tab.recipes in de.ts + 15 Lokalen)
 - [x] Zutaten-Kategorien im Rezepte-Admin standardmässig aufgeklappt (recipe-admin.tsx groupsOpen=true)
+- [x] Admin-Katalog: „Als Textdatei exportieren" durch „Liste als Text kopieren" ersetzt (Dialog mit Titel, Vorschau-Textarea, Clipboard-Kopieren)

@@ -95,6 +95,7 @@ export function CatalogTileEditor(p: {
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
   const [variantAdd, setVariantAdd] = useState<TileProd | null>(null);
+  const [copyOpen, setCopyOpen] = useState(false);
   const moved = useRef(false);
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
@@ -272,9 +273,9 @@ export function CatalogTileEditor(p: {
   // Icon-Klick öffnet den Dialog erst nach kurzer Verzögerung — ein Doppelklick (Zoom) kann ihn abbrechen
   const iconClickTimer = useRef<number | null>(null);
 
-  /** Produktliste der aktuellen Kategorie als Textdatei herunterladen (Überschriften als #-Zeilen). */
-  const exportTxt = () => {
-    if (!p.cur) return;
+  /** Produktliste der aktuellen Kategorie als Text (Überschriften als #-Zeilen). */
+  const buildListText = () => {
+    if (!p.cur) return "";
     const lines: string[] = [p.path.map((d) => p.nm(d.id, d.name)).join(" › "), ""];
     for (const x of p.products) {
       if (x.alias_id) continue;
@@ -282,12 +283,7 @@ export function CatalogTileEditor(p: {
       if (h) lines.push("", `# ${h.name}`);
       lines.push(`${x.emoji ? x.emoji + " " : ""}${p.nm(x.id, x.name)}`);
     }
-    const blob = new Blob([lines.join("\n") + "\n"], { type: "text/plain;charset=utf-8" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `${p.nm(p.cur, p.path[p.path.length - 1]?.name ?? "katalog")}.txt`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+    return lines.join("\n") + "\n";
   };
 
   return (
@@ -324,7 +320,7 @@ export function CatalogTileEditor(p: {
             </Button>
           )}
           {p.cur && p.products.length > 0 && (
-            <Button size="sm" variant="outline" onClick={exportTxt}>📄 {T("adm.exportTxt")}</Button>
+            <Button size="sm" variant="outline" onClick={() => setCopyOpen(true)}>📋 {T("adm.copyList")}</Button>
           )}
           {p.onTranslateMissing && <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onTranslateMissing}>🌐 {p.busy ? T("adm.working") : T("adm.trMissing")}</Button>}
         </div>
@@ -445,6 +441,8 @@ export function CatalogTileEditor(p: {
       {p.below}
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
+
+      {copyOpen && p.cur && <CopyListDialog title={p.path.map((d) => p.nm(d.id, d.name)).join(" › ")} text={buildListText()} onClose={() => setCopyOpen(false)} />}
 
       {variantAdd && <VariantAddDialog prod={variantAdd} run={p.run} must={p.must} nm={p.nm} onClose={() => setVariantAdd(null)} />}
 
@@ -1117,6 +1115,33 @@ function SuggestSheet(p: Parameters<typeof CatalogTileEditor>[0] & { cur: string
         {items && items.length > 0 && (
           <Button className="w-full" disabled={sel.size === 0} onClick={create}>{T("tile.suggestCreate", { n: sel.size })}</Button>
         )}
+      </div>
+    </div>
+  );
+}
+
+function CopyListDialog(p: { title: string; text: string; onClose: () => void }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(p.text);
+      setCopied(true);
+      toast.success(T("export.copied"));
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error(T("export.copyFailed"));
+    }
+  };
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={p.onClose}>
+      <div className="flex w-full max-w-sm flex-col gap-3 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+        <p className="text-sm font-bold text-foreground">{T("adm.copyListTitle", { name: p.title })}</p>
+        <textarea readOnly value={p.text} rows={10}
+          className="w-full rounded-xl border border-input bg-background px-3 py-2 font-mono text-xs" />
+        <div className="flex gap-2">
+          <Button variant="outline" className="flex-1" onClick={p.onClose}>{T("adm.cancel")}</Button>
+          <Button className="flex-1" onClick={() => void copy()}>{copied ? "✓ " : ""}{T("share.copyText")}</Button>
+        </div>
       </div>
     </div>
   );
