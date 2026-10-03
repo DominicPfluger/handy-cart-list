@@ -191,7 +191,7 @@ export const suggestProducts = createServerFn({ method: "POST" })
       : "source: immer leer. ";
     const r = await aiJson<{ items: Array<{ name: string; emoji: string; reason: string; scope: "global" | "market"; source: string }> }>(
       mkText + webText + "Du kuratierst den Katalog einer deutschsprachigen Einkaufslisten-App (Schweiz/Deutschland/Österreich). " +
-        "Schlage 8–15 relevante Produkte vor, die in der genannten Kategorie FEHLEN und die Kundinnen im Supermarkt typischerweise kaufen. Sie müssen thematisch genau zur Kategorie passen. " +
+        `Schlage ${data.count} relevante Produkte vor, die in der genannten Kategorie FEHLEN und die Kundinnen im Supermarkt typischerweise kaufen. Sie müssen thematisch genau zur Kategorie passen. ` +
         "Keine Duplikate, keine Synonyme bereits vorhandener Einträge, keine Einträge aus der Ausschlussliste, kein 'Beliebige'-Präfix. " +
         "Deutsche Namen (de-DE), kurz, wie im Regal. Sortiert nach Relevanz. emoji: ein passendes Emoji. reason: max. 6 Wörter.",
       JSON.stringify({ kategorie: data.path, vorhanden: data.existing, ausschliessen: data.exclude, ...(web.ok ? { web: web.text } : {}) }),
