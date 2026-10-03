@@ -115,6 +115,7 @@ function AdminPage() {
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
+  const [bulkTree, setBulkTree] = useState(false);
   const [sortDlg, setSortDlg] = useState<string | null>(null);
   /** Aktiver Admin-Bereich (Tabs). */
   const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "more">("catalog");
@@ -534,6 +535,37 @@ function AdminPage() {
       }
       if (newIds.length) await translateIds(newIds);
     }, T("adm.headingsToSubDone", { cats: groups.length, n }));
+  };
+
+  const createTree = (blocks: TreeBlock[]) => {
+    if (!cur || !d) return;
+    const n = blocks.reduce((s, b) => s + b.items.length, 0);
+    run(async () => {
+      const children = d.depts.filter((x) => x.parent_id === cur);
+      let order = children.reduce((m, x) => Math.max(m, x.sort_order), 0);
+      const newIds: string[] = [];
+      for (const b of blocks) {
+        let target = children.find((x) => x.name.trim().toLowerCase() === b.name.toLowerCase());
+        let start = 0;
+        if (target) {
+          start = d.prods.filter((x) => x.department_id === target!.id).reduce((m, x) => Math.max(m, x.sort_order), 0);
+        } else {
+          const r = await supabase.from("departments").insert({ name: b.name, parent_id: cur, sort_order: ++order }).select("id, name, emoji, parent_id, sort_order, image_path").single();
+          if (r.error) throw new Error(r.error.message);
+          target = r.data as Dept;
+          children.push(target);
+          newIds.push(target.id);
+        }
+        if (b.items.length) {
+          const tid = target.id;
+          const r = await supabase.from("products").insert(b.items.map((name, i) => ({ department_id: tid, name, sort_order: start + i + 1 }))).select("id");
+          if (r.error) throw new Error(r.error.message);
+          newIds.push(...(r.data ?? []).map((x) => x.id as string));
+        }
+      }
+      if (newIds.length) await translateIds(newIds);
+      setBulkTree(false);
+    }, T("adm.bulkTreeDone", { cats: blocks.length, n }));
   };
 
   const remove = (s: NonNullable<Sel>, name: string) => {
