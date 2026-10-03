@@ -1162,7 +1162,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assign",
-    "adm.selectRow": "Select row"
+    "adm.selectRow": "Select row",
+    "adm.bulkSelected": "{n} selected"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2327,7 +2328,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assign",
-    "adm.selectRow": "Select row"
+    "adm.selectRow": "Select row",
+    "adm.bulkSelected": "{n} selected"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3492,7 +3494,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assign",
-    "adm.selectRow": "Select row"
+    "adm.selectRow": "Select row",
+    "adm.bulkSelected": "{n} selected"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4657,7 +4660,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Estándar",
     "adm.bulkAssign": "Asignar",
-    "adm.selectRow": "Seleccionar fila"
+    "adm.selectRow": "Seleccionar fila",
+    "adm.bulkSelected": "{n} seleccionados"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5822,7 +5826,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Estándar",
     "adm.bulkAssign": "Asignar",
-    "adm.selectRow": "Seleccionar fila"
+    "adm.selectRow": "Seleccionar fila",
+    "adm.bulkSelected": "{n} seleccionados"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6987,7 +6992,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Attribuer",
-    "adm.selectRow": "Sélectionner la ligne"
+    "adm.selectRow": "Sélectionner la ligne",
+    "adm.bulkSelected": "{n} sélectionnés"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8152,7 +8158,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Attribuer",
-    "adm.selectRow": "Sélectionner la ligne"
+    "adm.selectRow": "Sélectionner la ligne",
+    "adm.bulkSelected": "{n} sélectionnés"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9317,7 +9324,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assegna",
-    "adm.selectRow": "Seleziona riga"
+    "adm.selectRow": "Seleziona riga",
+    "adm.bulkSelected": "{n} selezionati"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10482,7 +10490,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Assegna",
-    "adm.selectRow": "Seleziona riga"
+    "adm.selectRow": "Seleziona riga",
+    "adm.bulkSelected": "{n} selezionati"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11647,7 +11656,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Padrão",
     "adm.bulkAssign": "Atribuir",
-    "adm.selectRow": "Selecionar linha"
+    "adm.selectRow": "Selecionar linha",
+    "adm.bulkSelected": "{n} selecionados"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12812,7 +12822,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Padrão",
     "adm.bulkAssign": "Atribuir",
-    "adm.selectRow": "Selecionar linha"
+    "adm.selectRow": "Selecionar linha",
+    "adm.bulkSelected": "{n} selecionados"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13977,7 +13988,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standaard",
     "adm.bulkAssign": "Toewijzen",
-    "adm.selectRow": "Rij selecteren"
+    "adm.selectRow": "Rij selecteren",
+    "adm.bulkSelected": "{n} geselecteerd"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15142,7 +15154,8 @@
     "rk.variant": "Variant",
     "rk.variantStandard": "Standaard",
     "adm.bulkAssign": "Toewijzen",
-    "adm.selectRow": "Rij selecteren"
+    "adm.selectRow": "Rij selecteren",
+    "adm.bulkSelected": "{n} geselecteerd"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15769,7 +15782,8 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Zuweisen",
-    "adm.selectRow": "Zeile auswählen"
+    "adm.selectRow": "Zeile auswählen",
+    "adm.bulkSelected": "{n} ausgewählt"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16396,6 +16410,7 @@
     "rk.variant": "Variante",
     "rk.variantStandard": "Standard",
     "adm.bulkAssign": "Zuweisen",
-    "adm.selectRow": "Zeile auswählen"
+    "adm.selectRow": "Zeile auswählen",
+    "adm.bulkSelected": "{n} ausgewählt"
   }
 }
