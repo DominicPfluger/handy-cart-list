@@ -987,6 +987,7 @@ function Editor(p: {
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
                       <span className="truncate">{v}</span>
                     </span>
+                    {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} variant={v} />}
                     <button
                       type="button"
                       aria-label={`${v} entfernen`}
