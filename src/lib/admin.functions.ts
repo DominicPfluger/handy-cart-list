@@ -142,6 +142,7 @@ const ctxSchema = z.object({
   exclude: z.array(z.string().max(120)).max(400).default([]),
   market: z.string().regex(/^[A-Z]{2}$/).optional(),
   mode: z.enum(["web", "ai"]).default("ai"),
+  count: z.number().int().min(5).max(25).default(15),
 });
 
 /** Websuche (Firecrawl) nach Shop-Seiten zur Kategorie; liefert gekürzten Text + Quellen. */
