@@ -599,7 +599,7 @@ function AdminPage() {
         await must(supabase.from("catalog_translations").delete().eq("entity_id", id));
       }
       await qc.invalidateQueries({ queryKey: ALIAS_KEY });
-et      }, T("adm.deleted"));
+    }, T("adm.deleted"));
   };
 
   const results = useMemo(() => {
