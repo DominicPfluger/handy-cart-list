@@ -5,6 +5,7 @@
 - [ ] Browser-Tests nachholen: recipe-traits-admin, Varianten-Auswahl
 
 ## Erledigt (Auswahl)
+- [x] Marktwahl in „Mehr“ steuert Produkt-Sichtbarkeit, Marktreihenfolge und Marken unabhängig von der Sprache; DE/CH/Automatisch und Marken in der Produktdetailseite im Browser geprüft. Aktuell sind noch keine marktspezifischen Produkte oder Sortierungen hinterlegt.
 - [x] Eigene Varianten nur in der Produktdetailansicht anlegen; in der Abteilungsansicht weiterhin verwenden. Anlegen, Dublettenprüfung, Schnell-Hinzufügen und Entfernen auf Handy und Desktop geprüft; Admin-Werkzeuge bleiben getrennt.
 - [x] Eigene Produktvarianten pro Gerät speichern, suchen, favorisieren, zur Liste hinzufügen und entfernen (Desktop/Mobil Browser-getestet).
 - [x] Abteilungsansicht: „Produktvarianten"-Link ersetzt durch Auf-/Zuklappen-Link „Varianten (n)" unter der Mengenzeile; kleiner Button neben dem Produktnamen entfernt (Desktop/Mobil Browser-getestet).

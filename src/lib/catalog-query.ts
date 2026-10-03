@@ -6,6 +6,7 @@ import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
 import { usePersonalVariants } from "../hooks/use-personal-variants";
 import { useAllMarkets } from "../hooks/use-all-markets";
+import { useMarket } from "../hooks/use-market";
 
 /** Ländercode des Marktes aus der Sprachvariante (de-CH → CH). */
 export function marketOf(locale: string): string {
@@ -52,6 +53,7 @@ export function originalName(e: { names: Record<string, string>; baseName: strin
 /** Katalog mit Namen in der aktuell gewählten Sprache (persönliche Namen haben Vorrang). */
 export function useCatalog(): Catalog {
   const locale = useLocale();
+  const market = useMarket();
   const { data } = useSuspenseQuery(catalogQueryOptions(locale));
   const { data: images } = useQuery(catalogImagesQueryOptions);
   const custom = useCustomNames();
@@ -59,7 +61,6 @@ export function useCatalog(): Catalog {
   const personalVariants = usePersonalVariants();
   const allMarkets = useAllMarkets();
   return useMemo(() => {
-    const market = marketOf(locale);
     const img = (path: string | null | undefined) => (path ? (images?.[path] ?? null) : null);
     const ownDepts: CatalogDepartment[] = own.departments.map((d, i) => ({
       id: d.id, parentId: d.parentId, name: d.name, emoji: d.emoji, color: null, imageUrl: null,
@@ -97,7 +98,7 @@ export function useCatalog(): Catalog {
       recipeSteps: (data.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
       recipePopular: data.recipePopular ?? [],
     };
-  }, [data, images, locale, custom, own, allMarkets, personalVariants]);
+  }, [data, images, locale, market, custom, own, allMarkets, personalVariants]);
 }
 
 export type { Catalog, CatalogCuisine, CatalogDepartment, CatalogHeading, CatalogProduct };
@@ -165,9 +166,8 @@ export function compareByName(a: { name: string }, b: { name: string }) {
   return a.name.localeCompare(b.name, getLocale());
 }
 
-/** Marken eines Produkts, die im Markt der gewählten Sprachvariante verbreitet sind. */
-export function brandsFor(product: Pick<CatalogProduct, "brands">, locale: string = getLocale()): string[] {
-  const market = locale.split("-")[1] ?? "";
+/** Marken eines Produkts, die im ausgewählten Markt verbreitet sind. */
+export function brandsFor(product: Pick<CatalogProduct, "brands">, market: string): string[] {
   const all = product.brands ?? [];
   const own = all.filter((b) => !b.markets.length || b.markets.includes(market)).map((b) => b.name);
   // Fallback: keine Marken für den eigenen Markt hinterlegt → alle Marken zeigen statt gar keiner.

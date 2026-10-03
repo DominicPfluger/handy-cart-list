@@ -37,6 +37,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { saveHeading } from "../lib/admin.functions";
 import { useReferencePrices, formatRefPrice } from "../hooks/use-reference-prices";
+import { useMarket } from "../hooks/use-market";
 import { removePersonalVariant, usePersonalVariants } from "../hooks/use-personal-variants";
 
 
@@ -66,6 +67,7 @@ function DepartmentThumb({ department }: { department: CatalogDepartment }) {
 
 function DepartmentsPage() {
   const data = useCatalog();
+  const market = useMarket();
   const hiddenIds = useHiddenDepartments();
   const hiddenProductIds = useHiddenProducts();
   const diets = useDietFilter();
@@ -222,13 +224,13 @@ function DepartmentsPage() {
     const big = Number.MAX_SAFE_INTEGER;
     return orderedProducts
       .filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId))
-      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || matchesProductSearch(product.baseName ?? "", normalizedQuery) || brandsFor(product).some((b) => matchesProductSearch(b, normalizedQuery)) || !!matchedVariant(product) || !!matchedSynonym(product) || !!matchedLocaleName(product))
+      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || matchesProductSearch(product.baseName ?? "", normalizedQuery) || brandsFor(product, market).some((b) => matchesProductSearch(b, normalizedQuery)) || !!matchedVariant(product) || !!matchedSynonym(product) || !!matchedLocaleName(product))
       .sort((a, b) => (deptRank.get(a.departmentId) ?? big) - (deptRank.get(b.departmentId) ?? big) || (order.get(a.id) ?? big) - (order.get(b.id) ?? big));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [departments, orderedProducts, hiddenProductIds, removedIds, normalizedQuery]);
+  }, [departments, orderedProducts, hiddenProductIds, removedIds, normalizedQuery, market]);
 
   const matchedBrand = (product: CatalogProduct) =>
-    matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) ? undefined : brandsFor(product).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
+    matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) ? undefined : brandsFor(product, market).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
   const synonymHint = (product: CatalogProduct) =>
     matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) || matchedBrand(product) ? undefined : matchedSynonym(product) ?? matchedLocaleName(product);
 
