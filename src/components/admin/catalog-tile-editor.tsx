@@ -442,7 +442,7 @@ export function CatalogTileEditor(p: {
       {p.cur && p.products.length > 0 && (
         <label className="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm font-medium text-foreground">
           <input
-            ref={(el) => { if (allSelRef.current !== el) { allSelRef.current = el; if (el) el.indeterminate = !allSelected && selected.size > 0; } }}
+            ref={allSelRef}
             type="checkbox"
             checked={allSelected}
             onChange={() => setSelected(allSelected ? new Set() : new Set(p.products.map((x) => x.id)))}
