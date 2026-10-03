@@ -48,4 +48,4 @@
 - [x] Rezepte-Admin: Button „Neue Vorlage" umbenannt in „Neue Rezept-Kategorie" (adm.stepNew) in allen 16 Sprachen; Tab-Name unverändert.
 - [x] Separates Icon + grosses Vorschaubild für Produkte und Kategorien
 
-- [ ] Admin: Stift neben Zieh-Griff (Papierkorb bleibt rechts) + Icon-Funktionen im Bild-Dialog (Beide Bilder gleich, Bild auswählen, KI-Bild, Entfernen)
+- [x] Admin: Stift neben Zieh-Griff (Papierkorb bleibt rechts) + Icon-Funktionen im Bild-Dialog (Beide Bilder gleich, Bild auswählen, KI-Bild, Entfernen) — Browser-getestet: Zeile ⠿/Stift/Bild/…/Papierkorb, Dialog zeigt alle vier Aktionen, „Beide Bilder gleich" übernimmt das Vorschaubild als Icon, Entfernen setzt zurück auf Auto-Icon
