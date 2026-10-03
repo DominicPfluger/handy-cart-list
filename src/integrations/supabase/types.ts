@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_backups: {
+        Row: {
+          created_at: string
+          id: string
+          label: string
+          payload: Json
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          label: string
+          payload?: Json
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          label?: string
+          payload?: Json
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       app_locales: {
         Row: {
           created_at: string
