@@ -287,6 +287,8 @@ export function CatalogTileEditor(p: {
   const click = (fn: () => void) => () => { if (moved.current) { moved.current = false; return; } fn(); };
   // Icon-Klick öffnet den Dialog erst nach kurzer Verzögerung — ein Doppelklick (Zoom) kann ihn abbrechen
   const iconClickTimer = useRef<number | null>(null);
+  const lpTimer = useRef<number | null>(null);
+  const lpFired = useRef(false);
 
   /** Produktliste der aktuellen Kategorie als Text (Überschriften als #-Zeilen). */
   const buildListText = () => {
@@ -422,11 +424,22 @@ export function CatalogTileEditor(p: {
                 className={`flex items-center gap-3 px-3 py-2 ${x.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
                 <input type="checkbox" checked={selected.has(x.id)} onChange={() => toggleSel(x.id)} aria-label={T("adm.select")} className="h-4 w-4 shrink-0 accent-primary" />
                 <span onPointerDown={(e) => startDrag(e, "product", x.id, i, (x.emoji ?? "•") + (selected.has(x.id) && selected.size > 1 ? ` +${selected.size - 1}` : ""))} {...dragHandlers} aria-label={T("adm.drag")} title={T("adm.drag")} className="cursor-grab touch-none select-none px-0.5 text-base text-muted-foreground">⠿</span>
-                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
-                  <Pencil className="h-3.5 w-3.5" />
-                </Button>
-                <span onClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
-                  className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl">
+                <span
+                  onPointerDown={(e) => {
+                    if (!editMode) return;
+                    lpFired.current = false;
+                    if (lpTimer.current !== null) window.clearTimeout(lpTimer.current);
+                    lpTimer.current = window.setTimeout(() => {
+                      lpTimer.current = null;
+                      lpFired.current = true;
+                      startDrag(e, "product", x.id, i, (x.emoji ?? "•") + (selected.has(x.id) && selected.size > 1 ? ` +${selected.size - 1}` : ""));
+                    }, 500);
+                  }}
+                  onPointerMove={(e) => { if (lpTimer.current !== null) { window.clearTimeout(lpTimer.current); lpTimer.current = null; } onMove(e); }}
+                  onPointerUp={(e) => { if (lpTimer.current !== null) { window.clearTimeout(lpTimer.current); lpTimer.current = null; } onUp(e); }}
+                  onPointerCancel={() => { if (lpTimer.current !== null) { window.clearTimeout(lpTimer.current); lpTimer.current = null; } setDrag(null); setOver(null); setOverPos(null); }}
+                  onClick={() => { if (lpFired.current) { lpFired.current = false; return; } if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
+                  className="flex h-11 w-11 shrink-0 touch-none select-none items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl">
                   {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
                 </span>
                 <button type="button" disabled={!editMode} onClick={click(() => x.alias_id ? p.onAdvanced?.("product", pid) : setTarget({ kind: "product", id: x.id }))} className="min-w-0 flex-1 text-left">
