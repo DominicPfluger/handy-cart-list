@@ -606,11 +606,24 @@ function AdminPage() {
       if (done > 0) await refresh();
     }
   };
-  const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, ai?: { hint: string; opts: AiImageOpts }) => {
+  const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, deptId: string, ai?: { hint: string; opts: AiImageOpts }) => {
     if (ai && !window.confirm(T("adm.aiImagesConfirm", { n: names.length }))) return;
     let newIds: string[] = [];
     return run(async () => {
-    if (!cur) return;
+    const target = deptId || cur;
+    if (!target) return;
+    if (target !== cur) {
+      // Fremde Kategorie gewählt: immer ans Ende dieser Kategorie (höchster sort_order + 1)
+      const { data: maxRow } = await supabase.from("products").select("sort_order").eq("department_id", target).order("sort_order", { ascending: false }).limit(1);
+      const start = ((maxRow?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1;
+      const rows = names.map((name, i) => ({ department_id: target, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: start + i }));
+      const r = await supabase.from("products").insert(rows).select("id");
+      if (r.error) throw new Error(r.error.message);
+      newIds = (r.data ?? []).map((x) => x.id as string);
+      await translateIds(newIds);
+      setBulk(false);
+      return;
+    }
     // Einfügeposition bestimmen: "end" = ans Ende, "top" = ganz oben, sonst Überschriften-ID = ans Ende ihrer Gruppe
     let insertAt = products.length;
     if (pos === "top") insertAt = 0;
@@ -628,7 +641,7 @@ function AdminPage() {
     // Bestehende Produkte ab der Einfügestelle nach hinten schieben
     const shifted = products.slice(insertAt).filter((x) => !x.id.startsWith("alias:"));
     await Promise.all(shifted.map((x, i) => must(supabase.from("products").update({ sort_order: insertAt + names.length + i + 1 }).eq("id", x.id))));
-    const rows = names.map((name, i) => ({ department_id: cur, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: insertAt + i + 1 }));
+    const rows = names.map((name, i) => ({ department_id: target, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: insertAt + i + 1 }));
     const r = await supabase.from("products").insert(rows).select("id");
     if (r.error) throw new Error(r.error.message);
     newIds = (r.data ?? []).map((x) => x.id as string);
