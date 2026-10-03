@@ -147,6 +147,12 @@ export async function fetchRecipe(id: string): Promise<CommunityRecipe | null> {
   return data ? { ...data, items: (data.items as unknown as RecipeItem[]) ?? [] } : null;
 }
 
+/** Mengen (items) eines eigenen Rezepts aktualisieren (RLS: nur Besitzer). */
+export async function updateRecipeItems(recipeId: string, items: RecipeItem[]) {
+  const { error } = await supabase.from("recipes").update({ items: items as unknown as Json }).eq("id", recipeId);
+  if (error) throw error;
+}
+
 /** Öffentliche Rezepte samt Eigenschaften für die Kriterien-Suche. */
 export type TraitRecipe = {
   id: string; title: string; description: string | null; template_id: string; share_slug: string;

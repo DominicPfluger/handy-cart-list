@@ -12,6 +12,7 @@ export const de = {
 
   "common.organic": "Bio",
   "common.cancel": "Abbrechen",
+  "common.save": "Speichern",
   "common.done": "Fertig",
   "common.tryOther": "Versuche einen anderen Suchbegriff.",
   "common.searchResults": "Suchergebnisse",
@@ -498,6 +499,9 @@ export const de = {
   "rs.speakStop": "Vorlesen stoppen",
   "rs.speakIngredients": "Zutaten",
   "rs.portions": "Portionen",
+  "rs.quantity": "Menge",
+  "rs.editQty": "Mengen bearbeiten",
+  "rs.qtySaved": "Mengen gespeichert",
   "rs.expand": "Aufklappen",
   "rs.collapse": "Zuklappen",
   "rs.newFolder": "+ Neuer Ordner",
