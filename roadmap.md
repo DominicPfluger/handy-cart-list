@@ -53,3 +53,5 @@
 - [x] Admin: KI-Bild-Optionen im Bild-Dialog (Stichworte, Stil, Hintergrund, Ansicht, Anzahl) — erledigt 2026-10-03
 
 - [x] Abteilungsansicht: kein grosses Vorschaubild mehr über der aufgeklappten Variantenliste (2026-10-03)
+- [x] Icon-Bild wie Vorschaubild repariert
+- [x] KI-Bilder beim Anlegen neuer Produkte

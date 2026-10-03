@@ -1215,7 +1215,12 @@
     "adm.iconAutoHint": "Created automatically from the preview image",
     "adm.iconUseImage": "Icon image like preview image",
     "adm.iconPick": "Choose image",
-    "adm.iconAi": "AI image"
+    "adm.iconAi": "AI image",
+    "adm.aiImagesNew": "Generate AI images",
+    "adm.aiImagesConfirm": "Generate AI images for {n} new products? This uses credits.",
+    "adm.aiImagesProgress": "Generating AI image {i} of {n} …",
+    "adm.iconUseImageDone": "Icon applied",
+    "tile.noImage": "No preview image available"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2433,7 +2438,12 @@
     "adm.iconAutoHint": "Created automatically from the preview image",
     "adm.iconUseImage": "Icon image like preview image",
     "adm.iconPick": "Choose image",
-    "adm.iconAi": "AI image"
+    "adm.iconAi": "AI image",
+    "adm.aiImagesNew": "Generate AI images",
+    "adm.aiImagesConfirm": "Generate AI images for {n} new products? This uses credits.",
+    "adm.aiImagesProgress": "Generating AI image {i} of {n} …",
+    "adm.iconUseImageDone": "Icon applied",
+    "tile.noImage": "No preview image available"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3651,7 +3661,12 @@
     "adm.iconAutoHint": "Created automatically from the preview image",
     "adm.iconUseImage": "Icon image like preview image",
     "adm.iconPick": "Choose image",
-    "adm.iconAi": "AI image"
+    "adm.iconAi": "AI image",
+    "adm.aiImagesNew": "Generate AI images",
+    "adm.aiImagesConfirm": "Generate AI images for {n} new products? This uses credits.",
+    "adm.aiImagesProgress": "Generating AI image {i} of {n} …",
+    "adm.iconUseImageDone": "Icon applied",
+    "tile.noImage": "No preview image available"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4869,7 +4884,12 @@
     "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa",
     "adm.iconUseImage": "Imagen de icono como la vista previa",
     "adm.iconPick": "Elegir imagen",
-    "adm.iconAi": "Imagen con IA"
+    "adm.iconAi": "Imagen con IA",
+    "adm.aiImagesNew": "Generar imágenes con IA",
+    "adm.aiImagesConfirm": "¿Generar imágenes con IA para {n} productos nuevos? Esto consume créditos.",
+    "adm.aiImagesProgress": "Generando imagen IA {i} de {n} …",
+    "adm.iconUseImageDone": "Icono aplicado",
+    "tile.noImage": "No hay imagen de vista previa"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6087,7 +6107,12 @@
     "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa",
     "adm.iconUseImage": "Imagen de icono como la vista previa",
     "adm.iconPick": "Elegir imagen",
-    "adm.iconAi": "Imagen con IA"
+    "adm.iconAi": "Imagen con IA",
+    "adm.aiImagesNew": "Generar imágenes con IA",
+    "adm.aiImagesConfirm": "¿Generar imágenes con IA para {n} productos nuevos? Esto consume créditos.",
+    "adm.aiImagesProgress": "Generando imagen IA {i} de {n} …",
+    "adm.iconUseImageDone": "Icono aplicado",
+    "tile.noImage": "No hay imagen de vista previa"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7305,7 +7330,12 @@
     "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu",
     "adm.iconUseImage": "Image d'icône comme l'aperçu",
     "adm.iconPick": "Choisir une image",
-    "adm.iconAi": "Image par IA"
+    "adm.iconAi": "Image par IA",
+    "adm.aiImagesNew": "Générer des images IA",
+    "adm.aiImagesConfirm": "Générer des images IA pour {n} nouveaux produits ? Cela consomme des crédits.",
+    "adm.aiImagesProgress": "Génération de l'image IA {i} sur {n} …",
+    "adm.iconUseImageDone": "Icône appliquée",
+    "tile.noImage": "Aucune image d'aperçu"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8523,7 +8553,12 @@
     "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu",
     "adm.iconUseImage": "Image d'icône comme l'aperçu",
     "adm.iconPick": "Choisir une image",
-    "adm.iconAi": "Image par IA"
+    "adm.iconAi": "Image par IA",
+    "adm.aiImagesNew": "Générer des images IA",
+    "adm.aiImagesConfirm": "Générer des images IA pour {n} nouveaux produits ? Cela consomme des crédits.",
+    "adm.aiImagesProgress": "Génération de l'image IA {i} sur {n} …",
+    "adm.iconUseImageDone": "Icône appliquée",
+    "tile.noImage": "Aucune image d'aperçu"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9741,7 +9776,12 @@
     "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima",
     "adm.iconUseImage": "Immagine icona come anteprima",
     "adm.iconPick": "Scegli immagine",
-    "adm.iconAi": "Immagine IA"
+    "adm.iconAi": "Immagine IA",
+    "adm.aiImagesNew": "Genera immagini IA",
+    "adm.aiImagesConfirm": "Generare immagini IA per {n} nuovi prodotti? Consuma crediti.",
+    "adm.aiImagesProgress": "Generazione immagine IA {i} di {n} …",
+    "adm.iconUseImageDone": "Icona applicata",
+    "tile.noImage": "Nessuna immagine di anteprima"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10959,7 +10999,12 @@
     "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima",
     "adm.iconUseImage": "Immagine icona come anteprima",
     "adm.iconPick": "Scegli immagine",
-    "adm.iconAi": "Immagine IA"
+    "adm.iconAi": "Immagine IA",
+    "adm.aiImagesNew": "Genera immagini IA",
+    "adm.aiImagesConfirm": "Generare immagini IA per {n} nuovi prodotti? Consuma crediti.",
+    "adm.aiImagesProgress": "Generazione immagine IA {i} di {n} …",
+    "adm.iconUseImageDone": "Icona applicata",
+    "tile.noImage": "Nessuna immagine di anteprima"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12177,7 +12222,12 @@
     "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização",
     "adm.iconUseImage": "Imagem de ícone igual à pré-visualização",
     "adm.iconPick": "Escolher imagem",
-    "adm.iconAi": "Imagem de IA"
+    "adm.iconAi": "Imagem de IA",
+    "adm.aiImagesNew": "Gerar imagens com IA",
+    "adm.aiImagesConfirm": "Gerar imagens com IA para {n} novos produtos? Isto consome créditos.",
+    "adm.aiImagesProgress": "A gerar imagem IA {i} de {n} …",
+    "adm.iconUseImageDone": "Ícone aplicado",
+    "tile.noImage": "Sem imagem de pré-visualização"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13395,7 +13445,12 @@
     "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização",
     "adm.iconUseImage": "Imagem de ícone igual à pré-visualização",
     "adm.iconPick": "Escolher imagem",
-    "adm.iconAi": "Imagem de IA"
+    "adm.iconAi": "Imagem de IA",
+    "adm.aiImagesNew": "Gerar imagens com IA",
+    "adm.aiImagesConfirm": "Gerar imagens com IA para {n} novos produtos? Isto consome créditos.",
+    "adm.aiImagesProgress": "A gerar imagem IA {i} de {n} …",
+    "adm.iconUseImageDone": "Ícone aplicado",
+    "tile.noImage": "Sem imagem de pré-visualização"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14613,7 +14668,12 @@
     "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding",
     "adm.iconUseImage": "Pictogramafbeelding zoals voorbeeldafbeelding",
     "adm.iconPick": "Afbeelding kiezen",
-    "adm.iconAi": "AI-afbeelding"
+    "adm.iconAi": "AI-afbeelding",
+    "adm.aiImagesNew": "AI-afbeeldingen maken",
+    "adm.aiImagesConfirm": "AI-afbeeldingen maken voor {n} nieuwe producten? Dit verbruikt credits.",
+    "adm.aiImagesProgress": "AI-afbeelding {i} van {n} wordt gemaakt …",
+    "adm.iconUseImageDone": "Icoon toegepast",
+    "tile.noImage": "Geen voorbeeldafbeelding"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15831,7 +15891,12 @@
     "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding",
     "adm.iconUseImage": "Pictogramafbeelding zoals voorbeeldafbeelding",
     "adm.iconPick": "Afbeelding kiezen",
-    "adm.iconAi": "AI-afbeelding"
+    "adm.iconAi": "AI-afbeelding",
+    "adm.aiImagesNew": "AI-afbeeldingen maken",
+    "adm.aiImagesConfirm": "AI-afbeeldingen maken voor {n} nieuwe producten? Dit verbruikt credits.",
+    "adm.aiImagesProgress": "AI-afbeelding {i} van {n} wordt gemaakt …",
+    "adm.iconUseImageDone": "Icoon toegepast",
+    "tile.noImage": "Geen voorbeeldafbeelding"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16510,7 +16575,12 @@
     "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt",
     "adm.iconUseImage": "Icon-Bild wie Vorschaubild",
     "adm.iconPick": "Bild auswählen",
-    "adm.iconAi": "KI-Bild"
+    "adm.iconAi": "KI-Bild",
+    "adm.aiImagesNew": "KI-Bilder erzeugen",
+    "adm.aiImagesConfirm": "Für {n} neue Produkte KI-Bilder erzeugen? Dies verbraucht Credits.",
+    "adm.aiImagesProgress": "KI-Bild {i} von {n} wird erzeugt …",
+    "adm.iconUseImageDone": "Icon übernommen",
+    "tile.noImage": "Kein Vorschaubild vorhanden"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17189,6 +17259,11 @@
     "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt",
     "adm.iconUseImage": "Icon-Bild wie Vorschaubild",
     "adm.iconPick": "Bild auswählen",
-    "adm.iconAi": "KI-Bild"
+    "adm.iconAi": "KI-Bild",
+    "adm.aiImagesNew": "KI-Bilder erzeugen",
+    "adm.aiImagesConfirm": "Für {n} neue Produkte KI-Bilder erzeugen? Dies verbraucht Credits.",
+    "adm.aiImagesProgress": "KI-Bild {i} von {n} wird erzeugt …",
+    "adm.iconUseImageDone": "Icon übernommen",
+    "tile.noImage": "Kein Vorschaubild vorhanden"
   }
 }

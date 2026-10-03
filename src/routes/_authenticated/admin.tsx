@@ -32,6 +32,9 @@ import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 import { ImportPanel } from "@/components/admin/import-panel";
 import { CatalogMediaPanel } from "@/components/admin/catalog-media-panel";
 import { CatalogTileEditor } from "@/components/admin/catalog-tile-editor";
+import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
+import { generateImageFor } from "@/lib/product-media.functions";
+import { saveProductIconFromPath } from "@/lib/product-icon";
 import { LocaleAdminPanel } from "@/components/admin/locale-admin-panel";
 import { CatalogHealthPanel } from "@/components/admin/catalog-health-panel";
 import { useReferencePrices } from "@/hooks/use-reference-prices";
@@ -95,6 +98,7 @@ function AdminPage() {
   const saveH = useServerFn(saveHeading);
   const delH = useServerFn(deleteHeading);
   const suggest = useServerFn(suggestProducts);
+  const genImgFor = useServerFn(generateImageFor);
   const trVariants = useServerFn(translateVariants);
   const rank = useServerFn(rankProducts);
   const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity" | "marketRelevance">("popularity");
@@ -499,7 +503,28 @@ function AdminPage() {
 
   const selName = sel ? (sel.kind === "department" ? deptById.get(sel.id)?.name : sel.kind === "product" ? d?.prods.find((p) => p.id === sel.id)?.name : d?.heads.find((h) => h.id === sel.id)?.name) ?? "" : "";
 
-  const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string) => run(async () => {
+  /** Creates AI images one after another; stops at the first failure (e.g. credits used up). */
+  const generateNewImages = async (ids: string[], ai: { hint: string; opts: AiImageOpts }) => {
+    const tid = toast.loading(T("adm.aiImagesProgress", { i: 1, n: ids.length }));
+    let done = 0;
+    try {
+      for (const id of ids) {
+        toast.loading(T("adm.aiImagesProgress", { i: done + 1, n: ids.length }), { id: tid });
+        const g = await genImgFor({ data: { id, kind: "product", hint: ai.hint || undefined, opts: ai.opts } });
+        await saveProductIconFromPath(id, g.path);
+        done++;
+      }
+      toast.success(T("tile.imgDone"), { id: tid });
+    } catch (e) {
+      toast.error((e as Error).message, { id: tid });
+    } finally {
+      if (done > 0) await refresh();
+    }
+  };
+  const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, ai?: { hint: string; opts: AiImageOpts }) => {
+    if (ai && !window.confirm(T("adm.aiImagesConfirm", { n: names.length }))) return;
+    let newIds: string[] = [];
+    return run(async () => {
     if (!cur) return;
     // Einfügeposition bestimmen: "end" = ans Ende, "top" = ganz oben, sonst Überschriften-ID = ans Ende ihrer Gruppe
     let insertAt = products.length;
@@ -521,9 +546,11 @@ function AdminPage() {
     const rows = names.map((name, i) => ({ department_id: cur, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: insertAt + i + 1 }));
     const r = await supabase.from("products").insert(rows).select("id");
     if (r.error) throw new Error(r.error.message);
-    await translateIds((r.data ?? []).map((x) => x.id as string));
+    newIds = (r.data ?? []).map((x) => x.id as string);
+    await translateIds(newIds);
     setBulk(false);
-  }, T("adm.created"));
+  }, T("adm.created")).then(() => { if (ai && newIds.length) void generateNewImages(newIds, ai); });
+  };
 
   return (
     <div className="space-y-4 pb-10">
@@ -719,7 +746,7 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
 type Suggestion = { name: string; emoji: string; reason: string; scope: "global" | "market"; source?: string | undefined };
 
 function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path, headings = [], products = [] }: {
-  onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string) => void; onCancel: () => void;
+  onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, ai?: { hint: string; opts: AiImageOpts }) => void; onCancel: () => void;
   onSuggest: (typed: string[], mode: "web" | "ai") => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string; path?: string;
   headings?: Head[]; products?: { id: string }[];
 }) {
@@ -750,6 +777,9 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
   const [emoji, setEmoji] = useState("");
   const [qty, setQty] = useState("1");
   const [unit, setUnit] = useState("stueck");
+  const [aiOn, setAiOn] = useState(false);
+  const [aiHint, setAiHint] = useState("");
+  const [aiOpts, setAiOpts] = useState<AiImageOpts>(DEFAULT_AI_IMAGE_OPTS);
   const names = text.split("\n").map((l) => l.trim()).filter(Boolean);
   return (
     <div className="space-y-2 rounded-xl border border-dashed border-primary/50 p-3">
@@ -826,8 +856,20 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
           </select>
         </label>
       )}
+      <div className="space-y-2 rounded-lg border border-border p-2">
+        <label className="flex items-center gap-2 text-sm font-medium">
+          <input type="checkbox" checked={aiOn} onChange={(e) => setAiOn(e.target.checked)} />
+          <span>✨ {T("adm.aiImagesNew")}</span>
+        </label>
+        {aiOn && (
+          <>
+            <Input aria-label={T("tile.aiHint")} placeholder={T("tile.aiHint")} value={aiHint} onChange={(e) => setAiHint(e.target.value)} />
+            <AiImageOptionSelects value={aiOpts} onChange={setAiOpts} />
+          </>
+        )}
+      </div>
       <div className="flex gap-2">
-        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit, mkOnly, pos)}>
+        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit, mkOnly, pos, aiOn ? { hint: aiHint.trim(), opts: aiOpts } : undefined)}>
           {T("adm.createN", { n: names.length })}
         </Button>
         <Button variant="ghost" onClick={onCancel}>{T("adm.cancel")}</Button>
