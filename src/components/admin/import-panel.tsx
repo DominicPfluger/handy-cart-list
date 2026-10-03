@@ -3,7 +3,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { scanImportUrl, acceptImportCandidates, rejectImportCandidates, undoBulkBackup } from "@/lib/admin.functions";
+import { scanImportUrl, acceptImportCandidates, rejectImportCandidates } from "@/lib/import.functions";
+import { undoBulkBackup } from "@/lib/admin.functions";
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ export function ImportPanel({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const scan = useServerFn(scanImportUrl);
   const accept = useServerFn(acceptImportCandidates);
   const reject = useServerFn(rejectImportCandidates);
+  const undoBackup = useServerFn(undoBulkBackup);
   const [url, setUrl] = useState("");
   const [market, setMarket] = useState(getLocale().split("-")[1] ?? "CH");
   const [busy, setBusy] = useState(false);
