@@ -37,4 +37,4 @@ Die Icon-Zeile (Zeilen 802–815) hat bisher nur „Hochladen" und ein ✕ (bei 
 Neue Schlüssel `adm.iconUseImage` („Beide Bilder gleich"), `adm.iconPick` („Bild auswählen"), `adm.iconAi` („KI-Bild") in `src/i18n/de.ts` und allen 15 weiteren Lokalen in `messages.json`. „Entfernen" nutzt bestehende Schlüssel (`tile.removeImage` / `tile.removeImageConfirm`).
 
 ## Verify
-Typprüfung, dann Browser-Test: Admin → Katalog → Produktzeile zeigt ⠿/✏️/🗑 links neben dem Bild; Bild-Dialog: „Beide Bilder gleich" übernimmt das Vorschaubild als Icon, Bild auswählen und Entfernen funktionieren, KI-Knopf fragt vor Credits.
+Typprüfung, dann Browser-Test: Admin → Katalog → Produktzeile zeigt ⠿/✏️ links neben dem Bild und 🗑 rechts; Bild-Dialog: „Beide Bilder gleich" übernimmt das Vorschaubild als Icon, Bild auswählen und Entfernen funktionieren, KI-Knopf fragt vor Credits.
