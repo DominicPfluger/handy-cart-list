@@ -1121,3 +1121,45 @@ function SuggestSheet(p: Parameters<typeof CatalogTileEditor>[0] & { cur: string
     </div>
   );
 }
+
+function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>, ok?: string) => Promise<void>; must: (q: PromiseLike<{ error: { message: string } | null }>) => Promise<void>; nm: (id: string, base: string) => string; onClose: () => void }) {
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const trVariants = useServerFn(translateVariants);
+  const existing = p.prod.variants ?? [];
+  const add = async () => {
+    if (busy) return;
+    const vals = text.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+    const next = [...existing];
+    let added = 0;
+    for (const v of vals) {
+      if (!next.some((y) => y.toLowerCase() === v.toLowerCase())) { next.push(v); added++; }
+    }
+    if (!added) { p.onClose(); return; }
+    setBusy(true);
+    await p.run(async () => {
+      await p.must(supabase.from("products").update({ variants: next }).eq("id", p.prod.id));
+      void trVariants({ data: { productId: p.prod.id } }).catch(() => {});
+    }, T("adm.variantAddDone", { n: added }));
+    setBusy(false);
+    p.onClose();
+  };
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={p.onClose}>
+      <div className="flex w-full max-w-sm flex-col gap-3 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+        <p className="text-sm font-bold text-foreground">{T("adm.variantAddTitle", { name: p.nm(p.prod.id, p.prod.name) })}</p>
+        {existing.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {existing.map((v) => <span key={v} className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">{v}</span>)}
+          </div>
+        )}
+        <textarea autoFocus value={text} onChange={(e) => setText(e.target.value)} rows={4} placeholder={T("adm.variantAddHint")}
+          className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm" />
+        <div className="flex gap-2">
+          <Button variant="outline" className="flex-1" onClick={p.onClose}>{T("adm.cancel")}</Button>
+          <Button className="flex-1" disabled={busy || !text.trim()} onClick={() => void add()}>{busy ? T("adm.working") : T("adm.variantAdd")}</Button>
+        </div>
+      </div>
+    </div>
+  );
+}
