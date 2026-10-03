@@ -82,6 +82,8 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const [groupName, setGroupName] = useState("");
   const [groupEmoji, setGroupEmoji] = useState("");
   const [dragGroup, setDragGroup] = useState<string | null>(null);
+  const [dragTpl, setDragTpl] = useState<string | null>(null);
+  const [dragStep, setDragStep] = useState<string | null>(null);
   // Vorlagen-/Oberkategorien-Verwaltung
   const [manageOpen, setManageOpen] = useState(false);
   const [tplForm, setTplForm] = useState<{ id: string; emoji: string } | null>(null);
@@ -140,16 +142,21 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     const { error } = await supabase.from("recipe_templates").update({ enabled: !t.enabled }).eq("id", t.id);
     if (error) throw new Error(error.message);
   });
-  const moveTpl = (t: TplRow, dir: -1 | 1) => runTpl(async () => {
+  const reorderTpl = (sourceId: string, target: TplRow) => runTpl(async () => {
     const list = [...templates].sort((a, b) => a.sort_order - b.sort_order);
-    const i = list.findIndex((x) => x.id === t.id);
-    const j = i + dir;
-    if (i < 0 || j < 0 || j >= list.length) return;
-    const a = list[i]!, b = list[j]!;
-    const { error: e1 } = await supabase.from("recipe_templates").update({ sort_order: b.sort_order }).eq("id", a.id);
-    if (e1) throw new Error(e1.message);
-    const { error: e2 } = await supabase.from("recipe_templates").update({ sort_order: a.sort_order }).eq("id", b.id);
-    if (e2) throw new Error(e2.message);
+    const from = list.findIndex((x) => x.id === sourceId);
+    const to = list.findIndex((x) => x.id === target.id);
+    if (from < 0 || to < 0 || from === to) return;
+    const next = [...list];
+    const [moved] = next.splice(from, 1);
+    if (!moved) return;
+    next.splice(to, 0, moved);
+    for (let i = 0; i < next.length; i++) {
+      const row = next[i];
+      if (!row) continue;
+      const { error } = await supabase.from("recipe_templates").update({ sort_order: i + 1 }).eq("id", row.id);
+      if (error) throw new Error(error.message);
+    }
   });
 
   const saveStep = () => runTpl(async () => {
@@ -172,16 +179,21 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
       if (error) throw new Error(error.message);
     });
   };
-  const moveStep = (s: StepRow, dir: -1 | 1) => runTpl(async () => {
+  const reorderStep = (sourceId: string, target: StepRow) => runTpl(async () => {
     const list = steps;
-    const i = list.findIndex((x) => x.id === s.id);
-    const j = i + dir;
-    if (i < 0 || j < 0 || j >= list.length) return;
-    const a = list[i]!, b = list[j]!;
-    const { error: e1 } = await supabase.from("recipe_steps").update({ sort_order: b.sort_order }).eq("id", a.id);
-    if (e1) throw new Error(e1.message);
-    const { error: e2 } = await supabase.from("recipe_steps").update({ sort_order: a.sort_order }).eq("id", b.id);
-    if (e2) throw new Error(e2.message);
+    const from = list.findIndex((x) => x.id === sourceId);
+    const to = list.findIndex((x) => x.id === target.id);
+    if (from < 0 || to < 0 || from === to) return;
+    const next = [...list];
+    const [moved] = next.splice(from, 1);
+    if (!moved) return;
+    next.splice(to, 0, moved);
+    for (let i = 0; i < next.length; i++) {
+      const row = next[i];
+      if (!row) continue;
+      const { error } = await supabase.from("recipe_steps").update({ sort_order: i + 1 }).eq("id", row.id);
+      if (error) throw new Error(error.message);
+    }
   });
 
   const addPop = () => runTpl(async () => {
