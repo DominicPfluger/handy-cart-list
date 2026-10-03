@@ -396,7 +396,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
             )}
             </div>
           </div>
-          <div className="space-y-2 border-b border-border pb-4">
+          <div className="space-y-2 rounded-lg border border-border bg-background p-2">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
               <Button type="button" variant="ghost" aria-expanded={groupsOpen} aria-controls="recipe-admin-groups" onClick={() => setGroupsOpen((v) => !v)} className="h-auto min-w-0 justify-start gap-2 px-0 text-left text-sm font-semibold hover:bg-transparent">
                 <span aria-hidden="true" className="shrink-0 text-xs text-muted-foreground">{groupsOpen ? "▲" : "▼"}</span>
