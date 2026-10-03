@@ -35,6 +35,8 @@ export interface CatalogProduct {
   synonyms?: string[];
   /** Übersetzte Varianten: Variante → { locale: Name } */
   variantNames: Record<string, Record<string, string>>;
+  /** Bilder je Variante: Pfade aus der DB, Adressen werden im Client aufgelöst */
+  variantImages?: Record<string, { imagePath: string | null; iconPath: string | null; imageUrl?: string | null; iconUrl?: string | null }>;
   /** Ernährungsformen, in denen das Produkt nicht erlaubt ist */
   excludedDiets: string[];
   /** Länderküchen, in denen das Produkt typisch ist */
@@ -169,13 +171,15 @@ function publicClient() {
 /** Nur die signierten Bild-Adressen (leichtgewichtig; wird häufiger erneuert als der Katalog). */
 export const getCatalogImageUrls = createServerFn({ method: "GET" }).handler(async (): Promise<Record<string, string>> => {
   const supabase = publicClient();
-  const [deptRes, prodRes] = await Promise.all([
+  const [deptRes, prodRes, varRes] = await Promise.all([
     supabase.from("departments").select("image_path").not("image_path", "is", null),
     supabase.from("products").select("image_path, icon_path").or("image_path.not.is.null,icon_path.not.is.null"),
+    supabase.from("product_variant_images").select("image_path, icon_path"),
   ]);
   const paths = [
     ...((deptRes.data ?? []) as Array<{ image_path: string | null }>).map((r) => r.image_path),
     ...((prodRes.data ?? []) as Array<{ image_path: string | null; icon_path: string | null }>).flatMap((r) => [r.image_path, r.icon_path]),
+    ...((varRes.data ?? []) as Array<{ image_path: string | null; icon_path: string | null }>).flatMap((r) => [r.image_path, r.icon_path]),
   ].filter((p): p is string => Boolean(p));
   const out: Record<string, string> = {};
   if (paths.length > 0) {
@@ -241,7 +245,16 @@ export const getCatalog = createServerFn({ method: "GET" })
     supabase.from("recipe_steps").select("id, template_id, key, name, emoji, min, max, required, sort_order").order("sort_order", { ascending: true }),
     supabase.from("recipe_popular").select("id, template_id, picks, sort_order").order("sort_order", { ascending: true }),
   ]);
-  const synRes = await fetchAll("product_synonyms", "product_id, term", ["id"]);
+  const [synRes, viRes] = await Promise.all([
+    fetchAll("product_synonyms", "product_id, term", ["id"]),
+    supabase.from("product_variant_images").select("product_id, variant, image_path, icon_path"),
+  ]);
+  const variantImages = new Map<string, NonNullable<CatalogProduct["variantImages"]>>();
+  for (const r of (viRes.data ?? []) as Array<{ product_id: string; variant: string; image_path: string | null; icon_path: string | null }>) {
+    const m = variantImages.get(r.product_id) ?? {};
+    m[r.variant] = { imagePath: r.image_path, iconPath: r.icon_path };
+    variantImages.set(r.product_id, m);
+  }
   const synonyms = new Map<string, string[]>();
   for (const r of (synRes.data ?? []) as Array<{ product_id: string; term: string }>) synonyms.set(r.product_id, [...(synonyms.get(r.product_id) ?? []), r.term]);
   const variantNames = new Map<string, Record<string, Record<string, string>>>();
@@ -308,6 +321,7 @@ export const getCatalog = createServerFn({ method: "GET" })
       variants: (r["variants"] as string[] | null) ?? [],
       synonyms: synonyms.get(r["id"] as string) ?? [],
       variantNames: variantNames.get(r["id"] as string) ?? {},
+      variantImages: variantImages.get(r["id"] as string) ?? {},
       excludedDiets: (r["excluded_diets"] as string[] | null) ?? [],
       cuisineIds: cuisineIdsByProduct.get(r["id"] as string) ?? [],
       brands: brandsByProduct.get(r["id"] as string) ?? [],
