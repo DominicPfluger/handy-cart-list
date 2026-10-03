@@ -18,3 +18,4 @@
 - Rezept-Generator: Zutaten erscheinen beim Aufklappen direkt neben der grauen Oberkategorie in derselben umbruchenden Reihe (Browser-getestet, Desktop + 390 px, kein horizontales Scrollen).
 
 - [x] Mengenangaben in Rezepten manuell bearbeiten (Generator-Übersicht + Stift-Dialog bei eigenen Rezepten; Browser-getestet)
+- [x] Rezept-Admin: „Aus Katalog" neben Suchfeld, KI-Vorschläge (✨) komplett entfernt (Browser-getestet)

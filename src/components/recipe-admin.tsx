@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getLocale, translate } from "@/i18n";
 import { useServerFn } from "@tanstack/react-start";
-import { sortRecipeIngredients, saveRecipeGroup, deleteRecipeGroup, suggestRecipeStepProducts } from "@/lib/admin.functions";
+import { sortRecipeIngredients, saveRecipeGroup, deleteRecipeGroup } from "@/lib/admin.functions";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -428,9 +428,6 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
   const [dragRow, setDragRow] = useState<string | null>(null);
   const [dropAt, setDropAt] = useState<{ id: string; pos: "top" | "bottom" } | null>(null);
   const sortFn = useServerFn(sortRecipeIngredients);
-  const suggestStepFn = useServerFn(suggestRecipeStepProducts);
-  const [suggestStep, setSuggestStep] = useState<StepRow | null>(null);
-  const [suggestPicks, setSuggestPicks] = useState<Set<string> | null>(null);
   const [selRows, setSelRows] = useState<Set<string>>(new Set());
   const [bulkGroup, setBulkGroup] = useState("");
 
@@ -467,33 +464,6 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
       setBusy(false);
     }
   };
-
-  /** KI-Vorschläge für eine Oberkategorie: erst bestätigen, dann Vorschläge zum Abhaken. */
-  const startSuggest = (s: StepRow) => {
-    if (!window.confirm(T("adm.stepSuggestConfirm", { name: s.name }))) return;
-    setBusy(true);
-    const assigned = new Set(assignedFor(s.key).map((r) => r.product_id));
-    const candidates = prods.filter((p) => !assigned.has(p.id)).slice(0, 400).map((p) => ({ id: p.id, name: p.name, path: path(p.department_id) }));
-    suggestStepFn({ data: { step: s.name, template: tplLabel(tplId!), candidates } })
-      .then((r) => { setSuggestStep(s); setSuggestPicks(new Set(r.ids)); })
-      .catch((e) => toast.error((e as Error).message))
-      .finally(() => setBusy(false));
-  };
-  const applySuggest = () => run(async () => {
-    if (!suggestStep || !suggestPicks) return;
-    const s = suggestStep;
-    let max = Math.max(0, ...assignedFor(s.key).map((r) => r.sort_order));
-    const add = [...suggestPicks];
-    if (add.length) {
-      const { error } = await supabase.from("recipe_ingredients").upsert(
-        add.map((product_id) => ({ template_id: tplId!, step_key: s.key, product_id, sort_order: ++max })),
-        { onConflict: "template_id,step_key,product_id" },
-      );
-      if (error) throw new Error(error.message);
-    }
-    setSuggestStep(null);
-    setSuggestPicks(null);
-  });
 
   const assignGroup = (row: Row, id: string | null) => run(async () => {
     const { error } = await supabase.from("recipe_ingredients").update({ group_id: id }).eq("id", row.id);
@@ -678,7 +648,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
         {templates.map((x) => (
           <button
             key={x.id}
-            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setPickerSearch(""); setSuggestStep(null); setSelRows(new Set()); setBulkGroup(""); }}
+            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setPickerSearch(""); setSelRows(new Set()); setBulkGroup(""); }}
             aria-pressed={tplId === x.id}
             className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"} ${x.enabled ? "" : "opacity-50 line-through"}`}
           >
@@ -823,33 +793,10 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                     ))}
                   </div>
                 )}
-                {suggestStep?.key === s.key && suggestPicks && (
-                  <div className="space-y-1 rounded-lg border border-primary/40 bg-background p-2">
-                    <p className="text-xs text-muted-foreground">{T("adm.stepSuggestDone", { n: suggestPicks.size })}</p>
-                    <div className="max-h-72 space-y-0.5 overflow-y-auto">
-                      {[...suggestPicks].map((id) => {
-                        const p = prodById.get(id);
-                        return (
-                          <label key={id} className="flex items-center gap-2 rounded-lg px-2 py-1 text-xs hover:bg-accent/40">
-                            <input type="checkbox" checked onChange={() => setSuggestPicks((x) => { const n = new Set(x); n.delete(id); return n; })} className="accent-primary" />
-                            <span className="min-w-0 flex-1 truncate text-foreground">{p?.emoji} {p?.name ?? id}</span>
-                          </label>
-                        );
-                      })}
-                    </div>
-                    <div className="flex justify-end gap-2">
-                      <Button size="sm" variant="ghost" onClick={() => { setSuggestStep(null); setSuggestPicks(null); }}>{T("adm.cancel")}</Button>
-                      <Button size="sm" disabled={busy} onClick={applySuggest}>{T("adm.apply")} ({suggestPicks.size})</Button>
-                    </div>
-                  </div>
-                )}
                 {pickerStep !== s.key ? (
                   <div className="flex items-center gap-3">
                     <button type="button" onClick={() => openPicker(s.key)} className="text-xs font-medium text-primary">
                       {T("adm.fromCatalog")}
-                    </button>
-                    <button type="button" disabled={busy} onClick={() => { const row = (stepRows ?? []).find((x) => x.template_id === tplId && x.key === s.key); if (row) startSuggest(row); }} className="text-xs font-medium text-primary disabled:opacity-50">
-                      ✨ {T("adm.stepSuggest")}
                     </button>
                   </div>
                 ) : (
@@ -858,15 +805,15 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                       {pickerDept && (
                         <button type="button" onClick={() => setPickerDept(deptById.get(pickerDept)?.parent_id ?? null)} className="px-1 text-muted-foreground">←</button>
                       )}
-                      <span className="min-w-0 flex-1 truncate font-semibold text-foreground">{pickerDept ? path(pickerDept) : T("adm.fromCatalog")}</span>
+                      <span className="shrink-0 truncate font-semibold text-foreground">{pickerDept ? path(pickerDept) : T("adm.fromCatalog")}</span>
+                      <Input
+                        aria-label={T("adm.recipeIngredientSearch")}
+                        placeholder={T("adm.recipeIngredientSearch")}
+                        value={pickerSearch}
+                        onChange={(e) => setPickerSearch(e.target.value)}
+                        className="h-9 min-w-0 flex-1"
+                      />
                     </div>
-                    <Input
-                      aria-label={T("adm.recipeIngredientSearch")}
-                      placeholder={T("adm.recipeIngredientSearch")}
-                      value={pickerSearch}
-                      onChange={(e) => setPickerSearch(e.target.value)}
-                      className="h-9"
-                    />
                     <div className="max-h-72 space-y-0.5 overflow-y-auto">
                       {pickerQuery && pickerMatches.length > 0 && (() => {
                         const ids = pickerMatches.map((p) => p.id);

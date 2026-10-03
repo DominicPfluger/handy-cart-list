@@ -385,25 +385,6 @@ export const suggestCuisineProducts = createServerFn({ method: "POST" })
     return { ids: (r.picks ?? []).map((i) => data.candidates[i]?.id).filter((x): x is string => Boolean(x)) };
   });
 
-/** KI-Vorschläge: passende Produkte für eine Rezept-Oberkategorie (nur Admins, nur auf Knopfdruck). */
-export const suggestRecipeStepProducts = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((d) =>
-    z.object({ step: z.string().max(60), template: z.string().max(60), candidates: z.array(z.object({ id: z.string(), name: z.string().max(120), path: z.string().max(200) })).max(400) }).parse(d),
-  )
-  .handler(async ({ data, context }) => {
-    await assertAdmin(context);
-    const { aiJson } = await import("./translate.server");
-    const list = data.candidates.map((c, i) => ({ i, name: c.name, kategorie: c.path }));
-    const r = await aiJson<{ picks: number[] }>(
-      `Wähle aus der Liste die Supermarkt-Produkte, die als Zutat in der Kategorie „${data.step}" eines Rezepts vom Typ „${data.template}" passen. Non-Food nie, außer die Kategorie verlangt es. Gib nur die Indizes zurück.`,
-      JSON.stringify(list),
-      "picks",
-      { type: "object", additionalProperties: false, required: ["picks"], properties: { picks: { type: "array", items: { type: "integer" } } } },
-    );
-    return { ids: (r.picks ?? []).map((i) => data.candidates[i]?.id).filter((x): x is string => Boolean(x)) };
-  });
-
 export const suggestBrands = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ products: z.array(z.object({ id: z.string(), name: z.string().max(120), path: z.string().max(200) })).min(1).max(60) }).parse(d))
