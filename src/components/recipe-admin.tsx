@@ -574,6 +574,22 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
       }
     });
 
+  /** Alphabetisch nach Produktnamen sortieren — lokal, ohne KI. */
+  const sortAlpha = (stepKey: string) => {
+    const list = assignedFor(stepKey);
+    if (list.length < 2) return;
+    run(async () => {
+      const ordered = [...list].sort((a, b) =>
+        (prodById.get(a.product_id)?.name ?? a.product_id).localeCompare(prodById.get(b.product_id)?.name ?? b.product_id, "de"));
+      for (let k = 0; k < ordered.length; k++) {
+        if (ordered[k]!.sort_order === k + 1) continue;
+        const { error } = await supabase.from("recipe_ingredients").update({ sort_order: k + 1 }).eq("id", ordered[k]!.id);
+        if (error) throw new Error(error.message);
+      }
+      toast.success(T("adm.recipeSortDone"));
+    });
+  };
+
   const sortStep = (stepKey: string, stepLabel: string, criterion: "popularity" | "relevance") => {
     const list = assignedFor(stepKey);
     if (list.length < 2) return;
