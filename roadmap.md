@@ -14,3 +14,4 @@
 - Varianten-Auswahl im Generator, „nach Wahl" pro Bereich
 - Oberkategorien je Rezept-Art, Bereichs-Verwaltung im Admin
 - Zutaten-Zuweisung: Alphabetisch-Sortierung je Bereich (lokal, ohne KI/Credits)
+- Ernährungsformenfilter im Rezept-Generator entfernt (Knopf + Panel; Zutaten werden dort ungefiltert angezeigt; Länderküchenfilter bleibt)
