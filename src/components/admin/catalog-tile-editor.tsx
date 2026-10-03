@@ -16,7 +16,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -94,6 +94,7 @@ export function CatalogTileEditor(p: {
   const [prodAliasSearch, setProdAliasSearch] = useState("");
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
+  const [variantAdd, setVariantAdd] = useState<TileProd | null>(null);
   const moved = useRef(false);
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
@@ -423,6 +424,9 @@ export function CatalogTileEditor(p: {
                 </button>
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   <Pencil className="h-3.5 w-3.5" />
+                </Button>
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.variantAdd")} title={T("adm.variantAdd")} onClick={() => setVariantAdd(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                  <Tags className="h-3.5 w-3.5" />
                 </Button>
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
                   <Trash2 className="h-3.5 w-3.5" />
