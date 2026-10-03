@@ -683,7 +683,7 @@ function DepartmentsPage() {
                     </button>
                     {isAdmin && (
                       <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} title={t("rename.action", { name: product.name })} className="ml-1.5 inline-flex align-middle text-muted-foreground hover:text-foreground">
-                        <Pencil className="h-3.5 w-3.5" />
+                        <PencilIcon className="h-3.5 w-3.5" />
                       </button>
                     )}
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
