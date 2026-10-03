@@ -1,0 +1,2 @@
+UPDATE public.departments SET parent_id = 'c1e0d001-0000-4000-8000-0000000000c1', sort_order = 3 WHERE id = 'c1e0d006-0000-4000-8000-0000000000c6';
+UPDATE public.departments SET sort_order = 4 WHERE id = 'c1e0d005-0000-4000-8000-0000000000c5';
