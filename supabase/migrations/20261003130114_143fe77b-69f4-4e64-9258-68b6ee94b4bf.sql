@@ -1,0 +1,1 @@
+ALTER TYPE public.unit_of_measure ADD VALUE IF NOT EXISTS 'artikel';
