@@ -6,7 +6,6 @@ import type { MessageKey } from "../i18n/de";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { POPULAR_RECIPES, RECIPE_TEMPLATES, STEP_EMOJIS, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
-import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
 import { setCuisines, toggleCuisine, useCuisineFilter } from "../hooks/use-cuisine-filter";
 import { formatQuantity } from "../lib/units";
 import { ProductEmoji } from "./product-emoji";
@@ -64,7 +63,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [traitsError, setTraitsError] = useState(false);
   const traitsComplete = TRAIT_GROUPS.every((g) => !!traits[g]);
   const [onlyFav, setOnlyFav] = useState(false);
-  const diets = useDietFilter();
   const cuisineSel = useCuisineFilter();
   const cuisines = useMemo(() => cuisineSel.filter((id) => catalog.cuisines.some((c) => c.id === id)), [cuisineSel, catalog.cuisines]);
   const [showAllRecent, setShowAllRecent] = useState(false);
