@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Offen
+- [ ] Favorisierte Produktvarianten in der richtigen Kategorie anzeigen und Varianten bei Listenübernahme erhalten; Browser prüfen.
 - [ ] DB-Security-Hinweise (10 ältere, vorher vorhanden) separat beheben — auf Nutzer-Entscheid wartend
 - [ ] Browser-Tests nachholen: recipe-traits-admin, Varianten-Auswahl
 
