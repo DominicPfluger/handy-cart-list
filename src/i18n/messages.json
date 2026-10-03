@@ -1160,7 +1160,7 @@
     "rec.entrySearchDesc": "Find recipes that match your criteria – for example ingredients, diet or category.",
     "rec.searchTitle": "Search Recipes",
     "rec.searchSoon": "Search by specific criteria will be available here soon.",
-    "rec.searchIntro": "Find recipes by satiety, spiciness and price class.",
+    "rec.searchIntro": "Find recipes by cuisine, satiety, spiciness, price, taste and difficulty.",
     "rec.searchAll": "All",
     "rec.searchClear": "Reset",
     "rec.searchCount": "{n} recipes found",
@@ -1227,7 +1227,8 @@
     "tile.noImage": "No preview image available",
     "adm.headingsToSub": "Convert headings to subcategories",
     "adm.headingsToSubConfirm": "Create {cats} subcategories and move {n} products? The headings will be removed afterwards.",
-    "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved"
+    "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved",
+    "rec.recipeCuisines": "Cuisines (optional)"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2390,7 +2391,7 @@
     "rec.entrySearchDesc": "Find recipes that match your criteria – for example ingredients, diet or category.",
     "rec.searchTitle": "Search Recipes",
     "rec.searchSoon": "Search by specific criteria will be available here soon.",
-    "rec.searchIntro": "Find recipes by satiety, spiciness and price class.",
+    "rec.searchIntro": "Find recipes by cuisine, satiety, spiciness, price, taste and difficulty.",
     "rec.searchAll": "All",
     "rec.searchClear": "Reset",
     "rec.searchCount": "{n} recipes found",
@@ -2457,7 +2458,8 @@
     "tile.noImage": "No preview image available",
     "adm.headingsToSub": "Convert headings to subcategories",
     "adm.headingsToSubConfirm": "Create {cats} subcategories and move {n} products? The headings will be removed afterwards.",
-    "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved"
+    "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved",
+    "rec.recipeCuisines": "Cuisines (optional)"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3620,7 +3622,7 @@
     "rec.entrySearchDesc": "Find recipes that match your criteria – for example ingredients, diet or category.",
     "rec.searchTitle": "Search Recipes",
     "rec.searchSoon": "Search by specific criteria will be available here soon.",
-    "rec.searchIntro": "Find recipes by satiety, spiciness and price class.",
+    "rec.searchIntro": "Find recipes by cuisine, satiety, spiciness, price, taste and difficulty.",
     "rec.searchAll": "All",
     "rec.searchClear": "Reset",
     "rec.searchCount": "{n} recipes found",
@@ -3687,7 +3689,8 @@
     "tile.noImage": "No preview image available",
     "adm.headingsToSub": "Convert headings to subcategories",
     "adm.headingsToSubConfirm": "Create {cats} subcategories and move {n} products? The headings will be removed afterwards.",
-    "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved"
+    "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved",
+    "rec.recipeCuisines": "Cuisines (optional)"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4850,7 +4853,7 @@
     "rec.entrySearchDesc": "Encuentra recetas según tus criterios, por ejemplo ingredientes, dieta o categoría.",
     "rec.searchTitle": "Buscar recetas",
     "rec.searchSoon": "La búsqueda por criterios específicos estará disponible aquí pronto.",
-    "rec.searchIntro": "Encuentra recetas por saturación, nivel de picante y clase de precio.",
+    "rec.searchIntro": "Busca recetas por cocina, saciedad, picante, precio, sabor y dificultad.",
     "rec.searchAll": "Todos",
     "rec.searchClear": "Restablecer",
     "rec.searchCount": "{n} recetas encontradas",
@@ -4917,7 +4920,8 @@
     "tile.noImage": "No hay imagen de vista previa",
     "adm.headingsToSub": "Convertir encabezados en subcategorías",
     "adm.headingsToSubConfirm": "¿Crear {cats} subcategorías y mover {n} productos? Después se eliminarán los encabezados.",
-    "adm.headingsToSubDone": "{cats} subcategorías creadas, {n} productos movidos"
+    "adm.headingsToSubDone": "{cats} subcategorías creadas, {n} productos movidos",
+    "rec.recipeCuisines": "Cocinas (opcional)"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6080,7 +6084,7 @@
     "rec.entrySearchDesc": "Encuentra recetas según tus criterios, por ejemplo ingredientes, dieta o categoría.",
     "rec.searchTitle": "Buscar recetas",
     "rec.searchSoon": "La búsqueda por criterios específicos estará disponible aquí pronto.",
-    "rec.searchIntro": "Encuentra recetas por saturación, nivel de picante y clase de precio.",
+    "rec.searchIntro": "Busca recetas por cocina, saciedad, picante, precio, sabor y dificultad.",
     "rec.searchAll": "Todos",
     "rec.searchClear": "Restablecer",
     "rec.searchCount": "{n} recetas encontradas",
@@ -6147,7 +6151,8 @@
     "tile.noImage": "No hay imagen de vista previa",
     "adm.headingsToSub": "Convertir encabezados en subcategorías",
     "adm.headingsToSubConfirm": "¿Crear {cats} subcategorías y mover {n} productos? Después se eliminarán los encabezados.",
-    "adm.headingsToSubDone": "{cats} subcategorías creadas, {n} productos movidos"
+    "adm.headingsToSubDone": "{cats} subcategorías creadas, {n} productos movidos",
+    "rec.recipeCuisines": "Cocinas (opcional)"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7310,7 +7315,7 @@
     "rec.entrySearchDesc": "Trouvez des recettes selon vos critères – par exemple ingrédients, régime ou catégorie.",
     "rec.searchTitle": "Rechercher des recettes",
     "rec.searchSoon": "La recherche par critères spécifiques sera bientôt disponible ici.",
-    "rec.searchIntro": "Trouvez des recettes selon la satiété, le piquant et la gamme de prix.",
+    "rec.searchIntro": "Trouvez des recettes par cuisine, satiété, piquant, prix, goût et difficulté.",
     "rec.searchAll": "Tout",
     "rec.searchClear": "Réinitialiser",
     "rec.searchCount": "{n} recettes trouvées",
@@ -7377,7 +7382,8 @@
     "tile.noImage": "Aucune image d'aperçu",
     "adm.headingsToSub": "Convertir les titres en sous-catégories",
     "adm.headingsToSubConfirm": "Créer {cats} sous-catégories et déplacer {n} produits ? Les titres seront ensuite supprimés.",
-    "adm.headingsToSubDone": "{cats} sous-catégories créées, {n} produits déplacés"
+    "adm.headingsToSubDone": "{cats} sous-catégories créées, {n} produits déplacés",
+    "rec.recipeCuisines": "Cuisines (facultatif)"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8540,7 +8546,7 @@
     "rec.entrySearchDesc": "Trouvez des recettes selon vos critères – par exemple ingrédients, régime ou catégorie.",
     "rec.searchTitle": "Rechercher des recettes",
     "rec.searchSoon": "La recherche par critères spécifiques sera bientôt disponible ici.",
-    "rec.searchIntro": "Trouvez des recettes selon la satiété, le piquant et la gamme de prix.",
+    "rec.searchIntro": "Trouvez des recettes par cuisine, satiété, piquant, prix, goût et difficulté.",
     "rec.searchAll": "Tout",
     "rec.searchClear": "Réinitialiser",
     "rec.searchCount": "{n} recettes trouvées",
@@ -8607,7 +8613,8 @@
     "tile.noImage": "Aucune image d'aperçu",
     "adm.headingsToSub": "Convertir les titres en sous-catégories",
     "adm.headingsToSubConfirm": "Créer {cats} sous-catégories et déplacer {n} produits ? Les titres seront ensuite supprimés.",
-    "adm.headingsToSubDone": "{cats} sous-catégories créées, {n} produits déplacés"
+    "adm.headingsToSubDone": "{cats} sous-catégories créées, {n} produits déplacés",
+    "rec.recipeCuisines": "Cuisines (facultatif)"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9770,7 +9777,7 @@
     "rec.entrySearchDesc": "Trova ricette in base ai tuoi criteri, ad esempio ingredienti, dieta o categoria.",
     "rec.searchTitle": "Cerca ricette",
     "rec.searchSoon": "La ricerca per criteri specifici sarà presto disponibile qui.",
-    "rec.searchIntro": "Trova ricette per sazietà, piccantezza e fascia di prezzo.",
+    "rec.searchIntro": "Trova ricette per cucina, sazietà, piccantezza, prezzo, gusto e difficoltà.",
     "rec.searchAll": "Tutti",
     "rec.searchClear": "Reimposta",
     "rec.searchCount": "{n} ricette trovate",
@@ -9837,7 +9844,8 @@
     "tile.noImage": "Nessuna immagine di anteprima",
     "adm.headingsToSub": "Converti titoli in sottocategorie",
     "adm.headingsToSubConfirm": "Creare {cats} sottocategorie e spostare {n} prodotti? I titoli verranno poi rimossi.",
-    "adm.headingsToSubDone": "{cats} sottocategorie create, {n} prodotti spostati"
+    "adm.headingsToSubDone": "{cats} sottocategorie create, {n} prodotti spostati",
+    "rec.recipeCuisines": "Cucine (facoltativo)"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11000,7 +11008,7 @@
     "rec.entrySearchDesc": "Trova ricette in base ai tuoi criteri, ad esempio ingredienti, dieta o categoria.",
     "rec.searchTitle": "Cerca ricette",
     "rec.searchSoon": "La ricerca per criteri specifici sarà presto disponibile qui.",
-    "rec.searchIntro": "Trova ricette per sazietà, piccantezza e fascia di prezzo.",
+    "rec.searchIntro": "Trova ricette per cucina, sazietà, piccantezza, prezzo, gusto e difficoltà.",
     "rec.searchAll": "Tutti",
     "rec.searchClear": "Reimposta",
     "rec.searchCount": "{n} ricette trovate",
@@ -11067,7 +11075,8 @@
     "tile.noImage": "Nessuna immagine di anteprima",
     "adm.headingsToSub": "Converti titoli in sottocategorie",
     "adm.headingsToSubConfirm": "Creare {cats} sottocategorie e spostare {n} prodotti? I titoli verranno poi rimossi.",
-    "adm.headingsToSubDone": "{cats} sottocategorie create, {n} prodotti spostati"
+    "adm.headingsToSubDone": "{cats} sottocategorie create, {n} prodotti spostati",
+    "rec.recipeCuisines": "Cucine (facoltativo)"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12230,7 +12239,7 @@
     "rec.entrySearchDesc": "Encontre receitas segundo os seus critérios – por exemplo ingredientes, dieta ou categoria.",
     "rec.searchTitle": "Procurar receitas",
     "rec.searchSoon": "A pesquisa por critérios específicos estará disponível aqui em breve.",
-    "rec.searchIntro": "Encontre receitas por saciedade, picância e classe de preço.",
+    "rec.searchIntro": "Encontre receitas por cozinha, saciedade, picância, preço, sabor e dificuldade.",
     "rec.searchAll": "Todos",
     "rec.searchClear": "Redefinir",
     "rec.searchCount": "{n} receitas encontradas",
@@ -12297,7 +12306,8 @@
     "tile.noImage": "Sem imagem de pré-visualização",
     "adm.headingsToSub": "Converter títulos em subcategorias",
     "adm.headingsToSubConfirm": "Criar {cats} subcategorias e mover {n} produtos? Os títulos serão removidos depois.",
-    "adm.headingsToSubDone": "{cats} subcategorias criadas, {n} produtos movidos"
+    "adm.headingsToSubDone": "{cats} subcategorias criadas, {n} produtos movidos",
+    "rec.recipeCuisines": "Cozinhas (opcional)"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13460,7 +13470,7 @@
     "rec.entrySearchDesc": "Encontre receitas segundo os seus critérios – por exemplo ingredientes, dieta ou categoria.",
     "rec.searchTitle": "Procurar receitas",
     "rec.searchSoon": "A pesquisa por critérios específicos estará disponível aqui em breve.",
-    "rec.searchIntro": "Encontre receitas por saciedade, picância e classe de preço.",
+    "rec.searchIntro": "Encontre receitas por cozinha, saciedade, picância, preço, sabor e dificuldade.",
     "rec.searchAll": "Todos",
     "rec.searchClear": "Redefinir",
     "rec.searchCount": "{n} receitas encontradas",
@@ -13527,7 +13537,8 @@
     "tile.noImage": "Sem imagem de pré-visualização",
     "adm.headingsToSub": "Converter títulos em subcategorias",
     "adm.headingsToSubConfirm": "Criar {cats} subcategorias e mover {n} produtos? Os títulos serão removidos depois.",
-    "adm.headingsToSubDone": "{cats} subcategorias criadas, {n} produtos movidos"
+    "adm.headingsToSubDone": "{cats} subcategorias criadas, {n} produtos movidos",
+    "rec.recipeCuisines": "Cozinhas (opcional)"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14690,7 +14701,7 @@
     "rec.entrySearchDesc": "Vind recepten die aan jouw criteria voldoen – bijvoorbeeld ingrediënten, dieet of categorie.",
     "rec.searchTitle": "Recepten zoeken",
     "rec.searchSoon": "Zoeken op specifieke criteria is hier binnenkort beschikbaar.",
-    "rec.searchIntro": "Vind recepten op verzadiging, pittigheid en prijsklasse.",
+    "rec.searchIntro": "Vind recepten op keuken, verzadiging, pittigheid, prijs, smaak en moeilijkheid.",
     "rec.searchAll": "Alle",
     "rec.searchClear": "Opnieuw instellen",
     "rec.searchCount": "{n} recepten gevonden",
@@ -14757,7 +14768,8 @@
     "tile.noImage": "Geen voorbeeldafbeelding",
     "adm.headingsToSub": "Kopjes omzetten naar subcategorieën",
     "adm.headingsToSubConfirm": "{cats} subcategorieën maken en {n} producten verplaatsen? De kopjes worden daarna verwijderd.",
-    "adm.headingsToSubDone": "{cats} subcategorieën gemaakt, {n} producten verplaatst"
+    "adm.headingsToSubDone": "{cats} subcategorieën gemaakt, {n} producten verplaatst",
+    "rec.recipeCuisines": "Keukens (optioneel)"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15920,7 +15932,7 @@
     "rec.entrySearchDesc": "Vind recepten die aan jouw criteria voldoen – bijvoorbeeld ingrediënten, dieet of categorie.",
     "rec.searchTitle": "Recepten zoeken",
     "rec.searchSoon": "Zoeken op specifieke criteria is hier binnenkort beschikbaar.",
-    "rec.searchIntro": "Vind recepten op verzadiging, pittigheid en prijsklasse.",
+    "rec.searchIntro": "Vind recepten op keuken, verzadiging, pittigheid, prijs, smaak en moeilijkheid.",
     "rec.searchAll": "Alle",
     "rec.searchClear": "Opnieuw instellen",
     "rec.searchCount": "{n} recepten gevonden",
@@ -15987,7 +15999,8 @@
     "tile.noImage": "Geen voorbeeldafbeelding",
     "adm.headingsToSub": "Kopjes omzetten naar subcategorieën",
     "adm.headingsToSubConfirm": "{cats} subcategorieën maken en {n} producten verplaatsen? De kopjes worden daarna verwijderd.",
-    "adm.headingsToSubDone": "{cats} subcategorieën gemaakt, {n} producten verplaatst"
+    "adm.headingsToSubDone": "{cats} subcategorieën gemaakt, {n} producten verplaatst",
+    "rec.recipeCuisines": "Keukens (optioneel)"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16609,7 +16622,7 @@
     "rec.entrySearchDesc": "Finde Rezepte gezielt nach deinen Kriterien – zum Beispiel Zutaten, Ernährungsform oder Kategorie.",
     "rec.searchTitle": "Rezepte suchen",
     "rec.searchSoon": "Die Suche nach spezifischen Kriterien wird hier in Kürze verfügbar sein.",
-    "rec.searchIntro": "Rezepte nach Sättigung, Schärfe und Preisklasse finden.",
+    "rec.searchIntro": "Rezepte nach Länderküche, Sättigung, Schärfe, Preisklasse, Geschmack und Schwierigkeit finden.",
     "rec.searchAll": "Alle",
     "rec.searchClear": "Zurücksetzen",
     "rec.searchCount": "{n} Rezepte gefunden",
@@ -16678,7 +16691,8 @@
     "tile.noImage": "Kein Vorschaubild vorhanden",
     "adm.headingsToSub": "Überschriften in Unterkategorien umwandeln",
     "adm.headingsToSubConfirm": "{cats} Unterkategorien anlegen und {n} Produkte verschieben? Die Überschriften werden danach entfernt.",
-    "adm.headingsToSubDone": "{cats} Unterkategorien erstellt, {n} Produkte verschoben"
+    "adm.headingsToSubDone": "{cats} Unterkategorien erstellt, {n} Produkte verschoben",
+    "rec.recipeCuisines": "Länderküchen (optional)"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17300,7 +17314,7 @@
     "rec.entrySearchDesc": "Finde Rezepte gezielt nach deinen Kriterien – zum Beispiel Zutaten, Ernährungsform oder Kategorie.",
     "rec.searchTitle": "Rezepte suchen",
     "rec.searchSoon": "Die Suche nach spezifischen Kriterien wird hier in Kürze verfügbar sein.",
-    "rec.searchIntro": "Rezepte nach Sättigung, Schärfe und Preisklasse finden.",
+    "rec.searchIntro": "Rezepte nach Länderküche, Sättigung, Schärfe, Preisklasse, Geschmack und Schwierigkeit finden.",
     "rec.searchAll": "Alle",
     "rec.searchClear": "Zurücksetzen",
     "rec.searchCount": "{n} Rezepte gefunden",
@@ -17369,6 +17383,7 @@
     "tile.noImage": "Kein Vorschaubild vorhanden",
     "adm.headingsToSub": "Überschriften in Unterkategorien umwandeln",
     "adm.headingsToSubConfirm": "{cats} Unterkategorien anlegen und {n} Produkte verschieben? Die Überschriften werden danach entfernt.",
-    "adm.headingsToSubDone": "{cats} Unterkategorien erstellt, {n} Produkte verschoben"
+    "adm.headingsToSubDone": "{cats} Unterkategorien erstellt, {n} Produkte verschoben",
+    "rec.recipeCuisines": "Länderküchen (optional)"
   }
 }

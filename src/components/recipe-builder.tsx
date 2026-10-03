@@ -65,6 +65,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [busy, setBusy] = useState(false);
   const [traits, setTraits] = useState<RecipeTraits>({ satiety: null, spiciness: null, price_class: null, taste: null, difficulty: null });
   const [traitsError, setTraitsError] = useState(false);
+  const [recipeCuisineIds, setRecipeCuisineIds] = useState<string[]>([]);
   const traitsComplete = TRAIT_GROUPS.every((g) => !!traits[g]);
   const [onlyFav, setOnlyFav] = useState(false);
   const cuisineSel = useCuisineFilter();
@@ -319,7 +320,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       const recTitle = customTitle.trim() || title;
       const recDesc = customDesc.trim() || null;
       const imagePath = photo ? await uploadRecipeImage(user.id, photo) : null;
-      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, description: recDesc, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic, imagePath, satiety: traits.satiety, spiciness: traits.spiciness, priceClass: traits.price_class, taste: traits.taste, difficulty: traits.difficulty });
+      const rec = await createRecipe({ ownerId: user.id, authorName: user.name, title: recTitle, description: recDesc, templateId: tpl.id, picks, items: recipeItems(), isPublic: makePublic, imagePath, satiety: traits.satiety, spiciness: traits.spiciness, priceClass: traits.price_class, taste: traits.taste, difficulty: traits.difficulty, cuisineIds: recipeCuisineIds });
       await saveToFolder(user.id, rec.id, folderId);
       if (makePublic && rec.share_slug) {
         const how = await shareLink(rec.share_slug, recTitle);
@@ -330,6 +331,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       setCustomTitle("");
       setCustomDesc("");
       setPhoto(null);
+      setRecipeCuisineIds([]);
       setSavedMsg(true);
     } catch {
       toast.error(t("cloud.error"));
@@ -358,7 +360,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
 
   const saveDialog = saveOpen && (
     <div className="fixed inset-0 z-[60] flex items-end justify-center bg-foreground/40" onClick={() => setSaveOpen(false)}>
-      <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
+      <div className="max-h-[90dvh] w-full max-w-[440px] space-y-3 overflow-y-auto rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
         <h3 className="text-base font-bold text-foreground">{t("rk.saveTo")}</h3>
         <input
           value={customTitle}
@@ -374,6 +376,19 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           maxLength={2000}
           className="w-full resize-none rounded-2xl border border-border bg-card px-4 py-2 text-sm text-foreground outline-none focus:border-primary"
         />
+        <div role="group" aria-label={t("cuisine.filter")} className="space-y-1.5">
+          <p className="text-xs font-bold text-foreground">🌍 {t("rec.recipeCuisines")}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {catalog.cuisines.map((c) => {
+              const on = recipeCuisineIds.includes(c.id);
+              return <button key={c.id} type="button" role="checkbox" aria-checked={on}
+                onClick={() => setRecipeCuisineIds((ids) => on ? ids.filter((id) => id !== c.id) : [...ids, c.id])}
+                className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
+                {c.emoji} {c.name}
+              </button>;
+            })}
+          </div>
+        </div>
         {TRAIT_GROUPS.map((g) => {
           const missing = traitsError && !traits[g];
           const multi = g === "taste";

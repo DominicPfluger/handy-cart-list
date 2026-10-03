@@ -36,6 +36,7 @@ export async function createRecipe(input: {
   ownerId: string; authorName?: string | undefined; title: string; description?: string | null | undefined; templateId: string;
   picks: Record<string, string[]>; items: RecipeItem[]; isPublic?: boolean | undefined; imagePath?: string | null | undefined;
   satiety?: string | null | undefined; spiciness?: string | null | undefined; priceClass?: string | null | undefined; taste?: string | null | undefined; difficulty?: string | null | undefined;
+  cuisineIds?: string[] | undefined;
 }) {
   const { data, error } = await supabase.from("recipes").insert({
     owner_id: input.ownerId,
@@ -46,7 +47,7 @@ export async function createRecipe(input: {
     picks: input.picks as unknown as Json,
     items: input.items as unknown as Json,
     product_ids: input.items.map((i) => i.productId).filter((id) => !id.startsWith("any:")),
-    is_public: !!input.isPublic,
+    is_public: input.cuisineIds?.length ? false : !!input.isPublic,
     image_path: input.imagePath ?? null,
     satiety: input.satiety ?? null,
     spiciness: input.spiciness ?? null,
@@ -56,6 +57,19 @@ export async function createRecipe(input: {
     share_slug: input.isPublic ? makeSlug() : null,
   }).select("id, share_slug").single();
   if (error) throw error;
+  if (input.cuisineIds?.length) {
+    const { error: cuisineError } = await supabase.from("recipe_cuisines").insert(
+      [...new Set(input.cuisineIds)].map((cuisine_id) => ({ recipe_id: data.id, cuisine_id })),
+    );
+    if (cuisineError) {
+      await supabase.from("recipes").delete().eq("id", data.id);
+      throw cuisineError;
+    }
+    if (input.isPublic) {
+      const { error: publishError } = await supabase.from("recipes").update({ is_public: true }).eq("id", data.id);
+      if (publishError) throw publishError;
+    }
+  }
   return data;
 }
 
@@ -158,11 +172,12 @@ export type TraitRecipe = {
   id: string; title: string; description: string | null; template_id: string; share_slug: string;
   author_name: string | null; created_at: string; image_path: string | null;
   satiety: string | null; spiciness: string | null; price_class: string | null; taste: string | null; difficulty: string | null;
+  recipe_cuisines: { cuisine_id: string }[];
 };
 
 export async function fetchTraitRecipes(): Promise<TraitRecipe[]> {
   const { data, error } = await supabase.from("recipes")
-    .select("id, title, description, template_id, share_slug, author_name, created_at, image_path, satiety, spiciness, price_class, taste, difficulty")
+    .select("id, title, description, template_id, share_slug, author_name, created_at, image_path, satiety, spiciness, price_class, taste, difficulty, recipe_cuisines(cuisine_id)")
     .eq("is_public", true).not("share_slug", "is", null)
     .order("created_at", { ascending: false }).limit(300);
   if (error) throw error;

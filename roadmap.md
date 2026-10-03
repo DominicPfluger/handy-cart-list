@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Offen
+- [ ] Rezepte beim Speichern mehreren Länderküchen zuordnen und in der Suche zuerst danach filtern; Eigenschaften einzeln rahmen und im Browser prüfen.
 - [ ] DB-Security-Hinweise (10 ältere, vorher vorhanden) separat beheben — auf Nutzer-Entscheid wartend
 - [ ] Browser-Tests nachholen: recipe-traits-admin, Varianten-Auswahl
 
