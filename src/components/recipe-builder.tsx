@@ -532,35 +532,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           </button>
       </div>
 
-      {dietOpen && (
-        <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
-          <div className="mb-1 text-sm font-semibold text-foreground">{t("diet.title")}</div>
-          <p className="mb-3 text-xs text-muted-foreground">{t("diet.hint")}</p>
-          <div className="flex flex-wrap gap-1.5">
-            {DIETS.map((d) => {
-              const on = diets.includes(d);
-              return (
-                <button
-                  key={d}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => toggleDiet(d)}
-                  className={`flex h-8 items-center gap-1 rounded-full border px-2.5 text-[11px] font-medium leading-none ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-foreground"}`}
-                >
-                  <span className="text-sm leading-none">{DIET_EMOJI[d]}</span>
-                  {t(`diet.${d}`)}
-                </button>
-              );
-            })}
-          </div>
-          {diets.length > 0 && (
-            <button type="button" onClick={() => setDiets([])} className="mt-2 text-xs font-medium text-primary">
-              {t("diet.reset")}
-            </button>
-          )}
-        </section>
-      )}
-
       {cuisineOpen && (
         <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
           <div className="mb-1 text-sm font-semibold text-foreground">{t("cuisine.title")}</div>
