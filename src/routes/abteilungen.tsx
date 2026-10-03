@@ -239,7 +239,7 @@ function DepartmentsPage() {
   const matchedBrand = (product: CatalogProduct) =>
     matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) ? undefined : brandsFor(product).find((b) => b.toLocaleLowerCase().includes(normalizedQuery));
   const synonymHint = (product: CatalogProduct) =>
-    matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) || matchedBrand(product) ? undefined : matchedSynonym(product);
+    matchesProductSearch(product.name, normalizedQuery) || matchedVariant(product) || matchedBrand(product) ? undefined : matchedSynonym(product) ?? matchedLocaleName(product);
 
   const groupFor = (product: CatalogProduct) => {
     // Alias-Produkt in der aktuellen Kategorie → aktuelle Kategorie; Suche/Spracheingabe → bevorzugte Kategorie
