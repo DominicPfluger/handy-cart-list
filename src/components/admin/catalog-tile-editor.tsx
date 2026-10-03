@@ -399,9 +399,11 @@ export function CatalogTileEditor(p: {
       {(p.children.length > 0 || editMode) && (
         <div className="grid grid-cols-3 gap-2.5 md:grid-cols-5 xl:grid-cols-7">
           {p.children.map((c, i) => (
-            <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
-              style={{ background: rootColorByName(rootName(c)) }}
-              className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""}`}>
+             <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
+               style={{ background: rootColorByName(rootName(c)) }}
+               className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""} ${selectedDepts.has(c.alias_id ? `alias:${c.alias_id}` : c.id) ? "ring-2 ring-primary" : ""}`}>
+               <input type="checkbox" checked={selectedDepts.has(c.alias_id ? `alias:${c.alias_id}` : c.id)} onChange={() => toggleSelDept(c.alias_id ? `alias:${c.alias_id}` : c.id)} aria-label={T("adm.select")}
+                 className="absolute left-1.5 top-1.5 z-10 h-4 w-4 accent-primary" />
               <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
                 onClick={click(() => p.setCur(c.dept_id ?? c.id))}
