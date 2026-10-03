@@ -16,7 +16,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
-import { Pencil, Tags, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Sparkles, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -116,6 +116,21 @@ export function CatalogTileEditor(p: {
         }
       } finally { setImgProg(null); }
     }, T("tile.genAllDone", { n: list.length }));
+  };
+  const [aiBusy, setAiBusy] = useState<string | null>(null);
+  /** Erzeugt direkt aus der Zeile ein KI-Bild für ein Produkt (mit Credits-Bestätigung). */
+  const quickAiImage = (prod: TileProd) => {
+    const name = p.nm(prod.id, prod.name);
+    if (!window.confirm(T("adm.variantImageAiConfirm", { name }))) return;
+    setAiBusy(prod.id);
+    void p.run(async () => {
+      try {
+        const result = await genImgAll({ data: { id: prod.id, kind: "product" } });
+        await saveProductIconFromPath(prod.id, result.path);
+      } catch (e) {
+        toast.error(e instanceof Error ? e.message : String(e));
+      } finally { setAiBusy(null); }
+    });
   };
   const deptById = useMemo(() => new Map(p.depts.map((d) => [d.id, d])), [p.depts]);
 
@@ -423,6 +438,9 @@ export function CatalogTileEditor(p: {
                 </Button>
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.variantAdd")} title={T("adm.variantAdd")} onClick={() => setVariantAdd(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   <Tags className="h-3.5 w-3.5" />
+                </Button>
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode || aiBusy === pid} aria-label={T("tile.aiImage")} title={T("tile.aiImage")} onClick={() => quickAiImage(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                  {aiBusy === pid ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                 </Button>
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
                   <Trash2 className="h-3.5 w-3.5" />
