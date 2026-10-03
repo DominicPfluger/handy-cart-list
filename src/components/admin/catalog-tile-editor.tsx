@@ -652,6 +652,18 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
+  // Kategorie-Wahl beim Anlegen eines neuen Produkts (Vorauswahl: aktuell geöffnete Kategorie)
+  const [newDept, setNewDept] = useState<string>(p.cur ?? "");
+  const newDeptOpts = (() => {
+    const byId = new Map(p.depts.map((d) => [d.id, d]));
+    const label = (id: string) => {
+      const parts: string[] = [];
+      let c = byId.get(id);
+      while (c) { parts.unshift(c.name); c = c.parent_id ? byId.get(c.parent_id) : undefined; }
+      return parts.join(" › ");
+    };
+    return p.depts.map((d) => ({ id: d.id, label: label(d.id) })).sort((a, b) => a.label.localeCompare(b.label, "de"));
+  })();
   const [price, setPrice] = useState("");
   const estAll = useServerFn(estimateProductPricesAllMarkets);
   const estOneFn = useServerFn(estimateProductPrice);
@@ -783,7 +795,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     } else {
       const r = isDept
         ? await supabase.from("departments").insert({ ...base, parent_id: p.cur, sort_order: p.children.length + 1 }).select("id").single()
-        : await supabase.from("products").insert({ ...base, department_id: p.cur!, default_quantity: qty, default_unit: unit as never, variants, sort_order: p.products.length + 1 }).select("id").single();
+        : await (async () => {
+            const targetDept = newDept || p.cur!;
+            // Fremde Kategorie: ans Ende dieser Kategorie (höchster sort_order + 1)
+            const nextSort = targetDept === p.cur
+              ? p.products.length + 1
+              : await supabase.from("products").select("sort_order").eq("department_id", targetDept).order("sort_order", { ascending: false }).limit(1)
+                  .then(({ data }) => ((data?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1);
+            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, variants, sort_order: nextSort }).select("id").single();
+          })();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
       if (!isNewProduct) await p.translateIds([id]);
@@ -1031,6 +1051,14 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </div>
           )}
         </div>
+        {!p.imageOnly && !isDept && !item && (
+          <label className="flex items-center gap-2 text-sm">
+            <span className="shrink-0 text-muted-foreground">{T("adm.category")}</span>
+            <select aria-label={T("adm.category")} value={newDept || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
+              {newDeptOpts.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+            </select>
+          </label>
+        )}
         {!p.imageOnly && <div className="flex gap-2">
           <Input aria-label={T("tile.emoji")} placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} className="h-11 w-16 rounded-xl text-center text-xl" />
           <Input aria-label={T("tile.name")} placeholder={T("tile.name")} value={name} onChange={(e) => setName(e.target.value)} className="h-11 flex-1 rounded-xl" />

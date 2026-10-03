@@ -606,11 +606,24 @@ function AdminPage() {
       if (done > 0) await refresh();
     }
   };
-  const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, ai?: { hint: string; opts: AiImageOpts }) => {
+  const handleBulkSubmit = (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, deptId: string, ai?: { hint: string; opts: AiImageOpts }) => {
     if (ai && !window.confirm(T("adm.aiImagesConfirm", { n: names.length }))) return;
     let newIds: string[] = [];
     return run(async () => {
-    if (!cur) return;
+    const target = deptId || cur;
+    if (!target) return;
+    if (target !== cur) {
+      // Fremde Kategorie gewählt: immer ans Ende dieser Kategorie (höchster sort_order + 1)
+      const { data: maxRow } = await supabase.from("products").select("sort_order").eq("department_id", target).order("sort_order", { ascending: false }).limit(1);
+      const start = ((maxRow?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1;
+      const rows = names.map((name, i) => ({ department_id: target, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: start + i }));
+      const r = await supabase.from("products").insert(rows).select("id");
+      if (r.error) throw new Error(r.error.message);
+      newIds = (r.data ?? []).map((x) => x.id as string);
+      await translateIds(newIds);
+      setBulk(false);
+      return;
+    }
     // Einfügeposition bestimmen: "end" = ans Ende, "top" = ganz oben, sonst Überschriften-ID = ans Ende ihrer Gruppe
     let insertAt = products.length;
     if (pos === "top") insertAt = 0;
@@ -628,7 +641,7 @@ function AdminPage() {
     // Bestehende Produkte ab der Einfügestelle nach hinten schieben
     const shifted = products.slice(insertAt).filter((x) => !x.id.startsWith("alias:"));
     await Promise.all(shifted.map((x, i) => must(supabase.from("products").update({ sort_order: insertAt + names.length + i + 1 }).eq("id", x.id))));
-    const rows = names.map((name, i) => ({ department_id: cur, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: insertAt + i + 1 }));
+    const rows = names.map((name, i) => ({ department_id: target, name, markets: mk && mkOnly.has(name) ? [mk] : [], emoji: emoji || null, default_quantity: qty, default_unit: unit as never, sort_order: insertAt + i + 1 }));
     const r = await supabase.from("products").insert(rows).select("id");
     if (r.error) throw new Error(r.error.message);
     newIds = (r.data ?? []).map((x) => x.id as string);
@@ -751,6 +764,8 @@ function AdminPage() {
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
               headings={headings} products={products}
+              curDept={cur ?? undefined}
+              deptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
               onSubmit={handleBulkSubmit} />
           )}
         </>
@@ -851,12 +866,14 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
 
 type Suggestion = { name: string; emoji: string; reason: string; scope: "global" | "market"; source?: string | undefined };
 
-function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path, headings = [], products = [] }: {
-  onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, ai?: { hint: string; opts: AiImageOpts }) => void; onCancel: () => void;
+function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path, deptOptions, curDept, headings = [], products = [] }: {
+  onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, deptId: string, ai?: { hint: string; opts: AiImageOpts }) => void; onCancel: () => void;
   onSuggest: (typed: string[], mode: "web" | "ai", count: number) => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string; path?: string;
+  deptOptions: { id: string; label: string }[]; curDept?: string | undefined;
   headings?: Head[]; products?: { id: string }[];
 }) {
   const [pos, setPos] = useState("end");
+  const [deptId, setDeptId] = useState("");
   const [mkOnly, setMkOnly] = useState<Set<string>>(new Set());
   const [text, setText] = useState("");
   const [sugs, setSugs] = useState<Suggestion[] | null>(null);
@@ -957,7 +974,13 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
         <UnitSelect value={unit} onChange={setUnit} />
       </div>
       <p className="text-xs text-muted-foreground">{T("adm.detected", { n: names.length })}</p>
-      {headings.length > 0 && (
+      <label className="flex items-center gap-2 text-sm">
+        <span className="shrink-0 text-muted-foreground">{T("adm.category")}</span>
+        <select aria-label={T("adm.category")} value={deptId || curDept || ""} onChange={(e) => setDeptId(e.target.value)} className="h-9 min-w-0 flex-1 rounded-lg border border-input bg-background px-2 text-sm">
+          {deptOptions.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+        </select>
+      </label>
+      {headings.length > 0 && (!deptId || deptId === curDept) && (
         <label className="flex items-center gap-2 text-sm">
           <span className="shrink-0 text-muted-foreground">{T("adm.posLabel")}</span>
           <select value={pos} onChange={(e) => setPos(e.target.value)} className="h-9 min-w-0 flex-1 rounded-lg border border-input bg-background px-2 text-sm">
@@ -982,7 +1005,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
         )}
       </div>
       <div className="flex gap-2">
-        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit, mkOnly, pos, aiOn ? { hint: aiHint.trim(), opts: aiOpts } : undefined)}>
+        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit, mkOnly, pos, deptId || curDept || "", aiOn ? { hint: aiHint.trim(), opts: aiOpts } : undefined)}>
           {T("adm.createN", { n: names.length })}
         </Button>
         <Button variant="ghost" onClick={onCancel}>{T("adm.cancel")}</Button>
