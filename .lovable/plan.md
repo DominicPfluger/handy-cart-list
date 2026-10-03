@@ -14,5 +14,5 @@ In der Abteilungsansicht erscheint unterhalb der Info-Zeile jedes Produkts mit V
    - Neuer Text `dept.productVariants` = „Produktvarianten" (de) und Übersetzungen in allen 15 weiteren App-Sprachen.
 
 ## Prüfung
-- Browser-Test: Produktzeile in der Abteilungsansicht zeigt den Link unter der Mengenzeile; Klick öffnet die Produktdetailseite; Variantenliste lässt sich weiterhin auf-/zuklappen; kein „Details →" mehr am Listenende.
+- Browser-Test: Produktzeile in der Abteilungsansicht zeigt den Link nur bei Produkten mit Varianten unter der Mengenzeile; Klick öffnet die Produktdetailseite; Variantenliste lässt sich weiterhin auf-/zuklappen; kein „Details →" mehr am Listenende.
 - Ansicht auf Mobil (390 px) und Desktop prüfen; Build fehlerfrei.
