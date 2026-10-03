@@ -45,3 +45,4 @@
 - Mengeneinheit „Artikel" (Art.) hinzugefügt: Enum-Wert in der Datenbank, Einheitenliste und Übersetzungen in allen 16 Sprachen.
 
 - [x] Rezepte-Admin: Zutaten-Kategorien in eigenem umrandeten Container (rounded-lg border bg-background p-2) statt nur Trennlinie; getestet im Browser.
+- [x] Rezepte-Admin: Button „Neue Vorlage" umbenannt in „Neue Rezept-Kategorie" (adm.stepNew) in allen 16 Sprachen; Tab-Name unverändert.
