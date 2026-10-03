@@ -40,11 +40,16 @@ function RecipeSearchPage() {
   const all = data ?? [];
   const active = TRAIT_GROUPS.some((g) => filters[g]);
   const results = active
-    ? all.filter((r) => TRAIT_GROUPS.every((g) => !filters[g] || r[g] === filters[g]))
+    ? all.filter((r) => TRAIT_GROUPS.every((g) => {
+        const f = filters[g];
+        if (!f) return true;
+        if (g === "taste") return splitTaste(r.taste).some((v) => splitTaste(f).includes(v));
+        return r[g] === f;
+      }))
     : all;
 
   const setFilter = (g: TraitGroup, v: string | null) =>
-    setFilters((prev) => ({ ...prev, [g]: prev[g] === v ? null : v }));
+    setFilters((prev) => ({ ...prev, [g]: g === "taste" && v ? toggleTaste(prev.taste, v) : prev[g] === v ? null : v }));
 
   return (
     <div className="space-y-5">
@@ -57,9 +62,15 @@ function RecipeSearchPage() {
       </div>
 
       <div className="space-y-3 rounded-2xl border border-border bg-card p-4">
-        {TRAIT_GROUPS.map((g) => (
-          <div key={g} role="radiogroup" aria-label={t(`rk.${g}` as Parameters<typeof t>[0])} className="space-y-1.5">
-            <p className="text-xs font-bold text-foreground">{RECIPE_TRAITS[g].emoji} {t(`rk.${g}` as Parameters<typeof t>[0])}</p>
+        {TRAIT_GROUPS.map((g) => {
+          const multi = g === "taste";
+          const sel = multi ? splitTaste(filters.taste) : [];
+          return (
+          <div key={g} role={multi ? "group" : "radiogroup"} aria-label={t(`rk.${g}` as Parameters<typeof t>[0])} className="space-y-1.5">
+            <p className="text-xs font-bold text-foreground">
+              {RECIPE_TRAITS[g].emoji} {t(`rk.${g}` as Parameters<typeof t>[0])}
+              {multi && <span className="ml-1 font-normal text-muted-foreground">({t("rk.tasteMax", { n: TASTE_MAX })})</span>}
+            </p>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button" role="radio" aria-checked={!filters[g]}
@@ -68,18 +79,22 @@ function RecipeSearchPage() {
               >
                 {t("rec.searchAll")}
               </button>
-              {RECIPE_TRAITS[g].values.map((v) => (
+              {RECIPE_TRAITS[g].values.map((v) => {
+                const on = multi ? sel.includes(v) : filters[g] === v;
+                return (
                 <button
-                  key={v} type="button" role="radio" aria-checked={filters[g] === v}
+                  key={v} type="button" role={multi ? "checkbox" : "radio"} aria-checked={on}
                   onClick={() => setFilter(g, v)}
-                  className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${filters[g] === v ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}
+                  className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}
                 >
                   {t(`rk.${g}.${v}` as Parameters<typeof t>[0])}
                 </button>
-              ))}
+                );
+              })}
             </div>
           </div>
-        ))}
+          );
+        })}
         {active ? (
           <button type="button" onClick={() => setFilters(EMPTY_FILTERS)} className="text-sm font-semibold text-primary">
             {t("rec.searchClear")}
@@ -102,7 +117,7 @@ function RecipeSearchPage() {
             const tpl = templates.find((x) => x.id === r.template_id);
             const traits = TRAIT_GROUPS
               .filter((g) => r[g])
-              .map((g) => `${RECIPE_TRAITS[g].emoji} ${t(`rk.${g}.${r[g]}` as Parameters<typeof t>[0])}`)
+              .map((g) => `${RECIPE_TRAITS[g].emoji} ${g === "taste" ? splitTaste(r.taste).map((v) => t(`rk.taste.${v}` as Parameters<typeof t>[0])).join(", ") : t(`rk.${g}.${r[g]}` as Parameters<typeof t>[0])}`)
               .join(" · ");
             return (
               <Link key={r.id} to="/rezept/$slug" params={{ slug: r.share_slug }} className={LIST_CARD_CLASS}>
