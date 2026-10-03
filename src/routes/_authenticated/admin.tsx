@@ -717,10 +717,12 @@ function Stat({ label, value }: { label: string; value: number | undefined }) {
 
 type Suggestion = { name: string; emoji: string; reason: string; scope: "global" | "market"; source?: string | undefined };
 
-function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path }: {
-  onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>) => void; onCancel: () => void;
+function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path, headings = [], products = [] }: {
+  onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string) => void; onCancel: () => void;
   onSuggest: (typed: string[], mode: "web" | "ai") => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string; path?: string;
+  headings?: Head[]; products?: { id: string }[];
 }) {
+  const [pos, setPos] = useState("end");
   const [mkOnly, setMkOnly] = useState<Set<string>>(new Set());
   const [text, setText] = useState("");
   const [sugs, setSugs] = useState<Suggestion[] | null>(null);
