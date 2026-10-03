@@ -40,7 +40,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const { t } = useT();
   const catalog = useCatalog();
   const templates = useRecipeTemplates();
-  const { addCatalogItem, favorites } = useShoppingList();
+  const { addCatalogItem, addItem, favorites } = useShoppingList();
   const [tplId, setTplIdRaw] = useState<RecipeTemplate["id"] | null>(initialTemplateId ?? null);
   const setTplId = (id: RecipeTemplate["id"] | null) => { setTplIdRaw(id); onTemplateChange?.(id); };
   const [picks, setPicks] = useState<Picks>({});
@@ -96,6 +96,11 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     if (!template) return;
     const next: Picks = {};
     for (const item of r.items) {
+      if (item.productId.startsWith("any:")) {
+        const k = item.productId.slice(4);
+        if (template.steps.some((s) => s.key === k)) (next[k] ??= []).push(item.productId);
+        continue;
+      }
       const step = template.steps.find((s) => {
         const dbIds = catalog.recipeIngredients
           .filter((ri) => ri.templateId === template.id && ri.stepKey === s.key)
@@ -165,7 +170,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         setPicks((prev) => {
           const pruned: Picks = {};
           for (const [k, ids] of Object.entries(prev)) {
-            const kept = ids.filter((id) => favIds.has(id));
+            const kept = ids.filter((id) => favIds.has(id) || id.startsWith("any:"));
             if (kept.length) pruned[k] = kept;
           }
           return pruned;
@@ -240,7 +245,11 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setPicks(p);
   };
 
-  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => s.products.find((p) => p.id === id)!).filter(Boolean));
+  const anyProduct = (s: (typeof steps)[number]) => ({
+    id: `any:${s.key}`, name: t("rk.anyOf", { name: s.label }), emoji: s.emoji || STEP_EMOJIS[s.key] || "🍽️",
+    defaultQuantity: 1, defaultUnit: "stueck", departmentId: "", imageUrl: undefined,
+  }) as unknown as CatalogProduct;
+  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => id.startsWith("any:") ? anyProduct(s) : s.products.find((p) => p.id === id)!).filter(Boolean));
   const catName = tpl ? templateLabel(tpl, t) : "";
   const title = chosen.length
     ? `${catName}: ${chosen.slice(0, 3).map((p) => p.name).join(", ")}${chosen.length > 3 ? " …" : ""}`
@@ -248,6 +257,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
 
   const addAll = () => {
     for (const p of chosen) {
+      if (p.id.startsWith("any:")) { addItem(p.name, "1", "sonstiges"); continue; }
       const g = catalog.departments.find((d) => d.id === p.departmentId);
       addCatalogItem({
         productId: p.id,
@@ -604,7 +614,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               {sel0.length > 0 && (
                 <span className="mt-0.5 flex flex-wrap gap-1">
                   {sel0.map((id) => {
-                    const p = s.products.find((x) => x.id === id);
+                    const p = id.startsWith("any:") ? anyProduct(s) : s.products.find((x) => x.id === id);
                     return p ? <span key={id} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-foreground">{p.emoji} {p.name}</span> : null;
                   })}
                 </span>
@@ -612,6 +622,16 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             </span>
           </div>
           <div className="space-y-2 border-t border-border px-3 py-3">
+          {(() => {
+            const ap = anyProduct(s);
+            const on = sel0.includes(ap.id);
+            return (
+              <button type="button" aria-pressed={on} onClick={() => { setSavedMsg(false); toggle(s.key, ap.id, s.max); }}
+                className={`rounded-full border border-dashed px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${on ? "border-primary bg-primary text-primary-foreground" : "border-primary/60 bg-card text-foreground"}`}>
+                <span aria-hidden="true" className="mr-1">{ap.emoji}</span>{ap.name}
+              </button>
+            );
+          })()}
           {s.products.length === 0 ? (
             <p className="text-xs text-muted-foreground">{t("rk.empty")}</p>
           ) : (
