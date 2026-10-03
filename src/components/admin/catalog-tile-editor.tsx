@@ -96,6 +96,7 @@ export function CatalogTileEditor(p: {
   const [selCur, setSelCur] = useState(p.cur);
   if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); }
   const toggleSel = (id: string) => setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  useEffect(() => { if (allSelRef.current) allSelRef.current.indeterminate = !allSelected && selected.size > 0; });
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
   const [headMove, setHeadMove] = useState<{ id: string; name: string; insertAt: number; n: number } | null>(null);
