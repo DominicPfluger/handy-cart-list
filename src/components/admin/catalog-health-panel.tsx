@@ -183,10 +183,34 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit }: {
   const filteredSyns = (syns.data ?? []).filter((s) => !synSearch.trim() || s.term.toLowerCase().includes(synSearch.trim().toLowerCase()) || (prodById.get(s.product_id)?.name ?? "").toLowerCase().includes(synSearch.trim().toLowerCase()));
   const synNameSet = new Set(prods.map((p) => norm(p.name)));
 
+  /** Gesamter Katalog als Text: Kategorie-Baum mit #-Überschriften, Produkte ohne Emojis. */
+  const buildCatalogText = () => {
+    const nameOf = (id: string, base: string) => tr.get(id)?.[locale]?.name?.trim() || base;
+    const byParent = new Map<string | null, Dept[]>();
+    for (const d of depts) byParent.set(d.parent_id, [...(byParent.get(d.parent_id) ?? []), d]);
+    for (const list of byParent.values()) list.sort((a, b) => nameOf(a.id, a.name).localeCompare(nameOf(b.id, b.name), locale));
+    const prodsByDept = new Map<string, Prod[]>();
+    for (const p of prods) prodsByDept.set(p.department_id, [...(prodsByDept.get(p.department_id) ?? []), p]);
+    for (const list of prodsByDept.values()) list.sort((a, b) => nameOf(a.id, a.name).localeCompare(nameOf(b.id, b.name), locale));
+    const lines: string[] = [];
+    const walk = (d: Dept, path: string[]) => {
+      const name = nameOf(d.id, d.name);
+      const nextPath = [...path, name];
+      lines.push("", `${d.parent_id ? "##" : "#"} ${nextPath.join(" › ")}`);
+      for (const p of prodsByDept.get(d.id) ?? []) lines.push(nameOf(p.id, p.name));
+      for (const c of byParent.get(d.id) ?? []) walk(c, nextPath);
+    };
+    for (const root of byParent.get(null) ?? []) walk(root, []);
+    return lines.join("\n").trim() + "\n";
+  };
+
   return (
     <div className="space-y-6 pt-2">
       <section className="space-y-2">
-        <h2 className="text-sm font-semibold text-foreground">{T("adm.health.gaps")}</h2>
+        <div className="flex items-center justify-between gap-2">
+          <h2 className="text-sm font-semibold text-foreground">{T("adm.health.gaps")}</h2>
+          <Button size="sm" variant="outline" onClick={() => setCopyOpen(true)}>{T("adm.copyCatalog")}</Button>
+        </div>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {gapCards.map((g) => (
             <button key={g.id} type="button" onClick={() => setOpenGap(openGap === g.id ? null : g.id)}
