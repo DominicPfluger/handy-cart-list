@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useT } from "../i18n";
-import { RECIPE_TRAITS, TRAIT_GROUPS, type TraitGroup } from "../lib/recipe-traits";
+import { RECIPE_TRAITS, TRAIT_GROUPS, TASTE_MAX, splitTaste, toggleTaste, type TraitGroup } from "../lib/recipe-traits";
 import { fetchTraitRecipes } from "../lib/recipes-api";
 import { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
 import { ListCardBody, LIST_CARD_CLASS } from "../components/recipe-feed";

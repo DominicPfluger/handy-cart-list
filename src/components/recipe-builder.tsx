@@ -19,7 +19,7 @@ import { createRecipe, fetchRecipe, publishRecipe, shareLink, type RecipeItem } 
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { SavedRecipesBoard } from "./saved-recipes-board";
-import { RECIPE_TRAITS, TRAIT_GROUPS, type RecipeTraits } from "../lib/recipe-traits";
+import { RECIPE_TRAITS, TRAIT_GROUPS, TASTE_MAX, splitTaste, toggleTaste, type RecipeTraits } from "../lib/recipe-traits";
 import { SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
