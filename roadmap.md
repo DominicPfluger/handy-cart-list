@@ -23,3 +23,5 @@
 - Rezept-Admin: Mehrere Oberkategorien gleichzeitig per Zeilenumbruch anlegen; Bereich „Rezept-Kategorien" in „Zutaten-Kategorien" umbenannt (16 Sprachen); Browser-getestet
 - Listen-Verwaltung: Vorlagen per Drag & Drop sortierbar (Zieh-Griff wie bei Listen), Löschen-Knopf bleibt
 - Admin „Mehrere Produkte": Positions-Auswahl (Ende/oben/unter Überschrift) bei Abteilungen mit Überschriften
+- Rezepte-Admin: Bearbeiten/Löschen als Stift-/Papierkorb-Icons direkt neben dem Drag-Griff (Vorlagen & Oberkategorien).
+- Abteilungsansicht: Produktvarianten mit Herz (Favorit), Blitz (Schnell hinzufügen) und grünem Plus (Produkt-hinzufügen-Dialog, Variante vorgewählt).

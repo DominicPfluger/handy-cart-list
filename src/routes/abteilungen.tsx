@@ -139,6 +139,7 @@ function DepartmentsPage() {
   const [query, setQuery] = useState("");
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string | undefined>(undefined);
+  const [selectedVariant, setSelectedVariant] = useState<string | undefined>(undefined);
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
   const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
@@ -706,7 +707,7 @@ function DepartmentsPage() {
                     type="button"
                     size="icon"
                     aria-label={t("common.addWithQty", { name: product.name })}
-                    onClick={() => { setSelectedBrand(normalizedQuery ? matchedBrand(product) : undefined); setSelectedProduct(product); }}
+                    onClick={() => { setSelectedBrand(normalizedQuery ? matchedBrand(product) : undefined); setSelectedVariant(undefined); setSelectedProduct(product); }}
                     className="h-8 w-8 rounded-full shadow-none"
                   >
                     <PlusIcon className="h-3.5 w-3.5" />
@@ -718,15 +719,56 @@ function DepartmentsPage() {
                   <div className="border-t border-dashed border-border bg-muted/30 py-1 pl-8 pr-2.5">
                     {product.variants.map((v) => {
                       const vi = product.variantImages?.[v];
+                      const vName = variantLabel(product, v);
+                      const vFav = isFavorite(`${product.id}::${v}`);
                       return (
                         <div key={v} className="flex items-center gap-2.5 py-1.5">
                           <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-primary-soft/25">
                             <ProductIcon emoji={product.emoji} iconUrl={vi?.iconUrl ?? vi?.imageUrl ?? product.iconUrl} iconPath={vi?.iconPath ?? vi?.imagePath ?? product.iconPath} symbolClassName="text-2xl" />
                           </div>
-                          <span className="min-w-0 flex-1 truncate text-sm text-foreground">{variantLabel(product, v)}</span>
-                          <Button type="button" variant="ghost" size="icon" aria-label={t("common.quickAdd", { name: `${product.name} · ${variantLabel(product, v)}` })} onClick={() => quickAdd(product, group, v)} className="h-8 w-8 rounded-full text-primary">
-                            <PlusIcon className="h-3.5 w-3.5" />
-                          </Button>
+                          <span className="min-w-0 flex-1 truncate text-sm text-foreground">{vName}</span>
+                          <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              aria-label={vFav ? t("common.removeFavorite", { name: `${product.name} · ${vName}` }) : t("common.addFavorite", { name: `${product.name} · ${vName}` })}
+                              onClick={() => toggleFavorite({
+                                productId: `${product.id}::${v}`,
+                                name: `${product.name} · ${vName}`,
+                                emoji: product.emoji,
+                                imageUrl: vi?.imageUrl ?? product.imageUrl ?? undefined,
+                                defaultQuantity: product.defaultQuantity,
+                                defaultUnit: product.defaultUnit,
+                                organicAvailable: product.organicAvailable,
+                                groupLabel: group?.name,
+                                groupEmoji: group?.emoji ?? undefined,
+                              })}
+                              className={`h-8 w-8 ${vFav ? "rounded-full bg-coral/15 text-coral" : "rounded-full text-muted-foreground"}`}
+                            >
+                              <HeartIcon className={`h-3.5 w-3.5 ${vFav ? "fill-current" : ""}`} />
+                            </Button>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              aria-label={t("common.quickAdd", { name: `${product.name} · ${vName}` })}
+                              onClick={() => quickAdd(product, group, v)}
+                              className="h-8 w-8 rounded-full text-muted-foreground"
+                            >
+                              <BoltIcon className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button
+                              type="button"
+                              size="icon"
+                              aria-label={t("common.addWithQty", { name: `${product.name} · ${vName}` })}
+                              onClick={() => { setSelectedBrand(undefined); setSelectedVariant(v); setSelectedProduct(product); }}
+                              className="h-8 w-8 rounded-full shadow-none"
+                            >
+                              <PlusIcon className="h-3.5 w-3.5" />
+                            </Button>
+                            <span aria-hidden className="w-1.5 shrink-0" />
+                          </div>
                         </div>
                       );
                     })}
@@ -802,7 +844,8 @@ function DepartmentsPage() {
         groupEmoji={selectedProduct ? groupFor(selectedProduct)?.emoji : undefined}
         initialDepartmentId={selectedProduct ? groupFor(selectedProduct)?.id : undefined}
         initialBrand={selectedBrand}
-        onOpenChange={(open) => { if (!open) setSelectedProduct(null); }}
+        initialVariant={selectedVariant}
+        onOpenChange={(open) => { if (!open) { setSelectedProduct(null); setSelectedVariant(undefined); } }}
       />
     </div>
   );

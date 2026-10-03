@@ -33,6 +33,8 @@ interface CatalogProductDialogProps {
   groupLabel?: string | undefined;
   groupEmoji?: string | null | undefined;
   initialBrand?: string | undefined;
+  /** Vorausgewählte Variante (z. B. beim Öffnen aus einer Varianten-Zeile). */
+  initialVariant?: string | undefined;
   /** Kategorie, aus der das Produkt geöffnet wurde (für Alias-Produkte). */
   initialDepartmentId?: string | undefined;
   onOpenChange: (open: boolean) => void;
@@ -43,6 +45,7 @@ export function CatalogProductDialog({
   groupLabel,
   groupEmoji,
   initialBrand,
+  initialVariant,
   initialDepartmentId,
   onOpenChange,
 }: CatalogProductDialogProps) {
@@ -97,11 +100,12 @@ export function CatalogProductDialog({
     setCustomInput("");
     setExpanded(false);
     setBrand(initialBrand);
+    setSelected(initialVariant && (product.variants ?? []).includes(initialVariant) ? [initialVariant] : []);
     const ids = departmentIdsOf(product, catalog.productAliases ?? []);
     const pref = preferred[product.id];
     setDeptId(initialDepartmentId && ids.includes(initialDepartmentId) ? initialDepartmentId : pref && ids.includes(pref) ? pref : product.departmentId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [product, initialBrand, initialDepartmentId]);
+  }, [product, initialBrand, initialVariant, initialDepartmentId]);
   const chosenDept = deptIds.length > 1 ? catalog.departments.find((d) => d.id === deptId) : undefined;
 
   const toggleVariant = (v: string) =>
