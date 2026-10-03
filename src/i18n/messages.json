@@ -1232,7 +1232,11 @@
     "adm.headingsToSub": "Convert headings to subcategories",
     "adm.headingsToSubConfirm": "Create {cats} subcategories and move {n} products? The headings will be removed afterwards.",
     "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved",
-    "rec.recipeCuisines": "Cuisines (optional)"
+    "rec.recipeCuisines": "Cuisines (optional)",
+    "adm.variantSuggest": "Suggest variants with AI",
+    "adm.variantSuggestConfirm": "AI will suggest suitable variants. This uses AI credits.",
+    "adm.variantSuggestApply": "Apply",
+    "adm.variantSuggestNone": "No new variants found."
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2467,7 +2471,11 @@
     "adm.headingsToSub": "Convert headings to subcategories",
     "adm.headingsToSubConfirm": "Create {cats} subcategories and move {n} products? The headings will be removed afterwards.",
     "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved",
-    "rec.recipeCuisines": "Cuisines (optional)"
+    "rec.recipeCuisines": "Cuisines (optional)",
+    "adm.variantSuggest": "Suggest variants with AI",
+    "adm.variantSuggestConfirm": "AI will suggest suitable variants. This uses AI credits.",
+    "adm.variantSuggestApply": "Apply",
+    "adm.variantSuggestNone": "No new variants found."
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3702,7 +3710,11 @@
     "adm.headingsToSub": "Convert headings to subcategories",
     "adm.headingsToSubConfirm": "Create {cats} subcategories and move {n} products? The headings will be removed afterwards.",
     "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved",
-    "rec.recipeCuisines": "Cuisines (optional)"
+    "rec.recipeCuisines": "Cuisines (optional)",
+    "adm.variantSuggest": "Suggest variants with AI",
+    "adm.variantSuggestConfirm": "AI will suggest suitable variants. This uses AI credits.",
+    "adm.variantSuggestApply": "Apply",
+    "adm.variantSuggestNone": "No new variants found."
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4937,7 +4949,11 @@
     "adm.headingsToSub": "Convertir encabezados en subcategorías",
     "adm.headingsToSubConfirm": "¿Crear {cats} subcategorías y mover {n} productos? Después se eliminarán los encabezados.",
     "adm.headingsToSubDone": "{cats} subcategorías creadas, {n} productos movidos",
-    "rec.recipeCuisines": "Cocinas (opcional)"
+    "rec.recipeCuisines": "Cocinas (opcional)",
+    "adm.variantSuggest": "Sugerir variantes con IA",
+    "adm.variantSuggestConfirm": "La IA sugiere variantes adecuadas. Esto consume créditos de IA.",
+    "adm.variantSuggestApply": "Aplicar",
+    "adm.variantSuggestNone": "No se encontraron variantes nuevas."
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6172,7 +6188,11 @@
     "adm.headingsToSub": "Convertir encabezados en subcategorías",
     "adm.headingsToSubConfirm": "¿Crear {cats} subcategorías y mover {n} productos? Después se eliminarán los encabezados.",
     "adm.headingsToSubDone": "{cats} subcategorías creadas, {n} productos movidos",
-    "rec.recipeCuisines": "Cocinas (opcional)"
+    "rec.recipeCuisines": "Cocinas (opcional)",
+    "adm.variantSuggest": "Sugerir variantes con IA",
+    "adm.variantSuggestConfirm": "La IA sugiere variantes adecuadas. Esto consume créditos de IA.",
+    "adm.variantSuggestApply": "Aplicar",
+    "adm.variantSuggestNone": "No se encontraron variantes nuevas."
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7407,7 +7427,11 @@
     "adm.headingsToSub": "Convertir les titres en sous-catégories",
     "adm.headingsToSubConfirm": "Créer {cats} sous-catégories et déplacer {n} produits ? Les titres seront ensuite supprimés.",
     "adm.headingsToSubDone": "{cats} sous-catégories créées, {n} produits déplacés",
-    "rec.recipeCuisines": "Cuisines (facultatif)"
+    "rec.recipeCuisines": "Cuisines (facultatif)",
+    "adm.variantSuggest": "Suggérer des variantes par IA",
+    "adm.variantSuggestConfirm": "L’IA propose des variantes adaptées. Cela consomme des crédits IA.",
+    "adm.variantSuggestApply": "Reprendre",
+    "adm.variantSuggestNone": "Aucune nouvelle variante trouvée."
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8642,7 +8666,11 @@
     "adm.headingsToSub": "Convertir les titres en sous-catégories",
     "adm.headingsToSubConfirm": "Créer {cats} sous-catégories et déplacer {n} produits ? Les titres seront ensuite supprimés.",
     "adm.headingsToSubDone": "{cats} sous-catégories créées, {n} produits déplacés",
-    "rec.recipeCuisines": "Cuisines (facultatif)"
+    "rec.recipeCuisines": "Cuisines (facultatif)",
+    "adm.variantSuggest": "Suggérer des variantes par IA",
+    "adm.variantSuggestConfirm": "L’IA propose des variantes adaptées. Cela consomme des crédits IA.",
+    "adm.variantSuggestApply": "Reprendre",
+    "adm.variantSuggestNone": "Aucune nouvelle variante trouvée."
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9877,7 +9905,11 @@
     "adm.headingsToSub": "Converti titoli in sottocategorie",
     "adm.headingsToSubConfirm": "Creare {cats} sottocategorie e spostare {n} prodotti? I titoli verranno poi rimossi.",
     "adm.headingsToSubDone": "{cats} sottocategorie create, {n} prodotti spostati",
-    "rec.recipeCuisines": "Cucine (facoltativo)"
+    "rec.recipeCuisines": "Cucine (facoltativo)",
+    "adm.variantSuggest": "Suggerisci varianti con l’IA",
+    "adm.variantSuggestConfirm": "L’IA suggerisce varianti adatte. Vengono consumati crediti IA.",
+    "adm.variantSuggestApply": "Applica",
+    "adm.variantSuggestNone": "Nessuna nuova variante trovata."
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11112,7 +11144,11 @@
     "adm.headingsToSub": "Converti titoli in sottocategorie",
     "adm.headingsToSubConfirm": "Creare {cats} sottocategorie e spostare {n} prodotti? I titoli verranno poi rimossi.",
     "adm.headingsToSubDone": "{cats} sottocategorie create, {n} prodotti spostati",
-    "rec.recipeCuisines": "Cucine (facoltativo)"
+    "rec.recipeCuisines": "Cucine (facoltativo)",
+    "adm.variantSuggest": "Suggerisci varianti con l’IA",
+    "adm.variantSuggestConfirm": "L’IA suggerisce varianti adatte. Vengono consumati crediti IA.",
+    "adm.variantSuggestApply": "Applica",
+    "adm.variantSuggestNone": "Nessuna nuova variante trovata."
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12347,7 +12383,11 @@
     "adm.headingsToSub": "Converter títulos em subcategorias",
     "adm.headingsToSubConfirm": "Criar {cats} subcategorias e mover {n} produtos? Os títulos serão removidos depois.",
     "adm.headingsToSubDone": "{cats} subcategorias criadas, {n} produtos movidos",
-    "rec.recipeCuisines": "Cozinhas (opcional)"
+    "rec.recipeCuisines": "Cozinhas (opcional)",
+    "adm.variantSuggest": "Sugerir variantes com IA",
+    "adm.variantSuggestConfirm": "A IA sugere variantes adequadas. Isto consome créditos de IA.",
+    "adm.variantSuggestApply": "Aplicar",
+    "adm.variantSuggestNone": "Nenhuma variante nova encontrada."
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13582,7 +13622,11 @@
     "adm.headingsToSub": "Converter títulos em subcategorias",
     "adm.headingsToSubConfirm": "Criar {cats} subcategorias e mover {n} produtos? Os títulos serão removidos depois.",
     "adm.headingsToSubDone": "{cats} subcategorias criadas, {n} produtos movidos",
-    "rec.recipeCuisines": "Cozinhas (opcional)"
+    "rec.recipeCuisines": "Cozinhas (opcional)",
+    "adm.variantSuggest": "Sugerir variantes com IA",
+    "adm.variantSuggestConfirm": "A IA sugere variantes adequadas. Isto consome créditos de IA.",
+    "adm.variantSuggestApply": "Aplicar",
+    "adm.variantSuggestNone": "Nenhuma variante nova encontrada."
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14817,7 +14861,11 @@
     "adm.headingsToSub": "Kopjes omzetten naar subcategorieën",
     "adm.headingsToSubConfirm": "{cats} subcategorieën maken en {n} producten verplaatsen? De kopjes worden daarna verwijderd.",
     "adm.headingsToSubDone": "{cats} subcategorieën gemaakt, {n} producten verplaatst",
-    "rec.recipeCuisines": "Keukens (optioneel)"
+    "rec.recipeCuisines": "Keukens (optioneel)",
+    "adm.variantSuggest": "Varianten voorstellen met AI",
+    "adm.variantSuggestConfirm": "AI stelt passende varianten voor. Dit verbruikt AI-credits.",
+    "adm.variantSuggestApply": "Overnemen",
+    "adm.variantSuggestNone": "Geen nieuwe varianten gevonden."
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16052,7 +16100,11 @@
     "adm.headingsToSub": "Kopjes omzetten naar subcategorieën",
     "adm.headingsToSubConfirm": "{cats} subcategorieën maken en {n} producten verplaatsen? De kopjes worden daarna verwijderd.",
     "adm.headingsToSubDone": "{cats} subcategorieën gemaakt, {n} producten verplaatst",
-    "rec.recipeCuisines": "Keukens (optioneel)"
+    "rec.recipeCuisines": "Keukens (optioneel)",
+    "adm.variantSuggest": "Varianten voorstellen met AI",
+    "adm.variantSuggestConfirm": "AI stelt passende varianten voor. Dit verbruikt AI-credits.",
+    "adm.variantSuggestApply": "Overnemen",
+    "adm.variantSuggestNone": "Geen nieuwe varianten gevonden."
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16748,7 +16800,11 @@
     "adm.headingsToSub": "Überschriften in Unterkategorien umwandeln",
     "adm.headingsToSubConfirm": "{cats} Unterkategorien anlegen und {n} Produkte verschieben? Die Überschriften werden danach entfernt.",
     "adm.headingsToSubDone": "{cats} Unterkategorien erstellt, {n} Produkte verschoben",
-    "rec.recipeCuisines": "Länderküchen (optional)"
+    "rec.recipeCuisines": "Länderküchen (optional)",
+    "adm.variantSuggest": "Varianten per KI vorschlagen",
+    "adm.variantSuggestConfirm": "Die KI schlägt passende Varianten vor. Dabei werden KI-Credits verbraucht.",
+    "adm.variantSuggestApply": "Übernehmen",
+    "adm.variantSuggestNone": "Keine neuen Varianten gefunden."
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17444,6 +17500,10 @@
     "adm.headingsToSub": "Überschriften in Unterkategorien umwandeln",
     "adm.headingsToSubConfirm": "{cats} Unterkategorien anlegen und {n} Produkte verschieben? Die Überschriften werden danach entfernt.",
     "adm.headingsToSubDone": "{cats} Unterkategorien erstellt, {n} Produkte verschoben",
-    "rec.recipeCuisines": "Länderküchen (optional)"
+    "rec.recipeCuisines": "Länderküchen (optional)",
+    "adm.variantSuggest": "Varianten per KI vorschlagen",
+    "adm.variantSuggestConfirm": "Die KI schlägt passende Varianten vor. Dabei werden KI-Credits verbraucht.",
+    "adm.variantSuggestApply": "Übernehmen",
+    "adm.variantSuggestNone": "Keine neuen Varianten gefunden."
   }
 }
