@@ -456,7 +456,7 @@ export function CatalogTileEditor(p: {
                   {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
                 </span>
                 <button type="button" disabled={!editMode} onClick={click(() => x.alias_id ? p.onAdvanced?.("product", pid) : setTarget({ kind: "product", id: x.id }))} className="min-w-0 flex-1 text-left">
-                  <div className="truncate text-sm font-semibold text-foreground">{p.nm(pid, x.name)}{x.alias_id && <span className="ml-1 text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</div>
+                  <div className="truncate text-sm font-semibold text-foreground" title={p.nm(pid, x.name)}>{p.nm(pid, x.name)}{x.alias_id && <span className="ml-1 text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</div>
                   <div className="truncate text-xs text-muted-foreground">
                     {x.default_quantity} {getUnits(getLocale()).find((u) => u.id === x.default_unit)?.label ?? x.default_unit}
                     {price ? ` · ${formatRefPrice(price)}` : ""}
