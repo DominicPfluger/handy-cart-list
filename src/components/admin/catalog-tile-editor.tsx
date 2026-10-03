@@ -652,6 +652,18 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const fileRef = useRef<HTMLInputElement>(null);
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
+  // Kategorie-Wahl beim Anlegen eines neuen Produkts (Vorauswahl: aktuell geöffnete Kategorie)
+  const [newDept, setNewDept] = useState<string>(p.cur ?? "");
+  const newDeptOpts = (() => {
+    const byId = new Map(p.depts.map((d) => [d.id, d]));
+    const label = (id: string) => {
+      const parts: string[] = [];
+      let c = byId.get(id);
+      while (c) { parts.unshift(c.name); c = c.parent_id ? byId.get(c.parent_id) : undefined; }
+      return parts.join(" › ");
+    };
+    return p.depts.map((d) => ({ id: d.id, label: label(d.id) })).sort((a, b) => a.label.localeCompare(b.label, "de"));
+  })();
   const [price, setPrice] = useState("");
   const estAll = useServerFn(estimateProductPricesAllMarkets);
   const estOneFn = useServerFn(estimateProductPrice);
