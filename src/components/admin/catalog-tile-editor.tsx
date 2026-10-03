@@ -91,9 +91,12 @@ export function CatalogTileEditor(p: {
   const [priceFocus, setPriceFocus] = useState(false);
   const [drag, setDrag] = useState<Drag>(null);
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
+  const allSelRef = useRef<HTMLInputElement>(null);
+  const allSelected = p.products.length > 0 && selected.size === p.products.length;
   const [selCur, setSelCur] = useState(p.cur);
   if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); }
   const toggleSel = (id: string) => setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  useEffect(() => { if (allSelRef.current) allSelRef.current.indeterminate = !allSelected && selected.size > 0; });
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
   const [headMove, setHeadMove] = useState<{ id: string; name: string; insertAt: number; n: number } | null>(null);
@@ -437,6 +440,20 @@ export function CatalogTileEditor(p: {
           <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>{T("adm.clearSelection")}</Button>
         </div>
       )}
+      {p.cur && p.products.length > 0 && (
+        <label className="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm font-medium text-foreground">
+          <input
+            ref={allSelRef}
+            type="checkbox"
+            checked={allSelected}
+            onChange={() => setSelected(allSelected ? new Set() : new Set(p.products.map((x) => x.id)))}
+            className="h-4 w-4 shrink-0 accent-primary"
+            aria-label={T("adm.selectAll")}
+          />
+          {T("adm.selectAll")}
+        </label>
+      )}
+
       {p.cur && (
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
           {p.products.map((x, i) => {
