@@ -691,6 +691,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                 {groupRows(null).map(({ group: g, depth }) => <option key={g.id} value={g.id}>{depth ? `${groups.find((x) => x.id === g.parent_id)?.name ?? ""} › ` : ""}{g.name}</option>)}
               </select>
               <Button size="sm" disabled={busy} onClick={() => void bulkAssignGroup([...selRows], bulkGroup || null)}>{T("adm.bulkAssign")}</Button>
+              <Button size="sm" variant="destructive" disabled={busy} onClick={() => bulkDeleteRows([...selRows])}>{T("adm.bulkDelete")}</Button>
               <Button size="sm" variant="ghost" disabled={busy} onClick={() => { setSelRows(new Set()); setBulkGroup(""); }}>{T("adm.clearSelection")}</Button>
             </div>
           )}
