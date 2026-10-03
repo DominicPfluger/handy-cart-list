@@ -83,8 +83,8 @@ export function CatalogTileEditor(p: {
   onCloseImageEditor?: () => void;
   /** Ergänzt fehlende Übersetzungen per KI (ganzer Katalog). */
   onTranslateMissing?: () => void;
-  /** Löscht alle markierten Einträge (Produkte, leere Kategorien, Aliasse). */
-  onDeleteSelected?: (sel: { productIds: string[]; deptIds: string[]; productAliasIds: string[]; deptAliasIds: string[] }) => void;
+  /** Löscht alle markierten Produkte (inkl. Produkt-Aliasse). */
+  onDeleteSelected?: (sel: { productIds: string[]; productAliasIds: string[] }) => void;
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const [newTitlePos, setNewTitlePos] = useState(0);
@@ -94,16 +94,14 @@ export function CatalogTileEditor(p: {
   const [priceFocus, setPriceFocus] = useState(false);
   const [drag, setDrag] = useState<Drag>(null);
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
-  const [selectedDepts, setSelectedDepts] = useState<Set<string>>(() => new Set());
   const allSelRef = useRef<HTMLInputElement>(null);
-  const selCount = selected.size + selectedDepts.size;
-  const allSelected = (p.products.length + p.children.length) > 0 && selected.size === p.products.length && selectedDepts.size === p.children.length;
+  const selCount = selected.size;
+  const allSelected = p.products.length > 0 && selected.size === p.products.length;
   const [selCur, setSelCur] = useState(p.cur);
-  if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); setSelectedDepts(new Set()); }
+  if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); }
   const toggleSel = (id: string) => setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
-  const toggleSelDept = (id: string) => setSelectedDepts((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
-  const selectAll = () => { setSelected(new Set(p.products.map((x) => x.id))); setSelectedDepts(new Set(p.children.map((c) => (c.alias_id ? `alias:${c.alias_id}` : c.id)))); };
-  const clearSelection = () => { setSelected(new Set()); setSelectedDepts(new Set()); };
+  const selectAll = () => setSelected(new Set(p.products.map((x) => x.id)));
+  const clearSelection = () => setSelected(new Set());
   useEffect(() => { if (allSelRef.current) allSelRef.current.indeterminate = !allSelected && selCount > 0; });
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
