@@ -1316,8 +1316,22 @@ function CopyListDialog(p: { title: string; text: string; onClose: () => void })
 function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>, ok?: string) => Promise<void>; must: (q: PromiseLike<{ error: { message: string } | null }>) => Promise<void>; nm: (id: string, base: string) => string; onClose: () => void }) {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
+  const [vDrag, setVDrag] = useState<number | null>(null);
+  const [vOver, setVOver] = useState<number | null>(null);
   const trVariants = useServerFn(translateVariants);
   const existing = p.prod.variants ?? [];
+  const reorder = async (from: number, to: number) => {
+    if (from === to || busy) return;
+    const next = [...existing];
+    const moved = next[from]!;
+    next.splice(from, 1);
+    next.splice(to, 0, moved);
+    setBusy(true);
+    await p.run(async () => {
+      await p.must(supabase.from("products").update({ variants: next }).eq("id", p.prod.id));
+    });
+    setBusy(false);
+  };
   const add = async () => {
     if (busy) return;
     const vals = text.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
@@ -1340,8 +1354,25 @@ function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>,
       <div className="flex w-full max-w-sm flex-col gap-3 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
         <p className="text-sm font-bold text-foreground">{T("adm.variantAddTitle", { name: p.nm(p.prod.id, p.prod.name) })}</p>
         {existing.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {existing.map((v) => <span key={v} className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">{v}</span>)}
+          <div className="divide-y divide-border rounded-lg border border-border">
+            {existing.map((v, vi) => (
+              <div
+                key={v}
+                draggable={!busy}
+                onDragStart={() => setVDrag(vi)}
+                onDragOver={(e) => { e.preventDefault(); setVOver(vi); }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  if (vDrag !== null && vDrag !== vi) void reorder(vDrag, vi);
+                  setVDrag(null); setVOver(null);
+                }}
+                onDragEnd={() => { setVDrag(null); setVOver(null); }}
+                className={`flex items-center gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
+              >
+                <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
+                <span className="truncate">{v}</span>
+              </div>
+            ))}
           </div>
         )}
         <textarea autoFocus value={text} onChange={(e) => setText(e.target.value)} rows={4} placeholder={T("adm.variantAddHint")}
