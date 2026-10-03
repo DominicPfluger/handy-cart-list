@@ -17,7 +17,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
-import { Loader2, Pencil, Sparkles, Tags, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -86,6 +86,7 @@ export function CatalogTileEditor(p: {
   const headingBefore = useMemo(() => new Map((p.headings ?? []).map((h) => [h.before_product_id, h])), [p.headings]);
   const editMode = true;
   const [target, setTarget] = useState<Target>(null);
+  const [priceFocus, setPriceFocus] = useState(false);
   const [drag, setDrag] = useState<Drag>(null);
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
   const [selCur, setSelCur] = useState(p.cur);
@@ -464,6 +465,9 @@ export function CatalogTileEditor(p: {
                 </button>
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   <Pencil className="h-3.5 w-3.5" />
+                </Button>
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.estimatePrice")} title={T("adm.estimatePrice")} onClick={() => { setPriceFocus(true); setTarget({ kind: "product", id: pid }); }} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                  <Tag className="h-3.5 w-3.5" />
                 </Button>
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.variantAdd")} title={T("adm.variantAdd")} onClick={() => setVariantAdd(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   <Tags className="h-3.5 w-3.5" />
