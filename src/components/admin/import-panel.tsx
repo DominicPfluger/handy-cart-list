@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { scanImportUrl, acceptImportCandidates, rejectImportCandidates } from "@/lib/import.functions";
+import { scanImportUrl, acceptImportCandidates, rejectImportCandidates, undoBulkBackup } from "@/lib/admin.functions";
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";

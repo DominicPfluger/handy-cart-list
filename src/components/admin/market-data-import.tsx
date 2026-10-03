@@ -44,10 +44,10 @@ export function MarketDataImport({ prods }: { prods: Prod[] }) {
   const rows = useMemo<Row[]>(() => {
     const byName = new Map<string, Prod>();
     for (const p of prods) byName.set(p.name.trim().toLowerCase(), p);
-    return text.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => ({
-      ...parseLine(l),
-      product: byName.get(parseLine(l).raw.toLowerCase()) ?? null,
-    }));
+    return text.split("\n").map((l) => l.trim()).filter(Boolean).map((l) => {
+      const parsed = parseLine(l);
+      return { ...parsed, product: byName.get(parsed.raw.toLowerCase()) ?? null };
+    });
   }, [text, prods]);
 
   const matched = rows.filter((r) => r.product && (r.price != null || r.sortOrder != null || r.hidden));
