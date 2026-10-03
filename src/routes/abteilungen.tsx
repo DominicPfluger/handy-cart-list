@@ -95,11 +95,7 @@ function DepartmentsPage() {
   const departments = useMemo(() => orderedDepartments.filter((d) => !removedIds.has(d.id)), [orderedDepartments, removedIds]);
   const filterExemptDepartments = useMemo(() => {
     const byId = new Map(orderedDepartments.map((d) => [d.id, d]));
-    const exemptRoots = new Set([
-      "Körperpflege", "Haushalt", "Tierbedarf", "Apotheke & Drogerie", "Büroartikel",
-      "Autozubehör", "Elektronik", "Kleidung & Textilien", "Küchenutensilien", "Tabak & Dampfen",
-    ]);
-    return new Set(orderedDepartments.filter((d) => exemptRoots.has(rootOf(d, byId).baseName)).map((d) => d.id));
+    return new Set(orderedDepartments.filter((d) => isNonFoodRootName(rootOf(d, byId).baseName)).map((d) => d.id));
   }, [orderedDepartments]);
   const products = useMemo(
     () => orderedProducts.filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId) && (filterExemptDepartments.has(p.departmentId) || !diets.length || !p.excludedDiets.some((d) => (diets as string[]).includes(d)))),
