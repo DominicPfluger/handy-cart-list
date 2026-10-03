@@ -16,7 +16,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
-import { Pencil, Tags, Trash2 } from "lucide-react";
+import { Loader2, Pencil, Sparkles, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -116,6 +116,21 @@ export function CatalogTileEditor(p: {
         }
       } finally { setImgProg(null); }
     }, T("tile.genAllDone", { n: list.length }));
+  };
+  const [aiBusy, setAiBusy] = useState<string | null>(null);
+  /** Erzeugt direkt aus der Zeile ein KI-Bild für ein Produkt (mit Credits-Bestätigung). */
+  const quickAiImage = (prod: TileProd) => {
+    const name = p.nm(prod.id, prod.name);
+    if (!window.confirm(T("adm.variantImageAiConfirm", { name }))) return;
+    setAiBusy(prod.id);
+    void p.run(async () => {
+      try {
+        const result = await genImgAll({ data: { id: prod.id, kind: "product" } });
+        await saveProductIconFromPath(prod.id, result.path);
+      } catch (e) {
+        toast.error(e instanceof Error ? e.message : String(e));
+      } finally { setAiBusy(null); }
+    });
   };
   const deptById = useMemo(() => new Map(p.depts.map((d) => [d.id, d])), [p.depts]);
 
