@@ -7,6 +7,7 @@
 ## Erledigt (Auswahl)
 - [x] Eigene Varianten nur in der Produktdetailansicht anlegen; in der Abteilungsansicht weiterhin verwenden. Anlegen, Dublettenprüfung, Schnell-Hinzufügen und Entfernen auf Handy und Desktop geprüft; Admin-Werkzeuge bleiben getrennt.
 - [x] Eigene Produktvarianten pro Gerät speichern, suchen, favorisieren, zur Liste hinzufügen und entfernen (Desktop/Mobil Browser-getestet).
+- [x] Link „Produktvarianten" unter der Mengenzeile nur bei Produkten mit Varianten; „Details →" entfernt (Desktop/Mobil Browser-getestet).
 - „… nach Wahl" auch pro Oberkategorie im Rezept-Generator (Browser-getestet)
 - Geschmack: Mehrfachauswahl bis zu 3 (Generator, Suche, Admin; Browser-getestet)
 - Admin-Rezeptverwaltung aufklappbar, Zutatensuche, Massen-Zuordnung, „Alle auswählen" in Katalogsuche
