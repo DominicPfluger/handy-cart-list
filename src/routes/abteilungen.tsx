@@ -714,6 +714,27 @@ function DepartmentsPage() {
                   <span aria-hidden className="w-1.5 shrink-0" />
                   </div>
                 </div>
+                {expandedId === product.id && product.variants.length > 0 && (
+                  <div className="border-t border-dashed border-border bg-muted/30 py-1 pl-8 pr-2.5">
+                    {product.variants.map((v) => {
+                      const vi = product.variantImages?.[v];
+                      return (
+                        <div key={v} className="flex items-center gap-2.5 py-1.5">
+                          <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-primary-soft/25">
+                            <ProductIcon emoji={product.emoji} iconUrl={vi?.iconUrl ?? vi?.imageUrl ?? product.iconUrl} iconPath={vi?.iconPath ?? vi?.imagePath ?? product.iconPath} symbolClassName="text-2xl" />
+                          </div>
+                          <span className="min-w-0 flex-1 truncate text-sm text-foreground">{variantLabel(product, v)}</span>
+                          <Button type="button" variant="ghost" size="icon" aria-label={t("common.quickAdd", { name: `${product.name} · ${variantLabel(product, v)}` })} onClick={() => quickAdd(product, group, v)} className="h-8 w-8 rounded-full text-primary">
+                            <PlusIcon className="h-3.5 w-3.5" />
+                          </Button>
+                        </div>
+                      );
+                    })}
+                    <button type="button" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="py-1.5 text-xs font-medium text-primary">
+                      {t("dept.details")} →
+                    </button>
+                  </div>
+                )}
                 </Fragment>
               );
             })}
