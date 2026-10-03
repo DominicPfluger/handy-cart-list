@@ -1,11 +1,9 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "../hooks/use-is-admin";
-import { translateVariants } from "../lib/admin.functions";
 import { Button } from "../components/ui/button";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { ProductEmoji } from "../components/product-emoji";
@@ -45,8 +43,6 @@ function ProductPage() {
   const [adding, setAdding] = useState(false);
   const isAdmin = useIsAdmin();
   const qc = useQueryClient();
-  const trVariants = useServerFn(translateVariants);
-  const [newVariant, setNewVariant] = useState("");
   const [personalVariantName, setPersonalVariantName] = useState("");
   const personalVariants = usePersonalVariants();
   const [saving, setSaving] = useState(false);
@@ -83,20 +79,13 @@ function ProductPage() {
   const sharedVariants = catalogProduct?.variants ?? product.variants.filter((v) => !ownVariants.includes(v));
   const units = getUnits(locale);
 
-  const save = async (patch: { default_unit?: string; variants?: string[] }, translate = false) => {
+  const save = async (patch: { default_unit?: string; variants?: string[] }) => {
     setSaving(true);
     const { error } = await supabase.from("products").update(patch as never).eq("id", product.id);
     if (error) { setSaving(false); toast.error(t("cloud.error")); return; }
-    if (translate) { try { await trVariants({ data: { productId: product.id } }); } catch { /* optional */ } }
     await qc.invalidateQueries({ queryKey: catalogQueryOptions(locale).queryKey });
     setSaving(false);
     toast.success(t("pd.saved"));
-  };
-  const addVariant = async () => {
-    const v = newVariant.trim();
-    if (!v || product.variants.some((variant) => variant.toLocaleLowerCase() === v.toLocaleLowerCase())) return;
-    setNewVariant("");
-    await save({ variants: [...sharedVariants, v] }, true);
   };
   const addOwnVariant = () => {
     if (addPersonalVariant(product.id, personalVariantName, product.variants)) {
@@ -187,15 +176,6 @@ function ProductPage() {
                 {t("dept.addVariant")}
               </Button>
             </form>
-            {isAdmin && (
-              <form className="mt-2 flex gap-2" onSubmit={(e) => { e.preventDefault(); void addVariant(); }}>
-                <input value={newVariant} onChange={(e) => setNewVariant(e.target.value)} placeholder={t("pd.variantPh")} aria-label={t("pd.variantPh")}
-                  className="min-w-0 flex-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary" />
-                <Button type="submit" size="sm" disabled={!newVariant.trim() || saving} className="shrink-0 rounded-full">
-                  {t("pd.addVariant")}
-                </Button>
-              </form>
-            )}
           </div>
       </dl>
 
