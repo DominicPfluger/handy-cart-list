@@ -474,7 +474,7 @@ function AdminPage() {
       if (c === "alphabetical") {
         orderedGroup = [...group].sort((a, b) => a.name.localeCompare(b.name, "de"));
       } else if (c === "price") {
-        const priceOf = (x: (typeof group)[number]) => refPrices.data?.get(x.product_id ?? x.id)?.price;
+        const priceOf = (x: (typeof group)[number]) => refPrices.data?.get((x as Prod & { product_id?: string }).product_id ?? x.id)?.price;
         orderedGroup = [...group].sort((a, b) => {
           const pa = priceOf(a); const pb = priceOf(b);
           if (pa == null && pb == null) return a.name.localeCompare(b.name, "de");
