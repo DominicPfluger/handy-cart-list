@@ -72,7 +72,7 @@ export function RecipeAdmin({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const { data: popRows } = useQuery({ queryKey: ["admin-recipe-popular"], queryFn: loadPopRows });
   const [open, setOpen] = useState(true);
   const [stepsOpen, setStepsOpen] = useState(true);
-  const [groupsOpen, setGroupsOpen] = useState(false);
+  const [groupsOpen, setGroupsOpen] = useState(true);
   const [tplId, setTplId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const saveGroupFn = useServerFn(saveRecipeGroup);
