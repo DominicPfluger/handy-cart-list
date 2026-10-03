@@ -7,7 +7,7 @@ import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
 import { prepareCategoryImage } from "@/lib/image-upload";
-import { clearCustomIcon, saveCustomIcon, saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
+import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
 import { toast } from "sonner";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPrice, estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
@@ -422,6 +422,9 @@ export function CatalogTileEditor(p: {
                 className={`flex items-center gap-3 px-3 py-2 ${x.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
                 <input type="checkbox" checked={selected.has(x.id)} onChange={() => toggleSel(x.id)} aria-label={T("adm.select")} className="h-4 w-4 shrink-0 accent-primary" />
                 <span onPointerDown={(e) => startDrag(e, "product", x.id, i, (x.emoji ?? "•") + (selected.has(x.id) && selected.size > 1 ? ` +${selected.size - 1}` : ""))} {...dragHandlers} aria-label={T("adm.drag")} title={T("adm.drag")} className="cursor-grab touch-none select-none px-0.5 text-base text-muted-foreground">⠿</span>
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                  <Pencil className="h-3.5 w-3.5" />
+                </Button>
                 <span onClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
                   className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl">
                   {img(x.image_path) ? <ZoomableImage src={img(x.image_path)!} className="h-full w-full object-cover" /> : x.emoji ?? "🛒"}
@@ -433,9 +436,6 @@ export function CatalogTileEditor(p: {
                     {price ? ` · ${formatRefPrice(price)}` : ""}
                   </div>
                 </button>
-                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
-                  <Pencil className="h-3.5 w-3.5" />
-                </Button>
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.variantAdd")} title={T("adm.variantAdd")} onClick={() => setVariantAdd(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   <Tags className="h-3.5 w-3.5" />
                 </Button>
@@ -547,11 +547,14 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [imageBusy, setImageBusy] = useState(false);
   const iconFileRef = useRef<HTMLInputElement>(null);
   const [iconInfo, setIconInfo] = useState<{ url: string | null; custom: boolean }>({ url: null, custom: false });
+  const [imgPath, setImgPath] = useState<string | null>(null);
+  const [iconPicking, setIconPicking] = useState(false);
   const loadIcon = async (id: string) => {
-    const { data } = await supabase.from(isDept ? "departments" : "products").select("icon_path, icon_custom").eq("id", id).single();
+    const { data } = await supabase.from(isDept ? "departments" : "products").select("icon_path, icon_custom, image_path").eq("id", id).single();
     const path = (data as { icon_path: string | null } | null)?.icon_path ?? null;
     const signed = path ? (await supabase.storage.from("catalog-images").createSignedUrl(path, 600)).data?.signedUrl ?? null : null;
     setIconInfo({ url: signed, custom: Boolean((data as { icon_custom?: boolean } | null)?.icon_custom) });
+    setImgPath((data as { image_path: string | null } | null)?.image_path ?? null);
   };
   useEffect(() => { if (p.target.id) void loadIcon(p.target.id); }, [p.target.id]);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -787,6 +790,41 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     } finally { setImageBusy(false); }
   };
 
+  /** Übernimmt das grosse Vorschaubild als eigenes Icon („Beide Bilder gleich"). */
+  const useImageAsIcon = async () => {
+    if (!effId || !imgPath) return;
+    await p.run(async () => {
+      await saveCustomIconFromPath(isDept ? "department" : "product", effId, imgPath);
+      await loadIcon(effId);
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    });
+  };
+  const pickIcon = (path: string) => {
+    setIconPicking(false);
+    void p.run(async () => {
+      await saveCustomIconFromPath(isDept ? "department" : "product", effId!, path);
+      await loadIcon(effId!);
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    });
+  };
+  /** Erzeugt ein KI-Bild und verwendet es für Vorschaubild und Icon (mit Credits-Bestätigung). */
+  const aiIcon = async () => {
+    if (!effId) return;
+    if (!window.confirm(T("adm.variantImageAiConfirm", { name: name.trim() || T("adm.iconImage") }))) return;
+    setImageBusy(true);
+    try {
+      await p.run(async () => {
+        const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined } });
+        await forgetCatalogImage(generated.path);
+        await saveCustomIconFromPath(isDept ? "department" : "product", effId, generated.path);
+        const { data } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
+        if (data?.signedUrl) { setImagePreview(data.signedUrl); setImgPath(generated.path); }
+        await loadIcon(effId);
+        await qc.invalidateQueries({ queryKey: ["catalog"] });
+      }, T("tile.imgDone"));
+    } finally { setImageBusy(false); }
+  };
+
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
       <div className="w-full max-w-[440px] space-y-3 rounded-t-3xl bg-background p-5 pb-8" onClick={(e) => e.stopPropagation()}>
@@ -796,21 +834,29 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           const { data: signed } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
           setImagePreview(signed?.signedUrl ?? null);
         }); }} />}
+        {iconPicking && effId && <ImagePicker onClose={() => setIconPicking(false)} onPick={(path) => pickIcon(path)} />}
         <h2 className="text-lg font-bold text-foreground">{item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2>
         {enrichStatus && <div role="status" className="text-sm text-foreground">{enriching && <span aria-hidden="true">⏳ </span>}{enrichStatus}</div>}
         {enrichErrors.length > 0 && <ul className="max-h-24 overflow-auto text-xs text-destructive">{enrichErrors.map((error) => <li key={error}>{error}</li>)}</ul>}
         {effId && (
-          <div className="flex items-center gap-3 rounded-xl border border-border p-2">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-2xl">
-              {iconInfo.url ? <img src={iconInfo.url} alt="" className="h-full w-full object-contain" /> : emoji || (isDept ? "📁" : "🛒")}
+          <div className="space-y-2 rounded-xl border border-border p-2">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-2xl">
+                {iconInfo.url ? <img src={iconInfo.url} alt="" className="h-full w-full object-contain" /> : emoji || (isDept ? "📁" : "🛒")}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-foreground">{T("adm.iconImage")}</p>
+                {!iconInfo.custom && <p className="text-[11px] text-muted-foreground">{T("adm.iconAutoHint")}</p>}
+              </div>
+              <Button size="sm" variant="outline" onClick={() => iconFileRef.current?.click()}>{T("tile.upload")}</Button>
+              {iconInfo.custom && <Button size="sm" variant="ghost" className="text-destructive" onClick={() => { if (window.confirm(T("tile.removeImageConfirm"))) void p.run(async () => { await clearCustomIcon(isDept ? "department" : "product", effId); await loadIcon(effId); await qc.invalidateQueries({ queryKey: ["catalog"] }); }); }}>{T("tile.removeImage")}</Button>}
+              <input ref={iconFileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void p.run(async () => { await saveCustomIcon(isDept ? "department" : "product", effId, f); await loadIcon(effId); await qc.invalidateQueries({ queryKey: ["catalog"] }); }); }} />
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-foreground">{T("adm.iconImage")}</p>
-              {!iconInfo.custom && <p className="text-[11px] text-muted-foreground">{T("adm.iconAutoHint")}</p>}
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" variant="outline" disabled={p.busy || !imgPath} onClick={() => void useImageAsIcon()}>{T("adm.iconUseImage")}</Button>
+              <Button size="sm" variant="outline" disabled={p.busy} onClick={() => setIconPicking(true)}>🖼️ {T("adm.iconPick")}</Button>
+              <Button size="sm" variant="outline" disabled={imageBusy || p.busy} onClick={() => void aiIcon()}>{imageBusy ? T("adm.working") : `✨ ${T("adm.iconAi")}`}</Button>
             </div>
-            <Button size="sm" variant="outline" onClick={() => iconFileRef.current?.click()}>{T("tile.upload")}</Button>
-            {iconInfo.custom && <Button size="sm" variant="ghost" className="text-destructive" onClick={() => { if (window.confirm(T("tile.removeImageConfirm"))) void p.run(async () => { await clearCustomIcon(isDept ? "department" : "product", effId); await loadIcon(effId); await qc.invalidateQueries({ queryKey: ["catalog"] }); }); }}>✕</Button>}
-            <input ref={iconFileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void p.run(async () => { await saveCustomIcon(isDept ? "department" : "product", effId, f); await loadIcon(effId); await qc.invalidateQueries({ queryKey: ["catalog"] }); }); }} />
           </div>
         )}
         {effId && <p className="-mb-1 text-sm font-semibold text-foreground">{T("adm.previewImage")}</p>}
