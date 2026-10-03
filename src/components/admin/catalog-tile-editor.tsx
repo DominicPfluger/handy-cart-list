@@ -429,10 +429,16 @@ export function CatalogTileEditor(p: {
                     if (!editMode) return;
                     lpFired.current = false;
                     if (lpTimer.current !== null) window.clearTimeout(lpTimer.current);
+                    const el = e.currentTarget as HTMLElement;
+                    const pointerId = e.pointerId;
+                    const cx = e.clientX; const cy = e.clientY;
+                    const label = (x.emoji ?? "•") + (selected.has(x.id) && selected.size > 1 ? ` +${selected.size - 1}` : "");
                     lpTimer.current = window.setTimeout(() => {
                       lpTimer.current = null;
                       lpFired.current = true;
-                      startDrag(e, "product", x.id, i, (x.emoji ?? "•") + (selected.has(x.id) && selected.size > 1 ? ` +${selected.size - 1}` : ""));
+                      moved.current = false;
+                      try { el.setPointerCapture(pointerId); } catch { /* ignore */ }
+                      setDrag({ kind: "product", id: x.id, index: i, x: cx, y: cy, label });
                     }, 500);
                   }}
                   onPointerMove={(e) => { if (lpTimer.current !== null) { window.clearTimeout(lpTimer.current); lpTimer.current = null; } onMove(e); }}
