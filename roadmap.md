@@ -34,3 +34,7 @@
 - [x] Admin-Tab „Rezept-Generator“ → „Rezept-Verwaltung“ (adm.tab.recipes in de.ts + 15 Lokalen)
 - [x] Zutaten-Kategorien im Rezepte-Admin standardmässig aufgeklappt (recipe-admin.tsx groupsOpen=true)
 - [x] Admin-Katalog: „Als Textdatei exportieren" durch „Liste als Text kopieren" ersetzt (Dialog mit Titel, Vorschau-Textarea, Clipboard-Kopieren)
+- [x] Admin: Länderküchen-Tab standardmässig aufgeklappt (Browser-Test: offen sichtbar, Zuklappen/Aufklappen ok)
+- [x] Admin-Tab „Rezept-Generator" → „Rezept-Verwaltung" in allen 16 Sprachen (Browser-Test: „Recipe Management")
+- [x] Rezepte-Admin: Zutaten-Kategorien standardmässig aufgeklappt (Browser-Test: Cereal-Vorlage zeigt 5 Kategorien offen)
+- [x] Browser-Auth-Fix für Tests: Session-JSON muss doppelt kodiert in localStorage geschrieben werden
