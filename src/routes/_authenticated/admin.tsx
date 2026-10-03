@@ -1215,6 +1215,45 @@ function Editor(p: {
                 );
               })}
             </div>
+            {!sug && !askAi && (
+              <Button type="button" variant="outline" size="sm" disabled={aiBusy} onClick={() => setAskAi(true)}>
+                {aiBusy ? T("adm.working") : `✨ ${T("adm.variantSuggest")}`}
+              </Button>
+            )}
+            {askAi && (
+              <div className="flex flex-col gap-2 rounded-xl border border-border bg-muted/40 p-3 text-sm">
+                <p>{T("adm.variantSuggestConfirm")}</p>
+                <label className="flex items-center gap-2">
+                  <span>{T("adm.suggestCount")}</span>
+                  <select value={aiCount} onChange={(e) => setAiCount(Number(e.target.value))} className="rounded-lg border border-input bg-background px-2 py-1">
+                    {[5, 10, 15].map((n) => <option key={n} value={n}>{n}</option>)}
+                  </select>
+                </label>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" className="flex-1" onClick={() => setAskAi(false)}>{T("adm.cancel")}</Button>
+                  <Button size="sm" className="flex-1" onClick={() => void runSuggest()}>✨ {T("adm.variantSuggest")}</Button>
+                </div>
+              </div>
+            )}
+            {sug && (
+              <div className="flex flex-col gap-2 rounded-xl border border-border p-3">
+                {sug.length === 0 ? <p className="text-sm text-muted-foreground">{T("adm.variantSuggestNone")}</p> : (
+                  <div className="flex flex-wrap gap-1.5">
+                    {sug.map((s) => {
+                      const on = picked.includes(s);
+                      return (
+                        <button key={s} type="button" aria-pressed={on} onClick={() => setPicked(on ? picked.filter((x) => x !== s) : [...picked, s])}
+                          className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground"}`}>{s}</button>
+                      );
+                    })}
+                  </div>
+                )}
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" className="flex-1" onClick={() => setSug(null)}>{T("adm.cancel")}</Button>
+                  <Button size="sm" className="flex-1" disabled={!picked.length} onClick={applySug}>{T("adm.variantSuggestApply")}</Button>
+                </div>
+              </div>
+            )}
             <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
           </div>
         )}
