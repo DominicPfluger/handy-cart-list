@@ -17,6 +17,7 @@ import { getLocale, useT } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { useFavoriteQuantity } from "../hooks/use-favorite-quantity";
 import { useReferencePrices, formatRefPrice } from "../hooks/use-reference-prices";
+import { addPersonalVariant, removePersonalVariant, usePersonalVariants } from "../hooks/use-personal-variants";
 
 export const Route = createFileRoute("/produkt/$id")({
   ssr: false,
@@ -46,6 +47,8 @@ function ProductPage() {
   const qc = useQueryClient();
   const trVariants = useServerFn(translateVariants);
   const [newVariant, setNewVariant] = useState("");
+  const [personalVariantName, setPersonalVariantName] = useState("");
+  const personalVariants = usePersonalVariants();
   const [saving, setSaving] = useState(false);
   const fav = useFavoriteQuantity(id);
   const [favQty, setFavQty] = useState("1");
@@ -75,6 +78,9 @@ function ProductPage() {
   const favorite = isFavorite(product.id);
   const brands = brandsFor(product);
   const variantLabel = (v: string) => product.variantNames?.[v]?.[locale] ?? v;
+  const ownVariants = personalVariants[product.id] ?? [];
+  const catalogProduct = qc.getQueryData<ReturnType<typeof useCatalog>>(catalogQueryOptions(locale).queryKey)?.products.find((p) => p.id === product.id);
+  const sharedVariants = catalogProduct?.variants ?? product.variants.filter((v) => !ownVariants.includes(v));
   const units = getUnits(locale);
 
   const save = async (patch: { default_unit?: string; variants?: string[] }, translate = false) => {
@@ -88,9 +94,16 @@ function ProductPage() {
   };
   const addVariant = async () => {
     const v = newVariant.trim();
-    if (!v || product.variants.includes(v)) return;
+    if (!v || product.variants.some((variant) => variant.toLocaleLowerCase() === v.toLocaleLowerCase())) return;
     setNewVariant("");
-    await save({ variants: [...product.variants, v] }, true);
+    await save({ variants: [...sharedVariants, v] }, true);
+  };
+  const addOwnVariant = () => {
+    if (addPersonalVariant(product.id, personalVariantName, product.variants)) {
+      setPersonalVariantName("");
+    } else {
+      toast.error(t("dept.variantDuplicate"));
+    }
   };
 
   return (
@@ -151,32 +164,39 @@ function ProductPage() {
             <dd className="text-right font-semibold text-foreground">{brands.join(", ")}</dd>
           </div>
         )}
-        {(product.variants.length > 0 || isAdmin) && (
-          <div className="text-sm">
+        <div className="text-sm">
             <dt className="text-muted-foreground">{t("pd.variants")}</dt>
-            <dd className="mt-1.5 flex flex-wrap gap-1.5">
+            {product.variants.length > 0 && <dd className="mt-1.5 flex flex-wrap gap-1.5">
               {product.variants.map((v) => (
                 <span key={v} className="rounded-full bg-primary-soft/25 px-2.5 py-1 text-xs font-medium text-foreground">
                   {variantLabel(v)}
-                  {isAdmin && (
-                    <button type="button" aria-label={t("pd.removeVariant", { name: variantLabel(v) })} disabled={saving}
-                      onClick={() => void save({ variants: product.variants.filter((x) => x !== v) })}
-                      className="ml-1.5 text-muted-foreground">×</button>
-                  )}
+                  {ownVariants.includes(v) && !sharedVariants.includes(v) ? (
+                    <Button type="button" variant="ghost" size="sm" aria-label={t("dept.removeVariant", { name: variantLabel(v) })} title={t("dept.removeVariant", { name: variantLabel(v) })} onClick={() => removePersonalVariant(product.id, v)} className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
+                  ) : isAdmin ? (
+                    <Button type="button" variant="ghost" size="sm" aria-label={t("pd.removeVariant", { name: variantLabel(v) })} disabled={saving}
+                      onClick={() => void save({ variants: sharedVariants.filter((x) => x !== v) })}
+                      className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
+                  ) : null}
                 </span>
               ))}
-            </dd>
+            </dd>}
+            <form className="mt-2 flex flex-wrap gap-2" onSubmit={(e) => { e.preventDefault(); addOwnVariant(); }}>
+              <input value={personalVariantName} onChange={(e) => setPersonalVariantName(e.target.value)} maxLength={40} placeholder={t("dept.variantPlaceholder")} aria-label={t("dept.variantPlaceholder")}
+                className="min-w-32 flex-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary" />
+              <Button type="submit" size="sm" disabled={!personalVariantName.trim()} className="shrink-0 rounded-full">
+                {t("dept.addVariant")}
+              </Button>
+            </form>
             {isAdmin && (
               <form className="mt-2 flex gap-2" onSubmit={(e) => { e.preventDefault(); void addVariant(); }}>
                 <input value={newVariant} onChange={(e) => setNewVariant(e.target.value)} placeholder={t("pd.variantPh")} aria-label={t("pd.variantPh")}
                   className="min-w-0 flex-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary" />
-                <button type="submit" disabled={!newVariant.trim() || saving} className="shrink-0 rounded-full bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50">
+                <Button type="submit" size="sm" disabled={!newVariant.trim() || saving} className="shrink-0 rounded-full">
                   {t("pd.addVariant")}
-                </button>
+                </Button>
               </form>
             )}
           </div>
-        )}
       </dl>
 
       <div className="mt-4 rounded-2xl bg-card p-4 shadow-sm">

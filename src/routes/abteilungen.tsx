@@ -40,8 +40,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { saveHeading } from "../lib/admin.functions";
 import { useReferencePrices, formatRefPrice } from "../hooks/use-reference-prices";
-import { addPersonalVariant, removePersonalVariant, usePersonalVariants } from "../hooks/use-personal-variants";
-import { Input } from "../components/ui/input";
+import { removePersonalVariant, usePersonalVariants } from "../hooks/use-personal-variants";
 
 
 export const Route = createFileRoute("/abteilungen")({
@@ -129,7 +128,6 @@ function DepartmentsPage() {
   }, [departments, orderedProducts, products, diets.length, filterExemptDepartments]);
   const { t } = useT();
   const personalVariants = usePersonalVariants();
-  const [newVariant, setNewVariant] = useState("");
   const refPrices = useReferencePrices();
   const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
   const { preferred: preferredDept } = usePreferredDept();
@@ -443,15 +441,7 @@ function DepartmentsPage() {
   };
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const toggleExpanded = (id: string) => {
-    setNewVariant("");
     setExpandedId((previous) => previous === id ? null : id);
-  };
-  const createVariant = (product: CatalogProduct) => {
-    if (addPersonalVariant(product.id, newVariant, product.variants)) {
-      setNewVariant("");
-    } else {
-      toast.error(t("dept.variantDuplicate"));
-    }
   };
 
   /** Gesprochene Zutaten im Katalog finden und hinzufügen. */
@@ -682,10 +672,11 @@ function DepartmentsPage() {
                     onPointerUp={draggable ? cancelPress : undefined}
                     onPointerLeave={draggable ? cancelPress : undefined}
                     onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
-                    aria-expanded={expandedId === product.id}
+                    aria-expanded={product.variants.length > 0 ? expandedId === product.id : undefined}
                     onClick={() => {
                       if (suppressClick.current) return;
-                      toggleExpanded(product.id);
+                      if (product.variants.length) toggleExpanded(product.id);
+                      else navigate({ to: "/produkt/$id", params: { id: product.id } });
                     }}
                     className={`grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25 ${draggable ? "cursor-grab touch-none" : "cursor-pointer"}`}
                   >
@@ -695,9 +686,11 @@ function DepartmentsPage() {
                     <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} className="inline-flex text-left text-sm font-semibold text-foreground">
                       <span>{product.name}</span>
                     </button>
-                    <Button type="button" variant="ghost" size="sm" onClick={() => toggleExpanded(product.id)} aria-expanded={expandedId === product.id} aria-label={product.variants.length ? t("dept.variants", { count: product.variants.length }) : t("dept.addVariant")} className="ml-1.5 h-auto px-1 text-xs text-primary">
-                      {product.variants.length ? t("dept.variants", { count: product.variants.length }) : t("dept.addVariant")} {expandedId === product.id ? "▴" : "▾"}
-                    </Button>
+                    {product.variants.length > 0 && (
+                      <Button type="button" variant="ghost" size="sm" onClick={() => toggleExpanded(product.id)} aria-expanded={expandedId === product.id} aria-label={t("dept.variants", { count: product.variants.length })} className="ml-1.5 h-auto px-1 text-xs text-primary">
+                        {t("dept.variants", { count: product.variants.length })} {expandedId === product.id ? "▴" : "▾"}
+                      </Button>
+                    )}
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
@@ -808,10 +801,6 @@ function DepartmentsPage() {
                         </div>
                       );
                     })}
-                    <form onSubmit={(event) => { event.preventDefault(); createVariant(product); }} className="flex items-center gap-2 py-2 pr-1">
-                      <Input value={newVariant} onChange={(event) => setNewVariant(event.target.value)} maxLength={40} placeholder={t("dept.variantPlaceholder")} aria-label={t("dept.variantPlaceholder")} className="h-9 min-w-0 flex-1 bg-card" />
-                      <Button type="submit" size="icon" disabled={!newVariant.trim()} aria-label={t("dept.addVariant")} title={t("dept.addVariant")} className="h-9 w-9 shrink-0"><PlusIcon className="h-4 w-4" /></Button>
-                    </form>
                     <Button type="button" variant="link" size="sm" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="px-0 text-xs">
                       {t("dept.details")} →
                     </Button>
