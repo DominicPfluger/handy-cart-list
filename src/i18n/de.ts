@@ -973,6 +973,7 @@ export const de = {
   "adm.suggestModeAi": "Nur KI (günstiger)",
   "adm.suggestCostWeb": "Verbraucht Credits: 1 Websuche + 1 KI-Auswertung.",
   "adm.suggestCostAi": "Verbraucht Credits: 1 KI-Auswertung.",
+  "adm.suggestCount": "Anzahl Vorschläge",
   "adm.suggestStart": "Suche starten",
   "adm.suggestWebFailed": "Websuche ergab nichts – Vorschläge stammen nur von der KI.",
   "adm.synonyms": "Synonyme",

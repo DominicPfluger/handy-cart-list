@@ -415,8 +415,8 @@ function AdminPage() {
     const sib = new Set((d?.depts ?? []).filter((x) => x.parent_id === parent && x.id !== cur).map((x) => x.id));
     return (d?.prods ?? []).filter((x) => sib.has(x.department_id)).map((x) => x.name);
   };
-  const loadSuggestions = async (typed: string[], mode: "web" | "ai") => {
-    const r = await suggest({ data: { mode, path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: [...typed, ...siblingNames()].slice(0, 400), ...(mk ? { market: mk } : {}) } });
+  const loadSuggestions = async (typed: string[], mode: "web" | "ai", count: number) => {
+    const r = await suggest({ data: { mode, count, path: pathText(), existing: products.map((p) => p.name).slice(0, 400), exclude: [...typed, ...siblingNames()].slice(0, 400), ...(mk ? { market: mk } : {}) } });
     if (r.webFailed) toast.info(T("adm.suggestWebFailed"));
     return r.items;
   };
@@ -795,7 +795,7 @@ type Suggestion = { name: string; emoji: string; reason: string; scope: "global"
 
 function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path, headings = [], products = [] }: {
   onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, ai?: { hint: string; opts: AiImageOpts }) => void; onCancel: () => void;
-  onSuggest: (typed: string[], mode: "web" | "ai") => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string; path?: string;
+  onSuggest: (typed: string[], mode: "web" | "ai", count: number) => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string; path?: string;
   headings?: Head[]; products?: { id: string }[];
 }) {
   const [pos, setPos] = useState("end");
@@ -806,12 +806,13 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
   const [loadingS, setLoadingS] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(!!autoSuggest);
   const [mode, setMode] = useState<"web" | "ai">("web");
+  const [count, setCount] = useState(15);
   const fetchS = async () => {
     setConfirmOpen(false);
     setLoadingS(true);
     try {
       const typed = text.split("\n").map((l) => l.trim()).filter(Boolean);
-      const r = await onSuggest(typed, mode);
+      const r = await onSuggest(typed, mode, count);
       setSugs(r); setPicked(new Set(r.map((x) => x.name)));
       setMkOnly((s) => { const n = new Set(s); r.forEach((x) => { if (x.scope === "market") n.add(x.name); }); return n; });
     } catch (e) { toast.error((e as Error).message); }
@@ -854,6 +855,12 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
                 <label className="flex items-start gap-2"><input type="radio" checked={mode === "ai"} onChange={() => setMode("ai")} className="mt-1" /><span>{T("adm.suggestModeAi")}</span></label>
               </div>
               <p className="text-xs text-muted-foreground">{mode === "web" ? T("adm.suggestCostWeb") : T("adm.suggestCostAi")}</p>
+              <label className="flex items-center justify-between gap-2 text-sm">
+                <span>{T("adm.suggestCount")}</span>
+                <select value={count} onChange={(e) => setCount(Number(e.target.value))} className="rounded-lg border border-input bg-background px-2 py-1 text-sm">
+                  {[5, 10, 15, 20, 25].map((n) => <option key={n} value={n}>{n}</option>)}
+                </select>
+              </label>
               <div className="flex gap-2">
                 <Button className="flex-1" onClick={() => void fetchS()}>{T("adm.suggestStart")}</Button>
                 <Button variant="ghost" onClick={() => setConfirmOpen(false)}>{T("adm.cancel")}</Button>
