@@ -209,6 +209,40 @@ export const suggestProducts = createServerFn({ method: "POST" })
     };
   });
 
+/** KI-Vorschläge für Varianten eines Produkts (ohne bereits vorhandene). */
+export const suggestVariants = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ productId: z.string().uuid(), count: z.number().int().min(1).max(25).default(10) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { data: prod } = await context.supabase.from("products").select("name, variants, department_id").eq("id", data.productId).single();
+    if (!prod) throw new Error("Produkt nicht gefunden");
+    const path: string[] = [];
+    let dep: string | null = prod.department_id;
+    for (let i = 0; dep && i < 5; i++) {
+      const { data: d } = await context.supabase.from("departments").select("name, parent_id").eq("id", dep).single();
+      if (!d) break;
+      path.unshift(d.name); dep = d.parent_id;
+    }
+    const existing: string[] = prod.variants ?? [];
+    const { aiJson } = await import("./translate.server");
+    const r = await aiJson<{ items: Array<{ name: string }> }>(
+      "Du kuratierst den Katalog einer deutschsprachigen Einkaufslisten-App. " +
+        `Schlage ${data.count} typische Varianten für das genannte Produkt vor (z. B. Sorte, Geschmack, Farbe, Ausführung, Fettstufe), wie sie im Supermarkt erhältlich sind. ` +
+        "Nur die Variantenbezeichnung (kurz, 1–3 Wörter, Deutsch de-DE), ohne den Produktnamen zu wiederholen, keine Marken, keine Packungsgrössen, keine bereits vorhandenen Varianten oder Synonyme davon. Sortiert nach Relevanz.",
+      JSON.stringify({ produkt: prod.name, kategorie: path.join(" › "), vorhanden: existing }),
+      "variants",
+      { type: "object", additionalProperties: false, required: ["items"], properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["name"], properties: { name: { type: "string" } } } } } },
+    );
+    const have = new Set(existing.map((v) => v.toLowerCase()));
+    const out: string[] = [];
+    for (const x of r.items) {
+      const n = x.name.trim();
+      if (n && !have.has(n.toLowerCase())) { have.add(n.toLowerCase()); out.push(n); }
+    }
+    return { items: out.slice(0, data.count) };
+  });
+
 /** KI-Vorschlag für den Bildtext (hint) eines Kategorie-Bildes, abgeleitet aus den Produkten der Kategorie. */
 export const suggestImagePrompt = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
