@@ -11,6 +11,7 @@
 - i18n: UI strings in `src/i18n/de.ts` + `messages.json`; catalog names in `catalog_translations` via `pickName` (de-CH ß→ss). Why: light store, no SSR mismatch.
 - Admin writes via RLS `has_role`; AI translation in `translate.server.ts`. Why: no service-role in app code.
 - Personal data device-only localStorage (custom names, hidden items, diet/cuisine selection, purchase history, `shoppi:product-dept`, `shoppi:speak-locale`). Why: shared catalog admin-controlled.
+- User-created product variants are device-local and merged into catalog reads; only admins change shared variants. Why: shoppers can personalize products without altering the common catalog.
 - Diet filter: products.excluded_diets. Cuisine filter: `cuisines`+`product_cuisines`. Why: simple, editable.
 - Department diet/cuisine filters exempt non-food root categories by stable catalog base names. Why: localized and nested non-food products remain visible without changing saved preferences.
 - Catalog routes `ssr: false`. Why: SSR-embedded catalog caused 'aborted' blank screens.

@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Offen
+- [ ] Eigene Produktvarianten in der Abteilungsansicht anlegen, verwenden und entfernen (Gerät lokal; Browser-Test)
 - [ ] DB-Security-Hinweise (10 ältere, vorher vorhanden) separat beheben — auf Nutzer-Entscheid wartend
 - [ ] Browser-Tests nachholen: recipe-traits-admin, Varianten-Auswahl
 
