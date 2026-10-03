@@ -89,11 +89,6 @@ function MorePage() {
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("nav.more")}</h1>
       </div>
 
-      {/* Ernährungsform — erster Eintrag */}
-      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
-        <DietPreferenceRow />
-      </section>
-
       {/* Gemeinsam section */}
       <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
         <div className="flex items-center gap-2">
@@ -124,6 +119,11 @@ function MorePage() {
         <button type="button" onClick={invite} className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 text-sm font-semibold text-primary-foreground transition active:scale-[0.98]">
           <ShareIcon className="h-4 w-4" /> {t("more.invitePeople")}
         </button>
+      </section>
+
+      {/* Ernährungsform — unterhalb von „Gemeinsam“ */}
+      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <DietPreferenceRow />
       </section>
 
       {/* Settings menu */}
