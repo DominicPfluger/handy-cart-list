@@ -673,7 +673,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
           )}
           {selRows.size > 0 && (
             <div className="flex flex-wrap items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 px-2.5 py-2 text-xs">
-              <span className="font-semibold text-foreground">{T("adm.selectedCount", { n: selRows.size })}</span>
+              <span className="font-semibold text-foreground">{T("adm.bulkSelected", { n: selRows.size })}</span>
               <select aria-label={T("adm.recipeGroupTarget")} value={bulkGroup} disabled={busy} onChange={(e) => setBulkGroup(e.target.value)} className="max-w-44 rounded border border-border bg-background p-1 text-xs text-foreground">
                 <option value="">{T("adm.recipeGroupNone")}</option>
                 {groupRows(null).map(({ group: g, depth }) => <option key={g.id} value={g.id}>{depth ? `${groups.find((x) => x.id === g.parent_id)?.name ?? ""} › ` : ""}{g.name}</option>)}
