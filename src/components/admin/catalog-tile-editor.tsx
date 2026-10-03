@@ -108,18 +108,23 @@ export function CatalogTileEditor(p: {
   const moved = useRef(false);
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
+  const [genAllDlg, setGenAllDlg] = useState<{ all: boolean; hint: string; opts: AiImageOpts } | null>(null);
   const generateAllImages = () => {
     const missing = p.products.filter((x) => !x.image_path);
-    let list = missing;
-    if (missing.length === 0) {
-      if (!window.confirm(T("tile.genAllRedo", { n: p.products.length }))) return;
-      list = p.products;
-    } else if (!window.confirm(T("tile.genAllConfirm", { n: missing.length }))) return;
+    setGenAllDlg({ all: missing.length === 0, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS } });
+  };
+  const startGenerateAll = () => {
+    if (!genAllDlg) return;
+    const { all, hint, opts } = genAllDlg;
+    const list = all ? p.products : p.products.filter((x) => !x.image_path);
+    setGenAllDlg(null);
+    if (list.length === 0) return;
+    const h = hint.trim() || undefined;
     void p.run(async () => {
       setImgProg({ done: 0, total: list.length });
       try {
         for (let i = 0; i < list.length; i++) {
-          const result = await genImgAll({ data: { id: list[i]!.id, kind: "product" } });
+          const result = await genImgAll({ data: { id: list[i]!.id, kind: "product", hint: h, opts } });
           await saveProductIconFromPath(list[i]!.id, result.path);
           setImgProg({ done: i + 1, total: list.length });
         }
@@ -352,6 +357,32 @@ export function CatalogTileEditor(p: {
           {p.onTranslateMissing && <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onTranslateMissing}>🌐 {p.busy ? T("adm.working") : T("adm.trMissing")}</Button>}
         </div>
       )}
+      {genAllDlg && (() => {
+        const missingN = p.products.filter((x) => !x.image_path).length;
+        const n = genAllDlg.all ? p.products.length : missingN;
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setGenAllDlg(null)}>
+            <div className="w-full max-w-sm space-y-3 rounded-2xl bg-card p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
+              <p className="text-sm font-bold text-foreground">{T("tile.genAllTitle")}</p>
+              <div className="flex flex-col gap-1 text-sm">
+                <label className="flex items-center gap-2"><input type="radio" disabled={missingN === 0} checked={!genAllDlg.all} onChange={() => setGenAllDlg({ ...genAllDlg, all: false })} />{T("tile.genAllMissing", { n: missingN })}</label>
+                <label className="flex items-center gap-2"><input type="radio" checked={genAllDlg.all} onChange={() => setGenAllDlg({ ...genAllDlg, all: true })} />{T("tile.genAllEverything", { n: p.products.length })}</label>
+              </div>
+              <label className="block space-y-1 text-xs text-muted-foreground">
+                <span>{T("tile.genAllHint")}</span>
+                <textarea maxLength={300} rows={3} value={genAllDlg.hint} onChange={(e) => setGenAllDlg({ ...genAllDlg, hint: e.target.value })}
+                  className="w-full rounded-xl border border-input bg-background p-2 text-sm text-foreground" />
+              </label>
+              <AiImageOptionSelects value={genAllDlg.opts} onChange={(opts) => setGenAllDlg({ ...genAllDlg, opts })} />
+              <p className="text-xs text-muted-foreground">{T("adm.aiImagesConfirm", { n })}</p>
+              <div className="flex justify-end gap-2">
+                <Button variant="ghost" onClick={() => setGenAllDlg(null)}>{T("adm.cancel")}</Button>
+                <Button disabled={n === 0} onClick={startGenerateAll}>{T("tile.genAllStart")}</Button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {(p.children.length > 0 || editMode) && (
         <div className="grid grid-cols-3 gap-2.5 md:grid-cols-5 xl:grid-cols-7">
