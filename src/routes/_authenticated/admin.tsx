@@ -806,6 +806,7 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
   const [loadingS, setLoadingS] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(!!autoSuggest);
   const [mode, setMode] = useState<"web" | "ai">("web");
+  const [count, setCount] = useState(15);
   const fetchS = async () => {
     setConfirmOpen(false);
     setLoadingS(true);
