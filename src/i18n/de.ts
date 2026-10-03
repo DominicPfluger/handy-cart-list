@@ -894,7 +894,7 @@ export const de = {
   "adm.tplEnabled": "Aktiv",
   "adm.tplDisabled": "Deaktiviert",
   "adm.tplDeleteConfirm": "Vorlage „{name}“ wirklich löschen? Alle Oberkategorien und Zutaten-Zuordnungen gehen verloren.",
-  "adm.stepNew": "Neue Vorlage",
+  "adm.stepNew": "Neue Rezept-Kategorie",
   "adm.stepEdit": "Oberkategorie bearbeiten",
   "adm.stepMin": "Min.",
   "adm.stepMax": "Max.",
