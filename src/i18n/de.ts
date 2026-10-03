@@ -673,7 +673,7 @@ export const de = {
   "adm.iconImage": "Icon (klein)",
   "adm.previewImage": "Vorschaubild (gross)",
   "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt",
-  "adm.iconUseImage": "Beide Bilder gleich",
+  "adm.iconUseImage": "Icon-Bild wie Vorschaubild",
   "adm.iconPick": "Bild auswählen",
   "adm.iconAi": "KI-Bild",
   "adm.tab.recipes": "Rezept-Verwaltung",

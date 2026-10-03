@@ -1213,7 +1213,7 @@
     "adm.iconImage": "Icon (small)",
     "adm.previewImage": "Preview image (large)",
     "adm.iconAutoHint": "Created automatically from the preview image",
-    "adm.iconUseImage": "Use same image for both",
+    "adm.iconUseImage": "Icon image like preview image",
     "adm.iconPick": "Choose image",
     "adm.iconAi": "AI image"
   },
@@ -2431,7 +2431,7 @@
     "adm.iconImage": "Icon (small)",
     "adm.previewImage": "Preview image (large)",
     "adm.iconAutoHint": "Created automatically from the preview image",
-    "adm.iconUseImage": "Use same image for both",
+    "adm.iconUseImage": "Icon image like preview image",
     "adm.iconPick": "Choose image",
     "adm.iconAi": "AI image"
   },
@@ -3649,7 +3649,7 @@
     "adm.iconImage": "Icon (small)",
     "adm.previewImage": "Preview image (large)",
     "adm.iconAutoHint": "Created automatically from the preview image",
-    "adm.iconUseImage": "Use same image for both",
+    "adm.iconUseImage": "Icon image like preview image",
     "adm.iconPick": "Choose image",
     "adm.iconAi": "AI image"
   },
@@ -4867,7 +4867,7 @@
     "adm.iconImage": "Icono (pequeño)",
     "adm.previewImage": "Imagen de vista previa (grande)",
     "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa",
-    "adm.iconUseImage": "Usar la misma imagen",
+    "adm.iconUseImage": "Imagen de icono como la vista previa",
     "adm.iconPick": "Elegir imagen",
     "adm.iconAi": "Imagen con IA"
   },
@@ -6085,7 +6085,7 @@
     "adm.iconImage": "Icono (pequeño)",
     "adm.previewImage": "Imagen de vista previa (grande)",
     "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa",
-    "adm.iconUseImage": "Usar la misma imagen",
+    "adm.iconUseImage": "Imagen de icono como la vista previa",
     "adm.iconPick": "Elegir imagen",
     "adm.iconAi": "Imagen con IA"
   },
@@ -7303,7 +7303,7 @@
     "adm.iconImage": "Icône (petite)",
     "adm.previewImage": "Image d’aperçu (grande)",
     "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu",
-    "adm.iconUseImage": "Même image pour les deux",
+    "adm.iconUseImage": "Image d'icône comme l'aperçu",
     "adm.iconPick": "Choisir une image",
     "adm.iconAi": "Image par IA"
   },
@@ -8521,7 +8521,7 @@
     "adm.iconImage": "Icône (petite)",
     "adm.previewImage": "Image d’aperçu (grande)",
     "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu",
-    "adm.iconUseImage": "Même image pour les deux",
+    "adm.iconUseImage": "Image d'icône comme l'aperçu",
     "adm.iconPick": "Choisir une image",
     "adm.iconAi": "Image par IA"
   },
@@ -9739,7 +9739,7 @@
     "adm.iconImage": "Icona (piccola)",
     "adm.previewImage": "Immagine di anteprima (grande)",
     "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima",
-    "adm.iconUseImage": "Stessa immagine per entrambi",
+    "adm.iconUseImage": "Immagine icona come anteprima",
     "adm.iconPick": "Scegli immagine",
     "adm.iconAi": "Immagine IA"
   },
@@ -10957,7 +10957,7 @@
     "adm.iconImage": "Icona (piccola)",
     "adm.previewImage": "Immagine di anteprima (grande)",
     "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima",
-    "adm.iconUseImage": "Stessa immagine per entrambi",
+    "adm.iconUseImage": "Immagine icona come anteprima",
     "adm.iconPick": "Scegli immagine",
     "adm.iconAi": "Immagine IA"
   },
@@ -12175,7 +12175,7 @@
     "adm.iconImage": "Ícone (pequeno)",
     "adm.previewImage": "Imagem de pré-visualização (grande)",
     "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização",
-    "adm.iconUseImage": "Mesma imagem para ambos",
+    "adm.iconUseImage": "Imagem de ícone igual à pré-visualização",
     "adm.iconPick": "Escolher imagem",
     "adm.iconAi": "Imagem de IA"
   },
@@ -13393,7 +13393,7 @@
     "adm.iconImage": "Ícone (pequeno)",
     "adm.previewImage": "Imagem de pré-visualização (grande)",
     "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização",
-    "adm.iconUseImage": "Mesma imagem para ambos",
+    "adm.iconUseImage": "Imagem de ícone igual à pré-visualização",
     "adm.iconPick": "Escolher imagem",
     "adm.iconAi": "Imagem de IA"
   },
@@ -14611,7 +14611,7 @@
     "adm.iconImage": "Pictogram (klein)",
     "adm.previewImage": "Voorbeeldafbeelding (groot)",
     "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding",
-    "adm.iconUseImage": "Beide afbeeldingen gelijk",
+    "adm.iconUseImage": "Pictogramafbeelding zoals voorbeeldafbeelding",
     "adm.iconPick": "Afbeelding kiezen",
     "adm.iconAi": "AI-afbeelding"
   },
@@ -15829,7 +15829,7 @@
     "adm.iconImage": "Pictogram (klein)",
     "adm.previewImage": "Voorbeeldafbeelding (groot)",
     "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding",
-    "adm.iconUseImage": "Beide afbeeldingen gelijk",
+    "adm.iconUseImage": "Pictogramafbeelding zoals voorbeeldafbeelding",
     "adm.iconPick": "Afbeelding kiezen",
     "adm.iconAi": "AI-afbeelding"
   },
@@ -16508,7 +16508,7 @@
     "adm.iconImage": "Icon (klein)",
     "adm.previewImage": "Vorschaubild (gross)",
     "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt",
-    "adm.iconUseImage": "Beide Bilder gleich",
+    "adm.iconUseImage": "Icon-Bild wie Vorschaubild",
     "adm.iconPick": "Bild auswählen",
     "adm.iconAi": "KI-Bild"
   },
@@ -17187,7 +17187,7 @@
     "adm.iconImage": "Icon (klein)",
     "adm.previewImage": "Vorschaubild (gross)",
     "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt",
-    "adm.iconUseImage": "Beide Bilder gleich",
+    "adm.iconUseImage": "Icon-Bild wie Vorschaubild",
     "adm.iconPick": "Bild auswählen",
     "adm.iconAi": "KI-Bild"
   }
