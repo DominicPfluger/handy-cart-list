@@ -31,3 +31,5 @@
 - [x] Admin-Katalog: Produktzeilen mit Zieh-Griff (⠿ neben Bild), Stift (Bearbeiten-Dialog) und Papierkorb (Löschen mit Bestätigung) ergänzt
 
 - Admin-Katalog: Varianten-Schnelldialog (Tags-Icon pro Produktzeile, mehrzeilig, dedupe, translateVariants)
+- [x] Admin-Tab „Rezept-Generator“ → „Rezept-Verwaltung“ (adm.tab.recipes in de.ts + 15 Lokalen)
+- [x] Zutaten-Kategorien im Rezepte-Admin standardmässig aufgeklappt (recipe-admin.tsx groupsOpen=true)
