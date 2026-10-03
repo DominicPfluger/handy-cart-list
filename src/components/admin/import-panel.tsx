@@ -92,7 +92,13 @@ export function ImportPanel({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     const missing = items.find((i) => i.action === "create" && !i.department_id);
     if (missing) throw new Error(T("imp.needDept", { name: missing.name }));
     const r = await accept({ data: { items } });
-    toast.success(T("imp.saved", { created: r.created, linked: r.linked }));
+    const done = T("imp.saved", { created: r.created, linked: r.linked });
+    if (r.backupId) {
+      const id = r.backupId;
+      toast.success(done, { action: { label: T("adm.undo"), onClick: () => { void undoBackup({ data: { id } }).then(() => { toast.success(T("adm.undone")); qc.invalidateQueries(); }); } } });
+    } else {
+      toast.success(done);
+    }
     setEdits({});
     refresh();
     qc.invalidateQueries();
