@@ -25,3 +25,5 @@
 - Admin „Mehrere Produkte": Positions-Auswahl (Ende/oben/unter Überschrift) bei Abteilungen mit Überschriften
 - Rezepte-Admin: Bearbeiten/Löschen als Stift-/Papierkorb-Icons direkt neben dem Drag-Griff (Vorlagen & Oberkategorien).
 - Abteilungsansicht: Produktvarianten mit Herz (Favorit), Blitz (Schnell hinzufügen) und grünem Plus (Produkt-hinzufügen-Dialog, Variante vorgewählt).
+
+- [x] Rezepte-Admin: Bereich „Vorlagen & Oberkategorien" → „Vorlagen", Button „Neue Oberkategorie" → „Neue Vorlage" (16 Sprachen)
