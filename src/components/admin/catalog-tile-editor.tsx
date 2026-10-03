@@ -618,6 +618,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   }, [isDept, prod?.id]);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
+  const [vDrag, setVDrag] = useState<number | null>(null);
+  const [vOver, setVOver] = useState<number | null>(null);
   const [prodLines, setProdLines] = useState("");
   const heads = p.headings ?? [];
   const curHeadingId = (() => {
@@ -1078,9 +1080,25 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
             {variants.length > 0 && (
               <div className="divide-y divide-border rounded-lg border border-border">
-                {variants.map((v) => (
-                  <div key={v} className="flex items-center justify-between gap-2 px-3 py-1.5 text-sm">
-                    <span className="truncate">{v}</span>
+                {variants.map((v, vi) => (
+                  <div
+                    key={v}
+                    draggable
+                    onDragStart={() => setVDrag(vi)}
+                    onDragOver={(e) => { e.preventDefault(); setVOver(vi); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (vDrag === null || vDrag === vi) { setVDrag(null); setVOver(null); return; }
+                      setVariants((x) => { const next = [...x]; const moved = next[vDrag]!; next.splice(vDrag, 1); next.splice(vi, 0, moved); return next; });
+                      setVDrag(null); setVOver(null);
+                    }}
+                    onDragEnd={() => { setVDrag(null); setVOver(null); }}
+                    className={`flex items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
+                  >
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
+                      <span className="truncate">{v}</span>
+                    </span>
                     <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
                   </div>
                 ))}
