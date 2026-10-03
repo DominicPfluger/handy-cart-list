@@ -78,7 +78,7 @@ function ListPage() {
   const {
     items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
-    templates, saveAsTemplate, createFromTemplate, deleteTemplate,
+    templates, saveAsTemplate, createFromTemplate, deleteTemplate, reorderTemplates,
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const data = useCatalog();
@@ -250,6 +250,7 @@ function ListPage() {
           toast.success(t("lm.templateCreated"));
         }}
         onDeleteTemplate={deleteTemplate}
+        onReorderTemplates={reorderTemplates}
       />
 
       {/* List switcher */}
