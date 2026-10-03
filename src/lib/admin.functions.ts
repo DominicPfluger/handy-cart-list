@@ -761,8 +761,10 @@ export const mergeProducts = createServerFn({ method: "POST" })
 
 // ============= Sicherung vor Massenänderungen =============
 
-type BackupGroup = { table: string; filterColumn: string; filterIds: string[]; rows: unknown[] };
+type BackupGroup = { table: string; filterColumn: string; filterIds: string[]; rows: Record<string, unknown>[] };
 type BackupPayload = { deletes?: BackupGroup[]; created?: { table: string; ids: string[] }[] };
+/** Tabellenname kommt dynamisch aus den Sicherungsdaten — daher der Cast. */
+const table = (sb: { from: (t: string) => unknown }, name: string) => sb.from(name);
 
 /** Vor einer Massenlöschung die betroffenen Zeilen sichern (null = nichts zu löschen). */
 export const createBulkBackup = createServerFn({ method: "POST" })
