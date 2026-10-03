@@ -60,3 +60,4 @@
 - [x] KI-Bilder beim Anlegen neuer Produkte
 - [x] Produkt-Bilddialog vollständig scrollbar; eigene KI-Stichworte und Optionen für das kleine Icon, unabhängig vom grossen Vorschaubild (Desktop und Mobilgerät geprüft; KI-Icon-Erzeugung geprüft).
 - [x] Abteilungsansicht: Kategorienbild über der Produkteauflistung für jede Kategorie mit Bild (nicht mehr nur bei Icon+Bild; Frühstücks-Cerealien unverändert; Desktop/Mobil Browser-getestet) — erledigt 2026-10-03
+- [x] Favoritenansicht: Produkt-Icons (kleine Bilder) statt nur Emoji; Einstellung Bilder/Symbole wird respektiert (Handy/Desktop Browser-getestet) — erledigt 2026-10-03
