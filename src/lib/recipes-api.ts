@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Json } from "@/integrations/supabase/types";
 
-export type RecipeItem = { productId: string; name: string; emoji?: string | null; quantity: string; unit?: string | null };
+export type RecipeItem = { productId: string; name: string; emoji?: string | null; quantity: string; unit?: string | null; variant?: string };
 export type FeedRecipe = {
   id: string; title: string; description: string | null; template_id: string; items: RecipeItem[]; product_ids: string[];
   share_slug: string | null; author_name: string | null; created_at: string;

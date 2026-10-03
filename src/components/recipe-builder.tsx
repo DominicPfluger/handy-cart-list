@@ -1,7 +1,7 @@
 import { uploadRecipeImage } from "../lib/recipe-images";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useT } from "../i18n";
+import { pickName, useLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { POPULAR_RECIPES, RECIPE_TEMPLATES, STEP_EMOJIS, type RecipeTemplate } from "../lib/recipe-templates";
@@ -44,6 +44,10 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [tplId, setTplIdRaw] = useState<RecipeTemplate["id"] | null>(initialTemplateId ?? null);
   const setTplId = (id: RecipeTemplate["id"] | null) => { setTplIdRaw(id); onTemplateChange?.(id); };
   const [picks, setPicks] = useState<Picks>({});
+  const locale = useLocale();
+  // Gewählte Produkt-Variante je Zutat (leer = Standard).
+  const [variants, setVariants] = useState<Record<string, string>>({});
+  const vName = (p: CatalogProduct, v: string) => pickName(p.variantNames?.[v], locale, v);
   const [added, setAdded] = useState(false);
   const [saveOpen, setSaveOpen] = useState(false);
   const [savedMsg, setSavedMsg] = useState(false);
@@ -95,6 +99,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     const template = templates.find((x) => x.id === r.template_id);
     if (!template) return;
     const next: Picks = {};
+    const loadedVariants: Record<string, string> = {};
     for (const item of r.items) {
       if (item.productId.startsWith("any:")) {
         const k = item.productId.slice(4);
@@ -111,9 +116,11 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       });
       if (!step) continue;
       (next[step.key] ??= []).push(item.productId);
+      if (item.variant) loadedVariants[item.productId] = item.variant;
     }
     setTplId(template.id);
     setPicks(next);
+    setVariants(loadedVariants);
     setCustomTitle(r.title);
     setCustomDesc(r.description ?? "");
     setLoadedId(r.id);
@@ -219,7 +226,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const popularShown = showAllPopular ? visiblePopular : visiblePopular.slice(0, 5);
 
   const openRecipe = (id: RecipeTemplate["id"], p: Picks) => {
-    setTplId(id); setPicks(p); setAdded(false); setSavedMsg(false);
+    setTplId(id); setPicks(p); setVariants({}); setAdded(false); setSavedMsg(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -227,7 +234,10 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setAdded(false);
     setPicks((prev) => {
       const cur = prev[stepKey] ?? [];
-      if (cur.includes(id)) return { ...prev, [stepKey]: cur.filter((x) => x !== id) };
+      if (cur.includes(id)) {
+        setVariants(({ [id]: _drop, ...rest }) => rest);
+        return { ...prev, [stepKey]: cur.filter((x) => x !== id) };
+      }
       const next = max === 1 ? [id] : cur.length >= max ? [...cur.slice(1), id] : [...cur, id];
       const updated = { ...prev, [stepKey]: next };
       return updated;
@@ -243,13 +253,15 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       p[s.key] = shuffle(s.products).slice(0, n).map((x) => x.id);
     }
     setPicks(p);
+    setVariants({});
   };
 
   const anyProduct = (s: (typeof steps)[number]) => ({
     id: `any:${s.key}`, name: t("rk.anyOf", { name: s.label }), emoji: s.emoji || STEP_EMOJIS[s.key] || "🍽️",
     defaultQuantity: 1, defaultUnit: "stueck", departmentId: "", imageUrl: undefined,
   }) as unknown as CatalogProduct;
-  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => id.startsWith("any:") ? anyProduct(s) : s.products.find((p) => p.id === id)!).filter(Boolean));
+  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => id.startsWith("any:") ? anyProduct(s) : s.products.find((p) => p.id === id)!).filter(Boolean))
+    .map((p) => { const v = variants[p.id]; return v && p.variants?.includes(v) ? { ...p, name: `${p.name} · ${vName(p, v)}`, chosenVariant: v } : p; }) as (CatalogProduct & { chosenVariant?: string })[];
   const catName = tpl ? templateLabel(tpl, t) : "";
   const title = chosen.length
     ? `${catName}: ${chosen.slice(0, 3).map((p) => p.name).join(", ")}${chosen.length > 3 ? " …" : ""}`
@@ -275,7 +287,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   };
 
   const recipeItems = (): RecipeItem[] => chosen.map((p) => ({
-    productId: p.id, name: p.name, emoji: p.emoji, quantity: formatQuantity(p.defaultQuantity, p.defaultUnit), unit: p.defaultUnit,
+    productId: p.id, name: p.name, ...(p.chosenVariant ? { variant: p.chosenVariant } : {}), emoji: p.emoji, quantity: formatQuantity(p.defaultQuantity, p.defaultUnit), unit: p.defaultUnit,
   }));
 
   const doSave = async (collectionId: string | null) => {
@@ -511,7 +523,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           <button onClick={surprise} className="shrink-0 whitespace-nowrap rounded-full bg-accent px-2 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
             {t("rk.surprise")}
           </button>
-          <button onClick={() => { setPicks({}); setAdded(false); }} className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
+          <button onClick={() => { setPicks({}); setVariants({}); setAdded(false); }} className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
             {t("rk.reset")}
           </button>
       </div>
@@ -615,7 +627,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 <span className="mt-0.5 flex flex-wrap gap-1">
                   {sel0.map((id) => {
                     const p = id.startsWith("any:") ? anyProduct(s) : s.products.find((x) => x.id === id);
-                    return p ? <span key={id} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-foreground">{p.emoji} {p.name}</span> : null;
+                    return p ? <span key={id} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-foreground">{p.emoji} {p.name}{variants[id] && p.variants?.includes(variants[id]!) ? ` · ${vName(p, variants[id]!)}` : ""}</span> : null;
                   })}
                 </span>
               )}
@@ -645,7 +657,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 : [{ key: "all", name: "", emoji: null, products: pool }];
               const chip = (p: CatalogProduct) => {
                 const on = sel.includes(p.id);
-                return (
+                const btn = (
                   <button
                     key={p.id}
                     type="button"
@@ -656,7 +668,25 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                     }`}
                   >
                     {p.emoji ? <ProductEmoji emoji={p.emoji} className="mr-1" /> : null}{p.name}
+                    {on && variants[p.id] ? ` · ${vName(p, variants[p.id]!)}` : ""}
                   </button>
+                );
+                const vs = p.variants ?? [];
+                if (!on || vs.length === 0) return btn;
+                const cur = variants[p.id] ?? "";
+                return (
+                  <span key={p.id} className="inline-flex flex-wrap items-center gap-1 rounded-2xl border border-dashed border-primary/50 p-1">
+                    {btn}
+                    <span role="group" aria-label={t("rk.variant")} className="inline-flex flex-wrap gap-1">
+                      {["", ...vs].map((v) => (
+                        <button key={v || "std"} type="button" aria-pressed={cur === v}
+                          onClick={() => { setSavedMsg(false); setAdded(false); setVariants((x) => { const n = { ...x }; if (v) n[p.id] = v; else delete n[p.id]; return n; }); }}
+                          className={`rounded-full border px-2 py-0.5 text-[11px] font-medium ${cur === v ? "border-primary bg-accent text-accent-foreground" : "border-border bg-card text-muted-foreground"}`}>
+                          {v ? vName(p, v) : t("rk.variantStandard")}
+                        </button>
+                      ))}
+                    </span>
+                  </span>
                 );
               };
               if (!hasGroups) {

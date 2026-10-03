@@ -1158,7 +1158,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salty",
     "rk.taste.fruity": "Fruity",
-    "rk.anyOf": "{name} of your choice"
+    "rk.anyOf": "{name} of your choice",
+    "rk.variant": "Variant",
+    "rk.variantStandard": "Standard"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2319,7 +2321,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salty",
     "rk.taste.fruity": "Fruity",
-    "rk.anyOf": "{name} of your choice"
+    "rk.anyOf": "{name} of your choice",
+    "rk.variant": "Variant",
+    "rk.variantStandard": "Standard"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3480,7 +3484,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salty",
     "rk.taste.fruity": "Fruity",
-    "rk.anyOf": "{name} of your choice"
+    "rk.anyOf": "{name} of your choice",
+    "rk.variant": "Variant",
+    "rk.variantStandard": "Standard"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4641,7 +4647,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salado",
     "rk.taste.fruity": "Frutal",
-    "rk.anyOf": "{name} a elección"
+    "rk.anyOf": "{name} a elección",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Estándar"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5802,7 +5810,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salado",
     "rk.taste.fruity": "Frutal",
-    "rk.anyOf": "{name} a elección"
+    "rk.anyOf": "{name} a elección",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Estándar"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -6963,7 +6973,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salé",
     "rk.taste.fruity": "Fruité",
-    "rk.anyOf": "{name} au choix"
+    "rk.anyOf": "{name} au choix",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Standard"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8124,7 +8136,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salé",
     "rk.taste.fruity": "Fruité",
-    "rk.anyOf": "{name} au choix"
+    "rk.anyOf": "{name} au choix",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Standard"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9285,7 +9299,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salato",
     "rk.taste.fruity": "Fruttato",
-    "rk.anyOf": "{name} a scelta"
+    "rk.anyOf": "{name} a scelta",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Standard"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10446,7 +10462,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salato",
     "rk.taste.fruity": "Fruttato",
-    "rk.anyOf": "{name} a scelta"
+    "rk.anyOf": "{name} a scelta",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Standard"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11607,7 +11625,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salgado",
     "rk.taste.fruity": "Frutado",
-    "rk.anyOf": "{name} à escolha"
+    "rk.anyOf": "{name} à escolha",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Padrão"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12768,7 +12788,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salgado",
     "rk.taste.fruity": "Frutado",
-    "rk.anyOf": "{name} à escolha"
+    "rk.anyOf": "{name} à escolha",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Padrão"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -13929,7 +13951,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Zout",
     "rk.taste.fruity": "Fruitig",
-    "rk.anyOf": "{name} naar keuze"
+    "rk.anyOf": "{name} naar keuze",
+    "rk.variant": "Variant",
+    "rk.variantStandard": "Standaard"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15090,7 +15114,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Zout",
     "rk.taste.fruity": "Fruitig",
-    "rk.anyOf": "{name} naar keuze"
+    "rk.anyOf": "{name} naar keuze",
+    "rk.variant": "Variant",
+    "rk.variantStandard": "Standaard"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -15713,7 +15739,9 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salzig",
     "rk.taste.fruity": "Fruchtig",
-    "rk.anyOf": "{name} nach Wahl"
+    "rk.anyOf": "{name} nach Wahl",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Standard"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16336,6 +16364,8 @@
     "rk.taste.umami": "Umami",
     "rk.taste.salty": "Salzig",
     "rk.taste.fruity": "Fruchtig",
-    "rk.anyOf": "{name} nach Wahl"
+    "rk.anyOf": "{name} nach Wahl",
+    "rk.variant": "Variante",
+    "rk.variantStandard": "Standard"
   }
 }

@@ -896,6 +896,8 @@ export const de = {
   "adm.assigned": "Zugewiesen",
   "rk.otherGroup": "Weitere",
   "rk.anyOf": "{name} nach Wahl",
+  "rk.variant": "Variante",
+  "rk.variantStandard": "Standard",
   "rk.showAll": "Alle {count} anzeigen ▾",
   "rk.showMore": "Weitere {count} anzeigen ▾",
   "adm.recipeSortBy": "Sortieren nach…",
