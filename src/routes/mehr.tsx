@@ -89,6 +89,11 @@ function MorePage() {
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("nav.more")}</h1>
       </div>
 
+      {/* Ernährungsform — erster Eintrag */}
+      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <DietPreferenceRow />
+      </section>
+
       {/* Gemeinsam section */}
       <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
         <div className="flex items-center gap-2">
@@ -235,7 +240,6 @@ function MorePage() {
 
       {/* Sprache & Admin */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
-        <DietPreferenceRow />
         <label className="flex w-full items-center gap-3 px-4 py-3.5">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
             <GearIcon className="h-5 w-5" />
