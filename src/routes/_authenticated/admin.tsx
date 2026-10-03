@@ -602,7 +602,7 @@ function AdminPage() {
         <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
       </div>
 
-      <div className="flex gap-1.5 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible" role="tablist" aria-label={T("adm.title")}>
+      <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.title")}>
         {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["cuisines", "adm.tab.cuisines"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["health", "adm.tab.health"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
