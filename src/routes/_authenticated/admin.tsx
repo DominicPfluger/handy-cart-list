@@ -6,7 +6,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants } from "@/lib/admin.functions";
+import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup } from "@/lib/admin.functions";
 import { LOCALES, getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
@@ -32,6 +32,7 @@ import { CatalogPreview } from "@/components/admin/catalog-preview";
 import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 import { ImportPanel } from "@/components/admin/import-panel";
+import { MarketDataImport } from "@/components/admin/market-data-import";
 import { CatalogMediaPanel } from "@/components/admin/catalog-media-panel";
 import { CatalogTileEditor } from "@/components/admin/catalog-tile-editor";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
@@ -186,9 +187,9 @@ function AdminPage() {
     await qc.invalidateQueries({ queryKey: ["catalog"] });
     await qc.invalidateQueries({ queryKey: ["catalog-images"] });
   };
-  const run = async (fn: () => Promise<unknown>, ok = T("adm.saved")) => {
+  const run = async (fn: () => Promise<unknown>, ok: string | null = T("adm.saved")) => {
     setBusy(true);
-    try { await fn(); toast.success(ok); await refresh(); }
+    try { await fn(); if (ok !== null) toast.success(ok); await refresh(); }
     catch (e) { toast.error((e as Error).message); }
     finally { setBusy(false); }
   };
