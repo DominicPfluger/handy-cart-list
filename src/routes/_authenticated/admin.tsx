@@ -589,15 +589,15 @@ function AdminPage() {
     }, T("adm.deleted"));
   };
 
+  const createBackupFn = useServerFn(createBulkBackup);
   const undoBackupFn = useServerFn(undoBulkBackup);
 
   const deleteSelected = (sel: { productIds: string[]; productAliasIds: string[] }) => {
     const n = sel.productIds.length + sel.productAliasIds.length;
     if (!n || !confirm(T("adm.deleteSelectedConfirm", { n }))) return;
-    const backupFn = useServerFnRef.current;
     run(async () => {
       // Vor der Löschung Sicherungspunkt anlegen, damit sich die Aktion zurücknehmen lässt
-      const backupId = await backupFn({ data: {
+      const backupId = await createBackupFn({ data: {
         label: T("adm.bulkDeleteLabel"),
         deletes: [
           ...(sel.productAliasIds.length ? [{ table: "product_aliases", filterColumn: "id", filterIds: sel.productAliasIds }] : []),
@@ -906,7 +906,7 @@ function AdminPage() {
       </>)}
 
       {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel section="images" /></LoadingGate>}
-      {tab === "prices" && <LoadingGate d={d}><CatalogMediaPanel section="prices" depts={d?.depts ?? []} /></LoadingGate>}
+      {tab === "prices" && <LoadingGate d={d}><div className="space-y-4"><CatalogMediaPanel section="prices" depts={d?.depts ?? []} />{d && <MarketDataImport prods={d.prods.map((p) => ({ id: p.id, name: p.name }))} />}</div></LoadingGate>}
       {tab === "import" && (d ? <ImportPanel depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
 
 
