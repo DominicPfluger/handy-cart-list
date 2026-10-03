@@ -13,7 +13,7 @@
 - Personal data device-only localStorage (custom names, hidden items, diet/cuisine selection, purchase history, `shoppi:product-dept`, `shoppi:speak-locale`). Why: shared catalog admin-controlled.
 - User-created product variants are device-local and merged into catalog reads; only admins change shared variants. Why: shoppers can personalize products without altering the common catalog.
 - Diet filter: products.excluded_diets. Cuisine filter: `cuisines`+`product_cuisines`. Why: simple, editable.
-- Department diet/cuisine filters exempt non-food root categories by stable catalog base names. Why: localized and nested non-food products remain visible without changing saved preferences.
+- Department diet/cuisine filters exempt non-food root categories by stable catalog base names; the shared NON_FOOD_ROOTS list lives in src/lib/dept-colors.ts (isNonFoodRootName) and also hides the cuisine picker in the admin product editor. Why: localized and nested non-food products remain visible without changing saved preferences; one source of truth for non-food roots.
 - Catalog routes `ssr: false`. Why: SSR-embedded catalog caused 'aborted' blank screens.
 - Brands: `product_brands` (locales = market codes); chosen brand appended as "Name · Marke". Why: same for cloud/local lists.
 - Recipe creator keeps each recipe step's groups in a single scrollable row with independently expandable inline ingredients, limits the initial product view per group, and uses only admin-assigned ingredients for managed templates; recipe steps are edited beside the selected template in admin. Why: preserve ingredient families and make their editing discoverable without nested accordions or surprise defaults.
