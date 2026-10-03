@@ -693,8 +693,11 @@ function DepartmentsPage() {
                     )}
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
-                       {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
-                    </p>
+                    {product.variants.length > 0 && (
+                      <button type="button" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="mt-0.5 block max-w-full truncate text-left text-xs font-medium text-primary">
+                        {t("dept.productVariants")}
+                      </button>
+                    )}
                   </div>
                   <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
                   <Button
