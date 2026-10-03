@@ -452,6 +452,48 @@ function AdminPage() {
     }, T("adm.sorted", { label }));
   };
 
+  /** Überschriften der aktuellen Abteilung in Unterkategorien umwandeln; Produkte darunter werden verschoben. */
+  const headingsToSubcategories = () => {
+    if (!cur || !d) return;
+    const own = products.filter((p) => !p.id.startsWith("alias:"));
+    const byAnchor = new Map(headings.map((h) => [h.before_product_id, h]));
+    const groups: { h: Head; items: typeof own }[] = [];
+    let curG: { h: Head; items: typeof own } | null = null;
+    for (const p of products) {
+      const h = byAnchor.get(p.id);
+      if (h) { curG = { h, items: [] }; groups.push(curG); }
+      if (curG && !p.id.startsWith("alias:")) curG.items.push(p);
+    }
+    // Überschriften ohne gefundenen Anker trotzdem als (leere) Unterkategorie übernehmen
+    for (const h of headings) if (!groups.some((g) => g.h.id === h.id)) groups.push({ h, items: [] });
+    const n = groups.reduce((s, g) => s + g.items.length, 0);
+    if (!confirm(T("adm.headingsToSubConfirm", { cats: groups.length, n }))) return;
+    void own;
+    run(async () => {
+      const children = d.depts.filter((x) => x.parent_id === cur);
+      let order = children.reduce((m, x) => Math.max(m, x.sort_order), 0);
+      const newIds: string[] = [];
+      for (const g of groups) {
+        const name = g.h.name.trim();
+        let target = children.find((x) => x.name.trim().toLowerCase() === name.toLowerCase());
+        let start = 0;
+        if (target) {
+          start = d.prods.filter((x) => x.department_id === target!.id).reduce((m, x) => Math.max(m, x.sort_order), 0);
+        } else {
+          const r = await supabase.from("departments").insert({ name, parent_id: cur, sort_order: ++order }).select("id, name, emoji, parent_id, sort_order, image_path").single();
+          if (r.error) throw new Error(r.error.message);
+          target = r.data as Dept;
+          children.push(target);
+          newIds.push(target.id);
+        }
+        const tid = target.id;
+        await Promise.all(g.items.map((p, i) => must(supabase.from("products").update({ department_id: tid, sort_order: start + i + 1 }).eq("id", p.id))));
+        await delH({ data: { id: g.h.id } });
+      }
+      if (newIds.length) await translateIds(newIds);
+    }, T("adm.headingsToSubDone", { cats: groups.length, n }));
+  };
+
   const remove = (s: NonNullable<Sel>, name: string) => {
     if (!confirm(T("adm.deleteConfirm", { name }))) return;
     run(async () => {
@@ -611,6 +653,9 @@ function AdminPage() {
             </select>
             <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={() => sortProducts()}>↕ {busy ? T("adm.working") : T("adm.sort")}</Button>
           </div>
+        )}
+        {cur && headings.length > 0 && !mk && (
+          <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={headingsToSubcategories}>📂 {T("adm.headingsToSub")}</Button>
         )}
         <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 min-w-[10rem] flex-1 rounded-xl" />
       </div>

@@ -1224,7 +1224,10 @@
     "adm.aiImagesConfirm": "Generate AI images for {n} new products? This uses credits.",
     "adm.aiImagesProgress": "Generating AI image {i} of {n} …",
     "adm.iconUseImageDone": "Icon applied",
-    "tile.noImage": "No preview image available"
+    "tile.noImage": "No preview image available",
+    "adm.headingsToSub": "Convert headings to subcategories",
+    "adm.headingsToSubConfirm": "Create {cats} subcategories and move {n} products? The headings will be removed afterwards.",
+    "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2451,7 +2454,10 @@
     "adm.aiImagesConfirm": "Generate AI images for {n} new products? This uses credits.",
     "adm.aiImagesProgress": "Generating AI image {i} of {n} …",
     "adm.iconUseImageDone": "Icon applied",
-    "tile.noImage": "No preview image available"
+    "tile.noImage": "No preview image available",
+    "adm.headingsToSub": "Convert headings to subcategories",
+    "adm.headingsToSubConfirm": "Create {cats} subcategories and move {n} products? The headings will be removed afterwards.",
+    "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3678,7 +3684,10 @@
     "adm.aiImagesConfirm": "Generate AI images for {n} new products? This uses credits.",
     "adm.aiImagesProgress": "Generating AI image {i} of {n} …",
     "adm.iconUseImageDone": "Icon applied",
-    "tile.noImage": "No preview image available"
+    "tile.noImage": "No preview image available",
+    "adm.headingsToSub": "Convert headings to subcategories",
+    "adm.headingsToSubConfirm": "Create {cats} subcategories and move {n} products? The headings will be removed afterwards.",
+    "adm.headingsToSubDone": "{cats} subcategories created, {n} products moved"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4905,7 +4914,10 @@
     "adm.aiImagesConfirm": "¿Generar imágenes con IA para {n} productos nuevos? Esto consume créditos.",
     "adm.aiImagesProgress": "Generando imagen IA {i} de {n} …",
     "adm.iconUseImageDone": "Icono aplicado",
-    "tile.noImage": "No hay imagen de vista previa"
+    "tile.noImage": "No hay imagen de vista previa",
+    "adm.headingsToSub": "Convertir encabezados en subcategorías",
+    "adm.headingsToSubConfirm": "¿Crear {cats} subcategorías y mover {n} productos? Después se eliminarán los encabezados.",
+    "adm.headingsToSubDone": "{cats} subcategorías creadas, {n} productos movidos"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6132,7 +6144,10 @@
     "adm.aiImagesConfirm": "¿Generar imágenes con IA para {n} productos nuevos? Esto consume créditos.",
     "adm.aiImagesProgress": "Generando imagen IA {i} de {n} …",
     "adm.iconUseImageDone": "Icono aplicado",
-    "tile.noImage": "No hay imagen de vista previa"
+    "tile.noImage": "No hay imagen de vista previa",
+    "adm.headingsToSub": "Convertir encabezados en subcategorías",
+    "adm.headingsToSubConfirm": "¿Crear {cats} subcategorías y mover {n} productos? Después se eliminarán los encabezados.",
+    "adm.headingsToSubDone": "{cats} subcategorías creadas, {n} productos movidos"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7359,7 +7374,10 @@
     "adm.aiImagesConfirm": "Générer des images IA pour {n} nouveaux produits ? Cela consomme des crédits.",
     "adm.aiImagesProgress": "Génération de l'image IA {i} sur {n} …",
     "adm.iconUseImageDone": "Icône appliquée",
-    "tile.noImage": "Aucune image d'aperçu"
+    "tile.noImage": "Aucune image d'aperçu",
+    "adm.headingsToSub": "Convertir les titres en sous-catégories",
+    "adm.headingsToSubConfirm": "Créer {cats} sous-catégories et déplacer {n} produits ? Les titres seront ensuite supprimés.",
+    "adm.headingsToSubDone": "{cats} sous-catégories créées, {n} produits déplacés"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8586,7 +8604,10 @@
     "adm.aiImagesConfirm": "Générer des images IA pour {n} nouveaux produits ? Cela consomme des crédits.",
     "adm.aiImagesProgress": "Génération de l'image IA {i} sur {n} …",
     "adm.iconUseImageDone": "Icône appliquée",
-    "tile.noImage": "Aucune image d'aperçu"
+    "tile.noImage": "Aucune image d'aperçu",
+    "adm.headingsToSub": "Convertir les titres en sous-catégories",
+    "adm.headingsToSubConfirm": "Créer {cats} sous-catégories et déplacer {n} produits ? Les titres seront ensuite supprimés.",
+    "adm.headingsToSubDone": "{cats} sous-catégories créées, {n} produits déplacés"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9813,7 +9834,10 @@
     "adm.aiImagesConfirm": "Generare immagini IA per {n} nuovi prodotti? Consuma crediti.",
     "adm.aiImagesProgress": "Generazione immagine IA {i} di {n} …",
     "adm.iconUseImageDone": "Icona applicata",
-    "tile.noImage": "Nessuna immagine di anteprima"
+    "tile.noImage": "Nessuna immagine di anteprima",
+    "adm.headingsToSub": "Converti titoli in sottocategorie",
+    "adm.headingsToSubConfirm": "Creare {cats} sottocategorie e spostare {n} prodotti? I titoli verranno poi rimossi.",
+    "adm.headingsToSubDone": "{cats} sottocategorie create, {n} prodotti spostati"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11040,7 +11064,10 @@
     "adm.aiImagesConfirm": "Generare immagini IA per {n} nuovi prodotti? Consuma crediti.",
     "adm.aiImagesProgress": "Generazione immagine IA {i} di {n} …",
     "adm.iconUseImageDone": "Icona applicata",
-    "tile.noImage": "Nessuna immagine di anteprima"
+    "tile.noImage": "Nessuna immagine di anteprima",
+    "adm.headingsToSub": "Converti titoli in sottocategorie",
+    "adm.headingsToSubConfirm": "Creare {cats} sottocategorie e spostare {n} prodotti? I titoli verranno poi rimossi.",
+    "adm.headingsToSubDone": "{cats} sottocategorie create, {n} prodotti spostati"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12267,7 +12294,10 @@
     "adm.aiImagesConfirm": "Gerar imagens com IA para {n} novos produtos? Isto consome créditos.",
     "adm.aiImagesProgress": "A gerar imagem IA {i} de {n} …",
     "adm.iconUseImageDone": "Ícone aplicado",
-    "tile.noImage": "Sem imagem de pré-visualização"
+    "tile.noImage": "Sem imagem de pré-visualização",
+    "adm.headingsToSub": "Converter títulos em subcategorias",
+    "adm.headingsToSubConfirm": "Criar {cats} subcategorias e mover {n} produtos? Os títulos serão removidos depois.",
+    "adm.headingsToSubDone": "{cats} subcategorias criadas, {n} produtos movidos"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13494,7 +13524,10 @@
     "adm.aiImagesConfirm": "Gerar imagens com IA para {n} novos produtos? Isto consome créditos.",
     "adm.aiImagesProgress": "A gerar imagem IA {i} de {n} …",
     "adm.iconUseImageDone": "Ícone aplicado",
-    "tile.noImage": "Sem imagem de pré-visualização"
+    "tile.noImage": "Sem imagem de pré-visualização",
+    "adm.headingsToSub": "Converter títulos em subcategorias",
+    "adm.headingsToSubConfirm": "Criar {cats} subcategorias e mover {n} produtos? Os títulos serão removidos depois.",
+    "adm.headingsToSubDone": "{cats} subcategorias criadas, {n} produtos movidos"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14721,7 +14754,10 @@
     "adm.aiImagesConfirm": "AI-afbeeldingen maken voor {n} nieuwe producten? Dit verbruikt credits.",
     "adm.aiImagesProgress": "AI-afbeelding {i} van {n} wordt gemaakt …",
     "adm.iconUseImageDone": "Icoon toegepast",
-    "tile.noImage": "Geen voorbeeldafbeelding"
+    "tile.noImage": "Geen voorbeeldafbeelding",
+    "adm.headingsToSub": "Kopjes omzetten naar subcategorieën",
+    "adm.headingsToSubConfirm": "{cats} subcategorieën maken en {n} producten verplaatsen? De kopjes worden daarna verwijderd.",
+    "adm.headingsToSubDone": "{cats} subcategorieën gemaakt, {n} producten verplaatst"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15948,7 +15984,10 @@
     "adm.aiImagesConfirm": "AI-afbeeldingen maken voor {n} nieuwe producten? Dit verbruikt credits.",
     "adm.aiImagesProgress": "AI-afbeelding {i} van {n} wordt gemaakt …",
     "adm.iconUseImageDone": "Icoon toegepast",
-    "tile.noImage": "Geen voorbeeldafbeelding"
+    "tile.noImage": "Geen voorbeeldafbeelding",
+    "adm.headingsToSub": "Kopjes omzetten naar subcategorieën",
+    "adm.headingsToSubConfirm": "{cats} subcategorieën maken en {n} producten verplaatsen? De kopjes worden daarna verwijderd.",
+    "adm.headingsToSubDone": "{cats} subcategorieën gemaakt, {n} producten verplaatst"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16636,7 +16675,10 @@
     "adm.aiImagesConfirm": "Für {n} neue Produkte KI-Bilder erzeugen? Dies verbraucht Credits.",
     "adm.aiImagesProgress": "KI-Bild {i} von {n} wird erzeugt …",
     "adm.iconUseImageDone": "Icon übernommen",
-    "tile.noImage": "Kein Vorschaubild vorhanden"
+    "tile.noImage": "Kein Vorschaubild vorhanden",
+    "adm.headingsToSub": "Überschriften in Unterkategorien umwandeln",
+    "adm.headingsToSubConfirm": "{cats} Unterkategorien anlegen und {n} Produkte verschieben? Die Überschriften werden danach entfernt.",
+    "adm.headingsToSubDone": "{cats} Unterkategorien erstellt, {n} Produkte verschoben"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17324,6 +17366,9 @@
     "adm.aiImagesConfirm": "Für {n} neue Produkte KI-Bilder erzeugen? Dies verbraucht Credits.",
     "adm.aiImagesProgress": "KI-Bild {i} von {n} wird erzeugt …",
     "adm.iconUseImageDone": "Icon übernommen",
-    "tile.noImage": "Kein Vorschaubild vorhanden"
+    "tile.noImage": "Kein Vorschaubild vorhanden",
+    "adm.headingsToSub": "Überschriften in Unterkategorien umwandeln",
+    "adm.headingsToSubConfirm": "{cats} Unterkategorien anlegen und {n} Produkte verschieben? Die Überschriften werden danach entfernt.",
+    "adm.headingsToSubDone": "{cats} Unterkategorien erstellt, {n} Produkte verschoben"
   }
 }
