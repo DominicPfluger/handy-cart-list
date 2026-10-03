@@ -5,9 +5,9 @@ Aktuell:
 - Produktname: öffnet den Umbenennen-Dialog.
 
 Änderung (src/routes/abteilungen.tsx):
-- Produktbild öffnet immer die Detailseite (/produkt/$id).
-- Produktname öffnet ebenfalls die Detailseite. Umbenennen bleibt für Admins über den bestehenden Stift/Umbenennen-Zugang erreichbar (kleines Stift-Symbol neben dem Namen, nur für Admins).
-- Der Link „Varianten (n) ▾“ klappt die Variantenliste weiterhin auf und zu.
+- Produktbild öffnet immer die Detailseite (/produkt/$id) — auch bei Produkten mit Varianten.
+- Produktname öffnet ebenfalls die Detailseite. Umbenennen bleibt für Admins über ein kleines Stift-Symbol neben dem Namen erreichbar.
+- Die Variantenliste klappt ausschliesslich über den Link „Varianten (n) ▾" auf und zu.
 - Herz, Blitz und Plus bleiben unverändert.
 
 Prüfung: Im Browser auf Handy und Desktop testen, ob Bild und Name die Detailseite öffnen und der Varianten-Link weiterhin aufklappt.
