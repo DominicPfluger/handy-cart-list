@@ -671,17 +671,21 @@ function DepartmentsPage() {
                     aria-expanded={product.variants.length > 0 ? expandedId === product.id : undefined}
                     onClick={() => {
                       if (suppressClick.current) return;
-                      if (product.variants.length) toggleExpanded(product.id);
-                      else navigate({ to: "/produkt/$id", params: { id: product.id } });
+                      navigate({ to: "/produkt/$id", params: { id: product.id } });
                     }}
                     className={`grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25 ${draggable ? "cursor-grab touch-none" : "cursor-pointer"}`}
                   >
                     <ProductThumb product={product} />
                   </button>
                   <div className="min-w-0 flex-1">
-                    <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} className="inline-flex text-left text-sm font-semibold text-foreground">
-                      <span>{product.name}</span>
+                    <button type="button" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="inline-flex max-w-full text-left text-sm font-semibold text-foreground">
+                      <span className="truncate">{product.name}</span>
                     </button>
+                    {isAdmin && (
+                      <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} title={t("rename.action", { name: product.name })} className="ml-1.5 inline-flex align-middle text-muted-foreground hover:text-foreground">
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                    )}
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
