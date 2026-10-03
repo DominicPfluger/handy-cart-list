@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants } from "@/lib/admin.functions";
+import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants } from "@/lib/admin.functions";
 import { LOCALES, getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
@@ -1046,6 +1046,30 @@ function Editor(p: {
   const [variantInput, setVariantInput] = useState("");
   const [vDrag, setVDrag] = useState<number | null>(null);
   const [vOver, setVOver] = useState<number | null>(null);
+  const suggestFn = useServerFn(suggestVariants);
+  const [askAi, setAskAi] = useState(false);
+  const [aiBusy, setAiBusy] = useState(false);
+  const [aiCount, setAiCount] = useState(10);
+  const [sug, setSug] = useState<string[] | null>(null);
+  const [picked, setPicked] = useState<string[]>([]);
+  const runSuggest = async () => {
+    if (!prod) return;
+    setAskAi(false); setAiBusy(true);
+    try {
+      const r = await suggestFn({ data: { productId: prod.id, count: aiCount } });
+      setSug(r.items); setPicked(r.items);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally { setAiBusy(false); }
+  };
+  const applySug = () => {
+    setVariants((x) => {
+      const next = [...x];
+      for (const s of picked) if (!next.some((y) => y.toLowerCase() === s.toLowerCase())) next.push(s);
+      return next;
+    });
+    setSug(null);
+  };
   const addVariant = (v: string) => {
     const vals = v.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
     setVariants((x) => {
