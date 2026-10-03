@@ -465,33 +465,6 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
     }
   };
 
-  /** KI-Vorschläge für eine Oberkategorie: erst bestätigen, dann Vorschläge zum Abhaken. */
-  const startSuggest = (s: StepRow) => {
-    if (!window.confirm(T("adm.stepSuggestConfirm", { name: s.name }))) return;
-    setBusy(true);
-    const assigned = new Set(assignedFor(s.key).map((r) => r.product_id));
-    const candidates = prods.filter((p) => !assigned.has(p.id)).slice(0, 400).map((p) => ({ id: p.id, name: p.name, path: path(p.department_id) }));
-    suggestStepFn({ data: { step: s.name, template: tplLabel(tplId!), candidates } })
-      .then((r) => { setSuggestStep(s); setSuggestPicks(new Set(r.ids)); })
-      .catch((e) => toast.error((e as Error).message))
-      .finally(() => setBusy(false));
-  };
-  const applySuggest = () => run(async () => {
-    if (!suggestStep || !suggestPicks) return;
-    const s = suggestStep;
-    let max = Math.max(0, ...assignedFor(s.key).map((r) => r.sort_order));
-    const add = [...suggestPicks];
-    if (add.length) {
-      const { error } = await supabase.from("recipe_ingredients").upsert(
-        add.map((product_id) => ({ template_id: tplId!, step_key: s.key, product_id, sort_order: ++max })),
-        { onConflict: "template_id,step_key,product_id" },
-      );
-      if (error) throw new Error(error.message);
-    }
-    setSuggestStep(null);
-    setSuggestPicks(null);
-  });
-
   const assignGroup = (row: Row, id: string | null) => run(async () => {
     const { error } = await supabase.from("recipe_ingredients").update({ group_id: id }).eq("id", row.id);
     if (error) throw new Error(error.message);
@@ -675,7 +648,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
         {templates.map((x) => (
           <button
             key={x.id}
-            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setPickerSearch(""); setSuggestStep(null); setSelRows(new Set()); setBulkGroup(""); }}
+            onClick={() => { setTplId(x.id); setSearch(""); setPickerStep(null); setPickerSearch(""); setSelRows(new Set()); setBulkGroup(""); }}
             aria-pressed={tplId === x.id}
             className={`rounded-full border px-2.5 py-1 text-xs ${tplId === x.id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"} ${x.enabled ? "" : "opacity-50 line-through"}`}
           >
