@@ -108,18 +108,23 @@ export function CatalogTileEditor(p: {
   const moved = useRef(false);
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
+  const [genAllDlg, setGenAllDlg] = useState<{ all: boolean; hint: string; opts: AiImageOpts } | null>(null);
   const generateAllImages = () => {
     const missing = p.products.filter((x) => !x.image_path);
-    let list = missing;
-    if (missing.length === 0) {
-      if (!window.confirm(T("tile.genAllRedo", { n: p.products.length }))) return;
-      list = p.products;
-    } else if (!window.confirm(T("tile.genAllConfirm", { n: missing.length }))) return;
+    setGenAllDlg({ all: missing.length === 0, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS } });
+  };
+  const startGenerateAll = () => {
+    if (!genAllDlg) return;
+    const { all, hint, opts } = genAllDlg;
+    const list = all ? p.products : p.products.filter((x) => !x.image_path);
+    setGenAllDlg(null);
+    if (list.length === 0) return;
+    const h = hint.trim() || undefined;
     void p.run(async () => {
       setImgProg({ done: 0, total: list.length });
       try {
         for (let i = 0; i < list.length; i++) {
-          const result = await genImgAll({ data: { id: list[i]!.id, kind: "product" } });
+          const result = await genImgAll({ data: { id: list[i]!.id, kind: "product", hint: h, opts } });
           await saveProductIconFromPath(list[i]!.id, result.path);
           setImgProg({ done: i + 1, total: list.length });
         }
