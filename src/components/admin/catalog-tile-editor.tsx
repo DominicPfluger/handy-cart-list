@@ -449,9 +449,7 @@ export function CatalogTileEditor(p: {
             <Button size="sm" variant="destructive" onClick={() => {
               const productIds: string[] = []; const productAliasIds: string[] = [];
               for (const id of selected) (id.startsWith("alias:") ? productAliasIds : productIds).push(id.startsWith("alias:") ? id.slice(6) : id);
-              const deptIds: string[] = []; const deptAliasIds: string[] = [];
-              for (const id of selectedDepts) (id.startsWith("alias:") ? deptAliasIds : deptIds).push(id.startsWith("alias:") ? id.slice(6) : id);
-              p.onDeleteSelected!({ productIds, deptIds, productAliasIds, deptAliasIds });
+              p.onDeleteSelected!({ productIds, productAliasIds });
               clearSelection();
             }}>
               <Trash2 className="mr-1 h-3.5 w-3.5" />{T("adm.deleteSelected")}
