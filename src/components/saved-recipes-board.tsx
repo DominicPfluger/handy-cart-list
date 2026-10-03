@@ -32,6 +32,28 @@ function Row({ r, userId, draggable, onOpen }: { r: SavedRecipe; userId: string;
   const [editing, setEditing] = useState(false);
   const [val, setVal] = useState(r.title);
   const rt = templates.find((x) => x.id === r.templateId);
+  const [qtyOpen, setQtyOpen] = useState(false);
+  const [qtyItems, setQtyItems] = useState<RecipeItem[] | null>(null);
+  const [qtyBusy, setQtyBusy] = useState(false);
+
+  const openQty = async () => {
+    setQtyOpen(true);
+    setQtyItems(null);
+    try {
+      const rec = await fetchRecipe(r.recipeId);
+      setQtyItems(rec?.items ?? []);
+    } catch { toast.error(t("cloud.error")); setQtyOpen(false); }
+  };
+  const saveQty = async () => {
+    if (!qtyItems || qtyBusy) return;
+    setQtyBusy(true);
+    try {
+      await updateRecipeItems(r.recipeId, qtyItems);
+      toast.success(t("rs.qtySaved"));
+      setQtyOpen(false);
+    } catch { toast.error(t("cloud.error")); }
+    finally { setQtyBusy(false); }
+  };
 
   const commit = () => { setEditing(false); if (val.trim() && val.trim() !== r.title) void renameSaved(r, val); else setVal(r.title); };
   const remove = async () => {
