@@ -1194,7 +1194,10 @@
     "adm.variantAddHint": "One variant per line …",
     "adm.variantAddDone": "{n} variants added",
     "adm.copyList": "Copy list as text",
-    "adm.copyListTitle": "List “{name}”"
+    "adm.copyListTitle": "List “{name}”",
+    "adm.iconImage": "Icon (small)",
+    "adm.previewImage": "Preview image (large)",
+    "adm.iconAutoHint": "Created automatically from the preview image"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2391,7 +2394,10 @@
     "adm.variantAddHint": "One variant per line …",
     "adm.variantAddDone": "{n} variants added",
     "adm.copyList": "Copy list as text",
-    "adm.copyListTitle": "List “{name}”"
+    "adm.copyListTitle": "List “{name}”",
+    "adm.iconImage": "Icon (small)",
+    "adm.previewImage": "Preview image (large)",
+    "adm.iconAutoHint": "Created automatically from the preview image"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3588,7 +3594,10 @@
     "adm.variantAddHint": "One variant per line …",
     "adm.variantAddDone": "{n} variants added",
     "adm.copyList": "Copy list as text",
-    "adm.copyListTitle": "List “{name}”"
+    "adm.copyListTitle": "List “{name}”",
+    "adm.iconImage": "Icon (small)",
+    "adm.previewImage": "Preview image (large)",
+    "adm.iconAutoHint": "Created automatically from the preview image"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4785,7 +4794,10 @@
     "adm.variantAddHint": "Una variante por línea …",
     "adm.variantAddDone": "{n} variantes añadidas",
     "adm.copyList": "Copiar la lista como texto",
-    "adm.copyListTitle": "Lista «{name}»"
+    "adm.copyListTitle": "Lista «{name}»",
+    "adm.iconImage": "Icono (pequeño)",
+    "adm.previewImage": "Imagen de vista previa (grande)",
+    "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5982,7 +5994,10 @@
     "adm.variantAddHint": "Una variante por línea …",
     "adm.variantAddDone": "{n} variantes agregadas",
     "adm.copyList": "Copiar la lista como texto",
-    "adm.copyListTitle": "Lista «{name}»"
+    "adm.copyListTitle": "Lista «{name}»",
+    "adm.iconImage": "Icono (pequeño)",
+    "adm.previewImage": "Imagen de vista previa (grande)",
+    "adm.iconAutoHint": "Creado automáticamente a partir de la imagen de vista previa"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7179,7 +7194,10 @@
     "adm.variantAddHint": "Une variante par ligne …",
     "adm.variantAddDone": "{n} variantes ajoutées",
     "adm.copyList": "Copier la liste en texte",
-    "adm.copyListTitle": "Liste « {name} »"
+    "adm.copyListTitle": "Liste « {name} »",
+    "adm.iconImage": "Icône (petite)",
+    "adm.previewImage": "Image d’aperçu (grande)",
+    "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8376,7 +8394,10 @@
     "adm.variantAddHint": "Une variante par ligne …",
     "adm.variantAddDone": "{n} variantes ajoutées",
     "adm.copyList": "Copier la liste en texte",
-    "adm.copyListTitle": "Liste « {name} »"
+    "adm.copyListTitle": "Liste « {name} »",
+    "adm.iconImage": "Icône (petite)",
+    "adm.previewImage": "Image d’aperçu (grande)",
+    "adm.iconAutoHint": "Créée automatiquement à partir de l’image d’aperçu"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9573,7 +9594,10 @@
     "adm.variantAddHint": "Una variante per riga …",
     "adm.variantAddDone": "{n} varianti aggiunte",
     "adm.copyList": "Copia la lista come testo",
-    "adm.copyListTitle": "Lista «{name}»"
+    "adm.copyListTitle": "Lista «{name}»",
+    "adm.iconImage": "Icona (piccola)",
+    "adm.previewImage": "Immagine di anteprima (grande)",
+    "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10770,7 +10794,10 @@
     "adm.variantAddHint": "Una variante per riga …",
     "adm.variantAddDone": "{n} varianti aggiunte",
     "adm.copyList": "Copia la lista come testo",
-    "adm.copyListTitle": "Lista «{name}»"
+    "adm.copyListTitle": "Lista «{name}»",
+    "adm.iconImage": "Icona (piccola)",
+    "adm.previewImage": "Immagine di anteprima (grande)",
+    "adm.iconAutoHint": "Creata automaticamente dall’immagine di anteprima"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11967,7 +11994,10 @@
     "adm.variantAddHint": "Uma variante por linha …",
     "adm.variantAddDone": "{n} variantes adicionadas",
     "adm.copyList": "Copiar a lista como texto",
-    "adm.copyListTitle": "Lista «{name}»"
+    "adm.copyListTitle": "Lista «{name}»",
+    "adm.iconImage": "Ícone (pequeno)",
+    "adm.previewImage": "Imagem de pré-visualização (grande)",
+    "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13164,7 +13194,10 @@
     "adm.variantAddHint": "Uma variante por linha …",
     "adm.variantAddDone": "{n} variantes adicionadas",
     "adm.copyList": "Copiar a lista como texto",
-    "adm.copyListTitle": "Lista «{name}»"
+    "adm.copyListTitle": "Lista «{name}»",
+    "adm.iconImage": "Ícone (pequeno)",
+    "adm.previewImage": "Imagem de pré-visualização (grande)",
+    "adm.iconAutoHint": "Criado automaticamente a partir da imagem de pré-visualização"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14361,7 +14394,10 @@
     "adm.variantAddHint": "Eén variant per regel …",
     "adm.variantAddDone": "{n} varianten toegevoegd",
     "adm.copyList": "Lijst als tekst kopiëren",
-    "adm.copyListTitle": "Lijst “{name}”"
+    "adm.copyListTitle": "Lijst “{name}”",
+    "adm.iconImage": "Pictogram (klein)",
+    "adm.previewImage": "Voorbeeldafbeelding (groot)",
+    "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15558,7 +15594,10 @@
     "adm.variantAddHint": "Eén variant per regel …",
     "adm.variantAddDone": "{n} varianten toegevoegd",
     "adm.copyList": "Lijst als tekst kopiëren",
-    "adm.copyListTitle": "Lijst “{name}”"
+    "adm.copyListTitle": "Lijst “{name}”",
+    "adm.iconImage": "Pictogram (klein)",
+    "adm.previewImage": "Voorbeeldafbeelding (groot)",
+    "adm.iconAutoHint": "Automatisch gemaakt van de voorbeeldafbeelding"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16216,7 +16255,10 @@
     "adm.copyList": "Liste als Text kopieren",
     "adm.copyListTitle": "Liste „{name}“",
     "unit.artikel": "Artikel",
-    "unitS.artikel": "Art."
+    "unitS.artikel": "Art.",
+    "adm.iconImage": "Icon (klein)",
+    "adm.previewImage": "Vorschaubild (gross)",
+    "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16874,6 +16916,9 @@
     "adm.copyList": "Liste als Text kopieren",
     "adm.copyListTitle": "Liste „{name}“",
     "unit.artikel": "Artikel",
-    "unitS.artikel": "Art."
+    "unitS.artikel": "Art.",
+    "adm.iconImage": "Icon (klein)",
+    "adm.previewImage": "Vorschaubild (gross)",
+    "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt"
   }
 }
