@@ -36,6 +36,7 @@ import { MemberAvatar } from "../components/member-avatar";
 import { openShareSheet } from "../components/share-sheet";
 import appIcon from "@/assets/splash-logo.png.asset.json";
 import { APP_VERSION } from "../lib/app-version";
+import { InstallAppRow } from "../components/install-app-row";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
@@ -168,6 +169,7 @@ function MorePage() {
           </div>
           <span className="text-muted-foreground">›</span>
         </Link>
+        <InstallAppRow />
         <NotificationSettingsRow />
         <div>
           <button
