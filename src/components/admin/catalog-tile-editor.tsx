@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { getLocale, translate } from "@/i18n";
+import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "./ai-image-options";
 import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
@@ -564,7 +565,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [qty, setQty] = useState(prod?.default_quantity ?? 1);
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [hint, setHint] = useState("");
-  const [imgOpts, setImgOpts] = useState<{ style: "photo" | "illustration"; background: "transparent" | "white" | "gradient"; view: "front" | "top" | "side"; count: "single" | "group" }>({ style: "photo", background: "transparent", view: "front", count: "single" });
+  const [imgOpts, setImgOpts] = useState<AiImageOpts>(DEFAULT_AI_IMAGE_OPTS);
   const [large, setLarge] = useState<string | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null | undefined>(undefined);
   const [imageBusy, setImageBusy] = useState(false);
@@ -909,38 +910,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true, [...picked])}>↻</Button>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <label className="space-y-1 text-xs text-muted-foreground">
-                      <span>{T("tile.aiStyle")}</span>
-                      <select value={imgOpts.style} onChange={(e) => setImgOpts((o) => ({ ...o, style: e.target.value as typeof o.style }))} className="h-9 w-full rounded-xl border border-input bg-background px-2 text-sm text-foreground">
-                        <option value="photo">{T("tile.aiStylePhoto")}</option>
-                        <option value="illustration">{T("tile.aiStyleIllustration")}</option>
-                      </select>
-                    </label>
-                    <label className="space-y-1 text-xs text-muted-foreground">
-                      <span>{T("tile.aiBackground")}</span>
-                      <select value={imgOpts.background} onChange={(e) => setImgOpts((o) => ({ ...o, background: e.target.value as typeof o.background }))} className="h-9 w-full rounded-xl border border-input bg-background px-2 text-sm text-foreground">
-                        <option value="transparent">{T("tile.aiBgTransparent")}</option>
-                        <option value="white">{T("tile.aiBgWhite")}</option>
-                        <option value="gradient">{T("tile.aiBgGradient")}</option>
-                      </select>
-                    </label>
-                    <label className="space-y-1 text-xs text-muted-foreground">
-                      <span>{T("tile.aiView")}</span>
-                      <select value={imgOpts.view} onChange={(e) => setImgOpts((o) => ({ ...o, view: e.target.value as typeof o.view }))} className="h-9 w-full rounded-xl border border-input bg-background px-2 text-sm text-foreground">
-                        <option value="front">{T("tile.aiViewFront")}</option>
-                        <option value="top">{T("tile.aiViewTop")}</option>
-                        <option value="side">{T("tile.aiViewSide")}</option>
-                      </select>
-                    </label>
-                    <label className="space-y-1 text-xs text-muted-foreground">
-                      <span>{T("tile.aiCount")}</span>
-                      <select value={imgOpts.count} onChange={(e) => setImgOpts((o) => ({ ...o, count: e.target.value as typeof o.count }))} className="h-9 w-full rounded-xl border border-input bg-background px-2 text-sm text-foreground">
-                        <option value="single">{T("tile.aiCountSingle")}</option>
-                        <option value="group">{T("tile.aiCountGroup")}</option>
-                      </select>
-                    </label>
-                  </div>
+                  <AiImageOptionSelects value={imgOpts} onChange={setImgOpts} />
                 </div>
               </details>
               {isDept && effId && pickList.length > 0 && (
