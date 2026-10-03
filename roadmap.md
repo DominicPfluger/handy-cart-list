@@ -1,11 +1,11 @@
 # Roadmap
 
 ## Offen
-- [ ] Favorisierte Produktvarianten in der richtigen Kategorie anzeigen und Varianten bei Listenübernahme erhalten; Browser prüfen.
 - [ ] DB-Security-Hinweise (10 ältere, vorher vorhanden) separat beheben — auf Nutzer-Entscheid wartend
 - [ ] Browser-Tests nachholen: recipe-traits-admin, Varianten-Auswahl
 
 ## Erledigt (Auswahl)
+- [x] Favorisierte Produktvarianten in der passenden Kategorie anzeigen; Schnell-Hinzufügen, Mengen-Dialog und neue Liste erhalten die Variante (Browser-geprüft).
 - [x] Marktwahl in „Mehr“ steuert Produkt-Sichtbarkeit, Marktreihenfolge und Marken unabhängig von der Sprache; DE/CH/Automatisch und Marken in der Produktdetailseite im Browser geprüft. Aktuell sind noch keine marktspezifischen Produkte oder Sortierungen hinterlegt.
 - [x] Eigene Varianten nur in der Produktdetailansicht anlegen; in der Abteilungsansicht weiterhin verwenden. Anlegen, Dublettenprüfung, Schnell-Hinzufügen und Entfernen auf Handy und Desktop geprüft; Admin-Werkzeuge bleiben getrennt.
 - [x] Eigene Produktvarianten pro Gerät speichern, suchen, favorisieren, zur Liste hinzufügen und entfernen (Desktop/Mobil Browser-getestet).
