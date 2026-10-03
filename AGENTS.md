@@ -28,3 +28,4 @@
 - Small catalog and list icons share a device-local image/symbol preference; full product photos remain unchanged. Why: one visual choice should apply consistently without changing shared catalog data.
 - Displayed catalog icons use bounded device CacheStorage keyed by stable image path, with symbol fallback; expiring signed links only authorize cache misses. Why: image links rotate while artwork should download once per device.
 - Vorlagen in "Listen bearbeiten" sind per Drag & Drop sortierbar (reorderTemplates, sort_order auf shopping_lists). Why: gleiche Bedienung wie bei Listen.
+- Produktanlage im Admin bietet bei Abteilungen mit Überschriften eine Positions-Auswahl; neue Produkte werden am Gruppenende der gewählten Überschrift eingereiht und bestehende sort_order-Werte verschoben. Why: gezieltes Einordnen ohne nachträgliches Ziehen.
