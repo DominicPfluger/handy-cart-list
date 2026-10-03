@@ -453,6 +453,36 @@ function AdminPage() {
     }, T("adm.sorted", { label }));
   };
 
+  /** Nur die Einträge unterhalb einer Überschrift nach dem gewählten Kriterium sortieren. */
+  const sortHeadingGroup = (headingId: string) => {
+    const h = headings.find((x) => x.id === headingId);
+    if (!h || products.length < 2) return;
+    const c = sortBy;
+    const label = T(`adm.crit.${c}` as MessageKey);
+    if (!confirm(T("adm.sortConfirm", { label }))) return;
+    const anchors = new Set(headings.map((x) => x.before_product_id));
+    const start = products.findIndex((p) => p.id === h.before_product_id);
+    if (start < 0) return;
+    let end = products.length;
+    for (let i = start + 1; i < products.length; i++) if (anchors.has(products[i]!.id)) { end = i; break; }
+    const group = products.slice(start, end);
+    if (group.length < 2) return;
+    run(async () => {
+      let orderedGroup: typeof group;
+      if (c === "alphabetical") {
+        orderedGroup = [...group].sort((a, b) => a.name.localeCompare(b.name, "de"));
+      } else {
+        const r = await rank({ data: { path: pathText(), criterion: c === "marketRelevance" ? "popularity" : c, groups: [group.map((p) => p.name)], ...(mk ? { market: mk } : {}) } });
+        const pool = [...group];
+        orderedGroup = r.groups[0]!.map((n) => pool.splice(pool.findIndex((p) => p.name === n), 1)[0]!).concat(pool);
+      }
+      await saveOrder([...products.slice(0, start), ...orderedGroup, ...products.slice(end)]);
+      if (mk) return;
+      const first = orderedGroup[0]!;
+      if (first.id !== h.before_product_id) await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: first.id } });
+    }, T("adm.sorted", { label }));
+  };
+
   /** Überschriften der aktuellen Abteilung in Unterkategorien umwandeln; Produkte darunter werden verschoben. */
   const headingsToSubcategories = () => {
     if (!cur || !d) return;
