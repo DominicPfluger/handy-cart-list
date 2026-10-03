@@ -8,7 +8,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { getLocale, translate } from "@/i18n";
 import { useServerFn } from "@tanstack/react-start";
-import { sortRecipeIngredients, saveRecipeGroup, deleteRecipeGroup, suggestRecipeStepProducts } from "@/lib/admin.functions";
+import { sortRecipeIngredients, saveRecipeGroup, deleteRecipeGroup } from "@/lib/admin.functions";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -428,9 +428,6 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
   const [dragRow, setDragRow] = useState<string | null>(null);
   const [dropAt, setDropAt] = useState<{ id: string; pos: "top" | "bottom" } | null>(null);
   const sortFn = useServerFn(sortRecipeIngredients);
-  const suggestStepFn = useServerFn(suggestRecipeStepProducts);
-  const [suggestStep, setSuggestStep] = useState<StepRow | null>(null);
-  const [suggestPicks, setSuggestPicks] = useState<Set<string> | null>(null);
   const [selRows, setSelRows] = useState<Set<string>>(new Set());
   const [bulkGroup, setBulkGroup] = useState("");
 
