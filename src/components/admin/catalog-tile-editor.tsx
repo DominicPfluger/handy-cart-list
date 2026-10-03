@@ -16,7 +16,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -94,6 +94,7 @@ export function CatalogTileEditor(p: {
   const [prodAliasSearch, setProdAliasSearch] = useState("");
   const [zoom, setZoom] = useState<string | null>(null);
   const [suggesting, setSuggesting] = useState(false);
+  const [variantAdd, setVariantAdd] = useState<TileProd | null>(null);
   const moved = useRef(false);
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
@@ -424,6 +425,9 @@ export function CatalogTileEditor(p: {
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   <Pencil className="h-3.5 w-3.5" />
                 </Button>
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.variantAdd")} title={T("adm.variantAdd")} onClick={() => setVariantAdd(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                  <Tags className="h-3.5 w-3.5" />
+                </Button>
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
@@ -441,6 +445,8 @@ export function CatalogTileEditor(p: {
       {p.below}
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
+
+      {variantAdd && <VariantAddDialog prod={variantAdd} run={p.run} must={p.must} nm={p.nm} onClose={() => setVariantAdd(null)} />}
 
       {headMove && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setHeadMove(null)}>
@@ -1111,6 +1117,48 @@ function SuggestSheet(p: Parameters<typeof CatalogTileEditor>[0] & { cur: string
         {items && items.length > 0 && (
           <Button className="w-full" disabled={sel.size === 0} onClick={create}>{T("tile.suggestCreate", { n: sel.size })}</Button>
         )}
+      </div>
+    </div>
+  );
+}
+
+function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>, ok?: string) => Promise<void>; must: (q: PromiseLike<{ error: { message: string } | null }>) => Promise<void>; nm: (id: string, base: string) => string; onClose: () => void }) {
+  const [text, setText] = useState("");
+  const [busy, setBusy] = useState(false);
+  const trVariants = useServerFn(translateVariants);
+  const existing = p.prod.variants ?? [];
+  const add = async () => {
+    if (busy) return;
+    const vals = text.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
+    const next = [...existing];
+    let added = 0;
+    for (const v of vals) {
+      if (!next.some((y) => y.toLowerCase() === v.toLowerCase())) { next.push(v); added++; }
+    }
+    if (!added) { p.onClose(); return; }
+    setBusy(true);
+    await p.run(async () => {
+      await p.must(supabase.from("products").update({ variants: next }).eq("id", p.prod.id));
+      void trVariants({ data: { productId: p.prod.id } }).catch(() => {});
+    }, T("adm.variantAddDone", { n: added }));
+    setBusy(false);
+    p.onClose();
+  };
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={p.onClose}>
+      <div className="flex w-full max-w-sm flex-col gap-3 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+        <p className="text-sm font-bold text-foreground">{T("adm.variantAddTitle", { name: p.nm(p.prod.id, p.prod.name) })}</p>
+        {existing.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {existing.map((v) => <span key={v} className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">{v}</span>)}
+          </div>
+        )}
+        <textarea autoFocus value={text} onChange={(e) => setText(e.target.value)} rows={4} placeholder={T("adm.variantAddHint")}
+          className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm" />
+        <div className="flex gap-2">
+          <Button variant="outline" className="flex-1" onClick={p.onClose}>{T("adm.cancel")}</Button>
+          <Button className="flex-1" disabled={busy || !text.trim()} onClick={() => void add()}>{busy ? T("adm.working") : T("adm.variantAdd")}</Button>
+        </div>
       </div>
     </div>
   );

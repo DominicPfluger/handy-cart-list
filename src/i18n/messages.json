@@ -1187,7 +1187,11 @@
     "adm.variantImageUpload": "Upload image",
     "adm.variantImageRemove": "Delete image",
     "adm.variantImageSaved": "Variant image saved",
-    "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits."
+    "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits.",
+    "adm.variantAdd": "Add variant",
+    "adm.variantAddTitle": "Variants for \"{name}\"",
+    "adm.variantAddHint": "One variant per line …",
+    "adm.variantAddDone": "{n} variants added"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2377,7 +2381,11 @@
     "adm.variantImageUpload": "Upload image",
     "adm.variantImageRemove": "Delete image",
     "adm.variantImageSaved": "Variant image saved",
-    "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits."
+    "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits.",
+    "adm.variantAdd": "Add variant",
+    "adm.variantAddTitle": "Variants for \"{name}\"",
+    "adm.variantAddHint": "One variant per line …",
+    "adm.variantAddDone": "{n} variants added"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3567,7 +3575,11 @@
     "adm.variantImageUpload": "Upload image",
     "adm.variantImageRemove": "Delete image",
     "adm.variantImageSaved": "Variant image saved",
-    "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits."
+    "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits.",
+    "adm.variantAdd": "Add variant",
+    "adm.variantAddTitle": "Variants for \"{name}\"",
+    "adm.variantAddHint": "One variant per line …",
+    "adm.variantAddDone": "{n} variants added"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4757,7 +4769,11 @@
     "adm.variantImageUpload": "Subir imagen",
     "adm.variantImageRemove": "Eliminar imagen",
     "adm.variantImageSaved": "Imagen de variante guardada",
-    "adm.variantImageAiConfirm": "¿Generar imagen IA para «{name}»? Consume créditos."
+    "adm.variantImageAiConfirm": "¿Generar imagen IA para «{name}»? Consume créditos.",
+    "adm.variantAdd": "Añadir variante",
+    "adm.variantAddTitle": "Variantes de «{name}»",
+    "adm.variantAddHint": "Una variante por línea …",
+    "adm.variantAddDone": "{n} variantes añadidas"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5947,7 +5963,11 @@
     "adm.variantImageUpload": "Subir imagen",
     "adm.variantImageRemove": "Eliminar imagen",
     "adm.variantImageSaved": "Imagen de variante guardada",
-    "adm.variantImageAiConfirm": "¿Generar imagen IA para «{name}»? Consume créditos."
+    "adm.variantImageAiConfirm": "¿Generar imagen IA para «{name}»? Consume créditos.",
+    "adm.variantAdd": "Agregar variante",
+    "adm.variantAddTitle": "Variantes de «{name}»",
+    "adm.variantAddHint": "Una variante por línea …",
+    "adm.variantAddDone": "{n} variantes agregadas"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7137,7 +7157,11 @@
     "adm.variantImageUpload": "Téléverser une image",
     "adm.variantImageRemove": "Supprimer l’image",
     "adm.variantImageSaved": "Image de variante enregistrée",
-    "adm.variantImageAiConfirm": "Générer une image IA pour « {name} » ? Cela consomme des crédits."
+    "adm.variantImageAiConfirm": "Générer une image IA pour « {name} » ? Cela consomme des crédits.",
+    "adm.variantAdd": "Ajouter une variante",
+    "adm.variantAddTitle": "Variantes de « {name} »",
+    "adm.variantAddHint": "Une variante par ligne …",
+    "adm.variantAddDone": "{n} variantes ajoutées"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8327,7 +8351,11 @@
     "adm.variantImageUpload": "Téléverser une image",
     "adm.variantImageRemove": "Supprimer l’image",
     "adm.variantImageSaved": "Image de variante enregistrée",
-    "adm.variantImageAiConfirm": "Générer une image IA pour « {name} » ? Cela consomme des crédits."
+    "adm.variantImageAiConfirm": "Générer une image IA pour « {name} » ? Cela consomme des crédits.",
+    "adm.variantAdd": "Ajouter une variante",
+    "adm.variantAddTitle": "Variantes de « {name} »",
+    "adm.variantAddHint": "Une variante par ligne …",
+    "adm.variantAddDone": "{n} variantes ajoutées"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9517,7 +9545,11 @@
     "adm.variantImageUpload": "Carica immagine",
     "adm.variantImageRemove": "Elimina immagine",
     "adm.variantImageSaved": "Immagine variante salvata",
-    "adm.variantImageAiConfirm": "Generare un'immagine IA per «{name}»? Consuma crediti."
+    "adm.variantImageAiConfirm": "Generare un'immagine IA per «{name}»? Consuma crediti.",
+    "adm.variantAdd": "Aggiungi variante",
+    "adm.variantAddTitle": "Varianti di «{name}»",
+    "adm.variantAddHint": "Una variante per riga …",
+    "adm.variantAddDone": "{n} varianti aggiunte"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10707,7 +10739,11 @@
     "adm.variantImageUpload": "Carica immagine",
     "adm.variantImageRemove": "Elimina immagine",
     "adm.variantImageSaved": "Immagine variante salvata",
-    "adm.variantImageAiConfirm": "Generare un'immagine IA per «{name}»? Consuma crediti."
+    "adm.variantImageAiConfirm": "Generare un'immagine IA per «{name}»? Consuma crediti.",
+    "adm.variantAdd": "Aggiungi variante",
+    "adm.variantAddTitle": "Varianti di «{name}»",
+    "adm.variantAddHint": "Una variante per riga …",
+    "adm.variantAddDone": "{n} varianti aggiunte"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -11897,7 +11933,11 @@
     "adm.variantImageUpload": "Carregar imagem",
     "adm.variantImageRemove": "Eliminar imagem",
     "adm.variantImageSaved": "Imagem da variante guardada",
-    "adm.variantImageAiConfirm": "Gerar imagem IA para «{name}»? Isto consome créditos."
+    "adm.variantImageAiConfirm": "Gerar imagem IA para «{name}»? Isto consome créditos.",
+    "adm.variantAdd": "Adicionar variante",
+    "adm.variantAddTitle": "Variantes de «{name}»",
+    "adm.variantAddHint": "Uma variante por linha …",
+    "adm.variantAddDone": "{n} variantes adicionadas"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13087,7 +13127,11 @@
     "adm.variantImageUpload": "Carregar imagem",
     "adm.variantImageRemove": "Eliminar imagem",
     "adm.variantImageSaved": "Imagem da variante guardada",
-    "adm.variantImageAiConfirm": "Gerar imagem IA para «{name}»? Isto consome créditos."
+    "adm.variantImageAiConfirm": "Gerar imagem IA para «{name}»? Isto consome créditos.",
+    "adm.variantAdd": "Adicionar variante",
+    "adm.variantAddTitle": "Variantes de «{name}»",
+    "adm.variantAddHint": "Uma variante por linha …",
+    "adm.variantAddDone": "{n} variantes adicionadas"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14277,7 +14321,11 @@
     "adm.variantImageUpload": "Afbeelding uploaden",
     "adm.variantImageRemove": "Afbeelding verwijderen",
     "adm.variantImageSaved": "Variantafbeelding opgeslagen",
-    "adm.variantImageAiConfirm": "AI-afbeelding maken voor „{name}”? Dit kost credits."
+    "adm.variantImageAiConfirm": "AI-afbeelding maken voor „{name}”? Dit kost credits.",
+    "adm.variantAdd": "Variant toevoegen",
+    "adm.variantAddTitle": "Varianten voor „{name}“",
+    "adm.variantAddHint": "Eén variant per regel …",
+    "adm.variantAddDone": "{n} varianten toegevoegd"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15467,7 +15515,11 @@
     "adm.variantImageUpload": "Afbeelding uploaden",
     "adm.variantImageRemove": "Afbeelding verwijderen",
     "adm.variantImageSaved": "Variantafbeelding opgeslagen",
-    "adm.variantImageAiConfirm": "AI-afbeelding maken voor „{name}”? Dit kost credits."
+    "adm.variantImageAiConfirm": "AI-afbeelding maken voor „{name}”? Dit kost credits.",
+    "adm.variantAdd": "Variant toevoegen",
+    "adm.variantAddTitle": "Varianten voor „{name}“",
+    "adm.variantAddHint": "Eén variant per regel …",
+    "adm.variantAddDone": "{n} varianten toegevoegd"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16118,7 +16170,11 @@
     "adm.variantImageUpload": "Bild hochladen",
     "adm.variantImageRemove": "Bild löschen",
     "adm.variantImageSaved": "Variantenbild gespeichert",
-    "adm.variantImageAiConfirm": "KI-Bild für „{name}“ erzeugen? Dies verbraucht Credits."
+    "adm.variantImageAiConfirm": "KI-Bild für „{name}“ erzeugen? Dies verbraucht Credits.",
+    "adm.variantAdd": "Variante hinzufügen",
+    "adm.variantAddTitle": "Varianten für „{name}“",
+    "adm.variantAddHint": "Eine Variante pro Zeile …",
+    "adm.variantAddDone": "{n} Varianten hinzugefügt"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16769,6 +16825,10 @@
     "adm.variantImageUpload": "Bild hochladen",
     "adm.variantImageRemove": "Bild löschen",
     "adm.variantImageSaved": "Variantenbild gespeichert",
-    "adm.variantImageAiConfirm": "KI-Bild für „{name}“ erzeugen? Dies verbraucht Credits."
+    "adm.variantImageAiConfirm": "KI-Bild für „{name}“ erzeugen? Dies verbraucht Credits.",
+    "adm.variantAdd": "Variante hinzufügen",
+    "adm.variantAddTitle": "Varianten für „{name}“",
+    "adm.variantAddHint": "Eine Variante pro Zeile …",
+    "adm.variantAddDone": "{n} Varianten hinzugefügt"
   }
 }
