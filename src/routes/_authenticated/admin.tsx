@@ -869,7 +869,7 @@ type Suggestion = { name: string; emoji: string; reason: string; scope: "global"
 function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path, deptOptions, curDept, headings = [], products = [] }: {
   onSubmit: (names: string[], emoji: string, qty: number, unit: string, mkOnly: Set<string>, pos: string, deptId: string, ai?: { hint: string; opts: AiImageOpts }) => void; onCancel: () => void;
   onSuggest: (typed: string[], mode: "web" | "ai", count: number) => Promise<Suggestion[]>; autoSuggest?: boolean; market?: string; path?: string;
-  deptOptions: { id: string; label: string }[]; curDept?: string;
+  deptOptions: { id: string; label: string }[]; curDept?: string | undefined;
   headings?: Head[]; products?: { id: string }[];
 }) {
   const [pos, setPos] = useState("end");
