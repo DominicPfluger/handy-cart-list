@@ -905,6 +905,8 @@ export const de = {
   "adm.selectRow": "Zeile auswählen",
   "adm.copyList": "Liste als Text kopieren",
   "adm.copyListTitle": "Liste „{name}“",
+  "adm.copyCatalog": "Katalog als Text kopieren",
+  "adm.copyCatalogTitle": "Gesamter Katalog",
   "adm.selectNone": "Keine auswählen",
   "adm.topLevel": "Oberste Ebene",
   "adm.save": "Speichern",
