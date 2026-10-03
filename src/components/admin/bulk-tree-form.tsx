@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { t as T } from "@/i18n";
+import { getLocale, translate } from "@/i18n";
+import type { MessageKey } from "@/i18n/de";
+const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
 export type TreeBlock = { name: string; items: string[] };
 
