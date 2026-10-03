@@ -813,8 +813,20 @@ function BulkAddForm({ onSubmit, onCancel, onSuggest, autoSuggest, market, path,
         <UnitSelect value={unit} onChange={setUnit} />
       </div>
       <p className="text-xs text-muted-foreground">{T("adm.detected", { n: names.length })}</p>
+      {headings.length > 0 && (
+        <label className="flex items-center gap-2 text-sm">
+          <span className="shrink-0 text-muted-foreground">{T("adm.posLabel")}</span>
+          <select value={pos} onChange={(e) => setPos(e.target.value)} className="h-9 min-w-0 flex-1 rounded-lg border border-input bg-background px-2 text-sm">
+            <option value="end">{T("adm.posEnd")}</option>
+            <option value="top">{T("adm.posTop")}</option>
+            {headings.map((h) => (
+              <option key={h.id} value={h.id}>{T("adm.posUnder", { name: h.name })}</option>
+            ))}
+          </select>
+        </label>
+      )}
       <div className="flex gap-2">
-        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit, mkOnly)}>
+        <Button className="flex-1" disabled={names.length === 0} onClick={() => onSubmit(names, emoji, Number(qty.replace(",", ".")) || 1, unit, mkOnly, pos)}>
           {T("adm.createN", { n: names.length })}
         </Button>
         <Button variant="ghost" onClick={onCancel}>{T("adm.cancel")}</Button>
