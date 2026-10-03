@@ -40,3 +40,5 @@
 - [x] Browser-Auth-Fix für Tests: Session-JSON muss doppelt kodiert in localStorage geschrieben werden
 
 - [x] Admin-Tabs: Märkte direkt neben Sprachen eingeordnet
+
+- [x] Admin-Katalog: Schnell-KI-Bild-Knopf (✨) pro Produktzeile mit Credits-Bestätigung, Ladezustand, Icon-Komprimierung
