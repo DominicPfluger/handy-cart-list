@@ -627,7 +627,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 <span className="mt-0.5 flex flex-wrap gap-1">
                   {sel0.map((id) => {
                     const p = id.startsWith("any:") ? anyProduct(s) : s.products.find((x) => x.id === id);
-                    return p ? <span key={id} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-foreground">{p.emoji} {p.name}</span> : null;
+                    return p ? <span key={id} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-foreground">{p.emoji} {p.name}{variants[id] && p.variants?.includes(variants[id]!) ? ` · ${vName(p, variants[id]!)}` : ""}</span> : null;
                   })}
                 </span>
               )}
