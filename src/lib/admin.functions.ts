@@ -758,3 +758,122 @@ export const mergeProducts = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { merged: src.name as string };
   });
+
+// ============= Sicherung vor Massenänderungen =============
+
+type BackupGroup = { table: string; filterColumn: string; filterIds: string[]; rows: unknown[] };
+type BackupPayload = { deletes?: BackupGroup[]; created?: { table: string; ids: string[] }[] };
+
+/** Vor einer Massenlöschung die betroffenen Zeilen sichern (null = nichts zu löschen). */
+export const createBulkBackup = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({
+      label: z.string().min(1).max(200),
+      deletes: z.array(z.object({
+        table: z.string().min(1).max(64),
+        filterColumn: z.string().min(1).max(64),
+        filterIds: z.array(z.string().uuid()).min(1).max(500),
+      })).max(10),
+    }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    const deletes: BackupGroup[] = [];
+    for (const g of data.deletes) {
+      const { data: rows, error } = await sb.from(g.table).select("*").in(g.filterColumn, g.filterIds);
+      if (error) throw new Error(error.message);
+      if (rows?.length) deletes.push({ table: g.table, filterColumn: g.filterColumn, filterIds: g.filterIds, rows });
+    }
+    if (!deletes.length) return null;
+    const { data: row, error } = await sb
+      .from("admin_backups")
+      .insert({ user_id: context.userId, label: data.label, payload: { deletes } })
+      .select("id")
+      .single();
+    if (error) throw new Error(error.message);
+    return (row as { id: string }).id;
+  });
+
+/** Sicherungspunkt zurücknehmen: gelöschte Zeilen wiederherstellen, neu angelegte entfernen. */
+export const undoBulkBackup = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    const { data: row, error } = await sb.from("admin_backups").select("payload").eq("id", data.id).single();
+    if (error) throw new Error(error.message);
+    const payload = ((row as { payload: BackupPayload } | null)?.payload ?? {}) as BackupPayload;
+    // Neu angelegte Einträge entfernen (Produkte inkl. ihrer Übersetzungen)
+    for (const c of payload.created ?? []) {
+      if (c.table === "products") await sb.from("catalog_translations").delete().in("entity_id", c.ids);
+      const { error: e } = await sb.from(c.table).delete().in("id", c.ids);
+      if (e) throw new Error(e.message);
+    }
+    // Gelöschte Originalzeilen wiederherstellen
+    for (const g of payload.deletes ?? []) {
+      if (!g.rows?.length) continue;
+      await sb.from(g.table).delete().in(g.filterColumn, g.filterIds);
+      const { error: e } = await sb.from(g.table).insert(g.rows);
+      if (e) throw new Error(e.message);
+    }
+    const { error: delErr } = await sb.from("admin_backups").delete().eq("id", data.id);
+    if (delErr) throw new Error(delErr.message);
+    return { ok: true };
+  });
+
+// ============= Marktdaten importieren =============
+
+/** Marktpreise, Reihenfolge und Sichtbarkeit je Markt aus eingefügten Zeilen übernehmen. */
+export const importMarketData = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({
+      market: z.string().length(2),
+      currency: z.string().min(1).max(8),
+      rows: z.array(z.object({
+        productId: z.string().uuid(),
+        price: z.number().positive().nullable(),
+        sortOrder: z.number().int().min(0).max(9999).nullable(),
+        hidden: z.boolean(),
+      })).min(1).max(1000),
+    }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    let prices = 0, orders = 0, hidden = 0, shown = 0;
+    for (const r of data.rows) {
+      if (r.price != null) {
+        const { error } = await sb.from("product_reference_prices").upsert(
+          { product_id: r.productId, market: data.market, price: r.price, currency: data.currency, observed_at: new Date().toISOString() },
+          { onConflict: "product_id,market" },
+        );
+        if (error) throw new Error(error.message);
+        prices++;
+      }
+      if (r.sortOrder != null) {
+        const { error } = await sb.from("product_market_order").upsert(
+          { product_id: r.productId, market: data.market, sort_order: r.sortOrder },
+          { onConflict: "product_id,market" },
+        );
+        if (error) throw new Error(error.message);
+        orders++;
+      }
+      if (r.hidden) {
+        const { error } = await sb.from("product_market_exclusions").upsert(
+          { product_id: r.productId, market: data.market },
+          { onConflict: "product_id,market", ignoreDuplicates: true },
+        );
+        if (error) throw new Error(error.message);
+        hidden++;
+      } else {
+        const { error } = await sb.from("product_market_exclusions").delete().eq("product_id", r.productId).eq("market", data.market);
+        if (error) throw new Error(error.message);
+        shown++;
+      }
+    }
+    return { prices, orders, hidden, shown };
+  });
