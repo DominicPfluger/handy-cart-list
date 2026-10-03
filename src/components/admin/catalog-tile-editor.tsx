@@ -72,6 +72,8 @@ export function CatalogTileEditor(p: {
   onAssignHeading?: (productId: string, headingId: string) => void;
   onRenameHeading?: (id: string, name: string) => void;
   onDeleteHeading?: (id: string, name: string) => void;
+  /** Einträge unterhalb dieser Überschrift nach dem gewählten Kriterium sortieren. */
+  onSortHeading?: (id: string) => void;
   onBulkAdd?: (() => void) | undefined;
   /** Überschriften der Abteilung in Unterkategorien umwandeln (nur wenn möglich). */
   onHeadingsToSub?: (() => void) | undefined;
@@ -422,6 +424,10 @@ export function CatalogTileEditor(p: {
                   <button type="button" disabled={!editMode}
                     onClick={click(() => { const n = window.prompt(T("adm.heading"), h.name)?.trim(); if (n && n !== h.name) p.onRenameHeading?.(h.id, n); })}
                     className="min-w-0 flex-1 truncate text-left text-sm font-bold text-foreground">{p.nm(h.id, h.name)}</button>
+                  {editMode && p.onSortHeading && (
+                    <button type="button" onClick={() => p.onSortHeading!(h.id)} aria-label={T("adm.sortGroup")} title={T("adm.sortGroup")}
+                      className="rounded-full px-1.5 text-sm text-muted-foreground">↕</button>
+                  )}
                   {editMode && (
                     <button type="button" onClick={() => p.onDeleteHeading?.(h.id, h.name)} aria-label={T("adm.delete")}
                       className="rounded-full px-2 text-xs text-muted-foreground">✕</button>
