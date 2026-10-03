@@ -55,3 +55,4 @@
 - [x] Abteilungsansicht: kein grosses Vorschaubild mehr über der aufgeklappten Variantenliste (2026-10-03)
 - [x] Icon-Bild wie Vorschaubild repariert
 - [x] KI-Bilder beim Anlegen neuer Produkte
+- [x] Produkt-Bilddialog vollständig scrollbar; eigene KI-Stichworte und Optionen für das kleine Icon, unabhängig vom grossen Vorschaubild (Desktop und Mobilgerät geprüft; KI-Icon-Erzeugung geprüft).
