@@ -110,6 +110,7 @@ function AdminPage() {
   const q = useQuery({ queryKey: ["admin-catalog"], queryFn: loadAll, enabled: Boolean(admin.data?.isAdmin) });
   const [cur, setCur] = useState<string | null>(null);
   const [sel, setSel] = useState<Sel>(null);
+  const [imageEditor, setImageEditor] = useState<{ kind: "product"; id: string } | null>(null);
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
@@ -632,6 +633,7 @@ function AdminPage() {
       ) : d ? (
         <>
           <CatalogTileEditor depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={children} products={products}
+            imageEditor={imageEditor} imageEditorProduct={imageEditor ? d.prods.find((x) => x.id === imageEditor.id) : undefined} onCloseImageEditor={() => setImageEditor(null)}
             path={path(cur)} nm={nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
             reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
             busy={busy}
@@ -670,6 +672,7 @@ function AdminPage() {
       {sel && d && (
         <Editor key={sel.kind + sel.id} sel={sel} name={selName} data={d} products={(d.prods).filter((p) => p.department_id === (sel.kind === "heading" ? d.heads.find((h) => h.id === sel.id)?.department_id : undefined))}
           busy={busy} onClose={() => setSel(null)} onDelete={() => remove(sel, selName)}
+          onEditImage={() => { if (sel.kind === "product") { setSearch(""); setTab("catalog"); setImageEditor({ kind: "product", id: sel.id }); } }}
           onSave={(patch) => run(async () => {
             if (sel.kind === "heading") {
               const h = d.heads.find((x) => x.id === sel.id)!;
@@ -897,6 +900,7 @@ function Editor(p: {
   onClose: () => void; onDelete: () => void; onSave: (patch: Patch) => void;
   onTr: (locale: string, v: string, prev?: string) => void; onRetranslate: () => void;
   onImageChanged: () => void;
+  onEditImage: () => void;
 }) {
   const { sel, data } = p;
   const dept = sel.kind === "department" ? data.depts.find((x) => x.id === sel.id) : undefined;
@@ -961,14 +965,12 @@ function Editor(p: {
             {p.deptOptions.filter((o) => o.id !== sel.id).map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
           </select>
         )}
-        {prod && prodImgUrl && (
-          <div className="flex items-center gap-3">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background">
-              <ZoomableImage src={prodImgUrl} className="h-full w-full object-contain" />
-            </div>
-            <p className="text-[11px] text-muted-foreground">{T("adm.imgDblHint")}</p>
-          </div>
-        )}
+        {prod && <div className="flex flex-wrap items-center gap-3">
+          {prodImgUrl && <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background">
+            <ZoomableImage src={prodImgUrl} className="h-full w-full object-contain" />
+          </div>}
+          <Button type="button" variant="outline" onClick={p.onEditImage}>🖼️ {T("adm.previewImage")}</Button>
+        </div>}
         {prod && (
           <div className="grid grid-cols-2 gap-2">
             <Input inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} />

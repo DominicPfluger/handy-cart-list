@@ -138,6 +138,7 @@ export const generateImageFor = createServerFn({ method: "POST" })
     z.object({
       id: z.string().uuid(),
       kind: z.enum(["product", "department"]).default("product"),
+      iconOnly: z.boolean().optional(),
       hint: z.string().max(300).optional(),
       opts: z.object({
         style: z.enum(["photo", "illustration"]).optional(),
@@ -156,13 +157,15 @@ export const generateImageFor = createServerFn({ method: "POST" })
     if (error || !p) throw new Error(data.kind === "department" ? "Kategorie nicht gefunden" : "Produkt nicht gefunden");
     const bytes = await generateProductImage(p.name, p.emoji, data.hint, data.opts);
     // A new path makes the replacement visible immediately, even with cached signed URLs.
-    const path = `${table}/${p.id}-${crypto.randomUUID()}.webp`;
+    const path = `${data.iconOnly ? "icons" : table}/${p.id}-${crypto.randomUUID()}.webp`;
     const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
     if (up.error) throw new Error(up.error.message);
-    const upd = data.kind === "product"
-      ? await context.supabase.from("products").update({ image_path: path, icon_path: null }).eq("id", p.id)
-      : await context.supabase.from("departments").update({ image_path: path }).eq("id", p.id);
-    if (upd.error) throw new Error(upd.error.message);
+    if (!data.iconOnly) {
+      const upd = data.kind === "product"
+        ? await context.supabase.from("products").update({ image_path: path, icon_path: null }).eq("id", p.id)
+        : await context.supabase.from("departments").update({ image_path: path }).eq("id", p.id);
+      if (upd.error) throw new Error(upd.error.message);
+    }
     return { path };
   });
 
