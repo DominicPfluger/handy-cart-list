@@ -744,6 +744,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                     <option value="">{T("adm.recipeSortBy")}</option>
                     <option value="popularity">{T("adm.recipeSortPopularity")}</option>
                     <option value="relevance">{T("adm.recipeSortRelevance")}</option>
+                    <option value="alpha">{T("adm.recipeSortAlpha")}</option>
                   </select>
                 )}
                 {assigned.length > 0 && (() => {
