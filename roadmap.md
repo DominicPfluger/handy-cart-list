@@ -69,3 +69,5 @@
 - [x] Admin-Produktauflistung zeigt pro Produkt das kleine Icon statt des grossen Vorschaubilds (Fallback: Vorschaubild, dann Emoji); Doppelklick-Zoom bleibt beim grossen Bild (Browser-Test Zwiebeln & Lauchgemüse).
 - [x] Katalog-Pflege: gesamten Produktkatalog als kopierbaren Text exportieren (Kategorie-Baum mit #-Überschriften, ohne Emojis; Dialog mit Kopieren-Knopf; Absturz des Pflege-Tabs beim Laden behoben)
 - [x] Admin: Anzahl der Produktvorschläge wählbar (5/10/15/20/25, Voreinstellung 15; Browser-Test mit KI-Suche: 5 Vorschläge bei Auswahl 5; Dialog-Standard 15 geprüft)
+
+- [x] Preisschaetz-Knopf (Tag-Icon) in Admin-Produktzeile oeffnet Bearbeiten-Dialog direkt bei aufgeklapptem Preisbereich (catalog-tile-editor.tsx, i18n adm.estimatePrice, Browser-Test OK)

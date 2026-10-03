@@ -982,6 +982,7 @@ export const de = {
   "search.alsoKnownAs": "auch: {name}",
   "adm.variantsHint": "Varianten gelten nur für dieses Produkt und erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
   "adm.variantAdd": "Variante hinzufügen",
+  "adm.estimatePrice": "Preis schätzen",
   "adm.variantAddTitle": "Varianten für „{name}“",
   "adm.variantAddHint": "Eine Variante pro Zeile …",
   "adm.variantAddDone": "{n} Varianten hinzugefügt",
