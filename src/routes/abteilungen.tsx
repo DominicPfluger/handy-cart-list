@@ -686,18 +686,13 @@ function DepartmentsPage() {
                     <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} className="inline-flex text-left text-sm font-semibold text-foreground">
                       <span>{product.name}</span>
                     </button>
-                    {product.variants.length > 0 && (
-                      <Button type="button" variant="ghost" size="sm" onClick={() => toggleExpanded(product.id)} aria-expanded={expandedId === product.id} aria-label={t("dept.variants", { count: product.variants.length })} className="ml-1.5 h-auto px-1 text-xs text-primary">
-                        {t("dept.variants", { count: product.variants.length })} {expandedId === product.id ? "▴" : "▾"}
-                      </Button>
-                    )}
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
                     </p>
                     {product.variants.length > 0 && (
-                      <button type="button" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="mt-0.5 block max-w-full truncate text-left text-xs font-medium text-primary">
-                        {t("dept.productVariants")}
+                      <button type="button" onClick={() => toggleExpanded(product.id)} aria-expanded={expandedId === product.id} aria-label={t("dept.variants", { count: product.variants.length })} className="mt-0.5 block max-w-full truncate text-left text-xs font-medium text-primary">
+                        {t("dept.variants", { count: product.variants.length })} {expandedId === product.id ? "▴" : "▾"}
                       </button>
                     )}
                   </div>
