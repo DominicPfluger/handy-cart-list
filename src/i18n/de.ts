@@ -669,7 +669,7 @@ export const de = {
   "adm.tab.prices": "Preise",
   "adm.tab.import": "Import",
   "adm.tab.markets": "Märkte",
-  "adm.tab.recipes": "Rezept-Generator",
+  "adm.tab.recipes": "Rezept-Verwaltung",
   "adm.tab.cuisines": "Länderküchen",
   "adm.tab.languages": "Sprachen",
   "tile.estimateAll": "Preise für alle Märkte schätzen",
