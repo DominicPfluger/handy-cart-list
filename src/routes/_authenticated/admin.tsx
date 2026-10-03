@@ -756,6 +756,22 @@ function AdminPage() {
         </>
       ) : null}
 
+      {sortDlg && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setSortDlg(null)}>
+          <div className="w-full max-w-xs rounded-2xl bg-card p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <p className="mb-3 text-sm font-bold text-foreground">{T("adm.sortGroupTitle")}</p>
+            <div className="flex flex-col gap-2">
+              {(["similarity", "relevance", "alphabetical", "price"] as const).map((c) => (
+                <Button key={c} variant="outline" className="justify-start" onClick={() => sortHeadingGroup(sortDlg, c)}>
+                  {T(`adm.crit.${c === "relevance" ? "popularity" : c}` as MessageKey)}
+                </Button>
+              ))}
+              <Button variant="ghost" onClick={() => setSortDlg(null)}>{T("adm.cancel")}</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {sel && d && (
         <Editor key={sel.kind + sel.id} sel={sel} name={selName} data={d} products={(d.prods).filter((p) => p.department_id === (sel.kind === "heading" ? d.heads.find((h) => h.id === sel.id)?.department_id : undefined))}
           busy={busy} onClose={() => setSel(null)} onDelete={() => remove(sel, selName)}
