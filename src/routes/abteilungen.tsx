@@ -672,7 +672,7 @@ function DepartmentsPage() {
                     onPointerUp={draggable ? cancelPress : undefined}
                     onPointerLeave={draggable ? cancelPress : undefined}
                     onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
-                    aria-expanded={expandedId === product.id}
+                    aria-expanded={product.variants.length > 0 ? expandedId === product.id : undefined}
                     onClick={() => {
                       if (suppressClick.current) return;
                       if (product.variants.length) toggleExpanded(product.id);

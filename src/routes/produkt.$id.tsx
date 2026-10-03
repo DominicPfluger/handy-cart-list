@@ -79,7 +79,7 @@ function ProductPage() {
   const brands = brandsFor(product);
   const variantLabel = (v: string) => product.variantNames?.[v]?.[locale] ?? v;
   const ownVariants = personalVariants[product.id] ?? [];
-  const sharedVariants = product.variants.filter((v) => !ownVariants.includes(v));
+  const sharedVariants = product.variants.filter((v) => !ownVariants.some((own) => own.toLocaleLowerCase() === v.toLocaleLowerCase()));
   const units = getUnits(locale);
 
   const save = async (patch: { default_unit?: string; variants?: string[] }, translate = false) => {
@@ -169,7 +169,7 @@ function ProductPage() {
               {product.variants.map((v) => (
                 <span key={v} className="rounded-full bg-primary-soft/25 px-2.5 py-1 text-xs font-medium text-foreground">
                   {variantLabel(v)}
-                  {ownVariants.includes(v) ? (
+                  {ownVariants.includes(v) && !sharedVariants.includes(v) ? (
                     <Button type="button" variant="ghost" size="sm" aria-label={t("dept.removeVariant", { name: variantLabel(v) })} title={t("dept.removeVariant", { name: variantLabel(v) })} onClick={() => removePersonalVariant(product.id, v)} className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
                   ) : isAdmin ? (
                     <Button type="button" variant="ghost" size="sm" aria-label={t("pd.removeVariant", { name: variantLabel(v) })} disabled={saving}
@@ -179,9 +179,9 @@ function ProductPage() {
                 </span>
               ))}
             </dd>}
-            <form className="mt-2 flex gap-2" onSubmit={(e) => { e.preventDefault(); addOwnVariant(); }}>
+            <form className="mt-2 flex flex-wrap gap-2" onSubmit={(e) => { e.preventDefault(); addOwnVariant(); }}>
               <input value={personalVariantName} onChange={(e) => setPersonalVariantName(e.target.value)} maxLength={40} placeholder={t("dept.variantPlaceholder")} aria-label={t("dept.variantPlaceholder")}
-                className="min-w-0 flex-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary" />
+                className="min-w-32 flex-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary" />
               <Button type="submit" size="sm" disabled={!personalVariantName.trim()} className="shrink-0 rounded-full">
                 {t("dept.addVariant")}
               </Button>
