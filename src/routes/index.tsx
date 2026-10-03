@@ -69,6 +69,8 @@ function ListPage() {
     templates, saveAsTemplate, createFromTemplate, deleteTemplate, reorderTemplates,
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
+  const [purchaseOpen, setPurchaseOpen] = useState(false);
+  const [speakLocale] = useSpeakLocale();
   const data = useCatalog();
   const { t } = useT();
   const { data: referencePrices, isPending: pricesPending } = useReferencePrices();
@@ -202,6 +204,32 @@ function ListPage() {
   }, { value: 0, missing: 0 }), [items, productById, referencePrices]);
   const currency = referencePrices?.values().next().value?.currency ?? MARKET_CURRENCY[currentMarket()] ?? "EUR";
 
+  /** Artikel für den freihändigen Kaufmodus (offene Einträge, Vorlese-Sprache). */
+  const purchaseItems = useMemo<PurchaseItem[]>(() => grouped.flatMap((g) => {
+    const colorDept = g.root ?? departments.find((d) => d.name === g.label || d.baseName === g.label);
+    const color = (colorDept ? deptColor(colorDept, deptById) : undefined) ?? deptColorByLabel(g.label);
+    return g.items.filter((i) => !i.checked).map((i) => {
+      const product = i.productId ? productById.get(i.productId) : undefined;
+      let name = displayName(i);
+      if (product) {
+        const k = i.name.indexOf(" · ");
+        const base = pickName(product.names, speakLocale, product.baseName);
+        name = stripAnyPrefix(k >= 0 ? base + i.name.slice(k) : base);
+      }
+      return {
+        id: i.id,
+        name,
+        spoken: `${i.quantity ? speakQuantity(i.quantity, i.unit, speakLocale) + " " : ""}${name}`,
+        quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : "",
+        checked: i.checked,
+        emoji: i.emoji || product?.emoji || "🛒",
+        color: color ?? undefined,
+      };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [grouped, speakLocale, productById, deptById, departments]);
+
+
   // ---- Smarte Vorschläge (aus dem Einkaufsverlauf) & Einkauf abschliessen ----
   const { addPurchase } = usePurchaseHistory();
   const finishShopping = () => {
@@ -286,18 +314,37 @@ function ListPage() {
               }),
             }))}
           />
+          <button
+            onClick={() => setPurchaseOpen(true)}
+            aria-label={t("purchase.title")}
+            title={t("purchase.title")}
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="9" cy="21" r="1.5" /><circle cx="19" cy="21" r="1.5" />
+              <path d="M2 3h3l2.6 12.4a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21.5 8H6" />
+            </svg>
+          </button>
           <ExportListButton
             title={activeList.name}
             groups={grouped.map((g) => ({
               label: g.label,
-              items: g.items.map((i) => ({
-                name: displayName(i),
-                quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : "",
-                unit: i.unit ? unitShort(i.unit) : "",
-                organic: !!i.organic,
-                note: i.note ?? "",
-                checked: i.checked,
-              })),
+              items: g.items.map((i) => {
+                const product = i.productId ? productById.get(i.productId) : undefined;
+                return {
+                  name: displayName(i),
+                  quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : "",
+                  unit: i.unit ? unitShort(i.unit) : "",
+                  organic: !!i.organic,
+                  note: i.note ?? "",
+                  checked: i.checked,
+                  productId: i.productId ?? "",
+                  defaultQuantity: product?.defaultQuantity ?? 0,
+                  defaultUnit: product?.defaultUnit ?? "",
+                  priceQuantity: i.quantity,
+                  priceUnit: i.unit ?? "",
+                };
+              }),
             }))}
           />
           <button
