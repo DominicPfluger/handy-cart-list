@@ -737,7 +737,7 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                   <select
                     value=""
                     disabled={busy}
-                    onChange={(e) => { const v = e.target.value as "popularity" | "relevance"; if (v) sortStep(s.key, s.label, v); }}
+                    onChange={(e) => { const v = e.target.value as "popularity" | "relevance" | "alpha"; if (v === "alpha") sortAlpha(s.key); else if (v) sortStep(s.key, s.label, v); }}
                     className="rounded-md border border-border bg-background px-1.5 py-1 text-[11px] text-foreground"
                     aria-label={T("adm.recipeSortBy")}
                   >
