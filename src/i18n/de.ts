@@ -398,6 +398,7 @@ export const de = {
 
 
   "unit.stueck": "Stück", "unitS.stueck": "Stk.",
+  "unit.artikel": "Artikel", "unitS.artikel": "Art.",
   "unit.gramm": "Gramm", "unitS.gramm": "g",
   "unit.kilogramm": "Kilogramm", "unitS.kilogramm": "kg",
   "unit.milligramm": "Milligramm", "unitS.milligramm": "mg",
