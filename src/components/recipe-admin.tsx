@@ -799,6 +799,26 @@ export function RecipeAssignAdmin({ depts, prods }: { depts: Dept[]; prods: Prod
                       className="h-9"
                     />
                     <div className="max-h-72 space-y-0.5 overflow-y-auto">
+                      {pickerQuery && pickerMatches.length > 0 && (() => {
+                        const ids = pickerMatches.map((p) => p.id);
+                        const chosen = ids.filter((id) => pickerSel.has(id)).length;
+                        return (
+                          <label className="flex items-center gap-2 rounded-lg border-b border-border px-2 py-1.5 text-xs font-semibold text-foreground hover:bg-accent/40">
+                            <input
+                              type="checkbox"
+                              checked={chosen === ids.length}
+                              ref={(el) => { if (el) el.indeterminate = chosen > 0 && chosen < ids.length; }}
+                              onChange={(e) => setPickerSel((x) => {
+                                const n = new Set(x);
+                                for (const id of ids) { if (e.target.checked) n.add(id); else n.delete(id); }
+                                return n;
+                              })}
+                              className="accent-primary"
+                            />
+                            <span>{T("adm.selectAll")} <span className="font-normal text-muted-foreground">({chosen}/{ids.length})</span></span>
+                          </label>
+                        );
+                      })()}
                       {!pickerQuery && childDepts.map((d) => {
                         const ids = deptProductIds(d.id);
                         const chosen = ids.filter((id) => pickerSel.has(id)).length;
