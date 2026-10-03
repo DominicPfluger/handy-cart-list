@@ -79,7 +79,8 @@ function ProductPage() {
   const brands = brandsFor(product);
   const variantLabel = (v: string) => product.variantNames?.[v]?.[locale] ?? v;
   const ownVariants = personalVariants[product.id] ?? [];
-  const sharedVariants = product.variants.filter((v) => !ownVariants.some((own) => own.toLocaleLowerCase() === v.toLocaleLowerCase()));
+  const catalogProduct = qc.getQueryData<ReturnType<typeof useCatalog>>(catalogQueryOptions(locale).queryKey)?.products.find((p) => p.id === product.id);
+  const sharedVariants = catalogProduct?.variants ?? product.variants.filter((v) => !ownVariants.includes(v));
   const units = getUnits(locale);
 
   const save = async (patch: { default_unit?: string; variants?: string[] }, translate = false) => {
