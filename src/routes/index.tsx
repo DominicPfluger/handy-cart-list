@@ -489,6 +489,13 @@ function ListPage() {
           {t("hist.finish", { n: doneCount })}
         </button>
       )}
+      {purchaseOpen && (
+        <PurchaseMode
+          items={purchaseItems}
+          onToggle={toggleItem}
+          onClose={() => setPurchaseOpen(false)}
+        />
+      )}
     </div>
   );
 }
