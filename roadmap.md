@@ -1,11 +1,12 @@
 # Roadmap
 
 ## Offen
+- [ ] Eigene Varianten nur in der Produktdetailansicht hinzufügen; bestehende Varianten in der Abteilungsansicht weiter verwenden (Browser-Test).
 - [ ] DB-Security-Hinweise (10 ältere, vorher vorhanden) separat beheben — auf Nutzer-Entscheid wartend
 - [ ] Browser-Tests nachholen: recipe-traits-admin, Varianten-Auswahl
 
 ## Erledigt (Auswahl)
-- [x] Eigene Produktvarianten in der Abteilungsansicht pro Gerät anlegen, suchen, favorisieren, zur Liste hinzufügen und entfernen (Desktop/Mobil Browser-getestet).
+- [x] Eigene Produktvarianten pro Gerät speichern, suchen, favorisieren, zur Liste hinzufügen und entfernen (Desktop/Mobil Browser-getestet).
 - „… nach Wahl" auch pro Oberkategorie im Rezept-Generator (Browser-getestet)
 - Geschmack: Mehrfachauswahl bis zu 3 (Generator, Suche, Admin; Browser-getestet)
 - Admin-Rezeptverwaltung aufklappbar, Zutatensuche, Massen-Zuordnung, „Alle auswählen" in Katalogsuche
