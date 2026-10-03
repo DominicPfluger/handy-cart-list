@@ -91,6 +91,8 @@ export function CatalogTileEditor(p: {
   const [priceFocus, setPriceFocus] = useState(false);
   const [drag, setDrag] = useState<Drag>(null);
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
+  const allSelRef = useRef<HTMLInputElement>(null);
+  const allSelected = p.products.length > 0 && selected.size === p.products.length;
   const [selCur, setSelCur] = useState(p.cur);
   if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); }
   const toggleSel = (id: string) => setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
