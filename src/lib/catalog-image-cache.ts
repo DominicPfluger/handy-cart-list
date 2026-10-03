@@ -1,5 +1,5 @@
 /** Store catalog artwork by its storage path, not by expiring signed URL. */
-const CACHE = "shoppi-catalog-artwork-v1";
+const CACHE = "shoppi-catalog-artwork-v2";
 const MAX_ENTRIES = 2000;
 const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 const pending = new Map<string, Promise<Blob>>();
@@ -34,10 +34,19 @@ async function loadBlob(path: string, signedUrl?: string | null): Promise<Blob> 
   return blob;
 }
 
+let oldCleared = false;
+async function fetchFreshUrl(path: string): Promise<string | null> {
+  const { supabase } = await import("@/integrations/supabase/client");
+  const { data } = await supabase.storage.from("catalog-images").createSignedUrl(path, 60 * 60);
+  return data?.signedUrl ?? null;
+}
+
 export async function cachedCatalogImage(path: string, signedUrl?: string | null): Promise<string> {
+  if (!oldCleared && "caches" in window) { oldCleared = true; void caches.delete("shoppi-catalog-artwork-v1").catch(() => {}); }
   let task = pending.get(path);
   if (!task) {
-    task = loadBlob(path, signedUrl);
+    // Expired signed links fail after an hour; retry once with a fresh link.
+    task = loadBlob(path, signedUrl).catch(async () => loadBlob(path, await fetchFreshUrl(path)));
     pending.set(path, task);
     void task.finally(() => { if (pending.get(path) === task) pending.delete(path); }).catch(() => {});
   }

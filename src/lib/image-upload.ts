@@ -62,7 +62,7 @@ function removeBackground(ctx: CanvasRenderingContext2D) {
 
 /** Lädt ein vorbereitetes Bild in den Katalog-Speicher und gibt den Pfad zurück. */
 export async function uploadCategoryImage(departmentId: string, blob: Blob): Promise<string> {
-  const path = `departments/${departmentId}.png`;
+  const path = `departments/${departmentId}-${crypto.randomUUID()}.webp`;
   const { error } = await supabase.storage
     .from("catalog-images")
     .upload(path, blob, { contentType: "image/webp", upsert: true });
