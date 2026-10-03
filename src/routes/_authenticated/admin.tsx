@@ -588,6 +588,30 @@ function AdminPage() {
     }, T("adm.deleted"));
   };
 
+  const deleteSelected = (sel: { productIds: string[]; deptIds: string[]; productAliasIds: string[]; deptAliasIds: string[] }) => {
+    const n = sel.productIds.length + sel.deptIds.length + sel.productAliasIds.length + sel.deptAliasIds.length;
+    if (!n || !confirm(T("adm.deleteSelectedConfirm", { n }))) return;
+    run(async () => {
+      for (const id of sel.productAliasIds) await must(supabase.from("product_aliases").delete().eq("id", id));
+      for (const id of sel.deptAliasIds) await must(supabase.from("department_aliases").delete().eq("id", id));
+      for (const id of sel.productIds) {
+        await must(supabase.from("product_headings").delete().eq("before_product_id", id));
+        await must(supabase.from("products").delete().eq("id", id));
+        await must(supabase.from("catalog_translations").delete().eq("entity_id", id));
+      }
+      const skipped: string[] = [];
+      for (const id of sel.deptIds) {
+        if (d?.depts.some((x) => x.parent_id === id) || d?.prods.some((x) => x.department_id === id)) { skipped.push(nm(id, d?.depts.find((x) => x.id === id)?.name ?? id)); continue; }
+        await must(supabase.from("product_headings").delete().eq("department_id", id));
+        await must(supabase.from("departments").delete().eq("id", id));
+        await must(supabase.from("catalog_translations").delete().eq("entity_id", id));
+      }
+      if (skipped.length) toast.error(T("adm.deleteSkippedNotEmpty", { n: skipped.length, names: skipped.join(", ") }));
+      await qc.invalidateQueries({ queryKey: ALIAS_KEY });
+      await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY });
+    }, T("adm.deleted"));
+  };
+
   const results = useMemo(() => {
     const n = search.trim().toLowerCase();
     if (!n || !d) return null;
@@ -794,6 +818,7 @@ function AdminPage() {
             onBulkTree={cur ? () => setBulkTree(true) : undefined}
             onHeadingsToSub={cur && headings.length > 0 && !mk ? headingsToSubcategories : undefined}
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
+            onDeleteSelected={deleteSelected}
             onAdvanced={(kind, id) => setSel({ kind, id })} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}

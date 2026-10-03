@@ -83,6 +83,8 @@ export function CatalogTileEditor(p: {
   onCloseImageEditor?: () => void;
   /** Ergänzt fehlende Übersetzungen per KI (ganzer Katalog). */
   onTranslateMissing?: () => void;
+  /** Löscht alle markierten Einträge (Produkte, leere Kategorien, Aliasse). */
+  onDeleteSelected?: (sel: { productIds: string[]; deptIds: string[]; productAliasIds: string[]; deptAliasIds: string[] }) => void;
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const [newTitlePos, setNewTitlePos] = useState(0);
@@ -92,12 +94,17 @@ export function CatalogTileEditor(p: {
   const [priceFocus, setPriceFocus] = useState(false);
   const [drag, setDrag] = useState<Drag>(null);
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
+  const [selectedDepts, setSelectedDepts] = useState<Set<string>>(() => new Set());
   const allSelRef = useRef<HTMLInputElement>(null);
-  const allSelected = p.products.length > 0 && selected.size === p.products.length;
+  const selCount = selected.size + selectedDepts.size;
+  const allSelected = (p.products.length + p.children.length) > 0 && selected.size === p.products.length && selectedDepts.size === p.children.length;
   const [selCur, setSelCur] = useState(p.cur);
-  if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); }
+  if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); setSelectedDepts(new Set()); }
   const toggleSel = (id: string) => setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
-  useEffect(() => { if (allSelRef.current) allSelRef.current.indeterminate = !allSelected && selected.size > 0; });
+  const toggleSelDept = (id: string) => setSelectedDepts((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  const selectAll = () => { setSelected(new Set(p.products.map((x) => x.id))); setSelectedDepts(new Set(p.children.map((c) => (c.alias_id ? `alias:${c.alias_id}` : c.id)))); };
+  const clearSelection = () => { setSelected(new Set()); setSelectedDepts(new Set()); };
+  useEffect(() => { if (allSelRef.current) allSelRef.current.indeterminate = !allSelected && selCount > 0; });
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
   const [headMove, setHeadMove] = useState<{ id: string; name: string; insertAt: number; n: number } | null>(null);
@@ -392,9 +399,11 @@ export function CatalogTileEditor(p: {
       {(p.children.length > 0 || editMode) && (
         <div className="grid grid-cols-3 gap-2.5 md:grid-cols-5 xl:grid-cols-7">
           {p.children.map((c, i) => (
-            <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
-              style={{ background: rootColorByName(rootName(c)) }}
-              className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""}`}>
+             <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
+               style={{ background: rootColorByName(rootName(c)) }}
+               className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""} ${selectedDepts.has(c.alias_id ? `alias:${c.alias_id}` : c.id) ? "ring-2 ring-primary" : ""}`}>
+               <input type="checkbox" checked={selectedDepts.has(c.alias_id ? `alias:${c.alias_id}` : c.id)} onChange={() => toggleSelDept(c.alias_id ? `alias:${c.alias_id}` : c.id)} aria-label={T("adm.select")}
+                 className="absolute left-1.5 top-1.5 z-10 h-4 w-4 accent-primary" />
               <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
                 onClick={click(() => p.setCur(c.dept_id ?? c.id))}
@@ -435,20 +444,32 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
-      {p.cur && selected.size > 0 && (
+      {selCount > 0 && (
         <div className="flex items-center gap-2 rounded-xl bg-primary-soft px-3 py-2 text-sm">
-          <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: selected.size })}</span>
-          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set(p.products.map((x) => x.id)))}>{T("adm.selectAll")}</Button>
-          <Button size="sm" variant="ghost" onClick={() => setSelected(new Set())}>{T("adm.clearSelection")}</Button>
+          <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: selCount })}</span>
+          <Button size="sm" variant="ghost" onClick={selectAll}>{T("adm.selectAll")}</Button>
+          <Button size="sm" variant="ghost" onClick={clearSelection}>{T("adm.clearSelection")}</Button>
+          {p.onDeleteSelected && (
+            <Button size="sm" variant="destructive" onClick={() => {
+              const productIds: string[] = []; const productAliasIds: string[] = [];
+              for (const id of selected) (id.startsWith("alias:") ? productAliasIds : productIds).push(id.startsWith("alias:") ? id.slice(6) : id);
+              const deptIds: string[] = []; const deptAliasIds: string[] = [];
+              for (const id of selectedDepts) (id.startsWith("alias:") ? deptAliasIds : deptIds).push(id.startsWith("alias:") ? id.slice(6) : id);
+              p.onDeleteSelected!({ productIds, deptIds, productAliasIds, deptAliasIds });
+              clearSelection();
+            }}>
+              <Trash2 className="mr-1 h-3.5 w-3.5" />{T("adm.deleteSelected")}
+            </Button>
+          )}
         </div>
       )}
-      {p.cur && p.products.length > 0 && (
+      {p.cur && (p.products.length > 0 || p.children.length > 0) && (
         <label className="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm font-medium text-foreground">
           <input
             ref={allSelRef}
             type="checkbox"
             checked={allSelected}
-            onChange={() => setSelected(allSelected ? new Set() : new Set(p.products.map((x) => x.id)))}
+            onChange={() => (allSelected ? clearSelection() : selectAll())}
             className="h-4 w-4 shrink-0 accent-primary"
             aria-label={T("adm.selectAll")}
           />

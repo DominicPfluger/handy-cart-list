@@ -78,3 +78,5 @@
 
 - [x] KI-Variantenvorschläge im Produkt-Bearbeiten-Dialog (EditSheet, admin.tsx): ✨-Knopf, Bestätigung mit Anzahl 5/10/15, Chips-Auswahl, Übernehmen in Varianten-Liste; Browser-Test mit Paprika Rosenscharf OK (Vorschläge erzeugt, einzelner Chip abgewählt, übernommen — nicht gespeichert).
 - [x] Kategorie-Dropdown beim Produkt-Anlegen: „+ Neues Produkt" (ItemSheet) und „+ Mehrere Produkte" (BulkAddForm) mit Kategorie-Auswahl (Pfad-Labels, alphabetisch, Vorauswahl = aktuelle Kategorie); fremde Kategorie → Einfügen am Ende (max sort_order + 1), Positions-Auswahl nur bei aktueller Kategorie; Browser-Tests OK, Testprodukt gelöscht (2026-10-03)
+
+- [x] Admin-Katalog: Sammel-Löschen — Checkboxen auch an Kategorien, Master-Checkbox, Löschen-Knopf in Auswahlleiste (Produkte + leere Kategorien; nicht-leere werden übersprungen mit Hinweis); i18n in 16 Sprachen; Browser-Test OK
