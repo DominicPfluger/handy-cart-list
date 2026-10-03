@@ -121,6 +121,11 @@ function MorePage() {
         </button>
       </section>
 
+      {/* Ernährungsform — unterhalb von „Gemeinsam“ */}
+      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <DietPreferenceRow />
+      </section>
+
       {/* Settings menu */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <Link to="/vorrat" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
