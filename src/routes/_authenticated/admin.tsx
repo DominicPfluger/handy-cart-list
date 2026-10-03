@@ -115,6 +115,7 @@ function AdminPage() {
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
+  const [sortDlg, setSortDlg] = useState<string | null>(null);
   /** Aktiver Admin-Bereich (Tabs). */
   const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "more">("catalog");
   const [preview, setPreview] = useState(false);
@@ -454,12 +455,13 @@ function AdminPage() {
   };
 
   /** Nur die Einträge unterhalb einer Überschrift nach dem gewählten Kriterium sortieren. */
-  const sortHeadingGroup = (headingId: string) => {
+  const sortHeadingGroup = (headingId: string, c: "similarity" | "relevance" | "alphabetical" | "price") => {
+    setSortDlg(null);
     const h = headings.find((x) => x.id === headingId);
     if (!h || products.length < 2) return;
-    const c = sortBy;
-    const label = T(`adm.crit.${c}` as MessageKey);
-    if (!confirm(T("adm.sortConfirm", { label }))) return;
+    const label = T(`adm.crit.${c === "relevance" ? "popularity" : c}` as MessageKey);
+    const ai = c === "similarity" || c === "relevance";
+    if (ai && !confirm(T("adm.sortConfirm", { label }))) return;
     const anchors = new Set(headings.map((x) => x.before_product_id));
     const start = products.findIndex((p) => p.id === h.before_product_id);
     if (start < 0) return;
@@ -471,8 +473,17 @@ function AdminPage() {
       let orderedGroup: typeof group;
       if (c === "alphabetical") {
         orderedGroup = [...group].sort((a, b) => a.name.localeCompare(b.name, "de"));
+      } else if (c === "price") {
+        const priceOf = (x: (typeof group)[number]) => refPrices.data?.get((x as Prod & { product_id?: string }).product_id ?? x.id)?.price;
+        orderedGroup = [...group].sort((a, b) => {
+          const pa = priceOf(a); const pb = priceOf(b);
+          if (pa == null && pb == null) return a.name.localeCompare(b.name, "de");
+          if (pa == null) return 1;
+          if (pb == null) return -1;
+          return Number(pa) - Number(pb);
+        });
       } else {
-        const r = await rank({ data: { path: pathText(), criterion: c === "marketRelevance" ? "popularity" : c, groups: [group.map((p) => p.name)], ...(mk ? { market: mk } : {}) } });
+        const r = await rank({ data: { path: pathText(), criterion: c === "relevance" ? "popularity" : c, groups: [group.map((p) => p.name)], ...(mk ? { market: mk } : {}) } });
         const pool = [...group];
         orderedGroup = r.groups[0]!.map((n) => pool.splice(pool.findIndex((p) => p.name === n), 1)[0]!).concat(pool);
       }
@@ -732,7 +743,7 @@ function AdminPage() {
             onAssignHeading={(productId, headingId) => run(() => assignHeading(productId, headingId), T("adm.saved"))}
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
-            onSortHeading={sortHeadingGroup}
+            onSortHeading={(id) => setSortDlg(id)}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
             onHeadingsToSub={cur && headings.length > 0 && !mk ? headingsToSubcategories : undefined}
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
@@ -744,6 +755,22 @@ function AdminPage() {
           )}
         </>
       ) : null}
+
+      {sortDlg && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setSortDlg(null)}>
+          <div className="w-full max-w-xs rounded-2xl bg-card p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <p className="mb-3 text-sm font-bold text-foreground">{T("adm.sortGroupTitle")}</p>
+            <div className="flex flex-col gap-2">
+              {(["similarity", "relevance", "alphabetical", "price"] as const).map((c) => (
+                <Button key={c} variant="outline" className="justify-start" onClick={() => sortHeadingGroup(sortDlg, c)}>
+                  {T(`adm.crit.${c === "relevance" ? "popularity" : c}` as MessageKey)}
+                </Button>
+              ))}
+              <Button variant="ghost" onClick={() => setSortDlg(null)}>{T("adm.cancel")}</Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {sel && d && (
         <Editor key={sel.kind + sel.id} sel={sel} name={selName} data={d} products={(d.prods).filter((p) => p.department_id === (sel.kind === "heading" ? d.heads.find((h) => h.id === sel.id)?.department_id : undefined))}

@@ -1237,7 +1237,8 @@
     "adm.variantSuggestConfirm": "AI will suggest suitable variants. This uses AI credits.",
     "adm.variantSuggestApply": "Apply",
     "adm.variantSuggestNone": "No new variants found.",
-    "adm.sortGroup": "Sort entries under this heading"
+    "adm.sortGroup": "Sort entries under this heading",
+    "adm.sortGroupTitle": "Sort entries under this heading by"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2477,7 +2478,8 @@
     "adm.variantSuggestConfirm": "AI will suggest suitable variants. This uses AI credits.",
     "adm.variantSuggestApply": "Apply",
     "adm.variantSuggestNone": "No new variants found.",
-    "adm.sortGroup": "Sort entries under this heading"
+    "adm.sortGroup": "Sort entries under this heading",
+    "adm.sortGroupTitle": "Sort entries under this heading by"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3717,7 +3719,8 @@
     "adm.variantSuggestConfirm": "AI will suggest suitable variants. This uses AI credits.",
     "adm.variantSuggestApply": "Apply",
     "adm.variantSuggestNone": "No new variants found.",
-    "adm.sortGroup": "Sort entries under this heading"
+    "adm.sortGroup": "Sort entries under this heading",
+    "adm.sortGroupTitle": "Sort entries under this heading by"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -4957,7 +4960,8 @@
     "adm.variantSuggestConfirm": "La IA sugiere variantes adecuadas. Esto consume créditos de IA.",
     "adm.variantSuggestApply": "Aplicar",
     "adm.variantSuggestNone": "No se encontraron variantes nuevas.",
-    "adm.sortGroup": "Ordenar las entradas de este encabezado"
+    "adm.sortGroup": "Ordenar las entradas de este encabezado",
+    "adm.sortGroupTitle": "Ordenar las entradas de este encabezado por"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6197,7 +6201,8 @@
     "adm.variantSuggestConfirm": "La IA sugiere variantes adecuadas. Esto consume créditos de IA.",
     "adm.variantSuggestApply": "Aplicar",
     "adm.variantSuggestNone": "No se encontraron variantes nuevas.",
-    "adm.sortGroup": "Ordenar las entradas de este encabezado"
+    "adm.sortGroup": "Ordenar las entradas de este encabezado",
+    "adm.sortGroupTitle": "Ordenar las entradas de este encabezado por"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7437,7 +7442,8 @@
     "adm.variantSuggestConfirm": "L’IA propose des variantes adaptées. Cela consomme des crédits IA.",
     "adm.variantSuggestApply": "Reprendre",
     "adm.variantSuggestNone": "Aucune nouvelle variante trouvée.",
-    "adm.sortGroup": "Trier les entrées sous ce titre"
+    "adm.sortGroup": "Trier les entrées sous ce titre",
+    "adm.sortGroupTitle": "Trier les entrées de ce titre par"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8677,7 +8683,8 @@
     "adm.variantSuggestConfirm": "L’IA propose des variantes adaptées. Cela consomme des crédits IA.",
     "adm.variantSuggestApply": "Reprendre",
     "adm.variantSuggestNone": "Aucune nouvelle variante trouvée.",
-    "adm.sortGroup": "Trier les entrées sous ce titre"
+    "adm.sortGroup": "Trier les entrées sous ce titre",
+    "adm.sortGroupTitle": "Trier les entrées de ce titre par"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -9917,7 +9924,8 @@
     "adm.variantSuggestConfirm": "L’IA suggerisce varianti adatte. Vengono consumati crediti IA.",
     "adm.variantSuggestApply": "Applica",
     "adm.variantSuggestNone": "Nessuna nuova variante trovata.",
-    "adm.sortGroup": "Ordina le voci sotto questo titolo"
+    "adm.sortGroup": "Ordina le voci sotto questo titolo",
+    "adm.sortGroupTitle": "Ordina le voci di questa intestazione per"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11157,7 +11165,8 @@
     "adm.variantSuggestConfirm": "L’IA suggerisce varianti adatte. Vengono consumati crediti IA.",
     "adm.variantSuggestApply": "Applica",
     "adm.variantSuggestNone": "Nessuna nuova variante trovata.",
-    "adm.sortGroup": "Ordina le voci sotto questo titolo"
+    "adm.sortGroup": "Ordina le voci sotto questo titolo",
+    "adm.sortGroupTitle": "Ordina le voci di questa intestazione per"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12397,7 +12406,8 @@
     "adm.variantSuggestConfirm": "A IA sugere variantes adequadas. Isto consome créditos de IA.",
     "adm.variantSuggestApply": "Aplicar",
     "adm.variantSuggestNone": "Nenhuma variante nova encontrada.",
-    "adm.sortGroup": "Ordenar as entradas deste cabeçalho"
+    "adm.sortGroup": "Ordenar as entradas deste cabeçalho",
+    "adm.sortGroupTitle": "Ordenar as entradas deste cabeçalho por"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13637,7 +13647,8 @@
     "adm.variantSuggestConfirm": "A IA sugere variantes adequadas. Isto consome créditos de IA.",
     "adm.variantSuggestApply": "Aplicar",
     "adm.variantSuggestNone": "Nenhuma variante nova encontrada.",
-    "adm.sortGroup": "Ordenar as entradas deste cabeçalho"
+    "adm.sortGroup": "Ordenar as entradas deste cabeçalho",
+    "adm.sortGroupTitle": "Ordenar as entradas deste cabeçalho por"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -14877,7 +14888,8 @@
     "adm.variantSuggestConfirm": "AI stelt passende varianten voor. Dit verbruikt AI-credits.",
     "adm.variantSuggestApply": "Overnemen",
     "adm.variantSuggestNone": "Geen nieuwe varianten gevonden.",
-    "adm.sortGroup": "Items onder deze kop sorteren"
+    "adm.sortGroup": "Items onder deze kop sorteren",
+    "adm.sortGroupTitle": "Items onder deze kop sorteren op"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16117,7 +16129,8 @@
     "adm.variantSuggestConfirm": "AI stelt passende varianten voor. Dit verbruikt AI-credits.",
     "adm.variantSuggestApply": "Overnemen",
     "adm.variantSuggestNone": "Geen nieuwe varianten gevonden.",
-    "adm.sortGroup": "Items onder deze kop sorteren"
+    "adm.sortGroup": "Items onder deze kop sorteren",
+    "adm.sortGroupTitle": "Items onder deze kop sorteren op"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -16818,7 +16831,8 @@
     "adm.variantSuggestConfirm": "Die KI schlägt passende Varianten vor. Dabei werden KI-Credits verbraucht.",
     "adm.variantSuggestApply": "Übernehmen",
     "adm.variantSuggestNone": "Keine neuen Varianten gefunden.",
-    "adm.sortGroup": "Einträge dieser Überschrift sortieren"
+    "adm.sortGroup": "Einträge dieser Überschrift sortieren",
+    "adm.sortGroupTitle": "Einträge dieser Überschrift sortieren nach"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17519,6 +17533,7 @@
     "adm.variantSuggestConfirm": "Die KI schlägt passende Varianten vor. Dabei werden KI-Credits verbraucht.",
     "adm.variantSuggestApply": "Übernehmen",
     "adm.variantSuggestNone": "Keine neuen Varianten gefunden.",
-    "adm.sortGroup": "Einträge dieser Überschrift sortieren"
+    "adm.sortGroup": "Einträge dieser Überschrift sortieren",
+    "adm.sortGroupTitle": "Einträge dieser Überschrift sortieren nach"
   }
 }
