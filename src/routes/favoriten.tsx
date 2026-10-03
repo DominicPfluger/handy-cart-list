@@ -18,7 +18,7 @@ import {
 } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { formatQuantity } from "../lib/units";
-import { getLocale, useT } from "../i18n";
+import { getLocale, pickName, useT } from "../i18n";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 
 
@@ -41,6 +41,7 @@ export const Route = createFileRoute("/favoriten")({
 interface FavRow {
   product: CatalogProduct;
   favorite: FavoriteProduct;
+  variant?: string;
 }
 
 interface FavEntry {
@@ -66,8 +67,9 @@ function toCatalogProduct(favorite: FavoriteProduct): CatalogProduct {
   };
 }
 
-function ProductThumb({ product }: { product: CatalogProduct }) {
-  return <ProductIcon emoji={product.emoji} iconUrl={product.iconUrl} iconPath={product.iconPath} symbolClassName="text-3xl" />;
+function ProductThumb({ row }: { row: FavRow }) {
+  const image = row.variant ? row.product.variantImages?.[row.variant] : undefined;
+  return <ProductIcon emoji={row.product.emoji} iconUrl={image?.iconUrl ?? image?.imageUrl ?? row.product.iconUrl} iconPath={image?.iconPath ?? image?.imagePath ?? row.product.iconPath} symbolClassName="text-3xl" />;
 }
 
 function FavoritesPage() {
@@ -76,7 +78,7 @@ function FavoritesPage() {
   const favOrder = useFavoriteOrder();
   const data = useCatalog();
   const { preferred: preferredDept } = usePreferredDept();
-  const { t } = useT();
+  const { t, locale } = useT();
   const { departments } = useDepartmentOrder(data.departments);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<FavRow | null>(null);
@@ -91,6 +93,21 @@ function FavoritesPage() {
     () => new Map(data.products.map((p) => [p.id, p])),
     [data.products],
   );
+
+  const rowForFavorite = (favorite: FavoriteProduct): FavRow => {
+    const product = productById.get(favorite.productId);
+    if (product) return { product, favorite };
+    const separator = favorite.productId.indexOf("::");
+    if (separator > 0) {
+      const base = productById.get(favorite.productId.slice(0, separator));
+      if (base) return { product: base, favorite, variant: favorite.productId.slice(separator + 2) };
+    }
+    return { product: toCatalogProduct(favorite), favorite };
+  };
+
+  const displayName = (row: FavRow) => row.variant && row.product.variants.includes(row.variant)
+    ? `${row.product.name} · ${pickName(row.product.variantNames?.[row.variant], locale, row.variant)}`
+    : row.favorite.name;
 
   /** Hauptabteilungen (oberste Ebene), sortiert wie in der Abteilungsansicht. */
   const rootDepartments = useMemo(
@@ -110,29 +127,45 @@ function FavoritesPage() {
     return current ?? null;
   };
 
+  /** Gespeicherte Kategorie (auch Alias) vor der aktuellen Gerätepräferenz berücksichtigen. */
+  const groupOfRow = (row: FavRow): CatalogDepartment | undefined => {
+    const p = row.product;
+    if (!p.departmentId) return undefined;
+    const ids = departmentIdsOf(p, data.productAliases ?? []);
+    const lbl = row.favorite.groupLabel;
+    if (lbl) for (const id of ids) {
+      const d = deptById.get(id);
+      if (d && (d.name === lbl || d.baseName === lbl || Object.values(d.names).includes(lbl))) return d;
+    }
+    const pref = preferredDept[p.id];
+    if (pref && ids.includes(pref) && deptById.get(pref)) return deptById.get(pref);
+    return deptById.get(p.departmentId);
+  };
+
   /** Gruppierte Favoriten je Hauptabteilung + Favoriten ohne Katalogprodukt. */
   const { entriesByRoot, looseFavorites } = useMemo(() => {
     const byRoot = new Map<string, FavEntry[]>();
     const loose: FavRow[] = [];
     for (const favorite of favorites) {
-      const product = productById.get(favorite.productId);
-      if (!product) {
-        loose.push({ product: toCatalogProduct(favorite), favorite });
+      const row = rowForFavorite(favorite);
+      const { product } = row;
+      if (!product.departmentId) {
+        loose.push(row);
         continue;
       }
-      const leaf = deptById.get(product.departmentId) ?? null;
+      const leaf = groupOfRow(row) ?? null;
       const root = leaf ? rootOf(leaf) : null;
       if (!root) {
-        loose.push({ product, favorite });
+        loose.push(row);
         continue;
       }
       const list = byRoot.get(root.id) ?? [];
-      list.push({ row: { product, favorite }, leaf, rootId: root.id });
+      list.push({ row, leaf, rootId: root.id });
       byRoot.set(root.id, list);
     }
     return { entriesByRoot: byRoot, looseFavorites: loose };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [favorites, deptById, productById, departments]);
+  }, [favorites, deptById, productById, departments, data.productAliases, preferredDept]);
 
   /** Sortierung innerhalb einer Kategorie analog zur Abteilungsansicht:
    *  zuerst nach Kategorie (sortOrder), dann nach Produkt (sortOrder). */
@@ -207,47 +240,33 @@ function FavoritesPage() {
     if (!normalizedQuery) return [];
     const rows: FavRow[] = [];
     for (const fav of favorites) {
-      const product = productById.get(fav.productId) ?? toCatalogProduct(fav);
-      if (!matchesProductSearch(product.name, normalizedQuery)) continue;
-      rows.push({ product, favorite: fav });
+      const row = rowForFavorite(fav);
+      if (!matchesProductSearch(displayName(row), normalizedQuery)) continue;
+      rows.push(row);
     }
-    return rows.sort((a, b) => compareByName(a.product, b.product));
-  }, [normalizedQuery, favorites, productById]);
+    return rows.sort((a, b) => compareByName({ name: displayName(a) }, { name: displayName(b) }));
+  }, [normalizedQuery, favorites, productById, locale]);
 
   const categoryLabel = (product: CatalogProduct, fallback: string | undefined): string => {
     const leaf = product.departmentId ? deptById.get(product.departmentId) : undefined;
     return leaf?.name ?? fallback ?? "";
   };
 
-  /** Listen-Kategorie eines Favoriten: gespeicherte Alias-Kategorie, sonst bevorzugte, sonst Original. */
-  const groupOfRow = (row: FavRow): CatalogDepartment | undefined => {
-    const p = row.product;
-    if (!p.departmentId) return undefined;
-    const ids = departmentIdsOf(p, data.productAliases ?? []);
-    const lbl = row.favorite.groupLabel;
-    if (lbl) for (const id of ids.slice(1)) {
-      const d = deptById.get(id);
-      if (d && (d.name === lbl || d.baseName === lbl || Object.values(d.names).includes(lbl))) return d;
-    }
-    const pref = preferredDept[p.id];
-    if (pref && ids.includes(pref) && deptById.get(pref)) return deptById.get(pref);
-    return deptById.get(p.departmentId);
-  };
-
   const quickAdd = (row: FavRow) => {
     const group = groupOfRow(row);
+    const name = displayName(row);
     addCatalogItem({
-      productId: row.favorite.productId,
-      name: row.product.name,
+      productId: row.product.departmentId ? row.product.id : row.favorite.productId,
+      name,
       quantity: formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit),
       unit: row.favorite.defaultUnit,
       organic: false,
       emoji: row.favorite.emoji,
-      imageUrl: row.product.imageUrl ?? row.favorite.imageUrl,
+      imageUrl: (row.variant ? row.product.variantImages?.[row.variant]?.imageUrl : undefined) ?? row.favorite.imageUrl ?? row.product.imageUrl,
       groupLabel: group?.name ?? row.favorite.groupLabel,
       groupEmoji: (group?.emoji ?? row.favorite.groupEmoji) ?? undefined,
     });
-    toast.success(t("common.addedToList", { name: row.product.name }));
+    toast.success(t("common.addedToList", { name }));
   };
 
   const removeFavorite = (row: FavRow) => {
@@ -282,7 +301,7 @@ function FavoritesPage() {
       const group = groupOfRow(row);
       return {
         id: `i${Date.now()}-${i}`,
-        name: row.product.name,
+        name: displayName(row),
         quantity: formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit),
         category: "sonstiges",
         checked: false,
@@ -290,10 +309,10 @@ function FavoritesPage() {
         addedAt: Date.now(),
         unit: row.favorite.defaultUnit,
         emoji: row.favorite.emoji ?? undefined,
-        imageUrl: row.product.imageUrl ?? row.favorite.imageUrl,
+        imageUrl: (row.variant ? row.product.variantImages?.[row.variant]?.imageUrl : undefined) ?? row.favorite.imageUrl ?? row.product.imageUrl,
         groupLabel: group?.name ?? row.favorite.groupLabel,
         groupEmoji: (group?.emoji ?? row.favorite.groupEmoji) ?? undefined,
-        productId: row.favorite.productId,
+        productId: row.product.departmentId ? row.product.id : row.favorite.productId,
       };
     });
     createListFromItems(name, items);
@@ -316,10 +335,10 @@ function FavoritesPage() {
           onPointerCancel={() => setDrag(null)}
           className={`grid h-14 w-14 shrink-0 select-none place-items-center overflow-hidden rounded-xl bg-primary-soft/25 ${sec ? "touch-none cursor-grab" : ""}`}
         >
-          <ProductThumb product={row.product} />
+          <ProductThumb row={row} />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-foreground">{row.product.name}</p>
+          <p className="text-sm font-semibold text-foreground">{displayName(row)}</p>
           <p className="mt-0.5 truncate text-xs text-muted-foreground">
             {showCategory && group ? `${group.name} · ` : ""}
             {formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit)}
@@ -330,7 +349,7 @@ function FavoritesPage() {
           type="button"
           variant="ghost"
           size="icon"
-          aria-label={t("common.removeFavorite", { name: row.product.name })}
+          aria-label={t("common.removeFavorite", { name: displayName(row) })}
           onClick={() => removeFavorite(row)}
           className="h-8 w-8 rounded-full bg-coral/15 text-coral"
         >
@@ -340,7 +359,7 @@ function FavoritesPage() {
           type="button"
           variant="ghost"
           size="icon"
-          aria-label={t("common.quickAdd", { name: row.product.name })}
+          aria-label={t("common.quickAdd", { name: displayName(row) })}
           onClick={() => quickAdd(row)}
           className="h-8 w-8 rounded-full text-muted-foreground"
         >
@@ -349,7 +368,7 @@ function FavoritesPage() {
         <Button
           type="button"
           size="icon"
-          aria-label={t("common.addWithQty", { name: row.product.name })}
+          aria-label={t("common.addWithQty", { name: displayName(row) })}
           onClick={() => setSelected(row)}
           className="h-8 w-8 rounded-full shadow-none"
         >
@@ -497,6 +516,7 @@ function FavoritesPage() {
         product={selected ? selected.product : null}
         groupLabel={selected ? groupOfRow(selected)?.name ?? selected.favorite.groupLabel : undefined}
         initialDepartmentId={selected ? groupOfRow(selected)?.id : undefined}
+        initialVariant={selected?.variant}
         groupEmoji={selected ? ((selected.product.departmentId ? deptById.get(selected.product.departmentId)?.emoji : undefined) ?? selected.favorite.groupEmoji) ?? undefined : undefined}
         onOpenChange={(open) => { if (!open) setSelected(null); }}
       />

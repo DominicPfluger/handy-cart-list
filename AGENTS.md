@@ -19,6 +19,7 @@
 - The device-local market choice drives catalog visibility, ordering, brands, and reference prices independently of UI locale. Why: changing shopping market must not change language.
 - Recipe creator keeps each recipe step's groups in a single scrollable row with independently expandable inline ingredients, limits the initial product view per group, and uses only admin-assigned ingredients for managed templates; recipe steps are edited beside the selected template in admin. Why: preserve ingredient families and make their editing discoverable without nested accordions or surprise defaults.
 - Aliases: `department_aliases`/`product_aliases` show items in extra places; data lives once; list category = list_items.group_label. Why: single source of truth.
+- Variant favorites retain their composite favorite key while resolving the base catalog product for category, imagery, and list transfers. Why: keep variant identity without losing catalog placement.
 - Read-aloud: own language (default de-DE) + admin templates in `speech_texts`. Why: mother tongue regardless of UI.
 - Recipe folders nest via recipe_folders.parent_id (DB trigger blocks cycles); deleting a folder moves its recipes and subfolders up one level. Why: themed sorting without data loss.
 
