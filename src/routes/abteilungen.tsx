@@ -407,20 +407,23 @@ function DepartmentsPage() {
     return () => window.removeEventListener("shoppi:abteilungen-reset", reset);
   }, []);
 
-  const quickAdd = (product: CatalogProduct, group: CatalogDepartment | null) => {
+  const quickAdd = (product: CatalogProduct, group: CatalogDepartment | null, variant?: string) => {
+    const name = variant ? `${product.name} · ${variantLabel(product, variant)}` : product.name;
+    const vi = variant ? product.variantImages?.[variant] : undefined;
     addCatalogItem({
       productId: product.id,
-      name: product.name,
+      name,
       quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
       unit: product.defaultUnit,
       organic: false,
       emoji: product.emoji,
-      imageUrl: product.imageUrl,
+      imageUrl: vi?.imageUrl ?? product.imageUrl,
       groupLabel: group?.name,
       groupEmoji: group?.emoji ?? undefined,
     });
-    toast.success(t("common.addedToList", { name: product.name }));
+    toast.success(t("common.addedToList", { name }));
   };
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   /** Gesprochene Zutaten im Katalog finden und hinzufügen. */
   const handleVoiceResult = (text: string) => {
@@ -644,7 +647,12 @@ function DepartmentsPage() {
                     onPointerUp={draggable ? cancelPress : undefined}
                     onPointerLeave={draggable ? cancelPress : undefined}
                     onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
-                    onClick={() => { if (!suppressClick.current) navigate({ to: "/produkt/$id", params: { id: product.id } }); }}
+                    aria-expanded={product.variants.length > 0 ? expandedId === product.id : undefined}
+                    onClick={() => {
+                      if (suppressClick.current) return;
+                      if (product.variants.length > 0) setExpandedId((id) => (id === product.id ? null : product.id));
+                      else navigate({ to: "/produkt/$id", params: { id: product.id } });
+                    }}
                     className={`grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25 ${draggable ? "cursor-grab touch-none" : "cursor-pointer"}`}
                   >
                     <ProductThumb product={product} />
@@ -653,6 +661,11 @@ function DepartmentsPage() {
                     <button type="button" onClick={() => openRename(product, "product")} aria-label={t("rename.action", { name: product.name })} className="inline-flex text-left text-sm font-semibold text-foreground">
                       <span>{product.name}</span>
                     </button>
+                    {product.variants.length > 0 && (
+                      <button type="button" onClick={() => setExpandedId((id) => (id === product.id ? null : product.id))} aria-expanded={expandedId === product.id} aria-label={t("dept.variants", { count: product.variants.length })} className="ml-1.5 text-xs text-primary">
+                        {t("dept.variants", { count: product.variants.length })} {expandedId === product.id ? "▴" : "▾"}
+                      </button>
+                    )}
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
