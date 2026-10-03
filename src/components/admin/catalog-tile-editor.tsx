@@ -444,7 +444,7 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
-      {p.cur && selCount > 0 && (
+      {selCount > 0 && (
         <div className="flex items-center gap-2 rounded-xl bg-primary-soft px-3 py-2 text-sm">
           <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: selCount })}</span>
           <Button size="sm" variant="ghost" onClick={selectAll}>{T("adm.selectAll")}</Button>
