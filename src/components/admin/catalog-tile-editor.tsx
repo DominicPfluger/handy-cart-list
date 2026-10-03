@@ -304,7 +304,7 @@ export function CatalogTileEditor(p: {
       if (x.alias_id) continue;
       const h = headingBefore.get(x.id);
       if (h) lines.push("", `# ${h.name}`);
-      lines.push(`${x.emoji ? x.emoji + " " : ""}${p.nm(x.id, x.name)}`);
+      lines.push(p.nm(x.id, x.name));
     }
     return lines.join("\n") + "\n";
   };
