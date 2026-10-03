@@ -654,9 +654,6 @@ function AdminPage() {
             <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={() => sortProducts()}>↕ {busy ? T("adm.working") : T("adm.sort")}</Button>
           </div>
         )}
-        {cur && headings.length > 0 && !mk && (
-          <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={headingsToSubcategories}>📂 {T("adm.headingsToSub")}</Button>
-        )}
         <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 min-w-[10rem] flex-1 rounded-xl" />
       </div>
       {cur && mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
@@ -704,6 +701,7 @@ function AdminPage() {
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
+            onHeadingsToSub={cur && headings.length > 0 && !mk ? headingsToSubcategories : undefined}
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
             onAdvanced={(kind, id) => setSel({ kind, id })} />
           {bulk && (
