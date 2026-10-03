@@ -320,7 +320,7 @@ export function CatalogTileEditor(p: {
             </Button>
           )}
           {p.cur && p.products.length > 0 && (
-            <Button size="sm" variant="outline" onClick={() => setCopyOpen(true)}>📋 {T("adm.copyList")}</Button>
+            <Button size="sm" variant="outline" onClick={() => setCopyOpen(true)}>{T("adm.copyList")}</Button>
           )}
           {p.onTranslateMissing && <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onTranslateMissing}>🌐 {p.busy ? T("adm.working") : T("adm.trMissing")}</Button>}
         </div>
