@@ -638,7 +638,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               {sel0.length > 0 && (
                 <span className="mt-0.5 flex flex-wrap gap-1">
                   {sel0.map((id) => {
-                    const p = id.startsWith("any:") ? anyProduct(s) : s.products.find((x) => x.id === id);
+                    const p = id.startsWith("any:") ? resolveAny(s, id) : s.products.find((x) => x.id === id);
                     return p ? <span key={id} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-foreground">{p.emoji} {p.name}{variants[id] && p.variants?.includes(variants[id]!) ? ` · ${vName(p, variants[id]!)}` : ""}</span> : null;
                   })}
                 </span>
@@ -747,10 +747,18 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   for (const id of sel) if (group.products.some((p) => p.id === id)) shownIds.add(id);
                   const shown = gOpen ? group.products.filter((p) => shownIds.has(p.id)) : group.products.filter((p) => sel.includes(p.id));
                   const gHidden = group.products.length - shown.length;
-                  if (!shown.length && !gOpen) return null;
+                  const gAny = group.key !== "other" ? anyProduct(s, group) : null;
+                  const gAnyOn = gAny ? sel.includes(gAny.id) : false;
+                  if (!shown.length && !gOpen && !gAnyOn) return null;
                   return (
                     <div key={group.key} className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
+                        {gAny && gOpen && (
+                          <button type="button" aria-pressed={gAnyOn} onClick={() => { setSavedMsg(false); toggle(s.key, gAny.id, s.max); }}
+                            className={`rounded-full border border-dashed px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${gAnyOn ? "border-primary bg-primary text-primary-foreground" : "border-primary/60 bg-card text-foreground"}`}>
+                            <span aria-hidden="true" className="mr-1">{gAny.emoji}</span>{gAny.name}
+                          </button>
+                        )}
                         {shown.map(chip)}
                       </div>
                       {gOpen && gHidden > 0 && (
