@@ -1064,6 +1064,7 @@ function useCloudLists(
     renameList,
     deleteList,
     reorderLists,
+    reorderTemplates,
     setItems,
     saveAsTemplate,
     createFromTemplate,
@@ -1279,6 +1280,18 @@ export function useShoppingList() {
   const deleteTemplateLocal = useCallback(
     (templateId: string) => {
       persistLocalTemplates(localTemplates.filter((l) => l.id !== templateId));
+    },
+    [localTemplates, persistLocalTemplates]
+  );
+  const reorderTemplatesLocal = useCallback(
+    (fromId: string, toId: string) => {
+      const from = localTemplates.findIndex((l) => l.id === fromId);
+      const to = localTemplates.findIndex((l) => l.id === toId);
+      if (from < 0 || to < 0) return;
+      const next = [...localTemplates];
+      const [moved] = next.splice(from, 1);
+      next.splice(to, 0, moved!);
+      persistLocalTemplates(next);
     },
     [localTemplates, persistLocalTemplates]
   );
