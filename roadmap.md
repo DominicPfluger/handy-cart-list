@@ -43,3 +43,5 @@
 
 - [x] Admin-Katalog: Schnell-KI-Bild-Knopf (✨) pro Produktzeile mit Credits-Bestätigung, Ladezustand, Icon-Komprimierung
 - Mengeneinheit „Artikel" (Art.) hinzugefügt: Enum-Wert in der Datenbank, Einheitenliste und Übersetzungen in allen 16 Sprachen.
+
+- [x] Rezepte-Admin: Zutaten-Kategorien in eigenem umrandeten Container (rounded-lg border bg-background p-2) statt nur Trennlinie; getestet im Browser.
