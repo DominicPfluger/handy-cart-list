@@ -76,7 +76,16 @@ export const acceptImportCandidates = createServerFn({ method: "POST" })
         } catch (e) { console.error("translate", locale, e); }
       }));
     }
-    return { created: created.length, linked };
+    // Sicherungspunkt: neu angelegte Produkte lassen sich damit zurücknehmen
+    let backupId: string | null = null;
+    if (created.length) {
+      const { data: b, error: be } = await sb.from("admin_backups")
+        .insert({ user_id: context.userId, label: "import", payload: { created: [{ table: "products", ids: created.map((p) => p.id) }] } })
+        .select("id")
+        .single();
+      if (!be && b) backupId = (b as { id: string }).id;
+    }
+    return { created: created.length, linked, backupId };
   });
 
 export const rejectImportCandidates = createServerFn({ method: "POST" })
