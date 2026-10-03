@@ -74,3 +74,4 @@
 - [x] KI-Vorschläge für Produktvarianten im Varianten-Dialog (Admin)
 - [x] Überschriften-Gruppen einzeln sortieren: ↕-Knopf pro Überschrift (Admin), sortiert nur die Einträge unterhalb nach aktivem Kriterium; Browser-Test „Frische Kräuter" alphabetisch OK (2026-10-03)
 - [x] Überschriften-Sortierung: Kriterien-Dialog mit Ähnlichkeit (KI), Relevanz (KI), Alphabetisch (lokal), Preis (lokal aus gespeicherten DB-Preisen, ohne KI); Browser-Tests in Frische Kräuter + Hülsenfrüchte OK (2026-10-03)
+- [x] Admin-Katalog: Master-Checkbox „Alle auswählen" oberhalb der Produktauflistung (alle markieren/leeren, Strich bei Teilauswahl; Browser-Test in Frische Kräuter OK) (2026-10-03)
