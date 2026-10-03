@@ -16,6 +16,7 @@
 - Department diet/cuisine filters exempt non-food root categories by stable catalog base names; the shared NON_FOOD_ROOTS list lives in src/lib/dept-colors.ts (isNonFoodRootName) and also hides the cuisine picker in the admin product editor. Why: localized and nested non-food products remain visible without changing saved preferences; one source of truth for non-food roots.
 - Catalog routes `ssr: false`. Why: SSR-embedded catalog caused 'aborted' blank screens.
 - Brands: `product_brands` (locales = market codes); chosen brand appended as "Name · Marke". Why: same for cloud/local lists.
+- The device-local market choice drives catalog visibility, ordering, brands, and reference prices independently of UI locale. Why: changing shopping market must not change language.
 - Recipe creator keeps each recipe step's groups in a single scrollable row with independently expandable inline ingredients, limits the initial product view per group, and uses only admin-assigned ingredients for managed templates; recipe steps are edited beside the selected template in admin. Why: preserve ingredient families and make their editing discoverable without nested accordions or surprise defaults.
 - Aliases: `department_aliases`/`product_aliases` show items in extra places; data lives once; list category = list_items.group_label. Why: single source of truth.
 - Read-aloud: own language (default de-DE) + admin templates in `speech_texts`. Why: mother tongue regardless of UI.

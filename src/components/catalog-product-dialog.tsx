@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { prepareItemPhoto } from "../lib/item-photo-store";
 import { brandsFor, departmentIdsOf, pathTo, useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
+import { useMarket } from "../hooks/use-market";
 import { getUnits, formatQuantity, type UnitId } from "../lib/units";
 import { useT, pickName } from "../i18n";
 
@@ -50,6 +51,7 @@ export function CatalogProductDialog({
   onOpenChange,
 }: CatalogProductDialogProps) {
   const catalog = useCatalog();
+  const market = useMarket();
   const { preferred, setPreferred } = usePreferredDept();
   const deptIds = product ? departmentIdsOf(product, catalog.productAliases ?? []).filter((id) => catalog.departments.some((d) => d.id === id)) : [];
   const [deptId, setDeptId] = useState<string>("");
@@ -200,11 +202,11 @@ export function CatalogProductDialog({
           </div>
         )}
 
-        {product && brandsFor(product, locale).length > 0 && (
+        {product && brandsFor(product, market).length > 0 && (
           <div className="space-y-2">
             <Label>{t("brand.title")}</Label>
             <div className="flex flex-wrap gap-1.5">
-              {brandsFor(product, locale).map((b) => (
+              {brandsFor(product, market).map((b) => (
                 <button key={b} type="button" aria-pressed={brand === b} onClick={() => setBrand(brand === b ? undefined : b)}
                   className={`rounded-full border px-3 py-1 text-xs ${brand === b ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
                   {b}

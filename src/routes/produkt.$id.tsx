@@ -17,6 +17,7 @@ import { getLocale, useT } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { useFavoriteQuantity } from "../hooks/use-favorite-quantity";
 import { useReferencePrices, formatRefPrice } from "../hooks/use-reference-prices";
+import { useMarket } from "../hooks/use-market";
 import { addPersonalVariant, removePersonalVariant, usePersonalVariants } from "../hooks/use-personal-variants";
 
 export const Route = createFileRoute("/produkt/$id")({
@@ -41,6 +42,7 @@ function ProductPage() {
   const navigate = useNavigate();
   const locale = getLocale();
   const data = useCatalog();
+  const market = useMarket();
   const { isFavorite, toggleFavorite } = useShoppingList();
   const [adding, setAdding] = useState(false);
   const isAdmin = useIsAdmin();
@@ -76,7 +78,7 @@ function ProductPage() {
 
   const department = data.departments.find((d) => d.id === product.departmentId);
   const favorite = isFavorite(product.id);
-  const brands = brandsFor(product);
+  const brands = brandsFor(product, market);
   const variantLabel = (v: string) => product.variantNames?.[v]?.[locale] ?? v;
   const ownVariants = personalVariants[product.id] ?? [];
   const catalogProduct = qc.getQueryData<ReturnType<typeof useCatalog>>(catalogQueryOptions(locale).queryKey)?.products.find((p) => p.id === product.id);
