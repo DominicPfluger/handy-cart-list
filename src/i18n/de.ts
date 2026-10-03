@@ -464,6 +464,7 @@ export const de = {
   "rk.price_class.upscale": "Gehoben",
   "rk.price_class.exquisite": "Exquisit",
   "rk.taste": "Geschmack",
+  "rk.tasteMax": "max. {n}",
   "rk.taste.sweet": "Süss",
   "rk.taste.slightly_sweet": "Leicht süss",
   "rk.taste.balanced": "Ausgewogen",

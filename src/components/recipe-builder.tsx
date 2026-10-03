@@ -19,7 +19,7 @@ import { createRecipe, fetchRecipe, publishRecipe, shareLink, type RecipeItem } 
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { SavedRecipesBoard } from "./saved-recipes-board";
-import { RECIPE_TRAITS, TRAIT_GROUPS, type RecipeTraits } from "../lib/recipe-traits";
+import { RECIPE_TRAITS, TRAIT_GROUPS, TASTE_MAX, splitTaste, toggleTaste, type RecipeTraits } from "../lib/recipe-traits";
 import { SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
@@ -103,7 +103,8 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     for (const item of r.items) {
       if (item.productId.startsWith("any:")) {
         const k = item.productId.slice(4);
-        if (template.steps.some((s) => s.key === k)) (next[k] ??= []).push(item.productId);
+        const st = template.steps.find((s) => s.key === k || k.startsWith(`${s.key}:`));
+        if (st) (next[st.key] ??= []).push(item.productId);
         continue;
       }
       const step = template.steps.find((s) => {
@@ -256,11 +257,22 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     setVariants({});
   };
 
-  const anyProduct = (s: (typeof steps)[number]) => ({
-    id: `any:${s.key}`, name: t("rk.anyOf", { name: s.label }), emoji: s.emoji || STEP_EMOJIS[s.key] || "🍽️",
+  const anyProduct = (s: (typeof steps)[number], group?: { key: string; name: string; emoji: string | null }) => ({
+    id: group ? `any:${s.key}:${group.key}` : `any:${s.key}`, name: t("rk.anyOf", { name: group ? group.name : s.label }), emoji: group?.emoji || s.emoji || STEP_EMOJIS[s.key] || "🍽️",
     defaultQuantity: 1, defaultUnit: "stueck", departmentId: "", imageUrl: undefined,
   }) as unknown as CatalogProduct;
-  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => id.startsWith("any:") ? anyProduct(s) : s.products.find((p) => p.id === id)!).filter(Boolean))
+  // Löst eine „any:"-Kennung auf: Bereich (any:step) oder Oberkategorie (any:step:gruppe).
+  const resolveAny = (s: (typeof steps)[number], id: string) => {
+    if (!id.startsWith("any:")) return null;
+    const rest = id.slice(4);
+    if (rest === s.key) return anyProduct(s);
+    if (rest.startsWith(`${s.key}:`)) {
+      const g = s.groups.find((x) => x.id === rest.slice(s.key.length + 1));
+      return g ? anyProduct(s, { key: g.id, name: g.name, emoji: g.emoji }) : null;
+    }
+    return null;
+  };
+  const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => (id.startsWith("any:") ? resolveAny(s, id) : s.products.find((p) => p.id === id)) ?? null).filter((p): p is CatalogProduct => !!p))
     .map((p) => { const v = variants[p.id]; return v && p.variants?.includes(v) ? { ...p, name: `${p.name} · ${vName(p, v)}`, chosenVariant: v } : p; }) as (CatalogProduct & { chosenVariant?: string })[];
   const catName = tpl ? templateLabel(tpl, t) : "";
   const title = chosen.length
@@ -356,17 +368,24 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         />
         {TRAIT_GROUPS.map((g) => {
           const missing = traitsError && !traits[g];
+          const multi = g === "taste";
+          const tasteSel = multi ? splitTaste(traits.taste) : [];
           return (
-            <div key={g} role="radiogroup" aria-label={t(`rk.${g}`)} aria-required="true" className="space-y-1.5">
-              <p className={`text-xs font-bold ${missing ? "text-destructive" : "text-foreground"}`}>{RECIPE_TRAITS[g].emoji} {t(`rk.${g}`)} *</p>
+            <div key={g} role={multi ? "group" : "radiogroup"} aria-label={t(`rk.${g}`)} aria-required="true" className="space-y-1.5">
+              <p className={`text-xs font-bold ${missing ? "text-destructive" : "text-foreground"}`}>
+                {RECIPE_TRAITS[g].emoji} {t(`rk.${g}`)} *{multi && <span className="ml-1 font-normal text-muted-foreground">({t("rk.tasteMax", { n: TASTE_MAX })})</span>}
+              </p>
               <div className="flex flex-wrap gap-1.5">
-                {RECIPE_TRAITS[g].values.map((v) => (
-                  <button key={v} type="button" role="radio" aria-checked={traits[g] === v}
-                    onClick={() => setTraits((o) => ({ ...o, [g]: v }))}
-                    className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${traits[g] === v ? "border-primary bg-primary text-primary-foreground" : missing ? "border-destructive bg-card text-foreground" : "border-border bg-card text-foreground"}`}>
-                    {t(`rk.${g}.${v}` as Parameters<typeof t>[0])}
-                  </button>
-                ))}
+                {RECIPE_TRAITS[g].values.map((v) => {
+                  const on = multi ? tasteSel.includes(v) : traits[g] === v;
+                  return (
+                    <button key={v} type="button" role={multi ? "checkbox" : "radio"} aria-checked={on}
+                      onClick={() => setTraits((o) => ({ ...o, [g]: multi ? toggleTaste(o.taste, v) : v }))}
+                      className={`rounded-full border px-3 py-1 text-xs font-semibold transition ${on ? "border-primary bg-primary text-primary-foreground" : missing ? "border-destructive bg-card text-foreground" : "border-border bg-card text-foreground"}`}>
+                      {t(`rk.${g}.${v}` as Parameters<typeof t>[0])}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           );
@@ -626,7 +645,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               {sel0.length > 0 && (
                 <span className="mt-0.5 flex flex-wrap gap-1">
                   {sel0.map((id) => {
-                    const p = id.startsWith("any:") ? anyProduct(s) : s.products.find((x) => x.id === id);
+                    const p = id.startsWith("any:") ? resolveAny(s, id) : s.products.find((x) => x.id === id);
                     return p ? <span key={id} className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-foreground">{p.emoji} {p.name}{variants[id] && p.variants?.includes(variants[id]!) ? ` · ${vName(p, variants[id]!)}` : ""}</span> : null;
                   })}
                 </span>
@@ -735,10 +754,18 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   for (const id of sel) if (group.products.some((p) => p.id === id)) shownIds.add(id);
                   const shown = gOpen ? group.products.filter((p) => shownIds.has(p.id)) : group.products.filter((p) => sel.includes(p.id));
                   const gHidden = group.products.length - shown.length;
-                  if (!shown.length && !gOpen) return null;
+                  const gAny = group.key !== "other" ? anyProduct(s, group) : null;
+                  const gAnyOn = gAny ? sel.includes(gAny.id) : false;
+                  if (!shown.length && !gOpen && !gAnyOn) return null;
                   return (
                     <div key={group.key} className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
+                        {gAny && gOpen && (
+                          <button type="button" aria-pressed={gAnyOn} onClick={() => { setSavedMsg(false); toggle(s.key, gAny.id, s.max); }}
+                            className={`rounded-full border border-dashed px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${gAnyOn ? "border-primary bg-primary text-primary-foreground" : "border-primary/60 bg-card text-foreground"}`}>
+                            <span aria-hidden="true" className="mr-1">{gAny.emoji}</span>{gAny.name}
+                          </button>
+                        )}
                         {shown.map(chip)}
                       </div>
                       {gOpen && gHidden > 0 && (
