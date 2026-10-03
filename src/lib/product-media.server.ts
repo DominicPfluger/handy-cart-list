@@ -3,10 +3,10 @@ import { aiJson } from "./translate.server";
 const GATEWAY = "https://ai.gateway.lovable.dev/v1";
 
 export type ImageGenOpts = {
-  style?: "photo" | "illustration";
-  background?: "transparent" | "white" | "gradient";
-  view?: "front" | "top" | "side";
-  count?: "single" | "group";
+  style?: "photo" | "illustration" | undefined;
+  background?: "transparent" | "white" | "gradient" | undefined;
+  view?: "front" | "top" | "side" | undefined;
+  count?: "single" | "group" | undefined;
 };
 
 /** Erzeugt ein Produktbild (komprimiertes WebP mit transparentem Hintergrund) über das Lovable-KI-Bildmodell. */
