@@ -455,10 +455,10 @@ function AdminPage() {
   /** Überschriften der aktuellen Abteilung in Unterkategorien umwandeln; Produkte darunter werden verschoben. */
   const headingsToSubcategories = () => {
     if (!cur || !d) return;
-    const own = products.filter((p) => !p.id.startsWith("alias:"));
+    type P = (typeof products)[number];
     const byAnchor = new Map(headings.map((h) => [h.before_product_id, h]));
-    const groups: { h: Head; items: typeof own }[] = [];
-    let curG: { h: Head; items: typeof own } | null = null;
+    const groups: { h: Head; items: P[] }[] = [];
+    let curG: { h: Head; items: P[] } | null = null;
     for (const p of products) {
       const h = byAnchor.get(p.id);
       if (h) { curG = { h, items: [] }; groups.push(curG); }
@@ -468,7 +468,7 @@ function AdminPage() {
     for (const h of headings) if (!groups.some((g) => g.h.id === h.id)) groups.push({ h, items: [] });
     const n = groups.reduce((s, g) => s + g.items.length, 0);
     if (!confirm(T("adm.headingsToSubConfirm", { cats: groups.length, n }))) return;
-    void own;
+
     run(async () => {
       const children = d.depts.filter((x) => x.parent_id === cur);
       let order = children.reduce((m, x) => Math.max(m, x.sort_order), 0);
