@@ -7,7 +7,7 @@ const HIDDEN_KEY = "shoppi:hidden-groups";
 const LIST_STORES_KEY = "shoppi:list-stores";
 const EVENT = "shoppi:list-group-order-changed";
 
-export type CustomStore = { id: string; name: string };
+export type CustomStore = { id: string; name: string; emoji?: string };
 
 function readAll(): Record<string, string[]> {
   try {
@@ -96,12 +96,24 @@ export function useGroupOrder() {
     try { localStorage.setItem(STORE_KEY, id); } catch { /* ignore */ }
     emit();
   }, []);
-  const addCustomStore = useCallback((name: string) => {
+  const addCustomStore = useCallback((name: string, emoji?: string) => {
     const id = "custom:" + Date.now().toString(36);
-    const next = [...readCustom(), { id, name }];
+    const next = [...readCustom(), { id, name, ...(emoji ? { emoji } : {}) }];
     try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(next)); } catch { /* ignore */ }
     emit();
     return id;
+  }, []);
+  /** Ändert Name und/oder Icon eines eigenen Ladens (geräte-lokal). */
+  const updateCustomStore = useCallback((id: string, patch: { name?: string; emoji?: string | null }) => {
+    const next = readCustom().map((s) => {
+      if (s.id !== id) return s;
+      const out = { ...s };
+      if (patch.name !== undefined && patch.name.trim()) out.name = patch.name.trim();
+      if (patch.emoji !== undefined) { if (patch.emoji) out.emoji = patch.emoji; else delete out.emoji; }
+      return out;
+    });
+    try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(next)); } catch { /* ignore */ }
+    emit();
   }, []);
   const removeCustomStore = useCallback((id: string) => {
     const next = readCustom().filter((s) => s.id !== id);
