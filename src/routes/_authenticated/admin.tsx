@@ -729,16 +729,12 @@ function AdminPage() {
       </div>
 
       <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["cuisines", "adm.tab.cuisines"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["health", "adm.tab.health"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["cuisines", "adm.tab.cuisines"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["health", "adm.tab.health"], ["speech", "stx.title"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
-            {T(key)}
+            {id === "speech" ? "🔊 " : ""}{T(key)}
           </button>
         ))}
-        <Link to="/vorlese-texte" role="tab" aria-selected={false}
-          className="whitespace-nowrap rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-semibold text-muted-foreground transition-colors">
-          🔊 {T("stx.title")}
-        </Link>
         <button type="button" onClick={() => setPreview(true)}
           className="whitespace-nowrap rounded-full border border-primary px-3.5 py-1.5 text-sm font-semibold text-primary">
           👁 {T("tile.preview")}
