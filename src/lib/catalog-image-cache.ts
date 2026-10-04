@@ -1,7 +1,7 @@
 /** Store catalog artwork by its storage path, not by expiring signed URL. */
 const CACHE = "shoppi-catalog-artwork-v2";
 const MAX_ENTRIES = 2000;
-const MAX_AGE = 7 * 24 * 60 * 60 * 1000;
+const MAX_AGE = 30 * 24 * 60 * 60 * 1000;
 const pending = new Map<string, Promise<Blob>>();
 
 function key(path: string): string {

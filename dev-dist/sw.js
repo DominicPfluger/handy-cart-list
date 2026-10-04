@@ -67,7 +67,7 @@ if (!self.define) {
     });
   };
 }
-define(['./workbox-caf3a6a6'], (function (workbox) { 'use strict';
+define(['./workbox-9974be49'], (function (workbox) { 'use strict';
 
   self.skipWaiting();
   workbox.clientsClaim();
@@ -78,27 +78,34 @@ define(['./workbox-caf3a6a6'], (function (workbox) { 'use strict';
    */
   workbox.precacheAndRoute([{
     "url": "/",
-    "revision": "0.d6o8eqho0d"
+    "revision": "0.qfq41lpmi9g"
   }], {});
   workbox.cleanupOutdatedCaches();
   workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/"), {
     allowlist: [/^\/$/]
   }));
   workbox.registerRoute(({
+    request,
     url
-  }) => url.pathname.includes("/catalog-images/"), new workbox.CacheFirst({
+  }) => request.destination === "image" || url.pathname.includes("/storage/v1/object/") || /\.(png|jpe?g|webp|gif|svg|avif)$/i.test(url.pathname), new workbox.CacheFirst({
     "cacheName": "shoppi-catalog-images",
     plugins: [{
       cacheKeyWillBeUsed: async ({
         request
       }) => {
         const url = new URL(request.url);
-        url.search = "";
+        if (url.pathname.includes("/storage/v1/object/")) {
+          url.search = "";
+          url.pathname = url.pathname.replace(/\/object\/(sign|public|authenticated)\//, "/object/");
+        }
         return url.href;
       }
-    }, new workbox.ExpirationPlugin({
-      maxEntries: 500,
-      maxAgeSeconds: 604800
+    }, new workbox.CacheableResponsePlugin({
+      statuses: [0, 200]
+    }), new workbox.ExpirationPlugin({
+      maxEntries: 3000,
+      maxAgeSeconds: 2592000,
+      purgeOnQuotaError: true
     })]
   }), 'GET');
   workbox.registerRoute(({
