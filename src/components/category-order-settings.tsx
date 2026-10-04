@@ -10,7 +10,6 @@ import { hideDepartment, restoreDepartment, useHiddenDepartments } from "../hook
 import { deleteCustomEntry, isCustomId } from "../hooks/use-custom-catalog";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { RenameDialog, type RenameTarget } from "./rename-dialog";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
 import { PencilIcon, TrashIcon } from "./icons";
 import { DepartmentIcon } from "./catalog-icon";
 import { useT } from "../i18n";
@@ -74,7 +73,6 @@ export function CategoryOrderSettings() {
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
-  const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
   const [newEmoji, setNewEmoji] = useState("");
@@ -118,11 +116,9 @@ export function CategoryOrderSettings() {
   });
   const openRename = (d: CatalogDepartment) =>
     setRenameTarget({ id: d.id, name: d.name, originalName: originalName(d), isCustom: d.id in customNames, kind: "department" });
-  const confirmRemove = () => {
-    if (!removeTarget) return;
-    if (isCustomId(removeTarget.id)) deleteCustomEntry(removeTarget.id);
-    else hideDepartment(removeTarget.id);
-    setRemoveTarget(null);
+  const remove = (d: CatalogDepartment) => {
+    if (isCustomId(d.id)) deleteCustomEntry(d.id);
+    else hideDepartment(d.id);
   };
 
   const renderLevel = (list: CatalogDepartment[], parentId: string | null, depth: number) => (
@@ -134,7 +130,7 @@ export function CategoryOrderSettings() {
             const isOpen = expanded.has(d.id);
             return (
               <div key={d.id}>
-                <Row dept={d} depth={depth} hasChildren={children.length > 0} expanded={isOpen} onToggle={() => toggle(d.id)} onRename={() => openRename(d)} onRemove={() => setRemoveTarget(d)} />
+                <Row dept={d} depth={depth} hasChildren={children.length > 0} expanded={isOpen} onToggle={() => toggle(d.id)} onRename={() => openRename(d)} onRemove={() => remove(d)} />
                 {isOpen && children.length > 0 && renderLevel(children, d.id, depth + 1)}
               </div>
             );
@@ -220,18 +216,6 @@ export function CategoryOrderSettings() {
         </div>
       )}
       <RenameDialog target={renameTarget} onClose={() => setRenameTarget(null)} />
-      <AlertDialog open={!!removeTarget} onOpenChange={(o) => { if (!o) setRemoveTarget(null); }}>
-        <AlertDialogContent className="max-w-[calc(100%-2rem)] rounded-lg">
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t("dept.removeTitle", { name: removeTarget?.name ?? "" })}</AlertDialogTitle>
-            <AlertDialogDescription>{t(isCustomId(removeTarget?.id ?? "") ? "dept.deleteDescription" : "dept.hideDescription")}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmRemove} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">{t("dept.removeConfirm")}</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }
