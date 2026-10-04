@@ -139,7 +139,7 @@ function ListPage() {
   const groupOrder = pick(groupOrderAll[activeStoreId]) ?? pick(groupOrderAll[settingsStore]) ?? groupOrderAll["default"] ?? [];
   const hiddenGroups = hiddenGroupsAll[activeStoreId] ?? [];
   const allStores = useStores();
-  const activeStoreName = allStores.find((s) => s.id === activeStoreId)?.name;
+  const activeStore = allStores.find((s) => s.id === activeStoreId);
   const saveGroupOrder = (keys: string[]) => saveGroupOrderFor(activeStoreId, keys);
   const groupSensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
