@@ -86,15 +86,32 @@ export function StoreOrderSettings() {
 
   const choose = (v: string) => {
     if (v === "__new") {
-      const name = window.prompt(t("store.newName"))?.trim();
-      if (!name) return;
-      const id = addCustomStore(name);
-      setEdit(id);
-      setStore(id);
+      setCreating(true);
+      setNewName("");
+      setNewEmoji("");
       return;
     }
+    setCreating(false);
+    setEditStore(false);
     setEdit(v);
     setStore(v);
+  };
+
+  const submitNew = () => {
+    const n = newName.trim();
+    if (!n) return;
+    const id = addCustomStore(n, newEmoji.trim() || undefined);
+    setCreating(false);
+    setNewName("");
+    setNewEmoji("");
+    setEdit(id);
+    setStore(id);
+  };
+
+  const submitEdit = () => {
+    if (!selected.custom) return;
+    updateCustomStore(selected.id, { name: editName, emoji: editEmoji.trim() || null });
+    setEditStore(false);
   };
 
   return (
@@ -115,14 +132,35 @@ export function StoreOrderSettings() {
       {open && (
         <div className="space-y-3 border-t border-border px-4 py-3.5">
           <div className="flex gap-2">
-            <select value={selected.id} onChange={(e) => choose(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary">
-              {stores.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            <select value={creating ? "__new" : selected.id} onChange={(e) => choose(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary">
+              {stores.map((s) => <option key={s.id} value={s.id}>{storeLabel(s)}</option>)}
               <option value="__new">{t("store.addCustom")}</option>
             </select>
             {selected.custom && (
-              <button type="button" onClick={() => { removeCustomStore(selected.id); setEdit("default"); }} className="rounded-lg border border-border px-2 text-xs text-destructive">{t("store.remove")}</button>
+              <>
+                <button type="button" aria-label={t("store.edit")} title={t("store.edit")} onClick={() => { setEditStore(true); setEditName(selected.name); setEditEmoji(selected.emoji ?? ""); setCreating(false); }} className="rounded-lg border border-border px-2 text-xs">✎</button>
+                <button type="button" onClick={() => { removeCustomStore(selected.id); setEditStore(false); setEdit("default"); }} className="rounded-lg border border-border px-2 text-xs text-destructive">{t("store.remove")}</button>
+              </>
             )}
           </div>
+          {creating && (
+            <div className="flex items-start gap-2">
+              <StoreFields name={newName} onName={setNewName} emoji={newEmoji} onEmoji={setNewEmoji} />
+              <div className="flex shrink-0 flex-col gap-1">
+                <button type="button" onClick={submitNew} disabled={!newName.trim()} className="rounded-lg bg-primary px-2 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50">{t("store.add")}</button>
+                <button type="button" onClick={() => { setCreating(false); setNewName(""); setNewEmoji(""); }} className="rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground">{t("common.cancel")}</button>
+              </div>
+            </div>
+          )}
+          {editStore && selected.custom && (
+            <div className="flex items-start gap-2">
+              <StoreFields name={editName} onName={setEditName} emoji={editEmoji} onEmoji={setEditEmoji} />
+              <div className="flex shrink-0 flex-col gap-1">
+                <button type="button" onClick={submitEdit} className="rounded-lg bg-primary px-2 py-1.5 text-xs font-semibold text-primary-foreground">{t("common.save")}</button>
+                <button type="button" onClick={() => setEditStore(false)} className="rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground">{t("common.cancel")}</button>
+              </div>
+            </div>
+          )}
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e: DragEndEvent) => {
             const { active, over } = e;
             if (!over || active.id === over.id) return;
