@@ -98,6 +98,7 @@ export function useCatalog(): Catalog {
   const locale = useLocale();
   const market = useMarket();
   const { data } = useSuspenseQuery(catalogQueryOptions(locale));
+  const { data: details } = useQuery(catalogDetailsQueryOptions(locale));
   const { data: images } = useQuery(catalogImagesQueryOptions);
   const custom = useCustomNames();
   const own = useCustomCatalog();
@@ -105,6 +106,7 @@ export function useCatalog(): Catalog {
   const allMarkets = useAllMarkets();
   return useMemo(() => {
     const img = (path: string | null | undefined) => (path ? (images?.[path] ?? null) : null);
+    const d: CatalogDetails | undefined = details;
     const ownDepts: CatalogDepartment[] = own.departments.map((d, i) => ({
       id: d.id, parentId: d.parentId, name: d.name, emoji: d.emoji, color: null, imageUrl: null,
       sortOrder: 10000 + i, baseName: d.name, names: {},
@@ -121,27 +123,30 @@ export function useCatalog(): Catalog {
         const foreign = p.markets?.length && !p.markets.includes(market);
         return {
           ...p,
+          synonyms: d?.synonyms[p.id] ?? [],
+          variantNames: d?.variantNames[p.id] ?? {},
+          variantImages: d?.variantImages[p.id] ?? {},
+          cuisineIds: d?.cuisineIds[p.id] ?? [],
+          brands: d?.brands[p.id] ?? [],
           variants: [...p.variants, ...(personalVariants[p.id] ?? []).filter((v) => !p.variants.some((catalogVariant) => catalogVariant.toLocaleLowerCase() === v.toLocaleLowerCase()))],
           imageUrl: img(p.imagePath),
           iconUrl: img(p.iconPath),
-          variantImages: p.variantImages
-            ? Object.fromEntries(Object.entries(p.variantImages).map(([v, x]) => [v, { ...x, imageUrl: img(x.imagePath), iconUrl: img(x.iconPath) }]))
-            : {},
+          variantImages: Object.fromEntries(Object.entries(d?.variantImages[p.id] ?? {}).map(([v, x]) => [v, { ...x, imageUrl: img(x.imagePath), iconUrl: img(x.iconPath) }])),
           sortOrder: p.marketOrder?.[market] ?? p.sortOrder,
           name: foreign ? `${name} ${p.markets!.map(flagOf).join("")}` : name,
         };
       }),
       headings: (data.headings ?? []).map((h) => ({ ...h, name: pickName(h.names, locale, h.baseName) })),
-      cuisines: (data.cuisines ?? []).map((c) => ({ ...c, name: pickName(c.names, locale, c.baseName) })),
-      recipeIngredients: data.recipeIngredients ?? [],
+      cuisines: (d?.cuisines ?? []).map((c) => ({ ...c, name: pickName(c.names, locale, c.baseName) })),
+      recipeIngredients: d?.recipeIngredients ?? [],
       departmentAliases: data.departmentAliases ?? [],
       productAliases: data.productAliases ?? [],
-      recipeGroups: (data.recipeGroups ?? []).map((g) => ({ ...g, name: pickName(g.names, locale, g.baseName) })),
-      recipeTemplates: (data.recipeTemplates ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
-      recipeSteps: (data.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
-      recipePopular: data.recipePopular ?? [],
+      recipeGroups: (d?.recipeGroups ?? []).map((g) => ({ ...g, name: pickName(g.names, locale, g.baseName) })),
+      recipeTemplates: (d?.recipeTemplates ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
+      recipeSteps: (d?.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
+      recipePopular: d?.recipePopular ?? [],
     };
-  }, [data, images, locale, market, custom, own, allMarkets, personalVariants]);
+  }, [data, details, images, locale, market, custom, own, allMarkets, personalVariants]);
 }
 
 export type { Catalog, CatalogCuisine, CatalogDepartment, CatalogHeading, CatalogProduct };
