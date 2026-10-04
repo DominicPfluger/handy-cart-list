@@ -41,6 +41,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   const [scanned, setScanned] = useState(false);
   const [busy, setBusy] = useState(false);
   const [openGap, setOpenGap] = useState<string | null>(null);
+  const [openEmptyRows, setOpenEmptyRows] = useState<Set<string>>(new Set());
   const [synSearch, setSynSearch] = useState("");
   const [copyOpen, setCopyOpen] = useState(false);
 
@@ -70,6 +71,16 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   });
 
   const deptName = useMemo(() => new Map(depts.map((d) => [d.id, d.name])), [depts]);
+  const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
+  /** Vollständiger Kategoriepfad, z. B. „Frischmarkt › Gemüse › Pilze". */
+  const deptPath = (id: string) => {
+    const parts: string[] = [];
+    let cur = deptById.get(id);
+    while (cur) { parts.unshift(cur.name); cur = cur.parent_id ? deptById.get(cur.parent_id) : undefined; }
+    return parts.join(" › ");
+  };
+  const toggleEmptyRow = (id: string) =>
+    setOpenEmptyRows((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
   const prodCountByDept = useMemo(() => {
     const m = new Map<string, number>();
