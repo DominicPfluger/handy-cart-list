@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { deptTreeOrder } from "@/lib/dept-order";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -84,7 +86,10 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
       const missing = LOCALES.filter((l) => !rec[l]?.name?.trim());
       return { p, missing };
     }).filter((x) => x.missing.length > 0);
-    const emptyDepts = depts.filter((d) => !depts.some((c) => c.parent_id === d.id) && !(prodCountByDept.get(d.id) ?? 0));
+    const treePos = new Map(deptTreeOrder(depts).map((d, i) => [d.id, i]));
+    const emptyDepts = depts
+      .filter((d) => !depts.some((c) => c.parent_id === d.id) && !(prodCountByDept.get(d.id) ?? 0))
+      .sort((a, b) => (treePos.get(a.id) ?? 0) - (treePos.get(b.id) ?? 0));
     const deptNoImage = depts.filter((d) => !d.image_path);
     return { noImage, noEmoji, noPrice, missingTr, emptyDepts, deptNoImage };
   }, [prods, depts, tr, priced.data, prodCountByDept]);
