@@ -69,7 +69,7 @@ function toCatalogProduct(favorite: FavoriteProduct): CatalogProduct {
 
 function ProductThumb({ row }: { row: FavRow }) {
   const image = row.variant ? row.product.variantImages?.[row.variant] : undefined;
-  return <ProductIcon emoji={row.product.emoji} iconUrl={image?.iconUrl ?? image?.imageUrl ?? row.product.iconUrl} iconPath={image?.iconPath ?? image?.imagePath ?? row.product.iconPath} symbolClassName="text-3xl" />;
+  return <ProductIcon emoji={row.product.emoji} iconUrl={image?.iconUrl ?? image?.imageUrl ?? row.product.iconUrl} iconPath={image?.iconPath ?? image?.imagePath ?? row.product.iconPath} symbolClassName="text-4xl" />;
 }
 
 function FavoritesPage() {
@@ -333,7 +333,7 @@ function FavoritesPage() {
           onPointerMove={onDragMove}
           onPointerUp={onDragUp}
           onPointerCancel={() => setDrag(null)}
-          className={`grid h-14 w-14 shrink-0 select-none place-items-center overflow-hidden rounded-xl bg-primary-soft/25 ${sec ? "touch-none cursor-grab" : ""}`}
+          className={`grid h-12 w-12 shrink-0 select-none place-items-center overflow-hidden rounded-lg bg-primary-soft/25 ${sec ? "touch-none cursor-grab" : ""}`}
         >
           <ProductThumb row={row} />
         </div>
