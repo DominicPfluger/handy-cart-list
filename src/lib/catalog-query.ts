@@ -1,17 +1,13 @@
 import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { getLocale, pickName, useLocale } from "../i18n";
-import { getCatalog, getCatalogImageUrls, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct, type CatalogCuisine } from "./catalog.functions";
+import { getCatalogCore, getCatalogDetails, getCatalogImageUrls, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct, type CatalogCuisine, type CatalogCore, type CatalogDetails } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
 import { usePersonalVariants } from "../hooks/use-personal-variants";
 import { useAllMarkets } from "../hooks/use-all-markets";
 import { useMarket } from "../hooks/use-market";
 
-/** Ländercode des Marktes aus der Sprachvariante (de-CH → CH). */
-export function marketOf(locale: string): string {
-  return locale.split("-")[1] ?? "";
-}
 
 export function flagOf(market: string): string {
   return market.length === 2 ? String.fromCodePoint(...[...market.toUpperCase()].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65)) : "";
@@ -23,16 +19,66 @@ export function inMarket(p: Pick<CatalogProduct, "markets" | "excludedMarkets">,
   return !(p.excludedMarkets ?? []).includes(market);
 }
 
-/** Katalog für eine Sprachvariante (nur deren Übersetzungen werden geladen). */
-export const catalogQueryOptions = (locale: string) =>
-  queryOptions({
-    queryKey: ["catalog", locale],
-    queryFn: () => getCatalog({ data: { locale } }),
+// ---- Geräte-Cache für den Basis-Katalog: App erscheint sofort, Auffrischung im Hintergrund ----
+
+const coreCacheKey = (locale: string) => `shoppi:catalog-core-${locale}`;
+
+function readCoreCache(locale: string): { t: number; data: CatalogCore } | null {
+  try {
+    const raw = localStorage.getItem(coreCacheKey(locale));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { t: number; data: CatalogCore };
+    if (!parsed?.data?.products?.length) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function writeCoreCache(locale: string, data: CatalogCore) {
+  try {
+    localStorage.setItem(coreCacheKey(locale), JSON.stringify({ t: Date.now(), data }));
+  } catch {
+    /* Speicher voll: Cache einfach weglassen */
+  }
+}
+
+/** Basis-Katalog für eine Sprachvariante; mit Geräte-Cache als sofortiger Startwert. */
+export const catalogQueryOptions = (locale: string) => {
+  const cached = typeof localStorage !== "undefined" ? readCoreCache(locale) : null;
+  return queryOptions({
+    queryKey: ["catalog", "core", locale],
+    queryFn: async () => {
+      try {
+        const fresh = await getCatalogCore({ data: { locale } });
+        writeCoreCache(locale, fresh);
+        return fresh;
+      } catch (e) {
+        // Offline: letzten gespeicherten Katalog zeigen, statt auf den Ladebildschirm zu hängen
+        const cached = readCoreCache(locale);
+        if (cached) return cached.data;
+        throw e;
+      }
+    },
+    // Gespeicherter Stand erscheint sofort und wird im Hintergrund aufgefrischt.
+    initialData: cached?.data,
+    initialDataUpdatedAt: cached?.t ?? 0,
     // Neue Kategorien und Produkte sollen nach kurzer Zeit auch in bereits geöffneten Apps erscheinen.
     staleTime: 60 * 1000,
     // Loader uses ensureQueryData (fetchQuery = no retry by default). Retry so a
     // single interrupted request (reload/HMR during the large download) doesn't blank the page.
     retry: 3,
+    retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
+  });
+};
+
+/** Details (Länderküchen, Marken, Synonyme, Varianten, Rezepte) – im Hintergrund nachgeladen. */
+export const catalogDetailsQueryOptions = (locale: string) =>
+  queryOptions({
+    queryKey: ["catalog", "details", locale],
+    queryFn: () => getCatalogDetails({ data: { locale } }),
+    staleTime: 10 * 60 * 1000,
+    retry: 2,
     retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
   });
 
@@ -55,13 +101,16 @@ export function useCatalog(): Catalog {
   const locale = useLocale();
   const market = useMarket();
   const { data } = useSuspenseQuery(catalogQueryOptions(locale));
+  const { data: details } = useQuery(catalogDetailsQueryOptions(locale));
   const { data: images } = useQuery(catalogImagesQueryOptions);
   const custom = useCustomNames();
   const own = useCustomCatalog();
   const personalVariants = usePersonalVariants();
   const allMarkets = useAllMarkets();
   return useMemo(() => {
+    const core: CatalogCore = data ?? { departments: [], products: [], headings: [], departmentAliases: [], productAliases: [] };
     const img = (path: string | null | undefined) => (path ? (images?.[path] ?? null) : null);
+    const d: CatalogDetails | undefined = details;
     const ownDepts: CatalogDepartment[] = own.departments.map((d, i) => ({
       id: d.id, parentId: d.parentId, name: d.name, emoji: d.emoji, color: null, imageUrl: null,
       sortOrder: 10000 + i, baseName: d.name, names: {},
@@ -72,33 +121,35 @@ export function useCatalog(): Catalog {
       sortOrder: 10000 + i, baseName: p.name, names: {},
     }));
     return {
-      departments: [...data.departments, ...ownDepts].map((d) => ({ ...d, imageUrl: img(d.imagePath), iconUrl: img(d.iconPath), name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
-      products: [...data.products.filter((p) => allMarkets || inMarket(p, market)), ...ownProducts].map((p) => {
+      departments: [...core.departments, ...ownDepts].map((d) => ({ ...d, imageUrl: img(d.imagePath), iconUrl: img(d.iconPath), name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
+      products: [...core.products.filter((p) => allMarkets || inMarket(p, market)), ...ownProducts].map((p) => {
         const name = custom[p.id] ?? pickName(p.names, locale, p.baseName);
         const foreign = p.markets?.length && !p.markets.includes(market);
         return {
           ...p,
+          synonyms: d?.synonyms[p.id] ?? [],
+          variantNames: d?.variantNames[p.id] ?? {},
+          cuisineIds: d?.cuisineIds[p.id] ?? [],
+          brands: d?.brands[p.id] ?? [],
           variants: [...p.variants, ...(personalVariants[p.id] ?? []).filter((v) => !p.variants.some((catalogVariant) => catalogVariant.toLocaleLowerCase() === v.toLocaleLowerCase()))],
           imageUrl: img(p.imagePath),
           iconUrl: img(p.iconPath),
-          variantImages: p.variantImages
-            ? Object.fromEntries(Object.entries(p.variantImages).map(([v, x]) => [v, { ...x, imageUrl: img(x.imagePath), iconUrl: img(x.iconPath) }]))
-            : {},
+          variantImages: Object.fromEntries(Object.entries(d?.variantImages[p.id] ?? {}).map(([v, x]) => [v, { ...x, imageUrl: img(x.imagePath), iconUrl: img(x.iconPath) }])),
           sortOrder: p.marketOrder?.[market] ?? p.sortOrder,
           name: foreign ? `${name} ${p.markets!.map(flagOf).join("")}` : name,
         };
       }),
-      headings: (data.headings ?? []).map((h) => ({ ...h, name: pickName(h.names, locale, h.baseName) })),
-      cuisines: (data.cuisines ?? []).map((c) => ({ ...c, name: pickName(c.names, locale, c.baseName) })),
-      recipeIngredients: data.recipeIngredients ?? [],
-      departmentAliases: data.departmentAliases ?? [],
-      productAliases: data.productAliases ?? [],
-      recipeGroups: (data.recipeGroups ?? []).map((g) => ({ ...g, name: pickName(g.names, locale, g.baseName) })),
-      recipeTemplates: (data.recipeTemplates ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
-      recipeSteps: (data.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
-      recipePopular: data.recipePopular ?? [],
+      headings: (core.headings ?? []).map((h) => ({ ...h, name: pickName(h.names, locale, h.baseName) })),
+      cuisines: (d?.cuisines ?? []).map((c) => ({ ...c, name: pickName(c.names, locale, c.baseName) })),
+      recipeIngredients: d?.recipeIngredients ?? [],
+      departmentAliases: core.departmentAliases ?? [],
+      productAliases: core.productAliases ?? [],
+      recipeGroups: (d?.recipeGroups ?? []).map((g) => ({ ...g, name: pickName(g.names, locale, g.baseName) })),
+      recipeTemplates: (d?.recipeTemplates ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
+      recipeSteps: (d?.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
+      recipePopular: d?.recipePopular ?? [],
     };
-  }, [data, images, locale, market, custom, own, allMarkets, personalVariants]);
+  }, [data, details, images, locale, market, custom, own, allMarkets, personalVariants]);
 }
 
 export type { Catalog, CatalogCuisine, CatalogDepartment, CatalogHeading, CatalogProduct };

@@ -324,6 +324,7 @@ export const de = {
   "cloud.error": "Synchronisierung fehlgeschlagen – bitte erneut versuchen",
   "cloud.queued": "Offline gespeichert – wird synchronisiert, sobald du wieder online bist",
   "cloud.queueFlushed": "{n} Änderungen nachsynchronisiert",
+  "cloud.offlineSnapshot": "Offline – letzter gespeicherter Stand wird angezeigt",
   "common.undo": "Rückgängig",
   "list.itemRemoved": "{name} entfernt",
   "list.checkedCleared": "{n} abgehakte Artikel entfernt",

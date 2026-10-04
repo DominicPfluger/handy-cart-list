@@ -48,14 +48,6 @@ export function RecipeIcon(props: IconProps) {
   );
 }
 
-export function OffersIcon(props: IconProps) {
-  return (
-    <svg {...base} {...props}>
-      <path d="M20.59 13.41 13.42 20.6a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z" />
-      <path d="M7 7h.01" />
-    </svg>
-  );
-}
 
 export function MoreIcon(props: IconProps) {
   return (
@@ -170,15 +162,6 @@ export function DepartmentIcon(props: IconProps) {
   );
 }
 
-export function DotsIcon(props: IconProps) {
-  return (
-    <svg {...base} {...props}>
-      <circle cx="12" cy="5" r="1.2" fill="currentColor" stroke="none" />
-      <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none" />
-      <circle cx="12" cy="19" r="1.2" fill="currentColor" stroke="none" />
-    </svg>
-  );
-}
 
 export function ShareIcon(props: IconProps) {
   return (
@@ -199,34 +182,6 @@ export function PinIcon(props: IconProps) {
 }
 
 /* Shoppi logo: shopping basket with a leaf */
-export function ShoppiLogo({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 48 48"
-      className={className}
-      fill="none"
-      aria-hidden="true"
-    >
-      {/* Leaf */}
-      <path
-        d="M35 6c0 6-3.5 9.5-9 10 .5-5 3.5-9 9-10Z"
-        fill="currentColor"
-      />
-      {/* Basket handles */}
-      <path
-        d="M10 18h28l-2 4H12l-2-4Z"
-        fill="currentColor"
-      />
-      {/* Basket body */}
-      <path
-        d="M12 22h24l-2.5 16a2 2 0 0 1-2 1.8H16.5a2 2 0 0 1-2-1.8L12 22Z"
-        fill="currentColor"
-      />
-      {/* Slats */}
-      <path d="M19 24v14M24 24v14M29 24v14" stroke="var(--color-card)" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 export function MicIcon(props: IconProps) {
   return (

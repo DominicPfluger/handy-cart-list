@@ -4,7 +4,7 @@ import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup } from "@/lib/admin.functions";
@@ -15,9 +15,8 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 import { getUnits } from "@/lib/units";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
-import { RecipeTraitsAdmin } from "@/components/recipe-traits-admin";
-import { RecipeAdmin, RecipeAssignAdmin } from "@/components/recipe-admin";
+import { ProductCuisinePicker } from "@/components/cuisine-admin";
+
 import { DeptAliasEditor, KEY as DEPT_ALIAS_KEY, loadAliases as loadDeptAliases } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
@@ -29,23 +28,31 @@ import { deptTreeOrder } from "@/lib/dept-order";
 import { isNonFoodRootName } from "@/lib/dept-colors";
 import { MarketAdmin, MarketAdminsManager } from "@/components/market-admin";
 import { useMarketCodes } from "@/hooks/use-markets";
-import { MarketsManager } from "@/components/admin/markets-manager";
-import { CatalogPreview } from "@/components/admin/catalog-preview";
 import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
-import { ImportPanel } from "@/components/admin/import-panel";
-import { MarketDataImport } from "@/components/admin/market-data-import";
-import { CatalogMediaPanel } from "@/components/admin/catalog-media-panel";
-import { CatalogTileEditor } from "@/components/admin/catalog-tile-editor";
-import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
 import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath } from "@/lib/product-icon";
-import { LocaleAdminPanel } from "@/components/admin/locale-admin-panel";
-import { CatalogHealthPanel } from "@/components/admin/catalog-health-panel";
-import { SpeechTextsPanel } from "@/components/admin/speech-texts-panel";
-import { UnitsPanel } from "@/components/admin/units-panel";
+import type { HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { useReferencePrices } from "@/hooks/use-reference-prices";
+
+// Schwere Admin-Bereiche werden erst beim Öffnen des jeweiligen Tabs geladen.
+const CatalogTileEditor = lazy(() => import("@/components/admin/catalog-tile-editor").then((m) => ({ default: m.CatalogTileEditor })));
+const CatalogMediaPanel = lazy(() => import("@/components/admin/catalog-media-panel").then((m) => ({ default: m.CatalogMediaPanel })));
+const CatalogHealthPanel = lazy(() => import("@/components/admin/catalog-health-panel").then((m) => ({ default: m.CatalogHealthPanel })));
+const LocaleAdminPanel = lazy(() => import("@/components/admin/locale-admin-panel").then((m) => ({ default: m.LocaleAdminPanel })));
+const SpeechTextsPanel = lazy(() => import("@/components/admin/speech-texts-panel").then((m) => ({ default: m.SpeechTextsPanel })));
+const UnitsPanel = lazy(() => import("@/components/admin/units-panel").then((m) => ({ default: m.UnitsPanel })));
+const MarketsManager = lazy(() => import("@/components/admin/markets-manager").then((m) => ({ default: m.MarketsManager })));
+const ImportPanel = lazy(() => import("@/components/admin/import-panel").then((m) => ({ default: m.ImportPanel })));
+const MarketDataImport = lazy(() => import("@/components/admin/market-data-import").then((m) => ({ default: m.MarketDataImport })));
+const CatalogPreview = lazy(() => import("@/components/admin/catalog-preview").then((m) => ({ default: m.CatalogPreview })));
+const HeadingAiDialog = lazy(() => import("@/components/admin/heading-ai-dialog").then((m) => ({ default: m.HeadingAiDialog })));
+const RecipeAdmin = lazy(() => import("@/components/recipe-admin").then((m) => ({ default: m.RecipeAdmin })));
+const RecipeAssignAdmin = lazy(() => import("@/components/recipe-admin").then((m) => ({ default: m.RecipeAssignAdmin })));
+const RecipeTraitsAdmin = lazy(() => import("@/components/recipe-traits-admin").then((m) => ({ default: m.RecipeTraitsAdmin })));
+const CuisineAdmin = lazy(() => import("@/components/cuisine-admin").then((m) => ({ default: m.CuisineAdmin })));
+
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -776,6 +783,7 @@ function AdminPage() {
         </button>
       </div>
 
+      <Suspense fallback={<p className="pt-2 text-sm text-muted-foreground">{T("adm.loading")}</p>}>
       {tab === "catalog" && (<>
       <div className="grid grid-cols-4 gap-2 text-center md:max-w-xl">
         <Stat label={T("adm.categories")} value={d?.depts.length} />
@@ -968,6 +976,7 @@ function AdminPage() {
       </div>)}
 
       {preview && <CatalogPreview onClose={() => setPreview(false)} />}
+      </Suspense>
     </div>
   );
 }
