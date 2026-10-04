@@ -18,6 +18,7 @@ import {
   sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { OverviewSortable } from "../components/overview-sortable";
 import { SplashScreen } from "../components/splash-screen";
 import { LandingPage } from "@/components/landing/landing-page";
 import { shouldShowLanding, markLandingDone } from "@/lib/landing";
