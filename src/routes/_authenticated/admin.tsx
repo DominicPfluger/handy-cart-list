@@ -121,7 +121,7 @@ function AdminPage() {
   const [bulkTree, setBulkTree] = useState(false);
   const [sortDlg, setSortDlg] = useState<string | null>(null);
   /** Aktiver Admin-Bereich (Tabs). */
-  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "more">("catalog");
+  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "speech" | "more">("catalog");
   const [preview, setPreview] = useState(false);
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: true }));
@@ -919,6 +919,7 @@ function AdminPage() {
       {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
       {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={(id) => setSel({ kind: "product", id })}
         onOpenDept={(id) => { setSearch(""); setSel(null); setCur(id); setTab("catalog"); }} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
+      {tab === "speech" && <SpeechTextsPanel />}
 
       {tab === "markets" && (<div className="space-y-4">
         <MarketsManager />
