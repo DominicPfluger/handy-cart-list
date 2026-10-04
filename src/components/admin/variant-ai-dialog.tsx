@@ -15,7 +15,7 @@ const T = (k: MessageKey, p?: Record<string, string | number>) => translate(getL
 
 export type VariantAiChoice = { hint: string; opts: AiImageOpts; both: boolean };
 
-type GenFn = (a: { data: { productId: string; variant: string; iconOnly?: boolean; hint?: string; opts?: AiImageOpts } }) => Promise<{ path: string }>;
+type GenFn = (a: { data: { productId: string; variant: string; iconOnly?: boolean; hint?: string | undefined; opts?: AiImageOpts } }) => Promise<{ path: string }>;
 
 async function fetchBlob(path: string) {
   const { data } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
@@ -41,7 +41,7 @@ export async function generateVariantWithOptions(gen: GenFn, productId: string, 
 }
 
 export function VariantAiDialog({ title, subtitle, defaultHint, showHint, onCancel, onRun }: {
-  title: string; subtitle?: string; defaultHint: string; showHint: boolean; onCancel: () => void; onRun: (c: VariantAiChoice) => void;
+  title: string; subtitle?: string | undefined; defaultHint: string; showHint: boolean; onCancel: () => void; onRun: (c: VariantAiChoice) => void;
 }) {
   const [hint, setHint] = useState(defaultHint);
   const [opts, setOpts] = useState<AiImageOpts>(DEFAULT_AI_IMAGE_OPTS);
