@@ -405,7 +405,7 @@ function DietPreferenceRow() {
         type="button"
         onClick={() => setOpen((value) => !value)}
         aria-expanded={open}
-        className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition hover:bg-muted active:bg-muted"
+        className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition"
       >
         <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-xl" aria-hidden="true">🥗</div>
         <div className="min-w-0 flex-1">
