@@ -5,7 +5,7 @@ import { currentMarket, useMarket } from "./use-market";
 
 export { currentMarket };
 
-export type RefPrice = { product_id: string; price: number; currency: string; unit_price: number | null; unit_basis: string | null; observed_at: string };
+export type RefPrice = { product_id: string; price: number; pack_size?: number | null; pack_unit?: string | null; currency: string; unit_price: number | null; unit_basis: string | null; observed_at: string };
 
 /** Richtpreise (Admin-Import) für das aktuelle Land, als Map productId → Preis. */
 export function useReferencePrices() {
@@ -16,7 +16,7 @@ export function useReferencePrices() {
     queryFn: async () => {
       const map = new Map<string, RefPrice>();
       for (let f = 0; ; f += 1000) {
-        const { data } = await supabase.from("product_reference_prices").select("product_id, price, currency, unit_price, unit_basis, observed_at").eq("market", market).range(f, f + 999);
+        const { data } = await supabase.from("product_reference_prices").select("product_id, price, currency, pack_size, pack_unit, unit_price, unit_basis, observed_at").eq("market", market).range(f, f + 999);
         for (const r of (data ?? []) as RefPrice[]) map.set(r.product_id, r);
         if (!data || data.length < 1000) break;
       }
