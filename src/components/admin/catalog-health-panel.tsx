@@ -28,8 +28,10 @@ function loadIgnored(): Set<string> {
 }
 
 /** Katalog-Pflege: Datenlücken, Dubletten-Scan und zentrale Synonym-Verwaltung. */
-export function CatalogHealthPanel({ depts, prods, tr, onEdit }: {
+export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   depts: Dept[]; prods: Prod[]; tr: Tr; onEdit: (productId: string) => void;
+  /** Sprung in den Kachelmodus der gewählten Kategorie (z. B. „Leere Kategorien"). */
+  onOpenDept?: (deptId: string) => void;
 }) {
   const { t: T, locale } = useT();
   const qc = useQueryClient();
@@ -172,12 +174,12 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit }: {
     if (error) toast.error(error.message); else void syns.refetch();
   };
 
-  const gapCards: Array<{ id: string; label: string; count: number; items: Array<{ id: string; label: string; productId?: string }> }> = [
+  const gapCards: Array<{ id: string; label: string; count: number; items: Array<{ id: string; label: string; productId?: string; deptId?: string }> }> = [
     { id: "noImage", label: T("adm.health.noImage"), count: gaps.noImage.length, items: gaps.noImage.slice(0, 50).map((p) => ({ id: p.id, label: `${p.emoji ?? "🛒"} ${p.name} (${deptName.get(p.department_id) ?? "?"})`, productId: p.id })) },
     { id: "noEmoji", label: T("adm.health.noEmoji"), count: gaps.noEmoji.length, items: gaps.noEmoji.slice(0, 50).map((p) => ({ id: p.id, label: `${p.name} (${deptName.get(p.department_id) ?? "?"})`, productId: p.id })) },
     { id: "noPrice", label: T("adm.health.noPrice"), count: gaps.noPrice.length, items: gaps.noPrice.slice(0, 50).map((p) => ({ id: p.id, label: `${p.emoji ?? "🛒"} ${p.name}`, productId: p.id })) },
     { id: "missingTr", label: T("adm.health.missingTr"), count: gaps.missingTr.length, items: gaps.missingTr.slice(0, 50).map((x) => ({ id: x.p.id, label: `${x.p.emoji ?? "🛒"} ${x.p.name} (${x.missing.length})`, productId: x.p.id })) },
-    { id: "emptyDepts", label: T("adm.health.emptyDept"), count: gaps.emptyDepts.length, items: gaps.emptyDepts.map((d) => ({ id: d.id, label: `${d.emoji ?? "📁"} ${d.name}` })) },
+    { id: "emptyDepts", label: T("adm.health.emptyDept"), count: gaps.emptyDepts.length, items: gaps.emptyDepts.map((d) => ({ id: d.id, label: `${d.emoji ?? "📁"} ${d.name}`, deptId: d.id })) },
     { id: "deptNoImage", label: T("adm.health.deptNoImage"), count: gaps.deptNoImage.length, items: gaps.deptNoImage.map((d) => ({ id: d.id, label: `${d.emoji ?? "📁"} ${d.name}` })) },
   ];
 
@@ -225,7 +227,15 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit }: {
           <ul className="max-h-64 space-y-1 overflow-y-auto rounded-xl border border-border bg-card p-2 text-sm">
             {gapCards.find((g) => g.id === openGap)?.items.map((it) => (
               <li key={it.id} className="flex items-center justify-between gap-2">
-                <span className="truncate">{it.label}</span>
+                {it.deptId && onOpenDept ? (
+                  <button type="button" onClick={() => onOpenDept(it.deptId!)}
+                    className="flex min-w-0 flex-1 items-center gap-1 truncate rounded-lg px-1 py-0.5 text-left hover:bg-muted" title={it.label}>
+                    <span className="truncate">{it.label}</span>
+                    <span aria-hidden className="ml-auto shrink-0 text-muted-foreground">→</span>
+                  </button>
+                ) : (
+                  <span className="truncate">{it.label}</span>
+                )}
                 {it.productId && <Button size="sm" variant="outline" onClick={() => onEdit(it.productId!)}>{T("adm.health.open")}</Button>}
               </li>
             ))}

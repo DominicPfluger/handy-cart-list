@@ -913,7 +913,8 @@ function AdminPage() {
 {tab === "recipes" && (d ? <><RecipeAdmin depts={d.depts} prods={d.prods} /><RecipeAssignAdmin depts={d.depts} prods={d.prods} /><RecipeTraitsAdmin /></> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "cuisines" && (d ? <CuisineAdmin depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
-      {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={(id) => setSel({ kind: "product", id })} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
+      {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={(id) => setSel({ kind: "product", id })}
+        onOpenDept={(id) => { setSearch(""); setSel(null); setCur(id); setTab("catalog"); }} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
 
       {tab === "markets" && (<div className="space-y-4">
         <MarketsManager />
