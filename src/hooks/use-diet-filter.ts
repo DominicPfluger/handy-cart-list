@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 
 /** Gewählte Ernährungsformen für die Abteilungsansicht (nur auf diesem Gerät). */
 export const DIETS = [
-  "kosher", "halal", "vegetarian", "vegan", "gluten_free", "lactose_free", "fructose_free", "sugar_free",
+  "halal", "kosher", "vegetarian", "vegan", "gluten_free", "lactose_free", "fructose_free", "sugar_free",
   "keto", "paleo", "low_carb", "low_fat", "high_protein", "low_calorie", "clean_eating",
 ] as const;
 export type Diet = (typeof DIETS)[number];
