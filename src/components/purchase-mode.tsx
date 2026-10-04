@@ -59,13 +59,12 @@ export function PurchaseMode({ items, onToggle, onClose }: {
 
   return (
     <div className="fixed inset-0 z-[80] flex flex-col bg-background" role="dialog" aria-modal="true" aria-label={t("purchase.title")}>
-      <div className="flex items-center gap-3 px-5 pt-5">
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("purchase.title")}</p>
-          <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-            <div className="h-full rounded-full bg-primary transition-all duration-500" style={{ width: `${progress}%` }} />
-          </div>
-        </div>
+      {/* Grüner Statusbalken über die volle Breite am oberen Rand */}
+      <div className="h-1.5 w-full bg-muted" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100} aria-label={t("purchase.title")}>
+        <div className="h-full bg-primary transition-all duration-500" style={{ width: `${progress}%` }} />
+      </div>
+      <div className="flex items-center gap-3 px-5 pt-4">
+        <p className="min-w-0 flex-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("purchase.title")}</p>
         <span className="text-sm font-semibold text-muted-foreground">{done}/{items.length}</span>
         <button
           onClick={toggleSpeak}
