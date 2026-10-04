@@ -2,7 +2,8 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { WandSparkles, Zap, ImageOff, Loader2, X, Images } from "lucide-react";
+import { WandSparkles, Zap, ImageOff, Loader2, X, Images, ChevronDown, ChevronRight } from "lucide-react";
+import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { supabase } from "@/integrations/supabase/client";
 import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath, saveCustomIconFromPath } from "@/lib/product-icon";
@@ -12,7 +13,7 @@ import { deptTreeOrder } from "@/lib/dept-order";
 import { Button } from "@/components/ui/button";
 
 type Dept = { id: string; name: string; parent_id: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; image_path: string | null; icon_path?: string | null };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; image_path: string | null; icon_path?: string | null; variants?: string[] };
 type Filter = "any" | "image" | "icon" | "both";
 type Dlg = { target: Prod | null; hint: string; opts: AiImageOpts; both: boolean };
 const PAGE = 5;
@@ -30,6 +31,8 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   const [patch, setPatch] = useState<Record<string, { image_path?: string | null; icon_path?: string | null }>>({});
   const [busy, setBusy] = useState<Set<string>>(new Set());
   const [batch, setBatch] = useState<{ done: number; total: number } | null>(null);
+  const [openVars, setOpenVars] = useState<Set<string>>(new Set());
+  const toggleVars = (id: string) => setOpenVars((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const stop = useRef(false);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
