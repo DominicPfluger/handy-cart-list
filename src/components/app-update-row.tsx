@@ -8,7 +8,7 @@ import { useT } from "../i18n";
  * lädt die App anschliessend frisch vom Server.
  */
 export function AppUpdateRow() {
-  const t = useT();
+  const { t } = useT();
   const [busy, setBusy] = useState(false);
 
   const updateApp = async () => {
