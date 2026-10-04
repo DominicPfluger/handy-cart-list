@@ -105,6 +105,7 @@ export function useCatalog(): Catalog {
   const personalVariants = usePersonalVariants();
   const allMarkets = useAllMarkets();
   return useMemo(() => {
+    const core: CatalogCore = data ?? { departments: [], products: [], headings: [], departmentAliases: [], productAliases: [] };
     const img = (path: string | null | undefined) => (path ? (images?.[path] ?? null) : null);
     const d: CatalogDetails | undefined = details;
     const ownDepts: CatalogDepartment[] = own.departments.map((d, i) => ({
@@ -117,15 +118,14 @@ export function useCatalog(): Catalog {
       sortOrder: 10000 + i, baseName: p.name, names: {},
     }));
     return {
-      departments: [...data.departments, ...ownDepts].map((d) => ({ ...d, imageUrl: img(d.imagePath), iconUrl: img(d.iconPath), name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
-      products: [...data.products.filter((p) => allMarkets || inMarket(p, market)), ...ownProducts].map((p) => {
+      departments: [...core.departments, ...ownDepts].map((d) => ({ ...d, imageUrl: img(d.imagePath), iconUrl: img(d.iconPath), name: custom[d.id] ?? pickName(d.names, locale, d.baseName) })),
+      products: [...core.products.filter((p) => allMarkets || inMarket(p, market)), ...ownProducts].map((p) => {
         const name = custom[p.id] ?? pickName(p.names, locale, p.baseName);
         const foreign = p.markets?.length && !p.markets.includes(market);
         return {
           ...p,
           synonyms: d?.synonyms[p.id] ?? [],
           variantNames: d?.variantNames[p.id] ?? {},
-          variantImages: d?.variantImages[p.id] ?? {},
           cuisineIds: d?.cuisineIds[p.id] ?? [],
           brands: d?.brands[p.id] ?? [],
           variants: [...p.variants, ...(personalVariants[p.id] ?? []).filter((v) => !p.variants.some((catalogVariant) => catalogVariant.toLocaleLowerCase() === v.toLocaleLowerCase()))],
@@ -136,11 +136,11 @@ export function useCatalog(): Catalog {
           name: foreign ? `${name} ${p.markets!.map(flagOf).join("")}` : name,
         };
       }),
-      headings: (data.headings ?? []).map((h) => ({ ...h, name: pickName(h.names, locale, h.baseName) })),
+      headings: (core.headings ?? []).map((h) => ({ ...h, name: pickName(h.names, locale, h.baseName) })),
       cuisines: (d?.cuisines ?? []).map((c) => ({ ...c, name: pickName(c.names, locale, c.baseName) })),
       recipeIngredients: d?.recipeIngredients ?? [],
-      departmentAliases: data.departmentAliases ?? [],
-      productAliases: data.productAliases ?? [],
+      departmentAliases: core.departmentAliases ?? [],
+      productAliases: core.productAliases ?? [],
       recipeGroups: (d?.recipeGroups ?? []).map((g) => ({ ...g, name: pickName(g.names, locale, g.baseName) })),
       recipeTemplates: (d?.recipeTemplates ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
       recipeSteps: (d?.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
