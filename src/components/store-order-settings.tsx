@@ -96,7 +96,7 @@ export function StoreOrderSettings() {
           }}>
             <SortableContext items={roots.map((r) => r.key)} strategy={verticalListSortingStrategy}>
               <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-xl border border-border">
-                {roots.map((r) => <Row key={r.key} id={r.key} label={r.name} emoji={r.emoji} onHide={() => hideFor(selected.id, r.key)} />)}
+                {roots.map((r) => <Row key={r.key} id={r.key} label={r.name} emoji={r.emoji} imageUrl={r.imageUrl} imagePath={r.imagePath} onHide={() => hideFor(selected.id, r.key)} />)}
               </ul>
             </SortableContext>
           </DndContext>
@@ -106,7 +106,9 @@ export function StoreOrderSettings() {
               <ul className="divide-y divide-border rounded-xl border border-border">
                 {hiddenRoots.map((r) => (
                   <li key={r.key} className="flex items-center gap-2 bg-card px-3 py-2">
-                    <span aria-hidden="true">{r.emoji ?? "🛒"}</span>
+                    <span className="inline-grid h-6 w-6 shrink-0 place-items-center">
+                      <DepartmentIcon emoji={r.emoji} imageUrl={r.imageUrl} imagePath={r.imagePath} className="h-6 w-6 object-contain" symbolClassName="text-lg" />
+                    </span>
                     <span className="flex-1 text-sm text-muted-foreground">{r.name}</span>
                     <button type="button" onClick={() => unhideFor(selected.id, r.key)} className="text-xs font-semibold text-primary">{t("store.unhide")}</button>
                   </li>
