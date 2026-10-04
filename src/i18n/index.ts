@@ -44,18 +44,32 @@ export function allLocales(): LocaleInfo[] {
   return cachedAll;
 }
 const loadedDicts = new Set<string>();
+// Eingebaute Sprachen liegen als eigene Chunks vor und werden erst bei Bedarf geladen.
+const builtinDicts = import.meta.glob<{ default: Record<string, string> }>("./locales/*.json");
+
 async function loadDict(locale: string) {
-  if (dicts[locale] && !extraLocales.some((l) => l.id === locale)) return;
+  if (dicts[locale]) return;
   if (loadedDicts.has(locale)) return;
   loadedDicts.add(locale);
-  const { supabase } = await import("@/integrations/supabase/client");
-  const out: Record<string, string> = {};
-  for (let f = 0; ; f += 1000) {
-    const { data } = await supabase.from("ui_translations").select("key, text").eq("locale", locale).range(f, f + 999);
-    for (const r of data ?? []) out[r.key] = r.text;
-    if (!data || data.length < 1000) break;
+  try {
+    const builtin = builtinDicts[`./locales/${locale}.json`];
+    if (builtin) {
+      dicts[locale] = (await builtin()).default;
+    } else {
+      // Im Admin angelegte Sprache: Übersetzungen aus der Datenbank laden.
+      const { supabase } = await import("@/integrations/supabase/client");
+      const out: Record<string, string> = {};
+      for (let f = 0; ; f += 1000) {
+        const { data } = await supabase.from("ui_translations").select("key, text").eq("locale", locale).range(f, f + 999);
+        for (const r of data ?? []) out[r.key] = r.text;
+        if (!data || data.length < 1000) break;
+      }
+      dicts[locale] = out;
+    }
+  } catch {
+    loadedDicts.delete(locale);
+    return;
   }
-  dicts[locale] = out;
   localesVersion++;
   emit();
 }
