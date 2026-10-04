@@ -21,8 +21,10 @@ import { toast } from "sonner";
 import type { ShoppingList } from "../hooks/use-shopping-list";
 import { PlusIcon, TrashIcon, CheckIcon } from "./icons";
 import { getLocale, translate, useT } from "../i18n";
-import { useStores } from "../hooks/use-stores";
+import { storeLabel, useStores } from "../hooks/use-stores";
 import { useGroupOrder } from "../hooks/use-group-order";
+
+const STORE_EMOJIS = ["🏪", "🛒", "🧺", "🏬", "🥖", "🐄", "🌱"];
 
 interface Props {
   open: boolean;
