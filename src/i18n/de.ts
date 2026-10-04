@@ -675,6 +675,7 @@ export const de = {
   "adm.noImg.modeBoth": "Icon separat mit KI (2 Credits)",
   "adm.noImg.none": "Alle Produkte haben Bilder.",
   "adm.noImg.more": "Weitere 5 laden",
+  "adm.noImg.search": "Suchen…",
   "adm.tab.health": "Pflege",
   "adm.health.gaps": "Datenlücken",
   "adm.health.noImage": "Produkte ohne Bild",
