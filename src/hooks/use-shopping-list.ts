@@ -474,7 +474,7 @@ interface CloudListsApi {
   selfName: string;
   setActiveListId: (id: string) => void;
   createList: (name: string, isTemplate?: boolean) => string | undefined;
-  createListFromItems: (name: string, items: ListItem[]) => void;
+  createListFromItems: (name: string, items: ListItem[]) => string | undefined;
   renameList: (id: string, name: string) => void;
   deleteList: (id: string) => void;
   reorderLists: (fromId: string, toId: string) => void;
@@ -1085,6 +1085,7 @@ function useCloudLists(
           toast.error(t("cloud.error"));
           setCloudLists((prev) => prev.filter((l) => l.id !== id));
         });
+      return id;
     },
     [user, selfName, scheduleReload]
   );
