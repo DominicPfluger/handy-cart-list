@@ -506,31 +506,14 @@ function ListPage() {
         </div>
       )}
 
-      <DndContext
-        sensors={groupSensors}
-        collisionDetection={closestCenter}
-        onDragEnd={(e: DragEndEvent) => {
-          const { active, over } = e;
-          if (!over || active.id === over.id) return;
-          const keys = grouped.map((g) => g.key);
-          const from = keys.indexOf(String(active.id));
-          const to = keys.indexOf(String(over.id));
-          if (from < 0 || to < 0) return;
-          keys.splice(to, 0, ...keys.splice(from, 1));
-          saveGroupOrder(keys);
-        }}
-      >
-      <SortableContext items={grouped.map((g) => g.key)} strategy={verticalListSortingStrategy}>
       <div className="space-y-6">
         {visibleGroups.map((group) => {
           return (
-            <SortableGroup key={group.key} id={group.key} header={(grip) => (
+            <div key={group.key}>
               <div className="mb-2 flex items-center gap-1.5">
-                {grip}
                 <span className="grid h-6 w-6 shrink-0 place-items-center"><DepartmentIcon emoji={group.emoji} imageUrl={group.root?.imageUrl} imagePath={group.root?.imagePath} className="h-6 w-6 object-contain" symbolClassName="text-lg" /></span>
                 <h2 className="text-sm font-semibold text-foreground">{group.label}</h2>
               </div>
-            )}>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
                 {group.items.map((item, index) => {
                   const h = group.items.length > 5 && !item.checked && item.productId ? headingOf.get(item.productId) : undefined;
