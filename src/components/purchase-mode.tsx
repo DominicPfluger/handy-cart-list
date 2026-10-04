@@ -4,6 +4,7 @@ import { useSpeakRate } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { speakSentences } from "./speak-list-button";
 import { CheckIcon } from "./icons";
+import { CachedImage } from "./catalog-icon";
 
 const SPEAK_KEY = "shoppi:purchase-speak";
 
@@ -21,6 +22,9 @@ export interface PurchaseItem {
   checked: boolean;
   emoji: string;
   color?: string;
+  /** Grosses Produktbild (Pfad im Bild-Speicher + signierte Adresse). */
+  imagePath?: string | null | undefined;
+  imageUrl?: string | null | undefined;
 }
 
 /** Freihändiger Kaufmodus: zeigt jeweils den nächsten offenen Artikel gross an,
@@ -104,10 +108,20 @@ export function PurchaseMode({ items, onToggle, onClose }: {
         <>
           <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 text-center">
             <div
-              className="grid h-28 w-28 place-items-center overflow-hidden rounded-3xl text-6xl"
+              className="grid h-56 w-56 place-items-center overflow-hidden rounded-3xl text-8xl"
               style={current.color ? { backgroundColor: current.color } : undefined}
             >
-              {current.emoji || "🛒"}
+              {current.imagePath ? (
+                <CachedImage
+                  key={current.imagePath}
+                  path={current.imagePath}
+                  signedUrl={current.imageUrl}
+                  className="h-full w-full object-cover"
+                  fallback={<span aria-hidden="true">{current.emoji || "🛒"}</span>}
+                />
+              ) : (
+                current.emoji || "🛒"
+              )}
             </div>
             <p className="break-words text-3xl font-bold leading-tight text-foreground">{current.name}</p>
             {current.quantity && <p className="text-lg font-medium text-muted-foreground">{current.quantity}</p>}

@@ -289,6 +289,7 @@ function ListPage() {
         quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : "",
         checked: i.checked,
         emoji: i.emoji || product?.emoji || "🛒",
+        ...(product?.imagePath ? { imagePath: product.imagePath, imageUrl: product.imageUrl } : {}),
         ...(color ? { color } : {}),
       };
     });
