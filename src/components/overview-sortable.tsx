@@ -46,15 +46,15 @@ function OverviewRow({ row, onOpen, onSaveTemplate, onDelete, onRename, t }: Act
     if (n && n !== row.name) onRename?.(row.id, n); else setName(row.name);
     setEditing(false);
   };
-  const iconBtn = "grid h-9 w-9 shrink-0 place-items-center rounded-lg text-muted-foreground active:bg-muted";
+  const iconBtn = "grid h-8 w-8 shrink-0 place-items-center rounded-lg text-muted-foreground active:bg-muted";
   return (
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-center gap-2 bg-card px-2 py-2.5 ${isDragging ? "relative z-10 opacity-80 shadow-lg" : ""}`}
+      className={`flex items-center gap-0.5 bg-card px-2 py-2.5 ${isDragging ? "relative z-10 opacity-80 shadow-lg" : ""}`}
     >
       <button {...attributes} {...listeners} aria-label={t("lm.move")} title={t("lm.move")}
-        className="grid h-9 w-6 shrink-0 cursor-grab touch-none place-items-center text-muted-foreground">
+        className="grid h-8 w-6 shrink-0 cursor-grab touch-none place-items-center text-muted-foreground">
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
           <circle cx="9" cy="6" r="1.5" /><circle cx="15" cy="6" r="1.5" /><circle cx="9" cy="12" r="1.5" />
           <circle cx="15" cy="12" r="1.5" /><circle cx="9" cy="18" r="1.5" /><circle cx="15" cy="18" r="1.5" />
@@ -86,7 +86,7 @@ function OverviewRow({ row, onOpen, onSaveTemplate, onDelete, onRename, t }: Act
           </svg>
         </button>
       )}
-      <button onClick={() => onDelete(row.id)} aria-label={t("lm.delete")} title={t("lm.delete")} className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-coral active:bg-muted">
+      <button onClick={() => onDelete(row.id)} aria-label={t("lm.delete")} title={t("lm.delete")} className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-coral active:bg-muted">
         <TrashIcon className="h-4 w-4" />
       </button>
     </div>

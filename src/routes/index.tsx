@@ -120,7 +120,7 @@ function ListPage() {
   const {
     items, hydrated, loading, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
-    templates, saveAsTemplate, createFromTemplate, deleteTemplate, reorderTemplates,
+    templates, saveAsTemplate, createFromTemplate, deleteTemplate, reorderTemplates, renameTemplate,
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
@@ -421,6 +421,7 @@ function ListPage() {
             rows={templates.map((tp) => ({ id: tp.id, name: tp.name, sub: String(tp.items.length), emoji: "📋" }))}
             onReorder={reorderTemplates}
             onOpen={(id) => { createFromTemplate(id); toast.success(t("lm.templateCreated")); }}
+            onRename={renameTemplate}
             onDelete={(id) => {
               const tp = templates.find((x) => x.id === id);
               if (tp && confirm(t("lm.deleteTemplateConfirm").replace("{name}", tp.name))) deleteTemplate(id);
