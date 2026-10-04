@@ -144,12 +144,24 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
               <p className="truncate text-sm font-medium text-foreground">{p.emoji} {p.name}</p>
               <p className="truncate text-xs text-muted-foreground">{path(p.department_id)}</p>
             </button>
-            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => fix(p)}>
-              {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4 text-primary" />}
-            </Button>
-            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.genBoth")} title={t("adm.noImg.genBoth")} disabled={busy.has(p.id) || !!batch} onClick={() => fix(p, true)}>
-              {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
-            </Button>
+            <span className="relative">
+              <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setMenuFor((m) => (m === p.id ? null : p.id))}>
+                {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
+              </Button>
+              {menuFor === p.id && (
+                <>
+                  <span className="fixed inset-0 z-40" onClick={() => setMenuFor(null)} />
+                  <span className="absolute right-0 top-full z-50 mt-1 block w-56 overflow-hidden rounded-xl border border-border bg-card shadow-lg">
+                    <button type="button" className="block w-full px-3 py-2 text-left text-xs font-medium text-foreground hover:bg-muted" onClick={() => { setMenuFor(null); void fix(p); }}>
+                      {t("adm.noImg.gen")}
+                    </button>
+                    <button type="button" className="block w-full border-t border-border px-3 py-2 text-left text-xs font-medium text-foreground hover:bg-muted" onClick={() => { setMenuFor(null); void fix(p, true); }}>
+                      {t("adm.noImg.genBoth")}
+                    </button>
+                  </span>
+                </>
+              )}
+            </span>
           </li>
         ))}
       </ul>
