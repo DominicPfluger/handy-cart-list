@@ -708,6 +708,15 @@ function useCloudLists(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, hydrated, cloudLists]);
 
+  // Jede Änderung (auch eigene, noch nicht synchronisierte) vollständig offline sichern
+  useEffect(() => {
+    if (!user || !hydrated) return;
+    try {
+      localStorage.setItem(SNAPSHOT_KEY, JSON.stringify({ lists: cloudLists, members, selfName }));
+    } catch { /* Speicher voll */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, hydrated, cloudLists, members, selfName]);
+
   // Aktive Liste merken
   useEffect(() => {
     if (activeListId) {

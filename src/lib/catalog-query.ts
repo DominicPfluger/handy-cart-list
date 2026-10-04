@@ -57,6 +57,19 @@ export const catalogQueryOptions = (locale: string) => {
         // Offline: letzten gespeicherten Katalog zeigen, statt auf den Ladebildschirm zu hängen
         const cached = readCoreCache(locale);
         if (cached) return cached.data;
+        // Notfalls Katalog einer anderen Sprache — Namen enthalten alle Übersetzungen
+        try {
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k?.startsWith("shoppi:catalog-core-")) {
+              const other = readCoreCache(k.slice("shoppi:catalog-core-".length));
+              if (other) return other.data;
+            }
+          }
+        } catch { /* ignore */ }
+        // Letzter Ausweg: leerer Katalog, damit gespeicherte Listen trotzdem erscheinen
+        const empty: CatalogCore = { departments: [], products: [], headings: [], departmentAliases: [], productAliases: [] };
+        if (typeof navigator !== "undefined" && !navigator.onLine) return empty;
         throw e;
       }
     },
@@ -72,15 +85,39 @@ export const catalogQueryOptions = (locale: string) => {
   });
 };
 
-/** Details (Länderküchen, Marken, Synonyme, Varianten, Rezepte) – im Hintergrund nachgeladen. */
-export const catalogDetailsQueryOptions = (locale: string) =>
-  queryOptions({
+const detailsCacheKey = (locale: string) => `shoppi:catalog-details-${locale}`;
+function readDetailsCache(locale: string): { t: number; data: CatalogDetails } | null {
+  try {
+    const raw = localStorage.getItem(detailsCacheKey(locale));
+    return raw ? (JSON.parse(raw) as { t: number; data: CatalogDetails }) : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Details (Länderküchen, Marken, Synonyme, Varianten, Rezepte) – im Hintergrund nachgeladen, offline aus dem Geräte-Cache. */
+export const catalogDetailsQueryOptions = (locale: string) => {
+  const cached = typeof localStorage !== "undefined" ? readDetailsCache(locale) : null;
+  return queryOptions({
     queryKey: ["catalog", "details", locale],
-    queryFn: () => getCatalogDetails({ data: { locale } }),
+    queryFn: async () => {
+      try {
+        const fresh = await getCatalogDetails({ data: { locale } });
+        try { localStorage.setItem(detailsCacheKey(locale), JSON.stringify({ t: Date.now(), data: fresh })); } catch { /* Speicher voll */ }
+        return fresh;
+      } catch (e) {
+        const c = readDetailsCache(locale);
+        if (c) return c.data;
+        throw e;
+      }
+    },
+    initialData: cached?.data,
+    initialDataUpdatedAt: cached?.t ?? 0,
     staleTime: 10 * 60 * 1000,
     retry: 2,
     retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
   });
+};
 
 /** Signierte Bild-Adressen erneuern, bevor sie ablaufen; gespeicherte Dateien bleiben im Geräte-Cache. */
 export const catalogImagesQueryOptions = queryOptions({
