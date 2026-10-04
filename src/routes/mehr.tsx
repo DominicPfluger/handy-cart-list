@@ -37,6 +37,7 @@ import { openShareSheet } from "../components/share-sheet";
 import appIcon from "@/assets/splash-logo.png.asset.json";
 import { APP_VERSION } from "../lib/app-version";
 import { InstallAppRow } from "../components/install-app-row";
+import { StoreOrderSettings } from "../components/store-order-settings";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
@@ -125,6 +126,10 @@ function MorePage() {
       {/* Ernährungsform — unterhalb von „Gemeinsam“ */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <DietPreferenceRow />
+      </section>
+
+      <section className="rounded-2xl border border-border bg-card">
+        <StoreOrderSettings />
       </section>
 
       {/* Settings menu */}
