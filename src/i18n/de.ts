@@ -131,7 +131,7 @@ export const de = {
   "fav.listNameTitle": "Neue Liste aus Favoriten",
   "fav.listNamePlaceholder": "Name der Einkaufsliste",
 
-  "list.lists": "Listen",
+  "list.lists": "Einkaufslisten",
   "list.share": "Liste teilen",
   "list.empty1": "Deine Liste ist leer.",
   "list.empty2": "Füge Artikel über „Abteilungen“ hinzu!",
