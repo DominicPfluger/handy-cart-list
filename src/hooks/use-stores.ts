@@ -27,6 +27,6 @@ export function useStores(): StoreOption[] {
 }
 
 /** „Icon Name" für Dropdown-Optionen und Klartext-Anzeigen. */
-export function storeLabel(s: { name: string; emoji?: string }): string {
+export function storeLabel(s: { name: string; emoji?: string | undefined }): string {
   return s.emoji ? `${s.emoji} ${s.name}` : s.name;
 }
