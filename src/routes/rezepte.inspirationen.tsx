@@ -47,6 +47,7 @@ function Page() {
       <FavoritesRow />
       <RecipeFeed />
       <RecipeBuilder mode="inspiration" />
+      <MostSavedRow />
     </div>
   );
 }
