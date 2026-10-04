@@ -133,7 +133,7 @@ export function useGroupOrder() {
 
   const order = all[store] ?? all["default"] ?? [];
   const hidden = hiddenAll[store] ?? [];
-  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor, listStores, setListStore };
+  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, updateCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor, listStores, setListStore };
 }
 
 /** Überträgt die Laden-Zuordnung, wenn eine Liste ihre endgültige Kennung erhält. */
