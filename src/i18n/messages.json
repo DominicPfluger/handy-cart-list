@@ -1315,7 +1315,11 @@
     "adm.noImg.generate": "Generate image",
     "adm.variantAi.all": "AI images for {n} variants without image",
     "adm.variantAi.done": "{n} variant images generated",
-    "adm.health.openDept": "Open in catalog"
+    "adm.health.openDept": "Open in catalog",
+    "price.catProducts": "Show products in this category",
+    "price.catEmpty": "No products in this category",
+    "price.estimateOne": "Estimate price",
+    "price.estimated": "{n} price(s) saved"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2633,7 +2637,11 @@
     "adm.noImg.generate": "Generate image",
     "adm.variantAi.all": "AI images for {n} variants without image",
     "adm.variantAi.done": "{n} variant images generated",
-    "adm.health.openDept": "Open in catalogue"
+    "adm.health.openDept": "Open in catalogue",
+    "price.catProducts": "Show products in this category",
+    "price.catEmpty": "No products in this category",
+    "price.estimateOne": "Estimate price",
+    "price.estimated": "{n} price(s) saved"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3951,7 +3959,11 @@
     "adm.noImg.generate": "Generate image",
     "adm.variantAi.all": "AI images for {n} variants without image",
     "adm.variantAi.done": "{n} variant images generated",
-    "adm.health.openDept": "Open in catalog"
+    "adm.health.openDept": "Open in catalog",
+    "price.catProducts": "Show products in this category",
+    "price.catEmpty": "No products in this category",
+    "price.estimateOne": "Estimate price",
+    "price.estimated": "{n} price(s) saved"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5269,7 +5281,11 @@
     "adm.noImg.generate": "Generar imagen",
     "adm.variantAi.all": "Imágenes IA para {n} variantes sin imagen",
     "adm.variantAi.done": "{n} imágenes de variantes generadas",
-    "adm.health.openDept": "Abrir en el catálogo"
+    "adm.health.openDept": "Abrir en el catálogo",
+    "price.catProducts": "Mostrar productos de esta categoría",
+    "price.catEmpty": "No hay productos en esta categoría",
+    "price.estimateOne": "Estimar precio",
+    "price.estimated": "{n} precio(s) guardados"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6587,7 +6603,11 @@
     "adm.noImg.generate": "Generar imagen",
     "adm.variantAi.all": "Imágenes IA para {n} variantes sin imagen",
     "adm.variantAi.done": "{n} imágenes de variantes generadas",
-    "adm.health.openDept": "Abrir en el catálogo"
+    "adm.health.openDept": "Abrir en el catálogo",
+    "price.catProducts": "Mostrar productos de esta categoría",
+    "price.catEmpty": "No hay productos en esta categoría",
+    "price.estimateOne": "Estimar precio",
+    "price.estimated": "{n} precio(s) guardados"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7905,7 +7925,11 @@
     "adm.noImg.generate": "Générer l’image",
     "adm.variantAi.all": "Images IA pour {n} variantes sans image",
     "adm.variantAi.done": "{n} images de variantes générées",
-    "adm.health.openDept": "Ouvrir dans le catalogue"
+    "adm.health.openDept": "Ouvrir dans le catalogue",
+    "price.catProducts": "Afficher les produits de cette catégorie",
+    "price.catEmpty": "Aucun produit dans cette catégorie",
+    "price.estimateOne": "Estimer le prix",
+    "price.estimated": "{n} prix enregistré(s)"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9223,7 +9247,11 @@
     "adm.noImg.generate": "Générer l’image",
     "adm.variantAi.all": "Images IA pour {n} variantes sans image",
     "adm.variantAi.done": "{n} images de variantes générées",
-    "adm.health.openDept": "Ouvrir dans le catalogue"
+    "adm.health.openDept": "Ouvrir dans le catalogue",
+    "price.catProducts": "Afficher les produits de cette catégorie",
+    "price.catEmpty": "Aucun produit dans cette catégorie",
+    "price.estimateOne": "Estimer le prix",
+    "price.estimated": "{n} prix enregistré(s)"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10541,7 +10569,11 @@
     "adm.noImg.generate": "Genera immagine",
     "adm.variantAi.all": "Immagini IA per {n} varianti senza immagine",
     "adm.variantAi.done": "{n} immagini di varianti generate",
-    "adm.health.openDept": "Apri nel catalogo"
+    "adm.health.openDept": "Apri nel catalogo",
+    "price.catProducts": "Mostra i prodotti di questa categoria",
+    "price.catEmpty": "Nessun prodotto in questa categoria",
+    "price.estimateOne": "Stima prezzo",
+    "price.estimated": "{n} prezzo/i salvato/i"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11859,7 +11891,11 @@
     "adm.noImg.generate": "Genera immagine",
     "adm.variantAi.all": "Immagini IA per {n} varianti senza immagine",
     "adm.variantAi.done": "{n} immagini di varianti generate",
-    "adm.health.openDept": "Apri nel catalogo"
+    "adm.health.openDept": "Apri nel catalogo",
+    "price.catProducts": "Mostra i prodotti di questa categoria",
+    "price.catEmpty": "Nessun prodotto in questa categoria",
+    "price.estimateOne": "Stima prezzo",
+    "price.estimated": "{n} prezzo/i salvato/i"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13177,7 +13213,11 @@
     "adm.noImg.generate": "Gerar imagem",
     "adm.variantAi.all": "Imagens IA para {n} variantes sem imagem",
     "adm.variantAi.done": "{n} imagens de variantes geradas",
-    "adm.health.openDept": "Abrir no catálogo"
+    "adm.health.openDept": "Abrir no catálogo",
+    "price.catProducts": "Mostrar produtos desta categoria",
+    "price.catEmpty": "Sem produtos nesta categoria",
+    "price.estimateOne": "Estimar preço",
+    "price.estimated": "{n} preço(s) guardado(s)"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14495,7 +14535,11 @@
     "adm.noImg.generate": "Gerar imagem",
     "adm.variantAi.all": "Imagens IA para {n} variantes sem imagem",
     "adm.variantAi.done": "{n} imagens de variantes geradas",
-    "adm.health.openDept": "Abrir no catálogo"
+    "adm.health.openDept": "Abrir no catálogo",
+    "price.catProducts": "Mostrar produtos desta categoria",
+    "price.catEmpty": "Sem produtos nesta categoria",
+    "price.estimateOne": "Estimar preço",
+    "price.estimated": "{n} preço(s) salvo(s)"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15813,7 +15857,11 @@
     "adm.noImg.generate": "Afbeelding genereren",
     "adm.variantAi.all": "AI-afbeeldingen voor {n} varianten zonder afbeelding",
     "adm.variantAi.done": "{n} variantafbeeldingen gemaakt",
-    "adm.health.openDept": "In catalogus openen"
+    "adm.health.openDept": "In catalogus openen",
+    "price.catProducts": "Producten in deze categorie tonen",
+    "price.catEmpty": "Geen producten in deze categorie",
+    "price.estimateOne": "Prijs schatten",
+    "price.estimated": "{n} prijs/prijzen opgeslagen"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -17131,7 +17179,11 @@
     "adm.noImg.generate": "Afbeelding genereren",
     "adm.variantAi.all": "AI-afbeeldingen voor {n} varianten zonder afbeelding",
     "adm.variantAi.done": "{n} variantafbeeldingen gemaakt",
-    "adm.health.openDept": "In catalogus openen"
+    "adm.health.openDept": "In catalogus openen",
+    "price.catProducts": "Producten in deze categorie tonen",
+    "price.catEmpty": "Geen producten in deze categorie",
+    "price.estimateOne": "Prijs schatten",
+    "price.estimated": "{n} prijs/prijzen opgeslagen"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17879,7 +17931,11 @@
     "adm.variantAi.all": "KI-Bilder für {n} Varianten ohne Bild",
     "adm.variantAi.done": "{n} Variantenbilder erzeugt",
     "adm.noImg.quick": "Schnellbild: 1 KI-Bild, Icon wird daraus abgeleitet (1 Credit)",
-    "adm.health.openDept": "Im Katalog öffnen"
+    "adm.health.openDept": "Im Katalog öffnen",
+    "price.catProducts": "Produkte dieser Kategorie anzeigen",
+    "price.catEmpty": "Keine Produkte in dieser Kategorie",
+    "price.estimateOne": "Preis schätzen",
+    "price.estimated": "{n} Preis(e) gespeichert"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -18627,6 +18683,10 @@
     "adm.variantAi.all": "KI-Bilder für {n} Varianten ohne Bild",
     "adm.variantAi.done": "{n} Variantenbilder erzeugt",
     "adm.noImg.quick": "Schnellbild: 1 KI-Bild, Icon wird daraus abgeleitet (1 Credit)",
-    "adm.health.openDept": "Im Katalog öffnen"
+    "adm.health.openDept": "Im Katalog öffnen",
+    "price.catProducts": "Produkte dieser Kategorie anzeigen",
+    "price.catEmpty": "Keine Produkte in dieser Kategorie",
+    "price.estimateOne": "Preis schätzen",
+    "price.estimated": "{n} Preis(e) gespeichert"
   }
 }

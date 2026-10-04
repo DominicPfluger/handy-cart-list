@@ -355,6 +355,97 @@ export const estimateProductPrice = createServerFn({ method: "POST" })
     return { market: data.market, price: e.price, currency, pack_size: e.pack_size, pack_unit: e.pack_unit, unit_price: e.unit_price, unit_basis: e.unit_basis };
   });
 
+/** Produkte einer Kategorie (inkl. Unterkategorien) mit Richtpreis-Status eines Markts, seitenweise. */
+export const listCategoryPrices = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({ market: z.string().min(2).max(3), departmentId: z.string().uuid(), offset: z.number().int().min(0).default(0), limit: z.number().int().min(1).max(50).default(20) }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const sb = context.supabase;
+
+    const { data: depts } = await sb.from("departments").select("id, parent_id, name");
+    const children = new Map<string | null, string[]>();
+    for (const d of (depts ?? []) as Array<{ id: string; parent_id: string | null }>) {
+      children.set(d.parent_id, [...(children.get(d.parent_id) ?? []), d.id]);
+    }
+    const deptIds: string[] = [];
+    const stack = [data.departmentId];
+    while (stack.length > 0) {
+      const id = stack.pop()!;
+      deptIds.push(id);
+      stack.push(...(children.get(id) ?? []));
+    }
+    const deptName = new Map(((depts ?? []) as Array<{ id: string; name: string }>).map((d) => [d.id, d.name]));
+
+    const { data: prods, error } = await sb
+      .from("products")
+      .select("id, name, emoji, icon_path, department_id, sort_order")
+      .in("department_id", deptIds)
+      .order("sort_order")
+      .range(data.offset, data.offset + data.limit);
+    if (error) throw new Error(error.message);
+    const list = (prods ?? []) as Array<{ id: string; name: string; emoji: string | null; icon_path: string | null; department_id: string }>;
+    const hasMore = list.length > data.limit;
+    const page = list.slice(0, data.limit);
+
+    const { data: prices } = await sb
+      .from("product_reference_prices")
+      .select("product_id, price, currency, pack_size, pack_unit, unit_price, unit_basis, observed_at")
+      .eq("market", data.market)
+      .in("product_id", page.map((p) => p.id));
+    const byProduct = new Map(((prices ?? []) as Array<{ product_id: string } & Record<string, unknown>>).map((r) => [r.product_id, r]));
+
+    const items = await Promise.all(page.map(async (p) => {
+      const pr = byProduct.get(p.id);
+      const signed = p.icon_path ? await supabaseAdmin.storage.from("catalog-images").createSignedUrl(p.icon_path, 3600) : null;
+      return {
+        product_id: p.id,
+        name: p.name,
+        emoji: p.emoji,
+        dept: deptName.get(p.department_id) ?? "",
+        iconUrl: signed?.data?.signedUrl ?? null,
+        price: pr ? Number(pr["price"]) : null,
+        currency: (pr?.["currency"] as string | undefined) ?? null,
+        pack_size: pr?.["pack_size"] == null ? null : Number(pr["pack_size"]),
+        pack_unit: (pr?.["pack_unit"] as string | undefined) ?? null,
+        unit_price: pr?.["unit_price"] == null ? null : Number(pr["unit_price"]),
+        unit_basis: (pr?.["unit_basis"] as string | undefined) ?? null,
+        observed_at: (pr?.["observed_at"] as string | undefined) ?? null,
+      };
+    }));
+    return { items, hasMore };
+  });
+
+/** Schätzt den Richtpreis eines Produkts für die gewählten Märkte und speichert ihn sofort. */
+export const estimateAndSaveProductPrice = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ productId: z.string().uuid(), markets: z.array(z.string().min(2).max(3)).min(1).max(20) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { estimatePrices } = await import("./product-media.server");
+    const sb = context.supabase;
+    const { data: prod, error } = await sb.from("products").select("id, name, default_quantity, default_unit").eq("id", data.productId).single();
+    if (error || !prod) throw new Error(error?.message ?? "Produkt nicht gefunden");
+    let saved = 0;
+    const errors: string[] = [];
+    for (const m of data.markets) {
+      try {
+        const [e] = await estimatePrices([prod as any], m);
+        if (!e || !(e.price > 0)) throw new Error("Keine Schätzung erhalten");
+        const row = { product_id: prod.id, market: m, price: e.price, currency: CURRENCIES[m] ?? "EUR", pack_size: e.pack_size, pack_unit: e.pack_unit, unit_price: e.unit_price, unit_basis: e.unit_basis };
+        const { error: ue } = await sb.from("product_reference_prices").upsert(row, { onConflict: "product_id,market" });
+        if (ue) throw new Error(ue.message);
+        saved++;
+      } catch (err) {
+        errors.push(`${m}: ${err instanceof Error ? err.message : String(err)}`);
+      }
+    }
+    return { saved, errors };
+  });
+
 /** Richtpreise eines Markts seitenweise (für Nachladen beim Scrollen). */
 export const listReferencePrices = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
