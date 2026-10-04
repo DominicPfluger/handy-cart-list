@@ -205,6 +205,21 @@ function ListPage() {
     return undefined;
   };
 
+  /** Bildet die festen Artikel-Kategorien (manuell eingetippte Einträge) auf die
+   *  passende oberste Katalog-Abteilung ab, damit die Laden-Reihenfolge greift. */
+  const CATEGORY_ROOT_NAMES: Record<string, string> = {
+    "obst-gemuese": "Frischmarkt",
+    milchprodukte: "Milchprodukte & Eier",
+    backwaren: "Backwaren & Frühstück",
+    "fleisch-fisch": "Fleisch & Fisch",
+    getraenke: "Getränke",
+    tierbedarf: "Tierbedarf",
+  };
+  const rootForCategory = (categoryId: string): CatalogDepartment | undefined => {
+    const name = CATEGORY_ROOT_NAMES[categoryId];
+    return name ? deptByLabel(name) : undefined;
+  };
+
   interface Group {
     key: string;
     label: string;
@@ -222,7 +237,7 @@ function ListPage() {
       const leaf = leafOf(it);
       // Ohne Katalog-Verknüpfung: Gruppenname auf eine Abteilung abbilden,
       // damit die in den Einstellungen gespeicherte Reihenfolge greift.
-      const fallbackDept = leaf ? undefined : deptByLabel(it.groupLabel ?? getCategory(it.category).label);
+      const fallbackDept = leaf ? undefined : rootForCategory(it.category) ?? deptByLabel(it.groupLabel ?? getCategory(it.category).label);
       const root = leaf ? chainOf(leaf)[0] : fallbackDept ? chainOf(fallbackDept)[0] : undefined;
       const key = root ? root.id : `label:${it.groupLabel ?? it.category}`;
       let group = map.get(key);
