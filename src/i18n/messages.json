@@ -1299,7 +1299,12 @@
     "adm.noImg.genBoth": "Generate both images with AI (2 credits)",
     "adm.noImg.batchMode": "Batch mode",
     "adm.noImg.modeDerive": "Icon derived from image",
-    "adm.noImg.modeBoth": "Icon separately with AI (2 credits)"
+    "adm.noImg.modeBoth": "Icon separately with AI (2 credits)",
+    "list.showDone": "{n} done – show",
+    "list.hideDone": "Hide done",
+    "settings.checkedDisplay": "Checked items",
+    "settings.checkedDisplay.strike": "Strike through",
+    "settings.checkedDisplay.hide": "Hide"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2601,7 +2606,12 @@
     "adm.noImg.genBoth": "Generate both images with AI (2 credits)",
     "adm.noImg.batchMode": "Batch mode",
     "adm.noImg.modeDerive": "Icon derived from image",
-    "adm.noImg.modeBoth": "Icon separately with AI (2 credits)"
+    "adm.noImg.modeBoth": "Icon separately with AI (2 credits)",
+    "list.showDone": "{n} done – show",
+    "list.hideDone": "Hide done",
+    "settings.checkedDisplay": "Checked items",
+    "settings.checkedDisplay.strike": "Strike through",
+    "settings.checkedDisplay.hide": "Hide"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3903,7 +3913,12 @@
     "adm.noImg.genBoth": "Generate both images with AI (2 credits)",
     "adm.noImg.batchMode": "Batch mode",
     "adm.noImg.modeDerive": "Icon derived from image",
-    "adm.noImg.modeBoth": "Icon separately with AI (2 credits)"
+    "adm.noImg.modeBoth": "Icon separately with AI (2 credits)",
+    "list.showDone": "{n} done – show",
+    "list.hideDone": "Hide done",
+    "settings.checkedDisplay": "Checked items",
+    "settings.checkedDisplay.strike": "Strike through",
+    "settings.checkedDisplay.hide": "Hide"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5205,7 +5220,12 @@
     "adm.noImg.genBoth": "Generar ambas imágenes con IA (2 créditos)",
     "adm.noImg.batchMode": "Modo de lote",
     "adm.noImg.modeDerive": "Icono derivado de la imagen",
-    "adm.noImg.modeBoth": "Icono por separado con IA (2 créditos)"
+    "adm.noImg.modeBoth": "Icono por separado con IA (2 créditos)",
+    "list.showDone": "{n} hechos – mostrar",
+    "list.hideDone": "Ocultar hechos",
+    "settings.checkedDisplay": "Artículos marcados",
+    "settings.checkedDisplay.strike": "Tachar",
+    "settings.checkedDisplay.hide": "Ocultar"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6507,7 +6527,12 @@
     "adm.noImg.genBoth": "Generar ambas imágenes con IA (2 créditos)",
     "adm.noImg.batchMode": "Modo de lote",
     "adm.noImg.modeDerive": "Icono derivado de la imagen",
-    "adm.noImg.modeBoth": "Icono por separado con IA (2 créditos)"
+    "adm.noImg.modeBoth": "Icono por separado con IA (2 créditos)",
+    "list.showDone": "{n} hechos – mostrar",
+    "list.hideDone": "Ocultar hechos",
+    "settings.checkedDisplay": "Artículos marcados",
+    "settings.checkedDisplay.strike": "Tachar",
+    "settings.checkedDisplay.hide": "Ocultar"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7809,7 +7834,12 @@
     "adm.noImg.genBoth": "Générer les deux images avec l'IA (2 crédits)",
     "adm.noImg.batchMode": "Mode par lot",
     "adm.noImg.modeDerive": "Icône dérivée de l'image",
-    "adm.noImg.modeBoth": "Icône séparée avec l'IA (2 crédits)"
+    "adm.noImg.modeBoth": "Icône séparée avec l'IA (2 crédits)",
+    "list.showDone": "{n} terminés – afficher",
+    "list.hideDone": "Masquer terminés",
+    "settings.checkedDisplay": "Articles cochés",
+    "settings.checkedDisplay.strike": "Barrer",
+    "settings.checkedDisplay.hide": "Masquer"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9111,7 +9141,12 @@
     "adm.noImg.genBoth": "Générer les deux images avec l'IA (2 crédits)",
     "adm.noImg.batchMode": "Mode par lot",
     "adm.noImg.modeDerive": "Icône dérivée de l'image",
-    "adm.noImg.modeBoth": "Icône séparée avec l'IA (2 crédits)"
+    "adm.noImg.modeBoth": "Icône séparée avec l'IA (2 crédits)",
+    "list.showDone": "{n} terminés – afficher",
+    "list.hideDone": "Masquer terminés",
+    "settings.checkedDisplay": "Articles cochés",
+    "settings.checkedDisplay.strike": "Barrer",
+    "settings.checkedDisplay.hide": "Masquer"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10413,7 +10448,12 @@
     "adm.noImg.genBoth": "Genera entrambe le immagini con IA (2 crediti)",
     "adm.noImg.batchMode": "Modalità batch",
     "adm.noImg.modeDerive": "Icona derivata dall'immagine",
-    "adm.noImg.modeBoth": "Icona separata con IA (2 crediti)"
+    "adm.noImg.modeBoth": "Icona separata con IA (2 crediti)",
+    "list.showDone": "{n} fatti – mostra",
+    "list.hideDone": "Nascondi fatti",
+    "settings.checkedDisplay": "Articoli spuntati",
+    "settings.checkedDisplay.strike": "Barrare",
+    "settings.checkedDisplay.hide": "Nascondi"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11715,7 +11755,12 @@
     "adm.noImg.genBoth": "Genera entrambe le immagini con IA (2 crediti)",
     "adm.noImg.batchMode": "Modalità batch",
     "adm.noImg.modeDerive": "Icona derivata dall'immagine",
-    "adm.noImg.modeBoth": "Icona separata con IA (2 crediti)"
+    "adm.noImg.modeBoth": "Icona separata con IA (2 crediti)",
+    "list.showDone": "{n} fatti – mostra",
+    "list.hideDone": "Nascondi fatti",
+    "settings.checkedDisplay": "Articoli spuntati",
+    "settings.checkedDisplay.strike": "Barrare",
+    "settings.checkedDisplay.hide": "Nascondi"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13017,7 +13062,12 @@
     "adm.noImg.genBoth": "Gerar ambas as imagens com IA (2 créditos)",
     "adm.noImg.batchMode": "Modo em lote",
     "adm.noImg.modeDerive": "Ícone derivado da imagem",
-    "adm.noImg.modeBoth": "Ícone separado com IA (2 créditos)"
+    "adm.noImg.modeBoth": "Ícone separado com IA (2 créditos)",
+    "list.showDone": "{n} feitos – mostrar",
+    "list.hideDone": "Ocultar feitos",
+    "settings.checkedDisplay": "Itens marcados",
+    "settings.checkedDisplay.strike": "Riscar",
+    "settings.checkedDisplay.hide": "Ocultar"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14319,7 +14369,12 @@
     "adm.noImg.genBoth": "Gerar ambas as imagens com IA (2 créditos)",
     "adm.noImg.batchMode": "Modo em lote",
     "adm.noImg.modeDerive": "Ícone derivado da imagem",
-    "adm.noImg.modeBoth": "Ícone separado com IA (2 créditos)"
+    "adm.noImg.modeBoth": "Ícone separado com IA (2 créditos)",
+    "list.showDone": "{n} feitos – mostrar",
+    "list.hideDone": "Ocultar feitos",
+    "settings.checkedDisplay": "Itens marcados",
+    "settings.checkedDisplay.strike": "Riscar",
+    "settings.checkedDisplay.hide": "Ocultar"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15621,7 +15676,12 @@
     "adm.noImg.genBoth": "Beide afbeeldingen met AI maken (2 credits)",
     "adm.noImg.batchMode": "Batchmodus",
     "adm.noImg.modeDerive": "Pictogram afgeleid van afbeelding",
-    "adm.noImg.modeBoth": "Pictogram apart met AI (2 credits)"
+    "adm.noImg.modeBoth": "Pictogram apart met AI (2 credits)",
+    "list.showDone": "{n} klaar – tonen",
+    "list.hideDone": "Klaar verbergen",
+    "settings.checkedDisplay": "Afgevinkte artikelen",
+    "settings.checkedDisplay.strike": "Doorstrepen",
+    "settings.checkedDisplay.hide": "Verbergen"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16923,7 +16983,12 @@
     "adm.noImg.genBoth": "Beide afbeeldingen met AI maken (2 credits)",
     "adm.noImg.batchMode": "Batchmodus",
     "adm.noImg.modeDerive": "Pictogram afgeleid van afbeelding",
-    "adm.noImg.modeBoth": "Pictogram apart met AI (2 credits)"
+    "adm.noImg.modeBoth": "Pictogram apart met AI (2 credits)",
+    "list.showDone": "{n} klaar – tonen",
+    "list.hideDone": "Klaar verbergen",
+    "settings.checkedDisplay": "Afgevinkte artikelen",
+    "settings.checkedDisplay.strike": "Doorstrepen",
+    "settings.checkedDisplay.hide": "Verbergen"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
