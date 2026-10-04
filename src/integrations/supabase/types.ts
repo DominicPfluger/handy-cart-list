@@ -944,7 +944,7 @@ export type Database = {
         Row: {
           created_at: string
           default_quantity: number
-          default_unit: Database["public"]["Enums"]["unit_of_measure"]
+          default_unit: string
           department_id: string
           emoji: string | null
           excluded_diets: string[]
@@ -962,7 +962,7 @@ export type Database = {
         Insert: {
           created_at?: string
           default_quantity?: number
-          default_unit?: Database["public"]["Enums"]["unit_of_measure"]
+          default_unit?: string
           department_id: string
           emoji?: string | null
           excluded_diets?: string[]
@@ -980,7 +980,7 @@ export type Database = {
         Update: {
           created_at?: string
           default_quantity?: number
-          default_unit?: Database["public"]["Enums"]["unit_of_measure"]
+          default_unit?: string
           department_id?: string
           emoji?: string | null
           excluded_diets?: string[]
@@ -1645,6 +1645,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      units: {
+        Row: {
+          builtin: boolean
+          created_at: string
+          enabled: boolean
+          id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          builtin?: boolean
+          created_at?: string
+          enabled?: boolean
+          id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          builtin?: boolean
+          created_at?: string
+          enabled?: boolean
+          id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
