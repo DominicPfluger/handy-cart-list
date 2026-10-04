@@ -103,6 +103,8 @@ export interface ShoppingList {
   inviteCode?: string | null;
   /** Cloud-Liste: gehört diese Liste dem angemeldeten Nutzer? */
   isOwner?: boolean;
+  /** Cloud-Liste: mit weiteren Mitgliedern geteilt (live synchronisiert) */
+  shared?: boolean;
 }
 
 const MEMBERS = ["Du", "Jonas", "Mia", "Papa"];
@@ -132,6 +134,18 @@ const TPL_KEY = "shoppi:templates";
 const MIGRATED_KEY = "shoppi:cloud-migrated";
 const PENDING_JOIN_KEY = "shoppi:pending-join";
 const SNAPSHOT_KEY = "shoppi:lists-snapshot";
+/** Eigene Listen werden lokal geführt; Abgleich nur auf Knopfdruck. */
+const LIST_SYNC_KEY = "shoppi:local-lists";
+type ListSyncState = { dirty: string[]; base: Record<string, { name: string; items: ListItem[] }> };
+function readListSync(): ListSyncState {
+  try {
+    const raw = localStorage.getItem(LIST_SYNC_KEY);
+    const v = raw ? (JSON.parse(raw) as Partial<ListSyncState>) : {};
+    return { dirty: v.dirty ?? [], base: v.base ?? {} };
+  } catch {
+    return { dirty: [], base: {} };
+  }
+}
 
 function isButterProduct(name: string): boolean {
   const n = name.toLowerCase();
@@ -492,6 +506,9 @@ interface CloudListsApi {
   createFromTemplate: (templateId: string) => void;
   joinByCode: (code: string) => Promise<boolean>;
   hydrated: boolean;
+  syncList: (listId: string) => Promise<void>;
+  dirtyIds: string[];
+  syncing: boolean;
 }
 
 function useCloudLists(
@@ -516,6 +533,28 @@ function useCloudLists(
   const fetchSeqRef = useRef(0);
   const selfNameRef = useRef(selfName);
   selfNameRef.current = selfName;
+  // Lokale Führung eigener Listen
+  const syncStateRef = useRef<ListSyncState | null>(null);
+  if (syncStateRef.current === null) syncStateRef.current = typeof window === "undefined" ? { dirty: [], base: {} } : readListSync();
+  const [dirtyIds, setDirtyIds] = useState<string[]>(() => syncStateRef.current?.dirty ?? []);
+  const [syncing, setSyncing] = useState(false);
+  const sharedRef = useRef<Set<string>>(new Set());
+  const cloudListsRef = useRef<ShoppingList[]>([]);
+  const persistSync = () => {
+    try {
+      localStorage.setItem(LIST_SYNC_KEY, JSON.stringify(syncStateRef.current));
+    } catch { /* Speicher voll */ }
+  };
+  /** Eigene (nicht geteilte) Liste → Änderungen bleiben lokal */
+  const isLocalList = (listId: string) => !!listId && !sharedRef.current.has(listId);
+  const markDirty = (listId: string) => {
+    const st = syncStateRef.current!;
+    if (!st.dirty.includes(listId)) {
+      st.dirty = [...st.dirty, listId];
+      persistSync();
+      setDirtyIds(st.dirty);
+    }
+  };
 
   const scheduleReload = useCallback(() => {
     if (reloadTimer.current) clearTimeout(reloadTimer.current);
@@ -557,6 +596,34 @@ function useCloudLists(
         createdAt: r.created_at ? Date.parse(r.created_at) : Date.now(),
         items: (itemsByList.get(r.id) ?? []).map(rowToItem).map(applyPending),
       }));
+
+      // Geteilte Listen erkennen; eigene Listen mit lokalen Änderungen behalten ihren Gerätestand
+      const memberCount = new Map<string, number>();
+      for (const m of res.members) memberCount.set(String(m.list_id), (memberCount.get(String(m.list_id)) ?? 0) + 1);
+      sharedRef.current = new Set(mapped.filter((l) => (memberCount.get(l.id) ?? 0) > 1).map((l) => l.id));
+      const st = syncStateRef.current!;
+      let localSource = cloudListsRef.current;
+      if (!localSource.length) {
+        try {
+          const raw = localStorage.getItem(SNAPSHOT_KEY);
+          localSource = raw ? ((JSON.parse(raw) as { lists?: ShoppingList[] }).lists ?? []) : [];
+        } catch { localSource = []; }
+      }
+      const nextBase: ListSyncState["base"] = {};
+      for (let i = 0; i < mapped.length; i++) {
+        const l = mapped[i]!;
+        l.shared = sharedRef.current.has(l.id);
+        if (l.isTemplate || l.shared) continue;
+        nextBase[l.id] = { name: l.name, items: l.items };
+        if (st.dirty.includes(l.id)) {
+          const loc = localSource.find((x) => x.id === l.id);
+          if (loc) mapped[i] = { ...l, name: loc.name, items: loc.items };
+        }
+      }
+      st.base = nextBase;
+      st.dirty = st.dirty.filter((id) => nextBase[id]);
+      persistSync();
+      setDirtyIds(st.dirty);
 
       // Fern-Änderungen ins Aktivitätenprotokoll schreiben
       const nextItems = new Map<string, { checked: boolean; addedBy: string }>();
@@ -726,7 +793,8 @@ function useCloudLists(
   // Realtime-Abo an die aktuellen Listen anpassen
   useEffect(() => {
     if (!user || !hydrated) return;
-    subscribe(cloudLists.map((l) => l.id).filter((id) => !id.startsWith("tmp-")));
+    cloudListsRef.current = cloudLists;
+    subscribe(cloudLists.filter((l) => l.shared).map((l) => l.id).filter((id) => !id.startsWith("tmp-")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id, hydrated, cloudLists]);
 
@@ -838,7 +906,9 @@ function useCloudLists(
       const n = name.trim();
       if (!n) return;
       setCloudLists((prev) => prev.map((l) => (l.id === id ? { ...l, name: n } : l)));
-      runCloud({ fn: "updateList", data: { id, name: n } }, () => updateCloudList({ data: { id, name: n } }));
+      const isTpl = cloudListsRef.current.find((l) => l.id === id)?.isTemplate;
+      if (!isTpl && isLocalList(id)) markDirty(id);
+      else runCloud({ fn: "updateList", data: { id, name: n } }, () => updateCloudList({ data: { id, name: n } }));
     },
     [user]
   );
@@ -965,6 +1035,7 @@ function useCloudLists(
       };
       setItems((prev) => [...prev, item]);
       logActivity(selfName, "hat hinzugefügt", item.name);
+      if (isLocalList(activeListId)) return markDirty(activeListId);
       const payload = { listId: activeListId, items: [{ name: item.name, quantity: item.quantity, addedByName: selfName }] };
       runCloud(
         { fn: "addItems", data: payload },
@@ -983,6 +1054,7 @@ function useCloudLists(
       const photoSaved = input.photo ? putItemPhoto(item.id, input.photo).catch(() => {}) : Promise.resolve();
       setItems((prev) => [...prev, item]);
       logActivity(selfName, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
+      if (isLocalList(activeListId)) return markDirty(activeListId);
       const payload = { listId: activeListId, items: [itemToCloudInput(item, selfName)] };
       runCloud(
         { fn: "addItems", data: payload },
@@ -1003,7 +1075,10 @@ function useCloudLists(
       const current = activeList.items.find((it) => it.id === id);
       const after: ListItem | undefined = current ? { ...current, checked: !current.checked } : undefined;
       setItems((prev) => prev.map((it) => (it.id === id ? { ...it, checked: !it.checked } : it)));
-      if (after && id.startsWith("tmp-")) {
+      if (after && isLocalList(activeListId)) {
+        if (after.checked) logActivity(selfName, "hat abgehakt", after.name);
+        markDirty(activeListId);
+      } else if (after && id.startsWith("tmp-")) {
         tmpChecksRef.current.set(id, after.checked);
       } else if (after) {
         if (after.checked) logActivity(selfName, "hat abgehakt", after.name);
@@ -1026,7 +1101,8 @@ function useCloudLists(
   const setItemGroup = useCallback(
     (id: string, label: string, emoji?: string) => {
       setItems((prev) => prev.map((it) => (it.id === id ? { ...it, groupLabel: label, groupEmoji: emoji ?? it.groupEmoji } : it)));
-      if (!id.startsWith("tmp-")) {
+      if (isLocalList(activeListId)) markDirty(activeListId);
+      else if (!id.startsWith("tmp-")) {
         const patch = { id, groupLabel: label, ...(emoji ? { groupEmoji: emoji } : {}) };
         runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
       }
@@ -1037,7 +1113,8 @@ function useCloudLists(
   const setItemQuantity = useCallback(
     (id: string, quantity: string) => {
       setItems((prev) => prev.map((it) => (it.id === id ? { ...it, quantity } : it)));
-      if (!id.startsWith("tmp-")) {
+      if (isLocalList(activeListId)) markDirty(activeListId);
+      else if (!id.startsWith("tmp-")) {
         const patch = { id, quantity };
         runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
       }
@@ -1049,7 +1126,9 @@ function useCloudLists(
     (id: string) => {
       const removed = activeList.items.find((it) => it.id === id);
       setItems((prev) => prev.filter((it) => it.id !== id));
-      if (!id.startsWith("tmp-")) {
+      const local = isLocalList(activeListId);
+      if (local) markDirty(activeListId);
+      else if (!id.startsWith("tmp-")) {
         runCloud({ fn: "deleteItem", data: { id } }, () => deleteCloudItem({ data: { id } }));
       }
       if (removed) {
@@ -1059,6 +1138,7 @@ function useCloudLists(
             label: t("common.undo"),
             onClick: () => {
               setItems((prev) => [...prev, item]);
+              if (local) return;
               const payload = { listId: activeListId, items: [itemToCloudInput(item, selfName)] };
               runCloud({ fn: "addItems", data: payload }, () => addCloudItems({ data: payload }));
             },
@@ -1072,7 +1152,9 @@ function useCloudLists(
   const clearChecked = useCallback(() => {
     const removed = activeList.items.filter((it) => it.checked);
     setItems((prev) => prev.filter((it) => !it.checked));
-    if (activeListId) {
+    const local = isLocalList(activeListId);
+    if (local) markDirty(activeListId);
+    else if (activeListId) {
       runCloud({ fn: "clearChecked", data: { listId: activeListId } }, () => clearCloudChecked({ data: { listId: activeListId } }));
     }
     if (removed.length) {
@@ -1081,6 +1163,7 @@ function useCloudLists(
           label: t("common.undo"),
           onClick: () => {
             setItems((prev) => [...prev, ...removed]);
+            if (local) return;
             const payload = { listId: activeListId, items: removed.map((i) => itemToCloudInput(i, selfName)) };
             runCloud({ fn: "addItems", data: payload }, () => addCloudItems({ data: payload }));
           },
@@ -1129,7 +1212,72 @@ function useCloudLists(
     [user, selfName, scheduleReload]
   );
 
+  /** Gleicht eine eigene Liste mit dem Web ab: Unterschiede zum letzten Server-Stand übertragen. */
+  const syncList = useCallback(
+    async (listId: string) => {
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        toast.error(t("list.syncOffline"));
+        return;
+      }
+      const list = cloudListsRef.current.find((l) => l.id === listId);
+      if (!list || listId.startsWith("tmp-")) return;
+      const st = syncStateRef.current!;
+      const base = st.base[listId] ?? { name: list.name, items: [] };
+      const me = selfNameRef.current;
+      setSyncing(true);
+      try {
+        const baseMap = new Map(base.items.map((i) => [i.id, i]));
+        const localIds = new Set(list.items.map((i) => i.id));
+        const toAdd = list.items.filter((i) => !baseMap.has(i.id));
+        if (toAdd.length) {
+          const res = await addCloudItems({ data: { listId, items: toAdd.map((i) => itemToCloudInput(i, me)) } });
+          const rows = (res.items as CloudRow[]) ?? [];
+          for (let k = 0; k < toAdd.length; k++) {
+            const row = rows[k];
+            const src = toAdd[k]!;
+            if (!row) continue;
+            const newId = String(row.id);
+            if (src.id.startsWith("tmp-")) await moveItemPhoto(src.id, newId).catch(() => {});
+            if (src.checked) await updateCloudItem({ data: { id: newId, checked: true, checkedByName: me } });
+          }
+        }
+        for (const b of base.items) {
+          if (!localIds.has(b.id)) await deleteCloudItem({ data: { id: b.id } });
+        }
+        for (const i of list.items) {
+          const b = baseMap.get(i.id);
+          if (!b) continue;
+          const patch: { id: string; checked?: boolean; checkedByName?: string; groupLabel?: string; groupEmoji?: string; quantity?: string } = { id: i.id };
+          let changed = false;
+          if (b.checked !== i.checked) { patch.checked = i.checked; patch.checkedByName = me; changed = true; }
+          if ((b.quantity ?? "") !== (i.quantity ?? "")) { patch.quantity = i.quantity ?? ""; changed = true; }
+          if ((b.groupLabel ?? "") !== (i.groupLabel ?? "")) {
+            patch.groupLabel = i.groupLabel ?? "";
+            if (i.groupEmoji) patch.groupEmoji = i.groupEmoji;
+            changed = true;
+          }
+          if (changed) await updateCloudItem({ data: patch });
+        }
+        if (base.name !== list.name) await updateCloudList({ data: { id: listId, name: list.name } });
+        st.dirty = st.dirty.filter((id) => id !== listId);
+        persistSync();
+        setDirtyIds(st.dirty);
+        await fetchCloud();
+        toast.success(t("list.synced"));
+      } catch {
+        toast.error(t("cloud.error"));
+      } finally {
+        setSyncing(false);
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [fetchCloud]
+  );
+
   return {
+    syncList,
+    dirtyIds,
+    syncing,
     lists,
     templates,
     activeList,
@@ -1420,6 +1568,9 @@ export function useShoppingList() {
       isFavorite,
       toggleFavorite,
       inviteLinkFor: (_listId: string) => null as string | null,
+      syncList: (async () => {}) as (listId: string) => Promise<void>,
+      dirtyIds: [] as string[],
+      syncing: false,
     };
   }
 
@@ -1454,6 +1605,9 @@ export function useShoppingList() {
     setItemQuantity: cloud.setItemQuantity,
     removeItem: cloud.removeItem,
     clearChecked: cloud.clearChecked,
+    syncList: cloud.syncList,
+    dirtyIds: cloud.dirtyIds,
+    syncing: cloud.syncing,
     isFavorite,
     toggleFavorite,
     inviteLinkFor: (listId: string) => {

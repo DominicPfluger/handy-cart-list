@@ -133,6 +133,9 @@ export const de = {
 
   "list.lists": "Einkaufslisten",
   "list.share": "Liste teilen",
+  "list.sync": "Mit dem Web abgleichen",
+  "list.synced": "Liste abgeglichen",
+  "list.syncOffline": "Kein Internet – Abgleich später erneut versuchen",
   "list.empty1": "Deine Liste ist leer.",
   "list.empty2": "Füge Artikel über „Abteilungen“ hinzu!",
   "list.estimatedTotal": "Geschätzter Gesamtpreis",
