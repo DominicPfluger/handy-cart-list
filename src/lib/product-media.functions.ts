@@ -408,10 +408,10 @@ export const listCategoryPrices = createServerFn({ method: "GET" })
         dept: deptName.get(p.department_id) ?? "",
         iconUrl: signed?.data?.signedUrl ?? null,
         price: pr ? Number(pr["price"]) : null,
-        currency: (pr?.currency as string | undefined) ?? null,
+        currency: (pr?.["currency"] as string | undefined) ?? null,
         pack_size: pr?.["pack_size"] == null ? null : Number(pr["pack_size"]),
         pack_unit: (pr?.["pack_unit"] as string | undefined) ?? null,
-        unit_price: pr?.["unit_price"] == null ? null : Number(pr.unit_price),
+        unit_price: pr?.["unit_price"] == null ? null : Number(pr["unit_price"]),
         unit_basis: (pr?.["unit_basis"] as string | undefined) ?? null,
         observed_at: (pr?.["observed_at"] as string | undefined) ?? null,
       };
