@@ -90,12 +90,14 @@ function SpeechTextsPage() {
       <p className="text-sm text-muted-foreground">{t("stx.hint")}</p>
       <p className="rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">{t("stx.placeholders")}: {"{name}"}, {"{count}"}, {"{kategorie}"}, {"{artikel}"}</p>
 
-      <label className="block text-sm font-semibold text-foreground">
-        {t("speak.locale")}
-        <select value={locale} onChange={(e) => setLocale(e.target.value as Locale)} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
-          {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}{rows?.some((r) => r.locale === l.id) ? ` · ✎ ${t("stx.custom")}` : ""}</option>)}
-        </select>
-      </label>
+      <div className="max-w-xl space-y-4">
+        <label className="block text-sm font-semibold text-foreground">
+          {t("speak.locale")}
+          <select value={locale} onChange={(e) => setLocale(e.target.value as Locale)} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
+            {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}{rows?.some((r) => r.locale === l.id) ? ` · ✎ ${t("stx.custom")}` : ""}</option>)}
+          </select>
+        </label>
+
 
       {SPEECH_KEYS.map((k) => (
         <div key={k} className="space-y-1">
