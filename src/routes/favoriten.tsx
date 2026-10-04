@@ -441,7 +441,7 @@ function FavoritesPage() {
             <section key={department.id}>
               <div className="mb-3 flex items-center justify-between gap-3">
                 <h2 className="text-base font-semibold text-foreground">
-                  <span className="mr-1.5 inline-grid h-5 w-5 align-middle place-items-center"><DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl} className="h-5 w-5 object-contain" symbolClassName="text-base" /></span>
+                  <span className="mr-1.5 inline-grid h-5 w-5 align-middle place-items-center"><DepartmentIcon emoji={department.emoji} imageUrl={department.iconUrl ?? department.imageUrl} imagePath={department.iconPath ?? department.imagePath} className="h-5 w-5 object-contain" symbolClassName="text-base" /></span>
                   {department.name}
                 </h2>
               </div>
