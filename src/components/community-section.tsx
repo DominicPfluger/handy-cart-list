@@ -153,7 +153,7 @@ function Card({ r, mine }: { r: CommunityRecipe; mine: boolean }) {
                 onChange={(e) => { const f = e.target.files?.[0]; if (f) void photo(f); e.target.value = ""; }} />
             </label>
             <button disabled={busy} onClick={() => void toggle()}
-              className={`rounded-full px-3 py-1 font-semibold ${r.is_public ? "bg-muted text-foreground" : "bg-primary text-primary-foreground"}`}>
+              className="rounded-full bg-primary px-3 py-1 font-semibold text-primary-foreground">
               {r.is_public ? t("cm.unpublish") : `🌍 ${t("cm.publish")}`}
             </button>
           </>
