@@ -37,18 +37,26 @@ export default defineConfig({
           // Katalog-Antworten und Bilder offline verfügbar halten
           runtimeCaching: [
             {
-              // Only large/admin images go through Workbox. Small icons use a
-              // stable-path CacheStorage key in the app instead of signed URLs.
-              urlPattern: ({ url }) => url.pathname.includes("/catalog-images/"),
+              // Every image (storage photos, recipe images, app artwork) is
+              // fetched once from the server, then served from the device.
+              // Storage URLs are keyed without their expiring signature.
+              urlPattern: ({ request, url }) =>
+                request.destination === "image" ||
+                url.pathname.includes("/storage/v1/object/") ||
+                /\.(png|jpe?g|webp|gif|svg|avif)$/i.test(url.pathname),
               handler: "CacheFirst",
               options: {
                 cacheName: "shoppi-catalog-images",
                 plugins: [{ cacheKeyWillBeUsed: async ({ request }) => {
                   const url = new URL(request.url);
-                  url.search = "";
+                  if (url.pathname.includes("/storage/v1/object/")) {
+                    url.search = "";
+                    url.pathname = url.pathname.replace(/\/object\/(sign|public|authenticated)\//, "/object/");
+                  }
                   return url.href;
                 } }],
-                expiration: { maxEntries: 500, maxAgeSeconds: 7 * 24 * 60 * 60 },
+                cacheableResponse: { statuses: [0, 200] },
+                expiration: { maxEntries: 3000, maxAgeSeconds: 30 * 24 * 60 * 60, purgeOnQuotaError: true },
               },
             },
             {
