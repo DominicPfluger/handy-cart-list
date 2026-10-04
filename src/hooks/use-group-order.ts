@@ -4,6 +4,7 @@ const KEY = "shoppi:list-group-order";
 const STORE_KEY = "shoppi:active-store";
 const CUSTOM_KEY = "shoppi:custom-stores";
 const HIDDEN_KEY = "shoppi:hidden-groups";
+const LIST_STORES_KEY = "shoppi:list-stores";
 const EVENT = "shoppi:list-group-order-changed";
 
 export type CustomStore = { id: string; name: string };
@@ -30,6 +31,14 @@ function readHidden(): Record<string, string[]> {
   try {
     const v = JSON.parse(localStorage.getItem(HIDDEN_KEY) ?? "{}");
     return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, string[]>) : {};
+  } catch {
+    return {};
+  }
+}
+function readListStores(): Record<string, string> {
+  try {
+    const v = JSON.parse(localStorage.getItem(LIST_STORES_KEY) ?? "{}");
+    return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, string>) : {};
   } catch {
     return {};
   }
