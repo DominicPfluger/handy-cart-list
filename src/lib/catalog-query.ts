@@ -49,9 +49,16 @@ export const catalogQueryOptions = (locale: string) => {
   return queryOptions({
     queryKey: ["catalog", "core", locale],
     queryFn: async () => {
-      const fresh = await getCatalogCore({ data: { locale } });
-      writeCoreCache(locale, fresh);
-      return fresh;
+      try {
+        const fresh = await getCatalogCore({ data: { locale } });
+        writeCoreCache(locale, fresh);
+        return fresh;
+      } catch (e) {
+        // Offline: letzten gespeicherten Katalog zeigen, statt auf den Ladebildschirm zu hängen
+        const cached = readCoreCache(locale);
+        if (cached) return cached.data;
+        throw e;
+      }
     },
     // Gespeicherter Stand erscheint sofort und wird im Hintergrund aufgefrischt.
     initialData: cached?.data,
