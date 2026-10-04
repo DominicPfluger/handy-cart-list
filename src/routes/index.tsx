@@ -590,9 +590,10 @@ function ListPage() {
                   </Fragment>
                   );
                 })}
-          </div>
-        );
-      })}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {hydrated && items.length > 0 && (
