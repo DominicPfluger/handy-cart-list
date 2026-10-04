@@ -1348,7 +1348,15 @@
     "adm.imgGallery.title": "Image gallery",
     "adm.imgGallery.hint": "Choose a category to see its product images.",
     "adm.imgGallery.none": "No product images in this category.",
-    "adm.imgGallery.more": "Load more"
+    "adm.imgGallery.more": "Load more",
+    "adm.headingAi.btn": "Headings",
+    "adm.headingAi.title": "Suggest headings with AI",
+    "adm.headingAi.keywords": "Keyword (optional), e.g. by origin",
+    "adm.headingAi.go": "Suggest",
+    "adm.headingAi.again": "Suggest again",
+    "adm.headingAi.apply": "Apply",
+    "adm.headingAi.replace": "This category already has headings. Replace them?",
+    "adm.headingAi.done": "{n} headings created"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2699,7 +2707,15 @@
     "adm.imgGallery.title": "Image gallery",
     "adm.imgGallery.hint": "Choose a category to see its product images.",
     "adm.imgGallery.none": "No product images in this category.",
-    "adm.imgGallery.more": "Load more"
+    "adm.imgGallery.more": "Load more",
+    "adm.headingAi.btn": "Headings",
+    "adm.headingAi.title": "Suggest headings with AI",
+    "adm.headingAi.keywords": "Keyword (optional), e.g. by origin",
+    "adm.headingAi.go": "Suggest",
+    "adm.headingAi.again": "Suggest again",
+    "adm.headingAi.apply": "Apply",
+    "adm.headingAi.replace": "This category already has headings. Replace them?",
+    "adm.headingAi.done": "{n} headings created"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -4050,7 +4066,15 @@
     "adm.imgGallery.title": "Image gallery",
     "adm.imgGallery.hint": "Choose a category to see its product images.",
     "adm.imgGallery.none": "No product images in this category.",
-    "adm.imgGallery.more": "Load more"
+    "adm.imgGallery.more": "Load more",
+    "adm.headingAi.btn": "Headings",
+    "adm.headingAi.title": "Suggest headings with AI",
+    "adm.headingAi.keywords": "Keyword (optional), e.g. by origin",
+    "adm.headingAi.go": "Suggest",
+    "adm.headingAi.again": "Suggest again",
+    "adm.headingAi.apply": "Apply",
+    "adm.headingAi.replace": "This category already has headings. Replace them?",
+    "adm.headingAi.done": "{n} headings created"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5401,7 +5425,15 @@
     "adm.imgGallery.title": "Galería de imágenes",
     "adm.imgGallery.hint": "Elige una categoría para ver sus imágenes de productos.",
     "adm.imgGallery.none": "No hay imágenes de productos en esta categoría.",
-    "adm.imgGallery.more": "Cargar más"
+    "adm.imgGallery.more": "Cargar más",
+    "adm.headingAi.btn": "Encabezados",
+    "adm.headingAi.title": "Sugerir encabezados con IA",
+    "adm.headingAi.keywords": "Palabra clave (opcional), p. ej. por origen",
+    "adm.headingAi.go": "Sugerir",
+    "adm.headingAi.again": "Sugerir de nuevo",
+    "adm.headingAi.apply": "Aplicar",
+    "adm.headingAi.replace": "Esta categoría ya tiene encabezados. ¿Reemplazarlos?",
+    "adm.headingAi.done": "{n} encabezados creados"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6752,7 +6784,15 @@
     "adm.imgGallery.title": "Galería de imágenes",
     "adm.imgGallery.hint": "Elige una categoría para ver sus imágenes de productos.",
     "adm.imgGallery.none": "No hay imágenes de productos en esta categoría.",
-    "adm.imgGallery.more": "Cargar más"
+    "adm.imgGallery.more": "Cargar más",
+    "adm.headingAi.btn": "Encabezados",
+    "adm.headingAi.title": "Sugerir encabezados con IA",
+    "adm.headingAi.keywords": "Palabra clave (opcional), p. ej. por origen",
+    "adm.headingAi.go": "Sugerir",
+    "adm.headingAi.again": "Sugerir de nuevo",
+    "adm.headingAi.apply": "Aplicar",
+    "adm.headingAi.replace": "Esta categoría ya tiene encabezados. ¿Reemplazarlos?",
+    "adm.headingAi.done": "{n} encabezados creados"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8103,7 +8143,15 @@
     "adm.imgGallery.title": "Galerie d'images",
     "adm.imgGallery.hint": "Choisissez une catégorie pour voir ses images de produits.",
     "adm.imgGallery.none": "Aucune image de produit dans cette catégorie.",
-    "adm.imgGallery.more": "Charger plus"
+    "adm.imgGallery.more": "Charger plus",
+    "adm.headingAi.btn": "Titres",
+    "adm.headingAi.title": "Suggérer des titres par IA",
+    "adm.headingAi.keywords": "Mot-clé (facultatif), p. ex. par origine",
+    "adm.headingAi.go": "Suggérer",
+    "adm.headingAi.again": "Suggérer à nouveau",
+    "adm.headingAi.apply": "Appliquer",
+    "adm.headingAi.replace": "Cette catégorie a déjà des titres. Les remplacer ?",
+    "adm.headingAi.done": "{n} titres créés"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9454,7 +9502,15 @@
     "adm.imgGallery.title": "Galerie d'images",
     "adm.imgGallery.hint": "Choisissez une catégorie pour voir ses images de produits.",
     "adm.imgGallery.none": "Aucune image de produit dans cette catégorie.",
-    "adm.imgGallery.more": "Charger plus"
+    "adm.imgGallery.more": "Charger plus",
+    "adm.headingAi.btn": "Titres",
+    "adm.headingAi.title": "Suggérer des titres par IA",
+    "adm.headingAi.keywords": "Mot-clé (facultatif), p. ex. par origine",
+    "adm.headingAi.go": "Suggérer",
+    "adm.headingAi.again": "Suggérer à nouveau",
+    "adm.headingAi.apply": "Appliquer",
+    "adm.headingAi.replace": "Cette catégorie a déjà des titres. Les remplacer ?",
+    "adm.headingAi.done": "{n} titres créés"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10805,7 +10861,15 @@
     "adm.imgGallery.title": "Galleria di immagini",
     "adm.imgGallery.hint": "Scegli una categoria per vedere le immagini dei prodotti.",
     "adm.imgGallery.none": "Nessuna immagine di prodotto in questa categoria.",
-    "adm.imgGallery.more": "Carica altro"
+    "adm.imgGallery.more": "Carica altro",
+    "adm.headingAi.btn": "Titoli",
+    "adm.headingAi.title": "Suggerisci titoli con l'IA",
+    "adm.headingAi.keywords": "Parola chiave (facoltativa), ad es. per origine",
+    "adm.headingAi.go": "Suggerisci",
+    "adm.headingAi.again": "Suggerisci di nuovo",
+    "adm.headingAi.apply": "Applica",
+    "adm.headingAi.replace": "Questa categoria ha già dei titoli. Sostituirli?",
+    "adm.headingAi.done": "{n} titoli creati"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -12156,7 +12220,15 @@
     "adm.imgGallery.title": "Galleria di immagini",
     "adm.imgGallery.hint": "Scegli una categoria per vedere le immagini dei prodotti.",
     "adm.imgGallery.none": "Nessuna immagine di prodotto in questa categoria.",
-    "adm.imgGallery.more": "Carica altro"
+    "adm.imgGallery.more": "Carica altro",
+    "adm.headingAi.btn": "Titoli",
+    "adm.headingAi.title": "Suggerisci titoli con l'IA",
+    "adm.headingAi.keywords": "Parola chiave (facoltativa), ad es. per origine",
+    "adm.headingAi.go": "Suggerisci",
+    "adm.headingAi.again": "Suggerisci di nuovo",
+    "adm.headingAi.apply": "Applica",
+    "adm.headingAi.replace": "Questa categoria ha già dei titoli. Sostituirli?",
+    "adm.headingAi.done": "{n} titoli creati"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13507,7 +13579,15 @@
     "adm.imgGallery.title": "Galeria de imagens",
     "adm.imgGallery.hint": "Escolha uma categoria para ver as imagens dos produtos.",
     "adm.imgGallery.none": "Sem imagens de produtos nesta categoria.",
-    "adm.imgGallery.more": "Carregar mais"
+    "adm.imgGallery.more": "Carregar mais",
+    "adm.headingAi.btn": "Títulos",
+    "adm.headingAi.title": "Sugerir títulos com IA",
+    "adm.headingAi.keywords": "Palavra-chave (opcional), p. ex. por origem",
+    "adm.headingAi.go": "Sugerir",
+    "adm.headingAi.again": "Sugerir novamente",
+    "adm.headingAi.apply": "Aplicar",
+    "adm.headingAi.replace": "Esta categoria já tem títulos. Substituí-los?",
+    "adm.headingAi.done": "{n} títulos criados"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14858,7 +14938,15 @@
     "adm.imgGallery.title": "Galeria de imagens",
     "adm.imgGallery.hint": "Escolha uma categoria para ver as imagens dos produtos.",
     "adm.imgGallery.none": "Sem imagens de produtos nesta categoria.",
-    "adm.imgGallery.more": "Carregar mais"
+    "adm.imgGallery.more": "Carregar mais",
+    "adm.headingAi.btn": "Títulos",
+    "adm.headingAi.title": "Sugerir títulos com IA",
+    "adm.headingAi.keywords": "Palavra-chave (opcional), p. ex. por origem",
+    "adm.headingAi.go": "Sugerir",
+    "adm.headingAi.again": "Sugerir novamente",
+    "adm.headingAi.apply": "Aplicar",
+    "adm.headingAi.replace": "Esta categoria já tem títulos. Substituí-los?",
+    "adm.headingAi.done": "{n} títulos criados"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16209,7 +16297,15 @@
     "adm.imgGallery.title": "Afbeeldingengalerij",
     "adm.imgGallery.hint": "Kies een categorie om de productafbeeldingen te zien.",
     "adm.imgGallery.none": "Geen productafbeeldingen in deze categorie.",
-    "adm.imgGallery.more": "Meer laden"
+    "adm.imgGallery.more": "Meer laden",
+    "adm.headingAi.btn": "Kopjes",
+    "adm.headingAi.title": "Kopjes voorstellen met AI",
+    "adm.headingAi.keywords": "Trefwoord (optioneel), bijv. op herkomst",
+    "adm.headingAi.go": "Voorstellen",
+    "adm.headingAi.again": "Opnieuw voorstellen",
+    "adm.headingAi.apply": "Toepassen",
+    "adm.headingAi.replace": "Deze categorie heeft al kopjes. Vervangen?",
+    "adm.headingAi.done": "{n} kopjes aangemaakt"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -17560,7 +17656,15 @@
     "adm.imgGallery.title": "Afbeeldingengalerij",
     "adm.imgGallery.hint": "Kies een categorie om de productafbeeldingen te zien.",
     "adm.imgGallery.none": "Geen productafbeeldingen in deze categorie.",
-    "adm.imgGallery.more": "Meer laden"
+    "adm.imgGallery.more": "Meer laden",
+    "adm.headingAi.btn": "Kopjes",
+    "adm.headingAi.title": "Kopjes voorstellen met AI",
+    "adm.headingAi.keywords": "Trefwoord (optioneel), bijv. op herkomst",
+    "adm.headingAi.go": "Voorstellen",
+    "adm.headingAi.again": "Opnieuw voorstellen",
+    "adm.headingAi.apply": "Toepassen",
+    "adm.headingAi.replace": "Deze categorie heeft al kopjes. Vervangen?",
+    "adm.headingAi.done": "{n} kopjes aangemaakt"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -18338,7 +18442,15 @@
     "adm.imgGallery.title": "Bildergalerie",
     "adm.imgGallery.hint": "Kategorie wählen, um deren Produktbilder zu sehen.",
     "adm.imgGallery.none": "Keine Produktbilder in dieser Kategorie.",
-    "adm.imgGallery.more": "Mehr laden"
+    "adm.imgGallery.more": "Mehr laden",
+    "adm.headingAi.btn": "Überschriften",
+    "adm.headingAi.title": "Überschriften per KI vorschlagen",
+    "adm.headingAi.keywords": "Stichwort (optional), z. B. nach Herkunft",
+    "adm.headingAi.go": "Vorschlagen",
+    "adm.headingAi.again": "Neu vorschlagen",
+    "adm.headingAi.apply": "Übernehmen",
+    "adm.headingAi.replace": "Diese Kategorie hat schon Überschriften. Ersetzen?",
+    "adm.headingAi.done": "{n} Überschriften angelegt"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -19116,6 +19228,14 @@
     "adm.imgGallery.title": "Bildergalerie",
     "adm.imgGallery.hint": "Kategorie wählen, um deren Produktbilder zu sehen.",
     "adm.imgGallery.none": "Keine Produktbilder in dieser Kategorie.",
-    "adm.imgGallery.more": "Mehr laden"
+    "adm.imgGallery.more": "Mehr laden",
+    "adm.headingAi.btn": "Überschriften",
+    "adm.headingAi.title": "Überschriften per KI vorschlagen",
+    "adm.headingAi.keywords": "Stichwort (optional), z. B. nach Herkunft",
+    "adm.headingAi.go": "Vorschlagen",
+    "adm.headingAi.again": "Neu vorschlagen",
+    "adm.headingAi.apply": "Übernehmen",
+    "adm.headingAi.replace": "Diese Kategorie hat schon Überschriften. Ersetzen?",
+    "adm.headingAi.done": "{n} Überschriften angelegt"
   }
 }
