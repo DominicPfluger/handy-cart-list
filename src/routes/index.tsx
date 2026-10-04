@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useCheckedDisplay } from "../hooks/use-checked-display";
 import { Fragment, useEffect, useState, useMemo, type ReactNode } from "react";
 import {
   DndContext,
@@ -250,6 +251,13 @@ function ListPage() {
 
   const headingOf = useMemo(() => headingByProduct(data.products, data.headings), [data.products, data.headings]);
   const doneCount = items.filter((i) => i.checked).length;
+  const [checkedDisplay] = useCheckedDisplay();
+  const [showDone, setShowDone] = useState(false);
+  const hideDone = checkedDisplay === "hide" && !showDone;
+  const visibleGroups = useMemo(
+    () => hideDone ? grouped.map((g) => ({ ...g, items: g.items.filter((i) => !i.checked) })).filter((g) => g.items.length > 0) : grouped,
+    [grouped, hideDone],
+  );
   const total = items.length;
   const progress = total > 0 ? (doneCount / total) * 100 : 0;
   const estimate = useMemo(() => items.reduce((acc, item) => {
@@ -439,7 +447,7 @@ function ListPage() {
       >
       <SortableContext items={grouped.map((g) => g.key)} strategy={verticalListSortingStrategy}>
       <div className="space-y-6">
-        {grouped.map((group) => {
+        {visibleGroups.map((group) => {
           return (
             <SortableGroup key={group.key} id={group.key} header={(grip) => (
               <div className="mb-2 flex items-center gap-1.5">
@@ -540,6 +548,16 @@ function ListPage() {
           </div>
           {!pricesPending && estimate.missing > 0 && <p className="mt-1 text-xs text-muted-foreground">{t("list.unpriced", { n: estimate.missing })}</p>}
         </div>
+      )}
+
+      {checkedDisplay === "hide" && doneCount > 0 && (
+        <button
+          type="button"
+          onClick={() => setShowDone((v) => !v)}
+          className="w-full rounded-xl border border-border py-2 text-xs font-medium text-muted-foreground transition active:bg-muted"
+        >
+          {showDone ? t("list.hideDone") : t("list.showDone", { n: doneCount })}
+        </button>
       )}
 
       {/* Einkauf abschliessen: archiviert abgehakte Artikel im Verlauf */}
