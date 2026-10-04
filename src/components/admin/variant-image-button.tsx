@@ -8,17 +8,19 @@ import type { MessageKey } from "@/i18n/de";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { makeProductIcon } from "@/lib/product-icon";
 import { generateVariantImage } from "@/lib/product-media.functions";
+import { VariantAiDialog, generateVariantWithOptions } from "@/components/admin/variant-ai-dialog";
 
 const T = (k: MessageKey, p?: Record<string, string | number>) => translate(getLocale(), k, p);
 
 type Row = { variant: string; image_path: string | null; icon_path: string | null };
 
 /** Admin control for one variant's picture: upload, AI generate (confirmed), remove. */
-export function VariantImageButton({ productId, variant }: { productId: string; variant: string }) {
+export function VariantImageButton({ productId, productName, variant }: { productId: string; productName?: string; variant: string }) {
   const qc = useQueryClient();
   const file = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState(false);
+  const [aiOpen, setAiOpen] = useState(false);
   const gen = useServerFn(generateVariantImage);
   const rows = useQuery({
     queryKey: ["admin-variant-images", productId],
@@ -68,15 +70,7 @@ export function VariantImageButton({ productId, variant }: { productId: string; 
     await saveFromBlob(blob, path);
   }, "adm.variantImageSaved");
 
-  const generate = () => {
-    if (!window.confirm(T("adm.variantImageAiConfirm", { name: variant }))) return;
-    void wrap(async () => {
-      const { path } = await gen({ data: { productId, variant } });
-      const { data } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
-      if (!data?.signedUrl) throw new Error("Bild nicht verfügbar");
-      await saveFromBlob(await (await fetch(data.signedUrl)).blob(), path);
-    }, "adm.variantImageSaved");
-  };
+  const generate = () => { setOpen(false); setAiOpen(true); };
 
   const remove = () => {
     if (!window.confirm(T("tile.removeImageConfirm"))) return;
@@ -98,6 +92,12 @@ export function VariantImageButton({ productId, variant }: { productId: string; 
           <button type="button" className="rounded px-2 py-1.5 text-left hover:bg-muted" onClick={generate}>✨ {T("tile.aiImage")}</button>
           {row && <button type="button" className="rounded px-2 py-1.5 text-left text-destructive hover:bg-muted" onClick={remove}>🗑️ {T("adm.variantImageRemove")}</button>}
         </span>
+      )}
+      {aiOpen && (
+        <VariantAiDialog title={variant} subtitle={productName} showHint
+          defaultHint={productName ? `${variant} von ${productName}` : variant}
+          onCancel={() => setAiOpen(false)}
+          onRun={(c) => { setAiOpen(false); void wrap(() => generateVariantWithOptions(gen, productId, variant, c), "adm.variantImageSaved"); }} />
       )}
       <input ref={file} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void upload(f); }} />
     </span>
