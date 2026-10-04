@@ -903,7 +903,7 @@ export const translateUnitLabels = createServerFn({ method: "POST" })
           loc,
           `${loc} — these are a unit of measure for groceries (long name and its abbreviation; context: ${texts.label})`,
         );
-        out[loc] = { label: r.label || data.label, short: r.short || data.short };
+        out[loc] = { label: r['label'] || data.label, short: r['short'] || data.short };
       } catch { /* einzelne Sprache überspringen */ }
     }));
     return out;
