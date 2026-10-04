@@ -323,9 +323,12 @@ function FavoritesPage() {
         productId: row.product.departmentId ? row.product.id : row.favorite.productId,
       };
     });
-    createListFromItems(name, items);
-    const createdId = createListFromItems ? undefined : undefined;
+    const createdId = createListFromItems(name, items);
+    if (createdId && newStore !== "__new__") setListStore(createdId, newStore);
     setListNameOpen(false);
+    setNewStore("default");
+    setNewStoreName("");
+    setNewStoreEmoji("");
     toast.success(t("fav.toListDone", { count: items.length }));
     navigate({ to: "/" });
   };
