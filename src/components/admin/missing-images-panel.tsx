@@ -8,6 +8,7 @@ import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath, saveCustomIconFromPath } from "@/lib/product-icon";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
 import { useT } from "@/i18n";
+import { deptTreeOrder } from "@/lib/dept-order";
 import { Button } from "@/components/ui/button";
 
 type Dept = { id: string; name: string; parent_id: string | null };
@@ -37,7 +38,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     return out.join(" › ");
   };
   const catOptions = useMemo(
-    () => depts.map((d) => ({ id: d.id, label: path(d.id) })).sort((a, b) => a.label.localeCompare(b.label, "de")),
+    () => deptTreeOrder(depts).map((d) => ({ id: d.id, label: path(d.id) })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [depts],
   );

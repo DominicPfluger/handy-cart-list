@@ -7,6 +7,7 @@ import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from ".
 import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
+import { deptTreeOrder } from "@/lib/dept-order";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
 import { toast } from "sonner";
@@ -679,7 +680,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       while (c) { parts.unshift(c.name); c = c.parent_id ? byId.get(c.parent_id) : undefined; }
       return parts.join(" › ");
     };
-    return p.depts.map((d) => ({ id: d.id, label: label(d.id) })).sort((a, b) => a.label.localeCompare(b.label, "de"));
+    return deptTreeOrder(p.depts).map((d) => ({ id: d.id, label: label(d.id) }));
   })();
   const [price, setPrice] = useState("");
   const estAll = useServerFn(estimateProductPricesAllMarkets);
