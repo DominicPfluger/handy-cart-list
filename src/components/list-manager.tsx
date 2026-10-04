@@ -283,8 +283,15 @@ export function ListManager(props: Props) {
             onChange={(e) => setNewName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && create()}
             placeholder={t("lm.newPlaceholder")}
-            className="min-w-0 flex-1 rounded-xl border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
+            className="w-full rounded-xl border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
           />
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="shrink-0">{t("store.label")}</span>
+            <select value={newStore} onChange={(e) => setNewStore(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs text-foreground outline-none focus:border-primary">
+              {stores.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            </select>
+          </label>
+          </div>
           <button
             onClick={create}
             disabled={!newName.trim()}
