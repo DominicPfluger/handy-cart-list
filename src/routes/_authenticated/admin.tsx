@@ -24,6 +24,7 @@ import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
 import { signedCategoryImageUrl } from "@/lib/image-upload";
+import { deptTreeOrder } from "@/lib/dept-order";
 import { isNonFoodRootName } from "@/lib/dept-colors";
 import { MarketAdmin, MarketAdminsManager } from "@/components/market-admin";
 import { useMarketCodes } from "@/hooks/use-markets";
@@ -780,6 +781,13 @@ function AdminPage() {
             <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={() => sortProducts()}>↕ {busy ? T("adm.working") : T("adm.sort")}</Button>
           </div>
         )}
+        <select value={cur ?? ""} onChange={(e) => { setCur(e.target.value || null); setSel(null); setSearch(""); }} aria-label={T("adm.categories")}
+          className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
+          <option value="">{T("adm.noImg.cat")}</option>
+          {(d ? deptTreeOrder(d.depts) : []).map((x) => (
+            <option key={x.id} value={x.id}>{path(x.id).map((p) => nm(p.id, p.name)).join(" › ")}</option>
+          ))}
+        </select>
         <Input placeholder={T("adm.search")} value={search} onChange={(e) => setSearch(e.target.value)} className="h-11 min-w-[10rem] flex-1 rounded-xl" />
       </div>
       {cur && mk && <p className="text-xs text-muted-foreground">{T("adm.marketOrderHint", { m: `${flagOf(mk)} ${mk}` })}</p>}
