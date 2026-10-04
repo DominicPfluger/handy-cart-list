@@ -1,5 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Fragment, useEffect, useState, useMemo } from "react";
+import { Fragment, useEffect, useState, useMemo, type ReactNode } from "react";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { SplashScreen } from "../components/splash-screen";
 import { LandingPage } from "@/components/landing/landing-page";
 import { shouldShowLanding, markLandingDone } from "@/lib/landing";
@@ -40,6 +57,7 @@ import { currentMarket, useReferencePrices } from "../hooks/use-reference-prices
 import { priceForItem } from "../lib/item-price";
 import { PurchaseMode, type PurchaseItem } from "../components/purchase-mode";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
+import { useGroupOrder, applyGroupOrder } from "../hooks/use-group-order";
 
 const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
