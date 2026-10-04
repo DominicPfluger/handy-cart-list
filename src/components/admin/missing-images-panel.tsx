@@ -232,7 +232,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
               >
                 <span className="grid h-14 w-full place-items-center overflow-hidden rounded-lg bg-muted">
                   {cImgs.data?.get(c.image_path!) ? (
-                    <img src={cImgs.data.get(c.image_path!)} alt="" loading="lazy" className="h-full w-full object-contain" />
+                    <img src={cImgs.data.get(c.image_path!) ?? undefined} alt="" loading="lazy" className="h-full w-full object-contain" />
                   ) : (
                     <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
                   )}
