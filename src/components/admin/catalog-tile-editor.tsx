@@ -7,6 +7,7 @@ import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from ".
 import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
 import { rootColorByName } from "@/lib/dept-colors";
+import { deptTreeOrder } from "@/lib/dept-order";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
 import { toast } from "sonner";
