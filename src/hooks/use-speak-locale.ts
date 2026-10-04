@@ -3,10 +3,11 @@ import { LOCALES, useLocale, type Locale } from "../i18n";
 
 const KEY = "shoppi:speak-locale";
 const EVENT = "shoppi:speak-locale-changed";
-export const DEFAULT_SPEAK_LOCALE: Locale = "de-DE";
 /** Gespeicherter Wert: "app" = wie App-Sprache. */
 export const SPEAK_FOLLOW_APP = "app";
 export type SpeakLocaleSetting = Locale | typeof SPEAK_FOLLOW_APP;
+/** Standard: Vorlesen folgt der App-Sprache. */
+export const DEFAULT_SPEAK_LOCALE: SpeakLocaleSetting = SPEAK_FOLLOW_APP;
 const IDS = LOCALES.map((l) => l.id) as readonly string[];
 
 export function getSpeakLocaleSetting(): SpeakLocaleSetting {
