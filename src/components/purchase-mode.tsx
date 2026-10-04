@@ -22,6 +22,9 @@ export interface PurchaseItem {
   checked: boolean;
   emoji: string;
   color?: string;
+  /** Grosses Produktbild (Pfad im Bild-Speicher + signierte Adresse). */
+  imagePath?: string | null | undefined;
+  imageUrl?: string | null | undefined;
 }
 
 /** Freihändiger Kaufmodus: zeigt jeweils den nächsten offenen Artikel gross an,
