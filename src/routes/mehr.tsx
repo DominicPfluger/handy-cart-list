@@ -39,6 +39,7 @@ import appIcon from "@/assets/splash-logo.png.asset.json";
 import { APP_VERSION } from "../lib/app-version";
 import { InstallAppRow } from "../components/install-app-row";
 import { CategoryOrderSettings } from "../components/category-order-settings";
+import { AppUpdateRow } from "../components/app-update-row";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
@@ -155,6 +156,7 @@ function MorePage() {
         </label>
         <MarketRow />
         <AllMarketsRow />
+        <AppUpdateRow />
       </section>
 
       {/* Settings menu */}
