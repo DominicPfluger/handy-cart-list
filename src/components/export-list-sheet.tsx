@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useT } from "../i18n";
+import { supabase } from "@/integrations/supabase/client";
+import { useMarketCodes } from "@/hooks/use-markets";
+import { flagOf } from "@/lib/catalog-query";
+import { priceForItem } from "@/lib/item-price";
 
 export interface ExportItem {
   name: string;
@@ -9,11 +13,20 @@ export interface ExportItem {
   organic: boolean;
   note: string;
   checked: boolean;
+  productId: string;
+  defaultQuantity: number;
+  defaultUnit: string;
+  /** Menge/Einheit im gespeicherten Format (für die Preissumme). */
+  priceQuantity?: string;
+  priceUnit?: string;
 }
 export interface ExportGroup {
   label: string;
   items: ExportItem[];
 }
+
+type MarketTotal = { code: string; flag: string; total: number; currency: string; items: number };
+
 
 function splitBrand(name: string): { name: string; brand: string } {
   const parts = name.split(" · ");
@@ -41,8 +54,54 @@ function download(blob: Blob, filename: string) {
 
 export function ExportListButton({ title, groups }: { title: string; groups: ExportGroup[] }) {
   const { t, locale } = useT();
+  const MARKETS = useMarketCodes();
   const [open, setOpen] = useState(false);
   const [withChecked, setWithChecked] = useState(false);
+  const [marketTotals, setMarketTotals] = useState<MarketTotal[]>([]);
+
+  // Beim Öffnen: Richtpreise aller Märkte laden und je Markt die Listensumme rechnen
+  useEffect(() => {
+    if (!open) return;
+    let alive = true;
+    (async () => {
+      const ids = [...new Set(groups.flatMap((g) => g.items.map((i) => i.productId)).filter(Boolean))];
+      if (!ids.length) { setMarketTotals([]); return; }
+      const rows: { product_id: string; market: string; price: number; currency: string }[] = [];
+      for (let f = 0; ; f += 1000) {
+        const { data } = await supabase.from("product_reference_prices")
+          .select("product_id, market, price, currency").in("product_id", ids).range(f, f + 999);
+        rows.push(...((data ?? []) as typeof rows));
+        if (!data || data.length < 1000) break;
+      }
+      const byMarket = new Map<string, Map<string, { price: number; currency: string }>>();
+      for (const r of rows) {
+        if (!byMarket.has(r.market)) byMarket.set(r.market, new Map());
+        byMarket.get(r.market)!.set(r.product_id, { price: Number(r.price), currency: r.currency });
+      }
+      const totals: MarketTotal[] = [];
+      for (const code of MARKETS) {
+        const prices = byMarket.get(code);
+        if (!prices) continue;
+        let total = 0, items = 0, currency = "";
+        for (const g of groups) for (const i of g.items) {
+          const p = prices.get(i.productId);
+          if (!p) continue;
+          const v = priceForItem(
+            { quantity: i.priceQuantity ?? i.quantity, unit: i.priceUnit ?? i.unit },
+            { defaultQuantity: i.defaultQuantity, defaultUnit: i.defaultUnit },
+            p.price,
+          );
+          if (v == null) continue;
+          total += v; items++; currency = p.currency;
+        }
+        if (items) totals.push({ code, flag: flagOf(code), total, currency, items });
+      }
+      if (alive) setMarketTotals(totals.sort((a, b) => a.total - b.total));
+    })().catch(() => { if (alive) setMarketTotals([]); });
+    return () => { alive = false; };
+  }, [open, groups, MARKETS]);
+
+
 
   const filtered = groups
     .map((g) => ({ ...g, items: g.items.filter((i) => withChecked || !i.checked) }))
@@ -121,6 +180,18 @@ export function ExportListButton({ title, groups }: { title: string; groups: Exp
             className="w-full max-w-[440px] space-y-3 rounded-t-2xl bg-background p-5 sm:rounded-2xl">
             <h2 className="text-lg font-semibold text-foreground">{t("export.title")}</h2>
             <p className="text-xs text-muted-foreground">{t("export.hint")}</p>
+            {marketTotals.length > 0 && (
+              <div className="space-y-1 rounded-xl border border-border bg-muted/40 p-3">
+                <p className="text-xs font-semibold text-foreground">{t("export.priceCompare")}</p>
+                {marketTotals.map((r, i) => (
+                  <div key={r.code} className={`flex items-center justify-between text-xs ${i === 0 ? "font-bold text-primary" : "text-muted-foreground"}`}>
+                    <span>{r.flag} {r.code}{i === 0 ? ` · ${t("export.cheapest")}` : ""}</span>
+                    <span>{new Intl.NumberFormat(locale, { style: "currency", currency: r.currency }).format(r.total)}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+
             <label className="flex items-center gap-2 text-sm text-foreground">
               <input type="checkbox" checked={withChecked} onChange={(e) => setWithChecked(e.target.checked)} className="h-4 w-4 accent-primary" />
               {t("export.withChecked")}

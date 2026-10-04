@@ -4,6 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { scanImportUrl, acceptImportCandidates, rejectImportCandidates } from "@/lib/import.functions";
+import { undoBulkBackup } from "@/lib/admin.functions";
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ export function ImportPanel({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const scan = useServerFn(scanImportUrl);
   const accept = useServerFn(acceptImportCandidates);
   const reject = useServerFn(rejectImportCandidates);
+  const undoBackup = useServerFn(undoBulkBackup);
   const [url, setUrl] = useState("");
   const [market, setMarket] = useState(getLocale().split("-")[1] ?? "CH");
   const [busy, setBusy] = useState(false);
@@ -90,7 +92,13 @@ export function ImportPanel({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
     const missing = items.find((i) => i.action === "create" && !i.department_id);
     if (missing) throw new Error(T("imp.needDept", { name: missing.name }));
     const r = await accept({ data: { items } });
-    toast.success(T("imp.saved", { created: r.created, linked: r.linked }));
+    const done = T("imp.saved", { created: r.created, linked: r.linked });
+    if (r.backupId) {
+      const id = r.backupId;
+      toast.success(done, { action: { label: T("adm.undo"), onClick: () => { void undoBackup({ data: { id } }).then(() => { toast.success(T("adm.undone")); qc.invalidateQueries(); }); } } });
+    } else {
+      toast.success(done);
+    }
     setEdits({});
     refresh();
     qc.invalidateQueries();

@@ -6,7 +6,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants } from "@/lib/admin.functions";
+import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup } from "@/lib/admin.functions";
 import { LOCALES, getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
@@ -32,6 +32,7 @@ import { CatalogPreview } from "@/components/admin/catalog-preview";
 import { flagOf } from "@/lib/catalog-query";
 import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
 import { ImportPanel } from "@/components/admin/import-panel";
+import { MarketDataImport } from "@/components/admin/market-data-import";
 import { CatalogMediaPanel } from "@/components/admin/catalog-media-panel";
 import { CatalogTileEditor } from "@/components/admin/catalog-tile-editor";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
@@ -186,9 +187,9 @@ function AdminPage() {
     await qc.invalidateQueries({ queryKey: ["catalog"] });
     await qc.invalidateQueries({ queryKey: ["catalog-images"] });
   };
-  const run = async (fn: () => Promise<unknown>, ok = T("adm.saved")) => {
+  const run = async (fn: () => Promise<unknown>, ok: string | null = T("adm.saved")) => {
     setBusy(true);
-    try { await fn(); toast.success(ok); await refresh(); }
+    try { await fn(); if (ok !== null) toast.success(ok); await refresh(); }
     catch (e) { toast.error((e as Error).message); }
     finally { setBusy(false); }
   };
@@ -588,10 +589,25 @@ function AdminPage() {
     }, T("adm.deleted"));
   };
 
+  const createBackupFn = useServerFn(createBulkBackup);
+  const undoBackupFn = useServerFn(undoBulkBackup);
+
   const deleteSelected = (sel: { productIds: string[]; productAliasIds: string[] }) => {
     const n = sel.productIds.length + sel.productAliasIds.length;
     if (!n || !confirm(T("adm.deleteSelectedConfirm", { n }))) return;
     run(async () => {
+      // Vor der Löschung Sicherungspunkt anlegen, damit sich die Aktion zurücknehmen lässt
+      const backupId = await createBackupFn({ data: {
+        label: T("adm.bulkDeleteLabel"),
+        deletes: [
+          ...(sel.productAliasIds.length ? [{ table: "product_aliases", filterColumn: "id", filterIds: sel.productAliasIds }] : []),
+          ...(sel.productIds.length ? [
+            { table: "products", filterColumn: "id", filterIds: sel.productIds },
+            { table: "product_headings", filterColumn: "before_product_id", filterIds: sel.productIds },
+            { table: "catalog_translations", filterColumn: "entity_id", filterIds: sel.productIds },
+          ] : []),
+        ],
+      } });
       for (const id of sel.productAliasIds) await must(supabase.from("product_aliases").delete().eq("id", id));
       for (const id of sel.productIds) {
         await must(supabase.from("product_headings").delete().eq("before_product_id", id));
@@ -599,7 +615,14 @@ function AdminPage() {
         await must(supabase.from("catalog_translations").delete().eq("entity_id", id));
       }
       await qc.invalidateQueries({ queryKey: ALIAS_KEY });
-    }, T("adm.deleted"));
+      if (backupId) {
+        toast.success(T("adm.deleted"), {
+          action: { label: T("adm.undo"), onClick: () => { void undoBackupFn({ data: { id: backupId } }).then(() => { toast.success(T("adm.undone")); void refresh(); }); } },
+        });
+      } else {
+        toast.success(T("adm.deleted"));
+      }
+    }, null);
   };
 
   const results = useMemo(() => {
@@ -883,7 +906,7 @@ function AdminPage() {
       </>)}
 
       {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel section="images" /></LoadingGate>}
-      {tab === "prices" && <LoadingGate d={d}><CatalogMediaPanel section="prices" depts={d?.depts ?? []} /></LoadingGate>}
+      {tab === "prices" && <LoadingGate d={d}><div className="space-y-4"><CatalogMediaPanel section="prices" depts={d?.depts ?? []} />{d && <MarketDataImport prods={d.prods.map((p) => ({ id: p.id, name: p.name }))} />}</div></LoadingGate>}
       {tab === "import" && (d ? <ImportPanel depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
 
 

@@ -37,24 +37,12 @@ import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 import { deptColor, deptColorByLabel } from "../lib/dept-colors";
 import { toast } from "sonner";
 import { currentMarket, useReferencePrices } from "../hooks/use-reference-prices";
+import { priceForItem } from "../lib/item-price";
+import { PurchaseMode, type PurchaseItem } from "../components/purchase-mode";
+import { useSpeakLocale } from "../hooks/use-speak-locale";
 
 const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
-const UNIT_SCALE: Record<string, { kind: string; factor: number }> = {
-  gramm: { kind: "weight", factor: 1 }, kilogramm: { kind: "weight", factor: 1000 }, milligramm: { kind: "weight", factor: 0.001 },
-  milliliter: { kind: "volume", factor: 1 }, deziliter: { kind: "volume", factor: 100 }, liter: { kind: "volume", factor: 1000 },
-};
 
-function priceForItem(item: ListItem, product: { defaultQuantity: number; defaultUnit: string }, price: number): number | null {
-  if (!Number.isFinite(price) || price <= 0) return null;
-  const match = /^\s*(\d+(?:[.,]\d+)?)(?:\s|$)/.exec(item.quantity);
-  if (!match) return null;
-  const amount = Number(match[1]?.replace(",", "."));
-  if (!Number.isFinite(amount) || amount <= 0 || product.defaultQuantity <= 0) return null;
-  if (item.unit === product.defaultUnit) return price * amount / product.defaultQuantity;
-  const from = item.unit ? UNIT_SCALE[item.unit] : undefined;
-  const to = UNIT_SCALE[product.defaultUnit];
-  return from && to && from.kind === to.kind ? price * amount * from.factor / (product.defaultQuantity * to.factor) : null;
-}
 
 
 export const Route = createFileRoute("/")({
@@ -81,6 +69,8 @@ function ListPage() {
     templates, saveAsTemplate, createFromTemplate, deleteTemplate, reorderTemplates,
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
+  const [purchaseOpen, setPurchaseOpen] = useState(false);
+  const [speakLocale] = useSpeakLocale();
   const data = useCatalog();
   const { t } = useT();
   const { data: referencePrices, isPending: pricesPending } = useReferencePrices();
@@ -207,12 +197,38 @@ function ListPage() {
   const estimate = useMemo(() => items.reduce((acc, item) => {
     const product = item.productId ? productById.get(item.productId) : undefined;
     const ref = item.productId ? referencePrices?.get(item.productId) : undefined;
-    const amount = product && ref ? priceForItem(item, product, Number(ref.price)) : null;
+    const amount = product && ref ? priceForItem({ quantity: item.quantity, unit: item.unit ?? "" }, product, Number(ref.price)) : null;
     if (amount === null) acc.missing += 1;
     else acc.value += amount;
     return acc;
   }, { value: 0, missing: 0 }), [items, productById, referencePrices]);
   const currency = referencePrices?.values().next().value?.currency ?? MARKET_CURRENCY[currentMarket()] ?? "EUR";
+
+  /** Artikel für den freihändigen Kaufmodus (offene Einträge, Vorlese-Sprache). */
+  const purchaseItems = useMemo<PurchaseItem[]>(() => grouped.flatMap((g) => {
+    const colorDept = g.root ?? departments.find((d) => d.name === g.label || d.baseName === g.label);
+    const color = (colorDept ? deptColor(colorDept, deptById) : undefined) ?? deptColorByLabel(g.label);
+    return g.items.filter((i) => !i.checked).map((i) => {
+      const product = i.productId ? productById.get(i.productId) : undefined;
+      let name = displayName(i);
+      if (product) {
+        const k = i.name.indexOf(" · ");
+        const base = pickName(product.names, speakLocale, product.baseName);
+        name = stripAnyPrefix(k >= 0 ? base + i.name.slice(k) : base);
+      }
+      return {
+        id: i.id,
+        name,
+        spoken: `${i.quantity ? speakQuantity(i.quantity, i.unit, speakLocale) + " " : ""}${name}`,
+        quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : "",
+        checked: i.checked,
+        emoji: i.emoji || product?.emoji || "🛒",
+        ...(color ? { color } : {}),
+      };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }), [grouped, speakLocale, productById, deptById, departments]);
+
 
   // ---- Smarte Vorschläge (aus dem Einkaufsverlauf) & Einkauf abschliessen ----
   const { addPurchase } = usePurchaseHistory();
@@ -298,18 +314,37 @@ function ListPage() {
               }),
             }))}
           />
+          <button
+            onClick={() => setPurchaseOpen(true)}
+            aria-label={t("purchase.title")}
+            title={t("purchase.title")}
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
+          >
+            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <circle cx="9" cy="21" r="1.5" /><circle cx="19" cy="21" r="1.5" />
+              <path d="M2 3h3l2.6 12.4a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21.5 8H6" />
+            </svg>
+          </button>
           <ExportListButton
             title={activeList.name}
             groups={grouped.map((g) => ({
               label: g.label,
-              items: g.items.map((i) => ({
-                name: displayName(i),
-                quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : "",
-                unit: i.unit ? unitShort(i.unit) : "",
-                organic: !!i.organic,
-                note: i.note ?? "",
-                checked: i.checked,
-              })),
+              items: g.items.map((i) => {
+                const product = i.productId ? productById.get(i.productId) : undefined;
+                return {
+                  name: displayName(i),
+                  quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : "",
+                  unit: i.unit ? unitShort(i.unit) : "",
+                  organic: !!i.organic,
+                  note: i.note ?? "",
+                  checked: i.checked,
+                  productId: i.productId ?? "",
+                  defaultQuantity: product?.defaultQuantity ?? 0,
+                  defaultUnit: product?.defaultUnit ?? "",
+                  priceQuantity: i.quantity,
+                  priceUnit: i.unit ?? "",
+                };
+              }),
             }))}
           />
           <button
@@ -453,6 +488,13 @@ function ListPage() {
         >
           {t("hist.finish", { n: doneCount })}
         </button>
+      )}
+      {purchaseOpen && (
+        <PurchaseMode
+          items={purchaseItems}
+          onToggle={toggleItem}
+          onClose={() => setPurchaseOpen(false)}
+        />
       )}
     </div>
   );
