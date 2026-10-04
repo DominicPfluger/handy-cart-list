@@ -125,10 +125,17 @@ function ListPage() {
   // Übersicht zuerst: erst nach Auswahl einer Liste wird deren Inhalt geladen.
   const [openListId, setOpenListId] = useState<string | null>(null);
   const [speakLocale] = useSpeakLocale();
-  const { all: groupOrderAll, saveFor: saveGroupOrderFor, hiddenAll: hiddenGroupsAll, listStores, setListStore } = useGroupOrder();
+  const { all: groupOrderAll, saveFor: saveGroupOrderFor, hiddenAll: hiddenGroupsAll, listStores, setListStore, store: settingsStore, setStore: setSettingsStore, customStores } = useGroupOrder();
   const activeStoreId = listStores[activeList.id] ?? "default";
-  const groupOrder = groupOrderAll[activeStoreId] ?? groupOrderAll["default"] ?? [];
+  const pick = (o?: string[]) => (o && o.length > 0 ? o : undefined);
+  const groupOrder = pick(groupOrderAll[activeStoreId]) ?? pick(groupOrderAll[settingsStore]) ?? groupOrderAll["default"] ?? [];
   const hiddenGroups = hiddenGroupsAll[activeStoreId] ?? [];
+  // Einstellungen wählen den Laden der geöffneten Liste vor, damit dieselbe Sortierung bearbeitet wird.
+  useEffect(() => {
+    if (openListId && activeList.id === openListId && settingsStore !== activeStoreId) setSettingsStore(activeStoreId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openListId, activeList.id, activeStoreId]);
+  const activeStoreName = customStores.find((s) => s.id === activeStoreId)?.name;
   const saveGroupOrder = (keys: string[]) => saveGroupOrderFor(activeStoreId, keys);
   const groupSensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
