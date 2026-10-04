@@ -23,6 +23,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   const [patch, setPatch] = useState<Record<string, { image_path?: string | null; icon_path?: string | null }>>({});
   const [busy, setBusy] = useState<Set<string>>(new Set());
   const [batch, setBatch] = useState<{ done: number; total: number } | null>(null);
+  const [batchBoth, setBatchBoth] = useState(false);
   const stop = useRef(false);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
@@ -111,7 +112,13 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
           <Button size="sm" variant="outline" onClick={() => { stop.current = true; }}>{t("adm.noImg.stop")}</Button>
         </div>
       ) : (
-        <Button size="sm" variant="outline" onClick={fixAll}><Wand2 className="mr-1 h-4 w-4" />{t("adm.noImg.all", { n: String(visible.length) })}</Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button size="sm" variant="outline" onClick={fixAll}><Wand2 className="mr-1 h-4 w-4" />{t("adm.noImg.all", { n: String(visible.length) })}</Button>
+          <select value={batchBoth ? "both" : "derive"} onChange={(e) => setBatchBoth(e.target.value === "both")} className="rounded-lg border border-input bg-background px-2 py-1 text-xs" aria-label={t("adm.noImg.batchMode")}>
+            <option value="derive">{t("adm.noImg.modeDerive")}</option>
+            <option value="both">{t("adm.noImg.modeBoth")}</option>
+          </select>
+        </div>
       ))}
       <ul className="divide-y divide-border">
         {visible.map((p) => (
