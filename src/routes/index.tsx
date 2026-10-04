@@ -239,7 +239,7 @@ function ListPage() {
     }
     return groups;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, productById, deptById]);
+  }, [items, productById, deptById, groupOrder]);
 
   /** Baum-Sortierschlüssel entlang des Kategoriebaums (analog Abteilungsansicht). */
   function segOf(it: ListItem) {
