@@ -209,10 +209,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   return (
     <div className="space-y-6 pt-2">
       <section className="space-y-2">
-        <div className="flex items-center justify-between gap-2">
-          <h2 className="text-sm font-semibold text-foreground">{T("adm.health.gaps")}</h2>
-          <Button size="sm" variant="outline" onClick={() => setCopyOpen(true)}>{T("adm.copyCatalog")}</Button>
-        </div>
+        <h2 className="text-sm font-semibold text-foreground">{T("adm.health.gaps")}</h2>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {gapCards.map((g) => (
             <button key={g.id} type="button" onClick={() => setOpenGap(openGap === g.id ? null : g.id)}
@@ -240,6 +237,9 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
             ))}
           </ul>
         )}
+        <div>
+          <Button size="sm" variant="outline" onClick={() => setCopyOpen(true)}>{T("adm.copyCatalog")}</Button>
+        </div>
       </section>
 
 
