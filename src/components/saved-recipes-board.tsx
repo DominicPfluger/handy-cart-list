@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Trash2, Pencil } from "lucide-react";
+import { ShareIcon } from "./icons";
 import {
   DndContext, DragOverlay, KeyboardSensor, PointerSensor, TouchSensor, closestCorners,
   useDroppable, useSensor, useSensors, type DragEndEvent, type DragOverEvent, type DragStartEvent,
@@ -10,7 +11,8 @@ import { SortableContext, arrayMove, sortableKeyboardCoordinates, useSortable, v
 import { CSS } from "@dnd-kit/utilities";
 import { useT } from "../i18n";
 import { useRecipeTemplates } from "../lib/use-recipe-templates";
-import { publishRecipe, shareLink, unpublishRecipe, fetchRecipe, updateRecipeItems, type RecipeItem } from "../lib/recipes-api";
+import { publishRecipe, shareUrl, unpublishRecipe, fetchRecipe, updateRecipeItems, type RecipeItem } from "../lib/recipes-api";
+import { openShareSheet } from "./share-sheet";
 import { QuantityInput, isValidQty } from "./quantity-input";
 import { formatQuantity } from "../lib/units";
 import {
@@ -65,7 +67,7 @@ function Row({ r, userId, draggable, onOpen }: { r: SavedRecipe; userId: string;
   const share = async () => {
     try {
       const slug = await publishRecipe(r.recipeId);
-      if ((await shareLink(slug, r.title)) === "copied") toast.success(t("rs.linkCopied"));
+      openShareSheet({ title: r.title, text: `🍽️ ${r.title}\n${shareUrl(slug)}` });
     } catch { toast.error(t("cloud.error")); }
   };
 
@@ -112,7 +114,7 @@ function Row({ r, userId, draggable, onOpen }: { r: SavedRecipe; userId: string;
         <button onClick={() => void openQty()} aria-label={t("rs.editQty")} title={t("rs.editQty")} className="px-1 text-muted-foreground transition active:text-primary"><Pencil size={16} /></button>
       )}
       {r.isOwn ? (
-        <button onClick={() => void share()} aria-label={t("rs.share")} className="px-1 text-sm">🔗</button>
+        <button onClick={() => void share()} aria-label={t("rs.share")} title={t("rs.share")} className="px-1 text-muted-foreground transition active:text-primary"><ShareIcon className="h-4 w-4" /></button>
       ) : r.shareSlug ? (
         <Link to="/rezept/$slug" params={{ slug: r.shareSlug }} aria-label={t("rs.open")} className="px-1 text-sm">↗</Link>
       ) : null}
