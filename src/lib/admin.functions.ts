@@ -908,3 +908,43 @@ export const translateUnitLabels = createServerFn({ method: "POST" })
     }));
     return out;
   });
+
+/** KI-Vorschlag: Produkte einer Kategorie in sinnvolle Gruppen mit Überschriften einteilen. */
+export const suggestHeadings = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({
+      path: z.string().max(300),
+      products: z.array(z.object({ id: z.string().uuid(), name: z.string().max(120) })).min(2).max(400),
+      keywords: z.string().max(200).default(""),
+    }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { aiJson } = await import("./translate.server");
+    const keys = data.products.map((p, i) => ({ k: `p${i}`, name: p.name }));
+    const r = await aiJson<{ groups: Array<{ name: string; keys: string[] }> }>(
+      "Du kuratierst den Katalog einer deutschsprachigen Einkaufslisten-App. Teile die Produkte der genannten Kategorie in 2 bis 8 sinnvolle Gruppen ein, " +
+        "wie Zwischenüberschriften im Supermarktregal (z. B. bei Käse: Hartkäse, Weichkäse, Frischkäse). Jede Gruppe bekommt eine kurze deutsche Überschrift (1–3 Wörter, de-DE, ss statt ß), " +
+        "die nicht einfach den Kategorienamen wiederholt. Ordne JEDES Produkt genau einer Gruppe zu (über seinen Schlüssel k). Gruppen in sinnvoller Regal-Reihenfolge, Produkte innerhalb nach Relevanz." +
+        (data.keywords.trim() ? ` Wunsch der Admin: ${data.keywords.trim()}.` : ""),
+      JSON.stringify({ kategorie: data.path, produkte: keys }),
+      "headings",
+      {
+        type: "object", additionalProperties: false, required: ["groups"],
+        properties: { groups: { type: "array", items: { type: "object", additionalProperties: false, required: ["name", "keys"],
+          properties: { name: { type: "string" }, keys: { type: "array", items: { type: "string" } } } } } },
+      },
+    );
+    const byKey = new Map(keys.map((k, i) => [k.k, data.products[i]!.id]));
+    const used = new Set<string>();
+    const groups = r.groups
+      .map((g) => ({ name: g.name.trim().replace(/ß/g, "ss").slice(0, 80), productIds: g.keys.map((k) => byKey.get(k)).filter((id): id is string => !!id && !used.has(id) && (used.add(id), true)) }))
+      .filter((g) => g.name && g.productIds.length);
+    const missing = data.products.map((p) => p.id).filter((id) => !used.has(id));
+    if (missing.length) {
+      if (groups.length) groups[groups.length - 1]!.productIds.push(...missing);
+      else groups.push({ name: "Weitere", productIds: missing });
+    }
+    return { groups };
+  });

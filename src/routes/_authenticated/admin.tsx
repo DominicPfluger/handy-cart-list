@@ -37,6 +37,7 @@ import { ImportPanel } from "@/components/admin/import-panel";
 import { MarketDataImport } from "@/components/admin/market-data-import";
 import { CatalogMediaPanel } from "@/components/admin/catalog-media-panel";
 import { CatalogTileEditor } from "@/components/admin/catalog-tile-editor";
+import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
 import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath } from "@/lib/product-icon";
@@ -595,6 +596,37 @@ function AdminPage() {
 
   const createBackupFn = useServerFn(createBulkBackup);
   const undoBackupFn = useServerFn(undoBulkBackup);
+  const [headingAi, setHeadingAi] = useState(false);
+  /** KI-Gruppen übernehmen: Produkte umsortieren, alte Überschriften (mit Sicherung) ersetzen. */
+  const applyHeadingGroups = async (groups: HeadingGroup[]) => {
+    if (!cur) return;
+    const deptId = cur;
+    const oldOrder = products.map((x) => ({ id: x.id }));
+    const oldIds = headings.map((h) => h.id);
+    await run(async () => {
+      const backupId = oldIds.length ? await createBackupFn({ data: { label: T("adm.headingAi.title"), deletes: [
+        { table: "product_headings", filterColumn: "id", filterIds: oldIds },
+        { table: "catalog_translations", filterColumn: "entity_id", filterIds: oldIds },
+      ] } }) : null;
+      const grouped = new Set(groups.flatMap((g) => g.productIds));
+      const next = [...groups.flatMap((g) => g.productIds.map((id) => ({ id }))), ...products.filter((x) => !grouped.has(x.id)).map((x) => ({ id: x.id }))];
+      await saveOrder(next);
+      for (const id of oldIds) await delH({ data: { id } });
+      const created: string[] = [];
+      for (const g of groups) {
+        const anchor = g.productIds.find((id) => !id.startsWith("alias:"));
+        if (anchor) created.push((await saveH({ data: { departmentId: deptId, beforeProductId: anchor, name: g.name.trim() } })).id);
+      }
+      await qc.invalidateQueries({ queryKey: ALIAS_KEY });
+      toast.success(T("adm.headingAi.done", { n: created.length }), {
+        action: { label: T("adm.undo"), onClick: () => { void run(async () => {
+          for (const id of created) await delH({ data: { id } });
+          await saveOrder(oldOrder);
+          if (backupId) await undoBackupFn({ data: { id: backupId } });
+        }, T("adm.undone")); } },
+      });
+    }, null);
+  };
 
   const deleteSelected = (sel: { productIds: string[]; productAliasIds: string[] }) => {
     const n = sel.productIds.length + sel.productAliasIds.length;
@@ -778,6 +810,11 @@ function AdminPage() {
               <option value="similarity">{T("adm.opt.similarity")}</option>
             </select>
             <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={() => sortProducts()}>↕ {busy ? T("adm.working") : T("adm.sort")}</Button>
+            {cur && <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={() => setHeadingAi(true)} title={T("adm.headingAi.title")}>✨ {T("adm.headingAi.btn")}</Button>}
+            {cur && headingAi && <HeadingAiDialog open={headingAi} onOpenChange={setHeadingAi} nm={nm} hasHeadings={headings.length > 0}
+              path={path(cur).map((p) => p.name).join(" › ")}
+              products={products.filter((x) => !x.id.startsWith("alias:")).map((x) => ({ id: x.id, name: x.name, emoji: x.emoji }))}
+              onApply={applyHeadingGroups} />}
           </div>
         )}
         <select value={cur ?? ""} onChange={(e) => { setCur(e.target.value || null); setSel(null); setSearch(""); }} aria-label={T("adm.categories")}
