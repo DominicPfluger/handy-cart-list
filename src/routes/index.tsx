@@ -349,6 +349,66 @@ function ListPage() {
     clearChecked();
   };
 
+  // ---- Übersicht: zuerst alle Listen anzeigen, Inhalt erst nach Auswahl laden ----
+  if (!openListId || !lists.some((l) => l.id === openListId)) {
+    return (
+      <div className="space-y-5">
+        <ListManager
+          open={managerOpen}
+          onClose={() => setManagerOpen(false)}
+          lists={lists}
+          activeId={activeList.id}
+          templates={templates}
+          onSelect={(id) => { setActiveListId(id); setOpenListId(id); }}
+          onCreate={(name, storeId) => {
+            const id = createList(name);
+            if (id) { setListStore(id, storeId); setActiveListId(id); setOpenListId(id); }
+          }}
+          onRename={renameList}
+          onDelete={deleteList}
+          onReorder={reorderLists}
+          onSaveAsTemplate={saveAsTemplate}
+          onCreateFromTemplate={(templateId) => {
+            createFromTemplate(templateId);
+            toast.success(t("lm.templateCreated"));
+          }}
+          onDeleteTemplate={deleteTemplate}
+          onReorderTemplates={reorderTemplates}
+        />
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("list.lists")}</h1>
+        <div className="divide-y divide-border rounded-2xl border border-border bg-card">
+          {lists.map((l) => {
+            const done = l.items.filter((i) => i.checked).length;
+            return (
+              <button
+                key={l.id}
+                onClick={() => { setActiveListId(l.id); setOpenListId(l.id); }}
+                className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-muted"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-lg">🛒</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold text-foreground">{l.name}</span>
+                  <span className="block text-xs text-muted-foreground">
+                    {l.items.length === 0 ? t("list.empty1") : `${done}/${l.items.length}`}
+                  </span>
+                </span>
+                <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-muted-foreground" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m9 6 6 6-6 6" />
+                </svg>
+              </button>
+            );
+          })}
+        </div>
+        <button
+          onClick={() => setManagerOpen(true)}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-primary/40 py-3.5 text-sm font-semibold text-primary active:bg-muted"
+        >
+          <PlusIcon className="h-4 w-4" /> {t("lm.create")}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-5">
       <ListManager
