@@ -158,3 +158,23 @@
 [id^="rk-"] {
   scroll-margin-top: 0.75rem;
 }
+
+/* Abhak-Animation: Haken poppt auf, Text wird weich durchgestrichen */
+@keyframes check-pop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.35); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.check-pop {
+  animation: check-pop 0.3s ease-out;
+}
+.strike-animate {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 58%;
+  background-size: 0% 1.5px;
+  transition: background-size 0.25s ease-out, color 0.25s ease-out;
+}
+.strike-animate.is-checked {
+  background-size: 100% 1.5px;
+}
