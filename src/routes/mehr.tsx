@@ -305,7 +305,6 @@ function MorePage() {
           </Link>
         </section>
       )}
-      </section>
 
       <footer className="flex flex-col items-center gap-1 pt-4 pb-2 text-center">
         <img src={appIcon.url} alt="Shoppi App-Icon" className="h-16 w-16 rounded-2xl shadow-sm" />
