@@ -2,10 +2,10 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Wand2, ImageOff, Loader2 } from "lucide-react";
+import { Wand2, WandSparkles, ImageOff, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { generateImageFor } from "@/lib/product-media.functions";
-import { saveProductIconFromPath } from "@/lib/product-icon";
+import { saveProductIconFromPath, saveCustomIconFromPath } from "@/lib/product-icon";
 import { useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 
@@ -23,6 +23,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   const [patch, setPatch] = useState<Record<string, { image_path?: string | null; icon_path?: string | null }>>({});
   const [busy, setBusy] = useState<Set<string>>(new Set());
   const [batch, setBatch] = useState<{ done: number; total: number } | null>(null);
+  const [batchBoth, setBatchBoth] = useState(false);
   const stop = useRef(false);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
@@ -54,12 +55,17 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   });
   const url = (p?: string | null): string | undefined => (p ? imgs.data?.get(p) ?? undefined : undefined);
 
-  const fix = async (p: Prod) => {
+  const fix = async (p: Prod, both = false) => {
     setBusy((s) => new Set(s).add(p.id));
     try {
       let image = p.image_path;
       if (!image) image = (await gen({ data: { id: p.id, kind: "product" } })).path;
-      await saveProductIconFromPath(p.id, image);
+      if (both) {
+        const icon = await gen({ data: { id: p.id, kind: "product", iconOnly: true } });
+        await saveCustomIconFromPath("product", p.id, icon.path);
+      } else {
+        await saveProductIconFromPath(p.id, image);
+      }
       const { data } = await supabase.from("products").select("image_path, icon_path").eq("id", p.id).single();
       setPatch((m) => ({ ...m, [p.id]: { image_path: data?.image_path ?? image, icon_path: data?.icon_path ?? null } }));
       return true;
@@ -77,7 +83,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     setBatch({ done: 0, total: list.length });
     for (let i = 0; i < list.length; i++) {
       if (stop.current) break;
-      if (!(await fix(list[i]!))) break;
+      if (!(await fix(list[i]!, batchBoth))) break;
       setBatch({ done: i + 1, total: list.length });
     }
     setBatch(null);
@@ -106,7 +112,13 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
           <Button size="sm" variant="outline" onClick={() => { stop.current = true; }}>{t("adm.noImg.stop")}</Button>
         </div>
       ) : (
-        <Button size="sm" variant="outline" onClick={fixAll}><Wand2 className="mr-1 h-4 w-4" />{t("adm.noImg.all", { n: String(visible.length) })}</Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button size="sm" variant="outline" onClick={fixAll}><Wand2 className="mr-1 h-4 w-4" />{t("adm.noImg.all", { n: String(visible.length) })}</Button>
+          <select value={batchBoth ? "both" : "derive"} onChange={(e) => setBatchBoth(e.target.value === "both")} className="rounded-lg border border-input bg-background px-2 py-1 text-xs" aria-label={t("adm.noImg.batchMode")}>
+            <option value="derive">{t("adm.noImg.modeDerive")}</option>
+            <option value="both">{t("adm.noImg.modeBoth")}</option>
+          </select>
+        </div>
       ))}
       <ul className="divide-y divide-border">
         {visible.map((p) => (
@@ -119,6 +131,9 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
             </button>
             <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => fix(p)}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4 text-primary" />}
+            </Button>
+            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.genBoth")} title={t("adm.noImg.genBoth")} disabled={busy.has(p.id) || !!batch} onClick={() => fix(p, true)}>
+              {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
             </Button>
           </li>
         ))}
