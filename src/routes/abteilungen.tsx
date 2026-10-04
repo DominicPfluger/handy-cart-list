@@ -62,7 +62,7 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
-  return <DepartmentIcon emoji={department.emoji} imageUrl={department.iconUrl ?? department.imageUrl} imagePath={department.iconPath ?? department.imagePath} />;
+  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl ?? department.iconUrl} imagePath={department.imagePath ?? department.iconPath} />;
 }
 
 function DepartmentsPage() {
