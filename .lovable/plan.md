@@ -21,3 +21,13 @@ Das gilt für die normale Einkaufsliste und für den Kaufmodus, weil beide dense
   - Sequenzzähler `fetchSeq`: Nur das Ergebnis des neuesten `fetchCloud` darf `setCloudLists` aufrufen.
   - `toggleItem` bei `tmp-`-Kennungen: Den gewünschten Zustand vormerken. In `replaceItemLocally` (nach `addItem`) übernehmen und `updateCloudItem` nachsenden.
 - Prüfung: Im angemeldeten Browser mehrere Artikel schnell hintereinander abhaken, in der Liste und im Kaufmodus. Kein Zurückspringen, Zustand bleibt nach dem Neuladen erhalten, danach die Testliste zurücksetzen.
+
+---
+
+# Bilder für die Rezept-Kategorien
+
+Auf der Rezepte-Hauptseite bekommen die vier Kacheln eigene Bilder statt der Emojis: Rezept-Generator, Rezepte suchen, Rezept-Listen und Rezept-Inspirationen. Die Kachelfarben und Texte bleiben gleich.
+
+- Pro Kachel wird ein freigestelltes KI-Bild im Stil der Produktbilder erstellt (PNG, transparent, quadratisch). Die Motive: Kochmütze mit Kochlöffel (Generator), Lupe über einem Rezeptblatt (Suchen), gestapelte Rezeptmappen (Listen), aufgeschlagenes Kochbuch mit Funken (Inspirationen).
+- Wie bei den KI-Bildern üblich: keine Kräuter, keine Garnituren, keine Gefässe.
+- Technisch: Die Bilder liegen unter `src/assets/recipes/` und werden in `src/routes/rezepte.index.tsx` importiert. Dazu bekommen `RecipeEntry` und `GENERATOR_ENTRY` ein Feld `image`, das anstelle von `icon` angezeigt wird (`object-contain`, gleiche Grösse wie bisher). Das Emoji bleibt als Ersatz, falls kein Bild vorhanden ist.
