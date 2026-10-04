@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { UpdateIcon } from "@radix-ui/react-icons";
-import { useI18n } from "../i18n";
+import { RefreshCw } from "lucide-react";
+import { useT } from "../i18n";
 
 /**
  * „App aktualisieren“-Zeile für die Einstellungen:
@@ -8,7 +8,7 @@ import { useI18n } from "../i18n";
  * lädt die App anschliessend frisch vom Server.
  */
 export function AppUpdateRow() {
-  const { t } = useI18n();
+  const t = useT();
   const [busy, setBusy] = useState(false);
 
   const updateApp = async () => {
@@ -37,7 +37,7 @@ export function AppUpdateRow() {
       className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted disabled:opacity-60"
     >
       <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
-        <UpdateIcon className={`h-5 w-5 ${busy ? "animate-spin" : ""}`} />
+        <RefreshCw className={`h-5 w-5 ${busy ? "animate-spin" : ""}`} />
       </div>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-foreground">{t("more.appUpdate")}</p>
