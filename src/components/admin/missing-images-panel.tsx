@@ -19,7 +19,9 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   const { t } = useT();
   const gen = useServerFn(generateImageFor);
   const [filter, setFilter] = useState<Filter>("any");
+  const [query, setQuery] = useState("");
   const [limit, setLimit] = useState(PAGE);
+  const [menuFor, setMenuFor] = useState<string | null>(null);
   const [patch, setPatch] = useState<Record<string, { image_path?: string | null; icon_path?: string | null }>>({});
   const [busy, setBusy] = useState<Set<string>>(new Set());
   const [batch, setBatch] = useState<{ done: number; total: number } | null>(null);
@@ -34,13 +36,16 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   };
 
   const all = useMemo(() => prods.map((p) => ({ ...p, ...patch[p.id] })), [prods, patch]);
-  const missing = useMemo(() => all.filter((p) => {
-    const noImg = !p.image_path, noIcon = !p.icon_path;
-    if (filter === "image") return noImg;
-    if (filter === "icon") return noIcon;
-    if (filter === "both") return noImg && noIcon;
-    return noImg || noIcon;
-  }), [all, filter]);
+  const missing = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return all.filter((p) => {
+      const noImg = !p.image_path, noIcon = !p.icon_path;
+      const hit = filter === "image" ? noImg : filter === "icon" ? noIcon : filter === "both" ? noImg && noIcon : noImg || noIcon;
+      if (!hit) return false;
+      if (!q) return true;
+      return p.name.toLowerCase().includes(q) || path(p.department_id).toLowerCase().includes(q);
+    });
+  }, [all, filter, query]);
   const visible = missing.slice(0, limit);
 
   const paths = visible.flatMap((p) => [p.image_path, p.icon_path]).filter((x): x is string => !!x);
@@ -99,12 +104,22 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     <section className="space-y-3 rounded-2xl border border-border bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-foreground">{t("adm.noImg.title")} ({missing.length})</h3>
-        <select value={filter} onChange={(e) => { setFilter(e.target.value as Filter); setLimit(PAGE); }} className="rounded-lg border border-input bg-background px-2 py-1 text-xs">
-          <option value="any">{t("adm.noImg.any")}</option>
-          <option value="image">{t("adm.noImg.image")}</option>
-          <option value="icon">{t("adm.noImg.icon")}</option>
-          <option value="both">{t("adm.noImg.both")}</option>
-        </select>
+        <div className="flex items-center gap-2">
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => { setQuery(e.target.value); setLimit(PAGE); }}
+            placeholder={t("adm.noImg.search")}
+            aria-label={t("adm.noImg.search")}
+            className="w-36 rounded-lg border border-input bg-background px-2 py-1 text-xs"
+          />
+          <select value={filter} onChange={(e) => { setFilter(e.target.value as Filter); setLimit(PAGE); }} className="rounded-lg border border-input bg-background px-2 py-1 text-xs">
+            <option value="any">{t("adm.noImg.any")}</option>
+            <option value="image">{t("adm.noImg.image")}</option>
+            <option value="icon">{t("adm.noImg.icon")}</option>
+            <option value="both">{t("adm.noImg.both")}</option>
+          </select>
+        </div>
       </div>
       {visible.length > 0 && (batch ? (
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -129,12 +144,24 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
               <p className="truncate text-sm font-medium text-foreground">{p.emoji} {p.name}</p>
               <p className="truncate text-xs text-muted-foreground">{path(p.department_id)}</p>
             </button>
-            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => fix(p)}>
-              {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4 text-primary" />}
-            </Button>
-            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.genBoth")} title={t("adm.noImg.genBoth")} disabled={busy.has(p.id) || !!batch} onClick={() => fix(p, true)}>
-              {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
-            </Button>
+            <span className="relative">
+              <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setMenuFor((m) => (m === p.id ? null : p.id))}>
+                {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
+              </Button>
+              {menuFor === p.id && (
+                <>
+                  <span className="fixed inset-0 z-40" onClick={() => setMenuFor(null)} />
+                  <span className="absolute right-0 top-full z-50 mt-1 block w-56 overflow-hidden rounded-xl border border-border bg-card shadow-lg">
+                    <button type="button" className="block w-full px-3 py-2 text-left text-xs font-medium text-foreground hover:bg-muted" onClick={() => { setMenuFor(null); void fix(p); }}>
+                      {t("adm.noImg.gen")}
+                    </button>
+                    <button type="button" className="block w-full border-t border-border px-3 py-2 text-left text-xs font-medium text-foreground hover:bg-muted" onClick={() => { setMenuFor(null); void fix(p, true); }}>
+                      {t("adm.noImg.genBoth")}
+                    </button>
+                  </span>
+                </>
+              )}
+            </span>
           </li>
         ))}
       </ul>
