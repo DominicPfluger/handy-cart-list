@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -19,7 +19,7 @@ type Dlg = { target: Prod | null; hint: string; opts: AiImageOpts; both: boolean
 const PAGE = 5;
 
 /** Pflege: Produkte ohne Vorschaubild/Icon, 5 pro Seite, mit Kategorienfilter und KI-Bildoptionen. */
-export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; prods: Prod[]; onEdit: (id: string) => void }) {
+export function MissingImagesPanel({ depts, prods, onEdit, children }: { depts: Dept[]; prods: Prod[]; onEdit: (id: string) => void; children?: ReactNode }) {
   const { t } = useT();
   const gen = useServerFn(generateImageFor);
   const [filter, setFilter] = useState<Filter>("any");
@@ -334,6 +334,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
       {missing.length > limit && (
         <Button size="sm" variant="ghost" className="w-full" onClick={() => setLimit((l) => l + PAGE)}>{t("adm.noImg.more")}</Button>
       )}
+      {children}
       {dlg && optionsDialog(dlg)}
       {pick && <PickerDialog target={pick.target} query={pick.query} />}
     </section>

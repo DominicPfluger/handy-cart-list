@@ -216,8 +216,11 @@ export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: {
     });
   return (
     <>
-      {section === "images" && onEdit && <MissingImagesPanel depts={depts} prods={prods} onEdit={onEdit} />}
-      {section === "images" && onEdit && <CategoryImageGallery depts={depts} prods={prods} onEdit={onEdit} />}
+      {section === "images" && onEdit && (
+        <MissingImagesPanel depts={depts} prods={prods} onEdit={onEdit}>
+          <CategoryImageGallery depts={depts} prods={prods} onEdit={onEdit} />
+        </MissingImagesPanel>
+      )}
       {section === "images" && (
       <section className="mt-8 rounded-2xl border border-border bg-card p-4">
         <h2 className="text-base font-semibold">{T("media.imgTitle")}</h2>

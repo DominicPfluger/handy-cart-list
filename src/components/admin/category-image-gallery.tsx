@@ -14,6 +14,7 @@ const PAGE = 24;
 export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; prods: Prod[]; onEdit: (id: string) => void }) {
   const { t } = useT();
   const [cat, setCat] = useState("");
+  const [q, setQ] = useState("");
   const [limit, setLimit] = useState(PAGE);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
@@ -35,9 +36,13 @@ export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; 
   };
 
   const items = useMemo(
-    () => (cat ? prods.filter((p) => p.image_path && inCat(p.department_id)) : []),
+    () => {
+      const needle = q.trim().toLowerCase();
+      if (!cat && !needle) return [];
+      return prods.filter((p) => p.image_path && (!cat || inCat(p.department_id)) && (!needle || p.name.toLowerCase().includes(needle)));
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [prods, cat],
+    [prods, cat, q],
   );
   const visible = items.slice(0, limit);
 
@@ -53,16 +58,26 @@ export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; 
   });
 
   return (
-    <section className="mt-8 space-y-3 rounded-2xl border border-border bg-card p-4">
+    <section className="space-y-3 border-t border-border pt-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-foreground">{t("adm.imgGallery.title")}{cat ? ` (${items.length})` : ""}</h3>
-        <select value={cat} onChange={(e) => { setCat(e.target.value); setLimit(PAGE); }} className="max-w-64 rounded-lg border border-input bg-background px-2 py-1 text-xs" aria-label={t("adm.imgGallery.title")}>
-          <option value="">{t("adm.noImg.cat")}</option>
-          {catOptions.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
-        </select>
+        <h3 className="text-sm font-semibold text-foreground">{t("adm.imgGallery.title")}{cat || q.trim() ? ` (${items.length})` : ""}</h3>
+        <div className="flex items-center gap-2">
+          <input
+            type="search"
+            value={q}
+            onChange={(e) => { setQ(e.target.value); setLimit(PAGE); }}
+            placeholder={t("adm.noImg.search")}
+            aria-label={t("adm.noImg.search")}
+            className="w-36 rounded-lg border border-input bg-background px-2 py-1 text-xs"
+          />
+          <select value={cat} onChange={(e) => { setCat(e.target.value); setLimit(PAGE); }} className="max-w-64 rounded-lg border border-input bg-background px-2 py-1 text-xs" aria-label={t("adm.imgGallery.title")}>
+            <option value="">{t("adm.noImg.cat")}</option>
+            {catOptions.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+          </select>
+        </div>
       </div>
-      {!cat && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.hint")}</p>}
-      {cat && visible.length === 0 && !imgs.isLoading && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.none")}</p>}
+      {!cat && !q.trim() && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.hint")}</p>}
+      {(cat || q.trim()) && visible.length === 0 && !imgs.isLoading && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.none")}</p>}
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
         {visible.map((p) => {
           const src = imgs.data?.get(p.image_path!);
