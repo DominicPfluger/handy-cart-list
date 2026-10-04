@@ -111,6 +111,32 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     setBatch(null);
   };
 
+  /** Vorhandenes Katalogbild eines anderen Produkts übernehmen (spart KI-Credits). */
+  const assignFrom = async (target: Prod, source: Prod) => {
+    if (!source.image_path) return;
+    setPick(null);
+    setBusy((s) => new Set(s).add(target.id));
+    try {
+      let icon = source.icon_path ?? null;
+      const { error } = await supabase.from("products").update({ image_path: source.image_path }).eq("id", target.id);
+      if (error) throw error;
+      if (icon) {
+        const { error: ie } = await supabase.from("products").update({ icon_path: icon }).eq("id", target.id);
+        if (ie) throw ie;
+      } else {
+        await saveProductIconFromPath(target.id, source.image_path);
+        const { data } = await supabase.from("products").select("icon_path").eq("id", target.id).single();
+        icon = data?.icon_path ?? null;
+      }
+      setPatch((m) => ({ ...m, [target.id]: { image_path: source.image_path, icon_path: icon } }));
+      toast.success(t("adm.noImg.picked"));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy((s) => { const n = new Set(s); n.delete(target.id); return n; });
+    }
+  };
+
   const runDlg = (d: Dlg) => {
     const h = d.hint.trim() || undefined;
     setDlg(null);
