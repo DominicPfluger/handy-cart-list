@@ -269,7 +269,67 @@ export function ListManager(props: Props) {
           </button>
         </div>
 
+        <div className="mb-5 flex gap-2">
+          <div className="min-w-0 flex-1 space-y-1.5">
+          <input
+            value={newName}
+            onChange={(e) => setNewName(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && create()}
+            placeholder={t("lm.newPlaceholder")}
+            className="w-full rounded-xl border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
+          />
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="shrink-0">{t("store.label")}</span>
+            <select value={newStore} onChange={(e) => setNewStore(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs text-foreground outline-none focus:border-primary">
+              {stores.map((s) => <option key={s.id} value={s.id}>{storeLabel(s)}</option>)}
+              <option value="__new__">{t("store.new")}</option>
+            </select>
+          </label>
+          {newStore === "__new__" && (
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <input
+                  value={newStoreEmoji}
+                  onChange={(e) => setNewStoreEmoji(e.target.value)}
+                  maxLength={4}
+                  aria-label={t("store.icon")}
+                  placeholder="🏪"
+                  className="w-11 shrink-0 rounded-lg border border-input bg-background px-2 py-1.5 text-center text-sm outline-none focus:border-primary"
+                />
+                <input
+                  value={newStoreName}
+                  onChange={(e) => setNewStoreName(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && addStore()}
+                  placeholder={t("store.newPlaceholder")}
+                  className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs outline-none focus:border-primary"
+                />
+                <button
+                  onClick={addStore}
+                  disabled={!newStoreName.trim()}
+                  className="shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50"
+                >
+                  {t("store.add")}
+                </button>
+              </div>
+              <div className="flex gap-1">
+                {STORE_EMOJIS.map((e) => (
+                  <button key={e} type="button" onClick={() => setNewStoreEmoji(e)} className={`grid h-7 w-7 place-items-center rounded-lg border text-sm ${newStoreEmoji === e ? "border-primary bg-primary-soft/60" : "border-border"}`} aria-label={`${t("store.icon")} ${e}`}>{e}</button>
+                ))}
+              </div>
+            </div>
+          )}
+          </div>
+          <button
+            onClick={create}
+            disabled={!newName.trim()}
+            className="flex items-center gap-1 self-start rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+          >
+            <PlusIcon className="h-4 w-4" /> {t("lm.create")}
+          </button>
+        </div>
+
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+
           <SortableContext items={lists.map((l) => l.id)} strategy={verticalListSortingStrategy}>
             <div className="space-y-2">
               {lists.map((l) => (
