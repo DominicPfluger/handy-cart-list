@@ -58,7 +58,13 @@ function Row({
   onRename,
   onDelete,
   onSaveAsTemplate,
+  stores,
+  storeId,
+  onStoreChange,
 }: {
+  stores: { id: string; name: string }[];
+  storeId: string;
+  onStoreChange: (id: string) => void;
   list: ShoppingList;
   active: boolean;
   canDelete: boolean;
@@ -130,6 +136,14 @@ function Row({
           <button onClick={onSelect} className="block w-full text-left text-xs text-muted-foreground">
             {t("lm.open", { open })}
           </button>
+          <select
+            value={storeId}
+            onChange={(e) => onStoreChange(e.target.value)}
+            aria-label={t("store.label")}
+            className="mt-1 max-w-full rounded-md border border-input bg-background px-1.5 py-0.5 text-xs text-foreground outline-none focus:border-primary"
+          >
+            {stores.map((s) => <option key={s.id} value={s.id}>🏪 {s.name}</option>)}
+          </select>
         </div>
       )}
 
@@ -222,7 +236,7 @@ export function ListManager(props: Props) {
   const [newStore, setNewStore] = useState("default");
   const [newStoreName, setNewStoreName] = useState("");
   const stores = useStores();
-  const { addCustomStore } = useGroupOrder();
+  const { addCustomStore, listStores, setListStore } = useGroupOrder();
 
   const addStore = () => {
     const name = newStoreName.trim();
@@ -273,6 +287,9 @@ export function ListManager(props: Props) {
                   key={l.id}
                   list={l}
                   active={l.id === activeId}
+                  stores={stores}
+                  storeId={listStores[l.id] ?? "default"}
+                  onStoreChange={(sid) => setListStore(l.id, sid)}
                   canDelete={lists.length > 1}
                   onSelect={() => {
                     props.onSelect(l.id);

@@ -58,6 +58,7 @@ import { priceForItem } from "../lib/item-price";
 import { PurchaseMode, type PurchaseItem } from "../components/purchase-mode";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useGroupOrder, applyGroupOrder, filterHidden } from "../hooks/use-group-order";
+import { useStores } from "../hooks/use-stores";
 
 const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
@@ -357,6 +358,9 @@ function ListPage() {
     deleteItemPhotos(items.filter((i) => i.checked).map((i) => i.id)).catch(() => {});
     clearChecked();
   };
+
+  // Erst nach Anmeldeprüfung und Laden der Listen anzeigen — keine aufblitzende Beispiel-Liste.
+  if (loading || !hydrated) return <SplashScreen />;
 
   // ---- Übersicht: zuerst alle Listen anzeigen, Inhalt erst nach Auswahl laden ----
   if (!openListId || !lists.some((l) => l.id === openListId)) {
