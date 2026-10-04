@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
 import { Input } from "./ui/input";
-import { setCustomName } from "../hooks/use-custom-names";
+import { setCustomName, setStoreDepartmentName } from "../hooks/use-custom-names";
 import { deleteCustomEntry, isCustomId } from "../hooks/use-custom-catalog";
 import { hideProduct } from "../hooks/use-hidden-products";
 import { useT } from "../i18n";
@@ -25,10 +25,13 @@ export function RenameDialog({ target, onClose }: { target: RenameTarget | null;
     onClose();
   };
 
+  const setName = (id: string, name: string | null) =>
+    target?.kind === "department" && !isCustomId(id) ? setStoreDepartmentName(id, name) : setCustomName(id, name);
+
   const save = () => {
     if (!target) return;
     const v = value.trim();
-    setCustomName(target.id, v && v !== target.originalName ? v : null);
+    setName(target.id, v && v !== target.originalName ? v : null);
     onClose();
   };
 
@@ -51,7 +54,7 @@ export function RenameDialog({ target, onClose }: { target: RenameTarget | null;
             <Button variant="outline" className="text-destructive" onClick={() => setConfirmRemove(true)}>{t("rename.deleteCatalog")}</Button>
           )}
           {target?.isCustom && !isCustomId(target.id) && (
-            <Button variant="outline" onClick={() => { setCustomName(target.id, null); onClose(); }}>{t("rename.reset")}</Button>
+            <Button variant="outline" onClick={() => { setName(target.id, null); onClose(); }}>{t("rename.reset")}</Button>
           )}
           <Button onClick={save} disabled={!value.trim()}>{t("rename.save")}</Button>
         </DialogFooter>
