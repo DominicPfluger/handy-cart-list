@@ -104,12 +104,22 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     <section className="space-y-3 rounded-2xl border border-border bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-foreground">{t("adm.noImg.title")} ({missing.length})</h3>
-        <select value={filter} onChange={(e) => { setFilter(e.target.value as Filter); setLimit(PAGE); }} className="rounded-lg border border-input bg-background px-2 py-1 text-xs">
-          <option value="any">{t("adm.noImg.any")}</option>
-          <option value="image">{t("adm.noImg.image")}</option>
-          <option value="icon">{t("adm.noImg.icon")}</option>
-          <option value="both">{t("adm.noImg.both")}</option>
-        </select>
+        <div className="flex items-center gap-2">
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => { setQuery(e.target.value); setLimit(PAGE); }}
+            placeholder={t("adm.noImg.search")}
+            aria-label={t("adm.noImg.search")}
+            className="w-36 rounded-lg border border-input bg-background px-2 py-1 text-xs"
+          />
+          <select value={filter} onChange={(e) => { setFilter(e.target.value as Filter); setLimit(PAGE); }} className="rounded-lg border border-input bg-background px-2 py-1 text-xs">
+            <option value="any">{t("adm.noImg.any")}</option>
+            <option value="image">{t("adm.noImg.image")}</option>
+            <option value="icon">{t("adm.noImg.icon")}</option>
+            <option value="both">{t("adm.noImg.both")}</option>
+          </select>
+        </div>
       </div>
       {visible.length > 0 && (batch ? (
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
