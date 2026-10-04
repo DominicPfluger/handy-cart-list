@@ -177,10 +177,20 @@ export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: {
   };
 
   const s = status.data;
+  const [openProducts, setOpenProducts] = useState<Set<string>>(() => new Set());
+  const toggleProducts = (id: string) => {
+    setOpenProducts((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
   const categoryRows = (parent: string | null): React.ReactNode =>
     (deptChildren.get(parent) ?? []).map((dept) => {
       const hasChildren = (deptChildren.get(dept.id)?.length ?? 0) > 0;
       const open = openCategories.has(dept.id);
+      const productsOpen = openProducts.has(dept.id);
       return (
         <div key={dept.id}>
           <div className="flex min-h-11 items-center gap-1.5 border-b border-border/50 py-1 last:border-0">
@@ -189,12 +199,16 @@ export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: {
                 {open ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
               </Button>
             ) : <span className="w-8 shrink-0" />}
-            <span className="min-w-0 flex-1 text-sm">{dept.name}</span>
+            <button type="button" onClick={() => toggleProducts(dept.id)} aria-expanded={productsOpen} title={T("price.catProducts")} className="flex min-w-0 flex-1 items-center gap-1 text-left text-sm hover:text-primary">
+              <span className="min-w-0 flex-1 truncate">{dept.name}</span>
+              {productsOpen ? <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground" /> : <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />}
+            </button>
             <Button size="sm" variant="secondary" className="h-8 w-8 shrink-0 p-0 sm:w-auto sm:px-3" disabled={busy !== null} onClick={() => void runCategoryPrices(dept)} aria-label={`${T("price.catRun")}: ${dept.name}`} title={`${T("price.catRun")}: ${dept.name}`}>
               <Sparkles className="h-4 w-4 sm:hidden" aria-hidden="true" />
               <span className="hidden sm:inline">{busy === "catPrice" ? T("media.working") : T("price.catRun")}</span>
             </Button>
           </div>
+          {productsOpen && <CategoryProducts departmentId={dept.id} markets={[...markets]} onEdit={onEdit} />}
           {hasChildren && open && <div className="pl-4">{categoryRows(dept.id)}</div>}
         </div>
       );
