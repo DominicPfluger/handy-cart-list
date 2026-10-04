@@ -51,9 +51,10 @@ export function useGroupOrder() {
   const [store, setStoreState] = useState("default");
   const [customStores, setCustom] = useState<CustomStore[]>([]);
   const [hiddenAll, setHiddenAll] = useState<Record<string, string[]>>({});
+  const [listStores, setListStores] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const sync = () => { setAll(readAll()); setStoreState(readStore()); setCustom(readCustom()); setHiddenAll(readHidden()); };
+    const sync = () => { setAll(readAll()); setStoreState(readStore()); setCustom(readCustom()); setHiddenAll(readHidden()); setListStores(readListStores()); };
     sync();
     window.addEventListener(EVENT, sync);
     window.addEventListener("storage", sync);
