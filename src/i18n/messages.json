@@ -1279,7 +1279,17 @@
     "store.addCustom": "+ Own store …",
     "store.newName": "Store name",
     "store.remove": "Remove",
-    "store.reset": "Reset"
+    "store.reset": "Reset",
+    "adm.noImg.title": "Products without image",
+    "adm.noImg.any": "Image or icon missing",
+    "adm.noImg.image": "No preview image",
+    "adm.noImg.icon": "No icon",
+    "adm.noImg.both": "Both missing",
+    "adm.noImg.all": "Generate all {n} with AI",
+    "adm.noImg.stop": "Cancel",
+    "adm.noImg.gen": "Generate AI image",
+    "adm.noImg.none": "All products have images.",
+    "adm.noImg.more": "Load 30 more"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2561,7 +2571,17 @@
     "store.addCustom": "+ Own store …",
     "store.newName": "Store name",
     "store.remove": "Remove",
-    "store.reset": "Reset"
+    "store.reset": "Reset",
+    "adm.noImg.title": "Products without image",
+    "adm.noImg.any": "Image or icon missing",
+    "adm.noImg.image": "No preview image",
+    "adm.noImg.icon": "No icon",
+    "adm.noImg.both": "Both missing",
+    "adm.noImg.all": "Generate all {n} with AI",
+    "adm.noImg.stop": "Cancel",
+    "adm.noImg.gen": "Generate AI image",
+    "adm.noImg.none": "All products have images.",
+    "adm.noImg.more": "Load 30 more"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3843,7 +3863,17 @@
     "store.addCustom": "+ Own store …",
     "store.newName": "Store name",
     "store.remove": "Remove",
-    "store.reset": "Reset"
+    "store.reset": "Reset",
+    "adm.noImg.title": "Products without image",
+    "adm.noImg.any": "Image or icon missing",
+    "adm.noImg.image": "No preview image",
+    "adm.noImg.icon": "No icon",
+    "adm.noImg.both": "Both missing",
+    "adm.noImg.all": "Generate all {n} with AI",
+    "adm.noImg.stop": "Cancel",
+    "adm.noImg.gen": "Generate AI image",
+    "adm.noImg.none": "All products have images.",
+    "adm.noImg.more": "Load 30 more"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5125,7 +5155,17 @@
     "store.addCustom": "+ Tienda propia …",
     "store.newName": "Nombre de la tienda",
     "store.remove": "Eliminar",
-    "store.reset": "Restablecer"
+    "store.reset": "Restablecer",
+    "adm.noImg.title": "Productos sin imagen",
+    "adm.noImg.any": "Falta imagen o icono",
+    "adm.noImg.image": "Sin imagen",
+    "adm.noImg.icon": "Sin icono",
+    "adm.noImg.both": "Faltan ambos",
+    "adm.noImg.all": "Generar los {n} con IA",
+    "adm.noImg.stop": "Cancelar",
+    "adm.noImg.gen": "Generar imagen IA",
+    "adm.noImg.none": "Todos los productos tienen imagen.",
+    "adm.noImg.more": "Cargar 30 más"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6407,7 +6447,17 @@
     "store.addCustom": "+ Tienda propia …",
     "store.newName": "Nombre de la tienda",
     "store.remove": "Eliminar",
-    "store.reset": "Restablecer"
+    "store.reset": "Restablecer",
+    "adm.noImg.title": "Productos sin imagen",
+    "adm.noImg.any": "Falta imagen o icono",
+    "adm.noImg.image": "Sin imagen",
+    "adm.noImg.icon": "Sin icono",
+    "adm.noImg.both": "Faltan ambos",
+    "adm.noImg.all": "Generar los {n} con IA",
+    "adm.noImg.stop": "Cancelar",
+    "adm.noImg.gen": "Generar imagen IA",
+    "adm.noImg.none": "Todos los productos tienen imagen.",
+    "adm.noImg.more": "Cargar 30 más"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7689,7 +7739,17 @@
     "store.addCustom": "+ Magasin perso …",
     "store.newName": "Nom du magasin",
     "store.remove": "Supprimer",
-    "store.reset": "Réinitialiser"
+    "store.reset": "Réinitialiser",
+    "adm.noImg.title": "Produits sans image",
+    "adm.noImg.any": "Image ou icône manquante",
+    "adm.noImg.image": "Sans image",
+    "adm.noImg.icon": "Sans icône",
+    "adm.noImg.both": "Les deux manquent",
+    "adm.noImg.all": "Générer les {n} par IA",
+    "adm.noImg.stop": "Annuler",
+    "adm.noImg.gen": "Générer une image IA",
+    "adm.noImg.none": "Tous les produits ont une image.",
+    "adm.noImg.more": "Charger 30 de plus"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8971,7 +9031,17 @@
     "store.addCustom": "+ Magasin perso …",
     "store.newName": "Nom du magasin",
     "store.remove": "Supprimer",
-    "store.reset": "Réinitialiser"
+    "store.reset": "Réinitialiser",
+    "adm.noImg.title": "Produits sans image",
+    "adm.noImg.any": "Image ou icône manquante",
+    "adm.noImg.image": "Sans image",
+    "adm.noImg.icon": "Sans icône",
+    "adm.noImg.both": "Les deux manquent",
+    "adm.noImg.all": "Générer les {n} par IA",
+    "adm.noImg.stop": "Annuler",
+    "adm.noImg.gen": "Générer une image IA",
+    "adm.noImg.none": "Tous les produits ont une image.",
+    "adm.noImg.more": "Charger 30 de plus"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10253,7 +10323,17 @@
     "store.addCustom": "+ Negozio personale …",
     "store.newName": "Nome del negozio",
     "store.remove": "Rimuovi",
-    "store.reset": "Ripristina"
+    "store.reset": "Ripristina",
+    "adm.noImg.title": "Prodotti senza immagine",
+    "adm.noImg.any": "Manca immagine o icona",
+    "adm.noImg.image": "Senza immagine",
+    "adm.noImg.icon": "Senza icona",
+    "adm.noImg.both": "Mancano entrambe",
+    "adm.noImg.all": "Genera tutti i {n} con IA",
+    "adm.noImg.stop": "Annulla",
+    "adm.noImg.gen": "Genera immagine IA",
+    "adm.noImg.none": "Tutti i prodotti hanno immagini.",
+    "adm.noImg.more": "Carica altri 30"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11535,7 +11615,17 @@
     "store.addCustom": "+ Negozio personale …",
     "store.newName": "Nome del negozio",
     "store.remove": "Rimuovi",
-    "store.reset": "Ripristina"
+    "store.reset": "Ripristina",
+    "adm.noImg.title": "Prodotti senza immagine",
+    "adm.noImg.any": "Manca immagine o icona",
+    "adm.noImg.image": "Senza immagine",
+    "adm.noImg.icon": "Senza icona",
+    "adm.noImg.both": "Mancano entrambe",
+    "adm.noImg.all": "Genera tutti i {n} con IA",
+    "adm.noImg.stop": "Annulla",
+    "adm.noImg.gen": "Genera immagine IA",
+    "adm.noImg.none": "Tutti i prodotti hanno immagini.",
+    "adm.noImg.more": "Carica altri 30"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12817,7 +12907,17 @@
     "store.addCustom": "+ Loja própria …",
     "store.newName": "Nome da loja",
     "store.remove": "Remover",
-    "store.reset": "Repor"
+    "store.reset": "Repor",
+    "adm.noImg.title": "Produtos sem imagem",
+    "adm.noImg.any": "Falta imagem ou ícone",
+    "adm.noImg.image": "Sem imagem",
+    "adm.noImg.icon": "Sem ícone",
+    "adm.noImg.both": "Faltam ambos",
+    "adm.noImg.all": "Gerar os {n} com IA",
+    "adm.noImg.stop": "Cancelar",
+    "adm.noImg.gen": "Gerar imagem IA",
+    "adm.noImg.none": "Todos os produtos têm imagem.",
+    "adm.noImg.more": "Carregar mais 30"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14099,7 +14199,17 @@
     "store.addCustom": "+ Loja própria …",
     "store.newName": "Nome da loja",
     "store.remove": "Remover",
-    "store.reset": "Repor"
+    "store.reset": "Repor",
+    "adm.noImg.title": "Produtos sem imagem",
+    "adm.noImg.any": "Falta imagem ou ícone",
+    "adm.noImg.image": "Sem imagem",
+    "adm.noImg.icon": "Sem ícone",
+    "adm.noImg.both": "Faltam ambos",
+    "adm.noImg.all": "Gerar os {n} com IA",
+    "adm.noImg.stop": "Cancelar",
+    "adm.noImg.gen": "Gerar imagem IA",
+    "adm.noImg.none": "Todos os produtos têm imagem.",
+    "adm.noImg.more": "Carregar mais 30"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15381,7 +15491,17 @@
     "store.addCustom": "+ Eigen winkel …",
     "store.newName": "Naam van de winkel",
     "store.remove": "Verwijderen",
-    "store.reset": "Herstellen"
+    "store.reset": "Herstellen",
+    "adm.noImg.title": "Producten zonder afbeelding",
+    "adm.noImg.any": "Afbeelding of icoon ontbreekt",
+    "adm.noImg.image": "Zonder afbeelding",
+    "adm.noImg.icon": "Zonder icoon",
+    "adm.noImg.both": "Beide ontbreken",
+    "adm.noImg.all": "Alle {n} met AI maken",
+    "adm.noImg.stop": "Annuleren",
+    "adm.noImg.gen": "AI-afbeelding maken",
+    "adm.noImg.none": "Alle producten hebben afbeeldingen.",
+    "adm.noImg.more": "Nog 30 laden"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16663,7 +16783,17 @@
     "store.addCustom": "+ Eigen winkel …",
     "store.newName": "Naam van de winkel",
     "store.remove": "Verwijderen",
-    "store.reset": "Herstellen"
+    "store.reset": "Herstellen",
+    "adm.noImg.title": "Producten zonder afbeelding",
+    "adm.noImg.any": "Afbeelding of icoon ontbreekt",
+    "adm.noImg.image": "Zonder afbeelding",
+    "adm.noImg.icon": "Zonder icoon",
+    "adm.noImg.both": "Beide ontbreken",
+    "adm.noImg.all": "Alle {n} met AI maken",
+    "adm.noImg.stop": "Annuleren",
+    "adm.noImg.gen": "AI-afbeelding maken",
+    "adm.noImg.none": "Alle producten hebben afbeeldingen.",
+    "adm.noImg.more": "Nog 30 laden"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",

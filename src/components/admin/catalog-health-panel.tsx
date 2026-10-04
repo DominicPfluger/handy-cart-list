@@ -7,9 +7,10 @@ import { mergeProducts } from "@/lib/admin.functions";
 import { useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { MissingImagesPanel } from "./missing-images-panel";
 
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; image_path: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; image_path: string | null };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; image_path: string | null; icon_path?: string | null };
 type Tr = Map<string, Record<string, { name: string }>>;
 
 const IGNORE_KEY = "shoppi:health-ignored";
@@ -206,6 +207,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit }: {
 
   return (
     <div className="space-y-6 pt-2">
+      <MissingImagesPanel depts={depts} prods={prods} onEdit={onEdit} />
       <section className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-sm font-semibold text-foreground">{T("adm.health.gaps")}</h2>
