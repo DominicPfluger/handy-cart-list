@@ -517,7 +517,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     return (
       <div className="space-y-5" id="rk-generator">
        {mode === "lists" && (collectionsView ?? <Link to="/auth" className="block rounded-full border border-primary px-4 py-2.5 text-center text-sm font-semibold text-primary">{t("rs.signInToSave")}</Link>)}
-       {mode === "inspiration" && <>{collectionsView}{popularView}{recentView}</>}
+       {mode === "inspiration" && <>{popularView}{recentView}</>}
        </div>
     );
   }
