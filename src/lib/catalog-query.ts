@@ -1,7 +1,7 @@
 import { queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { getLocale, pickName, useLocale } from "../i18n";
-import { getCatalog, getCatalogImageUrls, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct, type CatalogCuisine } from "./catalog.functions";
+import { getCatalogCore, getCatalogDetails, getCatalogImageUrls, type Catalog, type CatalogDepartment, type CatalogHeading, type CatalogProduct, type CatalogCuisine, type CatalogCore, type CatalogDetails } from "./catalog.functions";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { useCustomCatalog } from "../hooks/use-custom-catalog";
 import { usePersonalVariants } from "../hooks/use-personal-variants";
@@ -23,16 +23,59 @@ export function inMarket(p: Pick<CatalogProduct, "markets" | "excludedMarkets">,
   return !(p.excludedMarkets ?? []).includes(market);
 }
 
-/** Katalog für eine Sprachvariante (nur deren Übersetzungen werden geladen). */
-export const catalogQueryOptions = (locale: string) =>
-  queryOptions({
-    queryKey: ["catalog", locale],
-    queryFn: () => getCatalog({ data: { locale } }),
+// ---- Geräte-Cache für den Basis-Katalog: App erscheint sofort, Auffrischung im Hintergrund ----
+
+const coreCacheKey = (locale: string) => `shoppi:catalog-core-${locale}`;
+
+function readCoreCache(locale: string): { t: number; data: CatalogCore } | null {
+  try {
+    const raw = localStorage.getItem(coreCacheKey(locale));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { t: number; data: CatalogCore };
+    if (!parsed?.data?.products?.length) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function writeCoreCache(locale: string, data: CatalogCore) {
+  try {
+    localStorage.setItem(coreCacheKey(locale), JSON.stringify({ t: Date.now(), data }));
+  } catch {
+    /* Speicher voll: Cache einfach weglassen */
+  }
+}
+
+/** Basis-Katalog für eine Sprachvariante; mit Geräte-Cache als sofortiger Startwert. */
+export const catalogQueryOptions = (locale: string) => {
+  const cached = typeof localStorage !== "undefined" ? readCoreCache(locale) : null;
+  return queryOptions({
+    queryKey: ["catalog", "core", locale],
+    queryFn: async () => {
+      const fresh = await getCatalogCore({ data: { locale } });
+      writeCoreCache(locale, fresh);
+      return fresh;
+    },
+    // Gespeicherter Stand erscheint sofort und wird im Hintergrund aufgefrischt.
+    initialData: cached?.data,
+    initialDataUpdatedAt: cached?.t ?? 0,
     // Neue Kategorien und Produkte sollen nach kurzer Zeit auch in bereits geöffneten Apps erscheinen.
     staleTime: 60 * 1000,
     // Loader uses ensureQueryData (fetchQuery = no retry by default). Retry so a
     // single interrupted request (reload/HMR during the large download) doesn't blank the page.
     retry: 3,
+    retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
+  });
+};
+
+/** Details (Länderküchen, Marken, Synonyme, Varianten, Rezepte) – im Hintergrund nachgeladen. */
+export const catalogDetailsQueryOptions = (locale: string) =>
+  queryOptions({
+    queryKey: ["catalog", "details", locale],
+    queryFn: () => getCatalogDetails({ data: { locale } }),
+    staleTime: 10 * 60 * 1000,
+    retry: 2,
     retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
   });
 
