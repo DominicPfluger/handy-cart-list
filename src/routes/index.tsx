@@ -116,7 +116,7 @@ function SortableGroup({ id, header, children }: { id: string; header: (handle: 
 
 function ListPage() {
   const {
-    items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem,
+    items, hydrated, loading, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
     templates, saveAsTemplate, createFromTemplate, deleteTemplate, reorderTemplates,
   } = useShoppingList();
@@ -124,18 +124,20 @@ function ListPage() {
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   // Übersicht zuerst: erst nach Auswahl einer Liste wird deren Inhalt geladen.
   const [openListId, setOpenListId] = useState<string | null>(null);
+  // Neue Liste erhält nach dem Speichern ihre endgültige Kennung: geöffnet bleiben.
+  useEffect(() => {
+    if (openListId?.startsWith("tmp-") && !activeList.id.startsWith("tmp-") && !lists.some((l) => l.id === openListId)) {
+      setOpenListId(activeList.id);
+    }
+  }, [openListId, activeList.id, lists]);
   const [speakLocale] = useSpeakLocale();
-  const { all: groupOrderAll, saveFor: saveGroupOrderFor, hiddenAll: hiddenGroupsAll, listStores, setListStore, store: settingsStore, setStore: setSettingsStore, customStores } = useGroupOrder();
+  const { all: groupOrderAll, saveFor: saveGroupOrderFor, hiddenAll: hiddenGroupsAll, listStores, setListStore, store: settingsStore } = useGroupOrder();
   const activeStoreId = listStores[activeList.id] ?? "default";
   const pick = (o?: string[]) => (o && o.length > 0 ? o : undefined);
   const groupOrder = pick(groupOrderAll[activeStoreId]) ?? pick(groupOrderAll[settingsStore]) ?? groupOrderAll["default"] ?? [];
   const hiddenGroups = hiddenGroupsAll[activeStoreId] ?? [];
-  // Einstellungen wählen den Laden der geöffneten Liste vor, damit dieselbe Sortierung bearbeitet wird.
-  useEffect(() => {
-    if (openListId && activeList.id === openListId && settingsStore !== activeStoreId) setSettingsStore(activeStoreId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openListId, activeList.id, activeStoreId]);
-  const activeStoreName = customStores.find((s) => s.id === activeStoreId)?.name;
+  const allStores = useStores();
+  const activeStoreName = allStores.find((s) => s.id === activeStoreId)?.name;
   const saveGroupOrder = (keys: string[]) => saveGroupOrderFor(activeStoreId, keys);
   const groupSensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
