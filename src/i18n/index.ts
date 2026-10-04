@@ -85,7 +85,7 @@ export async function loadExtraLocales(force = false) {
     let stored: string | null = null;
     try { stored = localStorage.getItem(STORAGE_KEY); } catch { /* ignore */ }
     if (stored && !explicit && allIds().includes(stored)) { explicit = stored; current = stored; document.documentElement.lang = current; }
-    if (extraLocales.some((l) => l.id === current)) await loadDict(current);
+    if (current !== DEFAULT_LOCALE) await loadDict(current);
     emit();
   } catch { /* offline: eingebaute Sprachen genügen */ }
 }
@@ -141,7 +141,7 @@ export function setLocale(locale: Locale | null) {
   current = locale ?? matchLocale(navigator.languages ?? [navigator.language]);
   document.documentElement.lang = current;
   emit();
-  if (extraLocales.some((l) => l.id === current)) void loadDict(current);
+  if (current !== DEFAULT_LOCALE) void loadDict(current);
 }
 
 const subscribe = (cb: () => void) => {
