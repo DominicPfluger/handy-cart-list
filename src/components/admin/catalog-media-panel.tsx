@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { keepPreviousData, useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { catalogMediaStatus, estimateCategoryPrices, generateProductImages, generateReferencePrices, listProductImages, listProductsMissingIcons, listReferencePrices } from "@/lib/product-media.functions";
+import { catalogMediaStatus, estimateAndSaveProductPrice, estimateCategoryPrices, generateProductImages, generateReferencePrices, listCategoryPrices, listProductImages, listProductsMissingIcons, listReferencePrices } from "@/lib/product-media.functions";
 import { getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
 import { formatRefPrice } from "@/hooks/use-reference-prices";
 import { saveProductIconFromPath } from "@/lib/product-icon";
-import { ChevronDown, ChevronRight, Sparkles } from "lucide-react";
+import { ChevronDown, ChevronRight, Pencil, Sparkles } from "lucide-react";
 import { MissingImagesPanel } from "./missing-images-panel";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
