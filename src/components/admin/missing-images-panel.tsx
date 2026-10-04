@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { WandSparkles, Zap, ImageOff, Loader2, X } from "lucide-react";
+import { WandSparkles, Zap, ImageOff, Loader2, X, Images } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath, saveCustomIconFromPath } from "@/lib/product-icon";
@@ -26,6 +26,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   const [cat, setCat] = useState("");
   const [limit, setLimit] = useState(PAGE);
   const [dlg, setDlg] = useState<Dlg | null>(null);
+  const [pick, setPick] = useState<{ target: Prod; query: string } | null>(null);
   const [patch, setPatch] = useState<Record<string, { image_path?: string | null; icon_path?: string | null }>>({});
   const [busy, setBusy] = useState<Set<string>>(new Set());
   const [batch, setBatch] = useState<{ done: number; total: number } | null>(null);
