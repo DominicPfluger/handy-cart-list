@@ -536,7 +536,7 @@ function ListPage() {
                       }`}
                       aria-label={item.checked ? t("list.uncheck") : t("list.check")}
                     >
-                      {item.checked && <CheckIcon className="h-4 w-4" />}
+                      {item.checked && <CheckIcon className="check-pop h-4 w-4" />}
                     </button>
                     {(() => {
                       // Farbe: über die Wurzelkategorie, sonst über den Gruppennamen (z. B. ältere Einträge mit eigenem Gruppenlabel)
@@ -555,7 +555,7 @@ function ListPage() {
                       );
                     })()}
                     <div className="min-w-0 flex-1">
-                      <p className={`break-words font-medium text-sm ${item.checked ? "text-muted-foreground line-through" : "text-foreground"}`}>
+                      <p className={`strike-animate break-words font-medium text-sm ${item.checked ? "is-checked text-muted-foreground" : "text-foreground"}`}>
                         {displayName(item)}{item.organic ? ` (${t("common.organic")})` : ""}
                       </p>
                       <p className="break-words text-xs text-muted-foreground">
