@@ -27,7 +27,7 @@ export function StoreOrderSettings() {
   const { all, store, setStore, saveFor, resetFor, addCustomStore, removeCustomStore } = useGroupOrder();
   const [edit, setEdit] = useState<string | null>(null);
   const sel = edit ?? store;
-  const selected = stores.find((s) => s.id === sel) ?? stores[0];
+  const selected = stores.find((s) => s.id === sel) ?? stores[0]!;
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
