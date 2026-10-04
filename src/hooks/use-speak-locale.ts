@@ -3,6 +3,7 @@ import { LOCALES, useLocale, type Locale } from "../i18n";
 
 const KEY = "shoppi:speak-locale";
 const EVENT = "shoppi:speak-locale-changed";
+const MIGRATED_KEY = "shoppi:speak-locale-migrated";
 /** Gespeicherter Wert: "app" = wie App-Sprache. */
 export const SPEAK_FOLLOW_APP = "app";
 export type SpeakLocaleSetting = Locale | typeof SPEAK_FOLLOW_APP;
@@ -10,8 +11,17 @@ export type SpeakLocaleSetting = Locale | typeof SPEAK_FOLLOW_APP;
 export const DEFAULT_SPEAK_LOCALE: SpeakLocaleSetting = SPEAK_FOLLOW_APP;
 const IDS = LOCALES.map((l) => l.id) as readonly string[];
 
+/** Einmalig pro Gerät: früher gespeicherte Vorlese-Sprache zurücksetzen, damit „Wie App-Sprache" vorausgewählt ist. */
+function runMigration(): void {
+  if (typeof window === "undefined") return;
+  if (window.localStorage.getItem(MIGRATED_KEY)) return;
+  window.localStorage.setItem(MIGRATED_KEY, "1");
+  window.localStorage.removeItem(KEY);
+}
+
 export function getSpeakLocaleSetting(): SpeakLocaleSetting {
   if (typeof window === "undefined") return DEFAULT_SPEAK_LOCALE;
+  runMigration();
   const raw = window.localStorage.getItem(KEY);
   if (raw === SPEAK_FOLLOW_APP) return SPEAK_FOLLOW_APP;
   return raw && IDS.includes(raw) ? (raw as Locale) : DEFAULT_SPEAK_LOCALE;
