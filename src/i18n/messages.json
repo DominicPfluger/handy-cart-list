@@ -1340,7 +1340,12 @@
     "units.edit": "Edit",
     "units.editTitle": "Edit unit: {name}",
     "units.language": "Language",
-    "units.aiFill": "Translate missing with AI"
+    "units.aiFill": "Translate missing with AI",
+    "adm.noImg.variants": "{n} variants",
+    "adm.imgGallery.title": "Image gallery",
+    "adm.imgGallery.hint": "Choose a category to see its product images.",
+    "adm.imgGallery.none": "No product images in this category.",
+    "adm.imgGallery.more": "Load more"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2683,7 +2688,12 @@
     "units.edit": "Edit",
     "units.editTitle": "Edit unit: {name}",
     "units.language": "Language",
-    "units.aiFill": "Translate missing with AI"
+    "units.aiFill": "Translate missing with AI",
+    "adm.noImg.variants": "{n} variants",
+    "adm.imgGallery.title": "Image gallery",
+    "adm.imgGallery.hint": "Choose a category to see its product images.",
+    "adm.imgGallery.none": "No product images in this category.",
+    "adm.imgGallery.more": "Load more"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -4026,7 +4036,12 @@
     "units.edit": "Edit",
     "units.editTitle": "Edit unit: {name}",
     "units.language": "Language",
-    "units.aiFill": "Translate missing with AI"
+    "units.aiFill": "Translate missing with AI",
+    "adm.noImg.variants": "{n} variants",
+    "adm.imgGallery.title": "Image gallery",
+    "adm.imgGallery.hint": "Choose a category to see its product images.",
+    "adm.imgGallery.none": "No product images in this category.",
+    "adm.imgGallery.more": "Load more"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5369,7 +5384,12 @@
     "units.edit": "Editar",
     "units.editTitle": "Editar unidad: {name}",
     "units.language": "Idioma",
-    "units.aiFill": "Traducir faltantes con IA"
+    "units.aiFill": "Traducir faltantes con IA",
+    "adm.noImg.variants": "{n} variantes",
+    "adm.imgGallery.title": "Galería de imágenes",
+    "adm.imgGallery.hint": "Elige una categoría para ver sus imágenes de productos.",
+    "adm.imgGallery.none": "No hay imágenes de productos en esta categoría.",
+    "adm.imgGallery.more": "Cargar más"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6712,7 +6732,12 @@
     "units.edit": "Editar",
     "units.editTitle": "Editar unidad: {name}",
     "units.language": "Idioma",
-    "units.aiFill": "Traducir faltantes con IA"
+    "units.aiFill": "Traducir faltantes con IA",
+    "adm.noImg.variants": "{n} variantes",
+    "adm.imgGallery.title": "Galería de imágenes",
+    "adm.imgGallery.hint": "Elige una categoría para ver sus imágenes de productos.",
+    "adm.imgGallery.none": "No hay imágenes de productos en esta categoría.",
+    "adm.imgGallery.more": "Cargar más"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8055,7 +8080,12 @@
     "units.edit": "Modifier",
     "units.editTitle": "Modifier l'unité : {name}",
     "units.language": "Langue",
-    "units.aiFill": "Traduire les manquantes par IA"
+    "units.aiFill": "Traduire les manquantes par IA",
+    "adm.noImg.variants": "{n} variantes",
+    "adm.imgGallery.title": "Galerie d'images",
+    "adm.imgGallery.hint": "Choisissez une catégorie pour voir ses images de produits.",
+    "adm.imgGallery.none": "Aucune image de produit dans cette catégorie.",
+    "adm.imgGallery.more": "Charger plus"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9398,7 +9428,12 @@
     "units.edit": "Modifier",
     "units.editTitle": "Modifier l'unité : {name}",
     "units.language": "Langue",
-    "units.aiFill": "Traduire les manquantes par IA"
+    "units.aiFill": "Traduire les manquantes par IA",
+    "adm.noImg.variants": "{n} variantes",
+    "adm.imgGallery.title": "Galerie d'images",
+    "adm.imgGallery.hint": "Choisissez une catégorie pour voir ses images de produits.",
+    "adm.imgGallery.none": "Aucune image de produit dans cette catégorie.",
+    "adm.imgGallery.more": "Charger plus"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10741,7 +10776,12 @@
     "units.edit": "Modifica",
     "units.editTitle": "Modifica unità: {name}",
     "units.language": "Lingua",
-    "units.aiFill": "Traduci mancanti con IA"
+    "units.aiFill": "Traduci mancanti con IA",
+    "adm.noImg.variants": "{n} varianti",
+    "adm.imgGallery.title": "Galleria di immagini",
+    "adm.imgGallery.hint": "Scegli una categoria per vedere le immagini dei prodotti.",
+    "adm.imgGallery.none": "Nessuna immagine di prodotto in questa categoria.",
+    "adm.imgGallery.more": "Carica altro"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -12084,7 +12124,12 @@
     "units.edit": "Modifica",
     "units.editTitle": "Modifica unità: {name}",
     "units.language": "Lingua",
-    "units.aiFill": "Traduci mancanti con IA"
+    "units.aiFill": "Traduci mancanti con IA",
+    "adm.noImg.variants": "{n} varianti",
+    "adm.imgGallery.title": "Galleria di immagini",
+    "adm.imgGallery.hint": "Scegli una categoria per vedere le immagini dei prodotti.",
+    "adm.imgGallery.none": "Nessuna immagine di prodotto in questa categoria.",
+    "adm.imgGallery.more": "Carica altro"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13427,7 +13472,12 @@
     "units.edit": "Editar",
     "units.editTitle": "Editar unidade: {name}",
     "units.language": "Idioma",
-    "units.aiFill": "Traduzir em falta com IA"
+    "units.aiFill": "Traduzir em falta com IA",
+    "adm.noImg.variants": "{n} variantes",
+    "adm.imgGallery.title": "Galeria de imagens",
+    "adm.imgGallery.hint": "Escolha uma categoria para ver as imagens dos produtos.",
+    "adm.imgGallery.none": "Sem imagens de produtos nesta categoria.",
+    "adm.imgGallery.more": "Carregar mais"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14770,7 +14820,12 @@
     "units.edit": "Editar",
     "units.editTitle": "Editar unidade: {name}",
     "units.language": "Idioma",
-    "units.aiFill": "Traduzir em falta com IA"
+    "units.aiFill": "Traduzir em falta com IA",
+    "adm.noImg.variants": "{n} variantes",
+    "adm.imgGallery.title": "Galeria de imagens",
+    "adm.imgGallery.hint": "Escolha uma categoria para ver as imagens dos produtos.",
+    "adm.imgGallery.none": "Sem imagens de produtos nesta categoria.",
+    "adm.imgGallery.more": "Carregar mais"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16113,7 +16168,12 @@
     "units.edit": "Bewerken",
     "units.editTitle": "Eenheid bewerken: {name}",
     "units.language": "Taal",
-    "units.aiFill": "Ontbrekende vertalen met AI"
+    "units.aiFill": "Ontbrekende vertalen met AI",
+    "adm.noImg.variants": "{n} varianten",
+    "adm.imgGallery.title": "Afbeeldingengalerij",
+    "adm.imgGallery.hint": "Kies een categorie om de productafbeeldingen te zien.",
+    "adm.imgGallery.none": "Geen productafbeeldingen in deze categorie.",
+    "adm.imgGallery.more": "Meer laden"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -17456,7 +17516,12 @@
     "units.edit": "Bewerken",
     "units.editTitle": "Eenheid bewerken: {name}",
     "units.language": "Taal",
-    "units.aiFill": "Ontbrekende vertalen met AI"
+    "units.aiFill": "Ontbrekende vertalen met AI",
+    "adm.noImg.variants": "{n} varianten",
+    "adm.imgGallery.title": "Afbeeldingengalerij",
+    "adm.imgGallery.hint": "Kies een categorie om de productafbeeldingen te zien.",
+    "adm.imgGallery.none": "Geen productafbeeldingen in deze categorie.",
+    "adm.imgGallery.more": "Meer laden"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -18229,7 +18294,12 @@
     "units.edit": "Bearbeiten",
     "units.editTitle": "Mengenangabe bearbeiten: {name}",
     "units.language": "Sprache",
-    "units.aiFill": "Fehlende per KI übersetzen"
+    "units.aiFill": "Fehlende per KI übersetzen",
+    "adm.noImg.variants": "{n} Varianten",
+    "adm.imgGallery.title": "Bildergalerie",
+    "adm.imgGallery.hint": "Kategorie wählen, um deren Produktbilder zu sehen.",
+    "adm.imgGallery.none": "Keine Produktbilder in dieser Kategorie.",
+    "adm.imgGallery.more": "Mehr laden"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -19002,6 +19072,11 @@
     "units.edit": "Bearbeiten",
     "units.editTitle": "Mengenangabe bearbeiten: {name}",
     "units.language": "Sprache",
-    "units.aiFill": "Fehlende per KI übersetzen"
+    "units.aiFill": "Fehlende per KI übersetzen",
+    "adm.noImg.variants": "{n} Varianten",
+    "adm.imgGallery.title": "Bildergalerie",
+    "adm.imgGallery.hint": "Kategorie wählen, um deren Produktbilder zu sehen.",
+    "adm.imgGallery.none": "Keine Produktbilder in dieser Kategorie.",
+    "adm.imgGallery.more": "Mehr laden"
   }
 }

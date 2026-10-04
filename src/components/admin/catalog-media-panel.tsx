@@ -13,11 +13,12 @@ import { formatRefPrice } from "@/hooks/use-reference-prices";
 import { saveProductIconFromPath } from "@/lib/product-icon";
 import { ChevronDown, ChevronRight, Pencil, Sparkles } from "lucide-react";
 import { MissingImagesPanel } from "./missing-images-panel";
+import { CategoryImageGallery } from "./category-image-gallery";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
 /** KI-Bilder und KI-Richtpreise für den Katalog erzeugen (stapelweise); section wählt den Tab-Inhalt. */
-export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: { section: "images" | "prices"; depts?: Array<{ id: string; name: string; parent_id: string | null }>; prods?: Array<{ id: string; name: string; emoji: string | null; department_id: string; image_path: string | null; icon_path?: string | null }>; onEdit?: ((id: string) => void) | undefined }) {
+export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: { section: "images" | "prices"; depts?: Array<{ id: string; name: string; parent_id: string | null }>; prods?: Array<{ id: string; name: string; emoji: string | null; department_id: string; image_path: string | null; icon_path?: string | null; variants?: string[] }>; onEdit?: ((id: string) => void) | undefined }) {
   const MARKETS = useMarketCodes();
   const qc = useQueryClient();
   const statusFn = useServerFn(catalogMediaStatus);
@@ -216,6 +217,7 @@ export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: {
   return (
     <>
       {section === "images" && onEdit && <MissingImagesPanel depts={depts} prods={prods} onEdit={onEdit} />}
+      {section === "images" && onEdit && <CategoryImageGallery depts={depts} prods={prods} onEdit={onEdit} />}
       {section === "images" && (
       <section className="mt-8 rounded-2xl border border-border bg-card p-4">
         <h2 className="text-base font-semibold">{T("media.imgTitle")}</h2>
