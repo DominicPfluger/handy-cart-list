@@ -38,7 +38,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     return out.join(" › ");
   };
   const catOptions = useMemo(
-    () => depts.map((d) => ({ id: d.id, label: path(d.id) })).sort((a, b) => a.label.localeCompare(b.label, "de")),
+    () => deptTreeOrder(depts).map((d) => ({ id: d.id, label: path(d.id) })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [depts],
   );
