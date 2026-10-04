@@ -38,7 +38,8 @@ export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; 
   const items = useMemo(
     () => {
       const needle = q.trim().toLowerCase();
-      return cat ? prods.filter((p) => p.image_path && inCat(p.department_id) && (!needle || p.name.toLowerCase().includes(needle))) : [];
+      if (!cat && !needle) return [];
+      return prods.filter((p) => p.image_path && (!cat || inCat(p.department_id)) && (!needle || p.name.toLowerCase().includes(needle)));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [prods, cat, q],
