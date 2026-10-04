@@ -240,11 +240,21 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
             {gapCards.find((g) => g.id === openGap)?.items.map((it) => (
               <li key={it.id} className="flex items-center justify-between gap-2">
                 {it.deptId && onOpenDept ? (
-                  <button type="button" onClick={() => onOpenDept(it.deptId!)}
-                    className="flex min-w-0 flex-1 items-center gap-1 truncate rounded-lg px-1 py-0.5 text-left hover:bg-muted" title={it.label}>
-                    <span className="truncate">{it.label}</span>
-                    <span aria-hidden className="ml-auto shrink-0 text-muted-foreground">→</span>
-                  </button>
+                  <div className="min-w-0 flex-1">
+                    <button type="button" onClick={() => toggleEmptyRow(it.id)}
+                      className="flex w-full min-w-0 items-center gap-1 truncate rounded-lg px-1 py-0.5 text-left hover:bg-muted" title={it.label}>
+                      {openEmptyRows.has(it.id)
+                        ? <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        : <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />}
+                      <span className="truncate">{it.label}</span>
+                    </button>
+                    {openEmptyRows.has(it.id) && (
+                      <div className="flex items-center justify-between gap-2 py-1 pl-6 pr-1">
+                        <span className="min-w-0 truncate text-xs text-muted-foreground">{deptPath(it.deptId)}</span>
+                        <Button size="sm" variant="outline" onClick={() => onOpenDept(it.deptId!)}>{T("adm.health.open")}</Button>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <span className="truncate">{it.label}</span>
                 )}
