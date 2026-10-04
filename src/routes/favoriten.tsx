@@ -517,6 +517,46 @@ function FavoritesPage() {
               maxLength={60}
               className="w-full rounded-xl border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
             />
+            <label className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
+              <span className="shrink-0">{t("store.label")}</span>
+              <select value={newStore} onChange={(e) => setNewStore(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs text-foreground outline-none focus:border-primary">
+                {stores.map((s) => <option key={s.id} value={s.id}>{storeLabel(s)}</option>)}
+                <option value="__new__">{t("store.new")}</option>
+              </select>
+            </label>
+            {newStore === "__new__" && (
+              <div className="mt-2 space-y-1.5">
+                <div className="flex items-center gap-2">
+                  <input
+                    value={newStoreEmoji}
+                    onChange={(e) => setNewStoreEmoji(e.target.value)}
+                    maxLength={4}
+                    aria-label={t("store.icon")}
+                    placeholder="🏪"
+                    className="w-11 shrink-0 rounded-lg border border-input bg-background px-2 py-1.5 text-center text-sm outline-none focus:border-primary"
+                  />
+                  <input
+                    value={newStoreName}
+                    onChange={(e) => setNewStoreName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && addStore()}
+                    placeholder={t("store.newPlaceholder")}
+                    className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs outline-none focus:border-primary"
+                  />
+                  <button
+                    onClick={addStore}
+                    disabled={!newStoreName.trim()}
+                    className="shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50"
+                  >
+                    {t("store.add")}
+                  </button>
+                </div>
+                <div className="flex gap-1">
+                  {["🏪", "🛒", "🧺", "🏬", "🥖", "🐄", "🌱"].map((e) => (
+                    <button key={e} type="button" onClick={() => setNewStoreEmoji(e)} className={`grid h-7 w-7 place-items-center rounded-lg border text-sm ${newStoreEmoji === e ? "border-primary bg-primary-soft/60" : "border-border"}`} aria-label={`${t("store.icon")} ${e}`}>{e}</button>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="mt-4 flex gap-2">
               <button
                 onClick={() => setListNameOpen(false)}
