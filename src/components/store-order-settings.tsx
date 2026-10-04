@@ -4,9 +4,42 @@ import { SortableContext, verticalListSortingStrategy, useSortable, sortableKeyb
 import { CSS } from "@dnd-kit/utilities";
 import { useCatalog } from "../lib/catalog-query";
 import { useGroupOrder, applyGroupOrder, filterHidden } from "../hooks/use-group-order";
-import { useStores } from "../hooks/use-stores";
+import { storeLabel, useStores } from "../hooks/use-stores";
 import { useT } from "../i18n";
 import { DepartmentIcon } from "./catalog-icon";
+
+const STORE_EMOJIS = ["🏪", "🛒", "🧺", "🏬", "🥖", "🐄", "🌱"];
+
+/** Icon- und Namensfeld mit Emoji-Vorschlägen (Anlegen/Bearbeiten eines eigenen Ladens). */
+function StoreFields({ name, onName, emoji, onEmoji }: { name: string; onName: (v: string) => void; emoji: string; onEmoji: (v: string) => void }) {
+  const { t } = useT();
+  return (
+    <div className="min-w-0 flex-1 space-y-1.5">
+      <div className="flex items-center gap-2">
+        <input
+          value={emoji}
+          onChange={(e) => onEmoji(e.target.value)}
+          maxLength={4}
+          aria-label={t("store.icon")}
+          placeholder="🏪"
+          className="w-11 shrink-0 rounded-lg border border-input bg-background px-2 py-1.5 text-center text-sm outline-none focus:border-primary"
+        />
+        <input
+          value={name}
+          onChange={(e) => onName(e.target.value)}
+          aria-label={t("store.nameLabel")}
+          placeholder={t("store.newName")}
+          className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm outline-none focus:border-primary"
+        />
+      </div>
+      <div className="flex gap-1">
+        {STORE_EMOJIS.map((e) => (
+          <button key={e} type="button" onClick={() => onEmoji(e)} className={`grid h-7 w-7 place-items-center rounded-lg border text-sm ${emoji === e ? "border-primary bg-primary-soft/60" : "border-border"}`} aria-label={`${t("store.icon")} ${e}`}>{e}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function Row({ id, label, emoji, imageUrl, imagePath, onHide }: { id: string; label: string; emoji: string | null; imageUrl?: string | null | undefined; imagePath?: string | null | undefined; onHide: () => void }) {
   const { t } = useT();
@@ -28,9 +61,15 @@ export function StoreOrderSettings() {
   const { t } = useT();
   const catalog = useCatalog();
   const stores = useStores();
-  const { all, store, setStore, saveFor, resetFor, addCustomStore, removeCustomStore, hiddenAll, hideFor, unhideFor } = useGroupOrder();
+  const { all, store, setStore, saveFor, resetFor, addCustomStore, updateCustomStore, removeCustomStore, hiddenAll, hideFor, unhideFor } = useGroupOrder();
   const [edit, setEdit] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newEmoji, setNewEmoji] = useState("");
+  const [editStore, setEditStore] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editEmoji, setEditEmoji] = useState("");
   const sel = edit ?? store;
   const selected = stores.find((s) => s.id === sel) ?? stores[0]!;
   const sensors = useSensors(
