@@ -783,6 +783,7 @@ function AdminPage() {
         </button>
       </div>
 
+      <Suspense fallback={<p className="pt-2 text-sm text-muted-foreground">{T("adm.loading")}</p>}>
       {tab === "catalog" && (<>
       <div className="grid grid-cols-4 gap-2 text-center md:max-w-xl">
         <Stat label={T("adm.categories")} value={d?.depts.length} />
@@ -975,6 +976,7 @@ function AdminPage() {
       </div>)}
 
       {preview && <CatalogPreview onClose={() => setPreview(false)} />}
+      </Suspense>
     </div>
   );
 }
