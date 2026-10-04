@@ -3,18 +3,19 @@ import { DndContext, closestCenter, PointerSensor, TouchSensor, KeyboardSensor, 
 import { SortableContext, verticalListSortingStrategy, useSortable, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useCatalog } from "../lib/catalog-query";
-import { useGroupOrder, applyGroupOrder } from "../hooks/use-group-order";
+import { useGroupOrder, applyGroupOrder, filterHidden } from "../hooks/use-group-order";
 import { useStores } from "../hooks/use-stores";
 import { useT } from "../i18n";
 
-function Row({ id, label, emoji }: { id: string; label: string; emoji: string | null }) {
+function Row({ id, label, emoji, onHide }: { id: string; label: string; emoji: string | null; onHide: () => void }) {
   const { t } = useT();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   return (
     <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={`flex items-center gap-2 bg-card px-3 py-2.5 ${isDragging ? "relative z-10 shadow-lg" : ""}`}>
       <button type="button" aria-label={t("list.moveGroup")} className="touch-none cursor-grab px-1 text-muted-foreground" {...attributes} {...listeners}>⋮⋮</button>
       <span aria-hidden="true">{emoji ?? "🛒"}</span>
-      <span className="text-sm text-foreground">{label}</span>
+      <span className="flex-1 text-sm text-foreground">{label}</span>
+      <button type="button" aria-label={t("store.hide")} title={t("store.hide")} onClick={onHide} className="px-1 text-muted-foreground transition hover:text-destructive">🗑</button>
     </li>
   );
 }
@@ -24,7 +25,7 @@ export function StoreOrderSettings() {
   const { t } = useT();
   const catalog = useCatalog();
   const stores = useStores();
-  const { all, store, setStore, saveFor, resetFor, addCustomStore, removeCustomStore } = useGroupOrder();
+  const { all, store, setStore, saveFor, resetFor, addCustomStore, removeCustomStore, hiddenAll, hideFor, unhideFor } = useGroupOrder();
   const [edit, setEdit] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const sel = edit ?? store;
@@ -34,10 +35,12 @@ export function StoreOrderSettings() {
     useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
   );
-  const roots = useMemo(() => {
+  const hiddenSel = hiddenAll[selected.id] ?? [];
+  const { roots, hiddenRoots } = useMemo(() => {
     const r = catalog.departments.filter((d) => !d.parentId).map((d) => ({ key: d.id, order: d.sortOrder, name: d.name, emoji: d.emoji }));
-    return applyGroupOrder(r.sort((a, b) => a.order - b.order), all[selected.id] ?? []);
-  }, [catalog.departments, all, selected.id]);
+    const ordered = applyGroupOrder(r.sort((a, b) => a.order - b.order), all[selected.id] ?? []);
+    return { roots: filterHidden(ordered, hiddenSel), hiddenRoots: ordered.filter((x) => hiddenSel.includes(x.key)) };
+  }, [catalog.departments, all, selected.id, hiddenSel]);
 
   const choose = (v: string) => {
     if (v === "__new") {
@@ -90,10 +93,24 @@ export function StoreOrderSettings() {
           }}>
             <SortableContext items={roots.map((r) => r.key)} strategy={verticalListSortingStrategy}>
               <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-xl border border-border">
-                {roots.map((r) => <Row key={r.key} id={r.key} label={r.name} emoji={r.emoji} />)}
+                {roots.map((r) => <Row key={r.key} id={r.key} label={r.name} emoji={r.emoji} onHide={() => hideFor(selected.id, r.key)} />)}
               </ul>
             </SortableContext>
           </DndContext>
+          {hiddenRoots.length > 0 && (
+            <div>
+              <p className="mb-1 text-xs font-semibold text-muted-foreground">{t("store.hiddenTitle")}</p>
+              <ul className="divide-y divide-border rounded-xl border border-border">
+                {hiddenRoots.map((r) => (
+                  <li key={r.key} className="flex items-center gap-2 bg-card px-3 py-2">
+                    <span aria-hidden="true">{r.emoji ?? "🛒"}</span>
+                    <span className="flex-1 text-sm text-muted-foreground">{r.name}</span>
+                    <button type="button" onClick={() => unhideFor(selected.id, r.key)} className="text-xs font-semibold text-primary">{t("store.unhide")}</button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
           <button type="button" onClick={() => resetFor(selected.id)} className="text-xs font-semibold text-primary">{t("store.reset")}</button>
         </div>
       )}

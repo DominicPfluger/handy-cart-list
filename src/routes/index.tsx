@@ -57,7 +57,7 @@ import { currentMarket, useReferencePrices } from "../hooks/use-reference-prices
 import { priceForItem } from "../lib/item-price";
 import { PurchaseMode, type PurchaseItem } from "../components/purchase-mode";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
-import { useGroupOrder, applyGroupOrder } from "../hooks/use-group-order";
+import { useGroupOrder, applyGroupOrder, filterHidden } from "../hooks/use-group-order";
 import { StoreSwitcher } from "../components/store-order-settings";
 
 const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
@@ -124,7 +124,7 @@ function ListPage() {
   const [managerOpen, setManagerOpen] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   const [speakLocale] = useSpeakLocale();
-  const { order: groupOrder, save: saveGroupOrder } = useGroupOrder();
+  const { order: groupOrder, save: saveGroupOrder, hidden: hiddenGroups } = useGroupOrder();
   const groupSensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
@@ -221,7 +221,7 @@ function ListPage() {
       }
       group.items.push(it);
     }
-    const groups = applyGroupOrder([...map.values()].sort((a, b) => a.order - b.order), groupOrder);
+    const groups = filterHidden(applyGroupOrder([...map.values()].sort((a, b) => a.order - b.order), groupOrder), hiddenGroups);
     for (const group of groups) {
       group.items.sort((a, b) => {
         if (a.checked !== b.checked) return a.checked ? 1 : -1;
