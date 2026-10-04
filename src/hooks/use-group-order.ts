@@ -111,9 +111,17 @@ export function useGroupOrder() {
     emit();
   }, [resetFor, setStore]);
 
+  /** Ordnet einer Einkaufsliste dauerhaft einen Laden zu (geräte-lokal). */
+  const setListStore = useCallback((listId: string, storeId: string) => {
+    const cur = readListStores();
+    if (storeId === "default") delete cur[listId]; else cur[listId] = storeId;
+    try { localStorage.setItem(LIST_STORES_KEY, JSON.stringify(cur)); } catch { /* ignore */ }
+    emit();
+  }, []);
+
   const order = all[store] ?? all["default"] ?? [];
   const hidden = hiddenAll[store] ?? [];
-  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor };
+  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor, listStores, setListStore };
 }
 
 /** Entfernt Gruppen, die im aktiven Geschäft ausgeblendet sind. */
