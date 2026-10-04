@@ -86,7 +86,7 @@ function OverviewRow({ row, onOpen, onSaveTemplate, onDelete, onRename, t }: Act
           </svg>
         </button>
       )}
-      <button onClick={() => onDelete(row.id)} aria-label={t("lm.delete")} title={t("lm.delete")} className={`${iconBtn} text-coral`}>
+      <button onClick={() => onDelete(row.id)} aria-label={t("lm.delete")} title={t("lm.delete")} className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-coral active:bg-muted">
         <TrashIcon className="h-4 w-4" />
       </button>
     </div>
