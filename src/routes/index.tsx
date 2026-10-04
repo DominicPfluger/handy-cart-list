@@ -407,6 +407,12 @@ function ListPage() {
           }}
           t={t}
         />
+        <button
+          onClick={() => setManagerOpen(true)}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-primary/40 py-3.5 text-sm font-semibold text-primary active:bg-muted"
+        >
+          <PlusIcon className="h-4 w-4" /> {t("lm.create")}
+        </button>
         <h2 className="pt-2 text-lg font-bold tracking-tight text-foreground">{t("lm.templates")}</h2>
         {templates.length === 0 ? (
           <p className="text-xs text-muted-foreground">{t("lm.templatesHint")}</p>
@@ -422,12 +428,6 @@ function ListPage() {
             t={t}
           />
         )}
-        <button
-          onClick={() => setManagerOpen(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-primary/40 py-3.5 text-sm font-semibold text-primary active:bg-muted"
-        >
-          <PlusIcon className="h-4 w-4" /> {t("lm.create")}
-        </button>
       </div>
     );
   }
