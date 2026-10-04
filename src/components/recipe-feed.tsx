@@ -119,4 +119,3 @@ export function RecipeFeed() {
   );
 }
 
-export const templateLabelKey = (id: string) => `rk.cat.${id}` as MessageKey;

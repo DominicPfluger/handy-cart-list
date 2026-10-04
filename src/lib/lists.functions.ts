@@ -278,19 +278,6 @@ export const migrateCloudLists = createServerFn({ method: "POST" })
     return { created };
   });
 
-export const leaveCloudList = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => z.object({ listId: z.string().uuid() }).parse(data))
-  .handler(async ({ context, data }) => {
-    const sb = context.supabase as unknown as Sb;
-    const { error } = await sb
-      .from("list_members")
-      .delete()
-      .eq("list_id", data.listId)
-      .eq("user_id", context.userId);
-    if (error) throw new Error(error.message);
-    return { ok: true };
-  });
 
 // =============== Vorrat ===============
 
