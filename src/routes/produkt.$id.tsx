@@ -7,7 +7,7 @@ import { useIsAdmin } from "../hooks/use-is-admin";
 import { Button } from "../components/ui/button";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { ProductEmoji } from "../components/product-emoji";
-import { HeartIcon, PencilIcon, PlusIcon } from "../components/icons";
+import { HeartIcon, PlusIcon } from "../components/icons";
 import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { catalogQueryOptions, brandsFor, originalName, useCatalog } from "../lib/catalog-query";
 import { CachedImage } from "../components/catalog-icon";
@@ -116,11 +116,10 @@ function ProductPage() {
           )}
         </div>
         <div className="mt-4 flex max-w-full items-center justify-center gap-2">
-          <h1 className="min-w-0 break-words text-2xl font-bold text-foreground">{product.name}</h1>
-          <Button type="button" variant="ghost" size="icon" className="h-9 w-9 shrink-0 text-muted-foreground" aria-label={t("rename.action", { name: product.name })} title={t("rename.title")}
+          <button type="button" className="min-w-0 cursor-pointer rounded-lg px-1 transition hover:bg-muted" aria-label={t("rename.action", { name: product.name })} title={t("rename.title")}
             onClick={() => setRenameTarget({ id: product.id, name: product.name, originalName: originalName(product), isCustom: !!customNames[product.id], kind: "product" })}>
-            <PencilIcon className="h-4 w-4" />
-          </Button>
+            <h1 className="break-words text-2xl font-bold text-foreground">{product.name}</h1>
+          </button>
         </div>
         {refPrice && (
           <p className="mt-1 text-xs text-muted-foreground">
