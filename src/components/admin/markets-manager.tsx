@@ -32,6 +32,7 @@ export function MarketsManager() {
   const [edit, setEdit] = useState<string | null>(null);
   const [form, setForm] = useState({ code: "", name: "", flag: "", currency: "" });
   const [shopName, setShopName] = useState("");
+  const [shopEmoji, setShopEmoji] = useState("");
   const [drag, setDrag] = useState<{ kind: "m" | "s"; id: string } | null>(null);
 
   const refresh = () => { qc.invalidateQueries({ queryKey: ["markets"] }); qc.invalidateQueries({ queryKey: ["supermarkets"] }); };
@@ -116,11 +117,13 @@ export function MarketsManager() {
                       className={`flex items-center gap-2 text-sm ${s.enabled ? "" : "opacity-50"}`}>
                       <span className="cursor-grab text-muted-foreground">⠿</span>
                       <button type="button" className="flex-1 text-left" onClick={() => renameShop(s)}>{s.emoji ? `${s.emoji} ` : ""}{s.name}</button>
+                      <button type="button" aria-label={T("mkt.emoji")} title={T("mkt.emoji")} onClick={() => editShopEmoji(s)} className="text-sm">✎</button>
                       <button type="button" onClick={() => toggleShop(s)}>{s.enabled ? "👁" : "🚫"}</button>
                       <button type="button" className="text-destructive" onClick={() => delShop(s)}>✕</button>
                     </div>
                   ))}
                   <div className="flex gap-2 pt-1">
+                    <Input value={shopEmoji} onChange={(e) => setShopEmoji(e.target.value)} placeholder="🏪" maxLength={4} aria-label={T("mkt.emoji")} className="h-9 w-14 text-center" />
                     <Input value={shopName} onChange={(e) => setShopName(e.target.value)} placeholder={T("mkt.shopName")} className="h-9"
                       onKeyDown={(e) => { if (e.key === "Enter") addShop(m.code); }} />
                     <Button size="sm" variant="outline" onClick={() => addShop(m.code)}>+ {T("mkt.addShop")}</Button>
