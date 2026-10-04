@@ -130,6 +130,7 @@ const ACTIVE_KEY = "shoppi:active-list";
 const TPL_KEY = "shoppi:templates";
 const MIGRATED_KEY = "shoppi:cloud-migrated";
 const PENDING_JOIN_KEY = "shoppi:pending-join";
+const SNAPSHOT_KEY = "shoppi:lists-snapshot";
 
 function isButterProduct(name: string): boolean {
   const n = name.toLowerCase();
@@ -564,6 +565,12 @@ function useCloudLists(
         return first ? first.id : "";
       });
 
+      // letzten Stand gerätelocal sichern, damit die Liste auch offline erscheint
+      try {
+        localStorage.setItem(SNAPSHOT_KEY, JSON.stringify({ lists: mapped, members: [...memberNames], selfName: res.displayName }));
+      } catch { /* ignore */ }
+
+
       // Einmalige Migration der gerätelokalen Listen in die Cloud
       try {
         if (!localStorage.getItem(MIGRATED_KEY)) {
@@ -614,6 +621,20 @@ function useCloudLists(
 
       setHydrated(true);
     } catch {
+      // Offline oder Fehler: letzten gespeicherten Stand zeigen, Änderungen landen in der Warteschlange
+      try {
+        const raw = localStorage.getItem(SNAPSHOT_KEY);
+        const snap = raw ? (JSON.parse(raw) as { lists: ShoppingList[]; members: string[]; selfName: string }) : null;
+        if (snap?.lists?.length) {
+          setCloudLists(snap.lists);
+          setSelfName(snap.selfName ?? "Du");
+          setMembers(snap.members ?? []);
+          setActiveListId((cur) =>
+            cur && snap.lists.some((l) => l.id === cur && !l.isTemplate) ? cur : snap.lists.find((l) => !l.isTemplate)?.id ?? ""
+          );
+          toast.info(t("cloud.offlineSnapshot"));
+        }
+      } catch { /* ignore */ }
       setHydrated(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
