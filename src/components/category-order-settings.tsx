@@ -203,20 +203,20 @@ export function CategoryOrderSettings() {
           <div className="max-h-[32rem] overflow-y-auto rounded-xl border border-border">
             {renderLevel(roots, null, 0)}
           </div>
-          {hiddenDepts.length > 0 && (
-            <div>
-              <p className="mb-1 text-xs font-semibold text-muted-foreground">{t("store.hiddenTitle")}</p>
-              <ul className="divide-y divide-border rounded-xl border border-border">
-                {hiddenDepts.map((d) => (
-                  <li key={d.id} className="flex items-center gap-2 bg-card px-3 py-2">
-                    <span className="flex-1 text-sm text-muted-foreground">{d.name}</span>
-                    <button type="button" onClick={() => restoreDepartment(d.id)} className="text-xs font-semibold text-primary">{t("store.unhide")}</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
           <button type="button" onClick={() => resetFor(selected.id)} className="text-xs font-semibold text-primary">{t("catOrder.reset")}</button>
+        </div>
+      )}
+      {hiddenDepts.length > 0 && (
+        <div className="border-t border-border px-4 py-3.5">
+          <p className="mb-1 text-xs font-semibold text-muted-foreground">{t("store.hiddenTitle")}</p>
+          <ul className="divide-y divide-border rounded-xl border border-border">
+            {hiddenDepts.map((d) => (
+              <li key={d.id} className="flex items-center gap-2 bg-card px-3 py-2">
+                <span className="flex-1 text-sm text-muted-foreground">{d.name}</span>
+                <button type="button" onClick={() => restoreDepartment(d.id)} className="text-xs font-semibold text-primary">{t("store.unhide")}</button>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
       <RenameDialog target={renameTarget} onClose={() => setRenameTarget(null)} />
