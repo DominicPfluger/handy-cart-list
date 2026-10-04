@@ -317,7 +317,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
             </Button>
             </div>
             {expanded && vars.length > 0 && (
-              <ul className="ml-17 mt-1 space-y-1 border-l-2 border-border pl-3">
+              <ul className="ml-16 mt-1 space-y-1 border-l-2 border-border pl-3">
                 {vars.map((v) => (
                   <li key={v} className="flex items-center gap-2 py-0.5">
                     <VariantImageButton productId={p.id} productName={p.name} variant={v} />
