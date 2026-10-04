@@ -4,6 +4,7 @@ import { useSpeakRate } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { speakSentences } from "./speak-list-button";
 import { CheckIcon } from "./icons";
+import { CachedImage } from "./catalog-icon";
 
 const SPEAK_KEY = "shoppi:purchase-speak";
 
