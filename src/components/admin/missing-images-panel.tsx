@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { WandSparkles, Zap, ImageOff, Loader2, X } from "lucide-react";
+import { WandSparkles, Zap, ImageOff, Loader2, X, Images } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath, saveCustomIconFromPath } from "@/lib/product-icon";
@@ -26,6 +26,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   const [cat, setCat] = useState("");
   const [limit, setLimit] = useState(PAGE);
   const [dlg, setDlg] = useState<Dlg | null>(null);
+  const [pick, setPick] = useState<{ target: Prod; query: string } | null>(null);
   const [patch, setPatch] = useState<Record<string, { image_path?: string | null; icon_path?: string | null }>>({});
   const [busy, setBusy] = useState<Set<string>>(new Set());
   const [batch, setBatch] = useState<{ done: number; total: number } | null>(null);
@@ -110,6 +111,32 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     setBatch(null);
   };
 
+  /** Vorhandenes Katalogbild eines anderen Produkts übernehmen (spart KI-Credits). */
+  const assignFrom = async (target: Prod, source: Prod) => {
+    if (!source.image_path) return;
+    setPick(null);
+    setBusy((s) => new Set(s).add(target.id));
+    try {
+      let icon = source.icon_path ?? null;
+      const { error } = await supabase.from("products").update({ image_path: source.image_path }).eq("id", target.id);
+      if (error) throw error;
+      if (icon) {
+        const { error: ie } = await supabase.from("products").update({ icon_path: icon }).eq("id", target.id);
+        if (ie) throw ie;
+      } else {
+        await saveProductIconFromPath(target.id, source.image_path);
+        const { data } = await supabase.from("products").select("icon_path").eq("id", target.id).single();
+        icon = data?.icon_path ?? null;
+      }
+      setPatch((m) => ({ ...m, [target.id]: { image_path: source.image_path, icon_path: icon } }));
+      toast.success(t("adm.noImg.picked"));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy((s) => { const n = new Set(s); n.delete(target.id); return n; });
+    }
+  };
+
   const runDlg = (d: Dlg) => {
     const h = d.hint.trim() || undefined;
     setDlg(null);
@@ -158,6 +185,67 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
       </div>
     </div>
   );
+
+  const PickerDialog = ({ target, query: pq }: { target: Prod; query: string }) => {
+    const candidates = useMemo(() => {
+      const q = pq.trim().toLowerCase();
+      return all
+        .filter((p) => p.id !== target.id && p.image_path && (!q || p.name.toLowerCase().includes(q) || path(p.department_id).toLowerCase().includes(q)))
+        .slice(0, 24);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [all, pq, target.id]);
+    const cPaths = candidates.map((p) => p.image_path!);
+    const cImgs = useQuery({
+      queryKey: ["pick-imgs", cPaths.join("|")],
+      enabled: cPaths.length > 0,
+      staleTime: 30 * 60_000,
+      queryFn: async () => {
+        const { data } = await supabase.storage.from("catalog-images").createSignedUrls(cPaths, 3600);
+        return new Map((data ?? []).filter((e) => e.path && e.signedUrl).map((e) => [e.path!, e.signedUrl]));
+      },
+    });
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setPick(null)}>
+        <div className="w-full max-w-md space-y-3 rounded-2xl bg-card p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-bold text-foreground">{t("adm.noImg.pick")}</p>
+            <Button size="icon" variant="ghost" aria-label={t("adm.cancel")} onClick={() => setPick(null)}><X className="h-4 w-4" /></Button>
+          </div>
+          <p className="truncate text-xs text-muted-foreground">{target.emoji} {target.name}</p>
+          <input
+            type="search"
+            autoFocus
+            value={pq}
+            onChange={(e) => setPick({ target, query: e.target.value })}
+            placeholder={t("adm.noImg.search")}
+            aria-label={t("adm.noImg.search")}
+            className="w-full rounded-lg border border-input bg-background px-2 py-1.5 text-sm"
+          />
+          <div className="grid max-h-80 grid-cols-4 gap-2 overflow-y-auto">
+            {candidates.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => void assignFrom(target, c)}
+                className="flex flex-col items-center gap-1 rounded-xl border border-border p-1.5 hover:border-primary hover:bg-primary/5"
+                title={c.name}
+              >
+                <span className="grid h-14 w-full place-items-center overflow-hidden rounded-lg bg-muted">
+                  {cImgs.data?.get(c.image_path!) ? (
+                    <img src={cImgs.data.get(c.image_path!) ?? undefined} alt="" loading="lazy" className="h-full w-full object-contain" />
+                  ) : (
+                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                  )}
+                </span>
+                <span className="w-full truncate text-center text-[10px] text-muted-foreground">{c.name}</span>
+              </button>
+            ))}
+          </div>
+          {candidates.length === 0 && <p className="text-xs text-muted-foreground">{t("adm.noImg.pickNone")}</p>}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <section className="space-y-3 rounded-2xl border border-border bg-card p-4">
@@ -208,6 +296,9 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
             <Button size="icon" variant="ghost" aria-label={t("adm.noImg.quick")} title={t("adm.noImg.quick")} disabled={busy.has(p.id) || !!batch} onClick={() => void fix(p, false)}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4 text-primary" />}
             </Button>
+            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.pick")} title={t("adm.noImg.pick")} disabled={busy.has(p.id) || !!batch} onClick={() => setPick({ target: p, query: "" })}>
+              <Images className="h-4 w-4 text-primary" />
+            </Button>
             <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setDlg({ target: p, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS }, both: false })}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
             </Button>
@@ -219,6 +310,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
         <Button size="sm" variant="ghost" className="w-full" onClick={() => setLimit((l) => l + PAGE)}>{t("adm.noImg.more")}</Button>
       )}
       {dlg && optionsDialog(dlg)}
+      {pick && <PickerDialog target={pick.target} query={pick.query} />}
     </section>
   );
 }
