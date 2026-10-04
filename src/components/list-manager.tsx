@@ -244,7 +244,7 @@ export function ListManager(props: Props) {
   };
 
   const create = () => {
-    if (!newName.trim()) return;
+    if (!newName.trim() || newStore === "__new__") return;
     props.onCreate(newName, newStore);
     setNewName("");
     setNewStore("default");
