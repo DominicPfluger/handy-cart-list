@@ -1314,7 +1314,8 @@
     "adm.noImg.modeTwo": "Generate two different images (2 credits)",
     "adm.noImg.generate": "Generate image",
     "adm.variantAi.all": "AI images for {n} variants without image",
-    "adm.variantAi.done": "{n} variant images generated"
+    "adm.variantAi.done": "{n} variant images generated",
+    "adm.health.openDept": "Open in catalog"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2631,7 +2632,8 @@
     "adm.noImg.modeTwo": "Generate two different images (2 credits)",
     "adm.noImg.generate": "Generate image",
     "adm.variantAi.all": "AI images for {n} variants without image",
-    "adm.variantAi.done": "{n} variant images generated"
+    "adm.variantAi.done": "{n} variant images generated",
+    "adm.health.openDept": "Open in catalogue"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3948,7 +3950,8 @@
     "adm.noImg.modeTwo": "Generate two different images (2 credits)",
     "adm.noImg.generate": "Generate image",
     "adm.variantAi.all": "AI images for {n} variants without image",
-    "adm.variantAi.done": "{n} variant images generated"
+    "adm.variantAi.done": "{n} variant images generated",
+    "adm.health.openDept": "Open in catalog"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5265,7 +5268,8 @@
     "adm.noImg.modeTwo": "Generar dos imágenes diferentes (2 créditos)",
     "adm.noImg.generate": "Generar imagen",
     "adm.variantAi.all": "Imágenes IA para {n} variantes sin imagen",
-    "adm.variantAi.done": "{n} imágenes de variantes generadas"
+    "adm.variantAi.done": "{n} imágenes de variantes generadas",
+    "adm.health.openDept": "Abrir en el catálogo"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6582,7 +6586,8 @@
     "adm.noImg.modeTwo": "Generar dos imágenes diferentes (2 créditos)",
     "adm.noImg.generate": "Generar imagen",
     "adm.variantAi.all": "Imágenes IA para {n} variantes sin imagen",
-    "adm.variantAi.done": "{n} imágenes de variantes generadas"
+    "adm.variantAi.done": "{n} imágenes de variantes generadas",
+    "adm.health.openDept": "Abrir en el catálogo"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7899,7 +7904,8 @@
     "adm.noImg.modeTwo": "Générer deux images différentes (2 crédits)",
     "adm.noImg.generate": "Générer l’image",
     "adm.variantAi.all": "Images IA pour {n} variantes sans image",
-    "adm.variantAi.done": "{n} images de variantes générées"
+    "adm.variantAi.done": "{n} images de variantes générées",
+    "adm.health.openDept": "Ouvrir dans le catalogue"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9216,7 +9222,8 @@
     "adm.noImg.modeTwo": "Générer deux images différentes (2 crédits)",
     "adm.noImg.generate": "Générer l’image",
     "adm.variantAi.all": "Images IA pour {n} variantes sans image",
-    "adm.variantAi.done": "{n} images de variantes générées"
+    "adm.variantAi.done": "{n} images de variantes générées",
+    "adm.health.openDept": "Ouvrir dans le catalogue"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10533,7 +10540,8 @@
     "adm.noImg.modeTwo": "Genera due immagini diverse (2 crediti)",
     "adm.noImg.generate": "Genera immagine",
     "adm.variantAi.all": "Immagini IA per {n} varianti senza immagine",
-    "adm.variantAi.done": "{n} immagini di varianti generate"
+    "adm.variantAi.done": "{n} immagini di varianti generate",
+    "adm.health.openDept": "Apri nel catalogo"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11850,7 +11858,8 @@
     "adm.noImg.modeTwo": "Genera due immagini diverse (2 crediti)",
     "adm.noImg.generate": "Genera immagine",
     "adm.variantAi.all": "Immagini IA per {n} varianti senza immagine",
-    "adm.variantAi.done": "{n} immagini di varianti generate"
+    "adm.variantAi.done": "{n} immagini di varianti generate",
+    "adm.health.openDept": "Apri nel catalogo"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13167,7 +13176,8 @@
     "adm.noImg.modeTwo": "Gerar duas imagens diferentes (2 créditos)",
     "adm.noImg.generate": "Gerar imagem",
     "adm.variantAi.all": "Imagens IA para {n} variantes sem imagem",
-    "adm.variantAi.done": "{n} imagens de variantes geradas"
+    "adm.variantAi.done": "{n} imagens de variantes geradas",
+    "adm.health.openDept": "Abrir no catálogo"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14484,7 +14494,8 @@
     "adm.noImg.modeTwo": "Gerar duas imagens diferentes (2 créditos)",
     "adm.noImg.generate": "Gerar imagem",
     "adm.variantAi.all": "Imagens IA para {n} variantes sem imagem",
-    "adm.variantAi.done": "{n} imagens de variantes geradas"
+    "adm.variantAi.done": "{n} imagens de variantes geradas",
+    "adm.health.openDept": "Abrir no catálogo"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15801,7 +15812,8 @@
     "adm.noImg.modeTwo": "Twee verschillende afbeeldingen genereren (2 credits)",
     "adm.noImg.generate": "Afbeelding genereren",
     "adm.variantAi.all": "AI-afbeeldingen voor {n} varianten zonder afbeelding",
-    "adm.variantAi.done": "{n} variantafbeeldingen gemaakt"
+    "adm.variantAi.done": "{n} variantafbeeldingen gemaakt",
+    "adm.health.openDept": "In catalogus openen"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -17118,7 +17130,8 @@
     "adm.noImg.modeTwo": "Twee verschillende afbeeldingen genereren (2 credits)",
     "adm.noImg.generate": "Afbeelding genereren",
     "adm.variantAi.all": "AI-afbeeldingen voor {n} varianten zonder afbeelding",
-    "adm.variantAi.done": "{n} variantafbeeldingen gemaakt"
+    "adm.variantAi.done": "{n} variantafbeeldingen gemaakt",
+    "adm.health.openDept": "In catalogus openen"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17865,7 +17878,8 @@
     "adm.noImg.options": "KI-Bildoptionen",
     "adm.variantAi.all": "KI-Bilder für {n} Varianten ohne Bild",
     "adm.variantAi.done": "{n} Variantenbilder erzeugt",
-    "adm.noImg.quick": "Schnellbild: 1 KI-Bild, Icon wird daraus abgeleitet (1 Credit)"
+    "adm.noImg.quick": "Schnellbild: 1 KI-Bild, Icon wird daraus abgeleitet (1 Credit)",
+    "adm.health.openDept": "Im Katalog öffnen"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -18612,6 +18626,7 @@
     "adm.noImg.options": "KI-Bildoptionen",
     "adm.variantAi.all": "KI-Bilder für {n} Varianten ohne Bild",
     "adm.variantAi.done": "{n} Variantenbilder erzeugt",
-    "adm.noImg.quick": "Schnellbild: 1 KI-Bild, Icon wird daraus abgeleitet (1 Credit)"
+    "adm.noImg.quick": "Schnellbild: 1 KI-Bild, Icon wird daraus abgeleitet (1 Credit)",
+    "adm.health.openDept": "Im Katalog öffnen"
   }
 }
