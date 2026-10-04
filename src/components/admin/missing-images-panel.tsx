@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { WandSparkles, ImageOff, Loader2, X } from "lucide-react";
+import { WandSparkles, Zap, ImageOff, Loader2, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath, saveCustomIconFromPath } from "@/lib/product-icon";
@@ -205,6 +205,9 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
               <p className="truncate text-sm font-medium text-foreground">{p.emoji} {p.name}</p>
               <p className="truncate text-xs text-muted-foreground">{path(p.department_id)}</p>
             </button>
+            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.quick")} title={t("adm.noImg.quick")} disabled={busy.has(p.id) || !!batch} onClick={() => void fix(p, false)}>
+              {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4 text-primary" />}
+            </Button>
             <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setDlg({ target: p, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS }, both: false })}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
             </Button>

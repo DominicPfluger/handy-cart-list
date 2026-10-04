@@ -674,6 +674,7 @@ export const de = {
   "adm.noImg.all": "Alle {n} mit KI erzeugen",
   "adm.noImg.stop": "Abbrechen",
   "adm.noImg.gen": "KI-Bild erzeugen",
+  "adm.noImg.quick": "Bild schnell erzeugen (1 Credit)",
   "adm.noImg.modeOne": "Ein Bild erzeugen (Icon wird abgeleitet, 1 Credit)",
   "adm.noImg.modeTwo": "Zwei unterschiedliche Bilder erzeugen (2 Credits)",
   "adm.noImg.generate": "Bild erzeugen",
