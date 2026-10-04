@@ -4,7 +4,7 @@ import { useMarket } from "./use-market";
 import { useGroupOrder } from "./use-group-order";
 import { useT } from "../i18n";
 
-export type StoreOption = { id: string; name: string; emoji?: string; custom?: boolean };
+export type StoreOption = { id: string; name: string; emoji?: string | undefined; custom?: boolean };
 
 /** Läden des gewählten Marktes (Admin-Liste) + eigene Läden + „Standard" — Name und Icon getrennt. */
 export function useStores(): StoreOption[] {
