@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { useCheckedDisplay } from "../hooks/use-checked-display";
 import {
-  PeopleIcon,
   BellIcon,
   GearIcon,
   LeafIcon,
@@ -93,12 +92,10 @@ function MorePage() {
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("nav.more")}</h1>
       </div>
 
+      <SectionHeader label={t("more.together")} />
+
       {/* Gemeinsam section */}
       <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
-        <div className="flex items-center gap-2">
-          <PeopleIcon className="h-5 w-5 text-primary" />
-          <h2 className="text-base font-semibold text-foreground">{t("more.together")}</h2>
-        </div>
 
         {/* Member bubbles */}
         <div className="flex flex-wrap gap-3">
@@ -125,7 +122,9 @@ function MorePage() {
         </button>
       </section>
 
-      {/* Ernährungsform — unterhalb von „Gemeinsam“ */}
+      <SectionHeader label={t("more.group.shopping")} />
+
+      {/* Ernährungsform */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <DietPreferenceRow />
       </section>
@@ -134,7 +133,9 @@ function MorePage() {
         <CategoryOrderSettings />
       </section>
 
-      {/* Sprache & Region, Markt, Alle Märkte anzeigen — unterhalb von „Abteilungs-Reihenfolge“ */}
+      <SectionHeader label={t("more.group.app")} />
+
+      {/* Sprache & Region, Markt, Alle Märkte anzeigen, App aktualisieren */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <label className="flex w-full items-center gap-3 px-4 py-3.5">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
