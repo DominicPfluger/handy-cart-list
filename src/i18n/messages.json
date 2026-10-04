@@ -1292,7 +1292,11 @@
     "adm.noImg.more": "Load 5 more",
     "store.hide": "Hide department",
     "store.hiddenTitle": "Hidden",
-    "store.unhide": "Show again"
+    "store.unhide": "Show again",
+    "adm.noImg.genBoth": "Generate both images with AI (2 credits)",
+    "adm.noImg.batchMode": "Batch mode",
+    "adm.noImg.modeDerive": "Icon derived from image",
+    "adm.noImg.modeBoth": "Icon separately with AI (2 credits)"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2587,7 +2591,11 @@
     "adm.noImg.more": "Load 5 more",
     "store.hide": "Hide department",
     "store.hiddenTitle": "Hidden",
-    "store.unhide": "Show again"
+    "store.unhide": "Show again",
+    "adm.noImg.genBoth": "Generate both images with AI (2 credits)",
+    "adm.noImg.batchMode": "Batch mode",
+    "adm.noImg.modeDerive": "Icon derived from image",
+    "adm.noImg.modeBoth": "Icon separately with AI (2 credits)"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3882,7 +3890,11 @@
     "adm.noImg.more": "Load 5 more",
     "store.hide": "Hide department",
     "store.hiddenTitle": "Hidden",
-    "store.unhide": "Show again"
+    "store.unhide": "Show again",
+    "adm.noImg.genBoth": "Generate both images with AI (2 credits)",
+    "adm.noImg.batchMode": "Batch mode",
+    "adm.noImg.modeDerive": "Icon derived from image",
+    "adm.noImg.modeBoth": "Icon separately with AI (2 credits)"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5177,7 +5189,11 @@
     "adm.noImg.more": "Cargar 5 más",
     "store.hide": "Ocultar sección",
     "store.hiddenTitle": "Ocultas",
-    "store.unhide": "Mostrar de nuevo"
+    "store.unhide": "Mostrar de nuevo",
+    "adm.noImg.genBoth": "Generar ambas imágenes con IA (2 créditos)",
+    "adm.noImg.batchMode": "Modo de lote",
+    "adm.noImg.modeDerive": "Icono derivado de la imagen",
+    "adm.noImg.modeBoth": "Icono por separado con IA (2 créditos)"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6472,7 +6488,11 @@
     "adm.noImg.more": "Cargar 5 más",
     "store.hide": "Ocultar sección",
     "store.hiddenTitle": "Ocultas",
-    "store.unhide": "Mostrar de nuevo"
+    "store.unhide": "Mostrar de nuevo",
+    "adm.noImg.genBoth": "Generar ambas imágenes con IA (2 créditos)",
+    "adm.noImg.batchMode": "Modo de lote",
+    "adm.noImg.modeDerive": "Icono derivado de la imagen",
+    "adm.noImg.modeBoth": "Icono por separado con IA (2 créditos)"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7767,7 +7787,11 @@
     "adm.noImg.more": "Charger 5 de plus",
     "store.hide": "Masquer le rayon",
     "store.hiddenTitle": "Masqués",
-    "store.unhide": "Réafficher"
+    "store.unhide": "Réafficher",
+    "adm.noImg.genBoth": "Générer les deux images avec l'IA (2 crédits)",
+    "adm.noImg.batchMode": "Mode par lot",
+    "adm.noImg.modeDerive": "Icône dérivée de l'image",
+    "adm.noImg.modeBoth": "Icône séparée avec l'IA (2 crédits)"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9062,7 +9086,11 @@
     "adm.noImg.more": "Charger 5 de plus",
     "store.hide": "Masquer le rayon",
     "store.hiddenTitle": "Masqués",
-    "store.unhide": "Réafficher"
+    "store.unhide": "Réafficher",
+    "adm.noImg.genBoth": "Générer les deux images avec l'IA (2 crédits)",
+    "adm.noImg.batchMode": "Mode par lot",
+    "adm.noImg.modeDerive": "Icône dérivée de l'image",
+    "adm.noImg.modeBoth": "Icône séparée avec l'IA (2 crédits)"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10357,7 +10385,11 @@
     "adm.noImg.more": "Carica altri 5",
     "store.hide": "Nascondi reparto",
     "store.hiddenTitle": "Nascosti",
-    "store.unhide": "Mostra di nuovo"
+    "store.unhide": "Mostra di nuovo",
+    "adm.noImg.genBoth": "Genera entrambe le immagini con IA (2 crediti)",
+    "adm.noImg.batchMode": "Modalità batch",
+    "adm.noImg.modeDerive": "Icona derivata dall'immagine",
+    "adm.noImg.modeBoth": "Icona separata con IA (2 crediti)"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11652,7 +11684,11 @@
     "adm.noImg.more": "Carica altri 5",
     "store.hide": "Nascondi reparto",
     "store.hiddenTitle": "Nascosti",
-    "store.unhide": "Mostra di nuovo"
+    "store.unhide": "Mostra di nuovo",
+    "adm.noImg.genBoth": "Genera entrambe le immagini con IA (2 crediti)",
+    "adm.noImg.batchMode": "Modalità batch",
+    "adm.noImg.modeDerive": "Icona derivata dall'immagine",
+    "adm.noImg.modeBoth": "Icona separata con IA (2 crediti)"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12947,7 +12983,11 @@
     "adm.noImg.more": "Carregar mais 5",
     "store.hide": "Ocultar secção",
     "store.hiddenTitle": "Ocultas",
-    "store.unhide": "Mostrar novamente"
+    "store.unhide": "Mostrar novamente",
+    "adm.noImg.genBoth": "Gerar ambas as imagens com IA (2 créditos)",
+    "adm.noImg.batchMode": "Modo em lote",
+    "adm.noImg.modeDerive": "Ícone derivado da imagem",
+    "adm.noImg.modeBoth": "Ícone separado com IA (2 créditos)"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14242,7 +14282,11 @@
     "adm.noImg.more": "Carregar mais 5",
     "store.hide": "Ocultar secção",
     "store.hiddenTitle": "Ocultas",
-    "store.unhide": "Mostrar novamente"
+    "store.unhide": "Mostrar novamente",
+    "adm.noImg.genBoth": "Gerar ambas as imagens com IA (2 créditos)",
+    "adm.noImg.batchMode": "Modo em lote",
+    "adm.noImg.modeDerive": "Ícone derivado da imagem",
+    "adm.noImg.modeBoth": "Ícone separado com IA (2 créditos)"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15537,7 +15581,11 @@
     "adm.noImg.more": "Nog 5 laden",
     "store.hide": "Afdeling verbergen",
     "store.hiddenTitle": "Verborgen",
-    "store.unhide": "Weer tonen"
+    "store.unhide": "Weer tonen",
+    "adm.noImg.genBoth": "Beide afbeeldingen met AI maken (2 credits)",
+    "adm.noImg.batchMode": "Batchmodus",
+    "adm.noImg.modeDerive": "Pictogram afgeleid van afbeelding",
+    "adm.noImg.modeBoth": "Pictogram apart met AI (2 credits)"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16832,7 +16880,11 @@
     "adm.noImg.more": "Nog 5 laden",
     "store.hide": "Afdeling verbergen",
     "store.hiddenTitle": "Verborgen",
-    "store.unhide": "Weer tonen"
+    "store.unhide": "Weer tonen",
+    "adm.noImg.genBoth": "Beide afbeeldingen met AI maken (2 credits)",
+    "adm.noImg.batchMode": "Batchmodus",
+    "adm.noImg.modeDerive": "Pictogram afgeleid van afbeelding",
+    "adm.noImg.modeBoth": "Pictogram apart met AI (2 credits)"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17569,7 +17621,11 @@
     "install.manualHint": "Wähle im Browser-Menü „Zum Startbildschirm hinzufügen“.",
     "store.hide": "Abteilung ausblenden",
     "store.hiddenTitle": "Ausgeblendet",
-    "store.unhide": "Wieder einblenden"
+    "store.unhide": "Wieder einblenden",
+    "adm.noImg.genBoth": "Beide Bilder mit KI erzeugen (2 Credits)",
+    "adm.noImg.batchMode": "Stapel-Modus",
+    "adm.noImg.modeDerive": "Icon aus Bild ableiten",
+    "adm.noImg.modeBoth": "Icon separat mit KI (2 Credits)"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -18306,6 +18362,10 @@
     "install.manualHint": "Wähle im Browser-Menü «Zum Startbildschirm hinzufügen».",
     "store.hide": "Abteilung ausblenden",
     "store.hiddenTitle": "Ausgeblendet",
-    "store.unhide": "Wieder einblenden"
+    "store.unhide": "Wieder einblenden",
+    "adm.noImg.genBoth": "Beide Bilder mit KI erzeugen (2 Credits)",
+    "adm.noImg.batchMode": "Stapel-Modus",
+    "adm.noImg.modeDerive": "Icon aus Bild ableiten",
+    "adm.noImg.modeBoth": "Icon separat mit KI (2 Credits)"
   }
 }
