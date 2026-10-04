@@ -389,29 +389,38 @@ function ListPage() {
           onReorderTemplates={reorderTemplates}
         />
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("list.lists")}</h1>
-        <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-          {lists.map((l) => {
-            const done = l.items.filter((i) => i.checked).length;
-            return (
-              <button
-                key={l.id}
-                onClick={() => { setActiveListId(l.id); setOpenListId(l.id); }}
-                className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-muted"
-              >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-lg">🛒</span>
-                <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-semibold text-foreground">{l.name}</span>
-                  <span className="block text-xs text-muted-foreground">
-                    {l.items.length === 0 ? t("list.empty1") : `${done}/${l.items.length}`}
-                  </span>
-                </span>
-                <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-muted-foreground" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="m9 6 6 6-6 6" />
-                </svg>
-              </button>
-            );
-          })}
-        </div>
+        <OverviewSortable
+          rows={lists.map((l) => ({
+            id: l.id,
+            name: l.name,
+            sub: l.items.length === 0 ? t("list.empty1") : `${l.items.filter((i) => i.checked).length}/${l.items.length}`,
+            emoji: "🛒",
+          }))}
+          onReorder={reorderLists}
+          onOpen={(id) => { setActiveListId(id); setOpenListId(id); }}
+          onSaveTemplate={(id) => { saveAsTemplate(id); toast.success(t("lm.templateSaved")); }}
+          onDelete={(id) => {
+            if (lists.length <= 1) { toast.error(t("lm.lastList")); return; }
+            const l = lists.find((x) => x.id === id);
+            if (l && confirm(t("lm.confirmDelete").replace("{name}", l.name))) deleteList(id);
+          }}
+          t={t}
+        />
+        <h2 className="pt-2 text-lg font-bold tracking-tight text-foreground">{t("lm.templates")}</h2>
+        {templates.length === 0 ? (
+          <p className="text-xs text-muted-foreground">{t("lm.templatesHint")}</p>
+        ) : (
+          <OverviewSortable
+            rows={templates.map((tp) => ({ id: tp.id, name: tp.name, sub: String(tp.items.length), emoji: "📋" }))}
+            onReorder={reorderTemplates}
+            onOpen={(id) => { createFromTemplate(id); toast.success(t("lm.templateCreated")); }}
+            onDelete={(id) => {
+              const tp = templates.find((x) => x.id === id);
+              if (tp && confirm(t("lm.deleteTemplateConfirm").replace("{name}", tp.name))) deleteTemplate(id);
+            }}
+            t={t}
+          />
+        )}
         <button
           onClick={() => setManagerOpen(true)}
           className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-primary/40 py-3.5 text-sm font-semibold text-primary active:bg-muted"
