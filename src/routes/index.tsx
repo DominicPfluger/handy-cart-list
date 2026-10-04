@@ -357,22 +357,6 @@ function ListPage() {
           <button onClick={() => setManagerOpen(true)} className="min-w-0 flex-1 text-left">
             <h1 className="truncate text-2xl font-bold tracking-tight text-foreground">{activeList.name}</h1>
           </button>
-          <SpeakListButton
-            title={activeList.name}
-            groups={(sl) => grouped.map((g) => ({
-              label: g.root ? pickName(g.root.names, sl, g.root.baseName) : g.label,
-              items: g.items.filter((i) => !i.checked).map((i) => {
-                const product = i.productId ? productById.get(i.productId) : undefined;
-                let name = displayName(i);
-                if (product) {
-                  const k = i.name.indexOf(" · ");
-                  const base = pickName(product.names, sl, product.baseName);
-                  name = stripAnyPrefix(k >= 0 ? base + i.name.slice(k) : base);
-                }
-                return `${i.quantity ? speakQuantity(i.quantity, i.unit, sl) + " " : ""}${name}`;
-              }),
-            }))}
-          />
           <button
             onClick={() => setPurchaseOpen(true)}
             aria-label={t("purchase.title")}
