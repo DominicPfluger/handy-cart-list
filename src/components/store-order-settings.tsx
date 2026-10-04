@@ -26,6 +26,7 @@ export function StoreOrderSettings() {
   const stores = useStores();
   const { all, store, setStore, saveFor, resetFor, addCustomStore, removeCustomStore } = useGroupOrder();
   const [edit, setEdit] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
   const sel = edit ?? store;
   const selected = stores.find((s) => s.id === sel) ?? stores[0]!;
   const sensors = useSensors(
