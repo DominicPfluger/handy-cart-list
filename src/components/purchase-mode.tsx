@@ -33,6 +33,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   const { t } = useT();
   const [rate] = useSpeakRate();
   const [speakLocale] = useSpeakLocale();
+  const [speakOn, setSpeakOn] = useState<boolean>(readSpeakEnabled);
   const current = items.find((i) => !i.checked);
   const done = items.filter((i) => i.checked).length;
   const allDone = !current;
@@ -40,10 +41,17 @@ export function PurchaseMode({ items, onToggle, onClose }: {
 
   // Aktuellen Artikel vorlesen; beim Wechsel zum nächsten erneut.
   useEffect(() => {
-    if (current) speakSentences([current.spoken], speakLocale, rate);
+    if (current && speakOn) speakSentences([current.spoken], speakLocale, rate);
     return () => { try { window.speechSynthesis?.cancel(); } catch { /* ignore */ } };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current?.id]);
+  }, [current?.id, speakOn]);
+
+  const toggleSpeak = () => {
+    const next = !speakOn;
+    setSpeakOn(next);
+    try { window.localStorage.setItem(SPEAK_KEY, next ? "1" : "0"); } catch { /* ignore */ }
+    if (!next) { try { window.speechSynthesis?.cancel(); } catch { /* ignore */ } }
+  };
 
   return (
     <div className="fixed inset-0 z-[80] flex flex-col bg-background" role="dialog" aria-modal="true" aria-label={t("purchase.title")}>
