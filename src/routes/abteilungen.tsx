@@ -555,7 +555,7 @@ function DepartmentsPage() {
                   <span className="min-w-0 text-center whitespace-normal text-[13px] font-bold leading-4 text-foreground">{department.name}</span>
                 </span>
               </Button>
-              <Button type="button" variant="ghost" size="icon" aria-label={t("rename.action", { name: department.name })} title={t("rename.action", { name: department.name })} onClick={() => openRename(department)} className="absolute left-1 top-1 z-10 h-9 w-9 bg-card/90 text-muted-foreground transition-opacity hover:text-primary focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
+              <Button type="button" variant="ghost" size="icon" aria-label={t("rename.action", { name: department.name })} title={t("rename.action", { name: department.name })} onClick={() => openRename(department)} className="absolute right-11 top-1 z-10 h-9 w-9 bg-card/90 text-muted-foreground transition-opacity hover:text-primary focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
                 <PencilIcon className="h-4 w-4" />
               </Button>
               <Button type="button" variant="ghost" size="icon" aria-label={t("dept.remove", { name: department.name })} title={t("dept.remove", { name: department.name })} onClick={() => setRemoveTarget(department)} className="absolute right-1 top-1 z-10 h-9 w-9 bg-card/90 text-muted-foreground transition-opacity hover:text-destructive focus-visible:opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100">
