@@ -49,8 +49,10 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     if (!current || !speakOn || typeof window === "undefined" || !window.speechSynthesis) return;
     const synth = window.speechSynthesis;
     let cancelled = false;
+    let spoken = false;
     const run = () => {
-      if (cancelled) return;
+      if (cancelled || spoken) return;
+      spoken = true;
       try { synth.resume(); } catch { /* ignore */ }
       speakSentences([current.spoken], speakLocale, rate);
     };
