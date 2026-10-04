@@ -892,7 +892,6 @@ function useCloudLists(
       })
         .then((res) => {
           const newId = String((res.list as CloudRow).id);
-          renameListStore(id, newId);
           setActiveListId(newId);
           scheduleReload();
         })
