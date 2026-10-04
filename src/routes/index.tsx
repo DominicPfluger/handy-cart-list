@@ -193,6 +193,33 @@ function ListPage() {
   const treeOrder = (leaf: CatalogDepartment): number =>
     chainOf(leaf).reduce((acc, d) => acc * 1000 + d.sortOrder, 0);
 
+  /** Findet eine Katalog-Abteilung anhand eines Gruppennamens (Name, Basisname oder Übersetzung). */
+  const deptByLabel = (label: string): CatalogDepartment | undefined => {
+    const needle = label.trim().toLowerCase();
+    if (!needle) return undefined;
+    for (const d of departments) {
+      if (d.name.trim().toLowerCase() === needle) return d;
+      if (d.baseName?.trim().toLowerCase() === needle) return d;
+      if (Object.values(d.names).some((n) => n.trim().toLowerCase() === needle)) return d;
+    }
+    return undefined;
+  };
+
+  /** Bildet die festen Artikel-Kategorien (manuell eingetippte Einträge) auf die
+   *  passende oberste Katalog-Abteilung ab, damit die Laden-Reihenfolge greift. */
+  const CATEGORY_ROOT_NAMES: Record<string, string> = {
+    "obst-gemuese": "Frischmarkt",
+    milchprodukte: "Milchprodukte & Eier",
+    backwaren: "Backwaren & Frühstück",
+    "fleisch-fisch": "Fleisch & Fisch",
+    getraenke: "Getränke",
+    tierbedarf: "Tierbedarf",
+  };
+  const rootForCategory = (categoryId: string): CatalogDepartment | undefined => {
+    const name = CATEGORY_ROOT_NAMES[categoryId];
+    return name ? deptByLabel(name) : undefined;
+  };
+
   interface Group {
     key: string;
     label: string;
@@ -208,7 +235,10 @@ function ListPage() {
     const map = new Map<string, Group>();
     for (const it of items) {
       const leaf = leafOf(it);
-      const root = leaf ? chainOf(leaf)[0] : undefined;
+      // Ohne Katalog-Verknüpfung: Gruppenname auf eine Abteilung abbilden,
+      // damit die in den Einstellungen gespeicherte Reihenfolge greift.
+      const fallbackDept = leaf ? undefined : rootForCategory(it.category) ?? deptByLabel(it.groupLabel ?? getCategory(it.category).label);
+      const root = leaf ? chainOf(leaf)[0] : fallbackDept ? chainOf(fallbackDept)[0] : undefined;
       const key = root ? root.id : `label:${it.groupLabel ?? it.category}`;
       let group = map.get(key);
       if (!group) {
