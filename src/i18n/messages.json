@@ -1271,7 +1271,15 @@
     "purchase.allDone": "All done!",
     "install.title": "Install app",
     "install.desc": "Shoppi on your home screen",
-    "install.manualHint": "Choose \"Add to home screen\" in your browser menu."
+    "install.manualHint": "Choose \"Add to home screen\" in your browser menu.",
+    "store.default": "Default",
+    "store.label": "Store:",
+    "store.orderTitle": "Department order",
+    "store.orderHint": "Set the order of departments in your list for each store.",
+    "store.addCustom": "+ Own store …",
+    "store.newName": "Store name",
+    "store.remove": "Remove",
+    "store.reset": "Reset"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2545,7 +2553,15 @@
     "purchase.allDone": "All done!",
     "install.title": "Install app",
     "install.desc": "Shoppi on your home screen",
-    "install.manualHint": "Choose \"Add to home screen\" in your browser menu."
+    "install.manualHint": "Choose \"Add to home screen\" in your browser menu.",
+    "store.default": "Default",
+    "store.label": "Store:",
+    "store.orderTitle": "Department order",
+    "store.orderHint": "Set the order of departments in your list for each store.",
+    "store.addCustom": "+ Own store …",
+    "store.newName": "Store name",
+    "store.remove": "Remove",
+    "store.reset": "Reset"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3819,7 +3835,15 @@
     "purchase.allDone": "All done!",
     "install.title": "Install app",
     "install.desc": "Shoppi on your home screen",
-    "install.manualHint": "Choose \"Add to home screen\" in your browser menu."
+    "install.manualHint": "Choose \"Add to home screen\" in your browser menu.",
+    "store.default": "Default",
+    "store.label": "Store:",
+    "store.orderTitle": "Department order",
+    "store.orderHint": "Set the order of departments in your list for each store.",
+    "store.addCustom": "+ Own store …",
+    "store.newName": "Store name",
+    "store.remove": "Remove",
+    "store.reset": "Reset"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5093,7 +5117,15 @@
     "purchase.allDone": "¡Todo listo!",
     "install.title": "Instalar aplicación",
     "install.desc": "Shoppi en tu pantalla de inicio",
-    "install.manualHint": "Elige «Añadir a la pantalla de inicio» en el menú del navegador."
+    "install.manualHint": "Elige «Añadir a la pantalla de inicio» en el menú del navegador.",
+    "store.default": "Estándar",
+    "store.label": "Tienda:",
+    "store.orderTitle": "Orden de secciones",
+    "store.orderHint": "Define el orden de las secciones en tu lista para cada tienda.",
+    "store.addCustom": "+ Tienda propia …",
+    "store.newName": "Nombre de la tienda",
+    "store.remove": "Eliminar",
+    "store.reset": "Restablecer"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6367,7 +6399,15 @@
     "purchase.allDone": "¡Todo listo!",
     "install.title": "Instalar aplicación",
     "install.desc": "Shoppi en tu pantalla de inicio",
-    "install.manualHint": "Elige «Añadir a la pantalla de inicio» en el menú del navegador."
+    "install.manualHint": "Elige «Añadir a la pantalla de inicio» en el menú del navegador.",
+    "store.default": "Estándar",
+    "store.label": "Tienda:",
+    "store.orderTitle": "Orden de secciones",
+    "store.orderHint": "Define el orden de las secciones en tu lista para cada tienda.",
+    "store.addCustom": "+ Tienda propia …",
+    "store.newName": "Nombre de la tienda",
+    "store.remove": "Eliminar",
+    "store.reset": "Restablecer"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7641,7 +7681,15 @@
     "purchase.allDone": "Tout est fait !",
     "install.title": "Installer l'application",
     "install.desc": "Shoppi sur votre écran d'accueil",
-    "install.manualHint": "Choisis « Ajouter à l'écran d'accueil » dans le menu du navigateur."
+    "install.manualHint": "Choisis « Ajouter à l'écran d'accueil » dans le menu du navigateur.",
+    "store.default": "Standard",
+    "store.label": "Magasin :",
+    "store.orderTitle": "Ordre des rayons",
+    "store.orderHint": "Définissez l'ordre des rayons de votre liste pour chaque magasin.",
+    "store.addCustom": "+ Magasin perso …",
+    "store.newName": "Nom du magasin",
+    "store.remove": "Supprimer",
+    "store.reset": "Réinitialiser"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8915,7 +8963,15 @@
     "purchase.allDone": "Tout est fait !",
     "install.title": "Installer l'application",
     "install.desc": "Shoppi sur votre écran d'accueil",
-    "install.manualHint": "Choisis « Ajouter à l'écran d'accueil » dans le menu du navigateur."
+    "install.manualHint": "Choisis « Ajouter à l'écran d'accueil » dans le menu du navigateur.",
+    "store.default": "Standard",
+    "store.label": "Magasin :",
+    "store.orderTitle": "Ordre des rayons",
+    "store.orderHint": "Définissez l'ordre des rayons de votre liste pour chaque magasin.",
+    "store.addCustom": "+ Magasin perso …",
+    "store.newName": "Nom du magasin",
+    "store.remove": "Supprimer",
+    "store.reset": "Réinitialiser"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10189,7 +10245,15 @@
     "purchase.allDone": "Tutto fatto!",
     "install.title": "Installa app",
     "install.desc": "Shoppi sulla schermata iniziale",
-    "install.manualHint": "Scegli «Aggiungi alla schermata Home» nel menu del browser."
+    "install.manualHint": "Scegli «Aggiungi alla schermata Home» nel menu del browser.",
+    "store.default": "Standard",
+    "store.label": "Negozio:",
+    "store.orderTitle": "Ordine dei reparti",
+    "store.orderHint": "Imposta l'ordine dei reparti nella lista per ogni negozio.",
+    "store.addCustom": "+ Negozio personale …",
+    "store.newName": "Nome del negozio",
+    "store.remove": "Rimuovi",
+    "store.reset": "Ripristina"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11463,7 +11527,15 @@
     "purchase.allDone": "Tutto fatto!",
     "install.title": "Installa app",
     "install.desc": "Shoppi sulla schermata iniziale",
-    "install.manualHint": "Scegli «Aggiungi alla schermata Home» nel menu del browser."
+    "install.manualHint": "Scegli «Aggiungi alla schermata Home» nel menu del browser.",
+    "store.default": "Standard",
+    "store.label": "Negozio:",
+    "store.orderTitle": "Ordine dei reparti",
+    "store.orderHint": "Imposta l'ordine dei reparti nella lista per ogni negozio.",
+    "store.addCustom": "+ Negozio personale …",
+    "store.newName": "Nome del negozio",
+    "store.remove": "Rimuovi",
+    "store.reset": "Ripristina"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12737,7 +12809,15 @@
     "purchase.allDone": "Tudo concluído!",
     "install.title": "Instalar aplicação",
     "install.desc": "Shoppi no ecrã inicial",
-    "install.manualHint": "Escolha «Adicionar ao ecrã principal» no menu do navegador."
+    "install.manualHint": "Escolha «Adicionar ao ecrã principal» no menu do navegador.",
+    "store.default": "Padrão",
+    "store.label": "Loja:",
+    "store.orderTitle": "Ordem das secções",
+    "store.orderHint": "Defina a ordem das secções na lista para cada loja.",
+    "store.addCustom": "+ Loja própria …",
+    "store.newName": "Nome da loja",
+    "store.remove": "Remover",
+    "store.reset": "Repor"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14011,7 +14091,15 @@
     "purchase.allDone": "Tudo concluído!",
     "install.title": "Instalar aplicativo",
     "install.desc": "Shoppi na tela inicial",
-    "install.manualHint": "Escolha «Adicionar à tela inicial» no menu do navegador."
+    "install.manualHint": "Escolha «Adicionar à tela inicial» no menu do navegador.",
+    "store.default": "Padrão",
+    "store.label": "Loja:",
+    "store.orderTitle": "Ordem das secções",
+    "store.orderHint": "Defina a ordem das secções na lista para cada loja.",
+    "store.addCustom": "+ Loja própria …",
+    "store.newName": "Nome da loja",
+    "store.remove": "Remover",
+    "store.reset": "Repor"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15285,7 +15373,15 @@
     "purchase.allDone": "Alles klaar!",
     "install.title": "App installeren",
     "install.desc": "Shoppi op je startscherm",
-    "install.manualHint": "Kies «Aan startscherm toevoegen» in het browsermenu."
+    "install.manualHint": "Kies «Aan startscherm toevoegen» in het browsermenu.",
+    "store.default": "Standaard",
+    "store.label": "Winkel:",
+    "store.orderTitle": "Volgorde afdelingen",
+    "store.orderHint": "Stel per winkel de volgorde van de afdelingen in je lijst in.",
+    "store.addCustom": "+ Eigen winkel …",
+    "store.newName": "Naam van de winkel",
+    "store.remove": "Verwijderen",
+    "store.reset": "Herstellen"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16559,7 +16655,15 @@
     "purchase.allDone": "Alles klaar!",
     "install.title": "App installeren",
     "install.desc": "Shoppi op je startscherm",
-    "install.manualHint": "Kies «Aan startscherm toevoegen» in het browsermenu."
+    "install.manualHint": "Kies «Aan startscherm toevoegen» in het browsermenu.",
+    "store.default": "Standaard",
+    "store.label": "Winkel:",
+    "store.orderTitle": "Volgorde afdelingen",
+    "store.orderHint": "Stel per winkel de volgorde van de afdelingen in je lijst in.",
+    "store.addCustom": "+ Eigen winkel …",
+    "store.newName": "Naam van de winkel",
+    "store.remove": "Verwijderen",
+    "store.reset": "Herstellen"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",

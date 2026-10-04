@@ -1,44 +1,82 @@
 import { useCallback, useEffect, useState } from "react";
 
 const KEY = "shoppi:list-group-order";
+const STORE_KEY = "shoppi:active-store";
+const CUSTOM_KEY = "shoppi:custom-stores";
 const EVENT = "shoppi:list-group-order-changed";
 
-function read(): string[] {
+export type CustomStore = { id: string; name: string };
+
+function readAll(): Record<string, string[]> {
   try {
-    const v = JSON.parse(localStorage.getItem(KEY) ?? "[]");
-    return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
+    const v = JSON.parse(localStorage.getItem(KEY) ?? "{}");
+    if (Array.isArray(v)) return { default: v.filter((x): x is string => typeof x === "string") };
+    return v && typeof v === "object" ? (v as Record<string, string[]>) : {};
   } catch {
-    return [];
+    return {};
   }
 }
+function readStore(): string {
+  try { return localStorage.getItem(STORE_KEY) || "default"; } catch { return "default"; }
+}
+function readCustom(): CustomStore[] {
+  try {
+    const v = JSON.parse(localStorage.getItem(CUSTOM_KEY) ?? "[]");
+    return Array.isArray(v) ? v : [];
+  } catch { return []; }
+}
+function emit() { window.dispatchEvent(new Event(EVENT)); }
 
-/** Persönliche (nur lokal gespeicherte) Reihenfolge der Abteilungs-Gruppen in der Listenansicht. */
+/** Persönliche (geräte-lokale) Reihenfolge der Abteilungen, pro Laden. */
 export function useGroupOrder() {
-  const [order, setOrder] = useState<string[]>([]);
+  const [all, setAll] = useState<Record<string, string[]>>({});
+  const [store, setStoreState] = useState("default");
+  const [customStores, setCustom] = useState<CustomStore[]>([]);
 
   useEffect(() => {
-    setOrder(read());
-    const sync = () => setOrder(read());
+    const sync = () => { setAll(readAll()); setStoreState(readStore()); setCustom(readCustom()); };
+    sync();
     window.addEventListener(EVENT, sync);
     window.addEventListener("storage", sync);
-    return () => {
-      window.removeEventListener(EVENT, sync);
-      window.removeEventListener("storage", sync);
-    };
+    return () => { window.removeEventListener(EVENT, sync); window.removeEventListener("storage", sync); };
   }, []);
 
-  /** Speichert die komplette Reihenfolge der sichtbaren Gruppenschlüssel. */
-  const save = useCallback((keys: string[]) => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(keys));
-    } catch {
-      /* Speicher voll — Reihenfolge nur im State behalten */
-    }
-    setOrder(keys);
-    window.dispatchEvent(new Event(EVENT));
+  /** Speichert Reihenfolge für einen Laden; nicht genannte Schlüssel behalten ihre Position dahinter. */
+  const saveFor = useCallback((storeId: string, keys: string[]) => {
+    const cur = readAll();
+    const rest = (cur[storeId] ?? []).filter((k) => !keys.includes(k));
+    cur[storeId] = [...keys, ...rest];
+    try { localStorage.setItem(KEY, JSON.stringify(cur)); } catch { /* ignore */ }
+    emit();
   }, []);
+  const save = useCallback((keys: string[]) => saveFor(readStore(), keys), [saveFor]);
+  const resetFor = useCallback((storeId: string) => {
+    const cur = readAll();
+    delete cur[storeId];
+    try { localStorage.setItem(KEY, JSON.stringify(cur)); } catch { /* ignore */ }
+    emit();
+  }, []);
+  const setStore = useCallback((id: string) => {
+    try { localStorage.setItem(STORE_KEY, id); } catch { /* ignore */ }
+    emit();
+  }, []);
+  const addCustomStore = useCallback((name: string) => {
+    const id = "custom:" + Date.now().toString(36);
+    const next = [...readCustom(), { id, name }];
+    try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(next)); } catch { /* ignore */ }
+    emit();
+    return id;
+  }, []);
+  const removeCustomStore = useCallback((id: string) => {
+    const next = readCustom().filter((s) => s.id !== id);
+    try { localStorage.setItem(CUSTOM_KEY, JSON.stringify(next)); } catch { /* ignore */ }
+    resetFor(id);
+    if (readStore() === id) setStore("default");
+    emit();
+  }, [resetFor, setStore]);
 
-  return { order, save, hasCustomOrder: order.length > 0 };
+  const order = all[store] ?? all["default"] ?? [];
+  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, removeCustomStore, hasCustomOrder: order.length > 0 };
 }
 
 /** Sortiert Gruppen: zuerst in gespeicherter Reihenfolge, der Rest in Katalog-Reihenfolge dahinter. */
