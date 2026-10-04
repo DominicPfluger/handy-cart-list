@@ -2,30 +2,32 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Wand2, WandSparkles, ImageOff, Loader2 } from "lucide-react";
+import { WandSparkles, ImageOff, Loader2, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath, saveCustomIconFromPath } from "@/lib/product-icon";
+import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
 import { useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 
 type Dept = { id: string; name: string; parent_id: string | null };
 type Prod = { id: string; name: string; emoji: string | null; department_id: string; image_path: string | null; icon_path?: string | null };
 type Filter = "any" | "image" | "icon" | "both";
+type Dlg = { target: Prod | null; hint: string; opts: AiImageOpts };
 const PAGE = 5;
 
-/** Pflege: Produkte ohne Vorschaubild/Icon, 30 pro Seite, mit KI-Erzeugung. */
+/** Pflege: Produkte ohne Vorschaubild/Icon, 5 pro Seite, mit Kategorienfilter und KI-Bildoptionen. */
 export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; prods: Prod[]; onEdit: (id: string) => void }) {
   const { t } = useT();
   const gen = useServerFn(generateImageFor);
   const [filter, setFilter] = useState<Filter>("any");
   const [query, setQuery] = useState("");
+  const [cat, setCat] = useState("");
   const [limit, setLimit] = useState(PAGE);
-  const [menuFor, setMenuFor] = useState<string | null>(null);
+  const [dlg, setDlg] = useState<Dlg | null>(null);
   const [patch, setPatch] = useState<Record<string, { image_path?: string | null; icon_path?: string | null }>>({});
   const [busy, setBusy] = useState<Set<string>>(new Set());
   const [batch, setBatch] = useState<{ done: number; total: number } | null>(null);
-  const [batchBoth, setBatchBoth] = useState(false);
   const stop = useRef(false);
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
@@ -33,6 +35,17 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     const out: string[] = []; let c = deptById.get(id); let g = 0;
     while (c && g++ < 20) { out.unshift(c.name); c = c.parent_id ? deptById.get(c.parent_id) : undefined; }
     return out.join(" › ");
+  };
+  const catOptions = useMemo(
+    () => depts.map((d) => ({ id: d.id, label: path(d.id) })).sort((a, b) => a.label.localeCompare(b.label, "de")),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [depts],
+  );
+  const inCat = (deptId: string) => {
+    if (!cat) return true;
+    let c = deptById.get(deptId); let g = 0;
+    while (c && g++ < 20) { if (c.id === cat) return true; c = c.parent_id ? deptById.get(c.parent_id) : undefined; }
+    return false;
   };
 
   const all = useMemo(() => prods.map((p) => ({ ...p, ...patch[p.id] })), [prods, patch]);
@@ -42,10 +55,12 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
       const noImg = !p.image_path, noIcon = !p.icon_path;
       const hit = filter === "image" ? noImg : filter === "icon" ? noIcon : filter === "both" ? noImg && noIcon : noImg || noIcon;
       if (!hit) return false;
+      if (!inCat(p.department_id)) return false;
       if (!q) return true;
       return p.name.toLowerCase().includes(q) || path(p.department_id).toLowerCase().includes(q);
     });
-  }, [all, filter, query]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [all, filter, query, cat]);
   const visible = missing.slice(0, limit);
 
   const paths = visible.flatMap((p) => [p.image_path, p.icon_path]).filter((x): x is string => !!x);
@@ -60,13 +75,13 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   });
   const url = (p?: string | null): string | undefined => (p ? imgs.data?.get(p) ?? undefined : undefined);
 
-  const fix = async (p: Prod, both = false) => {
+  const fix = async (p: Prod, both: boolean, hint?: string, opts?: AiImageOpts) => {
     setBusy((s) => new Set(s).add(p.id));
     try {
       let image = p.image_path;
-      if (!image) image = (await gen({ data: { id: p.id, kind: "product" } })).path;
+      if (!image) image = (await gen({ data: { id: p.id, kind: "product", hint, opts } })).path;
       if (both) {
-        const icon = await gen({ data: { id: p.id, kind: "product", iconOnly: true } });
+        const icon = await gen({ data: { id: p.id, kind: "product", iconOnly: true, hint, opts } });
         await saveCustomIconFromPath("product", p.id, icon.path);
       } else {
         await saveProductIconFromPath(p.id, image);
@@ -82,22 +97,66 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     }
   };
 
-  const fixAll = async () => {
+  const fixAll = async (both: boolean, hint?: string, opts?: AiImageOpts) => {
     const list = visible.slice();
     stop.current = false;
     setBatch({ done: 0, total: list.length });
     for (let i = 0; i < list.length; i++) {
       if (stop.current) break;
-      if (!(await fix(list[i]!, batchBoth))) break;
+      if (!(await fix(list[i]!, both, hint, opts))) break;
       setBatch({ done: i + 1, total: list.length });
     }
     setBatch(null);
+  };
+
+  const runDlg = (d: Dlg) => {
+    const h = d.hint.trim() || undefined;
+    setDlg(null);
+    if (d.target) void fix(d.target, false, h, d.opts);
+    else void fixAll(false, h, d.opts);
+  };
+  const runDlgBoth = (d: Dlg) => {
+    const h = d.hint.trim() || undefined;
+    setDlg(null);
+    if (d.target) void fix(d.target, true, h, d.opts);
+    else void fixAll(true, h, d.opts);
   };
 
   const Thumb = ({ src, size }: { src: string | undefined; size: string }) => (
     <span className={`grid ${size} shrink-0 place-items-center overflow-hidden rounded-lg border border-border bg-muted text-muted-foreground`}>
       {src ? <img src={src} alt="" loading="lazy" className="h-full w-full object-contain" /> : <ImageOff className="h-4 w-4" />}
     </span>
+  );
+
+  const optionsDialog = (d: Dlg) => (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setDlg(null)}>
+      <div className="w-full max-w-sm space-y-3 rounded-2xl bg-card p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <p className="text-sm font-bold text-foreground">{t("tile.aiOptions")}</p>
+          <Button size="icon" variant="ghost" aria-label={t("adm.cancel")} onClick={() => setDlg(null)}><X className="h-4 w-4" /></Button>
+        </div>
+        {d.target ? (
+          <p className="truncate text-xs text-muted-foreground">{d.target.emoji} {d.target.name}</p>
+        ) : (
+          <p className="text-xs text-muted-foreground">{t("adm.noImg.all", { n: String(visible.length) })}</p>
+        )}
+        <label className="block space-y-1 text-xs text-muted-foreground">
+          <span>{t("tile.aiHint")}</span>
+          <textarea
+            maxLength={300}
+            rows={3}
+            value={d.hint}
+            onChange={(e) => setDlg({ ...d, hint: e.target.value })}
+            className="w-full rounded-xl border border-input bg-background p-2 text-sm text-foreground"
+          />
+        </label>
+        <AiImageOptionSelects value={d.opts} onChange={(opts) => setDlg({ ...d, opts })} />
+        <div className="flex flex-col gap-2">
+          <Button size="sm" disabled={busy.size > 0 || !!batch} onClick={() => runDlg(d)}>{t("adm.noImg.gen")}</Button>
+          <Button size="sm" variant="secondary" disabled={busy.size > 0 || !!batch} onClick={() => runDlgBoth(d)}>{t("adm.noImg.genBoth")}</Button>
+        </div>
+      </div>
+    </div>
   );
 
   return (
@@ -113,6 +172,10 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
             aria-label={t("adm.noImg.search")}
             className="w-36 rounded-lg border border-input bg-background px-2 py-1 text-xs"
           />
+          <select value={cat} onChange={(e) => { setCat(e.target.value); setLimit(PAGE); }} className="max-w-40 rounded-lg border border-input bg-background px-2 py-1 text-xs" aria-label={t("adm.noImg.cat")}>
+            <option value="">{t("adm.noImg.cat")}</option>
+            {catOptions.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+          </select>
           <select value={filter} onChange={(e) => { setFilter(e.target.value as Filter); setLimit(PAGE); }} className="rounded-lg border border-input bg-background px-2 py-1 text-xs">
             <option value="any">{t("adm.noImg.any")}</option>
             <option value="image">{t("adm.noImg.image")}</option>
@@ -128,11 +191,9 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
         </div>
       ) : (
         <div className="flex flex-wrap items-center gap-2">
-          <Button size="sm" variant="outline" onClick={fixAll}><Wand2 className="mr-1 h-4 w-4" />{t("adm.noImg.all", { n: String(visible.length) })}</Button>
-          <select value={batchBoth ? "both" : "derive"} onChange={(e) => setBatchBoth(e.target.value === "both")} className="rounded-lg border border-input bg-background px-2 py-1 text-xs" aria-label={t("adm.noImg.batchMode")}>
-            <option value="derive">{t("adm.noImg.modeDerive")}</option>
-            <option value="both">{t("adm.noImg.modeBoth")}</option>
-          </select>
+          <Button size="sm" variant="outline" onClick={() => setDlg({ target: null, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS } })}>
+            <WandSparkles className="mr-1 h-4 w-4" />{t("adm.noImg.all", { n: String(visible.length) })}
+          </Button>
         </div>
       ))}
       <ul className="divide-y divide-border">
@@ -144,24 +205,9 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
               <p className="truncate text-sm font-medium text-foreground">{p.emoji} {p.name}</p>
               <p className="truncate text-xs text-muted-foreground">{path(p.department_id)}</p>
             </button>
-            <span className="relative">
-              <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setMenuFor((m) => (m === p.id ? null : p.id))}>
-                {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
-              </Button>
-              {menuFor === p.id && (
-                <>
-                  <span className="fixed inset-0 z-40" onClick={() => setMenuFor(null)} />
-                  <span className="absolute right-0 top-full z-50 mt-1 block w-56 overflow-hidden rounded-xl border border-border bg-card shadow-lg">
-                    <button type="button" className="block w-full px-3 py-2 text-left text-xs font-medium text-foreground hover:bg-muted" onClick={() => { setMenuFor(null); void fix(p); }}>
-                      {t("adm.noImg.gen")}
-                    </button>
-                    <button type="button" className="block w-full border-t border-border px-3 py-2 text-left text-xs font-medium text-foreground hover:bg-muted" onClick={() => { setMenuFor(null); void fix(p, true); }}>
-                      {t("adm.noImg.genBoth")}
-                    </button>
-                  </span>
-                </>
-              )}
-            </span>
+            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setDlg({ target: p, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS } })}>
+              {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
+            </Button>
           </li>
         ))}
       </ul>
@@ -169,6 +215,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
       {missing.length > limit && (
         <Button size="sm" variant="ghost" className="w-full" onClick={() => setLimit((l) => l + PAGE)}>{t("adm.noImg.more")}</Button>
       )}
+      {dlg && optionsDialog(dlg)}
     </section>
   );
 }
