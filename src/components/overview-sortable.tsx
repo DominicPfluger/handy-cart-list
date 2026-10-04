@@ -6,7 +6,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
 import { PencilIcon, TrashIcon } from "./icons";
 
-export type OverviewRowData = { id: string; name: string; sub: string; emoji: string };
+export type OverviewRowData = { id: string; name: string; sub: string; emoji?: string };
 
 type Actions = {
   onOpen: (id: string) => void;
@@ -67,7 +67,7 @@ function OverviewRow({ row, onOpen, onSaveTemplate, onDelete, onRename, t }: Act
           className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm outline-none focus:border-primary" />
       ) : (
       <button onClick={() => onOpen(row.id)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
-        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-lg">{row.emoji}</span>
+        {row.emoji ? <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-lg">{row.emoji}</span> : null}
         <span className="min-w-0 flex-1">
           <span className="block truncate text-sm font-semibold text-foreground">{row.name}</span>
           <span className="block text-xs text-muted-foreground">{row.sub}</span>

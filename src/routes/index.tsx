@@ -395,7 +395,6 @@ function ListPage() {
             id: l.id,
             name: l.name,
             sub: l.items.length === 0 ? t("list.empty1") : `${l.items.filter((i) => i.checked).length}/${l.items.length}`,
-            emoji: "🛒",
           }))}
           onReorder={reorderLists}
           onOpen={(id) => { setActiveListId(id); setOpenListId(id); }}
