@@ -1,10 +1,11 @@
-# Bilder-Tab: Varianten aufklappbar + Produktbilder pro Kategorie
+# Bilder-Tab: Varianten aufklappbar + Bildergalerie in eigenem Container
 
 ## Ziel
-Zwei Ergänzungen im Admin-Panel unter „Bilder":
+Drei Ergänzungen im Admin-Panel unter „Bilder":
 
 1. **Varianten aufklappbar** — bei „Produkte ohne Bild" lassen sich die Varianten eines Produkts direkt unter dem Produkteintrag aufklappen.
-2. **Produktbilder der gewählten Kategorie** — unterhalb von „Produkte ohne Bild" erscheint eine Auflistung aller Produktbilder der im Kategorienfilter gewählten Kategorie.
+2. **Bildergalerie pro Kategorie** — eine Auflistung aller Produktbilder der im Kategorienfilter gewählten Kategorie.
+3. **Eigener Container** — die Bildergalerie erscheint in einem separaten Container (eigene Karte) unterhalb von „Produkte ohne Bild", nicht innerhalb desselben Abschnitts.
 
 ## Umsetzung
 
@@ -16,19 +17,20 @@ Zwei Ergänzungen im Admin-Panel unter „Bilder":
   - der vorhandene `VariantImageButton` (KI-Bild erzeugen/löschen pro Variante, inkl. Optionen-Dialog) — wird wiederverwendet, keine neue Logik.
 - Variantenbilder kommen aus `product_variant_images` (Bild + Icon pro Variante), geladen über signierte Links wie bisher.
 
-### 2. Produktbilder der gewählten Kategorie (gleiche Datei)
-- Neuer Abschnitt direkt unter „Produkte ohne Bild", sichtbar sobald im Kategorienfilter eine Kategorie gewählt ist (Unterkategorien eingeschlossen, wie beim bestehenden Filter).
+### 2. Bildergalerie als separater Container
+- Neue Komponente (z. B. `CategoryImageGallery`) als eigene Karte im gleichen Stil wie die anderen Admin-Container, gerendert direkt unterhalb von „Produkte ohne Bild" im Bilder-Tab.
+- Enthält eine eigene Kategorien-Auswahl (Baumreihenfolge wie die anderen Dropdowns, Unterkategorien eingeschlossen).
 - Kachel-Raster der Produkte dieser Kategorie, die ein Bild haben: grosses Bild, darunter Produktname; Klick auf eine Kachel öffnet den bekannten Bearbeitungsdialog (`onEdit`).
 - Lädt zunächst eine begrenzte Anzahl (z. B. 24) mit „Mehr laden"-Knopf, um Ressourcen zu schonen.
 - Ohne Kategoriewahl wird ein kurzer Hinweis angezeigt („Kategorie wählen, um Bilder zu sehen").
 
 ### 3. Übersetzungen
-- Neue Texte (`adm.noImg.variants`, `adm.noImg.catImages`, `adm.noImg.catImagesHint`) in `de.ts` und `messages.json` (alle 16 Sprachen).
+- Neue Texte (`adm.noImg.variants`, `adm.imgGallery.title`, `adm.imgGallery.hint`, `adm.imgGallery.more`) in `de.ts` und `messages.json` (alle 16 Sprachen).
 
 ### 4. Prüfung
-- Typprüfung (`bunx tsgo --noEmit`), Build-Log und Browser-Test im Bilder-Tab: Variante aufklappen, Kategorie wählen, Bilder-Raster prüfen.
+- Typprüfung (`bunx tsgo --noEmit`), Build-Log und Browser-Test im Bilder-Tab: Variante aufklappen, Galerie-Container mit Kategoriewahl und Bilder-Raster prüfen.
 
 ## Technische Details
-- Daten: `products.variants` + `product_variant_images` (Varianten), `products.image_path/icon_path` (Kategorie-Raster) — alles bereits über `prods` bzw. eine ergänzende Abfrage verfügbar.
+- Daten: `products.variants` + `product_variant_images` (Varianten), `products.image_path` (Galerie) — über die bereits geladenen `prods` bzw. eine ergänzende Abfrage.
 - Wiederverwendung: `VariantImageButton` aus `src/components/admin/variant-image-button.tsx`; signierte URLs aus dem Bucket `catalog-images` wie im bestehenden Panel.
 - Keine Datenbankänderungen; bestehende Filter und Batch-Funktionen bleiben unverändert.
