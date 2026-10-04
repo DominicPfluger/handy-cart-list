@@ -14,20 +14,36 @@ export function useAuthUser(): AuthUser | null | undefined {
 
   useEffect(() => {
     let active = true;
+    type RawUser = { id: string; email?: string | null; user_metadata?: Record<string, unknown> } | null | undefined;
+    const toUser = (u: RawUser): AuthUser | null =>
+      u
+        ? {
+            id: u.id,
+            email: u.email ?? undefined,
+            name:
+              (u.user_metadata?.["name"] as string | undefined) ??
+              (u.email ? u.email.split("@")[0] : undefined),
+          }
+        : null;
     const read = async () => {
-      const { data } = await supabase.auth.getUser();
+      // Zuerst gespeicherte Sitzung (funktioniert offline), danach online bestätigen.
+      const { data: s } = await supabase.auth.getSession();
       if (!active) return;
-      setUser(
-        data.user
-          ? {
-              id: data.user.id,
-              email: data.user.email ?? undefined,
-              name:
-                (data.user.user_metadata?.["name"] as string | undefined) ??
-                (data.user.email ? data.user.email.split("@")[0] : undefined),
-            }
-          : null
-      );
+      const local = toUser(s.session?.user);
+      setUser(local);
+      if (!local) return;
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        if (!active) return;
+        // Netzwerkfehler: Sitzungsdaten behalten; nur eine echte Abmeldung übernehmen.
+        if (error && !data.user) {
+          if ((error as { status?: number }).status === 401 || (error as { status?: number }).status === 403) setUser(null);
+          return;
+        }
+        setUser(toUser(data.user));
+      } catch {
+        /* offline */
+      }
     };
     read();
     const { data: sub } = supabase.auth.onAuthStateChange(() => {

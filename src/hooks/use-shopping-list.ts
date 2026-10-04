@@ -18,6 +18,7 @@ import {
   migrateCloudLists,
 } from "../lib/lists.functions";
 import { useAuthUser, type AuthUser } from "./use-auth-user";
+import { renameListStore } from "./use-group-order";
 import type { MessageKey } from "../i18n/de";
 
 export type CategoryId =
@@ -786,6 +787,7 @@ function useCloudLists(
                 : l
             )
           );
+          renameListStore(id, String((res.list as CloudRow).id));
           if (!isTemplate) setActiveListId(String((res.list as CloudRow).id));
           scheduleReload();
         })
@@ -1072,6 +1074,7 @@ function useCloudLists(
                 : l
             )
           );
+          renameListStore(id, newId);
           setActiveListId(newId);
           scheduleReload();
         })
@@ -1353,6 +1356,7 @@ export function useShoppingList() {
       selfName: "Du",
       signedIn: false as const,
       hydrated: local.hydrated && localHydrated,
+      loading: user === undefined,
       addItem: localAddItem,
       addCatalogItem: localAddCatalogItem,
       toggleItem: localToggleItem,
@@ -1388,6 +1392,7 @@ export function useShoppingList() {
     selfName: cloud.selfName,
     signedIn: true as const,
     hydrated: cloud.hydrated && localHydrated,
+    loading: false,
     addItem: cloud.addItem,
     addCatalogItem: cloud.addCatalogItem,
     toggleItem: cloud.toggleItem,
