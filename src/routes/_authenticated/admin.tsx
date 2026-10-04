@@ -4,7 +4,7 @@ import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup } from "@/lib/admin.functions";
@@ -15,9 +15,8 @@ const T = (key: MessageKey, vars?: Record<string, string | number>) => translate
 import { getUnits } from "@/lib/units";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { CuisineAdmin, ProductCuisinePicker } from "@/components/cuisine-admin";
-import { RecipeTraitsAdmin } from "@/components/recipe-traits-admin";
-import { RecipeAdmin, RecipeAssignAdmin } from "@/components/recipe-admin";
+import { ProductCuisinePicker } from "@/components/cuisine-admin";
+
 import { DeptAliasEditor, KEY as DEPT_ALIAS_KEY, loadAliases as loadDeptAliases } from "@/components/dept-alias-admin";
 import { ProductBrandEditor } from "@/components/brand-admin";
 import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
