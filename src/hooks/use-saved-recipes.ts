@@ -134,10 +134,6 @@ export async function saveToFolder(userId: string, recipeId: string, folderId: s
   if (error) throw error;
   await refreshCollections();
 }
-export async function moveSaved(saveId: string, folderId: string) {
-  await supabase.from("recipe_saves").update({ folder_id: folderId }).eq("id", saveId);
-  await refreshCollections();
-}
 export async function deleteSaved(saveId: string) {
   await supabase.from("recipe_saves").delete().eq("id", saveId);
   await refreshCollections();

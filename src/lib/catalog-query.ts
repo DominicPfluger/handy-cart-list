@@ -8,10 +8,6 @@ import { usePersonalVariants } from "../hooks/use-personal-variants";
 import { useAllMarkets } from "../hooks/use-all-markets";
 import { useMarket } from "../hooks/use-market";
 
-/** Ländercode des Marktes aus der Sprachvariante (de-CH → CH). */
-export function marketOf(locale: string): string {
-  return locale.split("-")[1] ?? "";
-}
 
 export function flagOf(market: string): string {
   return market.length === 2 ? String.fromCodePoint(...[...market.toUpperCase()].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65)) : "";

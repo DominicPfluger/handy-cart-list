@@ -70,38 +70,3 @@ export function ProductAliasEditor({ product, prods, options }: { product: Prod;
   );
 }
 
-/** In der Produktliste einer Kategorie: Alias-Produkte. */
-export function ProductAliasRows({ departmentId, prods, onEdit }: { departmentId: string; prods: Prod[]; onEdit: (id: string) => void }) {
-  const { data } = useQuery({ queryKey: KEY, queryFn: loadAliases });
-  const { busy, run } = useActions();
-  const rows = (data ?? []).filter((a) => a.department_id === departmentId).sort((a, b) => a.sort_order - b.sort_order);
-  if (!rows.length) return null;
-  const byId = new Map(prods.map((p) => [p.id, p]));
-  const swap = (i: number, j: number) => {
-    const a = rows[i], b = rows[j];
-    if (!a || !b) return;
-    run(async () => {
-      const r1 = await supabase.from("product_aliases").update({ sort_order: b.sort_order === a.sort_order ? a.sort_order + (j > i ? 1 : -1) : b.sort_order }).eq("id", a.id);
-      if (r1.error) return r1;
-      return supabase.from("product_aliases").update({ sort_order: a.sort_order }).eq("id", b.id);
-    });
-  };
-  return (
-    <section className="space-y-1">
-      <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{T("palias.rows")}</h2>
-      {rows.map((a, i) => {
-        const p = byId.get(a.product_id);
-        return (
-          <div key={a.id} className="flex items-center gap-2 rounded-xl border border-dashed border-border bg-card px-3 py-2 text-sm">
-            <button type="button" onClick={() => onEdit(a.product_id)} className="min-w-0 flex-1 truncate text-left text-foreground">
-              {p?.emoji ?? "📦"} {p?.name ?? "?"} <span className="text-[10px] text-muted-foreground">· {T("adm.alias")}</span>
-            </button>
-            <button type="button" disabled={busy || i === 0} onClick={() => swap(i, i - 1)} className="px-1 text-muted-foreground disabled:opacity-30">▲</button>
-            <button type="button" disabled={busy || i === rows.length - 1} onClick={() => swap(i, i + 1)} className="px-1 text-muted-foreground disabled:opacity-30">▼</button>
-            <button type="button" disabled={busy} onClick={() => { if (window.confirm(T("adm.aliasRemove", { name: p?.name ?? "" }))) run(() => supabase.from("product_aliases").delete().eq("id", a.id)); }} className="px-1 text-destructive" aria-label={T("adm.delete")}>✕</button>
-          </div>
-        );
-      })}
-    </section>
-  );
-}
