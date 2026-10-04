@@ -124,6 +124,18 @@ export function useGroupOrder() {
   return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor, listStores, setListStore };
 }
 
+/** Überträgt die Laden-Zuordnung, wenn eine Liste ihre endgültige Kennung erhält. */
+export function renameListStore(fromId: string, toId: string) {
+  if (fromId === toId) return;
+  const cur = readListStores();
+  const store = cur[fromId];
+  if (!store) return;
+  delete cur[fromId];
+  cur[toId] = store;
+  try { localStorage.setItem(LIST_STORES_KEY, JSON.stringify(cur)); } catch { /* ignore */ }
+  emit();
+}
+
 /** Entfernt Gruppen, die im aktiven Geschäft ausgeblendet sind. */
 export function filterHidden<T extends { key: string }>(groups: T[], hidden: string[]): T[] {
   if (hidden.length === 0) return groups;

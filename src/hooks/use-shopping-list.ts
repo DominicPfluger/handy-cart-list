@@ -18,6 +18,7 @@ import {
   migrateCloudLists,
 } from "../lib/lists.functions";
 import { useAuthUser, type AuthUser } from "./use-auth-user";
+import { renameListStore } from "./use-group-order";
 import type { MessageKey } from "../i18n/de";
 
 export type CategoryId =
@@ -1074,6 +1075,7 @@ function useCloudLists(
                 : l
             )
           );
+          renameListStore(id, newId);
           setActiveListId(newId);
           scheduleReload();
         })
