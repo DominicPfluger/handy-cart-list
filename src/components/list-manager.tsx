@@ -22,6 +22,7 @@ import type { ShoppingList } from "../hooks/use-shopping-list";
 import { PlusIcon, TrashIcon, CheckIcon } from "./icons";
 import { getLocale, translate, useT } from "../i18n";
 import { useStores } from "../hooks/use-stores";
+import { useGroupOrder } from "../hooks/use-group-order";
 
 interface Props {
   open: boolean;
@@ -219,7 +220,17 @@ export function ListManager(props: Props) {
   const { t } = useT();
   const [newName, setNewName] = useState("");
   const [newStore, setNewStore] = useState("default");
+  const [newStoreName, setNewStoreName] = useState("");
   const stores = useStores();
+  const { addCustomStore } = useGroupOrder();
+
+  const addStore = () => {
+    const name = newStoreName.trim();
+    if (!name) return;
+    const id = addCustomStore(name);
+    setNewStore(id);
+    setNewStoreName("");
+  };
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 120, tolerance: 6 } }),
@@ -289,8 +300,27 @@ export function ListManager(props: Props) {
             <span className="shrink-0">{t("store.label")}</span>
             <select value={newStore} onChange={(e) => setNewStore(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs text-foreground outline-none focus:border-primary">
               {stores.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+              <option value="__new__">{t("store.new")}</option>
             </select>
           </label>
+          {newStore === "__new__" && (
+            <div className="flex items-center gap-2">
+              <input
+                value={newStoreName}
+                onChange={(e) => setNewStoreName(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && addStore()}
+                placeholder={t("store.newPlaceholder")}
+                className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs outline-none focus:border-primary"
+              />
+              <button
+                onClick={addStore}
+                disabled={!newStoreName.trim()}
+                className="shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50"
+              >
+                {t("store.add")}
+              </button>
+            </div>
+          )}
           </div>
           <button
             onClick={create}
