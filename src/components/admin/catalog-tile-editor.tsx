@@ -116,6 +116,15 @@ export function CatalogTileEditor(p: {
   const [variantAdd, setVariantAdd] = useState<TileProd | null>(null);
   const [copyOpen, setCopyOpen] = useState(false);
   const moved = useRef(false);
+  const qc = useQueryClient();
+  /** Speichert Standard-Menge/-Einheit direkt aus der Zeile. */
+  const saveDefaults = (id: string, patch: { default_quantity?: number; default_unit?: string }) => {
+    void p.run(async () => {
+      await p.must(supabase.from("products").update(patch as never).eq("id", id));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
+  const QTY_OPTIONS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 50, 100, 250, 500];
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
   const [genAllDlg, setGenAllDlg] = useState<{ all: boolean; hint: string; opts: AiImageOpts } | null>(null);
@@ -535,6 +544,31 @@ export function CatalogTileEditor(p: {
                     {price ? ` · ${formatRefPrice(price)}` : ""}
                   </div>
                 </button>
+                <select
+                  value={String(x.default_quantity)}
+                  disabled={!editMode || Boolean(x.alias_id)}
+                  aria-label={T("adm.defaultQty")}
+                  title={T("adm.defaultQty")}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={(e) => { const v = Number(e.target.value); if (v !== x.default_quantity) saveDefaults(pid, { default_quantity: v }); }}
+                  className="h-7 w-[4.2rem] shrink-0 rounded-lg border border-input bg-background px-1 text-xs text-foreground"
+                >
+                  {(QTY_OPTIONS.includes(x.default_quantity) ? QTY_OPTIONS : [...QTY_OPTIONS, x.default_quantity].sort((a, b) => a - b)).map((q) => (
+                    <option key={q} value={String(q)}>{q}</option>
+                  ))}
+                </select>
+                <select
+                  value={x.default_unit}
+                  disabled={!editMode || Boolean(x.alias_id)}
+                  aria-label={T("adm.defaultUnit")}
+                  title={T("adm.defaultUnit")}
+                  onClick={(e) => e.stopPropagation()}
+                  onChange={(e) => { const v = e.target.value; if (v !== x.default_unit) saveDefaults(pid, { default_unit: v }); }}
+                  className="h-7 w-[5.5rem] shrink-0 rounded-lg border border-input bg-background px-1 text-xs text-foreground"
+                >
+                  {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+                  {!getUnits(getLocale()).some((u) => u.id === x.default_unit) && <option value={x.default_unit}>{x.default_unit}</option>}
+                </select>
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   <Pencil className="h-3.5 w-3.5" />
                 </Button>
