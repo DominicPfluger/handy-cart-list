@@ -29,7 +29,6 @@ import { Route as VerlaufRouteImport } from './routes/verlauf'
 import { Route as VorratRouteImport } from './routes/vorrat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedFeedbackAdminRouteImport } from './routes/_authenticated/feedback-admin'
-import { Route as AuthenticatedVorleseTexteRouteImport } from './routes/_authenticated/vorlese-texte'
 import { Route as ProduktIdRouteImport } from './routes/produkt.$id'
 import { Route as RezeptSlugRouteImport } from './routes/rezept.$slug'
 import { Route as RezepteIndexRouteImport } from './routes/rezepte.index'
@@ -140,12 +139,6 @@ const AuthenticatedFeedbackAdminRoute =
     path: '/feedback-admin',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
-const AuthenticatedVorleseTexteRoute =
-  AuthenticatedVorleseTexteRouteImport.update({
-    id: '/vorlese-texte',
-    path: '/vorlese-texte',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any)
 const ProduktIdRoute = ProduktIdRouteImport.update({
   id: '/produkt/$id',
   path: '/produkt/$id',
@@ -213,7 +206,6 @@ export interface FileRoutesByFullPath {
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/feedback-admin': typeof AuthenticatedFeedbackAdminRoute
-  '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
   '/produkt/$id': typeof ProduktIdRoute
   '/rezept/$slug': typeof RezeptSlugRoute
   '/rezepte/generator': typeof RezepteGeneratorRoute
@@ -243,7 +235,6 @@ export interface FileRoutesByTo {
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/feedback-admin': typeof AuthenticatedFeedbackAdminRoute
-  '/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
   '/produkt/$id': typeof ProduktIdRoute
   '/rezept/$slug': typeof RezeptSlugRoute
   '/rezepte/generator': typeof RezepteGeneratorRoute
@@ -276,7 +267,6 @@ export interface FileRoutesById {
   '/vorrat': typeof VorratRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/_authenticated/feedback-admin': typeof AuthenticatedFeedbackAdminRoute
-  '/_authenticated/vorlese-texte': typeof AuthenticatedVorleseTexteRoute
   '/produkt/$id': typeof ProduktIdRoute
   '/rezept/$slug': typeof RezeptSlugRoute
   '/rezepte/generator': typeof RezepteGeneratorRoute
@@ -309,7 +299,6 @@ export interface FileRouteTypes {
     | '/vorrat'
     | '/admin'
     | '/feedback-admin'
-    | '/vorlese-texte'
     | '/produkt/$id'
     | '/rezept/$slug'
     | '/rezepte/generator'
@@ -339,7 +328,6 @@ export interface FileRouteTypes {
     | '/vorrat'
     | '/admin'
     | '/feedback-admin'
-    | '/vorlese-texte'
     | '/produkt/$id'
     | '/rezept/$slug'
     | '/rezepte/generator'
@@ -371,7 +359,6 @@ export interface FileRouteTypes {
     | '/vorrat'
     | '/_authenticated/admin'
     | '/_authenticated/feedback-admin'
-    | '/_authenticated/vorlese-texte'
     | '/produkt/$id'
     | '/rezept/$slug'
     | '/rezepte/generator'
@@ -550,13 +537,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFeedbackAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/vorlese-texte': {
-      id: '/_authenticated/vorlese-texte'
-      path: '/vorlese-texte'
-      fullPath: '/vorlese-texte'
-      preLoaderRoute: typeof AuthenticatedVorleseTexteRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/produkt/$id': {
       id: '/produkt/$id'
       path: '/produkt/$id'
@@ -626,13 +606,11 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
   AuthenticatedFeedbackAdminRoute: typeof AuthenticatedFeedbackAdminRoute
-  AuthenticatedVorleseTexteRoute: typeof AuthenticatedVorleseTexteRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRoute: AuthenticatedAdminRoute,
   AuthenticatedFeedbackAdminRoute: AuthenticatedFeedbackAdminRoute,
-  AuthenticatedVorleseTexteRoute: AuthenticatedVorleseTexteRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

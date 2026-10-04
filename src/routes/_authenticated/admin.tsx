@@ -1,6 +1,6 @@
 import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
@@ -41,6 +41,7 @@ import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath } from "@/lib/product-icon";
 import { LocaleAdminPanel } from "@/components/admin/locale-admin-panel";
 import { CatalogHealthPanel } from "@/components/admin/catalog-health-panel";
+import { SpeechTextsPanel } from "@/components/admin/speech-texts-panel";
 import { useReferencePrices } from "@/hooks/use-reference-prices";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -121,7 +122,7 @@ function AdminPage() {
   const [bulkTree, setBulkTree] = useState(false);
   const [sortDlg, setSortDlg] = useState<string | null>(null);
   /** Aktiver Admin-Bereich (Tabs). */
-  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "more">("catalog");
+  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "speech" | "more">("catalog");
   const [preview, setPreview] = useState(false);
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: true }));
@@ -729,16 +730,12 @@ function AdminPage() {
       </div>
 
       <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["cuisines", "adm.tab.cuisines"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["health", "adm.tab.health"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["recipes", "adm.tab.recipes"], ["cuisines", "adm.tab.cuisines"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["media", "adm.tab.media"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["health", "adm.tab.health"], ["speech", "stx.title"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
-            {T(key)}
+            {id === "speech" ? "🔊 " : ""}{T(key)}
           </button>
         ))}
-        <Link to="/vorlese-texte" role="tab" aria-selected={false}
-          className="whitespace-nowrap rounded-full border border-border bg-card px-3.5 py-1.5 text-sm font-semibold text-muted-foreground transition-colors">
-          🔊 {T("stx.title")}
-        </Link>
         <button type="button" onClick={() => setPreview(true)}
           className="whitespace-nowrap rounded-full border border-primary px-3.5 py-1.5 text-sm font-semibold text-primary">
           👁 {T("tile.preview")}
@@ -923,6 +920,7 @@ function AdminPage() {
       {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
       {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={(id) => setSel({ kind: "product", id })}
         onOpenDept={(id) => { setSearch(""); setSel(null); setCur(id); setTab("catalog"); }} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
+      {tab === "speech" && <SpeechTextsPanel />}
 
       {tab === "markets" && (<div className="space-y-4">
         <MarketsManager />

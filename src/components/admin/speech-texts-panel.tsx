@@ -1,4 +1,3 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -12,26 +11,11 @@ import {
   SPEECH_KEYS, defaultSpeechText, fillSpeech, speechTextsQueryKey, useSpeechTexts, type SpeechKey,
 } from "@/lib/speech-texts";
 
-export const Route = createFileRoute("/_authenticated/vorlese-texte")({
-  ssr: false,
-  head: () => ({
-    meta: [
-      { title: "Shoppi — Vorlese-Texte verwalten" },
-      { name: "description", content: "Ansagetexte für das Vorlesen der Einkaufslisten pro Sprache anpassen." },
-      { property: "og:title", content: "Shoppi — Vorlese-Texte verwalten" },
-      { property: "og:description", content: "Ansagetexte für das Vorlesen der Einkaufslisten anpassen." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
-  component: SpeechTextsPage,
-});
-
 const LABEL: Record<SpeechKey, "stx.intro" | "stx.empty" | "stx.group" | "stx.outro"> = {
   intro: "stx.intro", empty: "stx.empty", group: "stx.group", outro: "stx.outro",
 };
 
-function SpeechTextsPage() {
+export function SpeechTextsPanel() {
   const { t } = useT();
   const qc = useQueryClient();
   const [speakLocale] = useSpeakLocale();
@@ -84,9 +68,7 @@ function SpeechTextsPage() {
   };
 
   return (
-    <div className="space-y-4 pb-10">
-      <Link to="/admin" className="text-sm text-primary">← {t("adm.title")}</Link>
-      <h1 className="text-2xl font-bold text-foreground">🔊 {t("stx.title")}</h1>
+    <div className="space-y-4">
       <p className="text-sm text-muted-foreground">{t("stx.hint")}</p>
       <p className="rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">{t("stx.placeholders")}: {"{name}"}, {"{count}"}, {"{kategorie}"}, {"{artikel}"}</p>
 
@@ -98,24 +80,23 @@ function SpeechTextsPage() {
           </select>
         </label>
 
-
-      {SPEECH_KEYS.map((k) => (
-        <div key={k} className="space-y-1">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-semibold text-foreground">{t(LABEL[k])}</span>
-            {draft[k] && (
-              <button type="button" onClick={() => setDraft((d) => ({ ...d, [k]: "" }))} className="text-xs text-primary">{t("stx.reset")}</button>
-            )}
+        {SPEECH_KEYS.map((k) => (
+          <div key={k} className="space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-foreground">{t(LABEL[k])}</span>
+              {draft[k] && (
+                <button type="button" onClick={() => setDraft((d) => ({ ...d, [k]: "" }))} className="text-xs text-primary">{t("stx.reset")}</button>
+              )}
+            </div>
+            <textarea
+              value={draft[k]}
+              onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.value }))}
+              placeholder={defaultSpeechText(locale, k) || t("stx.optional")}
+              rows={2}
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+            />
           </div>
-          <textarea
-            value={draft[k]}
-            onChange={(e) => setDraft((d) => ({ ...d, [k]: e.target.value }))}
-            placeholder={defaultSpeechText(locale, k) || t("stx.optional")}
-            rows={2}
-            className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
-          />
-        </div>
-      ))}
+        ))}
 
         <div className="flex gap-2">
           <Button variant="outline" onClick={preview}>▶ {t("stx.preview")}</Button>

@@ -174,10 +174,7 @@ function RootComponent() {
       .catch(() => {});
   }, []);
 
-  const isAdmin = useRouterState({ select: (s) => {
-    const p = s.location.pathname;
-    return p.startsWith("/admin") || p.startsWith("/vorlese-texte");
-  }});
+  const isAdmin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") });
   return (
     <QueryClientProvider client={queryClient}>
       <div className={`relative mx-auto min-h-screen w-full bg-background ${isAdmin ? "max-w-[440px] md:max-w-5xl xl:max-w-7xl md:px-4" : "max-w-[440px]"}`}>
