@@ -678,6 +678,8 @@ export const de = {
   "adm.noImg.pick": "Bild aus Katalog wählen (ohne KI)",
   "adm.noImg.pickNone": "Keine passenden Bilder gefunden",
   "adm.noImg.picked": "Bild übernommen",
+  "adm.variantAi.all": "KI-Bilder für {n} Varianten ohne Bild",
+  "adm.variantAi.done": "{n} Variantenbilder erzeugt",
   "adm.noImg.modeOne": "Ein Bild erzeugen (Icon wird abgeleitet, 1 Credit)",
   "adm.noImg.modeTwo": "Zwei unterschiedliche Bilder erzeugen (2 Credits)",
   "adm.noImg.generate": "Bild erzeugen",
