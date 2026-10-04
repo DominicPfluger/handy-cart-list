@@ -1,5 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Fragment, useEffect, useState, useMemo } from "react";
+import { Fragment, useEffect, useState, useMemo, type ReactNode } from "react";
+import {
+  DndContext,
+  closestCenter,
+  PointerSensor,
+  TouchSensor,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { SplashScreen } from "../components/splash-screen";
 import { LandingPage } from "@/components/landing/landing-page";
 import { shouldShowLanding, markLandingDone } from "@/lib/landing";
@@ -40,6 +57,7 @@ import { currentMarket, useReferencePrices } from "../hooks/use-reference-prices
 import { priceForItem } from "../lib/item-price";
 import { PurchaseMode, type PurchaseItem } from "../components/purchase-mode";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
+import { useGroupOrder, applyGroupOrder } from "../hooks/use-group-order";
 
 const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
@@ -62,6 +80,40 @@ export const Route = createFileRoute("/")({
   component: LandingGate,
 });
 
+/** Ziehbarer Abteilungs-Block in der Listenansicht (Griff in der Kopfzeile). */
+function SortableGroup({ id, header, children }: { id: string; header: (handle: ReactNode) => ReactNode; children: ReactNode }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  const { t } = useT();
+  const grip = (
+    <button
+      {...attributes}
+      {...listeners}
+      className="grid h-6 w-6 shrink-0 cursor-grab touch-none place-items-center text-muted-foreground/60 active:cursor-grabbing"
+      aria-label={t("list.moveGroup")}
+      title={t("list.moveGroup")}
+    >
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+        {[6, 12, 18].map((y) => (
+          <g key={y}>
+            <circle cx={9} cy={y} r={1.6} />
+            <circle cx={15} cy={y} r={1.6} />
+          </g>
+        ))}
+      </svg>
+    </button>
+  );
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 20 : undefined }}
+      className={isDragging ? "relative rounded-2xl shadow-lg" : undefined}
+    >
+      {header(grip)}
+      {children}
+    </div>
+  );
+}
+
 function ListPage() {
   const {
     items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem,
@@ -71,6 +123,12 @@ function ListPage() {
   const [managerOpen, setManagerOpen] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   const [speakLocale] = useSpeakLocale();
+  const { order: groupOrder, save: saveGroupOrder } = useGroupOrder();
+  const groupSensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
   const data = useCatalog();
   const { t } = useT();
   const { data: referencePrices, isPending: pricesPending } = useReferencePrices();
@@ -162,7 +220,7 @@ function ListPage() {
       }
       group.items.push(it);
     }
-    const groups = [...map.values()].sort((a, b) => a.order - b.order);
+    const groups = applyGroupOrder([...map.values()].sort((a, b) => a.order - b.order), groupOrder);
     for (const group of groups) {
       group.items.sort((a, b) => {
         if (a.checked !== b.checked) return a.checked ? 1 : -1;
@@ -181,7 +239,7 @@ function ListPage() {
     }
     return groups;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items, productById, deptById]);
+  }, [items, productById, deptById, groupOrder]);
 
   /** Baum-Sortierschlüssel entlang des Kategoriebaums (analog Abteilungsansicht). */
   function segOf(it: ListItem) {
@@ -380,14 +438,31 @@ function ListPage() {
         </div>
       )}
 
+      <DndContext
+        sensors={groupSensors}
+        collisionDetection={closestCenter}
+        onDragEnd={(e: DragEndEvent) => {
+          const { active, over } = e;
+          if (!over || active.id === over.id) return;
+          const keys = grouped.map((g) => g.key);
+          const from = keys.indexOf(String(active.id));
+          const to = keys.indexOf(String(over.id));
+          if (from < 0 || to < 0) return;
+          keys.splice(to, 0, ...keys.splice(from, 1));
+          saveGroupOrder(keys);
+        }}
+      >
+      <SortableContext items={grouped.map((g) => g.key)} strategy={verticalListSortingStrategy}>
       <div className="space-y-6">
         {grouped.map((group) => {
           return (
-            <div key={group.key}>
+            <SortableGroup key={group.key} id={group.key} header={(grip) => (
               <div className="mb-2 flex items-center gap-1.5">
+                {grip}
                 <span className="grid h-6 w-6 shrink-0 place-items-center"><DepartmentIcon emoji={group.emoji} imageUrl={group.root?.imageUrl} imagePath={group.root?.imagePath} className="h-6 w-6 object-contain" symbolClassName="text-lg" /></span>
                 <h2 className="text-sm font-semibold text-foreground">{group.label}</h2>
               </div>
+            )}>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
                 {group.items.map((item, index) => {
                   const h = group.items.length > 5 && !item.checked && item.productId ? headingOf.get(item.productId) : undefined;
@@ -465,10 +540,12 @@ function ListPage() {
                   );
                 })}
               </div>
-            </div>
+            </SortableGroup>
           );
         })}
       </div>
+      </SortableContext>
+      </DndContext>
 
       {hydrated && items.length > 0 && (
         <div className="border-t border-border pt-4" aria-live="polite">

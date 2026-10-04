@@ -140,6 +140,7 @@ export const de = {
   "list.by": "von {name}",
   "list.uncheck": "Abwählen",
   "list.check": "Auswählen",
+  "list.moveGroup": "Abteilung verschieben",
   "list.options": "Optionen",
   "list.remove": "Entfernen",
   "list.clearChecked": "{n} abgehakte Artikel entfernen",
