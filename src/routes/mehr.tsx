@@ -414,7 +414,7 @@ function DietPreferenceRow() {
           </p>
         </div>
         <span className="shrink-0 text-muted-foreground" aria-hidden="true">{open ? "▴" : "▾"}</span>
-      </Button>
+      </button>
       {open && (
         <div className="border-t border-border px-4 py-3">
           <div className="flex flex-wrap gap-2">
