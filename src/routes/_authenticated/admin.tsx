@@ -853,6 +853,8 @@ function AdminPage() {
         </>
       ) : null}
 
+      </>)}
+
       {sortDlg && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setSortDlg(null)}>
           <div className="w-full max-w-xs rounded-2xl bg-card p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
@@ -908,8 +910,6 @@ function AdminPage() {
           onImageChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }}
         />
       )}
-
-      </>)}
 
       {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel section="images" depts={d?.depts ?? []} prods={d?.prods ?? []} onEdit={(id) => setSel({ kind: "product", id })} /></LoadingGate>}
       {tab === "prices" && <LoadingGate d={d}><div className="space-y-4"><CatalogMediaPanel section="prices" depts={d?.depts ?? []} />{d && <MarketDataImport prods={d.prods.map((p) => ({ id: p.id, name: p.name }))} />}</div></LoadingGate>}
