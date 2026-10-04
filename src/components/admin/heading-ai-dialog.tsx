@@ -19,7 +19,7 @@ export function HeadingAiDialog({ open, onOpenChange, path, products, hasHeading
   onApply: (groups: HeadingGroup[]) => Promise<void>;
   nm: (id: string, name: string) => string;
 }) {
-  const T = useT();
+  const { t: T } = useT();
   const suggest = useServerFn(suggestHeadings);
   const [keywords, setKeywords] = useState("");
   const [groups, setGroups] = useState<HeadingGroup[] | null>(null);
