@@ -26,7 +26,7 @@ export function missingVoice(locale: string): boolean {
 }
 
 /** Kürzel, die die deutsche Sprachausgabe ausschreiben soll. */
-function expandAbbreviations(text: string, locale: string): string {
+export function expandAbbreviations(text: string, locale: string): string {
   if (!locale.toLowerCase().startsWith("de")) return text;
   return text
     .replace(/\bStk\.?/g, "Stück")

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useT } from "../i18n";
 import { useSpeakRate } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
-import { speakSentences } from "./speak-list-button";
+import { expandAbbreviations, findVoice } from "./speak-list-button";
 import { CheckIcon } from "./icons";
 import { CachedImage } from "./catalog-icon";
 
