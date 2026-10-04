@@ -10,7 +10,7 @@ type Actions = {
   onOpen: (id: string) => void;
   onSaveTemplate?: ((id: string) => void) | undefined;
   onDelete: (id: string) => void;
-  t: (k: string) => string;
+  t: (k: "lm.move" | "lm.saveAsTemplate" | "lm.delete") => string;
 };
 
 /** Sortierbare Zeilen der Listen-Übersicht (Listen bzw. Vorlagen). */
