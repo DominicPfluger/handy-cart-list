@@ -1,6 +1,6 @@
 import { useCallback, useSyncExternalStore } from "react";
 import { de, type MessageKey } from "./de";
-import messages from "./messages.json";
+
 
 export const LOCALES = [
   { id: "de-DE", label: "Deutsch (Deutschland)", flag: "🇩🇪" },
