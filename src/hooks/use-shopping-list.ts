@@ -565,7 +565,7 @@ function useCloudLists(
         return first ? first.id : "";
       });
 
-      // letzten Stand gerätelocal sichern, damit die Liste auch offline erscheint
+      // letzten Stand gerätelokal sichern, damit die Liste auch offline erscheint
       try {
         localStorage.setItem(SNAPSHOT_KEY, JSON.stringify({ lists: mapped, members: [...memberNames], selfName: res.displayName }));
       } catch { /* ignore */ }
