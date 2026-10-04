@@ -122,6 +122,8 @@ function ListPage() {
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
+  // Übersicht zuerst: erst nach Auswahl einer Liste wird deren Inhalt geladen.
+  const [openListId, setOpenListId] = useState<string | null>(null);
   const [speakLocale] = useSpeakLocale();
   const { all: groupOrderAll, saveFor: saveGroupOrderFor, hiddenAll: hiddenGroupsAll, listStores, setListStore } = useGroupOrder();
   const activeStoreId = listStores[activeList.id] ?? "default";
