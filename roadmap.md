@@ -1,6 +1,5 @@
 # Roadmap
 
-- [x] Sprachausgabe in der Listenansicht entfernt (Vorlese-Button), nur im Kaufmodus behalten
-- [x] Kaufmodus: Sprachausgabe ein-/ausschaltbar (Lautsprecher-Schalter in der Kopfzeile, geräte-lokal gespeichert)
-- [x] Einkaufsliste: Symbole enger, Reihenfolge Kaufmodus, Teilen, Herunterladen
-- [x] KI-Bilder für Varianten (Optionen-Dialog + alle auf einmal)
+## Offen
+- [ ] Admin → Bilder: Varianten unterhalb des Produkteintrags aufklappbar anzeigen
+- [ ] Admin → Bilder: Bildergalerie der gewählten Kategorie in eigenem Container unterhalb von „Produkte ohne Bild"
