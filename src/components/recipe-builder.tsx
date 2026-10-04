@@ -83,7 +83,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const summaryRef = useRef<HTMLDivElement>(null);
-  const [cuisineOpen, setCuisineOpen] = useState(false);
+  const [cuisineOpen, setCuisineOpen] = useState(true);
   const PAGE = 10;
 
   const tpl = templates.find((x) => x.id === tplId) ?? null;
