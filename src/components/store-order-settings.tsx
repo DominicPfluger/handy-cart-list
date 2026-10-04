@@ -4,9 +4,42 @@ import { SortableContext, verticalListSortingStrategy, useSortable, sortableKeyb
 import { CSS } from "@dnd-kit/utilities";
 import { useCatalog } from "../lib/catalog-query";
 import { useGroupOrder, applyGroupOrder, filterHidden } from "../hooks/use-group-order";
-import { useStores } from "../hooks/use-stores";
+import { storeLabel, useStores } from "../hooks/use-stores";
 import { useT } from "../i18n";
 import { DepartmentIcon } from "./catalog-icon";
+
+const STORE_EMOJIS = ["🏪", "🛒", "🧺", "🏬", "🥖", "🐄", "🌱"];
+
+/** Icon- und Namensfeld mit Emoji-Vorschlägen (Anlegen/Bearbeiten eines eigenen Ladens). */
+function StoreFields({ name, onName, emoji, onEmoji }: { name: string; onName: (v: string) => void; emoji: string; onEmoji: (v: string) => void }) {
+  const { t } = useT();
+  return (
+    <div className="min-w-0 flex-1 space-y-1.5">
+      <div className="flex items-center gap-2">
+        <input
+          value={emoji}
+          onChange={(e) => onEmoji(e.target.value)}
+          maxLength={4}
+          aria-label={t("store.icon")}
+          placeholder="🏪"
+          className="w-11 shrink-0 rounded-lg border border-input bg-background px-2 py-1.5 text-center text-sm outline-none focus:border-primary"
+        />
+        <input
+          value={name}
+          onChange={(e) => onName(e.target.value)}
+          aria-label={t("store.nameLabel")}
+          placeholder={t("store.newName")}
+          className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm outline-none focus:border-primary"
+        />
+      </div>
+      <div className="flex gap-1">
+        {STORE_EMOJIS.map((e) => (
+          <button key={e} type="button" onClick={() => onEmoji(e)} className={`grid h-7 w-7 place-items-center rounded-lg border text-sm ${emoji === e ? "border-primary bg-primary-soft/60" : "border-border"}`} aria-label={`${t("store.icon")} ${e}`}>{e}</button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function Row({ id, label, emoji, imageUrl, imagePath, onHide }: { id: string; label: string; emoji: string | null; imageUrl?: string | null | undefined; imagePath?: string | null | undefined; onHide: () => void }) {
   const { t } = useT();
@@ -28,9 +61,15 @@ export function StoreOrderSettings() {
   const { t } = useT();
   const catalog = useCatalog();
   const stores = useStores();
-  const { all, store, setStore, saveFor, resetFor, addCustomStore, removeCustomStore, hiddenAll, hideFor, unhideFor } = useGroupOrder();
+  const { all, store, setStore, saveFor, resetFor, addCustomStore, updateCustomStore, removeCustomStore, hiddenAll, hideFor, unhideFor } = useGroupOrder();
   const [edit, setEdit] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newEmoji, setNewEmoji] = useState("");
+  const [editStore, setEditStore] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editEmoji, setEditEmoji] = useState("");
   const sel = edit ?? store;
   const selected = stores.find((s) => s.id === sel) ?? stores[0]!;
   const sensors = useSensors(
@@ -47,15 +86,32 @@ export function StoreOrderSettings() {
 
   const choose = (v: string) => {
     if (v === "__new") {
-      const name = window.prompt(t("store.newName"))?.trim();
-      if (!name) return;
-      const id = addCustomStore(name);
-      setEdit(id);
-      setStore(id);
+      setCreating(true);
+      setNewName("");
+      setNewEmoji("");
       return;
     }
+    setCreating(false);
+    setEditStore(false);
     setEdit(v);
     setStore(v);
+  };
+
+  const submitNew = () => {
+    const n = newName.trim();
+    if (!n) return;
+    const id = addCustomStore(n, newEmoji.trim() || undefined);
+    setCreating(false);
+    setNewName("");
+    setNewEmoji("");
+    setEdit(id);
+    setStore(id);
+  };
+
+  const submitEdit = () => {
+    if (!selected.custom) return;
+    updateCustomStore(selected.id, { name: editName, emoji: editEmoji.trim() || null });
+    setEditStore(false);
   };
 
   return (
@@ -76,14 +132,35 @@ export function StoreOrderSettings() {
       {open && (
         <div className="space-y-3 border-t border-border px-4 py-3.5">
           <div className="flex gap-2">
-            <select value={selected.id} onChange={(e) => choose(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary">
-              {stores.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            <select value={creating ? "__new" : selected.id} onChange={(e) => choose(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary">
+              {stores.map((s) => <option key={s.id} value={s.id}>{storeLabel(s)}</option>)}
               <option value="__new">{t("store.addCustom")}</option>
             </select>
             {selected.custom && (
-              <button type="button" onClick={() => { removeCustomStore(selected.id); setEdit("default"); }} className="rounded-lg border border-border px-2 text-xs text-destructive">{t("store.remove")}</button>
+              <>
+                <button type="button" aria-label={t("store.edit")} title={t("store.edit")} onClick={() => { setEditStore(true); setEditName(selected.name); setEditEmoji(selected.emoji ?? ""); setCreating(false); }} className="rounded-lg border border-border px-2 text-xs">✎</button>
+                <button type="button" onClick={() => { removeCustomStore(selected.id); setEditStore(false); setEdit("default"); }} className="rounded-lg border border-border px-2 text-xs text-destructive">{t("store.remove")}</button>
+              </>
             )}
           </div>
+          {creating && (
+            <div className="flex items-start gap-2">
+              <StoreFields name={newName} onName={setNewName} emoji={newEmoji} onEmoji={setNewEmoji} />
+              <div className="flex shrink-0 flex-col gap-1">
+                <button type="button" onClick={submitNew} disabled={!newName.trim()} className="rounded-lg bg-primary px-2 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50">{t("store.add")}</button>
+                <button type="button" onClick={() => { setCreating(false); setNewName(""); setNewEmoji(""); }} className="rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground">{t("common.cancel")}</button>
+              </div>
+            </div>
+          )}
+          {editStore && selected.custom && (
+            <div className="flex items-start gap-2">
+              <StoreFields name={editName} onName={setEditName} emoji={editEmoji} onEmoji={setEditEmoji} />
+              <div className="flex shrink-0 flex-col gap-1">
+                <button type="button" onClick={submitEdit} className="rounded-lg bg-primary px-2 py-1.5 text-xs font-semibold text-primary-foreground">{t("common.save")}</button>
+                <button type="button" onClick={() => setEditStore(false)} className="rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground">{t("common.cancel")}</button>
+              </div>
+            </div>
+          )}
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e: DragEndEvent) => {
             const { active, over } = e;
             if (!over || active.id === over.id) return;
@@ -102,7 +179,7 @@ export function StoreOrderSettings() {
           </DndContext>
           {hiddenRoots.length > 0 && (
             <div>
-              <p className="mb-1 text-xs font-semibold text-muted-foreground">{t("store.hiddenTitle")} · {selected.name}</p>
+              <p className="mb-1 text-xs font-semibold text-muted-foreground">{t("store.hiddenTitle")} · {storeLabel(selected)}</p>
               <ul className="divide-y divide-border rounded-xl border border-border">
                 {hiddenRoots.map((r) => (
                   <li key={r.key} className="flex items-center gap-2 bg-card px-3 py-2">

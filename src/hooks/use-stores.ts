@@ -4,9 +4,9 @@ import { useMarket } from "./use-market";
 import { useGroupOrder } from "./use-group-order";
 import { useT } from "../i18n";
 
-export type StoreOption = { id: string; name: string; custom?: boolean };
+export type StoreOption = { id: string; name: string; emoji?: string | undefined; custom?: boolean };
 
-/** Läden des gewählten Marktes (Admin-Liste) + eigene Läden + „Standard". */
+/** Läden des gewählten Marktes (Admin-Liste) + eigene Läden + „Standard" — Name und Icon getrennt. */
 export function useStores(): StoreOption[] {
   const market = useMarket();
   const { t } = useT();
@@ -20,8 +20,13 @@ export function useStores(): StoreOption[] {
     staleTime: 10 * 60_000,
   });
   return [
-    { id: "default", name: t("store.default") },
-    ...(data ?? []).map((s) => ({ id: s.id, name: `${s.emoji ? s.emoji + " " : ""}${s.name}` })),
-    ...customStores.map((s) => ({ ...s, custom: true })),
+    { id: "default", name: t("store.default"), emoji: "🏪" },
+    ...(data ?? []).map((s) => ({ id: s.id, name: s.name, emoji: s.emoji ?? undefined })),
+    ...customStores.map((s) => ({ id: s.id, name: s.name, emoji: s.emoji, custom: true as const })),
   ];
+}
+
+/** „Icon Name" für Dropdown-Optionen und Klartext-Anzeigen. */
+export function storeLabel(s: { name: string; emoji?: string | undefined }): string {
+  return s.emoji ? `${s.emoji} ${s.name}` : s.name;
 }
