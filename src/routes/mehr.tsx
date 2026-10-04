@@ -5,7 +5,6 @@ import { toast } from "sonner";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { useCheckedDisplay } from "../hooks/use-checked-display";
 import {
-  PeopleIcon,
   BellIcon,
   GearIcon,
   LeafIcon,
@@ -93,12 +92,10 @@ function MorePage() {
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("nav.more")}</h1>
       </div>
 
+      <SectionHeader label={t("more.together")} />
+
       {/* Gemeinsam section */}
       <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
-        <div className="flex items-center gap-2">
-          <PeopleIcon className="h-5 w-5 text-primary" />
-          <h2 className="text-base font-semibold text-foreground">{t("more.together")}</h2>
-        </div>
 
         {/* Member bubbles */}
         <div className="flex flex-wrap gap-3">
@@ -125,7 +122,9 @@ function MorePage() {
         </button>
       </section>
 
-      {/* Ernährungsform — unterhalb von „Gemeinsam“ */}
+      <SectionHeader label={t("more.group.shopping")} />
+
+      {/* Ernährungsform */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <DietPreferenceRow />
       </section>
@@ -134,7 +133,9 @@ function MorePage() {
         <CategoryOrderSettings />
       </section>
 
-      {/* Sprache & Region, Markt, Alle Märkte anzeigen — unterhalb von „Abteilungs-Reihenfolge“ */}
+      <SectionHeader label={t("more.group.app")} />
+
+      {/* Sprache & Region, Markt, Alle Märkte anzeigen, App aktualisieren */}
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <label className="flex w-full items-center gap-3 px-4 py-3.5">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
@@ -201,8 +202,19 @@ function MorePage() {
           </div>
           <span className="text-muted-foreground">›</span>
         </Link>
-        <InstallAppRow />
-        <NotificationSettingsRow />
+        <button
+          type="button"
+          className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted"
+        >
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+            <LeafIcon className="h-5 w-5" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground">{t("more.sustainable")}</p>
+            <p className="truncate text-xs text-muted-foreground">{t("more.sustainableSub")}</p>
+          </div>
+          <span className="text-muted-foreground">›</span>
+        </button>
         <div>
           <button
             type="button"
@@ -249,31 +261,9 @@ function MorePage() {
           )}
         </div>
       </section>
-
-
-
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
-        {[
-          { Icon: LeafIcon, label: t("more.sustainable"), sub: t("more.sustainableSub") },
-        ].map((row) => (
-          <button
-            key={row.label}
-            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted"
-          >
-            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
-              <row.Icon className="h-5 w-5" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-foreground">{row.label}</p>
-              <p className="truncate text-xs text-muted-foreground">{row.sub}</p>
-            </div>
-            <span className="text-muted-foreground">›</span>
-          </button>
-        ))}
-      </section>
-
-      {/* Darstellung & Vorlesen */}
-      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
+        <InstallAppRow />
+        <NotificationSettingsRow />
         <IconSetRow />
         <PreloadImagesRow />
         <FontSizeRow />
@@ -325,6 +315,12 @@ function MorePage() {
         </nav>
       </footer>
     </div>
+  );
+}
+
+function SectionHeader({ label }: { label: string }) {
+  return (
+    <h2 className="px-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</h2>
   );
 }
 

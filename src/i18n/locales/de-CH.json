@@ -4,6 +4,8 @@
   "splash.loading": "Shoppi lädt …",
   "rename.deleteCatalog": "Aus dem Katalog entfernen",
   "more.hiddenProducts": "Ausgeblendete Produkte & Kategorien",
+  "more.group.shopping": "Einkaufen",
+  "more.group.app": "App",
   "more.hiddenProductsHint": "Diese Einträge sind nur auf diesem Gerät ausgeblendet.",
   "more.hiddenProductsEmpty": "Keine ausgeblendeten Produkte.",
   "heading.add": "Überschrift hinzufügen",
