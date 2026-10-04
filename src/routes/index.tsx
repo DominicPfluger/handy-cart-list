@@ -90,6 +90,7 @@ function ListPage() {
   const groupOrder = pick(groupOrderAll[activeStoreId]) ?? pick(groupOrderAll[settingsStore]) ?? groupOrderAll["default"] ?? [];
   const hiddenGroups = hiddenGroupsAll[activeStoreId] ?? [];
   const allStores = useStores();
+  const activeStore = allStores.find((s) => s.id === activeStoreId);
   const data = useCatalog();
   const { t } = useT();
   const { data: referencePrices, isPending: pricesPending } = useReferencePrices();
