@@ -1,9 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useT } from "../i18n";
 import { useSpeakRate } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { speakSentences } from "./speak-list-button";
 import { CheckIcon } from "./icons";
+
+const SPEAK_KEY = "shoppi:purchase-speak";
+
+function readSpeakEnabled(): boolean {
+  if (typeof window === "undefined") return true;
+  return window.localStorage.getItem(SPEAK_KEY) !== "0";
+}
 
 export interface PurchaseItem {
   id: string;
