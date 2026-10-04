@@ -7,7 +7,7 @@ import { useIsAdmin } from "../hooks/use-is-admin";
 import { Button } from "../components/ui/button";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { ProductEmoji } from "../components/product-emoji";
-import { HeartIcon, PencilIcon, PlusIcon } from "../components/icons";
+import { HeartIcon, PlusIcon } from "../components/icons";
 import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { catalogQueryOptions, brandsFor, originalName, useCatalog } from "../lib/catalog-query";
 import { CachedImage } from "../components/catalog-icon";
