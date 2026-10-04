@@ -186,6 +186,67 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     </div>
   );
 
+  const PickerDialog = ({ target, query: pq }: { target: Prod; query: string }) => {
+    const candidates = useMemo(() => {
+      const q = pq.trim().toLowerCase();
+      return all
+        .filter((p) => p.id !== target.id && p.image_path && (!q || p.name.toLowerCase().includes(q) || path(p.department_id).toLowerCase().includes(q)))
+        .slice(0, 24);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [all, pq, target.id]);
+    const cPaths = candidates.map((p) => p.image_path!);
+    const cImgs = useQuery({
+      queryKey: ["pick-imgs", cPaths.join("|")],
+      enabled: cPaths.length > 0,
+      staleTime: 30 * 60_000,
+      queryFn: async () => {
+        const { data } = await supabase.storage.from("catalog-images").createSignedUrls(cPaths, 3600);
+        return new Map((data ?? []).filter((e) => e.path && e.signedUrl).map((e) => [e.path!, e.signedUrl]));
+      },
+    });
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setPick(null)}>
+        <div className="w-full max-w-md space-y-3 rounded-2xl bg-card p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-bold text-foreground">{t("adm.noImg.pick")}</p>
+            <Button size="icon" variant="ghost" aria-label={t("adm.cancel")} onClick={() => setPick(null)}><X className="h-4 w-4" /></Button>
+          </div>
+          <p className="truncate text-xs text-muted-foreground">{target.emoji} {target.name}</p>
+          <input
+            type="search"
+            autoFocus
+            value={pq}
+            onChange={(e) => setPick({ target, query: e.target.value })}
+            placeholder={t("adm.noImg.search")}
+            aria-label={t("adm.noImg.search")}
+            className="w-full rounded-lg border border-input bg-background px-2 py-1.5 text-sm"
+          />
+          <div className="grid max-h-80 grid-cols-4 gap-2 overflow-y-auto">
+            {candidates.map((c) => (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => void assignFrom(target, c)}
+                className="flex flex-col items-center gap-1 rounded-xl border border-border p-1.5 hover:border-primary hover:bg-primary/5"
+                title={c.name}
+              >
+                <span className="grid h-14 w-full place-items-center overflow-hidden rounded-lg bg-muted">
+                  {cImgs.data?.get(c.image_path!) ? (
+                    <img src={cImgs.data.get(c.image_path!)} alt="" loading="lazy" className="h-full w-full object-contain" />
+                  ) : (
+                    <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                  )}
+                </span>
+                <span className="w-full truncate text-center text-[10px] text-muted-foreground">{c.name}</span>
+              </button>
+            ))}
+          </div>
+          {candidates.length === 0 && <p className="text-xs text-muted-foreground">{t("adm.noImg.pickNone")}</p>}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <section className="space-y-3 rounded-2xl border border-border bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
