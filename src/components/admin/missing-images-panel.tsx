@@ -288,14 +288,24 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
         </div>
       ))}
       <ul className="divide-y divide-border">
-        {visible.map((p) => (
-          <li key={p.id} className="flex items-center gap-3 py-2">
+        {visible.map((p) => {
+          const vars = p.variants ?? [];
+          const expanded = openVars.has(p.id);
+          return (
+          <li key={p.id} className="py-2">
+            <div className="flex items-center gap-3">
             <Thumb src={url(p.image_path)} size="h-14 w-14" />
             <Thumb src={url(p.icon_path)} size="h-8 w-8" />
             <button type="button" onClick={() => onEdit(p.id)} className="min-w-0 flex-1 text-left">
               <p className="truncate text-sm font-medium text-foreground">{p.emoji} {p.name}</p>
               <p className="truncate text-xs text-muted-foreground">{path(p.department_id)}</p>
             </button>
+            {vars.length > 0 && (
+              <Button size="sm" variant="ghost" aria-expanded={expanded} onClick={() => toggleVars(p.id)} className="gap-1 px-2 text-xs text-muted-foreground">
+                {expanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+                {t("adm.noImg.variants", { n: String(vars.length) })}
+              </Button>
+            )}
             <Button size="icon" variant="ghost" aria-label={t("adm.noImg.quick")} title={t("adm.noImg.quick")} disabled={busy.has(p.id) || !!batch} onClick={() => void fix(p, false)}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4 text-primary" />}
             </Button>
@@ -305,8 +315,20 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
             <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setDlg({ target: p, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS }, both: false })}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
             </Button>
+            </div>
+            {expanded && vars.length > 0 && (
+              <ul className="ml-17 mt-1 space-y-1 border-l-2 border-border pl-3">
+                {vars.map((v) => (
+                  <li key={v} className="flex items-center gap-2 py-0.5">
+                    <VariantImageButton productId={p.id} productName={p.name} variant={v} />
+                    <span className="truncate text-xs text-foreground">{v}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </li>
-        ))}
+          );
+        })}
       </ul>
       {missing.length === 0 && <p className="text-xs text-muted-foreground">{t("adm.noImg.none")}</p>}
       {missing.length > limit && (
