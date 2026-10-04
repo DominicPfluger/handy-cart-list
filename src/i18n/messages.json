@@ -1336,7 +1336,11 @@
     "units.hidden": "Hidden",
     "units.delete": "Delete",
     "units.cancel": "Cancel",
-    "units.exists": "This unit already exists"
+    "units.exists": "This unit already exists",
+    "units.edit": "Edit",
+    "units.editTitle": "Edit unit: {name}",
+    "units.language": "Language",
+    "units.aiFill": "Translate missing with AI"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2675,7 +2679,11 @@
     "units.hidden": "Hidden",
     "units.delete": "Delete",
     "units.cancel": "Cancel",
-    "units.exists": "This unit already exists"
+    "units.exists": "This unit already exists",
+    "units.edit": "Edit",
+    "units.editTitle": "Edit unit: {name}",
+    "units.language": "Language",
+    "units.aiFill": "Translate missing with AI"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -4014,7 +4022,11 @@
     "units.hidden": "Hidden",
     "units.delete": "Delete",
     "units.cancel": "Cancel",
-    "units.exists": "This unit already exists"
+    "units.exists": "This unit already exists",
+    "units.edit": "Edit",
+    "units.editTitle": "Edit unit: {name}",
+    "units.language": "Language",
+    "units.aiFill": "Translate missing with AI"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5353,7 +5365,11 @@
     "units.hidden": "Oculta",
     "units.delete": "Eliminar",
     "units.cancel": "Cancelar",
-    "units.exists": "Esta unidad ya existe"
+    "units.exists": "Esta unidad ya existe",
+    "units.edit": "Editar",
+    "units.editTitle": "Editar unidad: {name}",
+    "units.language": "Idioma",
+    "units.aiFill": "Traducir faltantes con IA"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6692,7 +6708,11 @@
     "units.hidden": "Oculta",
     "units.delete": "Eliminar",
     "units.cancel": "Cancelar",
-    "units.exists": "Esta unidad ya existe"
+    "units.exists": "Esta unidad ya existe",
+    "units.edit": "Editar",
+    "units.editTitle": "Editar unidad: {name}",
+    "units.language": "Idioma",
+    "units.aiFill": "Traducir faltantes con IA"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -8031,7 +8051,11 @@
     "units.hidden": "Masquée",
     "units.delete": "Supprimer",
     "units.cancel": "Annuler",
-    "units.exists": "Cette unité existe déjà"
+    "units.exists": "Cette unité existe déjà",
+    "units.edit": "Modifier",
+    "units.editTitle": "Modifier l'unité : {name}",
+    "units.language": "Langue",
+    "units.aiFill": "Traduire les manquantes par IA"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9370,7 +9394,11 @@
     "units.hidden": "Masquée",
     "units.delete": "Supprimer",
     "units.cancel": "Annuler",
-    "units.exists": "Cette unité existe déjà"
+    "units.exists": "Cette unité existe déjà",
+    "units.edit": "Modifier",
+    "units.editTitle": "Modifier l'unité : {name}",
+    "units.language": "Langue",
+    "units.aiFill": "Traduire les manquantes par IA"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10709,7 +10737,11 @@
     "units.hidden": "Nascosta",
     "units.delete": "Elimina",
     "units.cancel": "Annulla",
-    "units.exists": "Questa unità esiste già"
+    "units.exists": "Questa unità esiste già",
+    "units.edit": "Modifica",
+    "units.editTitle": "Modifica unità: {name}",
+    "units.language": "Lingua",
+    "units.aiFill": "Traduci mancanti con IA"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -12048,7 +12080,11 @@
     "units.hidden": "Nascosta",
     "units.delete": "Elimina",
     "units.cancel": "Annulla",
-    "units.exists": "Questa unità esiste già"
+    "units.exists": "Questa unità esiste già",
+    "units.edit": "Modifica",
+    "units.editTitle": "Modifica unità: {name}",
+    "units.language": "Lingua",
+    "units.aiFill": "Traduci mancanti con IA"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13387,7 +13423,11 @@
     "units.hidden": "Oculta",
     "units.delete": "Eliminar",
     "units.cancel": "Cancelar",
-    "units.exists": "Esta unidade já existe"
+    "units.exists": "Esta unidade já existe",
+    "units.edit": "Editar",
+    "units.editTitle": "Editar unidade: {name}",
+    "units.language": "Idioma",
+    "units.aiFill": "Traduzir em falta com IA"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14726,7 +14766,11 @@
     "units.hidden": "Oculta",
     "units.delete": "Eliminar",
     "units.cancel": "Cancelar",
-    "units.exists": "Esta unidade já existe"
+    "units.exists": "Esta unidade já existe",
+    "units.edit": "Editar",
+    "units.editTitle": "Editar unidade: {name}",
+    "units.language": "Idioma",
+    "units.aiFill": "Traduzir em falta com IA"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16065,7 +16109,11 @@
     "units.hidden": "Verborgen",
     "units.delete": "Verwijderen",
     "units.cancel": "Annuleren",
-    "units.exists": "Deze eenheid bestaat al"
+    "units.exists": "Deze eenheid bestaat al",
+    "units.edit": "Bewerken",
+    "units.editTitle": "Eenheid bewerken: {name}",
+    "units.language": "Taal",
+    "units.aiFill": "Ontbrekende vertalen met AI"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -17404,7 +17452,11 @@
     "units.hidden": "Verborgen",
     "units.delete": "Verwijderen",
     "units.cancel": "Annuleren",
-    "units.exists": "Deze eenheid bestaat al"
+    "units.exists": "Deze eenheid bestaat al",
+    "units.edit": "Bewerken",
+    "units.editTitle": "Eenheid bewerken: {name}",
+    "units.language": "Taal",
+    "units.aiFill": "Ontbrekende vertalen met AI"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -18173,7 +18225,11 @@
     "units.hidden": "Ausgeblendet",
     "units.delete": "Löschen",
     "units.cancel": "Abbrechen",
-    "units.exists": "Diese Mengenangabe gibt es schon"
+    "units.exists": "Diese Mengenangabe gibt es schon",
+    "units.edit": "Bearbeiten",
+    "units.editTitle": "Mengenangabe bearbeiten: {name}",
+    "units.language": "Sprache",
+    "units.aiFill": "Fehlende per KI übersetzen"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -18942,6 +18998,10 @@
     "units.hidden": "Ausgeblendet",
     "units.delete": "Löschen",
     "units.cancel": "Abbrechen",
-    "units.exists": "Diese Mengenangabe gibt es schon"
+    "units.exists": "Diese Mengenangabe gibt es schon",
+    "units.edit": "Bearbeiten",
+    "units.editTitle": "Mengenangabe bearbeiten: {name}",
+    "units.language": "Sprache",
+    "units.aiFill": "Fehlende per KI übersetzen"
   }
 }
