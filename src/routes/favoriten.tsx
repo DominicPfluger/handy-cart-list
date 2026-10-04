@@ -295,7 +295,19 @@ function FavoritesPage() {
   const openTransferDialog = () => {
     if (!favorites.length) return;
     setListName(t("fav.newListName"));
+    setNewStore("default");
+    setNewStoreName("");
+    setNewStoreEmoji("");
     setListNameOpen(true);
+  };
+
+  const addStore = () => {
+    const name = newStoreName.trim();
+    if (!name) return;
+    const id = addCustomStore(name, newStoreEmoji.trim() || undefined);
+    setNewStore(id);
+    setNewStoreName("");
+    setNewStoreEmoji("");
   };
 
   /** Alle Favoriten (in angezeigter Reihenfolge) in eine neue Einkaufsliste übertragen. */
