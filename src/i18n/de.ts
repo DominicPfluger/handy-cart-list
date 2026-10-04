@@ -716,6 +716,7 @@ export const de = {
   "adm.health.collision": "Kollidiert mit Produktname",
   "adm.health.pairs": "{n} Paare",
   "adm.health.open": "Bearbeiten",
+  "adm.health.openDept": "Im Katalog öffnen",
   "adm.tab.media": "Bilder",
   "adm.tab.prices": "Preise",
   "adm.tab.import": "Import",

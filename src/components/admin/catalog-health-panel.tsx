@@ -251,7 +251,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
                     {openEmptyRows.has(it.id) && (
                       <div className="flex items-center justify-between gap-2 py-1 pl-6 pr-1">
                         <span className="min-w-0 truncate text-xs text-muted-foreground">{deptPath(it.deptId)}</span>
-                        <Button size="sm" variant="outline" onClick={() => onOpenDept(it.deptId!)}>{T("adm.health.open")}</Button>
+                        <Button size="sm" variant="outline" onClick={() => onOpenDept(it.deptId!)}>{T("adm.health.openDept")}</Button>
                       </div>
                     )}
                   </div>
