@@ -216,6 +216,8 @@ export const de = {
 "dlg.addToList": "Zur Einkaufsliste hinzufügen",
 
   "more.together": "Gemeinsam",
+  "more.group.shopping": "Einkaufen",
+  "more.group.app": "App",
   "more.invite": "Einladen",
   "more.invitePeople": "Personen einladen",
   "more.activity": "Aktivitäten",
