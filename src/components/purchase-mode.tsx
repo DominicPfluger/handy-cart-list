@@ -63,6 +63,28 @@ export function PurchaseMode({ items, onToggle, onClose }: {
           </div>
         </div>
         <span className="text-sm font-semibold text-muted-foreground">{done}/{items.length}</span>
+        <button
+          onClick={toggleSpeak}
+          aria-label={speakOn ? t("purchase.speakOff") : t("purchase.speakOn")}
+          aria-pressed={speakOn}
+          title={speakOn ? t("purchase.speakOff") : t("purchase.speakOn")}
+          className={`grid h-10 w-10 place-items-center rounded-full active:bg-muted ${speakOn ? "text-primary" : "text-muted-foreground"}`}
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M11 5 6 9H2v6h4l5 4V5z" />
+            {speakOn ? (
+              <>
+                <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+                <path d="M19 5a10 10 0 0 1 0 14" />
+              </>
+            ) : (
+              <>
+                <path d="m22 9-6 6" />
+                <path d="m16 9 6 6" />
+              </>
+            )}
+          </svg>
+        </button>
         <button onClick={onClose} aria-label={t("common.close")} className="grid h-10 w-10 place-items-center rounded-full text-muted-foreground active:bg-muted">
           <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
             <path d="M18 6 6 18" /><path d="m6 6 12 12" />
