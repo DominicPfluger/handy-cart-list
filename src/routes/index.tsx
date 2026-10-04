@@ -590,13 +590,10 @@ function ListPage() {
                   </Fragment>
                   );
                 })}
-              </div>
-            </SortableGroup>
-          );
-        })}
+          </div>
+        );
+      })}
       </div>
-      </SortableContext>
-      </DndContext>
 
       {hydrated && items.length > 0 && (
         <div className="border-t border-border pt-4" aria-live="polite">
