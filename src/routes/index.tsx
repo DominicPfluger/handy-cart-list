@@ -481,20 +481,20 @@ function ListPage() {
             onClick={() => setPurchaseOpen(true)}
             aria-label={t("purchase.title")}
             title={t("purchase.title")}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
           >
-            <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="9" cy="21" r="1.5" /><circle cx="19" cy="21" r="1.5" />
               <path d="M2 3h3l2.6 12.4a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21.5 8H6" />
             </svg>
           </button>
           <button
             onClick={() => shareList({ ...activeList, items: activeList.items.map((i) => ({ ...i, name: displayName(i), quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : i.quantity })) })}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
             aria-label={t("list.share")}
             title={t("list.share")}
           >
-            <ShareIcon className="h-5 w-5" />
+            <ShareIcon className="h-[18px] w-[18px]" />
           </button>
           <ExportListButton
             title={activeList.name}
