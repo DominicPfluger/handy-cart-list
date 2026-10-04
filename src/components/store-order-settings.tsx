@@ -8,7 +8,7 @@ import { useStores } from "../hooks/use-stores";
 import { useT } from "../i18n";
 
 function Row({ id, label, emoji }: { id: string; label: string; emoji: string | null }) {
-  const t = useT();
+  const { t } = useT();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   return (
     <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={`flex items-center gap-2 bg-card px-3 py-2.5 ${isDragging ? "relative z-10 shadow-lg" : ""}`}>
@@ -21,7 +21,7 @@ function Row({ id, label, emoji }: { id: string; label: string; emoji: string | 
 
 /** Einstellungen: Abteilungs-Reihenfolge je Laden (geräte-lokal). */
 export function StoreOrderSettings() {
-  const t = useT();
+  const { t } = useT();
   const catalog = useCatalog();
   const stores = useStores();
   const { all, store, setStore, saveFor, resetFor, addCustomStore, removeCustomStore } = useGroupOrder();
@@ -89,7 +89,7 @@ export function StoreOrderSettings() {
 
 /** Kleiner Laden-Umschalter für die Listenansicht. */
 export function StoreSwitcher() {
-  const t = useT();
+  const { t } = useT();
   const stores = useStores();
   const { store, setStore } = useGroupOrder();
   if (stores.length <= 1) return null;
