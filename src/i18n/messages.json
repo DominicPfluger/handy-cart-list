@@ -1289,7 +1289,7 @@
     "adm.noImg.stop": "Cancel",
     "adm.noImg.gen": "Generate AI image",
     "adm.noImg.none": "All products have images.",
-    "adm.noImg.more": "Load 30 more",
+    "adm.noImg.more": "Load 5 more",
     "store.hide": "Hide department",
     "store.hiddenTitle": "Hidden",
     "store.unhide": "Show again"
@@ -2584,7 +2584,7 @@
     "adm.noImg.stop": "Cancel",
     "adm.noImg.gen": "Generate AI image",
     "adm.noImg.none": "All products have images.",
-    "adm.noImg.more": "Load 30 more",
+    "adm.noImg.more": "Load 5 more",
     "store.hide": "Hide department",
     "store.hiddenTitle": "Hidden",
     "store.unhide": "Show again"
@@ -3879,7 +3879,7 @@
     "adm.noImg.stop": "Cancel",
     "adm.noImg.gen": "Generate AI image",
     "adm.noImg.none": "All products have images.",
-    "adm.noImg.more": "Load 30 more",
+    "adm.noImg.more": "Load 5 more",
     "store.hide": "Hide department",
     "store.hiddenTitle": "Hidden",
     "store.unhide": "Show again"
@@ -5174,7 +5174,7 @@
     "adm.noImg.stop": "Cancelar",
     "adm.noImg.gen": "Generar imagen IA",
     "adm.noImg.none": "Todos los productos tienen imagen.",
-    "adm.noImg.more": "Cargar 30 más",
+    "adm.noImg.more": "Cargar 5 más",
     "store.hide": "Ocultar sección",
     "store.hiddenTitle": "Ocultas",
     "store.unhide": "Mostrar de nuevo"
@@ -6469,7 +6469,7 @@
     "adm.noImg.stop": "Cancelar",
     "adm.noImg.gen": "Generar imagen IA",
     "adm.noImg.none": "Todos los productos tienen imagen.",
-    "adm.noImg.more": "Cargar 30 más",
+    "adm.noImg.more": "Cargar 5 más",
     "store.hide": "Ocultar sección",
     "store.hiddenTitle": "Ocultas",
     "store.unhide": "Mostrar de nuevo"
@@ -7764,7 +7764,7 @@
     "adm.noImg.stop": "Annuler",
     "adm.noImg.gen": "Générer une image IA",
     "adm.noImg.none": "Tous les produits ont une image.",
-    "adm.noImg.more": "Charger 30 de plus",
+    "adm.noImg.more": "Charger 5 de plus",
     "store.hide": "Masquer le rayon",
     "store.hiddenTitle": "Masqués",
     "store.unhide": "Réafficher"
@@ -9059,7 +9059,7 @@
     "adm.noImg.stop": "Annuler",
     "adm.noImg.gen": "Générer une image IA",
     "adm.noImg.none": "Tous les produits ont une image.",
-    "adm.noImg.more": "Charger 30 de plus",
+    "adm.noImg.more": "Charger 5 de plus",
     "store.hide": "Masquer le rayon",
     "store.hiddenTitle": "Masqués",
     "store.unhide": "Réafficher"
@@ -10354,7 +10354,7 @@
     "adm.noImg.stop": "Annulla",
     "adm.noImg.gen": "Genera immagine IA",
     "adm.noImg.none": "Tutti i prodotti hanno immagini.",
-    "adm.noImg.more": "Carica altri 30",
+    "adm.noImg.more": "Carica altri 5",
     "store.hide": "Nascondi reparto",
     "store.hiddenTitle": "Nascosti",
     "store.unhide": "Mostra di nuovo"
@@ -11649,7 +11649,7 @@
     "adm.noImg.stop": "Annulla",
     "adm.noImg.gen": "Genera immagine IA",
     "adm.noImg.none": "Tutti i prodotti hanno immagini.",
-    "adm.noImg.more": "Carica altri 30",
+    "adm.noImg.more": "Carica altri 5",
     "store.hide": "Nascondi reparto",
     "store.hiddenTitle": "Nascosti",
     "store.unhide": "Mostra di nuovo"
@@ -12944,7 +12944,7 @@
     "adm.noImg.stop": "Cancelar",
     "adm.noImg.gen": "Gerar imagem IA",
     "adm.noImg.none": "Todos os produtos têm imagem.",
-    "adm.noImg.more": "Carregar mais 30",
+    "adm.noImg.more": "Carregar mais 5",
     "store.hide": "Ocultar secção",
     "store.hiddenTitle": "Ocultas",
     "store.unhide": "Mostrar novamente"
@@ -14239,7 +14239,7 @@
     "adm.noImg.stop": "Cancelar",
     "adm.noImg.gen": "Gerar imagem IA",
     "adm.noImg.none": "Todos os produtos têm imagem.",
-    "adm.noImg.more": "Carregar mais 30",
+    "adm.noImg.more": "Carregar mais 5",
     "store.hide": "Ocultar secção",
     "store.hiddenTitle": "Ocultas",
     "store.unhide": "Mostrar novamente"
@@ -15534,7 +15534,7 @@
     "adm.noImg.stop": "Annuleren",
     "adm.noImg.gen": "AI-afbeelding maken",
     "adm.noImg.none": "Alle producten hebben afbeeldingen.",
-    "adm.noImg.more": "Nog 30 laden",
+    "adm.noImg.more": "Nog 5 laden",
     "store.hide": "Afdeling verbergen",
     "store.hiddenTitle": "Verborgen",
     "store.unhide": "Weer tonen"
@@ -16829,7 +16829,7 @@
     "adm.noImg.stop": "Annuleren",
     "adm.noImg.gen": "AI-afbeelding maken",
     "adm.noImg.none": "Alle producten hebben afbeeldingen.",
-    "adm.noImg.more": "Nog 30 laden",
+    "adm.noImg.more": "Nog 5 laden",
     "store.hide": "Afdeling verbergen",
     "store.hiddenTitle": "Verborgen",
     "store.unhide": "Weer tonen"
