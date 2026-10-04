@@ -132,6 +132,9 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
             <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => fix(p)}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4 text-primary" />}
             </Button>
+            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.genBoth")} title={t("adm.noImg.genBoth")} disabled={busy.has(p.id) || !!batch} onClick={() => fix(p, true)}>
+              {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
+            </Button>
           </li>
         ))}
       </ul>
