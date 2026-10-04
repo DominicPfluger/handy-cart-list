@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import type { ShoppingList } from "../hooks/use-shopping-list";
 import { PlusIcon, TrashIcon, CheckIcon } from "./icons";
 import { getLocale, translate, useT } from "../i18n";
+import { useStores } from "../hooks/use-stores";
 
 interface Props {
   open: boolean;
@@ -29,7 +30,7 @@ interface Props {
   activeId: string;
   templates: ShoppingList[];
   onSelect: (id: string) => void;
-  onCreate: (name: string) => void;
+  onCreate: (name: string, storeId: string) => void;
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
   onReorder: (fromId: string, toId: string) => void;
@@ -217,6 +218,8 @@ export function ListManager(props: Props) {
   const { open, onClose, lists, activeId, templates } = props;
   const { t } = useT();
   const [newName, setNewName] = useState("");
+  const [newStore, setNewStore] = useState("default");
+  const stores = useStores();
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 120, tolerance: 6 } }),
@@ -231,8 +234,9 @@ export function ListManager(props: Props) {
 
   const create = () => {
     if (!newName.trim()) return;
-    props.onCreate(newName);
+    props.onCreate(newName, newStore);
     setNewName("");
+    setNewStore("default");
     onClose();
   };
 
@@ -273,17 +277,25 @@ export function ListManager(props: Props) {
         </DndContext>
 
         <div className="mt-5 flex gap-2">
+          <div className="min-w-0 flex-1 space-y-1.5">
           <input
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && create()}
             placeholder={t("lm.newPlaceholder")}
-            className="min-w-0 flex-1 rounded-xl border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
+            className="w-full rounded-xl border border-input bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
           />
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span className="shrink-0">{t("store.label")}</span>
+            <select value={newStore} onChange={(e) => setNewStore(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs text-foreground outline-none focus:border-primary">
+              {stores.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+            </select>
+          </label>
+          </div>
           <button
             onClick={create}
             disabled={!newName.trim()}
-            className="flex items-center gap-1 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+            className="flex items-center gap-1 self-start rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
           >
             <PlusIcon className="h-4 w-4" /> {t("lm.create")}
           </button>

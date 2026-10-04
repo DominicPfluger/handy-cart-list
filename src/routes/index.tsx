@@ -58,7 +58,6 @@ import { priceForItem } from "../lib/item-price";
 import { PurchaseMode, type PurchaseItem } from "../components/purchase-mode";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useGroupOrder, applyGroupOrder, filterHidden } from "../hooks/use-group-order";
-import { StoreSwitcher } from "../components/store-order-settings";
 
 const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
@@ -124,7 +123,11 @@ function ListPage() {
   const [managerOpen, setManagerOpen] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   const [speakLocale] = useSpeakLocale();
-  const { order: groupOrder, save: saveGroupOrder, hidden: hiddenGroups } = useGroupOrder();
+  const { all: groupOrderAll, saveFor: saveGroupOrderFor, hiddenAll: hiddenGroupsAll, listStores, setListStore } = useGroupOrder();
+  const activeStoreId = listStores[activeList.id] ?? "default";
+  const groupOrder = groupOrderAll[activeStoreId] ?? groupOrderAll["default"] ?? [];
+  const hiddenGroups = hiddenGroupsAll[activeStoreId] ?? [];
+  const saveGroupOrder = (keys: string[]) => saveGroupOrderFor(activeStoreId, keys);
   const groupSensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
@@ -323,7 +326,10 @@ function ListPage() {
         activeId={activeList.id}
         templates={templates}
         onSelect={setActiveListId}
-        onCreate={createList}
+        onCreate={(name, storeId) => {
+          const id = createList(name);
+          if (id) setListStore(id, storeId);
+        }}
         onRename={renameList}
         onDelete={deleteList}
         onReorder={reorderLists}
@@ -434,7 +440,6 @@ function ListPage() {
         </div>
       )}
 
-      {items.length > 0 && <StoreSwitcher />}
       <DndContext
         sensors={groupSensors}
         collisionDetection={closestCenter}
