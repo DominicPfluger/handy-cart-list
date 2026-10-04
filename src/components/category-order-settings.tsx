@@ -92,7 +92,11 @@ export function CategoryOrderSettings() {
     departments
       .filter((d) => d.parentId === parentId && !hiddenSet.has(d.id))
       .sort((a, b) => a.sortOrder - b.sortOrder || a.name.localeCompare(b.name));
-  const roots = applyGroupOrder(kids(null).map((d) => ({ ...d, key: d.id })), all[selected.id] ?? []);
+  const rootList = kids(null);
+  const rootById = new Map(rootList.map((d) => [d.id, d]));
+  const roots = applyGroupOrder(rootList.map((d) => ({ key: d.id, order: d.sortOrder })), all[selected.id] ?? [])
+    .map((x) => rootById.get(x.key)!)
+    .filter(Boolean);
   const hiddenDepts = departments.filter((d) => hiddenSet.has(d.id));
 
   const reorder = (list: CatalogDepartment[], parentId: string | null) => (e: DragEndEvent) => {
