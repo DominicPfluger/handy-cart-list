@@ -1289,7 +1289,10 @@
     "adm.noImg.stop": "Cancel",
     "adm.noImg.gen": "Generate AI image",
     "adm.noImg.none": "All products have images.",
-    "adm.noImg.more": "Load 30 more"
+    "adm.noImg.more": "Load 30 more",
+    "store.hide": "Hide department",
+    "store.hiddenTitle": "Hidden",
+    "store.unhide": "Show again"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2581,7 +2584,10 @@
     "adm.noImg.stop": "Cancel",
     "adm.noImg.gen": "Generate AI image",
     "adm.noImg.none": "All products have images.",
-    "adm.noImg.more": "Load 30 more"
+    "adm.noImg.more": "Load 30 more",
+    "store.hide": "Hide department",
+    "store.hiddenTitle": "Hidden",
+    "store.unhide": "Show again"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3873,7 +3879,10 @@
     "adm.noImg.stop": "Cancel",
     "adm.noImg.gen": "Generate AI image",
     "adm.noImg.none": "All products have images.",
-    "adm.noImg.more": "Load 30 more"
+    "adm.noImg.more": "Load 30 more",
+    "store.hide": "Hide department",
+    "store.hiddenTitle": "Hidden",
+    "store.unhide": "Show again"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5165,7 +5174,10 @@
     "adm.noImg.stop": "Cancelar",
     "adm.noImg.gen": "Generar imagen IA",
     "adm.noImg.none": "Todos los productos tienen imagen.",
-    "adm.noImg.more": "Cargar 30 más"
+    "adm.noImg.more": "Cargar 30 más",
+    "store.hide": "Ocultar sección",
+    "store.hiddenTitle": "Ocultas",
+    "store.unhide": "Mostrar de nuevo"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6457,7 +6469,10 @@
     "adm.noImg.stop": "Cancelar",
     "adm.noImg.gen": "Generar imagen IA",
     "adm.noImg.none": "Todos los productos tienen imagen.",
-    "adm.noImg.more": "Cargar 30 más"
+    "adm.noImg.more": "Cargar 30 más",
+    "store.hide": "Ocultar sección",
+    "store.hiddenTitle": "Ocultas",
+    "store.unhide": "Mostrar de nuevo"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7749,7 +7764,10 @@
     "adm.noImg.stop": "Annuler",
     "adm.noImg.gen": "Générer une image IA",
     "adm.noImg.none": "Tous les produits ont une image.",
-    "adm.noImg.more": "Charger 30 de plus"
+    "adm.noImg.more": "Charger 30 de plus",
+    "store.hide": "Masquer le rayon",
+    "store.hiddenTitle": "Masqués",
+    "store.unhide": "Réafficher"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9041,7 +9059,10 @@
     "adm.noImg.stop": "Annuler",
     "adm.noImg.gen": "Générer une image IA",
     "adm.noImg.none": "Tous les produits ont une image.",
-    "adm.noImg.more": "Charger 30 de plus"
+    "adm.noImg.more": "Charger 30 de plus",
+    "store.hide": "Masquer le rayon",
+    "store.hiddenTitle": "Masqués",
+    "store.unhide": "Réafficher"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10333,7 +10354,10 @@
     "adm.noImg.stop": "Annulla",
     "adm.noImg.gen": "Genera immagine IA",
     "adm.noImg.none": "Tutti i prodotti hanno immagini.",
-    "adm.noImg.more": "Carica altri 30"
+    "adm.noImg.more": "Carica altri 30",
+    "store.hide": "Nascondi reparto",
+    "store.hiddenTitle": "Nascosti",
+    "store.unhide": "Mostra di nuovo"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11625,7 +11649,10 @@
     "adm.noImg.stop": "Annulla",
     "adm.noImg.gen": "Genera immagine IA",
     "adm.noImg.none": "Tutti i prodotti hanno immagini.",
-    "adm.noImg.more": "Carica altri 30"
+    "adm.noImg.more": "Carica altri 30",
+    "store.hide": "Nascondi reparto",
+    "store.hiddenTitle": "Nascosti",
+    "store.unhide": "Mostra di nuovo"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -12917,7 +12944,10 @@
     "adm.noImg.stop": "Cancelar",
     "adm.noImg.gen": "Gerar imagem IA",
     "adm.noImg.none": "Todos os produtos têm imagem.",
-    "adm.noImg.more": "Carregar mais 30"
+    "adm.noImg.more": "Carregar mais 30",
+    "store.hide": "Ocultar secção",
+    "store.hiddenTitle": "Ocultas",
+    "store.unhide": "Mostrar novamente"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14209,7 +14239,10 @@
     "adm.noImg.stop": "Cancelar",
     "adm.noImg.gen": "Gerar imagem IA",
     "adm.noImg.none": "Todos os produtos têm imagem.",
-    "adm.noImg.more": "Carregar mais 30"
+    "adm.noImg.more": "Carregar mais 30",
+    "store.hide": "Ocultar secção",
+    "store.hiddenTitle": "Ocultas",
+    "store.unhide": "Mostrar novamente"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15501,7 +15534,10 @@
     "adm.noImg.stop": "Annuleren",
     "adm.noImg.gen": "AI-afbeelding maken",
     "adm.noImg.none": "Alle producten hebben afbeeldingen.",
-    "adm.noImg.more": "Nog 30 laden"
+    "adm.noImg.more": "Nog 30 laden",
+    "store.hide": "Afdeling verbergen",
+    "store.hiddenTitle": "Verborgen",
+    "store.unhide": "Weer tonen"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -16793,7 +16829,10 @@
     "adm.noImg.stop": "Annuleren",
     "adm.noImg.gen": "AI-afbeelding maken",
     "adm.noImg.none": "Alle producten hebben afbeeldingen.",
-    "adm.noImg.more": "Nog 30 laden"
+    "adm.noImg.more": "Nog 30 laden",
+    "store.hide": "Afdeling verbergen",
+    "store.hiddenTitle": "Verborgen",
+    "store.unhide": "Weer tonen"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17527,7 +17566,10 @@
     "purchase.allDone": "Alles erledigt!",
     "install.title": "App installieren",
     "install.desc": "Shoppi auf dem Startbildschirm",
-    "install.manualHint": "Wähle im Browser-Menü „Zum Startbildschirm hinzufügen“."
+    "install.manualHint": "Wähle im Browser-Menü „Zum Startbildschirm hinzufügen“.",
+    "store.hide": "Abteilung ausblenden",
+    "store.hiddenTitle": "Ausgeblendet",
+    "store.unhide": "Wieder einblenden"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -18261,6 +18303,9 @@
     "purchase.allDone": "Alles erledigt!",
     "install.title": "App installieren",
     "install.desc": "Shoppi auf dem Startbildschirm",
-    "install.manualHint": "Wähle im Browser-Menü «Zum Startbildschirm hinzufügen»."
+    "install.manualHint": "Wähle im Browser-Menü «Zum Startbildschirm hinzufügen».",
+    "store.hide": "Abteilung ausblenden",
+    "store.hiddenTitle": "Ausgeblendet",
+    "store.unhide": "Wieder einblenden"
   }
 }

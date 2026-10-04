@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 const KEY = "shoppi:list-group-order";
 const STORE_KEY = "shoppi:active-store";
 const CUSTOM_KEY = "shoppi:custom-stores";
+const HIDDEN_KEY = "shoppi:hidden-groups";
 const EVENT = "shoppi:list-group-order-changed";
 
 export type CustomStore = { id: string; name: string };
@@ -25,6 +26,14 @@ function readCustom(): CustomStore[] {
     return Array.isArray(v) ? v : [];
   } catch { return []; }
 }
+function readHidden(): Record<string, string[]> {
+  try {
+    const v = JSON.parse(localStorage.getItem(HIDDEN_KEY) ?? "{}");
+    return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, string[]>) : {};
+  } catch {
+    return {};
+  }
+}
 function emit() { window.dispatchEvent(new Event(EVENT)); }
 
 /** Persönliche (geräte-lokale) Reihenfolge der Abteilungen, pro Laden. */
@@ -32,9 +41,10 @@ export function useGroupOrder() {
   const [all, setAll] = useState<Record<string, string[]>>({});
   const [store, setStoreState] = useState("default");
   const [customStores, setCustom] = useState<CustomStore[]>([]);
+  const [hiddenAll, setHiddenAll] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
-    const sync = () => { setAll(readAll()); setStoreState(readStore()); setCustom(readCustom()); };
+    const sync = () => { setAll(readAll()); setStoreState(readStore()); setCustom(readCustom()); setHiddenAll(readHidden()); };
     sync();
     window.addEventListener(EVENT, sync);
     window.addEventListener("storage", sync);
@@ -54,6 +64,22 @@ export function useGroupOrder() {
     const cur = readAll();
     delete cur[storeId];
     try { localStorage.setItem(KEY, JSON.stringify(cur)); } catch { /* ignore */ }
+    const hid = readHidden();
+    delete hid[storeId];
+    try { localStorage.setItem(HIDDEN_KEY, JSON.stringify(hid)); } catch { /* ignore */ }
+    emit();
+  }, []);
+  const hideFor = useCallback((storeId: string, key: string) => {
+    const hid = readHidden();
+    const list = hid[storeId] ?? [];
+    if (!list.includes(key)) hid[storeId] = [...list, key];
+    try { localStorage.setItem(HIDDEN_KEY, JSON.stringify(hid)); } catch { /* ignore */ }
+    emit();
+  }, []);
+  const unhideFor = useCallback((storeId: string, key: string) => {
+    const hid = readHidden();
+    hid[storeId] = (hid[storeId] ?? []).filter((k) => k !== key);
+    try { localStorage.setItem(HIDDEN_KEY, JSON.stringify(hid)); } catch { /* ignore */ }
     emit();
   }, []);
   const setStore = useCallback((id: string) => {
@@ -76,7 +102,15 @@ export function useGroupOrder() {
   }, [resetFor, setStore]);
 
   const order = all[store] ?? all["default"] ?? [];
-  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, removeCustomStore, hasCustomOrder: order.length > 0 };
+  const hidden = hiddenAll[store] ?? [];
+  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor };
+}
+
+/** Entfernt Gruppen, die im aktiven Geschäft ausgeblendet sind. */
+export function filterHidden<T extends { key: string }>(groups: T[], hidden: string[]): T[] {
+  if (hidden.length === 0) return groups;
+  const set = new Set(hidden);
+  return groups.filter((g) => !set.has(g.key));
 }
 
 /** Sortiert Gruppen: zuerst in gespeicherter Reihenfolge, der Rest in Katalog-Reihenfolge dahinter. */
