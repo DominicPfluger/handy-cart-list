@@ -154,39 +154,12 @@ export function MissingImagesPanel({ depts, prods, onEdit, children }: { depts: 
   );
 
   const optionsDialog = (d: Dlg) => (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setDlg(null)}>
-      <div className="w-full max-w-sm space-y-3 rounded-2xl bg-card p-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-bold text-foreground">{t("tile.aiOptions")}</p>
-          <Button size="icon" variant="ghost" aria-label={t("adm.cancel")} onClick={() => setDlg(null)}><X className="h-4 w-4" /></Button>
-        </div>
-        {d.target ? (
-          <p className="truncate text-xs text-muted-foreground">{d.target.emoji} {d.target.name}</p>
-        ) : (
-          <p className="text-xs text-muted-foreground">{t("adm.noImg.all", { n: String(visible.length) })}</p>
-        )}
-        <label className="block space-y-1 text-xs text-muted-foreground">
-          <span>{t("tile.aiHint")}</span>
-          <textarea
-            maxLength={300}
-            rows={3}
-            value={d.hint}
-            onChange={(e) => setDlg({ ...d, hint: e.target.value })}
-            className="w-full rounded-xl border border-input bg-background p-2 text-sm text-foreground"
-          />
-        </label>
-        <AiImageOptionSelects value={d.opts} onChange={(opts) => setDlg({ ...d, opts })} />
-        <div className="space-y-1.5" role="radiogroup" aria-label={t("adm.noImg.options")}>
-          {([false, true] as const).map((b) => (
-            <label key={String(b)} className="flex cursor-pointer items-start gap-2 rounded-xl border border-input p-2 text-xs text-foreground has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-              <input type="radio" name="noimg-mode" checked={d.both === b} onChange={() => setDlg({ ...d, both: b })} className="mt-0.5" />
-              <span>{t(b ? "adm.noImg.modeTwo" : "adm.noImg.modeOne")}</span>
-            </label>
-          ))}
-        </div>
-        <Button size="sm" className="w-full" disabled={busy.size > 0 || !!batch} onClick={() => runDlg(d)}>{t("adm.noImg.generate")}</Button>
-      </div>
-    </div>
+    <AiImagePromptDialog
+      title={d.target ? `${d.target.emoji} ${d.target.name}` : t("adm.noImg.all", { n: String(visible.length) })}
+      disabled={busy.size > 0 || !!batch}
+      onRun={(c) => runDlg({ ...d, ...c })}
+      onCancel={() => setDlg(null)}
+    />
   );
 
   const PickerDialog = ({ target, query: pq }: { target: Prod; query: string }) => {

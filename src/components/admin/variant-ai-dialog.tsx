@@ -9,7 +9,8 @@ import { translate, getLocale } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { supabase } from "@/integrations/supabase/client";
 import { makeProductIcon } from "@/lib/product-icon";
-import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
+import { AiImagePromptDialog } from "./ai-image-dialog";
+import type { AiImageOpts } from "./ai-image-options";
 
 const T = (k: MessageKey, p?: Record<string, string | number>) => translate(getLocale(), k, p);
 
