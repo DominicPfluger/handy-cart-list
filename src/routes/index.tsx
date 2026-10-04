@@ -474,7 +474,7 @@ function ListPage() {
         <div className="flex items-center gap-2">
           <button onClick={() => setManagerOpen(true)} className="min-w-0 flex-1 text-left">
             <h1 className="truncate text-2xl font-bold tracking-tight text-foreground">{activeList.name}</h1>
-            {activeStoreName && <p className="truncate text-xs text-muted-foreground">🏪 {activeStoreName}</p>}
+            {activeStore && <p className="truncate text-xs text-muted-foreground">{activeStore.emoji ?? "🏪"} {activeStore.name}</p>}
           </button>
           <div className="-mr-1 flex shrink-0 items-center gap-0">
           <button

@@ -54,7 +54,12 @@ export function MarketsManager() {
   const addShop = async (code: string) => {
     const n = shopName.trim(); if (!n) return;
     const count = shops.filter((s) => s.market_code === code).length;
-    if (check(await supabase.from("supermarkets").insert({ market_code: code, name: n, sort_order: count + 1 }))) { setShopName(""); refresh(); }
+    if (check(await supabase.from("supermarkets").insert({ market_code: code, name: n, emoji: shopEmoji.trim() || null, sort_order: count + 1 }))) { setShopName(""); setShopEmoji(""); refresh(); }
+  };
+  const editShopEmoji = async (s: Shop) => {
+    const e = prompt(T("mkt.emoji"), s.emoji ?? "")?.trim();
+    if (e === undefined || e === (s.emoji ?? "")) return;
+    if (check(await supabase.from("supermarkets").update({ emoji: e || null }).eq("id", s.id))) refresh();
   };
   const renameShop = async (s: Shop) => {
     const n = prompt(T("mkt.rename"), s.name)?.trim(); if (!n || n === s.name) return;
