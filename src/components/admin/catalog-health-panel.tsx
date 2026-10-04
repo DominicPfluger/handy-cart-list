@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { deptTreeOrder } from "@/lib/dept-order";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -39,6 +41,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   const [scanned, setScanned] = useState(false);
   const [busy, setBusy] = useState(false);
   const [openGap, setOpenGap] = useState<string | null>(null);
+  const [openEmptyRows, setOpenEmptyRows] = useState<Set<string>>(new Set());
   const [synSearch, setSynSearch] = useState("");
   const [copyOpen, setCopyOpen] = useState(false);
 
@@ -68,6 +71,16 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   });
 
   const deptName = useMemo(() => new Map(depts.map((d) => [d.id, d.name])), [depts]);
+  const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
+  /** Vollständiger Kategoriepfad, z. B. „Frischmarkt › Gemüse › Pilze". */
+  const deptPath = (id: string) => {
+    const parts: string[] = [];
+    let cur = deptById.get(id);
+    while (cur) { parts.unshift(cur.name); cur = cur.parent_id ? deptById.get(cur.parent_id) : undefined; }
+    return parts.join(" › ");
+  };
+  const toggleEmptyRow = (id: string) =>
+    setOpenEmptyRows((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const prodById = useMemo(() => new Map(prods.map((p) => [p.id, p])), [prods]);
   const prodCountByDept = useMemo(() => {
     const m = new Map<string, number>();
@@ -84,7 +97,10 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
       const missing = LOCALES.filter((l) => !rec[l]?.name?.trim());
       return { p, missing };
     }).filter((x) => x.missing.length > 0);
-    const emptyDepts = depts.filter((d) => !depts.some((c) => c.parent_id === d.id) && !(prodCountByDept.get(d.id) ?? 0));
+    const treePos = new Map(deptTreeOrder(depts).map((d, i) => [d.id, i]));
+    const emptyDepts = depts
+      .filter((d) => !depts.some((c) => c.parent_id === d.id) && !(prodCountByDept.get(d.id) ?? 0))
+      .sort((a, b) => (treePos.get(a.id) ?? 0) - (treePos.get(b.id) ?? 0));
     const deptNoImage = depts.filter((d) => !d.image_path);
     return { noImage, noEmoji, noPrice, missingTr, emptyDepts, deptNoImage };
   }, [prods, depts, tr, priced.data, prodCountByDept]);
@@ -224,11 +240,21 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
             {gapCards.find((g) => g.id === openGap)?.items.map((it) => (
               <li key={it.id} className="flex items-center justify-between gap-2">
                 {it.deptId && onOpenDept ? (
-                  <button type="button" onClick={() => onOpenDept(it.deptId!)}
-                    className="flex min-w-0 flex-1 items-center gap-1 truncate rounded-lg px-1 py-0.5 text-left hover:bg-muted" title={it.label}>
-                    <span className="truncate">{it.label}</span>
-                    <span aria-hidden className="ml-auto shrink-0 text-muted-foreground">→</span>
-                  </button>
+                  <div className="min-w-0 flex-1">
+                    <button type="button" onClick={() => toggleEmptyRow(it.id)}
+                      className="flex w-full min-w-0 items-center gap-1 truncate rounded-lg px-1 py-0.5 text-left hover:bg-muted" title={it.label}>
+                      {openEmptyRows.has(it.id)
+                        ? <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        : <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />}
+                      <span className="truncate">{it.label}</span>
+                    </button>
+                    {openEmptyRows.has(it.id) && (
+                      <div className="flex items-center justify-between gap-2 py-1 pl-6 pr-1">
+                        <span className="min-w-0 truncate text-xs text-muted-foreground">{deptPath(it.deptId)}</span>
+                        <Button size="sm" variant="outline" onClick={() => onOpenDept(it.deptId!)}>{T("adm.health.openDept")}</Button>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <span className="truncate">{it.label}</span>
                 )}
