@@ -269,29 +269,7 @@ export function ListManager(props: Props) {
           </button>
         </div>
 
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
-          <SortableContext items={lists.map((l) => l.id)} strategy={verticalListSortingStrategy}>
-            <div className="space-y-2">
-              {lists.map((l) => (
-                <Row
-                  key={l.id}
-                  list={l}
-                  active={l.id === activeId}
-                  canDelete={lists.length > 1}
-                  onSelect={() => {
-                    props.onSelect(l.id);
-                    onClose();
-                  }}
-                  onRename={(n) => props.onRename(l.id, n)}
-                  onDelete={() => props.onDelete(l.id)}
-                  onSaveAsTemplate={() => props.onSaveAsTemplate(l.id)}
-                />
-              ))}
-            </div>
-          </SortableContext>
-        </DndContext>
-
-        <div className="mt-5 flex gap-2">
+        <div className="mb-5 flex gap-2">
           <div className="min-w-0 flex-1 space-y-1.5">
           <input
             value={newName}
@@ -349,6 +327,30 @@ export function ListManager(props: Props) {
             <PlusIcon className="h-4 w-4" /> {t("lm.create")}
           </button>
         </div>
+
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
+
+          <SortableContext items={lists.map((l) => l.id)} strategy={verticalListSortingStrategy}>
+            <div className="space-y-2">
+              {lists.map((l) => (
+                <Row
+                  key={l.id}
+                  list={l}
+                  active={l.id === activeId}
+                  canDelete={lists.length > 1}
+                  onSelect={() => {
+                    props.onSelect(l.id);
+                    onClose();
+                  }}
+                  onRename={(n) => props.onRename(l.id, n)}
+                  onDelete={() => props.onDelete(l.id)}
+                  onSaveAsTemplate={() => props.onSaveAsTemplate(l.id)}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
+
 
         {templates.length > 0 && (
           <div className="mt-5">
