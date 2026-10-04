@@ -116,6 +116,15 @@ export function CatalogTileEditor(p: {
   const [variantAdd, setVariantAdd] = useState<TileProd | null>(null);
   const [copyOpen, setCopyOpen] = useState(false);
   const moved = useRef(false);
+  const qc = useQueryClient();
+  /** Speichert Standard-Menge/-Einheit direkt aus der Zeile. */
+  const saveDefaults = (id: string, patch: { default_quantity?: number; default_unit?: string }) => {
+    void p.run(async () => {
+      await p.must(supabase.from("products").update(patch as never).eq("id", id));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
+  const QTY_OPTIONS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 50, 100, 250, 500];
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
   const [genAllDlg, setGenAllDlg] = useState<{ all: boolean; hint: string; opts: AiImageOpts } | null>(null);
