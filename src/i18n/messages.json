@@ -1298,7 +1298,6 @@
     "store.hide": "Hide department",
     "store.hiddenTitle": "Hidden",
     "store.unhide": "Show again",
-    "adm.noImg.genBoth": "Generate both images with AI (2 credits)",
     "adm.noImg.batchMode": "Batch mode",
     "adm.noImg.modeDerive": "Icon derived from image",
     "adm.noImg.modeBoth": "Icon separately with AI (2 credits)",
@@ -1306,7 +1305,10 @@
     "list.hideDone": "Hide done",
     "settings.checkedDisplay": "Checked items",
     "settings.checkedDisplay.strike": "Strike through",
-    "settings.checkedDisplay.hide": "Hide"
+    "settings.checkedDisplay.hide": "Hide",
+    "adm.noImg.modeOne": "Generate one image (icon derived, 1 credit)",
+    "adm.noImg.modeTwo": "Generate two different images (2 credits)",
+    "adm.noImg.generate": "Generate image"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2607,7 +2609,6 @@
     "store.hide": "Hide department",
     "store.hiddenTitle": "Hidden",
     "store.unhide": "Show again",
-    "adm.noImg.genBoth": "Generate both images with AI (2 credits)",
     "adm.noImg.batchMode": "Batch mode",
     "adm.noImg.modeDerive": "Icon derived from image",
     "adm.noImg.modeBoth": "Icon separately with AI (2 credits)",
@@ -2615,7 +2616,10 @@
     "list.hideDone": "Hide done",
     "settings.checkedDisplay": "Checked items",
     "settings.checkedDisplay.strike": "Strike through",
-    "settings.checkedDisplay.hide": "Hide"
+    "settings.checkedDisplay.hide": "Hide",
+    "adm.noImg.modeOne": "Generate one image (icon derived, 1 credit)",
+    "adm.noImg.modeTwo": "Generate two different images (2 credits)",
+    "adm.noImg.generate": "Generate image"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3916,7 +3920,6 @@
     "store.hide": "Hide department",
     "store.hiddenTitle": "Hidden",
     "store.unhide": "Show again",
-    "adm.noImg.genBoth": "Generate both images with AI (2 credits)",
     "adm.noImg.batchMode": "Batch mode",
     "adm.noImg.modeDerive": "Icon derived from image",
     "adm.noImg.modeBoth": "Icon separately with AI (2 credits)",
@@ -3924,7 +3927,10 @@
     "list.hideDone": "Hide done",
     "settings.checkedDisplay": "Checked items",
     "settings.checkedDisplay.strike": "Strike through",
-    "settings.checkedDisplay.hide": "Hide"
+    "settings.checkedDisplay.hide": "Hide",
+    "adm.noImg.modeOne": "Generate one image (icon derived, 1 credit)",
+    "adm.noImg.modeTwo": "Generate two different images (2 credits)",
+    "adm.noImg.generate": "Generate image"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5225,7 +5231,6 @@
     "store.hide": "Ocultar sección",
     "store.hiddenTitle": "Ocultas",
     "store.unhide": "Mostrar de nuevo",
-    "adm.noImg.genBoth": "Generar ambas imágenes con IA (2 créditos)",
     "adm.noImg.batchMode": "Modo de lote",
     "adm.noImg.modeDerive": "Icono derivado de la imagen",
     "adm.noImg.modeBoth": "Icono por separado con IA (2 créditos)",
@@ -5233,7 +5238,10 @@
     "list.hideDone": "Ocultar hechos",
     "settings.checkedDisplay": "Artículos marcados",
     "settings.checkedDisplay.strike": "Tachar",
-    "settings.checkedDisplay.hide": "Ocultar"
+    "settings.checkedDisplay.hide": "Ocultar",
+    "adm.noImg.modeOne": "Generar una imagen (icono derivado, 1 crédito)",
+    "adm.noImg.modeTwo": "Generar dos imágenes diferentes (2 créditos)",
+    "adm.noImg.generate": "Generar imagen"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6534,7 +6542,6 @@
     "store.hide": "Ocultar sección",
     "store.hiddenTitle": "Ocultas",
     "store.unhide": "Mostrar de nuevo",
-    "adm.noImg.genBoth": "Generar ambas imágenes con IA (2 créditos)",
     "adm.noImg.batchMode": "Modo de lote",
     "adm.noImg.modeDerive": "Icono derivado de la imagen",
     "adm.noImg.modeBoth": "Icono por separado con IA (2 créditos)",
@@ -6542,7 +6549,10 @@
     "list.hideDone": "Ocultar hechos",
     "settings.checkedDisplay": "Artículos marcados",
     "settings.checkedDisplay.strike": "Tachar",
-    "settings.checkedDisplay.hide": "Ocultar"
+    "settings.checkedDisplay.hide": "Ocultar",
+    "adm.noImg.modeOne": "Generar una imagen (icono derivado, 1 crédito)",
+    "adm.noImg.modeTwo": "Generar dos imágenes diferentes (2 créditos)",
+    "adm.noImg.generate": "Generar imagen"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7843,7 +7853,6 @@
     "store.hide": "Masquer le rayon",
     "store.hiddenTitle": "Masqués",
     "store.unhide": "Réafficher",
-    "adm.noImg.genBoth": "Générer les deux images avec l'IA (2 crédits)",
     "adm.noImg.batchMode": "Mode par lot",
     "adm.noImg.modeDerive": "Icône dérivée de l'image",
     "adm.noImg.modeBoth": "Icône séparée avec l'IA (2 crédits)",
@@ -7851,7 +7860,10 @@
     "list.hideDone": "Masquer terminés",
     "settings.checkedDisplay": "Articles cochés",
     "settings.checkedDisplay.strike": "Barrer",
-    "settings.checkedDisplay.hide": "Masquer"
+    "settings.checkedDisplay.hide": "Masquer",
+    "adm.noImg.modeOne": "Générer une image (icône dérivée, 1 crédit)",
+    "adm.noImg.modeTwo": "Générer deux images différentes (2 crédits)",
+    "adm.noImg.generate": "Générer l’image"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9152,7 +9164,6 @@
     "store.hide": "Masquer le rayon",
     "store.hiddenTitle": "Masqués",
     "store.unhide": "Réafficher",
-    "adm.noImg.genBoth": "Générer les deux images avec l'IA (2 crédits)",
     "adm.noImg.batchMode": "Mode par lot",
     "adm.noImg.modeDerive": "Icône dérivée de l'image",
     "adm.noImg.modeBoth": "Icône séparée avec l'IA (2 crédits)",
@@ -9160,7 +9171,10 @@
     "list.hideDone": "Masquer terminés",
     "settings.checkedDisplay": "Articles cochés",
     "settings.checkedDisplay.strike": "Barrer",
-    "settings.checkedDisplay.hide": "Masquer"
+    "settings.checkedDisplay.hide": "Masquer",
+    "adm.noImg.modeOne": "Générer une image (icône dérivée, 1 crédit)",
+    "adm.noImg.modeTwo": "Générer deux images différentes (2 crédits)",
+    "adm.noImg.generate": "Générer l’image"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10461,7 +10475,6 @@
     "store.hide": "Nascondi reparto",
     "store.hiddenTitle": "Nascosti",
     "store.unhide": "Mostra di nuovo",
-    "adm.noImg.genBoth": "Genera entrambe le immagini con IA (2 crediti)",
     "adm.noImg.batchMode": "Modalità batch",
     "adm.noImg.modeDerive": "Icona derivata dall'immagine",
     "adm.noImg.modeBoth": "Icona separata con IA (2 crediti)",
@@ -10469,7 +10482,10 @@
     "list.hideDone": "Nascondi fatti",
     "settings.checkedDisplay": "Articoli spuntati",
     "settings.checkedDisplay.strike": "Barrare",
-    "settings.checkedDisplay.hide": "Nascondi"
+    "settings.checkedDisplay.hide": "Nascondi",
+    "adm.noImg.modeOne": "Genera un’immagine (icona derivata, 1 credito)",
+    "adm.noImg.modeTwo": "Genera due immagini diverse (2 crediti)",
+    "adm.noImg.generate": "Genera immagine"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11770,7 +11786,6 @@
     "store.hide": "Nascondi reparto",
     "store.hiddenTitle": "Nascosti",
     "store.unhide": "Mostra di nuovo",
-    "adm.noImg.genBoth": "Genera entrambe le immagini con IA (2 crediti)",
     "adm.noImg.batchMode": "Modalità batch",
     "adm.noImg.modeDerive": "Icona derivata dall'immagine",
     "adm.noImg.modeBoth": "Icona separata con IA (2 crediti)",
@@ -11778,7 +11793,10 @@
     "list.hideDone": "Nascondi fatti",
     "settings.checkedDisplay": "Articoli spuntati",
     "settings.checkedDisplay.strike": "Barrare",
-    "settings.checkedDisplay.hide": "Nascondi"
+    "settings.checkedDisplay.hide": "Nascondi",
+    "adm.noImg.modeOne": "Genera un’immagine (icona derivata, 1 credito)",
+    "adm.noImg.modeTwo": "Genera due immagini diverse (2 crediti)",
+    "adm.noImg.generate": "Genera immagine"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13079,7 +13097,6 @@
     "store.hide": "Ocultar secção",
     "store.hiddenTitle": "Ocultas",
     "store.unhide": "Mostrar novamente",
-    "adm.noImg.genBoth": "Gerar ambas as imagens com IA (2 créditos)",
     "adm.noImg.batchMode": "Modo em lote",
     "adm.noImg.modeDerive": "Ícone derivado da imagem",
     "adm.noImg.modeBoth": "Ícone separado com IA (2 créditos)",
@@ -13087,7 +13104,10 @@
     "list.hideDone": "Ocultar feitos",
     "settings.checkedDisplay": "Itens marcados",
     "settings.checkedDisplay.strike": "Riscar",
-    "settings.checkedDisplay.hide": "Ocultar"
+    "settings.checkedDisplay.hide": "Ocultar",
+    "adm.noImg.modeOne": "Gerar uma imagem (ícone derivado, 1 crédito)",
+    "adm.noImg.modeTwo": "Gerar duas imagens diferentes (2 créditos)",
+    "adm.noImg.generate": "Gerar imagem"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14388,7 +14408,6 @@
     "store.hide": "Ocultar secção",
     "store.hiddenTitle": "Ocultas",
     "store.unhide": "Mostrar novamente",
-    "adm.noImg.genBoth": "Gerar ambas as imagens com IA (2 créditos)",
     "adm.noImg.batchMode": "Modo em lote",
     "adm.noImg.modeDerive": "Ícone derivado da imagem",
     "adm.noImg.modeBoth": "Ícone separado com IA (2 créditos)",
@@ -14396,7 +14415,10 @@
     "list.hideDone": "Ocultar feitos",
     "settings.checkedDisplay": "Itens marcados",
     "settings.checkedDisplay.strike": "Riscar",
-    "settings.checkedDisplay.hide": "Ocultar"
+    "settings.checkedDisplay.hide": "Ocultar",
+    "adm.noImg.modeOne": "Gerar uma imagem (ícone derivado, 1 crédito)",
+    "adm.noImg.modeTwo": "Gerar duas imagens diferentes (2 créditos)",
+    "adm.noImg.generate": "Gerar imagem"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15697,7 +15719,6 @@
     "store.hide": "Afdeling verbergen",
     "store.hiddenTitle": "Verborgen",
     "store.unhide": "Weer tonen",
-    "adm.noImg.genBoth": "Beide afbeeldingen met AI maken (2 credits)",
     "adm.noImg.batchMode": "Batchmodus",
     "adm.noImg.modeDerive": "Pictogram afgeleid van afbeelding",
     "adm.noImg.modeBoth": "Pictogram apart met AI (2 credits)",
@@ -15705,7 +15726,10 @@
     "list.hideDone": "Klaar verbergen",
     "settings.checkedDisplay": "Afgevinkte artikelen",
     "settings.checkedDisplay.strike": "Doorstrepen",
-    "settings.checkedDisplay.hide": "Verbergen"
+    "settings.checkedDisplay.hide": "Verbergen",
+    "adm.noImg.modeOne": "Eén afbeelding genereren (pictogram afgeleid, 1 credit)",
+    "adm.noImg.modeTwo": "Twee verschillende afbeeldingen genereren (2 credits)",
+    "adm.noImg.generate": "Afbeelding genereren"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -17006,7 +17030,6 @@
     "store.hide": "Afdeling verbergen",
     "store.hiddenTitle": "Verborgen",
     "store.unhide": "Weer tonen",
-    "adm.noImg.genBoth": "Beide afbeeldingen met AI maken (2 credits)",
     "adm.noImg.batchMode": "Batchmodus",
     "adm.noImg.modeDerive": "Pictogram afgeleid van afbeelding",
     "adm.noImg.modeBoth": "Pictogram apart met AI (2 credits)",
@@ -17014,7 +17037,10 @@
     "list.hideDone": "Klaar verbergen",
     "settings.checkedDisplay": "Afgevinkte artikelen",
     "settings.checkedDisplay.strike": "Doorstrepen",
-    "settings.checkedDisplay.hide": "Verbergen"
+    "settings.checkedDisplay.hide": "Verbergen",
+    "adm.noImg.modeOne": "Eén afbeelding genereren (pictogram afgeleid, 1 credit)",
+    "adm.noImg.modeTwo": "Twee verschillende afbeeldingen genereren (2 credits)",
+    "adm.noImg.generate": "Afbeelding genereren"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17754,7 +17780,6 @@
     "store.hide": "Abteilung ausblenden",
     "store.hiddenTitle": "Ausgeblendet",
     "store.unhide": "Wieder einblenden",
-    "adm.noImg.genBoth": "Beide Bilder mit KI erzeugen (2 Credits)",
     "adm.noImg.batchMode": "Stapel-Modus",
     "adm.noImg.modeDerive": "Icon aus Bild ableiten",
     "adm.noImg.modeBoth": "Icon separat mit KI (2 Credits)",
@@ -18499,7 +18524,6 @@
     "store.hide": "Abteilung ausblenden",
     "store.hiddenTitle": "Ausgeblendet",
     "store.unhide": "Wieder einblenden",
-    "adm.noImg.genBoth": "Beide Bilder mit KI erzeugen (2 Credits)",
     "adm.noImg.batchMode": "Stapel-Modus",
     "adm.noImg.modeDerive": "Icon aus Bild ableiten",
     "adm.noImg.modeBoth": "Icon separat mit KI (2 Credits)",

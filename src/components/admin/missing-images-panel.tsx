@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button";
 type Dept = { id: string; name: string; parent_id: string | null };
 type Prod = { id: string; name: string; emoji: string | null; department_id: string; image_path: string | null; icon_path?: string | null };
 type Filter = "any" | "image" | "icon" | "both";
-type Dlg = { target: Prod | null; hint: string; opts: AiImageOpts };
+type Dlg = { target: Prod | null; hint: string; opts: AiImageOpts; both: boolean };
 const PAGE = 5;
 
 /** Pflege: Produkte ohne Vorschaubild/Icon, 5 pro Seite, mit Kategorienfilter und KI-Bildoptionen. */
@@ -113,14 +113,8 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   const runDlg = (d: Dlg) => {
     const h = d.hint.trim() || undefined;
     setDlg(null);
-    if (d.target) void fix(d.target, false, h, d.opts);
-    else void fixAll(false, h, d.opts);
-  };
-  const runDlgBoth = (d: Dlg) => {
-    const h = d.hint.trim() || undefined;
-    setDlg(null);
-    if (d.target) void fix(d.target, true, h, d.opts);
-    else void fixAll(true, h, d.opts);
+    if (d.target) void fix(d.target, d.both, h, d.opts);
+    else void fixAll(d.both, h, d.opts);
   };
 
   const Thumb = ({ src, size }: { src: string | undefined; size: string }) => (
@@ -152,10 +146,15 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
           />
         </label>
         <AiImageOptionSelects value={d.opts} onChange={(opts) => setDlg({ ...d, opts })} />
-        <div className="flex flex-col gap-2">
-          <Button size="sm" disabled={busy.size > 0 || !!batch} onClick={() => runDlg(d)}>{t("adm.noImg.gen")}</Button>
-          <Button size="sm" variant="secondary" disabled={busy.size > 0 || !!batch} onClick={() => runDlgBoth(d)}>{t("adm.noImg.genBoth")}</Button>
+        <div className="space-y-1.5" role="radiogroup" aria-label={t("adm.noImg.options")}>
+          {([false, true] as const).map((b) => (
+            <label key={String(b)} className="flex cursor-pointer items-start gap-2 rounded-xl border border-input p-2 text-xs text-foreground has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+              <input type="radio" name="noimg-mode" checked={d.both === b} onChange={() => setDlg({ ...d, both: b })} className="mt-0.5" />
+              <span>{t(b ? "adm.noImg.modeTwo" : "adm.noImg.modeOne")}</span>
+            </label>
+          ))}
         </div>
+        <Button size="sm" className="w-full" disabled={busy.size > 0 || !!batch} onClick={() => runDlg(d)}>{t("adm.noImg.generate")}</Button>
       </div>
     </div>
   );
@@ -192,7 +191,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
         </div>
       ) : (
         <div className="flex flex-wrap items-center gap-2">
-          <Button size="sm" variant="outline" onClick={() => setDlg({ target: null, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS } })}>
+          <Button size="sm" variant="outline" onClick={() => setDlg({ target: null, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS }, both: false })}>
             <WandSparkles className="mr-1 h-4 w-4" />{t("adm.noImg.all", { n: String(visible.length) })}
           </Button>
         </div>
@@ -206,7 +205,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
               <p className="truncate text-sm font-medium text-foreground">{p.emoji} {p.name}</p>
               <p className="truncate text-xs text-muted-foreground">{path(p.department_id)}</p>
             </button>
-            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setDlg({ target: p, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS } })}>
+            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setDlg({ target: p, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS }, both: false })}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
             </Button>
           </li>
