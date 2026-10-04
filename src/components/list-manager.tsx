@@ -84,7 +84,7 @@ function Row({
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 20 : undefined }}
-      className={`flex items-center gap-2 rounded-2xl border bg-card px-2 py-2 ${
+      className={`flex items-center gap-1 rounded-2xl border bg-card px-2 py-2 ${
         active ? "border-primary" : "border-border"
       } ${isDragging ? "shadow-lg" : ""}`}
     >
@@ -137,10 +137,10 @@ function Row({
 
       <button
         onClick={onSaveAsTemplate}
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
+        className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-muted-foreground active:bg-muted"
         aria-label={t("lm.saveAsTemplate")}
       >
-        <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
           <rect x="5" y="3" width="14" height="18" rx="2" />
           <path d="M9 7h6M9 11h6M9 15h3" />
         </svg>
@@ -153,10 +153,10 @@ function Row({
           }
           if (confirm(t("lm.confirmDelete", { name: list.name }))) onDelete();
         }}
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-coral active:bg-muted"
+        className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-coral active:bg-muted"
         aria-label={t("lm.delete")}
       >
-        <TrashIcon className="h-[18px] w-[18px]" />
+        <TrashIcon className="h-4 w-4" />
       </button>
     </div>
   );
@@ -177,7 +177,7 @@ function TemplateRow({
     <div
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 20 : undefined }}
-      className={`flex items-center gap-2 rounded-2xl border border-dashed border-border bg-card px-2 py-2 ${isDragging ? "shadow-lg" : ""}`}
+      className={`flex items-center gap-1 rounded-2xl border border-dashed border-border bg-card px-2 py-2 ${isDragging ? "shadow-lg" : ""}`}
     >
       <button
         {...attributes}
@@ -208,10 +208,10 @@ function TemplateRow({
         onClick={() => {
           if (confirm(t("lm.deleteTemplateConfirm", { name: tpl.name }))) onDeleteTemplate();
         }}
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-coral active:bg-muted"
+        className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-coral active:bg-muted"
         aria-label={t("lm.deleteTemplate")}
       >
-        <TrashIcon className="h-[18px] w-[18px]" />
+        <TrashIcon className="h-4 w-4" />
       </button>
     </div>
   );
