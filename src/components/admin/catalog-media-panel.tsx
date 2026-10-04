@@ -327,6 +327,79 @@ export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: {
   );
 }
 
+/** Aufklappbare Produktliste einer Kategorie im Preise-Tab: zeigt Preis-Status, Einzelschätzung und Bearbeiten. */
+function CategoryProducts({ departmentId, markets, onEdit }: { departmentId: string; markets: string[]; onEdit?: (id: string) => void }) {
+  const fn = useServerFn(listCategoryPrices);
+  const estOne = useServerFn(estimateAndSaveProductPrice);
+  const qc = useQueryClient();
+  const market = markets[0] ?? "CH";
+  const per = 20;
+  const [estimating, setEstimating] = useState<string | null>(null);
+  const query = useInfiniteQuery({
+    queryKey: ["cat-price-products", departmentId, market],
+    initialPageParam: 0,
+    queryFn: ({ pageParam }) => fn({ data: { market, departmentId, offset: pageParam, limit: per } }),
+    getNextPageParam: (last, pages) => (last.hasMore ? pages.length * per : undefined),
+  });
+  const items = query.data?.pages.flatMap((p) => p.items) ?? [];
+
+  const estimate = async (productId: string) => {
+    setEstimating(productId);
+    try {
+      const r = await estOne({ data: { productId, markets } });
+      if (r.errors.length > 0) toast.error(r.errors[0]!);
+      else toast.success(T("price.estimated", { n: r.saved }));
+      void qc.invalidateQueries({ queryKey: ["cat-price-products", departmentId] });
+      void qc.invalidateQueries({ queryKey: ["ref-price-list"] });
+      void qc.invalidateQueries({ queryKey: ["catalog-media-status"] });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally {
+      setEstimating(null);
+    }
+  };
+
+  return (
+    <div className="mb-1 ml-9 rounded-xl border border-border bg-background p-2">
+      {query.isLoading && <p className="px-1 py-1 text-sm text-muted-foreground">{T("media.working")}</p>}
+      {!query.isLoading && items.length === 0 && <p className="px-1 py-1 text-sm text-muted-foreground">{T("price.catEmpty")}</p>}
+      <ul className="max-h-80 overflow-y-auto">
+        {items.map((p) => (
+          <li key={p.product_id} className="flex items-center gap-2 border-b border-border/50 py-1.5 text-sm last:border-0">
+            {p.iconUrl ? (
+              <img src={p.iconUrl} alt="" className="h-8 w-8 shrink-0 rounded-md object-cover" loading="lazy" />
+            ) : (
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted text-base">{p.emoji ?? "🛒"}</span>
+            )}
+            <span className="min-w-0 flex-1 truncate">
+              {p.name}
+              {p.pack_size ? <span className="text-muted-foreground"> · {p.pack_size} {p.pack_unit ?? ""}</span> : null}
+            </span>
+            <span className="shrink-0 tabular-nums text-muted-foreground">
+              {p.price != null && p.currency
+                ? formatRefPrice({ product_id: p.product_id, price: p.price, currency: p.currency, unit_price: p.unit_price, unit_basis: p.unit_basis, observed_at: p.observed_at ?? "" })
+                : "–"}
+            </span>
+            <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0" disabled={estimating !== null} onClick={() => void estimate(p.product_id)} aria-label={`${T("price.estimateOne")}: ${p.name}`} title={T("price.estimateOne")}>
+              <Sparkles className={`h-4 w-4 ${estimating === p.product_id ? "animate-pulse text-primary" : ""}`} />
+            </Button>
+            {onEdit && (
+              <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0" onClick={() => onEdit(p.product_id)} aria-label={`${T("adm.health.open")}: ${p.name}`} title={T("adm.health.open")}>
+                <Pencil className="h-4 w-4" />
+              </Button>
+            )}
+          </li>
+        ))}
+      </ul>
+      {query.hasNextPage && (
+        <Button size="sm" variant="secondary" className="mt-2" disabled={query.isFetchingNextPage} onClick={() => query.fetchNextPage()}>
+          {query.isFetchingNextPage ? T("media.working") : T("price.listMore")}
+        </Button>
+      )}
+    </div>
+  );
+}
+
 /** Dauerhafte Galerie aller Produkte mit Bild — durchsuchbar, seitenweise. */
 function ImageGallery() {
   const galleryFn = useServerFn(listProductImages);
