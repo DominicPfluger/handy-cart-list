@@ -52,7 +52,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
       return new Map((data ?? []).filter((e) => e.path && e.signedUrl).map((e) => [e.path!, e.signedUrl]));
     },
   });
-  const url = (p?: string | null) => (p ? imgs.data?.get(p) : undefined);
+  const url = (p?: string | null): string | undefined => (p ? imgs.data?.get(p) ?? undefined : undefined);
 
   const fix = async (p: Prod) => {
     setBusy((s) => new Set(s).add(p.id));
@@ -83,7 +83,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     setBatch(null);
   };
 
-  const Thumb = ({ src, size }: { src?: string; size: string }) => (
+  const Thumb = ({ src, size }: { src: string | undefined; size: string }) => (
     <span className={`grid ${size} shrink-0 place-items-center overflow-hidden rounded-lg border border-border bg-muted text-muted-foreground`}>
       {src ? <img src={src} alt="" loading="lazy" className="h-full w-full object-contain" /> : <ImageOff className="h-4 w-4" />}
     </span>
