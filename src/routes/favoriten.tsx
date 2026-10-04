@@ -17,6 +17,8 @@ import {
   departmentIdsOf,
 } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
+import { storeLabel, useStores } from "../hooks/use-stores";
+import { useGroupOrder } from "../hooks/use-group-order";
 import { formatQuantity } from "../lib/units";
 import { getLocale, pickName, useT } from "../i18n";
 import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
@@ -84,6 +86,9 @@ function FavoritesPage() {
   const [selected, setSelected] = useState<FavRow | null>(null);
   const [listNameOpen, setListNameOpen] = useState(false);
   const [listName, setListName] = useState("");
+  const [newStore, setNewStore] = useState("default");
+  const [newStoreName, setNewStoreName] = useState("");
+  const [newStoreEmoji, setNewStoreEmoji] = useState("");
 
   const deptById = useMemo(
     () => new Map(departments.map((d) => [d.id, d])),
