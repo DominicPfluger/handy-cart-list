@@ -44,11 +44,34 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   const progress = items.length ? (done / items.length) * 100 : 0;
 
   // Aktuellen Artikel vorlesen; beim Wechsel zum nächsten erneut.
+  // Kurze Verzögerung: Chrome verwirft speak() direkt nach cancel(); Stimmen laden evtl. asynchron.
   useEffect(() => {
-    if (current && speakOn) speakSentences([current.spoken], speakLocale, rate);
-    return () => { try { window.speechSynthesis?.cancel(); } catch { /* ignore */ } };
+    if (!current || !speakOn || typeof window === "undefined" || !window.speechSynthesis) return;
+    const synth = window.speechSynthesis;
+    let cancelled = false;
+    let spoken = false;
+    const run = () => {
+      if (cancelled || spoken) return;
+      spoken = true;
+      try { synth.resume(); } catch { /* ignore */ }
+      speakSentences([current.spoken], speakLocale, rate);
+    };
+    let timer: number;
+    if (synth.getVoices().length === 0) {
+      const onVoices = () => { synth.removeEventListener("voiceschanged", onVoices); run(); };
+      synth.addEventListener("voiceschanged", onVoices);
+      timer = window.setTimeout(() => { synth.removeEventListener("voiceschanged", onVoices); run(); }, 600);
+    } else {
+      synth.cancel();
+      timer = window.setTimeout(run, 150);
+    }
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+      try { synth.cancel(); } catch { /* ignore */ }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current?.id, speakOn]);
+  }, [current?.id, current?.spoken, speakOn, speakLocale]);
 
   const toggleSpeak = () => {
     const next = !speakOn;
