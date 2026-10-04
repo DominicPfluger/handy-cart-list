@@ -786,6 +786,7 @@ function useCloudLists(
                 : l
             )
           );
+          renameListStore(id, String((res.list as CloudRow).id));
           if (!isTemplate) setActiveListId(String((res.list as CloudRow).id));
           scheduleReload();
         })
@@ -890,6 +891,7 @@ function useCloudLists(
       })
         .then((res) => {
           const newId = String((res.list as CloudRow).id);
+          renameListStore(id, newId);
           setActiveListId(newId);
           scheduleReload();
         })
@@ -1353,6 +1355,7 @@ export function useShoppingList() {
       selfName: "Du",
       signedIn: false as const,
       hydrated: local.hydrated && localHydrated,
+      loading: user === undefined,
       addItem: localAddItem,
       addCatalogItem: localAddCatalogItem,
       toggleItem: localToggleItem,
@@ -1388,6 +1391,7 @@ export function useShoppingList() {
     selfName: cloud.selfName,
     signedIn: true as const,
     hydrated: cloud.hydrated && localHydrated,
+    loading: false,
     addItem: cloud.addItem,
     addCatalogItem: cloud.addCatalogItem,
     toggleItem: cloud.toggleItem,
