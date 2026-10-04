@@ -295,7 +295,7 @@ export function ListManager(props: Props) {
           <button
             onClick={create}
             disabled={!newName.trim()}
-            className="flex items-center gap-1 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-50"
+            className="flex items-center gap-1 self-start rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
           >
             <PlusIcon className="h-4 w-4" /> {t("lm.create")}
           </button>

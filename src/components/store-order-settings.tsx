@@ -122,19 +122,3 @@ export function StoreOrderSettings() {
     </div>
   );
 }
-
-/** Kleiner Laden-Umschalter für die Listenansicht. */
-export function StoreSwitcher() {
-  const { t } = useT();
-  const stores = useStores();
-  const { store, setStore } = useGroupOrder();
-  if (stores.length <= 1) return null;
-  return (
-    <label className="mb-3 flex items-center gap-2 text-xs text-muted-foreground">
-      <span>{t("store.label")}</span>
-      <select value={stores.some((s) => s.id === store) ? store : "default"} onChange={(e) => setStore(e.target.value)} className="rounded-lg border border-input bg-background px-2 py-1 text-xs text-foreground outline-none focus:border-primary">
-        {stores.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-      </select>
-    </label>
-  );
-}
