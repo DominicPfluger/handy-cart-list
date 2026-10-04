@@ -1652,6 +1652,7 @@ export type Database = {
           created_at: string
           enabled: boolean
           id: string
+          labels: Json
           sort_order: number
           updated_at: string
         }
@@ -1660,6 +1661,7 @@ export type Database = {
           created_at?: string
           enabled?: boolean
           id: string
+          labels?: Json
           sort_order?: number
           updated_at?: string
         }
@@ -1668,6 +1670,7 @@ export type Database = {
           created_at?: string
           enabled?: boolean
           id?: string
+          labels?: Json
           sort_order?: number
           updated_at?: string
         }
