@@ -15,15 +15,26 @@ const CURRENCIES: Record<string, string> = {
 /** Erzeugt ein KI-Bild für eine Produktvariante und liefert den Speicherpfad (Speichern der Zuordnung macht der Client). */
 export const generateVariantImage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((d) => z.object({ productId: z.string().uuid(), variant: z.string().min(1).max(120) }).parse(d))
+  .inputValidator((d) => z.object({
+    productId: z.string().uuid(),
+    variant: z.string().min(1).max(120),
+    iconOnly: z.boolean().optional(),
+    hint: z.string().max(300).optional(),
+    opts: z.object({
+      style: z.enum(["photo", "illustration"]).optional(),
+      background: z.enum(["transparent", "white", "gradient"]).optional(),
+      view: z.enum(["front", "top", "side"]).optional(),
+      count: z.enum(["single", "group"]).optional(),
+    }).optional(),
+  }).parse(d))
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
     const { generateProductImage } = await import("./product-media.server");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: p, error } = await context.supabase.from("products").select("id, name, emoji").eq("id", data.productId).single();
     if (error || !p) throw new Error("Produkt nicht gefunden");
-    const bytes = await generateProductImage(`${p.name} – ${data.variant}`, p.emoji, `the "${data.variant}" variety of ${p.name}`);
-    const path = `variants/${p.id}-${crypto.randomUUID()}.webp`;
+    const bytes = await generateProductImage(`${p.name} – ${data.variant}`, p.emoji, data.hint?.trim() || `the "${data.variant}" variety of ${p.name}`, data.opts);
+    const path = `${data.iconOnly ? "variant-icons" : "variants"}/${p.id}-${crypto.randomUUID()}.webp`;
     const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
     if (up.error) throw new Error(up.error.message);
     return { path };

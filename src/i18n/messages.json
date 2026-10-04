@@ -1312,7 +1312,9 @@
     "settings.checkedDisplay.hide": "Hide",
     "adm.noImg.modeOne": "Generate one image (icon derived, 1 credit)",
     "adm.noImg.modeTwo": "Generate two different images (2 credits)",
-    "adm.noImg.generate": "Generate image"
+    "adm.noImg.generate": "Generate image",
+    "adm.variantAi.all": "AI images for {n} variants without image",
+    "adm.variantAi.done": "{n} variant images generated"
   },
   "en-GB": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -2627,7 +2629,9 @@
     "settings.checkedDisplay.hide": "Hide",
     "adm.noImg.modeOne": "Generate one image (icon derived, 1 credit)",
     "adm.noImg.modeTwo": "Generate two different images (2 credits)",
-    "adm.noImg.generate": "Generate image"
+    "adm.noImg.generate": "Generate image",
+    "adm.variantAi.all": "AI images for {n} variants without image",
+    "adm.variantAi.done": "{n} variant images generated"
   },
   "en-CA": {
     "splash.slogan": "Together. Simply. Shop.",
@@ -3942,7 +3946,9 @@
     "settings.checkedDisplay.hide": "Hide",
     "adm.noImg.modeOne": "Generate one image (icon derived, 1 credit)",
     "adm.noImg.modeTwo": "Generate two different images (2 credits)",
-    "adm.noImg.generate": "Generate image"
+    "adm.noImg.generate": "Generate image",
+    "adm.variantAi.all": "AI images for {n} variants without image",
+    "adm.variantAi.done": "{n} variant images generated"
   },
   "es-ES": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -5257,7 +5263,9 @@
     "settings.checkedDisplay.hide": "Ocultar",
     "adm.noImg.modeOne": "Generar una imagen (icono derivado, 1 crédito)",
     "adm.noImg.modeTwo": "Generar dos imágenes diferentes (2 créditos)",
-    "adm.noImg.generate": "Generar imagen"
+    "adm.noImg.generate": "Generar imagen",
+    "adm.variantAi.all": "Imágenes IA para {n} variantes sin imagen",
+    "adm.variantAi.done": "{n} imágenes de variantes generadas"
   },
   "es-MX": {
     "splash.slogan": "Juntos. Fácil. Comprar.",
@@ -6572,7 +6580,9 @@
     "settings.checkedDisplay.hide": "Ocultar",
     "adm.noImg.modeOne": "Generar una imagen (icono derivado, 1 crédito)",
     "adm.noImg.modeTwo": "Generar dos imágenes diferentes (2 créditos)",
-    "adm.noImg.generate": "Generar imagen"
+    "adm.noImg.generate": "Generar imagen",
+    "adm.variantAi.all": "Imágenes IA para {n} variantes sin imagen",
+    "adm.variantAi.done": "{n} imágenes de variantes generadas"
   },
   "fr-FR": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -7887,7 +7897,9 @@
     "settings.checkedDisplay.hide": "Masquer",
     "adm.noImg.modeOne": "Générer une image (icône dérivée, 1 crédit)",
     "adm.noImg.modeTwo": "Générer deux images différentes (2 crédits)",
-    "adm.noImg.generate": "Générer l’image"
+    "adm.noImg.generate": "Générer l’image",
+    "adm.variantAi.all": "Images IA pour {n} variantes sans image",
+    "adm.variantAi.done": "{n} images de variantes générées"
   },
   "fr-CA": {
     "splash.slogan": "Ensemble. Simplement. Faire les courses.",
@@ -9202,7 +9214,9 @@
     "settings.checkedDisplay.hide": "Masquer",
     "adm.noImg.modeOne": "Générer une image (icône dérivée, 1 crédit)",
     "adm.noImg.modeTwo": "Générer deux images différentes (2 crédits)",
-    "adm.noImg.generate": "Générer l’image"
+    "adm.noImg.generate": "Générer l’image",
+    "adm.variantAi.all": "Images IA pour {n} variantes sans image",
+    "adm.variantAi.done": "{n} images de variantes générées"
   },
   "it-IT": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -10517,7 +10531,9 @@
     "settings.checkedDisplay.hide": "Nascondi",
     "adm.noImg.modeOne": "Genera un’immagine (icona derivata, 1 credito)",
     "adm.noImg.modeTwo": "Genera due immagini diverse (2 crediti)",
-    "adm.noImg.generate": "Genera immagine"
+    "adm.noImg.generate": "Genera immagine",
+    "adm.variantAi.all": "Immagini IA per {n} varianti senza immagine",
+    "adm.variantAi.done": "{n} immagini di varianti generate"
   },
   "it-CH": {
     "splash.slogan": "Insieme. Facile. Fare la spesa.",
@@ -11832,7 +11848,9 @@
     "settings.checkedDisplay.hide": "Nascondi",
     "adm.noImg.modeOne": "Genera un’immagine (icona derivata, 1 credito)",
     "adm.noImg.modeTwo": "Genera due immagini diverse (2 crediti)",
-    "adm.noImg.generate": "Genera immagine"
+    "adm.noImg.generate": "Genera immagine",
+    "adm.variantAi.all": "Immagini IA per {n} varianti senza immagine",
+    "adm.variantAi.done": "{n} immagini di varianti generate"
   },
   "pt-PT": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -13147,7 +13165,9 @@
     "settings.checkedDisplay.hide": "Ocultar",
     "adm.noImg.modeOne": "Gerar uma imagem (ícone derivado, 1 crédito)",
     "adm.noImg.modeTwo": "Gerar duas imagens diferentes (2 créditos)",
-    "adm.noImg.generate": "Gerar imagem"
+    "adm.noImg.generate": "Gerar imagem",
+    "adm.variantAi.all": "Imagens IA para {n} variantes sem imagem",
+    "adm.variantAi.done": "{n} imagens de variantes geradas"
   },
   "pt-BR": {
     "splash.slogan": "Juntos. Simples. Fazer compras.",
@@ -14462,7 +14482,9 @@
     "settings.checkedDisplay.hide": "Ocultar",
     "adm.noImg.modeOne": "Gerar uma imagem (ícone derivado, 1 crédito)",
     "adm.noImg.modeTwo": "Gerar duas imagens diferentes (2 créditos)",
-    "adm.noImg.generate": "Gerar imagem"
+    "adm.noImg.generate": "Gerar imagem",
+    "adm.variantAi.all": "Imagens IA para {n} variantes sem imagem",
+    "adm.variantAi.done": "{n} imagens de variantes geradas"
   },
   "nl-NL": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -15777,7 +15799,9 @@
     "settings.checkedDisplay.hide": "Verbergen",
     "adm.noImg.modeOne": "Eén afbeelding genereren (pictogram afgeleid, 1 credit)",
     "adm.noImg.modeTwo": "Twee verschillende afbeeldingen genereren (2 credits)",
-    "adm.noImg.generate": "Afbeelding genereren"
+    "adm.noImg.generate": "Afbeelding genereren",
+    "adm.variantAi.all": "AI-afbeeldingen voor {n} varianten zonder afbeelding",
+    "adm.variantAi.done": "{n} variantafbeeldingen gemaakt"
   },
   "nl-BE": {
     "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
@@ -17092,7 +17116,9 @@
     "settings.checkedDisplay.hide": "Verbergen",
     "adm.noImg.modeOne": "Eén afbeelding genereren (pictogram afgeleid, 1 credit)",
     "adm.noImg.modeTwo": "Twee verschillende afbeeldingen genereren (2 credits)",
-    "adm.noImg.generate": "Afbeelding genereren"
+    "adm.noImg.generate": "Afbeelding genereren",
+    "adm.variantAi.all": "AI-afbeeldingen voor {n} varianten zonder afbeelding",
+    "adm.variantAi.done": "{n} variantafbeeldingen gemaakt"
   },
   "de-AT": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -17836,7 +17862,9 @@
     "adm.noImg.modeDerive": "Icon aus Bild ableiten",
     "adm.noImg.modeBoth": "Icon separat mit KI (2 Credits)",
     "adm.noImg.cat": "Alle Kategorien",
-    "adm.noImg.options": "KI-Bildoptionen"
+    "adm.noImg.options": "KI-Bildoptionen",
+    "adm.variantAi.all": "KI-Bilder für {n} Varianten ohne Bild",
+    "adm.variantAi.done": "{n} Variantenbilder erzeugt"
   },
   "de-CH": {
     "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
@@ -18580,6 +18608,8 @@
     "adm.noImg.modeDerive": "Icon aus Bild ableiten",
     "adm.noImg.modeBoth": "Icon separat mit KI (2 Credits)",
     "adm.noImg.cat": "Alle Kategorien",
-    "adm.noImg.options": "KI-Bildoptionen"
+    "adm.noImg.options": "KI-Bildoptionen",
+    "adm.variantAi.all": "KI-Bilder für {n} Varianten ohne Bild",
+    "adm.variantAi.done": "{n} Variantenbilder erzeugt"
   }
 }
