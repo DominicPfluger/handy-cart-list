@@ -1,26 +1,25 @@
-# Popup beim Listennamen entfernen — nur noch beim Erstellen anzeigen
+# Laden-Dropdown nur beim Erstellen einer Liste
 
-## Ausgangslage
-In der Listen-Einzelansicht öffnet ein Tipp auf die Listenbezeichnung momentan das Popup
-„Listen bearbeiten" (ListManager: alle Listen, Umbenennen, Löschen, Vorlagen, Erstellen-Formular).
-Das ist unerwünscht — das Popup soll nur noch beim Erstellen einer neuen Liste erscheinen.
+## Ziel
 
-## Änderungen — `src/routes/index.tsx`
+Im „Meine Listen"-Popup (Listenübersicht und Detailansicht) erscheint unter jedem Listeneintrag ein Laden-Dropdown (🏪). Dieses wird entfernt. Die Laden-Auswahl bleibt ausschliesslich im Erstellen-Formular („+ Neue Liste") erhalten, inklusive „+ Neuer Laden"-Option.
 
-1. **Listenbezeichnung in der Einzelansicht entkoppeln** (ca. Zeile 475):
-   Der `<button onClick={() => setManagerOpen(true)}>` um Titel und Laden-Zeile wird zu einem
-   nicht klickbaren Block (`<div>` mit gleichen Klassen). Aussehen bleibt identisch; ein Tipp
-   auf den Listennamen öffnet kein Popup mehr.
+## Änderungen
 
-2. **Nicht mehr erreichbares Popup in der Einzelansicht entfernen**:
-   Das zweite `ListManager`-Instanz im Detail-View (ca. Zeile 438) wird samt `managerOpen`-
-   Verwendung dort entfernt, da es nur über den Listennamen-Tipp erreichbar war.
+Datei: `src/components/list-manager.tsx`
 
-3. **Erstellen bleibt wie es ist**: Der „+ Neue Liste"-Button in der Listenübersicht öffnet
-   weiterhin das Popup mit dem Erstellen-Formular (inkl. Laden-Auswahl und „+ Neuer Laden").
+1. **`Row`-Komponente:** Das `<select>` mit der Laden-Auswahl unter dem Listennamen (ca. Zeilen 139–146) entfernen. Die dadurch ungenutzten Props `stores`, `storeId`, `onStoreChange` aus der Komponente und deren Interface entfernen.
+2. **Aufrufstelle:** In `ListManager` die Props `stores={stores}`, `storeId={…}`, `onStoreChange={…}` aus dem `<Row>`-Aufruf entfernen; `listStores`/`setListStore` aus `useGroupOrder` dort nicht mehr destrukturieren.
+3. **Unverändert bleiben:**
+   - Die Laden-Auswahl im Erstellen-Formular (inkl. „+ Neuer Laden") — Liste wird wie bisher mit gewähltem Laden angelegt.
+   - Die interne Zuordnung `shoppi:list-stores`: bestehende Listen behalten ihren zugewiesenen Laden, die Listenansicht sortiert weiterhin danach.
+   - Umbenennen, Löschen, Verschieben, Vorlagen — alles unverändert.
 
-## Verifikation
+## Folge
+
+Bestehende Listen lassen sich nachträglich nicht mehr über dieses Popup einem anderen Laden zuordnen (das war ausdrücklich gewünscht). Falls später doch ein Ändern gewünscht wird, wäre ein Platz dafür z. B. die Detailansicht der Liste.
+
+## Prüfung
+
 - Typprüfung (`bunx tsgo --noEmit`).
-- Browser-Check: Tipp auf den Listennamen in der Einzelansicht öffnet kein Popup;
-  „+ Neue Liste" in der Übersicht öffnet das Popup weiterhin; bestehende Funktionen
-  (Umbenennen/Löschen/Vorlagen in der Übersicht) bleiben unverändert.
+- Browser-Check: Listenübersicht öffnen → Popup zeigt Einträge ohne Laden-Dropdown; Erstellen-Formular zeigt weiterhin die Laden-Auswahl.
