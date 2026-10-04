@@ -1,6 +1,6 @@
 import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
@@ -41,6 +41,7 @@ import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath } from "@/lib/product-icon";
 import { LocaleAdminPanel } from "@/components/admin/locale-admin-panel";
 import { CatalogHealthPanel } from "@/components/admin/catalog-health-panel";
+import { SpeechTextsPanel } from "@/components/admin/speech-texts-panel";
 import { useReferencePrices } from "@/hooks/use-reference-prices";
 
 export const Route = createFileRoute("/_authenticated/admin")({
