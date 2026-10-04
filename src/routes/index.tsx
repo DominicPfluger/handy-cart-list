@@ -80,6 +80,40 @@ export const Route = createFileRoute("/")({
   component: LandingGate,
 });
 
+/** Ziehbarer Abteilungs-Block in der Listenansicht (Griff in der Kopfzeile). */
+function SortableGroup({ id, header, children }: { id: string; header: (handle: ReactNode) => ReactNode; children: ReactNode }) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  const { t } = useT();
+  const grip = (
+    <button
+      {...attributes}
+      {...listeners}
+      className="grid h-6 w-6 shrink-0 cursor-grab touch-none place-items-center text-muted-foreground/60 active:cursor-grabbing"
+      aria-label={t("list.moveGroup")}
+      title={t("list.moveGroup")}
+    >
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+        {[6, 12, 18].map((y) => (
+          <g key={y}>
+            <circle cx={9} cy={y} r={1.6} />
+            <circle cx={15} cy={y} r={1.6} />
+          </g>
+        ))}
+      </svg>
+    </button>
+  );
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition, zIndex: isDragging ? 20 : undefined }}
+      className={isDragging ? "relative rounded-2xl shadow-lg" : undefined}
+    >
+      {header(grip)}
+      {children}
+    </div>
+  );
+}
+
 function ListPage() {
   const {
     items, hydrated, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem,
@@ -89,6 +123,12 @@ function ListPage() {
   const [managerOpen, setManagerOpen] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   const [speakLocale] = useSpeakLocale();
+  const { order: groupOrder, save: saveGroupOrder } = useGroupOrder();
+  const groupSensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
+  );
   const data = useCatalog();
   const { t } = useT();
   const { data: referencePrices, isPending: pricesPending } = useReferencePrices();
