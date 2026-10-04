@@ -122,6 +122,8 @@ function ListPage() {
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
+  // Übersicht zuerst: erst nach Auswahl einer Liste wird deren Inhalt geladen.
+  const [openListId, setOpenListId] = useState<string | null>(null);
   const [speakLocale] = useSpeakLocale();
   const { all: groupOrderAll, saveFor: saveGroupOrderFor, hiddenAll: hiddenGroupsAll, listStores, setListStore } = useGroupOrder();
   const activeStoreId = listStores[activeList.id] ?? "default";
@@ -347,6 +349,66 @@ function ListPage() {
     clearChecked();
   };
 
+  // ---- Übersicht: zuerst alle Listen anzeigen, Inhalt erst nach Auswahl laden ----
+  if (!openListId || !lists.some((l) => l.id === openListId)) {
+    return (
+      <div className="space-y-5">
+        <ListManager
+          open={managerOpen}
+          onClose={() => setManagerOpen(false)}
+          lists={lists}
+          activeId={activeList.id}
+          templates={templates}
+          onSelect={(id) => { setActiveListId(id); setOpenListId(id); }}
+          onCreate={(name, storeId) => {
+            const id = createList(name);
+            if (id) { setListStore(id, storeId); setActiveListId(id); setOpenListId(id); }
+          }}
+          onRename={renameList}
+          onDelete={deleteList}
+          onReorder={reorderLists}
+          onSaveAsTemplate={saveAsTemplate}
+          onCreateFromTemplate={(templateId) => {
+            createFromTemplate(templateId);
+            toast.success(t("lm.templateCreated"));
+          }}
+          onDeleteTemplate={deleteTemplate}
+          onReorderTemplates={reorderTemplates}
+        />
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("list.lists")}</h1>
+        <div className="divide-y divide-border rounded-2xl border border-border bg-card">
+          {lists.map((l) => {
+            const done = l.items.filter((i) => i.checked).length;
+            return (
+              <button
+                key={l.id}
+                onClick={() => { setActiveListId(l.id); setOpenListId(l.id); }}
+                className="flex w-full items-center gap-3 px-4 py-3.5 text-left active:bg-muted"
+              >
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/10 text-lg">🛒</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-sm font-semibold text-foreground">{l.name}</span>
+                  <span className="block text-xs text-muted-foreground">
+                    {l.items.length === 0 ? t("list.empty1") : `${done}/${l.items.length}`}
+                  </span>
+                </span>
+                <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0 text-muted-foreground" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m9 6 6 6-6 6" />
+                </svg>
+              </button>
+            );
+          })}
+        </div>
+        <button
+          onClick={() => setManagerOpen(true)}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-primary/40 py-3.5 text-sm font-semibold text-primary active:bg-muted"
+        >
+          <PlusIcon className="h-4 w-4" /> {t("lm.create")}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-5">
       <ListManager
@@ -372,28 +434,16 @@ function ListPage() {
         onReorderTemplates={reorderTemplates}
       />
 
-      {/* List switcher */}
-      <div className="flex flex-wrap gap-2" role="tablist" aria-label={t("list.lists")}>
-        {lists.map((l) => (
-          <button
-            key={l.id}
-            role="tab"
-            aria-selected={l.id === activeList.id}
-            onClick={() => setActiveListId(l.id)}
-            className={`max-w-full rounded-full px-4 py-1.5 text-xs font-semibold transition ${
-              l.id === activeList.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-            }`}
-          >
-            <span className="line-clamp-2 break-words text-left">{l.name}</span>
-          </button>
-        ))}
-        <button
-          onClick={() => setManagerOpen(true)}
-          className="flex items-center gap-1 rounded-full border border-dashed border-primary/40 px-3 py-1.5 text-xs font-semibold text-primary"
-        >
-          <PlusIcon className="h-3.5 w-3.5 shrink-0" /> {t("list.lists")}
-        </button>
-      </div>
+      {/* Zurück zur Listen-Übersicht */}
+      <button
+        onClick={() => setOpenListId(null)}
+        className="flex items-center gap-1.5 rounded-full bg-muted px-3 py-1.5 text-xs font-semibold text-muted-foreground active:bg-muted/70"
+      >
+        <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+        {t("list.lists")}
+      </button>
 
       {/* Title + progress */}
       <div>
