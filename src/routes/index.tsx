@@ -121,6 +121,7 @@ function ListPage() {
     items, hydrated, loading, toggleItem, setItemGroup, removeItem, clearChecked, addItem, addCatalogItem,
     lists, activeList, setActiveListId, createList, renameList, deleteList, reorderLists,
     templates, saveAsTemplate, createFromTemplate, deleteTemplate, reorderTemplates, renameTemplate,
+    syncList, dirtyIds, syncing, signedIn,
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
@@ -488,6 +489,23 @@ function ListPage() {
               <path d="M2 3h3l2.6 12.4a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21.5 8H6" />
             </svg>
           </button>
+          {signedIn && !activeList.shared && activeList.id && (
+            <button
+              onClick={() => void syncList(activeList.id)}
+              disabled={syncing}
+              aria-label={t("list.sync")}
+              title={t("list.sync")}
+              className="relative grid h-8 w-8 shrink-0 place-items-center rounded-full text-primary active:bg-muted disabled:opacity-60"
+            >
+              <svg viewBox="0 0 24 24" className={`h-[18px] w-[18px] ${syncing ? "animate-spin" : ""}`} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M21 12a9 9 0 0 1-15.5 6.2L3 16" /><path d="M3 21v-5h5" />
+                <path d="M3 12a9 9 0 0 1 15.5-6.2L21 8" /><path d="M21 3v5h-5" />
+              </svg>
+              {dirtyIds.includes(activeList.id) && !syncing && (
+                <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-destructive" aria-hidden="true" />
+              )}
+            </button>
+          )}
           <button
             onClick={() => shareList({ ...activeList, items: activeList.items.map((i) => ({ ...i, name: displayName(i), quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : i.quantity })) })}
             className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
