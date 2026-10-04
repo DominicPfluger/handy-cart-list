@@ -220,7 +220,7 @@ function ListPage() {
       }
       group.items.push(it);
     }
-    const groups = [...map.values()].sort((a, b) => a.order - b.order);
+    const groups = applyGroupOrder([...map.values()].sort((a, b) => a.order - b.order), groupOrder);
     for (const group of groups) {
       group.items.sort((a, b) => {
         if (a.checked !== b.checked) return a.checked ? 1 : -1;
