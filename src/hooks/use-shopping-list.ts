@@ -509,6 +509,13 @@ function useCloudLists(
   const prevItemsRef = useRef<Map<string, { checked: boolean; addedBy: string }>>(new Map());
   const localRef = useRef(local);
   localRef.current = local;
+  // Häkchen, deren Speicherung noch läuft — überstehen ein zwischenzeitliches Neuladen
+  const pendingChecksRef = useRef<Map<string, { checked: boolean; until: number }>>(new Map());
+  // Häkchen an noch nicht gespeicherten (tmp-) Artikeln
+  const tmpChecksRef = useRef<Map<string, boolean>>(new Map());
+  const fetchSeqRef = useRef(0);
+  const selfNameRef = useRef(selfName);
+  selfNameRef.current = selfName;
 
   const scheduleReload = useCallback(() => {
     if (reloadTimer.current) clearTimeout(reloadTimer.current);
@@ -520,8 +527,21 @@ function useCloudLists(
   }, []);
 
   const fetchCloud = useCallback(async () => {
+    const seq = ++fetchSeqRef.current;
     try {
       const res = await getMyLists();
+      // Veraltete Antwort (neueres Neuladen läuft bereits) verwerfen
+      if (seq !== fetchSeqRef.current) return;
+      const now = Date.now();
+      const applyPending = (it: ListItem): ListItem => {
+        const p = pendingChecksRef.current.get(it.id);
+        if (!p) return it;
+        if (p.until < now) {
+          pendingChecksRef.current.delete(it.id);
+          return it;
+        }
+        return p.checked === it.checked ? it : { ...it, checked: p.checked };
+      };
       const itemsByList = new Map<string, CloudRow[]>();
       for (const it of res.items) {
         const arr = itemsByList.get(it.list_id) ?? [];
@@ -535,7 +555,7 @@ function useCloudLists(
         inviteCode: r.invite_code ?? null,
         isOwner: r.owner_id === res.selfId,
         createdAt: r.created_at ? Date.parse(r.created_at) : Date.now(),
-        items: (itemsByList.get(r.id) ?? []).map(rowToItem),
+        items: (itemsByList.get(r.id) ?? []).map(rowToItem).map(applyPending),
       }));
 
       // Fern-Änderungen ins Aktivitätenprotokoll schreiben
@@ -740,10 +760,22 @@ function useCloudLists(
   };
 
   const replaceItemLocally = useCallback((tmpId: string, newItem: ListItem) => {
+    // Häkchen, das gesetzt wurde, bevor der Artikel gespeichert war, nachreichen
+    const wanted = tmpChecksRef.current.get(tmpId);
+    tmpChecksRef.current.delete(tmpId);
+    const finalItem = wanted !== undefined ? { ...newItem, checked: wanted } : newItem;
+    if (wanted !== undefined && wanted !== newItem.checked) {
+      const id = newItem.id;
+      pendingChecksRef.current.set(id, { checked: wanted, until: Date.now() + 5000 });
+      const data = { id, checked: wanted, checkedByName: selfNameRef.current };
+      runCloud({ fn: "updateItem", data }, () =>
+        updateCloudItem({ data }).finally(() => pendingChecksRef.current.delete(id))
+      );
+    }
     setCloudLists((prev) =>
       prev.map((l) =>
         l.id === activeListId
-          ? { ...l, items: l.items.map((it) => (it.id === tmpId ? newItem : it)) }
+          ? { ...l, items: l.items.map((it) => (it.id === tmpId ? { ...finalItem, checked: it.checked } : it)) }
           : l
       )
     );
@@ -971,13 +1003,20 @@ function useCloudLists(
       const current = activeList.items.find((it) => it.id === id);
       const after: ListItem | undefined = current ? { ...current, checked: !current.checked } : undefined;
       setItems((prev) => prev.map((it) => (it.id === id ? { ...it, checked: !it.checked } : it)));
-      if (after && !id.startsWith("tmp-")) {
+      if (after && id.startsWith("tmp-")) {
+        tmpChecksRef.current.set(id, after.checked);
+      } else if (after) {
         if (after.checked) logActivity(selfName, "hat abgehakt", after.name);
         else logActivity(selfName, "hat wieder hinzugefügt", after.name);
         const checked = after.checked;
+        pendingChecksRef.current.set(id, { checked, until: Date.now() + 5000 });
         runCloud(
           { fn: "updateItem", data: { id, checked, checkedByName: selfName } },
-          () => updateCloudItem({ data: { id, checked, checkedByName: selfName } })
+          () =>
+            updateCloudItem({ data: { id, checked, checkedByName: selfName } }).finally(() => {
+              const p = pendingChecksRef.current.get(id);
+              if (p && p.checked === checked) pendingChecksRef.current.delete(id);
+            })
         );
       }
     },

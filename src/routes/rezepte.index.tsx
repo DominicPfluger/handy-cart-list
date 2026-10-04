@@ -3,6 +3,10 @@ import { getLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { catalogQueryOptions } from "../lib/catalog-query";
 import { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
+import imgGenerator from "../assets/recipes/generator.png";
+import imgSearch from "../assets/recipes/search.png";
+import imgLists from "../assets/recipes/lists.png";
+import imgInspiration from "../assets/recipes/inspiration.png";
 
 export const Route = createFileRoute("/rezepte/")({
   ssr: false,
@@ -20,15 +24,15 @@ export const Route = createFileRoute("/rezepte/")({
   component: RecipesPage,
 });
 
-type RecipeEntry = { id: string; to: "/rezepte/generator" | "/rezepte/inspirationen" | "/rezepte/listen" | "/rezepte/suchen"; icon: string; bg: string; titleKey: MessageKey; descKey: MessageKey };
+type RecipeEntry = { id: string; to: "/rezepte/generator" | "/rezepte/inspirationen" | "/rezepte/listen" | "/rezepte/suchen"; icon: string; image?: string; bg: string; titleKey: MessageKey; descKey: MessageKey };
 
 const RECIPE_ENTRIES: RecipeEntry[] = [
-  { id: "rk-search", to: "/rezepte/suchen", icon: "🔍", bg: "#F0E7F7", titleKey: "rec.entrySearchTitle", descKey: "rec.entrySearchDesc" },
-  { id: "rk-lists", to: "/rezepte/listen", icon: "📁", bg: "#E3EEF9", titleKey: "rec.entryListsTitle", descKey: "rec.entryListsDesc" },
-  { id: "rk-inspiration", to: "/rezepte/inspirationen", icon: "✨", bg: "#FFF3D6", titleKey: "rec.entryInspTitle", descKey: "rec.entryInspDesc" },
+  { id: "rk-search", to: "/rezepte/suchen", icon: "🔍", image: imgSearch, bg: "#F0E7F7", titleKey: "rec.entrySearchTitle", descKey: "rec.entrySearchDesc" },
+  { id: "rk-lists", to: "/rezepte/listen", icon: "📁", image: imgLists, bg: "#E3EEF9", titleKey: "rec.entryListsTitle", descKey: "rec.entryListsDesc" },
+  { id: "rk-inspiration", to: "/rezepte/inspirationen", icon: "✨", image: imgInspiration, bg: "#FFF3D6", titleKey: "rec.entryInspTitle", descKey: "rec.entryInspDesc" },
 ];
 
-const GENERATOR_ENTRY: RecipeEntry = { id: "rk-generator", to: "/rezepte/generator", icon: "🧑‍🍳", bg: "#E4F3E6", titleKey: "rec.entryGenTitle", descKey: "rec.entryGenDesc" };
+const GENERATOR_ENTRY: RecipeEntry = { id: "rk-generator", to: "/rezepte/generator", icon: "🧑‍🍳", image: imgGenerator, bg: "#E4F3E6", titleKey: "rec.entryGenTitle", descKey: "rec.entryGenDesc" };
 
 function RecipesPage() {
   const { t } = useT();
@@ -50,7 +54,7 @@ function RecipesPage() {
           className="flex w-full items-start gap-3 text-left transition active:scale-[0.98]"
         >
           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-2xl" style={{ background: GENERATOR_ENTRY.bg }} aria-hidden="true">
-            {GENERATOR_ENTRY.icon}
+            {GENERATOR_ENTRY.image ? <img src={GENERATOR_ENTRY.image} alt="" width={48} height={48} className="h-10 w-10 object-contain" /> : GENERATOR_ENTRY.icon}
           </span>
           <span className="min-w-0">
             <span className="block text-sm font-bold text-foreground">{t(GENERATOR_ENTRY.titleKey)}</span>
@@ -83,7 +87,7 @@ function RecipesPage() {
             className="flex w-full items-start gap-3 rounded-2xl border border-border bg-card p-4 text-left transition active:scale-[0.98]"
           >
             <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl text-2xl" style={{ background: e.bg }} aria-hidden="true">
-              {e.icon}
+              {e.image ? <img src={e.image} alt="" loading="lazy" width={48} height={48} className="h-10 w-10 object-contain" /> : e.icon}
             </span>
             <span className="min-w-0">
               <span className="block text-sm font-bold text-foreground">{t(e.titleKey)}</span>
