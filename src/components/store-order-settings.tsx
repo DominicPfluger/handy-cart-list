@@ -8,7 +8,7 @@ import { useStores } from "../hooks/use-stores";
 import { useT } from "../i18n";
 import { DepartmentIcon } from "./catalog-icon";
 
-function Row({ id, label, emoji, imageUrl, imagePath, onHide }: { id: string; label: string; emoji: string | null; imageUrl?: string | null; imagePath?: string | null; onHide: () => void }) {
+function Row({ id, label, emoji, imageUrl, imagePath, onHide }: { id: string; label: string; emoji: string | null; imageUrl?: string | null | undefined; imagePath?: string | null | undefined; onHide: () => void }) {
   const { t } = useT();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   return (
