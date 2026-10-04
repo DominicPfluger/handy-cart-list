@@ -296,6 +296,9 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
             <Button size="icon" variant="ghost" aria-label={t("adm.noImg.quick")} title={t("adm.noImg.quick")} disabled={busy.has(p.id) || !!batch} onClick={() => void fix(p, false)}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="h-4 w-4 text-primary" />}
             </Button>
+            <Button size="icon" variant="ghost" aria-label={t("adm.noImg.pick")} title={t("adm.noImg.pick")} disabled={busy.has(p.id) || !!batch} onClick={() => setPick({ target: p, query: "" })}>
+              <Images className="h-4 w-4 text-primary" />
+            </Button>
             <Button size="icon" variant="ghost" aria-label={t("adm.noImg.gen")} title={t("adm.noImg.gen")} disabled={busy.has(p.id) || !!batch} onClick={() => setDlg({ target: p, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS }, both: false })}>
               {busy.has(p.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <WandSparkles className="h-4 w-4 text-primary" />}
             </Button>
@@ -307,6 +310,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
         <Button size="sm" variant="ghost" className="w-full" onClick={() => setLimit((l) => l + PAGE)}>{t("adm.noImg.more")}</Button>
       )}
       {dlg && optionsDialog(dlg)}
+      {pick && <PickerDialog target={pick.target} query={pick.query} />}
     </section>
   );
 }
