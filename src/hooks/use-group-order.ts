@@ -75,7 +75,7 @@ export function useGroupOrder() {
     emit();
   }, [resetFor, setStore]);
 
-  const order = all[store] ?? all.default ?? [];
+  const order = all[store] ?? all["default"] ?? [];
   return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, removeCustomStore, hasCustomOrder: order.length > 0 };
 }
 

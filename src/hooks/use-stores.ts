@@ -9,7 +9,7 @@ export type StoreOption = { id: string; name: string; custom?: boolean };
 /** Läden des gewählten Marktes (Admin-Liste) + eigene Läden + „Standard". */
 export function useStores(): StoreOption[] {
   const market = useMarket();
-  const t = useT();
+  const { t } = useT();
   const { customStores } = useGroupOrder();
   const { data } = useQuery({
     queryKey: ["supermarkets", market],
