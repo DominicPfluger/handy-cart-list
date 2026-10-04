@@ -29,7 +29,8 @@ export const DEFAULT_LOCALE: Locale = "de-DE";
 export const TRANSLATED_LOCALES: string[] = LOCALES.map((l) => l.id).filter((l) => l !== "de-DE");
 const STORAGE_KEY = "shoppi:locale";
 
-const dicts = { ...(messages as Record<string, Record<string, string>>) };
+const dicts: Record<string, Record<string, string>> = {};
+
 
 // ---- Im Admin angelegte Sprachen (app_locales + ui_translations) ----
 let extraLocales: LocaleInfo[] = [];
