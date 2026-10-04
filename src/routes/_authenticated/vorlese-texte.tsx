@@ -117,9 +117,10 @@ function SpeechTextsPage() {
         </div>
       ))}
 
-      <div className="flex gap-2">
-        <Button variant="outline" onClick={preview}>▶ {t("stx.preview")}</Button>
-        <Button onClick={save} disabled={saving} className="flex-1">{t("stx.save")}</Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={preview}>▶ {t("stx.preview")}</Button>
+          <Button onClick={save} disabled={saving} className="flex-1">{t("stx.save")}</Button>
+        </div>
       </div>
     </div>
   );
