@@ -60,7 +60,7 @@ export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; 
   return (
     <section className="space-y-3 border-t border-border pt-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-foreground">{t("adm.imgGallery.title")}{cat ? ` (${items.length})` : ""}</h3>
+        <h3 className="text-sm font-semibold text-foreground">{t("adm.imgGallery.title")}{cat || q.trim() ? ` (${items.length})` : ""}</h3>
         <div className="flex items-center gap-2">
           <input
             type="search"
@@ -76,8 +76,8 @@ export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; 
           </select>
         </div>
       </div>
-      {!cat && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.hint")}</p>}
-      {cat && visible.length === 0 && !imgs.isLoading && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.none")}</p>}
+      {!cat && !q.trim() && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.hint")}</p>}
+      {(cat || q.trim()) && visible.length === 0 && !imgs.isLoading && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.none")}</p>}
       <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
         {visible.map((p) => {
           const src = imgs.data?.get(p.image_path!);
