@@ -36,13 +36,16 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   };
 
   const all = useMemo(() => prods.map((p) => ({ ...p, ...patch[p.id] })), [prods, patch]);
-  const missing = useMemo(() => all.filter((p) => {
-    const noImg = !p.image_path, noIcon = !p.icon_path;
-    if (filter === "image") return noImg;
-    if (filter === "icon") return noIcon;
-    if (filter === "both") return noImg && noIcon;
-    return noImg || noIcon;
-  }), [all, filter]);
+  const missing = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return all.filter((p) => {
+      const noImg = !p.image_path, noIcon = !p.icon_path;
+      const hit = filter === "image" ? noImg : filter === "icon" ? noIcon : filter === "both" ? noImg && noIcon : noImg || noIcon;
+      if (!hit) return false;
+      if (!q) return true;
+      return p.name.toLowerCase().includes(q) || path(p.department_id).toLowerCase().includes(q);
+    });
+  }, [all, filter, query]);
   const visible = missing.slice(0, limit);
 
   const paths = visible.flatMap((p) => [p.image_path, p.icon_path]).filter((x): x is string => !!x);
