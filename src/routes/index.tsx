@@ -365,16 +365,25 @@ function ListPage() {
           <button onClick={() => setManagerOpen(true)} className="min-w-0 flex-1 text-left">
             <h1 className="truncate text-2xl font-bold tracking-tight text-foreground">{activeList.name}</h1>
           </button>
+          <div className="-mr-1 flex shrink-0 items-center gap-0">
           <button
             onClick={() => setPurchaseOpen(true)}
             aria-label={t("purchase.title")}
             title={t("purchase.title")}
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <circle cx="9" cy="21" r="1.5" /><circle cx="19" cy="21" r="1.5" />
               <path d="M2 3h3l2.6 12.4a1.8 1.8 0 0 0 1.8 1.4h8.6a1.8 1.8 0 0 0 1.8-1.4L21.5 8H6" />
             </svg>
+          </button>
+          <button
+            onClick={() => shareList({ ...activeList, items: activeList.items.map((i) => ({ ...i, name: displayName(i), quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : i.quantity })) })}
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
+            aria-label={t("list.share")}
+            title={t("list.share")}
+          >
+            <ShareIcon className="h-5 w-5" />
           </button>
           <ExportListButton
             title={activeList.name}
@@ -398,13 +407,7 @@ function ListPage() {
               }),
             }))}
           />
-          <button
-            onClick={() => shareList({ ...activeList, items: activeList.items.map((i) => ({ ...i, name: displayName(i), quantity: i.quantity ? relocalizeQuantity(i.quantity, i.unit) : i.quantity })) })}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full text-primary active:bg-muted"
-            aria-label={t("list.share")}
-          >
-            <ShareIcon className="h-5 w-5" />
-          </button>
+          </div>
         </div>
         <div className="mt-3 flex items-center gap-3">
           <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
