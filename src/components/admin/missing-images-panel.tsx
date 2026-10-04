@@ -2,10 +2,10 @@ import { useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
-import { Wand2, ImageOff, Loader2 } from "lucide-react";
+import { Wand2, WandSparkles, ImageOff, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { generateImageFor } from "@/lib/product-media.functions";
-import { saveProductIconFromPath } from "@/lib/product-icon";
+import { saveProductIconFromPath, saveCustomIconFromPath } from "@/lib/product-icon";
 import { useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 
@@ -54,12 +54,17 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   });
   const url = (p?: string | null): string | undefined => (p ? imgs.data?.get(p) ?? undefined : undefined);
 
-  const fix = async (p: Prod) => {
+  const fix = async (p: Prod, both = false) => {
     setBusy((s) => new Set(s).add(p.id));
     try {
       let image = p.image_path;
       if (!image) image = (await gen({ data: { id: p.id, kind: "product" } })).path;
-      await saveProductIconFromPath(p.id, image);
+      if (both) {
+        const icon = await gen({ data: { id: p.id, kind: "product", iconOnly: true } });
+        await saveCustomIconFromPath("product", p.id, icon.path);
+      } else {
+        await saveProductIconFromPath(p.id, image);
+      }
       const { data } = await supabase.from("products").select("image_path, icon_path").eq("id", p.id).single();
       setPatch((m) => ({ ...m, [p.id]: { image_path: data?.image_path ?? image, icon_path: data?.icon_path ?? null } }));
       return true;
@@ -77,7 +82,7 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
     setBatch({ done: 0, total: list.length });
     for (let i = 0; i < list.length; i++) {
       if (stop.current) break;
-      if (!(await fix(list[i]!))) break;
+      if (!(await fix(list[i]!, batchBoth))) break;
       setBatch({ done: i + 1, total: list.length });
     }
     setBatch(null);
