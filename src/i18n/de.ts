@@ -670,7 +670,7 @@ export const de = {
   "adm.noImg.stop": "Abbrechen",
   "adm.noImg.gen": "KI-Bild erzeugen",
   "adm.noImg.none": "Alle Produkte haben Bilder.",
-  "adm.noImg.more": "Weitere 30 laden",
+  "adm.noImg.more": "Weitere 5 laden",
   "adm.tab.health": "Pflege",
   "adm.health.gaps": "Datenlücken",
   "adm.health.noImage": "Produkte ohne Bild",
