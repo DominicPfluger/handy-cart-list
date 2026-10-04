@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import type { ShoppingList } from "../hooks/use-shopping-list";
 import { PlusIcon, TrashIcon, CheckIcon } from "./icons";
 import { getLocale, translate, useT } from "../i18n";
+import { useStores } from "../hooks/use-stores";
 
 interface Props {
   open: boolean;
@@ -29,7 +30,7 @@ interface Props {
   activeId: string;
   templates: ShoppingList[];
   onSelect: (id: string) => void;
-  onCreate: (name: string) => void;
+  onCreate: (name: string, storeId: string) => void;
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
   onReorder: (fromId: string, toId: string) => void;
@@ -217,6 +218,8 @@ export function ListManager(props: Props) {
   const { open, onClose, lists, activeId, templates } = props;
   const { t } = useT();
   const [newName, setNewName] = useState("");
+  const [newStore, setNewStore] = useState("default");
+  const stores = useStores();
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 120, tolerance: 6 } }),
@@ -231,8 +234,9 @@ export function ListManager(props: Props) {
 
   const create = () => {
     if (!newName.trim()) return;
-    props.onCreate(newName);
+    props.onCreate(newName, newStore);
     setNewName("");
+    setNewStore("default");
     onClose();
   };
 
@@ -273,6 +277,7 @@ export function ListManager(props: Props) {
         </DndContext>
 
         <div className="mt-5 flex gap-2">
+          <div className="min-w-0 flex-1 space-y-1.5">
           <input
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
