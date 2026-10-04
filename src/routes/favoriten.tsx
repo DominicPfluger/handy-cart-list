@@ -565,8 +565,8 @@ function FavoritesPage() {
                 {t("common.cancel")}
               </button>
               <button
-                onClick={() => listName.trim() && transferAllToNewList(listName.trim())}
-                disabled={!listName.trim()}
+                onClick={() => listName.trim() && newStore !== "__new__" && transferAllToNewList(listName.trim())}
+                disabled={!listName.trim() || newStore === "__new__"}
                 className="flex-1 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
               >
                 {t("lm.create")}
