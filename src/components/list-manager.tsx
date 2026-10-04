@@ -285,39 +285,6 @@ export function ListManager(props: Props) {
               <option value="__new__">{t("store.new")}</option>
             </select>
           </label>
-          {newStore === "__new__" && (
-            <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <input
-                  value={newStoreEmoji}
-                  onChange={(e) => setNewStoreEmoji(e.target.value)}
-                  maxLength={4}
-                  aria-label={t("store.icon")}
-                  placeholder="🏪"
-                  className="w-11 shrink-0 rounded-lg border border-input bg-background px-2 py-1.5 text-center text-sm outline-none focus:border-primary"
-                />
-                <input
-                  value={newStoreName}
-                  onChange={(e) => setNewStoreName(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && addStore()}
-                  placeholder={t("store.newPlaceholder")}
-                  className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs outline-none focus:border-primary"
-                />
-                <button
-                  onClick={addStore}
-                  disabled={!newStoreName.trim()}
-                  className="shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50"
-                >
-                  {t("store.add")}
-                </button>
-              </div>
-              <div className="flex gap-1">
-                {STORE_EMOJIS.map((e) => (
-                  <button key={e} type="button" onClick={() => setNewStoreEmoji(e)} className={`grid h-7 w-7 place-items-center rounded-lg border text-sm ${newStoreEmoji === e ? "border-primary bg-primary-soft/60" : "border-border"}`} aria-label={`${t("store.icon")} ${e}`}>{e}</button>
-                ))}
-              </div>
-            </div>
-          )}
           </div>
           <button
             onClick={create}
@@ -327,6 +294,39 @@ export function ListManager(props: Props) {
             <PlusIcon className="h-4 w-4" /> {t("lm.create")}
           </button>
         </div>
+        {newStore === "__new__" && (
+          <div className="mb-5 space-y-1.5">
+            <div className="flex items-center gap-2">
+              <input
+                value={newStoreEmoji}
+                onChange={(e) => setNewStoreEmoji(e.target.value)}
+                maxLength={4}
+                aria-label={t("store.icon")}
+                placeholder="🏪"
+                className="w-11 shrink-0 rounded-lg border border-input bg-background px-2 py-1.5 text-center text-sm outline-none focus:border-primary"
+              />
+              <input
+                value={newStoreName}
+                onChange={(e) => setNewStoreName(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && addStore()}
+                placeholder={t("store.newPlaceholder")}
+                className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-xs outline-none focus:border-primary"
+              />
+              <button
+                onClick={addStore}
+                disabled={!newStoreName.trim()}
+                className="shrink-0 rounded-lg bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground disabled:opacity-50"
+              >
+                {t("store.add")}
+              </button>
+            </div>
+            <div className="flex gap-1">
+              {STORE_EMOJIS.map((e) => (
+                <button key={e} type="button" onClick={() => setNewStoreEmoji(e)} className={`grid h-7 w-7 place-items-center rounded-lg border text-sm ${newStoreEmoji === e ? "border-primary bg-primary-soft/60" : "border-border"}`} aria-label={`${t("store.icon")} ${e}`}>{e}</button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
 
