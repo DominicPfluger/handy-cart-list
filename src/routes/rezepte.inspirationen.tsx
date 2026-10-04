@@ -3,7 +3,7 @@ import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { getLocale, useT } from "../i18n";
 import { RecipeBuilder } from "../components/recipe-builder";
-import { RecipeFeed, FavoritesRow } from "../components/recipe-feed";
+import { RecipeFeed, FavoritesRow, MostSavedRow } from "../components/recipe-feed";
 import { CommunitySection } from "../components/community-section";
 import { catalogQueryOptions } from "../lib/catalog-query";
 
