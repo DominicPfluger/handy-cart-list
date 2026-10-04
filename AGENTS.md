@@ -13,11 +13,11 @@
 - Personal data device-only localStorage (custom names, hidden items, diet/cuisine selection, purchase history, `shoppi:product-dept`, `shoppi:speak-locale`). Why: shared catalog admin-controlled.
 - User-created product variants are device-local and merged into catalog reads; only admins change shared variants. Why: shoppers can personalize products without altering the common catalog.
 - Diet filter: products.excluded_diets. Cuisine filter: `cuisines`+`product_cuisines`. Why: simple, editable.
-- Department diet/cuisine filters exempt non-food root categories by stable catalog base names; the shared NON_FOOD_ROOTS list lives in src/lib/dept-colors.ts (isNonFoodRootName) and also hides the cuisine picker in the admin product editor. Why: localized and nested non-food products remain visible without changing saved preferences; one source of truth for non-food roots.
+- Diet/cuisine filters exempt non-food roots via NON_FOOD_ROOTS/isNonFoodRootName in src/lib/dept-colors.ts (also hides admin cuisine picker). Why: non-food stays visible; one source of truth.
 - Catalog routes `ssr: false`. Why: SSR-embedded catalog caused 'aborted' blank screens.
 - Brands: `product_brands` (locales = market codes); chosen brand appended as "Name · Marke". Why: same for cloud/local lists.
 - The device-local market choice drives catalog visibility, ordering, brands, and reference prices independently of UI locale. Why: changing shopping market must not change language.
-- Recipe creator keeps each recipe step's groups in a single scrollable row with independently expandable inline ingredients, limits the initial product view per group, and uses only admin-assigned ingredients for managed templates; recipe steps are edited beside the selected template in admin. Why: preserve ingredient families and make their editing discoverable without nested accordions or surprise defaults.
+- Recipe creator: step groups in one scrollable row with inline expandable ingredients; managed templates use only admin-assigned ingredients; steps edited beside the template in admin. Why: discoverable editing, no surprise defaults.
 - Aliases: `department_aliases`/`product_aliases` show items in extra places; data lives once; list category = list_items.group_label. Why: single source of truth.
 - Variant favorites retain their composite favorite key while resolving the base catalog product for category, imagery, and list transfers. Why: keep variant identity without losing catalog placement.
 - Read-aloud: own language (default de-DE) + admin templates in `speech_texts`. Why: mother tongue regardless of UI.
@@ -28,8 +28,7 @@
 - Erster Besuch auf `/` zeigt die Landingpage (`src/components/landing/landing-page.tsx`, Flag `shoppi:landing-seen` via `src/lib/landing.ts`); danach direkt die Einkaufsliste. Die Website-Variante liegt auf `/start` mit eigenem head(). Warum: öffentliche Seite unter der künftigen Domain, App-Entscheid bleibt geräte-lokal.
 - Admin tile view (catalog-tile-editor.tsx) reuses admin.tsx data + save/reorder/remove callbacks. Why: one write path for list and tile editing.
 - Admin-created locales live in app_locales + ui_translations, loaded at runtime by src/i18n; server translation targets = built-in + app_locales (targetLocales). Why: add languages without redeploy.
-- Product images keep a full image_path and a separate 64px icon_path; icons are compressed in the admin browser, including after AI generation, with a resumable backfill. Why: list rows should not download full-size images or lose detail-page imagery.
-- Admin image generation can target an icon without changing image_path; the generated source is compressed into icon_path, and the image editor keeps separate icon and preview options. Why: an icon-only edit must preserve the large product image.
+- Products keep full image_path plus separate 64px icon_path (compressed in admin browser, also after AI generation; icon-only generation leaves image_path untouched). Why: light list rows, detail imagery preserved.
 - Small catalog and list icons share a device-local image/symbol preference; full product photos remain unchanged. Why: one visual choice should apply consistently without changing shared catalog data.
 - Displayed catalog icons use bounded device CacheStorage keyed by stable image path, with symbol fallback; expiring signed links only authorize cache misses. Why: image links rotate while artwork should download once per device.
 - Vorlagen in "Listen bearbeiten" sind per Drag & Drop sortierbar (reorderTemplates, sort_order auf shopping_lists). Why: gleiche Bedienung wie bei Listen.
