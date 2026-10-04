@@ -6,7 +6,6 @@ import type { MessageKey } from "../i18n/de";
 import { useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { POPULAR_RECIPES, RECIPE_TEMPLATES, STEP_EMOJIS, type RecipeTemplate } from "../lib/recipe-templates";
 import { useShoppingList } from "../hooks/use-shopping-list";
-import { setCuisines, toggleCuisine, useCuisineFilter } from "../hooks/use-cuisine-filter";
 import { formatQuantity } from "../lib/units";
 import { ProductEmoji } from "./product-emoji";
 import { Button } from "./ui/button";
@@ -68,8 +67,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [recipeCuisineIds, setRecipeCuisineIds] = useState<string[]>([]);
   const traitsComplete = TRAIT_GROUPS.every((g) => !!traits[g]);
   const [onlyFav, setOnlyFav] = useState(false);
-  const cuisineSel = useCuisineFilter();
-  const cuisines = useMemo(() => cuisineSel.filter((id) => catalog.cuisines.some((c) => c.id === id)), [cuisineSel, catalog.cuisines]);
   const [showAllRecent, setShowAllRecent] = useState(false);
   const [showAllPopular, setShowAllPopular] = useState(false);
 
@@ -83,7 +80,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [visibleCount, setVisibleCount] = useState<Record<string, number>>({});
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const summaryRef = useRef<HTMLDivElement>(null);
-  const [cuisineOpen, setCuisineOpen] = useState(true);
   const PAGE = 10;
 
   const tpl = templates.find((x) => x.id === tplId) ?? null;
@@ -146,7 +142,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       const visible = base.filter((p) => {
         if (picked.includes(p.id)) return true;
         if (onlyFav && !favIds.has(p.id)) return false;
-        if (cuisines.length && !p.cuisineIds.some((c) => cuisines.includes(c))) return false;
         return true;
       });
       const groupByProduct = new Map(catalog.recipeIngredients
@@ -162,7 +157,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         groupByProduct,
       };
     }),
-    [tpl, byBase, onlyFav, favIds, cuisines, picks, catalog.recipeIngredients, catalog.products, catalog.recipeGroups],
+    [tpl, byBase, onlyFav, favIds, picks, catalog.recipeIngredients, catalog.products, catalog.recipeGroups],
   );
 
   // Akkordeon: Pflicht-Schritte steuern Fortschritt und automatisches Weiterschalten.
@@ -532,17 +527,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       </div>
       <div className="flex flex-wrap items-center gap-2">
           <button
-            type="button"
-            onClick={() => setCuisineOpen((v) => !v)}
-            aria-expanded={cuisineOpen}
-            aria-label={t("cuisine.filter")}
-            title={`${t("cuisine.filter")}${cuisines.length ? ` · ${cuisines.length}` : ""}`}
-            className={`flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-2 py-1 text-[11px] font-semibold leading-tight transition ${cuisines.length ? "bg-primary text-primary-foreground" : "border border-border bg-background text-foreground"}`}
-          >
-            <span className="text-sm leading-none">🌍</span>
-            {t("cuisine.filter")}
-          </button>
-          <button
             onClick={toggleOnlyFav}
             aria-pressed={onlyFav}
             className={`shrink-0 whitespace-nowrap rounded-full border px-2 py-1 text-[11px] font-semibold leading-tight transition ${
@@ -559,34 +543,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           </button>
       </div>
 
-      {cuisineOpen && (
-        <section className="rounded-xl border border-border bg-card p-3 shadow-sm">
-          <div className="mb-1 text-sm font-semibold text-foreground">{t("cuisine.title")}</div>
-          <p className="mb-3 text-xs text-muted-foreground">{t("cuisine.hint")}</p>
-          <div className="flex flex-wrap gap-1.5">
-            {catalog.cuisines.map((c) => {
-              const on = cuisines.includes(c.id);
-              return (
-                <button
-                  key={c.id}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => toggleCuisine(c.id)}
-                  className={`flex h-8 items-center gap-1 rounded-full border px-2.5 text-[11px] font-medium leading-none ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-foreground"}`}
-                >
-                  {c.emoji && <span className="text-sm leading-none">{c.emoji}</span>}
-                  {c.name}
-                </button>
-              );
-            })}
-          </div>
-          {cuisines.length > 0 && (
-            <button type="button" onClick={() => setCuisines([])} className="mt-2 text-xs font-medium text-primary">
-              {t("diet.reset")}
-            </button>
-          )}
-        </section>
-      )}
 
 
       {mode !== "generator" && (
