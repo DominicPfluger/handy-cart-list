@@ -102,7 +102,7 @@ export function StoreOrderSettings() {
           </DndContext>
           {hiddenRoots.length > 0 && (
             <div>
-              <p className="mb-1 text-xs font-semibold text-muted-foreground">{t("store.hiddenTitle")}</p>
+              <p className="mb-1 text-xs font-semibold text-muted-foreground">{t("store.hiddenTitle")} · {selected.name}</p>
               <ul className="divide-y divide-border rounded-xl border border-border">
                 {hiddenRoots.map((r) => (
                   <li key={r.key} className="flex items-center gap-2 bg-card px-3 py-2">
