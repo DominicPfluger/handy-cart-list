@@ -479,6 +479,7 @@ interface CloudListsApi {
   deleteList: (id: string) => void;
   reorderLists: (fromId: string, toId: string) => void;
   reorderTemplates: (fromId: string, toId: string) => void;
+  renameTemplate: (id: string, name: string) => void;
   setItems: (fn: (prev: ListItem[]) => ListItem[]) => void;
   addItem: (name: string, quantity: string, category: ListItem["category"], user_?: string) => void;
   addCatalogItem: (input: AddCatalogItemInput, user_?: string) => void;
@@ -809,6 +810,8 @@ function useCloudLists(
     },
     [user]
   );
+  // Vorlagen sind Listen mit isTemplate: true — gleicher updateList-Pfad.
+  const renameTemplate = renameList;
 
   const deleteList = useCallback(
     (id: string) => {
@@ -1099,6 +1102,7 @@ function useCloudLists(
     deleteList,
     reorderLists,
     reorderTemplates,
+    renameTemplate,
     setItems,
     saveAsTemplate,
     createFromTemplate,
@@ -1317,6 +1321,14 @@ export function useShoppingList() {
     },
     [localTemplates, persistLocalTemplates]
   );
+  const renameTemplateLocal = useCallback(
+    (templateId: string, name: string) => {
+      const n = name.trim();
+      if (!n) return;
+      persistLocalTemplates(localTemplates.map((l) => (l.id === templateId ? { ...l, name: n } : l)));
+    },
+    [localTemplates, persistLocalTemplates]
+  );
   const reorderTemplatesLocal = useCallback(
     (fromId: string, toId: string) => {
       const from = localTemplates.findIndex((l) => l.id === fromId);
@@ -1343,6 +1355,7 @@ export function useShoppingList() {
       deleteList: local.deleteList,
       reorderLists: local.reorderLists,
       reorderTemplates: reorderTemplatesLocal,
+      renameTemplate: renameTemplateLocal,
       saveAsTemplate: saveAsTemplateLocal,
       createFromTemplate: createFromTemplateLocal,
       deleteTemplate: deleteTemplateLocal,
@@ -1382,6 +1395,7 @@ export function useShoppingList() {
     deleteList: cloud.deleteList,
     reorderLists: cloud.reorderLists,
     reorderTemplates: cloud.reorderTemplates,
+    renameTemplate: cloud.renameTemplate,
     saveAsTemplate: cloud.saveAsTemplate,
     createFromTemplate: cloud.createFromTemplate,
     deleteTemplate: cloud.deleteList,
