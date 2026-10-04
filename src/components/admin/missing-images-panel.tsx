@@ -19,7 +19,9 @@ export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; pr
   const { t } = useT();
   const gen = useServerFn(generateImageFor);
   const [filter, setFilter] = useState<Filter>("any");
+  const [query, setQuery] = useState("");
   const [limit, setLimit] = useState(PAGE);
+  const [menuFor, setMenuFor] = useState<string | null>(null);
   const [patch, setPatch] = useState<Record<string, { image_path?: string | null; icon_path?: string | null }>>({});
   const [busy, setBusy] = useState<Set<string>>(new Set());
   const [batch, setBatch] = useState<{ done: number; total: number } | null>(null);
