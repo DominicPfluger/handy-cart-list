@@ -34,3 +34,4 @@
 - Displayed catalog icons use bounded device CacheStorage keyed by stable image path, with symbol fallback; expiring signed links only authorize cache misses. Why: image links rotate while artwork should download once per device.
 - Vorlagen in "Listen bearbeiten" sind per Drag & Drop sortierbar (reorderTemplates, sort_order auf shopping_lists). Why: gleiche Bedienung wie bei Listen.
 - Produktanlage im Admin bietet bei Abteilungen mit Überschriften eine Positions-Auswahl; neue Produkte werden am Gruppenende der gewählten Überschrift eingereiht und bestehende sort_order-Werte verschoben. Why: gezieltes Einordnen ohne nachträgliches Ziehen.
+- Units of measure live in the public.units table (order, visibility, per-locale labels jsonb); src/lib/units.ts loads them at startup with the built-in list as fallback. Why: admins add/sort units without redeploy.

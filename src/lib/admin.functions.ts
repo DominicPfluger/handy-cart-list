@@ -885,3 +885,26 @@ export const importMarketData = createServerFn({ method: "POST" })
     }
     return { prices, orders, hidden, shown };
   });
+
+/** Übersetzt eine neue Mengenangabe (Lang-/Kurzform) in alle Zielsprachen (Admin). */
+export const translateUnitLabels = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ label: z.string().min(1).max(60), short: z.string().min(1).max(20) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { translateUiTexts } = await import("./translate.server");
+    const locales = await targetLocales(context.supabase);
+    const out: Record<string, { label: string; short: string }> = { "de-DE": { label: data.label, short: data.short } };
+    const texts = { label: `Mengeneinheit: ${data.label}`, short: `Abkürzung der Mengeneinheit „${data.label}": ${data.short}` };
+    await Promise.all(locales.map(async (loc) => {
+      try {
+        const r = await translateUiTexts(
+          { label: data.label, short: data.short },
+          loc,
+          `${loc} — these are a unit of measure for groceries (long name and its abbreviation; context: ${texts.label})`,
+        );
+        out[loc] = { label: r['label'] || data.label, short: r['short'] || data.short };
+      } catch { /* einzelne Sprache überspringen */ }
+    }));
+    return out;
+  });

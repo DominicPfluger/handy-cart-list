@@ -1,0 +1,1 @@
+ALTER TABLE public.units ADD COLUMN labels jsonb NOT NULL DEFAULT '{}'::jsonb;

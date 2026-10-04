@@ -1,5 +1,4 @@
-import { translate } from "../i18n";
-import type { MessageKey } from "../i18n/de";
+import { unitLabel } from "./units";
 
 /** Ausgesprochene Einheiten [Einzahl, Mehrzahl] je Sprache (Sprachcode). */
 const SPOKEN: Record<string, Record<string, [string, string]>> = {
@@ -69,5 +68,5 @@ export function speakQuantity(stored: string, unit: string | undefined, locale: 
     if (locale === "de-CH") word = word.replace(/ß/g, "ss");
     return `${num} ${word}`;
   }
-  return `${num} ${translate(locale, `unit.${unit}` as MessageKey)}`;
+  return `${num} ${unitLabel(unit, locale)}`;
 }
