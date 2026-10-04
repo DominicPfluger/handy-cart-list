@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 type Dept = { id: string; name: string; parent_id: string | null };
 type Prod = { id: string; name: string; emoji: string | null; department_id: string; image_path: string | null; icon_path?: string | null };
 type Filter = "any" | "image" | "icon" | "both";
-const PAGE = 30;
+const PAGE = 5;
 
 /** Pflege: Produkte ohne Vorschaubild/Icon, 30 pro Seite, mit KI-Erzeugung. */
 export function MissingImagesPanel({ depts, prods, onEdit }: { depts: Dept[]; prods: Prod[]; onEdit: (id: string) => void }) {

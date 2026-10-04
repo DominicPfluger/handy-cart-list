@@ -207,7 +207,6 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit }: {
 
   return (
     <div className="space-y-6 pt-2">
-      <MissingImagesPanel depts={depts} prods={prods} onEdit={onEdit} />
       <section className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-sm font-semibold text-foreground">{T("adm.health.gaps")}</h2>
