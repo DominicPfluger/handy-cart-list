@@ -89,6 +89,9 @@ function FavoritesPage() {
   const [newStore, setNewStore] = useState("default");
   const [newStoreName, setNewStoreName] = useState("");
   const [newStoreEmoji, setNewStoreEmoji] = useState("");
+  const stores = useStores();
+  const { setListStore, addCustomStore } = useGroupOrder();
+
 
   const deptById = useMemo(
     () => new Map(departments.map((d) => [d.id, d])),
@@ -321,6 +324,7 @@ function FavoritesPage() {
       };
     });
     createListFromItems(name, items);
+    const createdId = createListFromItems ? undefined : undefined;
     setListNameOpen(false);
     toast.success(t("fav.toListDone", { count: items.length }));
     navigate({ to: "/" });
