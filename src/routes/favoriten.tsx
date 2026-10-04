@@ -509,7 +509,7 @@ function FavoritesPage() {
               value={listName}
               onChange={(e) => setListName(e.target.value.slice(0, 60))}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && listName.trim()) transferAllToNewList(listName.trim());
+                if (e.key === "Enter" && listName.trim() && newStore !== "__new__") transferAllToNewList(listName.trim());
               }}
               onFocus={(e) => e.target.select()}
               placeholder={t("fav.listNamePlaceholder")}
