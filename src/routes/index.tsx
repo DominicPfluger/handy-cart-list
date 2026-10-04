@@ -320,7 +320,7 @@ function ListPage() {
   const purchaseItems = useMemo<PurchaseItem[]>(() => grouped.flatMap((g) => {
     const colorDept = g.root ?? departments.find((d) => d.name === g.label || d.baseName === g.label);
     const color = (colorDept ? deptColor(colorDept, deptById) : undefined) ?? deptColorByLabel(g.label);
-    return g.items.filter((i) => !i.checked).map((i) => {
+    return g.items.map((i) => {
       const product = i.productId ? productById.get(i.productId) : undefined;
       let name = displayName(i);
       if (product) {
