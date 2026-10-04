@@ -1,5 +1,6 @@
 import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
+import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -1259,7 +1260,10 @@ function Editor(p: {
         )}
         {prod && (
           <div className="space-y-1.5">
-            <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
+              <VariantAiBulkButton productId={prod.id} productName={prod.name} variants={prod.variants ?? []} />
+            </div>
             {variants.length > 0 && (
               <div className="divide-y divide-border rounded-lg border border-border">
                 {variants.map((v, vi) => (
@@ -1281,7 +1285,7 @@ function Editor(p: {
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
                       <span className="truncate">{v}</span>
                     </span>
-                    {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} variant={v} />}
+                    {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                     <button
                       type="button"
                       aria-label={`${v} entfernen`}
