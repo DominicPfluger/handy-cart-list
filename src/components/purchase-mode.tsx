@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useT } from "../i18n";
 import { useSpeakRate } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
-import { speakSentences } from "./speak-list-button";
+import { expandAbbreviations, findVoice } from "./speak-list-button";
 import { CheckIcon } from "./icons";
 import { CachedImage } from "./catalog-icon";
 
@@ -54,7 +54,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
       if (cancelled || spoken) return;
       spoken = true;
       try { synth.resume(); } catch { /* ignore */ }
-      speakSentences([current.spoken], speakLocale, rate);
+      speakNow(current.spoken);
     };
     let timer: number;
     if (synth.getVoices().length === 0) {
@@ -73,19 +73,32 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current?.id, current?.spoken, speakOn, speakLocale]);
 
+  // Eigene Ausgabe ohne cancel() direkt vor speak() (Chrome verwirft sonst die Ausgabe);
+  // Referenz halten, damit Chrome die Äusserung nicht vorzeitig verwirft.
+  const uttRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const speakNow = (text: string) => {
+    const synth = window.speechSynthesis;
+    if (!synth || !text.trim()) return;
+    const u = new SpeechSynthesisUtterance(expandAbbreviations(text, speakLocale));
+    u.lang = speakLocale;
+    const voice = findVoice(speakLocale);
+    if (voice) u.voice = voice;
+    u.rate = rate;
+    uttRef.current = u;
+    synth.speak(u);
+  };
+
   const toggleSpeak = () => {
     const next = !speakOn;
     setSpeakOn(next);
     try { window.localStorage.setItem(SPEAK_KEY, next ? "1" : "0"); } catch { /* ignore */ }
     if (!next) { try { window.speechSynthesis?.cancel(); } catch { /* ignore */ } }
+    // Direkt in der Klick-Geste sprechen (Safari/iOS gibt Sprachausgabe nur so frei).
+    else if (current) { try { window.speechSynthesis.cancel(); speakNow(current.spoken); } catch { /* ignore */ } }
   };
 
   return (
     <div className="fixed inset-0 z-[80] flex flex-col bg-background" role="dialog" aria-modal="true" aria-label={t("purchase.title")}>
-      {/* Grüner Statusbalken über die volle Breite am oberen Rand */}
-      <div className="h-1.5 w-full bg-muted" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100} aria-label={t("purchase.title")}>
-        <div className="h-full bg-primary transition-all duration-500" style={{ width: `${progress}%` }} />
-      </div>
       <div className="flex items-center gap-3 px-5 pt-4">
         <p className="min-w-0 flex-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t("purchase.title")}</p>
         <span className="text-sm font-semibold text-muted-foreground">{done}/{items.length}</span>
@@ -118,6 +131,10 @@ export function PurchaseMode({ items, onToggle, onClose }: {
         </button>
       </div>
 
+      {/* Grüner Statusbalken zwischen Titelleiste und Produktbild */}
+      <div className="mt-3 h-1.5 w-full bg-muted" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100} aria-label={t("purchase.title")}>
+        <div className="h-full bg-primary transition-all duration-500" style={{ width: `${progress}%` }} />
+      </div>
       {allDone ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 text-center">
           <div className="grid h-28 w-28 place-items-center rounded-full bg-primary text-6xl text-primary-foreground">✓</div>
