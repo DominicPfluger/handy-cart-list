@@ -26,6 +26,7 @@ export function StoreOrderSettings() {
   const stores = useStores();
   const { all, store, setStore, saveFor, resetFor, addCustomStore, removeCustomStore } = useGroupOrder();
   const [edit, setEdit] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
   const sel = edit ?? store;
   const selected = stores.find((s) => s.id === sel) ?? stores[0]!;
   const sensors = useSensors(
@@ -52,37 +53,50 @@ export function StoreOrderSettings() {
   };
 
   return (
-    <div className="space-y-3 px-4 py-3.5">
-      <div>
-        <p className="text-sm font-semibold text-foreground">{t("store.orderTitle")}</p>
-        <p className="text-xs text-muted-foreground">{t("store.orderHint")}</p>
-      </div>
-      <div className="flex gap-2">
-        <select value={selected.id} onChange={(e) => choose(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary">
-          {stores.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-          <option value="__new">{t("store.addCustom")}</option>
-        </select>
-        {selected.custom && (
-          <button type="button" onClick={() => { removeCustomStore(selected.id); setEdit("default"); }} className="rounded-lg border border-border px-2 text-xs text-destructive">{t("store.remove")}</button>
-        )}
-      </div>
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e: DragEndEvent) => {
-        const { active, over } = e;
-        if (!over || active.id === over.id) return;
-        const keys = roots.map((r) => r.key);
-        const from = keys.indexOf(String(active.id));
-        const to = keys.indexOf(String(over.id));
-        if (from < 0 || to < 0) return;
-        keys.splice(to, 0, ...keys.splice(from, 1));
-        saveFor(selected.id, keys);
-      }}>
-        <SortableContext items={roots.map((r) => r.key)} strategy={verticalListSortingStrategy}>
-          <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-xl border border-border">
-            {roots.map((r) => <Row key={r.key} id={r.key} label={r.name} emoji={r.emoji} />)}
-          </ul>
-        </SortableContext>
-      </DndContext>
-      <button type="button" onClick={() => resetFor(selected.id)} className="text-xs font-semibold text-primary">{t("store.reset")}</button>
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted"
+      >
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-xl" aria-hidden="true">↕️</div>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-foreground">{t("store.orderTitle")}</p>
+          <p className="whitespace-normal text-xs text-muted-foreground">{t("store.orderHint")}</p>
+        </div>
+        <span className="shrink-0 text-muted-foreground" aria-hidden="true">{open ? "▴" : "▾"}</span>
+      </button>
+      {open && (
+        <div className="space-y-3 border-t border-border px-4 py-3.5">
+          <div className="flex gap-2">
+            <select value={selected.id} onChange={(e) => choose(e.target.value)} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary">
+              {stores.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+              <option value="__new">{t("store.addCustom")}</option>
+            </select>
+            {selected.custom && (
+              <button type="button" onClick={() => { removeCustomStore(selected.id); setEdit("default"); }} className="rounded-lg border border-border px-2 text-xs text-destructive">{t("store.remove")}</button>
+            )}
+          </div>
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e: DragEndEvent) => {
+            const { active, over } = e;
+            if (!over || active.id === over.id) return;
+            const keys = roots.map((r) => r.key);
+            const from = keys.indexOf(String(active.id));
+            const to = keys.indexOf(String(over.id));
+            if (from < 0 || to < 0) return;
+            keys.splice(to, 0, ...keys.splice(from, 1));
+            saveFor(selected.id, keys);
+          }}>
+            <SortableContext items={roots.map((r) => r.key)} strategy={verticalListSortingStrategy}>
+              <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-xl border border-border">
+                {roots.map((r) => <Row key={r.key} id={r.key} label={r.name} emoji={r.emoji} />)}
+              </ul>
+            </SortableContext>
+          </DndContext>
+          <button type="button" onClick={() => resetFor(selected.id)} className="text-xs font-semibold text-primary">{t("store.reset")}</button>
+        </div>
+      )}
     </div>
   );
 }
