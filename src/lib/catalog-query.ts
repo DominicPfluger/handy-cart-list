@@ -146,7 +146,7 @@ export function useCatalog(): Catalog {
       recipeSteps: (d?.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
       recipePopular: d?.recipePopular ?? [],
     };
-  }, [core, details, images, locale, market, custom, own, allMarkets, personalVariants]);
+  }, [data, details, images, locale, market, custom, own, allMarkets, personalVariants]);
 }
 
 export type { Catalog, CatalogCuisine, CatalogDepartment, CatalogHeading, CatalogProduct };
