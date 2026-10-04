@@ -59,7 +59,7 @@ export function CommunitySection() {
       <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("cm.search")} aria-label={t("cm.search")}
         className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground outline-none focus:border-primary" />
 
-      <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+      <div className="flex flex-wrap gap-2">
         <Chip active={!cat} onClick={() => setCat(null)}>{t("cm.allCats")}</Chip>
         {templates.map((tp) => (
           <Chip key={tp.id} active={cat === tp.id} onClick={() => setCat(cat === tp.id ? null : tp.id)}>
