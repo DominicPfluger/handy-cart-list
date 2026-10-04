@@ -399,6 +399,7 @@ function ListPage() {
           }))}
           onReorder={reorderLists}
           onOpen={(id) => { setActiveListId(id); setOpenListId(id); }}
+          onRename={renameList}
           onSaveTemplate={(id) => { saveAsTemplate(id); toast.success(t("lm.templateSaved")); }}
           onDelete={(id) => {
             if (lists.length <= 1) { toast.error(t("lm.lastList")); return; }
