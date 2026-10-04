@@ -1275,6 +1275,8 @@ export const de = {
   "purchase.title": "Kaufmodus",
   "purchase.done": "Erledigt",
   "purchase.allDone": "Alles erledigt!",
+  "purchase.speakOn": "Sprachausgabe einschalten",
+  "purchase.speakOff": "Sprachausgabe ausschalten",
   "install.title": "App installieren",
   "install.desc": "Shoppi auf dem Startbildschirm",
   "install.manualHint": "Im Browser-Menü «Zum Startbildschirm hinzufügen» wählen.",
