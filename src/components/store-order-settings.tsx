@@ -6,14 +6,17 @@ import { useCatalog } from "../lib/catalog-query";
 import { useGroupOrder, applyGroupOrder, filterHidden } from "../hooks/use-group-order";
 import { useStores } from "../hooks/use-stores";
 import { useT } from "../i18n";
+import { DepartmentIcon } from "./catalog-icon";
 
-function Row({ id, label, emoji, onHide }: { id: string; label: string; emoji: string | null; onHide: () => void }) {
+function Row({ id, label, emoji, imageUrl, imagePath, onHide }: { id: string; label: string; emoji: string | null; imageUrl?: string | null | undefined; imagePath?: string | null | undefined; onHide: () => void }) {
   const { t } = useT();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   return (
     <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={`flex items-center gap-2 bg-card px-3 py-2.5 ${isDragging ? "relative z-10 shadow-lg" : ""}`}>
       <button type="button" aria-label={t("list.moveGroup")} className="touch-none cursor-grab px-1 text-muted-foreground" {...attributes} {...listeners}>⋮⋮</button>
-      <span aria-hidden="true">{emoji ?? "🛒"}</span>
+      <span className="inline-grid h-6 w-6 shrink-0 place-items-center">
+        <DepartmentIcon emoji={emoji} imageUrl={imageUrl} imagePath={imagePath} className="h-6 w-6 object-contain" symbolClassName="text-lg" />
+      </span>
       <span className="flex-1 text-sm text-foreground">{label}</span>
       <button type="button" aria-label={t("store.hide")} title={t("store.hide")} onClick={onHide} className="px-1 text-muted-foreground transition hover:text-destructive">🗑</button>
     </li>
@@ -37,7 +40,7 @@ export function StoreOrderSettings() {
   );
   const hiddenSel = hiddenAll[selected.id] ?? [];
   const { roots, hiddenRoots } = useMemo(() => {
-    const r = catalog.departments.filter((d) => !d.parentId).map((d) => ({ key: d.id, order: d.sortOrder, name: d.name, emoji: d.emoji }));
+    const r = catalog.departments.filter((d) => !d.parentId).map((d) => ({ key: d.id, order: d.sortOrder, name: d.name, emoji: d.emoji, imageUrl: d.iconUrl ?? d.imageUrl, imagePath: d.iconPath ?? d.imagePath }));
     const ordered = applyGroupOrder(r.sort((a, b) => a.order - b.order), all[selected.id] ?? []);
     return { roots: filterHidden(ordered, hiddenSel), hiddenRoots: ordered.filter((x) => hiddenSel.includes(x.key)) };
   }, [catalog.departments, all, selected.id, hiddenSel]);
@@ -93,7 +96,7 @@ export function StoreOrderSettings() {
           }}>
             <SortableContext items={roots.map((r) => r.key)} strategy={verticalListSortingStrategy}>
               <ul className="max-h-96 divide-y divide-border overflow-y-auto rounded-xl border border-border">
-                {roots.map((r) => <Row key={r.key} id={r.key} label={r.name} emoji={r.emoji} onHide={() => hideFor(selected.id, r.key)} />)}
+                {roots.map((r) => <Row key={r.key} id={r.key} label={r.name} emoji={r.emoji} imageUrl={r.imageUrl} imagePath={r.imagePath} onHide={() => hideFor(selected.id, r.key)} />)}
               </ul>
             </SortableContext>
           </DndContext>
@@ -103,7 +106,9 @@ export function StoreOrderSettings() {
               <ul className="divide-y divide-border rounded-xl border border-border">
                 {hiddenRoots.map((r) => (
                   <li key={r.key} className="flex items-center gap-2 bg-card px-3 py-2">
-                    <span aria-hidden="true">{r.emoji ?? "🛒"}</span>
+                    <span className="inline-grid h-6 w-6 shrink-0 place-items-center">
+                      <DepartmentIcon emoji={r.emoji} imageUrl={r.imageUrl} imagePath={r.imagePath} className="h-6 w-6 object-contain" symbolClassName="text-lg" />
+                    </span>
                     <span className="flex-1 text-sm text-muted-foreground">{r.name}</span>
                     <button type="button" onClick={() => unhideFor(selected.id, r.key)} className="text-xs font-semibold text-primary">{t("store.unhide")}</button>
                   </li>
