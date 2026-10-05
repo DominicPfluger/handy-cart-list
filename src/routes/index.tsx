@@ -357,19 +357,12 @@ function ListPage() {
         />
         <ListEditDialog
           list={lists.find((l) => l.id === editListId) ?? null}
-          index={lists.findIndex((l) => l.id === editListId)}
-          total={lists.length}
           storeId={editListId ? (listStores[editListId] ?? "default") : "default"}
           onClose={() => setEditListId(null)}
           onSave={(name, storeId) => {
             if (!editListId) return;
             renameList(editListId, name);
             setListStore(editListId, storeId);
-          }}
-          onMove={(dir) => {
-            const i = lists.findIndex((l) => l.id === editListId);
-            const j = i + dir;
-            if (editListId && i >= 0 && j >= 0 && j < lists.length) reorderLists(editListId, lists[j]!.id);
           }}
         />
         <button

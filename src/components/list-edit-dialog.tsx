@@ -8,18 +8,13 @@ const STORE_EMOJIS = ["🏪", "🛒", "🧺", "🏬", "🥖", "🐄", "🌱"];
 
 interface Props {
   list: ShoppingList | null;
-  /** Aktuelle Position in der Übersicht (0-basiert) und Gesamtzahl. */
-  index: number;
-  total: number;
   storeId: string;
   onClose: () => void;
   onSave: (name: string, storeId: string) => void;
-  /** Tauscht die Liste mit der benachbarten Position (dir -1 = hoch, +1 = runter). */
-  onMove: (dir: -1 | 1) => void;
 }
 
-/** Bearbeitungsdialog einer Einkaufsliste: Name, Markt/Laden und Reihenfolge in der Übersicht. */
-export function ListEditDialog({ list, index, total, storeId, onClose, onSave, onMove }: Props) {
+/** Bearbeitungsdialog einer Einkaufsliste: Name und Markt/Laden. */
+export function ListEditDialog({ list, storeId, onClose, onSave }: Props) {
   const { t } = useT();
   const stores = useStores();
   const { addCustomStore } = useGroupOrder();
@@ -54,8 +49,6 @@ export function ListEditDialog({ list, index, total, storeId, onClose, onSave, o
     onSave(n, store);
     onClose();
   };
-
-  const arrowBtn = "grid h-9 w-9 place-items-center rounded-xl border border-border text-foreground disabled:opacity-30 active:bg-muted";
 
   return (
     <div className="fixed inset-0 z-[70] flex items-end justify-center bg-foreground/30" onClick={onClose}>
@@ -128,29 +121,6 @@ export function ListEditDialog({ list, index, total, storeId, onClose, onSave, o
               </div>
             </div>
           )}
-
-          <div className="flex items-center gap-2">
-            <span className="min-w-0 flex-1 text-xs text-muted-foreground">{t("lm.position")}</span>
-            <button
-              onClick={() => onMove(-1)}
-              disabled={index <= 0}
-              aria-label={t("lm.moveUp")}
-              title={t("lm.moveUp")}
-              className={arrowBtn}
-            >
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6" /></svg>
-            </button>
-            <span className="w-14 shrink-0 text-center text-sm font-semibold text-foreground">{index + 1} / {total}</span>
-            <button
-              onClick={() => onMove(1)}
-              disabled={index >= total - 1}
-              aria-label={t("lm.moveDown")}
-              title={t("lm.moveDown")}
-              className={arrowBtn}
-            >
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-            </button>
-          </div>
 
           <button
             onClick={save}
