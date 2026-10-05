@@ -19,6 +19,7 @@ import { useSyncExternalStore } from "react";
 import { preloadCatalogImages, preloadState, subscribePreload } from "../lib/catalog-image-cache";
 import { getCatalogImageUrls } from "../lib/catalog.functions";
 import { setIconSet, useIconSet, type IconSet } from "../hooks/use-icon-set";
+import { useTheme } from "../hooks/use-theme";
 import { setFontSize, useFontSize, type FontSize } from "../hooks/use-font-size";
 import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
@@ -327,6 +328,36 @@ function IconSetRow() {
           <option value="symbols">{t("more.iconSymbols")}</option>
         </select>
       </label>
+    </div>
+  );
+}
+
+function ThemeRow() {
+  const { t } = useT();
+  const { theme, setTheme } = useTheme();
+  return (
+    <div className="flex w-full items-start gap-3 px-4 py-3.5">
+      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+        <SunMoon className="h-5 w-5" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <span className="text-sm font-semibold text-foreground">{t("theme.label")}</span>
+        <div className="mt-2 grid grid-cols-3 gap-1 rounded-lg border border-input bg-background p-1" role="group" aria-label={t("theme.label")}>
+          {(["system", "light", "dark"] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => setTheme(v)}
+              aria-pressed={theme === v}
+              className={`min-h-11 rounded-md px-2 py-2 text-sm font-medium transition active:scale-[0.98] ${
+                theme === v ? "bg-primary text-primary-foreground" : "text-muted-foreground active:bg-muted"
+              }`}
+            >
+              {t(`theme.${v}`)}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
