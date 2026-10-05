@@ -1389,5 +1389,16 @@
   "theme.system": "Système",
   "theme.light": "Clair",
   "theme.dark": "Sombre",
-  "list.merged": "{name} regroupé : {qty}"
+  "list.merged": "{name} regroupé : {qty}",
+  "adm.tab.diets": "Diets",
+  "diets.title": "Diets",
+  "diets.hint": "Drag to reorder. Hidden diets do not appear in filters.",
+  "diets.add": "+ New diet",
+  "diets.label": "Name",
+  "diets.emoji": "Icon",
+  "diets.added": "Diet added",
+  "diets.deleted": "Deleted",
+  "diets.inUse": "Used by {n} products – cannot delete",
+  "diets.exists": "This diet already exists",
+  "diets.editTitle": "Edit diet: {name}"
 }
