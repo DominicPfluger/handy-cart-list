@@ -21,7 +21,6 @@ import { getCatalogImageUrls } from "../lib/catalog.functions";
 import { setIconSet, useIconSet, type IconSet } from "../hooks/use-icon-set";
 import { setFontSize, useFontSize, type FontSize } from "../hooks/use-font-size";
 import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
-import { useHiddenDepartments, restoreDepartment } from "../hooks/use-hidden-departments";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
@@ -78,9 +77,7 @@ function MorePage() {
   };
   const inviteText = inviteLink ? `„${activeList.name}“ – ${t("lm.inviteHint")}\n${inviteLink}` : "";
   const [choice, setChoice] = useState<string>("auto");
-  const hiddenIds = useHiddenDepartments();
   const catalog = useCatalog();
-  const hiddenCategories = catalog.departments.filter((department) => hiddenIds.includes(department.id));
   const hiddenProductIds = useHiddenProducts();
   const hiddenProducts = catalog.products.filter((product) => hiddenProductIds.includes(product.id));
   const [hiddenOpen, setHiddenOpen] = useState(false);
@@ -131,6 +128,42 @@ function MorePage() {
 
       <section className="rounded-2xl border border-border bg-card">
         <CategoryOrderSettings />
+      </section>
+
+      {/* Ausgeblendete Produkte */}
+      <section className="rounded-2xl border border-border bg-card">
+        <div>
+          <button
+            type="button"
+            onClick={() => setHiddenOpen((open) => !open)}
+            aria-expanded={hiddenOpen}
+            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted"
+          >
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
+              <EyeOff className="h-5 w-5" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground">{t("more.hiddenProducts")}</p>
+              <p className="truncate text-xs text-muted-foreground">{t("more.hiddenProductsHint")}</p>
+            </div>
+            {hiddenProducts.length > 0 && <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{hiddenProducts.length}</span>}
+            <span className="text-muted-foreground" aria-hidden="true">{hiddenOpen ? "▴" : "▾"}</span>
+          </button>
+          {hiddenOpen && (
+            <div className="divide-y divide-border border-t border-border">
+              {hiddenProducts.length === 0 ? (
+                <p className="px-4 py-3 text-sm text-muted-foreground">{t("more.hiddenProductsEmpty")}</p>
+              ) : (
+                hiddenProducts.map((product) => (
+                  <div key={product.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
+                    <span className="min-w-0 text-sm text-foreground">{product.name}</span>
+                    <Button variant="ghost" size="sm" onClick={() => restoreProduct(product.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
       </section>
 
       <SectionHeader label={t("more.group.app")} />
@@ -215,51 +248,6 @@ function MorePage() {
           </div>
           <span className="text-muted-foreground">›</span>
         </button>
-        <div>
-          <button
-            type="button"
-            onClick={() => setHiddenOpen((open) => !open)}
-            aria-expanded={hiddenOpen}
-            className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted"
-          >
-            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
-              <EyeOff className="h-5 w-5" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-foreground">{t("more.hiddenProducts")}</p>
-              <p className="truncate text-xs text-muted-foreground">{t("more.hiddenProductsHint")}</p>
-            </div>
-            {(hiddenProducts.length + hiddenCategories.length) > 0 && <span className="shrink-0 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">{hiddenProducts.length + hiddenCategories.length}</span>}
-            <span className="text-muted-foreground" aria-hidden="true">{hiddenOpen ? "▴" : "▾"}</span>
-          </button>
-          {hiddenOpen && (
-            <div className="divide-y divide-border border-t border-border">
-              {hiddenProducts.length === 0 && hiddenCategories.length === 0 ? (
-                <p className="px-4 py-3 text-sm text-muted-foreground">{t("more.hiddenProductsEmpty")}</p>
-              ) : (
-                <>
-                  {hiddenProducts.map((product) => (
-                    <div key={product.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
-                      <span className="min-w-0 text-sm text-foreground">{product.name}</span>
-                      <Button variant="ghost" size="sm" onClick={() => restoreProduct(product.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
-                    </div>
-                  ))}
-                  {hiddenCategories.length > 0 && (
-                    <>
-                      <p className="px-4 py-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("more.hiddenCategories")}</p>
-                      {hiddenCategories.map((department) => (
-                        <div key={department.id} className="flex items-center justify-between gap-3 px-4 py-2.5">
-                          <span className="min-w-0 text-sm text-foreground">{department.name}</span>
-                          <Button variant="ghost" size="sm" onClick={() => restoreDepartment(department.id)} className="shrink-0 text-primary">{t("more.restore")}</Button>
-                        </div>
-                      ))}
-                    </>
-                  )}
-                </>
-              )}
-            </div>
-          )}
-        </div>
       </section>
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <InstallAppRow />
