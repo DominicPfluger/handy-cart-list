@@ -625,7 +625,7 @@
   "adm.variants": "Variants",
   "adm.variantsHint": "Variants apply only to this product and are offered when adding it to the shopping list.",
   "adm.variantPlaceholder": "New variant…",
-  "more.allMarkets": "Show all markets",
+  "more.allMarkets": "Show products from all markets",
   "more.allMarketsSub": "Full catalog incl. products from other countries (with flag)",
   "mk.title": "Market catalog",
   "mk.hint": "Add market products, hide global products in this market and set their order.",
