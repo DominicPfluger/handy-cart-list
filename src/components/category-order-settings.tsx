@@ -61,6 +61,35 @@ function Row({ dept, depth, hasChildren, expanded, onToggle, onRename, onRemove 
   );
 }
 
+type StoreRowProps = {
+  id: string;
+  label: string;
+  selected: boolean;
+  sortable: boolean;
+  custom?: boolean;
+  onPick: () => void;
+  onEdit?: () => void;
+  onRemove?: () => void;
+};
+
+function StoreRow({ id, label, selected, sortable, custom, onPick, onEdit, onRemove }: StoreRowProps) {
+  const { t } = useT();
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id, disabled: !sortable });
+  return (
+    <div ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={`flex items-center gap-2 bg-card px-2 py-2 ${isDragging ? "relative z-10 shadow-lg" : ""}`}>
+      {sortable ? (
+        <button type="button" aria-label={t("list.moveGroup")} className="touch-none cursor-grab px-1 text-muted-foreground" {...attributes} {...listeners}>⋮⋮</button>
+      ) : (
+        <span className="w-5 shrink-0" aria-hidden="true" />
+      )}
+      <button type="button" onClick={onPick} className="min-w-0 flex-1 text-left text-sm text-foreground">{label}</button>
+      {selected && <span className="shrink-0 text-primary" aria-hidden="true">✓</span>}
+      {custom && onEdit && <button type="button" aria-label={t("store.edit")} title={t("store.edit")} onClick={onEdit} className="p-1 text-muted-foreground hover:text-primary"><PencilIcon className="h-4 w-4" /></button>}
+      {custom && onRemove && <button type="button" aria-label={t("store.remove")} title={t("store.remove")} onClick={onRemove} className="p-1 text-muted-foreground hover:text-destructive"><TrashIcon className="h-4 w-4" /></button>}
+    </div>
+  );
+}
+
 /** Einstellungen: Kategorien aller Stufen ordnen/umbenennen/entfernen; Hauptkategorien-Reihenfolge pro Laden (geräte-lokal). */
 export function CategoryOrderSettings() {
   const { t } = useT();
