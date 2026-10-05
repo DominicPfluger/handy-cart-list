@@ -417,6 +417,16 @@ function DepartmentsPage() {
     return () => window.removeEventListener("shoppi:abteilungen-reset", reset);
   }, []);
 
+  // Ladenwahl-Popup bei Klick ausserhalb des Suchleisten-Bereichs schliessen
+  useEffect(() => {
+    if (!storeOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!storeBarRef.current?.contains(e.target as Node)) setStoreOpen(false);
+    };
+    window.addEventListener("pointerdown", onPointerDown);
+    return () => window.removeEventListener("pointerdown", onPointerDown);
+  }, [storeOpen]);
+
   const quickAdd = (product: CatalogProduct, group: CatalogDepartment | null, variant?: string) => {
     const name = variant ? `${product.name} · ${variantLabel(product, variant)}` : product.name;
     const vi = variant ? product.variantImages?.[variant] : undefined;
