@@ -116,6 +116,8 @@ export function CatalogTileEditor(p: {
   const [variantAdd, setVariantAdd] = useState<TileProd | null>(null);
   const [copyOpen, setCopyOpen] = useState(false);
   const [copyText, setCopyText] = useState("");
+  const [deptView, setDeptView] = useState<"tiles" | "list">(() => (localStorage.getItem("shoppi:admin-dept-view") === "list" ? "list" : "tiles"));
+  const switchDeptView = (v: "tiles" | "list") => { setDeptView(v); localStorage.setItem("shoppi:admin-dept-view", v); };
   const moved = useRef(false);
   const qc = useQueryClient();
   /** Speichert Standard-Menge/-Einheit direkt aus der Zeile. */
