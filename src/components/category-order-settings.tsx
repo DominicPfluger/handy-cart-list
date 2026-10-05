@@ -70,6 +70,7 @@ export function CategoryOrderSettings() {
   const { all, store, setStore, saveFor, resetFor, addCustomStore, updateCustomStore, removeCustomStore } = useGroupOrder();
   const hidden = useHiddenDepartments();
   const customNames = useCustomNames();
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
@@ -79,6 +80,19 @@ export function CategoryOrderSettings() {
   const [editStore, setEditStore] = useState(false);
   const [editName, setEditName] = useState("");
   const [editEmoji, setEditEmoji] = useState("");
+
+  // Aufruf über „+ Neuer Laden" im Laden-Popup der Abteilungsansicht: /mehr?catOrder=1
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("catOrder") !== "1") return;
+    setOpen(true);
+    params.delete("catOrder");
+    const qs = params.toString();
+    window.history.replaceState(null, "", `${window.location.pathname}${qs ? `?${qs}` : ""}`);
+    requestAnimationFrame(() => wrapperRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }, []);
+
   const selected = stores.find((s) => s.id === store) ?? stores[0]!;
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
