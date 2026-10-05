@@ -71,6 +71,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [showAllRecent, setShowAllRecent] = useState(false);
   const [showAllPopular, setShowAllPopular] = useState(false);
   const cuisineFilter = useCuisineFilter();
+  const [cuisineOpen, setCuisineOpen] = useState(false);
 
   const favIds = useMemo(() => new Set(favorites.map((f) => f.productId)), [favorites]);
 
