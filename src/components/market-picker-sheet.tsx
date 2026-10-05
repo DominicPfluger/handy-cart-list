@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Check } from "lucide-react";
-import { marketsQuery, MARKETS as FALLBACK_CODES, type MarketRow } from "@/hooks/use-markets";
+import { marketsQuery, FALLBACK_MARKETS, type MarketRow } from "@/hooks/use-markets";
 import { setMarketOverride, useMarket, useMarketOverride } from "@/hooks/use-market";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useT } from "@/i18n";
@@ -16,6 +16,8 @@ function toOptions(markets: MarketRow[], fallbackCodes: string[], effective: str
     : fallbackCodes.map((c) => ({ code: c, label: c, flag: flagOf(c) }));
   return [{ code: null, label: `${autoLabel} (${effective})`, flag: "🌐" }, ...rest];
 }
+
+const FALLBACK_CODES = FALLBACK_MARKETS;
 
 /** Bottom-Sheet zur Markt-Wahl (gleiche Wirkung wie die Einstellung unter „Mehr"). */
 export function MarketPickerSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
