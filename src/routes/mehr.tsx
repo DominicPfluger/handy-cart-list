@@ -263,6 +263,8 @@ function MorePage() {
       </section>
 
       {isAdmin && (
+        <>
+        <SectionHeader label={t("more.group.admin")} />
         <section className="divide-y divide-border rounded-2xl border border-border bg-card">
           <Link to="/admin" className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
             <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-primary">
@@ -286,6 +288,7 @@ function MorePage() {
             <span className="text-muted-foreground">›</span>
           </Link>
         </section>
+        </>
       )}
 
       <footer className="flex flex-col items-center gap-1 pt-4 pb-2 text-center">
