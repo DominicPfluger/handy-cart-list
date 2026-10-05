@@ -1309,6 +1309,13 @@ function Editor(p: {
     return () => { alive = false; };
   }, [prod?.image_path]);
 
+  // ESC bricht ab wie Klick daneben
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") { e.preventDefault(); p.onClose(); } };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [p.onClose]);
+
   return (
     <div className="fixed inset-0 z-[60] flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
       <div className="max-h-[88dvh] w-full max-w-[440px] space-y-3 overflow-y-auto rounded-t-3xl bg-background p-5 pb-[calc(5rem+env(safe-area-inset-bottom))]" onClick={(e) => e.stopPropagation()}>
