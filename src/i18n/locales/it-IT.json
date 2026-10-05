@@ -1387,5 +1387,6 @@
   "theme.label": "Aspetto",
   "theme.system": "Sistema",
   "theme.light": "Chiaro",
-  "theme.dark": "Scuro"
+  "theme.dark": "Scuro",
+  "list.merged": "{name} unito: {qty}"
 }
