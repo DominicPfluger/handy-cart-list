@@ -18,6 +18,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
+import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { LayoutGrid, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -88,6 +89,8 @@ export function CatalogTileEditor(p: {
   onDeleteSelected?: (sel: { productIds: string[]; productAliasIds: string[] }) => void;
   /** Löscht alle markierten Kategorien (inkl. Kategorie-Aliasse). */
   onDeleteSelectedDepts?: (sel: { deptIds: string[]; deptAliasIds: string[] }) => void;
+  /** Übernimmt per KI vorgeschlagene Überschriften-Gruppen. */
+  onApplyHeadingGroups?: (groups: HeadingGroup[]) => Promise<void>;
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const [newTitlePos, setNewTitlePos] = useState(0);
@@ -141,6 +144,7 @@ export function CatalogTileEditor(p: {
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
   const [genAllDlg, setGenAllDlg] = useState<{ all: boolean; hint: string; opts: AiImageOpts } | null>(null);
+  const [headingAi, setHeadingAi] = useState(false);
   const generateAllImages = () => {
     const missing = p.products.filter((x) => !x.image_path);
     setGenAllDlg({ all: missing.length === 0, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS } });
@@ -420,6 +424,9 @@ export function CatalogTileEditor(p: {
               🖼️ {imgProg ? T("tile.genAllBusy", { done: imgProg.done, total: imgProg.total }) : T("tile.genAll")}
             </Button>
           )}
+          {p.cur && p.onApplyHeadingGroups && p.products.length > 0 && (
+            <Button size="sm" variant="outline" disabled={p.busy} onClick={() => setHeadingAi(true)} title={T("adm.headingAi.title")}>✨ {T("adm.headingAi.btn")}</Button>
+          )}
           {p.cur && (
             <Button size="sm" variant="outline" onClick={() => void collectListText().then((text) => { if (text) { setCopyText(text); setCopyOpen(true); } })}>{T("adm.copyList")}</Button>
           )}
@@ -452,6 +459,13 @@ export function CatalogTileEditor(p: {
           </div>
         );
       })()}
+
+      {p.cur && p.onApplyHeadingGroups && headingAi && (
+        <HeadingAiDialog open={headingAi} onOpenChange={setHeadingAi} nm={p.nm} hasHeadings={(p.headings ?? []).length > 0}
+          path={p.path.map((d) => d.name).join(" › ")}
+          products={p.products.filter((x) => !x.id.startsWith("alias:")).map((x) => ({ id: x.id, name: x.name, emoji: x.emoji }))}
+          onApply={p.onApplyHeadingGroups} />
+      )}
 
       {p.children.length > 0 && (
         <div className="flex justify-end gap-1">
