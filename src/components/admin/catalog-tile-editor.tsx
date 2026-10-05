@@ -364,7 +364,6 @@ export function CatalogTileEditor(p: {
         if (d.alias_id) continue;
         lines.push("", `## ${pathOf(d.id).join(" › ")}`);
         for (const pr of (subProds.get(d.id) ?? []).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))) {
-          if (pr.alias_id) continue;
           lines.push(p.nm(pr.id, pr.name));
         }
         walk(d.id);
