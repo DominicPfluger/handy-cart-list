@@ -531,25 +531,43 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       </div>
       {catalog.cuisines.length > 0 && (
         <div role="group" aria-label={t("cuisine.title")} className="space-y-1.5">
-          <button
-            type="button"
-            onClick={() => setCuisineOpen((o) => !o)}
-            aria-expanded={cuisineOpen}
-            className="flex w-full items-center justify-between gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-left"
-          >
-            <span className="shrink-0 text-xs font-bold text-foreground">🌍 {t("cuisine.filter")}</span>
-            <span className="flex min-w-0 items-center gap-1.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => setCuisineOpen((o) => !o)}
+              aria-expanded={cuisineOpen}
+              aria-pressed={cuisineOpen || cuisineFilter.length > 0}
+              className={`flex max-w-full min-w-0 items-center gap-1.5 rounded-full border px-2 py-1 text-[11px] font-semibold leading-tight transition ${
+                cuisineOpen || cuisineFilter.length > 0
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : "border-border text-foreground"
+              }`}
+            >
+              <span className="shrink-0 whitespace-nowrap">🌍 {t("cuisine.filter")}</span>
               {cuisineFilter.length > 0 && (
-                <span className="truncate text-[11px] font-semibold text-primary">
+                <span className="min-w-0 max-w-[120px] truncate text-[11px] font-semibold opacity-80">
                   {cuisineFilter
                     .map((id) => catalog.cuisines.find((c) => c.id === id)?.name)
                     .filter(Boolean)
                     .join(", ")}
                 </span>
               )}
-              <span aria-hidden="true" className="shrink-0 text-muted-foreground">{cuisineOpen ? "▴" : "▾"}</span>
-            </span>
-          </button>
+            </button>
+            <button
+              onClick={toggleOnlyFav}
+              aria-pressed={onlyFav}
+              className={`shrink-0 whitespace-nowrap rounded-full border px-2 py-1 text-[11px] font-semibold leading-tight transition ${
+                onlyFav ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
+              }`}
+            >
+              ♥ {t("rk.onlyFavorites")}
+            </button>
+            <button onClick={surprise} className="shrink-0 whitespace-nowrap rounded-full bg-accent px-2 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
+              {t("rk.surprise")}
+            </button>
+            <button onClick={() => { setPicks({}); setVariants({}); setQty({}); setAdded(false); }} className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
+              {t("rk.reset")}
+            </button>
+          </div>
           {cuisineOpen && (
             <>
               <div className="flex flex-wrap gap-1.5">
@@ -576,23 +594,6 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           )}
         </div>
       )}
-      <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={toggleOnlyFav}
-            aria-pressed={onlyFav}
-            className={`shrink-0 whitespace-nowrap rounded-full border px-2 py-1 text-[11px] font-semibold leading-tight transition ${
-              onlyFav ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
-            }`}
-          >
-            ♥ {t("rk.onlyFavorites")}
-          </button>
-          <button onClick={surprise} className="shrink-0 whitespace-nowrap rounded-full bg-accent px-2 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
-            {t("rk.surprise")}
-          </button>
-          <button onClick={() => { setPicks({}); setVariants({}); setQty({}); setAdded(false); }} className="shrink-0 whitespace-nowrap rounded-full border border-border px-2 py-1 text-[11px] font-semibold leading-tight text-foreground">
-            {t("rk.reset")}
-          </button>
-      </div>
 
 
 
