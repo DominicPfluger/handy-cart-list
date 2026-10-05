@@ -17,7 +17,6 @@ function toOptions(markets: MarketRow[], fallbackCodes: string[], effective: str
   return [{ code: null, label: `${autoLabel} (${effective})`, flag: "🌐" }, ...rest];
 }
 
-const FALLBACK_CODES = FALLBACK_MARKETS;
 
 /** Bottom-Sheet zur Markt-Wahl (gleiche Wirkung wie die Einstellung unter „Mehr"). */
 export function MarketPickerSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
@@ -26,7 +25,7 @@ export function MarketPickerSheet({ open, onOpenChange }: { open: boolean; onOpe
   const effective = useMarket();
   const { data: markets = [] } = useQuery({ ...marketsQuery, enabled: open });
   const current = override ?? null; // null = automatisch
-  const options = toOptions(markets, FALLBACK_CODES, effective, t("more.marketAuto"));
+  const options = toOptions(markets, FALLBACK_MARKETS, effective, t("more.marketAuto"));
 
   const pick = (code: string | null) => {
     setMarketOverride(code);
