@@ -141,6 +141,8 @@ function DepartmentsPage() {
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
   const isAdmin = useIsAdmin();
   const [storeOpen, setStoreOpen] = useState(false);
+  const { setStore } = useGroupOrder();
+  const storeBarRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const saveHeadingFn = useServerFn(saveHeading);
@@ -474,31 +476,39 @@ function DepartmentsPage() {
         <p className="mt-1 text-sm text-muted-foreground">{t("dept.subtitle")}</p>
       </div>
 
-      <div className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
-        <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
-        <input
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder={t("dept.search")}
-          aria-label={t("dept.search")}
-          className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+      <div ref={storeBarRef} className="space-y-2">
+        <div className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
+          <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t("dept.search")}
+            aria-label={t("dept.search")}
+            className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+          />
+          <VoiceInputButton
+            onResult={handleVoiceResult}
+            className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
+          />
+          <button
+            type="button"
+            onClick={() => setStoreOpen((open) => !open)}
+            aria-label={t("store.label")}
+            aria-expanded={storeOpen}
+            className={`shrink-0 rounded-lg p-1 text-primary transition active:bg-muted ${storeOpen ? "bg-primary-soft/60" : ""}`}
+          >
+            <Store className="h-5 w-5" aria-hidden="true" />
+          </button>
+        </div>
+        <StorePickerInline
+          open={storeOpen}
+          onPick={(id) => {
+            setStore(id);
+            setStoreOpen(false);
+          }}
         />
-        <VoiceInputButton
-          onResult={handleVoiceResult}
-          className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
-        />
-        <button
-          type="button"
-          onClick={() => setStoreOpen(true)}
-          aria-label={t("store.label")}
-          className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
-        >
-          <Store className="h-5 w-5" aria-hidden="true" />
-        </button>
       </div>
-
-      <StorePickerSheet open={storeOpen} onOpenChange={setStoreOpen} />
 
       {!normalizedQuery && breadcrumbs.length > 0 && (
         <nav aria-label={t("dept.breadcrumb")} className="no-scrollbar flex items-center gap-1 overflow-x-auto text-xs">
