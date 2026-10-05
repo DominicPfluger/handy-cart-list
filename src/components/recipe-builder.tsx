@@ -552,6 +552,21 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 </span>
               )}
             </button>
+            {cuisineOpen && catalog.cuisines.map((c) => {
+              const on = cuisineFilter.includes(c.id);
+              return (
+                <button
+                  key={c.id}
+                  onClick={() => toggleCuisine(c.id)}
+                  aria-pressed={on}
+                  className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${
+                    on ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
+                  }`}
+                >
+                  {c.name}
+                </button>
+              );
+            })}
             <button
               onClick={toggleOnlyFav}
               aria-pressed={onlyFav}
@@ -568,29 +583,8 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               {t("rk.reset")}
             </button>
           </div>
-          {cuisineOpen && (
-            <>
-              <div className="flex flex-wrap gap-1.5">
-                {catalog.cuisines.map((c) => {
-                  const on = cuisineFilter.includes(c.id);
-                  return (
-                    <button
-                      key={c.id}
-                      onClick={() => toggleCuisine(c.id)}
-                      aria-pressed={on}
-                      className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${
-                        on ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
-                      }`}
-                    >
-                      {c.name}
-                    </button>
-                  );
-                })}
-              </div>
-              {cuisineFilter.length > 0 && (
-                <p className="text-[11px] text-muted-foreground">{t("cuisine.hint")}</p>
-              )}
-            </>
+          {cuisineOpen && cuisineFilter.length > 0 && (
+            <p className="text-[11px] text-muted-foreground">{t("cuisine.hint")}</p>
           )}
         </div>
       )}
