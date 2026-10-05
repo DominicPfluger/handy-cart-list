@@ -895,6 +895,7 @@
   "tile.preview": "Preview",
   "tile.hint": "Drag an image to sort or move it (onto a category or the path). Tap to edit.",
   "tile.editItem": "Edit",
+  "tile.editCat": "Edit category",
   "tile.newCat": "New category",
   "tile.newProd": "New product",
   "tile.name": "Name",
