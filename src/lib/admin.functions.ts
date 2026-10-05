@@ -923,6 +923,23 @@ export const translateUnitLabels = createServerFn({ method: "POST" })
     return out;
   });
 
+export const translateDietLabel = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ label: z.string().min(1).max(60) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { translateUiTexts } = await import("./translate.server");
+    const locales = await targetLocales(context.supabase);
+    const out: Record<string, string> = { "de-DE": data.label };
+    await Promise.all(locales.map(async (loc) => {
+      try {
+        const r = await translateUiTexts({ label: data.label }, loc, `${loc} — this is a diet / nutrition style used to filter groceries (e.g. vegan, halal, low carb)`);
+        out[loc] = r['label'] || data.label;
+      } catch { /* einzelne Sprache überspringen */ }
+    }));
+    return out;
+  });
+
 /** KI-Vorschlag: Produkte einer Kategorie in sinnvolle Gruppen mit Überschriften einteilen. */
 export const suggestHeadings = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])

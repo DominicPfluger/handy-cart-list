@@ -214,6 +214,39 @@ export type Database = {
           },
         ]
       }
+      diets: {
+        Row: {
+          builtin: boolean
+          created_at: string
+          emoji: string | null
+          enabled: boolean
+          id: string
+          labels: Json
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          builtin?: boolean
+          created_at?: string
+          emoji?: string | null
+          enabled?: boolean
+          id: string
+          labels?: Json
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          builtin?: boolean
+          created_at?: string
+          emoji?: string | null
+          enabled?: boolean
+          id?: string
+          labels?: Json
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       feedback_messages: {
         Row: {
           created_at: string

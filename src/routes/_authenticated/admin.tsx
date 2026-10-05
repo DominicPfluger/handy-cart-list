@@ -29,7 +29,7 @@ import { isNonFoodRootName } from "@/lib/dept-colors";
 import { MarketAdmin, MarketAdminsManager } from "@/components/market-admin";
 import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
-import { DIETS, DIET_EMOJI } from "@/hooks/use-diet-filter";
+import { useDiets, dietEmoji, dietLabel } from "@/hooks/use-diet-filter";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
 import { generateImageFor } from "@/lib/product-media.functions";
 import { saveProductIconFromPath } from "@/lib/product-icon";
@@ -42,6 +42,7 @@ const CatalogMediaPanel = lazy(() => import("@/components/admin/catalog-media-pa
 const CatalogHealthPanel = lazy(() => import("@/components/admin/catalog-health-panel").then((m) => ({ default: m.CatalogHealthPanel })));
 const LocaleAdminPanel = lazy(() => import("@/components/admin/locale-admin-panel").then((m) => ({ default: m.LocaleAdminPanel })));
 const SpeechTextsPanel = lazy(() => import("@/components/admin/speech-texts-panel").then((m) => ({ default: m.SpeechTextsPanel })));
+const DietsPanel = lazy(() => import("@/components/admin/diets-panel").then((m) => ({ default: m.DietsPanel })));
 const UnitsPanel = lazy(() => import("@/components/admin/units-panel").then((m) => ({ default: m.UnitsPanel })));
 const MarketsManager = lazy(() => import("@/components/admin/markets-manager").then((m) => ({ default: m.MarketsManager })));
 const ImportPanel = lazy(() => import("@/components/admin/import-panel").then((m) => ({ default: m.ImportPanel })));
@@ -149,7 +150,7 @@ function AdminPage() {
   const [bulkTree, setBulkTree] = useState(false);
   const [sortDlg, setSortDlg] = useState<string | null>(null);
   /** Aktiver Admin-Bereich (Tabs). */
-  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "speech" | "units" | "more">("catalog");
+  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "speech" | "units" | "diets" | "more">("catalog");
   const [preview, setPreview] = useState(false);
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: true }));
@@ -863,7 +864,7 @@ function AdminPage() {
       </div>
 
       <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["recipes", "adm.tab.recipes"], ["cuisines", "adm.tab.cuisines"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["health", "adm.tab.health"], ["speech", "stx.title"], ["units", "adm.tab.units"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["recipes", "adm.tab.recipes"], ["cuisines", "adm.tab.cuisines"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["health", "adm.tab.health"], ["speech", "stx.title"], ["units", "adm.tab.units"], ["diets", "adm.tab.diets"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
             {id === "speech" ? "🔊 " : ""}{T(key)}
@@ -1061,6 +1062,7 @@ function AdminPage() {
         onOpenDept={(id) => { setSearch(""); setSel(null); setCur(id); setTab("catalog"); }} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "speech" && <SpeechTextsPanel />}
       {tab === "units" && <UnitsPanel />}
+      {tab === "diets" && <DietsPanel />}
 
       {tab === "markets" && (<div className="space-y-4">
         <MarketsManager />
@@ -1289,6 +1291,7 @@ function Editor(p: {
   })();
   const [headingSel, setHeadingSel] = useState(curHeadingId);
   const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
+  const dietRows = useDiets();
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
   const [vDrag, setVDrag] = useState<number | null>(null);
@@ -1387,7 +1390,7 @@ function Editor(p: {
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-foreground">{T("adm.diets")}</h3>
             <div className="flex flex-wrap gap-1.5">
-              {DIETS.map((diet) => {
+              {dietRows.map(({ id: diet }) => {
                 const on = diets.includes(diet);
                 return (
                   <button
@@ -1397,7 +1400,7 @@ function Editor(p: {
                     onClick={() => setDiets((x) => (on ? x.filter((v) => v !== diet) : [...x, diet]))}
                     className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}
                   >
-                    {DIET_EMOJI[diet]} {T(`diet.${diet}` as MessageKey)}
+                    {dietEmoji(diet)} {dietLabel(diet)}
                   </button>
                 );
               })}

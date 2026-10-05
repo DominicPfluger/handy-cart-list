@@ -21,7 +21,7 @@ import { getCatalogImageUrls } from "../lib/catalog.functions";
 import { setIconSet, useIconSet, type IconSet } from "../hooks/use-icon-set";
 import { useTheme } from "../hooks/use-theme";
 import { setFontSize, useFontSize, type FontSize } from "../hooks/use-font-size";
-import { DIETS, DIET_EMOJI, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
+import { useDiets, dietEmoji, dietLabel, setDiets, toggleDiet, useDietFilter } from "../hooks/use-diet-filter";
 import { useHiddenProducts, restoreProduct } from "../hooks/use-hidden-products";
 import { useSpeakRate, DEFAULT_SPEAK_RATE } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
@@ -415,6 +415,7 @@ function FontSizeRow() {
 function DietPreferenceRow() {
   const { t } = useT();
   const diets = useDietFilter();
+  const dietRows = useDiets();
   const [open, setOpen] = useState(false);
   return (
     <div>
@@ -428,7 +429,7 @@ function DietPreferenceRow() {
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-foreground">{t("more.dietPreference")}</p>
           <p className="whitespace-normal text-xs font-normal text-muted-foreground">
-            {diets.length ? diets.map((diet) => t(`diet.${diet}`)).join(" · ") : t("more.dietNone")}
+            {diets.length ? diets.map((diet) => dietLabel(diet)).join(" · ") : t("more.dietNone")}
           </p>
         </div>
         <span className="shrink-0 text-muted-foreground" aria-hidden="true">{open ? "▴" : "▾"}</span>
@@ -436,12 +437,12 @@ function DietPreferenceRow() {
       {open && (
         <div className="border-t border-border px-4 py-3">
           <div className="flex flex-wrap gap-2">
-            {DIETS.map((diet) => {
+            {dietRows.map(({ id: diet }) => {
               const selected = diets.includes(diet);
               return (
                 <Button key={diet} type="button" size="sm" variant={selected ? "default" : "outline"}
                   aria-pressed={selected} onClick={() => toggleDiet(diet, "pref")} className="h-9 gap-1.5 rounded-full text-xs">
-                  <span aria-hidden="true">{DIET_EMOJI[diet]}</span>{t(`diet.${diet}`)}
+                  <span aria-hidden="true">{dietEmoji(diet)}</span>{dietLabel(diet)}
                 </Button>
               );
             })}

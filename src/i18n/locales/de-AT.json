@@ -811,5 +811,16 @@
   "theme.system": "System",
   "theme.light": "Hell",
   "theme.dark": "Dunkel",
-  "list.merged": "{name} zusammengefasst: {qty}"
+  "list.merged": "{name} zusammengefasst: {qty}",
+  "adm.tab.diets": "Ernährungsformen",
+  "diets.title": "Ernährungsformen",
+  "diets.hint": "Reihenfolge per Ziehen festlegen. Ausgeblendete Ernährungsformen erscheinen nicht in den Filtern.",
+  "diets.add": "+ Neue Ernährungsform",
+  "diets.label": "Bezeichnung",
+  "diets.emoji": "Symbol",
+  "diets.added": "Ernährungsform hinzugefügt",
+  "diets.deleted": "Gelöscht",
+  "diets.inUse": "Wird von {n} Produkten verwendet – nicht löschbar",
+  "diets.exists": "Diese Ernährungsform gibt es schon",
+  "diets.editTitle": "Ernährungsform bearbeiten: {name}"
 }
