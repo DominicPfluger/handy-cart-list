@@ -603,7 +603,6 @@ function AdminPage() {
 
   const createBackupFn = useServerFn(createBulkBackup);
   const undoBackupFn = useServerFn(undoBulkBackup);
-  const [headingAi, setHeadingAi] = useState(false);
   /** KI-Gruppen übernehmen: Produkte umsortieren, alte Überschriften (mit Sicherung) ersetzen. */
   const applyHeadingGroups = async (groups: HeadingGroup[]) => {
     if (!cur) return;
