@@ -1280,7 +1280,7 @@
   "install.title": "App installeren",
   "install.desc": "Shoppi op je startscherm",
   "install.manualHint": "Kies «Aan startscherm toevoegen» in het browsermenu.",
-  "store.default": "Standaard",
+  "store.default": "Alle winkels",
   "store.label": "Winkel:",
   "store.new": "+ Nieuwe winkel",
   "store.newPlaceholder": "Naam van de winkel",

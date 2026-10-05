@@ -1280,7 +1280,7 @@
   "install.title": "Install app",
   "install.desc": "Shoppi on your home screen",
   "install.manualHint": "Choose \"Add to home screen\" in your browser menu.",
-  "store.default": "Default",
+  "store.default": "All stores",
   "store.label": "Store:",
   "store.new": "+ New store",
   "store.newPlaceholder": "Store name",

@@ -1280,7 +1280,7 @@
   "install.title": "Installer l'application",
   "install.desc": "Shoppi sur votre écran d'accueil",
   "install.manualHint": "Choisis « Ajouter à l'écran d'accueil » dans le menu du navigateur.",
-  "store.default": "Standard",
+  "store.default": "Tous les magasins",
   "store.label": "Magasin :",
   "store.new": "+ New store",
   "store.newPlaceholder": "Store name",
