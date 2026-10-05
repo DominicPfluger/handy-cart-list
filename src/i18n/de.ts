@@ -1185,6 +1185,7 @@ export const de = {
   "list.qtyMinus": "Weniger",
   "list.qtyPlus": "Mehr",
   "list.photoAdd": "Foto aufnehmen",
+  "list.merged": "{name} zusammengefasst: {qty}",
   "list.photoBig": "Foto gross anzeigen",
   "list.photoDelete": "Foto löschen",
   "common.close": "Schliessen",

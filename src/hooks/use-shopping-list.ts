@@ -1421,15 +1421,12 @@ export function useShoppingList() {
 
   const localAddCatalogItem = useCallback(
     (input: AddCatalogItemInput, user_ = "Du") => {
-      let merged = false;
-      local.setItems((prev) => {
-        const m = findMergeTarget(prev, input);
-        if (!m) return prev;
-        merged = true;
+      const m = findMergeTarget(local.activeList.items, input);
+      if (m) {
+        local.setItems((prev) => prev.map((it) => (it.id === m.item.id ? { ...it, quantity: m.quantity } : it)));
         toast.success(t("list.merged", { name: m.item.name, qty: `${m.quantity}${m.item.unit ? ` ${m.item.unit}` : ""}` }));
-        return prev.map((it) => (it.id === m.item.id ? { ...it, quantity: m.quantity } : it));
-      });
-      if (merged) return;
+        return;
+      }
       const localItem = buildCatalogItem(`i${Date.now()}${Math.round(Math.random() * 1000)}`, input, user_);
       if (input.photo) putItemPhoto(localItem.id, input.photo).catch(() => {});
       local.setItems((prev) => [...prev, localItem]);
