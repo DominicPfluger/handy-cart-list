@@ -5,3 +5,7 @@
 - [x] Länderküchen-Auswahl im Rezept-Generator (nur bei gewählter Kategorie) — getestet
 - [x] Länderküchen im Rezept-Generator zugeklappt anzeigen (Aufklappen per Klick, Auswahl als Zusammenfassung im Kopf) — getestet
 - [x] Läden in Einstellungen per Drag & Drop sortierbar (shoppi:store-order, gilt auch im Laden-Popup und Listen-Dialog)
+- [x] Dunkle Kategoriefarben gesättigt: .dark-Kacheln jetzt hsl-Farbtöne je Abteilung (statt grauem color-mix) — getestet
+- [x] Dark Mode (System/Hell/Dunkel, use-theme.ts, ThemeRow unter Mehr) — getestet
+- [x] Grössere Produkt-Bildavatare (h-9) + Bild-Platzhalter-Fallbacks — getestet
+- [x] Freundliche leere Zustände für Listen/Vorlagen — getestet
