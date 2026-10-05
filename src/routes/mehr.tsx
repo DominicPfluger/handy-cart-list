@@ -244,6 +244,8 @@ function MorePage() {
           <span className="text-muted-foreground">›</span>
         </button>
       </section>
+      <SectionHeader label={t("more.group.appGeneral")} />
+
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <InstallAppRow />
         <AppUpdateRow />
