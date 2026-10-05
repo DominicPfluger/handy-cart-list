@@ -1280,7 +1280,7 @@
   "install.title": "Installa app",
   "install.desc": "Shoppi sulla schermata iniziale",
   "install.manualHint": "Scegli «Aggiungi alla schermata Home» nel menu del browser.",
-  "store.default": "Standard",
+  "store.default": "Tutti i negozi",
   "store.label": "Negozio:",
   "store.new": "+ New store",
   "store.newPlaceholder": "Store name",

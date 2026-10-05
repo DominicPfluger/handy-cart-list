@@ -1280,7 +1280,7 @@
   "install.title": "Instalar aplicação",
   "install.desc": "Shoppi no ecrã inicial",
   "install.manualHint": "Escolha «Adicionar ao ecrã principal» no menu do navegador.",
-  "store.default": "Padrão",
+  "store.default": "Todas as lojas",
   "store.label": "Loja:",
   "store.new": "+ Nova loja",
   "store.newPlaceholder": "Nome da loja",

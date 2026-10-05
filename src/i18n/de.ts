@@ -151,7 +151,7 @@ export const de = {
   "settings.checkedDisplay": "Erledigte Artikel",
   "settings.checkedDisplay.strike": "Durchstreichen",
   "settings.checkedDisplay.hide": "Ausblenden",
-  "store.default": "Standard",
+  "store.default": "Alle Läden",
   "store.label": "Laden:",
   "store.new": "+ Neuer Laden",
   "store.newPlaceholder": "Name des Ladens",
