@@ -1145,6 +1145,7 @@
   "adm.clearSelection": "Selectie wissen",
   "adm.deleteSelected": "Selectie verwijderen",
   "adm.deleteSelectedConfirm": "{n} items echt verwijderen?",
+  "adm.deleteSelectedDeptsConfirm": "Echt {n} categorieën inclusief alle bevatte producten en subcategorieën verwijderen?",
   "adm.deleteSkippedNotEmpty": "{n} categorieën niet verwijderd omdat ze niet leeg zijn: {names}",
   "rk.progress": "{done} van {total} categorieën",
   "rk.toRecipe": "Naar recept ({n} ingrediënten)",
