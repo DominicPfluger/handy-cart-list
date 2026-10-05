@@ -222,7 +222,7 @@ export function CategoryOrderSettings() {
       {open && (
         <div className="space-y-3 border-t border-border px-4 py-3.5">
           <div>
-            <p className="mb-1 text-xs text-muted-foreground">{t("store.orderHint")}</p>
+            <p className="mb-1 text-xs text-muted-foreground">{t("store.dragHint")}</p>
             <div className="divide-y divide-border rounded-xl border border-border">
               {defaultStore && (
                 <StoreRow id="default" label={storeLabel(defaultStore)} selected={selected.id === "default" && !creating} sortable={false} onPick={() => choose("default")} />
