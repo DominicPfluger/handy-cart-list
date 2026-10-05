@@ -117,6 +117,82 @@
   --cat-party-strong: #EBD8EA;
 }
 
+/*
+ * Dark Mode — dunkle Variante aller semantischen Tokens.
+ * Umschaltbar unter Einstellungen → Darstellung (System/Hell/Dunkel),
+ * Kategoriefarben automatisch als dunkle Tönungen der hellen Werte.
+ */
+.dark {
+  --background: oklch(0.17 0.012 200);
+  --foreground: oklch(0.93 0.008 90);
+  --card: oklch(0.21 0.014 200);
+  --card-foreground: oklch(0.93 0.008 90);
+  --popover: oklch(0.23 0.014 200);
+  --popover-foreground: oklch(0.93 0.008 90);
+
+  --primary: oklch(0.64 0.14 144);
+  --primary-foreground: oklch(0.98 0.003 90);
+  --primary-soft: oklch(0.32 0.06 144);
+
+  --secondary: oklch(0.27 0.012 90);
+  --secondary-foreground: oklch(0.93 0.008 90);
+  --muted: oklch(0.27 0.012 90);
+  --muted-foreground: oklch(0.68 0.012 90);
+
+  --accent: oklch(0.30 0.05 144);
+  --accent-foreground: oklch(0.86 0.1 144);
+
+  --coral: oklch(0.72 0.15 47);
+  --coral-foreground: oklch(0.99 0.003 90);
+
+  --border: oklch(0.30 0.012 200);
+  --input: oklch(0.30 0.012 200);
+  --ring: oklch(0.64 0.14 144);
+
+  --cat-frischmarkt: color-mix(in oklab, #EDF8EF 16%, #141A17);
+  --cat-milch: color-mix(in oklab, #FAF7F1 16%, #141A17);
+  --cat-fleisch: color-mix(in oklab, #FBEEEC 16%, #141A17);
+  --cat-deli: color-mix(in oklab, #FEF5EC 16%, #141A17);
+  --cat-backwaren: color-mix(in oklab, #FCF7E8 16%, #141A17);
+  --cat-vorraete: color-mix(in oklab, #F9F2E3 16%, #141A17);
+  --cat-kochzutaten: color-mix(in oklab, #FAEFE9 16%, #141A17);
+  --cat-tiefkuehl: color-mix(in oklab, #ECF5FA 16%, #141A17);
+  --cat-getraenke: color-mix(in oklab, #EAF7F5 16%, #141A17);
+  --cat-snacks: color-mix(in oklab, #FCF2E8 16%, #141A17);
+  --cat-suess: color-mix(in oklab, #FCEEF4 16%, #141A17);
+  --cat-koerperpflege: color-mix(in oklab, #F4F1FA 16%, #141A17);
+  --cat-haushalt: color-mix(in oklab, #EEF7F9 16%, #141A17);
+  --cat-apotheke: color-mix(in oklab, #F0F7F2 16%, #141A17);
+  --cat-tierbedarf: color-mix(in oklab, #F7F1E9 16%, #141A17);
+  --cat-buero: color-mix(in oklab, #F0F3F7 16%, #141A17);
+  --cat-tabak: color-mix(in oklab, #F3F0ED 16%, #141A17);
+  --cat-kleidung: color-mix(in oklab, #EFF3FA 16%, #141A17);
+  --cat-kuechenutensilien: color-mix(in oklab, #F8F0EB 16%, #141A17);
+  --cat-auto: color-mix(in oklab, #F1F2F4 16%, #141A17);
+  --cat-party: color-mix(in oklab, #F8F0F8 16%, #141A17);
+  --cat-frischmarkt-strong: color-mix(in oklab, #D3EFD9 28%, #141A17);
+  --cat-milch-strong: color-mix(in oklab, #F1E8D3 28%, #141A17);
+  --cat-fleisch-strong: color-mix(in oklab, #F6D6D0 28%, #141A17);
+  --cat-deli-strong: color-mix(in oklab, #FCE2C9 28%, #141A17);
+  --cat-backwaren-strong: color-mix(in oklab, #F7EAC2 28%, #141A17);
+  --cat-vorraete-strong: color-mix(in oklab, #F1E1BE 28%, #141A17);
+  --cat-kochzutaten-strong: color-mix(in oklab, #F3D8CA 28%, #141A17);
+  --cat-tiefkuehl-strong: color-mix(in oklab, #CFE5F3 28%, #141A17);
+  --cat-getraenke-strong: color-mix(in oklab, #CAEDE7 28%, #141A17);
+  --cat-snacks-strong: color-mix(in oklab, #F8DEC4 28%, #141A17);
+  --cat-suess-strong: color-mix(in oklab, #F7D3E4 28%, #141A17);
+  --cat-koerperpflege-strong: color-mix(in oklab, #E3DBF4 28%, #141A17);
+  --cat-haushalt-strong: color-mix(in oklab, #CFEAF0 28%, #141A17);
+  --cat-apotheke-strong: color-mix(in oklab, #D5EBDC 28%, #141A17);
+  --cat-tierbedarf-strong: color-mix(in oklab, #ECDCC6 28%, #141A17);
+  --cat-buero-strong: color-mix(in oklab, #D8E0EB 28%, #141A17);
+  --cat-tabak-strong: color-mix(in oklab, #E3DCD4 28%, #141A17);
+  --cat-kleidung-strong: color-mix(in oklab, #D4E0F4 28%, #141A17);
+  --cat-kuechenutensilien-strong: color-mix(in oklab, #EED9CC 28%, #141A17);
+  --cat-auto-strong: color-mix(in oklab, #DCDFE4 28%, #141A17);
+  --cat-party-strong: color-mix(in oklab, #EBD8EA 28%, #141A17);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
