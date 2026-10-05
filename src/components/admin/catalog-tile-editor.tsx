@@ -86,6 +86,8 @@ export function CatalogTileEditor(p: {
   onTranslateMissing?: () => void;
   /** Löscht alle markierten Produkte (inkl. Produkt-Aliasse). */
   onDeleteSelected?: (sel: { productIds: string[]; productAliasIds: string[] }) => void;
+  /** Löscht alle markierten Kategorien (inkl. Kategorie-Aliasse). */
+  onDeleteSelectedDepts?: (sel: { deptIds: string[]; deptAliasIds: string[] }) => void;
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const [newTitlePos, setNewTitlePos] = useState(0);
