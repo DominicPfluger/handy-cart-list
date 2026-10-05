@@ -424,6 +424,9 @@ export function CatalogTileEditor(p: {
               🖼️ {imgProg ? T("tile.genAllBusy", { done: imgProg.done, total: imgProg.total }) : T("tile.genAll")}
             </Button>
           )}
+          {p.cur && p.onApplyHeadingGroups && p.products.length > 0 && (
+            <Button size="sm" variant="outline" disabled={p.busy} onClick={() => setHeadingAi(true)} title={T("adm.headingAi.title")}>✨ {T("adm.headingAi.btn")}</Button>
+          )}
           {p.cur && (
             <Button size="sm" variant="outline" onClick={() => void collectListText().then((text) => { if (text) { setCopyText(text); setCopyOpen(true); } })}>{T("adm.copyList")}</Button>
           )}
