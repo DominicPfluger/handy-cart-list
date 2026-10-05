@@ -91,7 +91,12 @@ export function CatalogTileEditor(p: {
   onDeleteSelectedDepts?: (sel: { deptIds: string[]; deptAliasIds: string[] }) => void;
   /** Übernimmt per KI vorgeschlagene Überschriften-Gruppen. */
   onApplyHeadingGroups?: (groups: HeadingGroup[]) => Promise<void>;
+  /** Verschiebt markierte Produkte in eine andere Kategorie. */
+  onMoveSelected?: (productIds: string[], deptId: string) => void;
+  moveDeptOptions?: { id: string; label: string }[];
 }) {
+  const [movePick, setMovePick] = useState(false);
+  const [moveSearch, setMoveSearch] = useState("");
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const [newTitlePos, setNewTitlePos] = useState(0);
   const headingBefore = useMemo(() => new Map((p.headings ?? []).map((h) => [h.before_product_id, h])), [p.headings]);
@@ -587,6 +592,9 @@ export function CatalogTileEditor(p: {
           <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: selCount })}</span>
           <Button size="sm" variant="ghost" onClick={selectAll}>{T("adm.selectAll")}</Button>
           <Button size="sm" variant="ghost" onClick={clearSelection}>{T("adm.clearSelection")}</Button>
+          {p.onMoveSelected && [...selected].some((id) => !id.startsWith("alias:")) && (
+            <Button size="sm" variant="outline" onClick={() => { setMoveSearch(""); setMovePick(true); }}>{T("adm.moveSelected")}</Button>
+          )}
           {p.onDeleteSelected && (
             <Button size="sm" variant="destructive" onClick={() => {
               const productIds: string[] = []; const productAliasIds: string[] = [];
@@ -749,6 +757,22 @@ export function CatalogTileEditor(p: {
             <Button variant="outline" disabled={!p.products.slice(headMove.insertAt).some((x) => !x.id.startsWith("alias:"))} onClick={() => { p.onMoveHeading?.(headMove.id, headMove.insertAt, "title"); setHeadMove(null); }}>{T("adm.headingMoveOnly")}</Button>
             <Button onClick={() => { p.onMoveHeading?.(headMove.id, headMove.insertAt, "group"); setHeadMove(null); }}>{T("adm.headingMoveGroup", { n: headMove.n })}</Button>
             <Button variant="ghost" onClick={() => setHeadMove(null)}>{T("adm.cancel")}</Button>
+          </div>
+        </div>
+      )}
+
+      {movePick && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setMovePick(false)}>
+          <div className="flex max-h-[80vh] w-full max-w-md flex-col gap-2 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
+            <p className="text-sm font-bold text-foreground">{T("adm.moveSelectedTitle", { n: [...selected].filter((id) => !id.startsWith("alias:")).length })}</p>
+            <Input autoFocus value={moveSearch} onChange={(e) => setMoveSearch(e.target.value)} placeholder={T("adm.search")} className="h-10 rounded-xl" />
+            <div className="min-h-0 flex-1 space-y-1 overflow-y-auto">
+              {(p.moveDeptOptions ?? []).filter((o) => o.id !== p.cur && o.label.toLowerCase().includes(moveSearch.trim().toLowerCase())).map((o) => (
+                <button key={o.id} type="button" onClick={() => { p.onMoveSelected!([...selected].filter((id) => !id.startsWith("alias:")), o.id); setMovePick(false); clearSelection(); }}
+                  className="w-full truncate rounded-lg border border-border px-3 py-2 text-left text-sm text-foreground">{o.label}</button>
+              ))}
+            </div>
+            <Button variant="outline" onClick={() => setMovePick(false)}>{T("adm.cancel")}</Button>
           </div>
         </div>
       )}

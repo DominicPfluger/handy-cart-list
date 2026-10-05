@@ -684,6 +684,20 @@ function AdminPage() {
     }, null);
   };
 
+  /** Verschiebt markierte Produkte ans Ende der Zielkategorie; Überschriften-Anker der Produkte werden entfernt. */
+  const moveSelected = (ids: string[], deptId: string) => {
+    if (!ids.length) return;
+    void run(async () => {
+      const { data: maxRow } = await supabase.from("products").select("sort_order").eq("department_id", deptId).order("sort_order", { ascending: false }).limit(1);
+      let next = ((maxRow?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1;
+      for (const id of ids) {
+        await must(supabase.from("product_headings").delete().eq("before_product_id", id));
+        await must(supabase.from("products").update({ department_id: deptId, sort_order: next++ }).eq("id", id));
+      }
+      await refresh();
+    }, T("adm.moved", { n: ids.length }));
+  };
+
   /** Löscht markierte Kategorien rekursiv (mit Sicherungspunkt): inkl. Unterkategorien, Produkte, Überschriften, Aliase und Übersetzungen. */
   const deleteSelectedDepts = (sel: { deptIds: string[]; deptAliasIds: string[] }) => {
     const n = sel.deptIds.length + sel.deptAliasIds.length;
@@ -959,6 +973,8 @@ function AdminPage() {
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
             onDeleteSelected={deleteSelected}
             onDeleteSelectedDepts={deleteSelectedDepts}
+            onMoveSelected={moveSelected}
+            moveDeptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => nm(p.id, p.name)).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
             onAdvanced={(kind, id) => setSel({ kind, id })} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
