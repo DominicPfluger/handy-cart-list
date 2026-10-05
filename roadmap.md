@@ -1,5 +1,5 @@
 # Roadmap
 
-- [ ] Stift-Icon in Listenübersicht öffnet Bearbeitungsdialog (Name, Markt, Reihenfolge) — ersetzt Inline-Umbenennen
-- [ ] Länderküchen-Auswahl im Rezept-Generator wieder einbauen (nur bei gewählter Kategorie)
-- [ ] Typprüfung + Browser-Test beider Änderungen
+## Erledigt
+- [x] Stift-Icon in der Listenübersicht öffnet Bearbeitungsdialog (Name, Markt/Laden, Sortierung) — getestet
+- [x] Länderküchen-Auswahl im Rezept-Generator (nur bei gewählter Kategorie) — getestet
