@@ -11,3 +11,4 @@
 - [x] Freundliche leere Zustände für Listen/Vorlagen — getestet
 - [x] Produkt in der Einzelansicht (Abteilungen) ausblenden: «Ausblenden»-Button im CatalogProductDialog mit Bestätigung; geräte-lokal, wiederherstellbar unter «Mehr → Ausgeblendete Produkte» — getestet (Ausblenden, Verschwinden aus Liste, Wiederherstellen)
 - [x] Läden-Bereich in «Abteilungen ordnen & umbenennen» zugeklappt (Auf-/Zuklappen per Klick; Deep-Link ?catOrder=1 öffnet ihn mit) — getestet
+- [x] Rezept-Generator: Länderküchen-Chips beim Aufklappen inline direkt nach dem «Länderküche»-Knopf in derselben Reihe (Schnellwahl-Knöpfe darunter) — getestet
