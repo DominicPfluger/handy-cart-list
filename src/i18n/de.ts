@@ -800,6 +800,7 @@ export const de = {
   "adm.iconPick": "Bild auswählen",
   "adm.iconAi": "KI-Bild",
   "adm.tab.recipes": "Rezept-Verwaltung",
+  "adm.tab.settings": "Einstellungen",
   "adm.tab.cuisines": "Länderküchen",
   "adm.tab.languages": "Sprachen",
   "tile.estimateAll": "Preise für alle Märkte schätzen",

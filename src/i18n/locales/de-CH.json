@@ -822,5 +822,6 @@
   "diets.deleted": "Gelöscht",
   "diets.inUse": "Wird von {n} Produkten verwendet – nicht löschbar",
   "diets.exists": "Diese Ernährungsform gibt es schon",
-  "diets.editTitle": "Ernährungsform bearbeiten: {name}"
+  "diets.editTitle": "Ernährungsform bearbeiten: {name}",
+  "adm.tab.settings": "Einstellungen"
 }
