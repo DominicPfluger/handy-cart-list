@@ -115,6 +115,7 @@ export function CatalogTileEditor(p: {
   const [suggesting, setSuggesting] = useState(false);
   const [variantAdd, setVariantAdd] = useState<TileProd | null>(null);
   const [copyOpen, setCopyOpen] = useState(false);
+  const [copyText, setCopyText] = useState("");
   const moved = useRef(false);
   const qc = useQueryClient();
   /** Speichert Standard-Menge/-Einheit direkt aus der Zeile. */
@@ -636,7 +637,7 @@ export function CatalogTileEditor(p: {
 
       {suggesting && p.cur && <SuggestSheet {...p} cur={p.cur} onClose={() => setSuggesting(false)} />}
 
-      {copyOpen && p.cur && <CopyListDialog title={p.path.map((d) => p.nm(d.id, d.name)).join(" › ")} text={buildListText()} onClose={() => setCopyOpen(false)} />}
+      {copyOpen && p.cur && <CopyListDialog title={p.path.map((d) => p.nm(d.id, d.name)).join(" › ")} text={copyText} onClose={() => setCopyOpen(false)} />}
 
       {variantAdd && <VariantAddDialog prod={variantAdd} run={p.run} must={p.must} nm={p.nm} onClose={() => setVariantAdd(null)} />}
 
