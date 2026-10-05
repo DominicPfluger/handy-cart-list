@@ -245,7 +245,6 @@ export function CategoryOrderSettings() {
                 </SortableContext>
               </DndContext>
               <button type="button" onClick={() => choose("__new")} className={`flex w-full items-center gap-2 bg-card px-2 py-2 text-left text-sm ${creating ? "font-semibold text-primary" : "text-muted-foreground"}`}>
-                <span className="w-5 shrink-0 text-center" aria-hidden="true">+</span>
                 {t("store.addCustom")}
               </button>
             </div>
