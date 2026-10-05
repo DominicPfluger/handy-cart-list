@@ -1152,7 +1152,7 @@ export const de = {
   "adm.assignedList": "Zugewiesen ({n})",
   "adm.remove": "Entfernen",
   "adm.allCuisines": "Alle Küchen",
-  "more.allMarkets": "Alle Märkte anzeigen",
+  "more.allMarkets": "Produkte aller Märkte anzeigen",
   "more.market": "Markt",
   "more.marketAuto": "Automatisch (aus Sprache)",
   "more.preload": "Alle Bilder vorladen",
