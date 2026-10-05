@@ -37,7 +37,7 @@ import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog"
 import { VoiceInputButton } from "../components/voice-input";
 import { useIsAdmin } from "../hooks/use-is-admin";
 import { Store } from "lucide-react";
-import { MarketPickerSheet } from "../components/market-picker-sheet";
+import { StorePickerSheet } from "../components/store-picker-sheet";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { saveHeading } from "../lib/admin.functions";
