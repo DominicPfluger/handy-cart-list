@@ -846,6 +846,8 @@ export const de = {
   "tile.hint": "Bild ziehen zum Sortieren oder Verschieben (auf Kategorie oder Pfad). Antippen zum Bearbeiten.",
   "tile.editItem": "Bearbeiten",
   "tile.newCat": "Neue Kategorie",
+  "tile.viewTiles": "Kachelansicht",
+  "tile.viewList": "Listenansicht",
   "tile.newDeptAlias": "Alias-Kategorie",
   "tile.pickDeptAlias": "Kategorie als Alias hinzufügen",
   "tile.deptAliasSearch": "Kategorie suchen…",
