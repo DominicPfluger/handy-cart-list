@@ -487,11 +487,42 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
+      {p.children.length > 0 && deptView === "list" && deptSelCount > 0 && (
+        <div className="flex items-center gap-2 rounded-xl bg-primary-soft px-3 py-2 text-sm">
+          <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: deptSelCount })}</span>
+          <Button size="sm" variant="ghost" onClick={selectAllDepts}>{T("adm.selectAll")}</Button>
+          <Button size="sm" variant="ghost" onClick={clearDeptSelection}>{T("adm.clearSelection")}</Button>
+          {p.onDeleteSelectedDepts && (
+            <Button size="sm" variant="destructive" onClick={() => {
+              const deptIds: string[] = []; const deptAliasIds: string[] = [];
+              for (const id of selDepts) (id.startsWith("deptalias:") ? deptAliasIds : deptIds).push(id.startsWith("deptalias:") ? id.slice(10) : id);
+              p.onDeleteSelectedDepts!({ deptIds, deptAliasIds });
+              clearDeptSelection();
+            }}>
+              <Trash2 className="mr-1 h-3.5 w-3.5" />{T("adm.deleteSelected")}
+            </Button>
+          )}
+        </div>
+      )}
+      {p.children.length > 0 && deptView === "list" && (
+        <label className="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm font-medium text-foreground">
+          <input
+            ref={allDeptSelRef}
+            type="checkbox"
+            checked={allDeptsSelected}
+            onChange={() => (allDeptsSelected ? clearDeptSelection() : selectAllDepts())}
+            className="h-4 w-4 shrink-0 accent-primary"
+            aria-label={T("adm.selectAll")}
+          />
+          {T("adm.selectAll")}
+        </label>
+      )}
       {p.children.length > 0 && deptView === "list" && (
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
           {p.children.map((c, i) => (
             <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
               className={`flex items-center gap-3 px-3 py-2 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : "ring-2 ring-inset ring-primary") : ""}`}>
+              <input type="checkbox" checked={selDepts.has(c.id)} onChange={() => toggleDeptSel(c.id)} aria-label={T("adm.select")} className="h-4 w-4 shrink-0 accent-primary" />
               <span onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers} aria-label={T("adm.drag")} title={T("adm.drag")} className="cursor-grab touch-none select-none px-0.5 text-base text-muted-foreground">⠿</span>
               <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
                 onClick={click(() => p.setCur(c.dept_id ?? c.id))}
