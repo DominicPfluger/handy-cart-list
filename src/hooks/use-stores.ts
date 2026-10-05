@@ -10,7 +10,7 @@ export type StoreOption = { id: string; name: string; emoji?: string | undefined
 export function useStores(): StoreOption[] {
   const market = useMarket();
   const { t } = useT();
-  const { customStores } = useGroupOrder();
+  const { customStores, storeOrder } = useGroupOrder();
   const { data } = useQuery({
     queryKey: ["supermarkets", market],
     queryFn: async () => {
@@ -19,11 +19,23 @@ export function useStores(): StoreOption[] {
     },
     staleTime: 10 * 60_000,
   });
-  return [
-    { id: "default", name: t("store.default"), emoji: "🏪" },
+  const rest: StoreOption[] = [
     ...(data ?? []).map((s) => ({ id: s.id, name: s.name, emoji: s.emoji ?? undefined })),
     ...customStores.map((s) => ({ id: s.id, name: s.name, emoji: s.emoji, custom: true as const })),
   ];
+  // Geräte-lokale Laden-Reihenfolge anwenden; unbekannte/neue Läden hängen hinten an.
+  if (storeOrder.length > 0) {
+    const pos = new Map(storeOrder.map((id, i) => [id, i]));
+    rest.sort((a, b) => {
+      const ia = pos.get(a.id);
+      const ib = pos.get(b.id);
+      if (ia !== undefined && ib !== undefined) return ia - ib;
+      if (ia !== undefined) return -1;
+      if (ib !== undefined) return 1;
+      return 0;
+    });
+  }
+  return [{ id: "default", name: t("store.default"), emoji: "🏪" }, ...rest];
 }
 
 /** „Icon Name" für Dropdown-Optionen und Klartext-Anzeigen. */
