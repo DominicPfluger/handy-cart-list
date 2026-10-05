@@ -37,7 +37,7 @@ import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog"
 import { VoiceInputButton } from "../components/voice-input";
 import { useIsAdmin } from "../hooks/use-is-admin";
 import { Store } from "lucide-react";
-import { MarketPickerSheet } from "../components/market-picker-sheet";
+import { StorePickerSheet } from "../components/store-picker-sheet";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { saveHeading } from "../lib/admin.functions";
@@ -139,7 +139,7 @@ function DepartmentsPage() {
   const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
   const isAdmin = useIsAdmin();
-  const [marketOpen, setMarketOpen] = useState(false);
+  const [storeOpen, setStoreOpen] = useState(false);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const saveHeadingFn = useServerFn(saveHeading);
@@ -489,15 +489,15 @@ function DepartmentsPage() {
         />
         <button
           type="button"
-          onClick={() => setMarketOpen(true)}
-          aria-label={t("more.market")}
+          onClick={() => setStoreOpen(true)}
+          aria-label={t("store.label")}
           className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
         >
           <Store className="h-5 w-5" aria-hidden="true" />
         </button>
       </div>
 
-      <MarketPickerSheet open={marketOpen} onOpenChange={setMarketOpen} />
+      <StorePickerSheet open={storeOpen} onOpenChange={setStoreOpen} />
 
       {!normalizedQuery && breadcrumbs.length > 0 && (
         <nav aria-label={t("dept.breadcrumb")} className="no-scrollbar flex items-center gap-1 overflow-x-auto text-xs">
