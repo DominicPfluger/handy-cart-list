@@ -96,7 +96,7 @@ export function CategoryOrderSettings() {
   const catalog = useCatalog();
   const stores = useStores();
   const { departments, move } = useDepartmentOrder(catalog.departments);
-  const { all, store, setStore, saveFor, resetFor, addCustomStore, updateCustomStore, removeCustomStore } = useGroupOrder();
+  const { all, store, setStore, saveFor, resetFor, addCustomStore, updateCustomStore, removeCustomStore, saveStoreOrder } = useGroupOrder();
   const hidden = useHiddenDepartments();
   const customNames = useCustomNames();
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -188,6 +188,16 @@ export function CategoryOrderSettings() {
     setCreating(false);
     setEditStore(false);
     setStore(v);
+  };
+  const reorderStores = (e: DragEndEvent) => {
+    const { active, over } = e;
+    if (!over || active.id === over.id) return;
+    const ids = sortableStores.map((s) => s.id);
+    const from = ids.indexOf(String(active.id));
+    const to = ids.indexOf(String(over.id));
+    if (from < 0 || to < 0) return;
+    ids.splice(to, 0, ...ids.splice(from, 1));
+    saveStoreOrder(ids);
   };
   const submitNew = () => {
     const n = newName.trim();
