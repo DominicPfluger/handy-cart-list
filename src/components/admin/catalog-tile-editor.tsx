@@ -101,11 +101,19 @@ export function CatalogTileEditor(p: {
   const selCount = selected.size;
   const allSelected = p.products.length > 0 && selected.size === p.products.length;
   const [selCur, setSelCur] = useState(p.cur);
-  if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); }
+  const [selDepts, setSelDepts] = useState<Set<string>>(() => new Set());
+  const allDeptSelRef = useRef<HTMLInputElement>(null);
+  if (selCur !== p.cur) { setSelCur(p.cur); setSelected(new Set()); setSelDepts(new Set()); }
   const toggleSel = (id: string) => setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const selectAll = () => setSelected(new Set(p.products.map((x) => x.id)));
   const clearSelection = () => setSelected(new Set());
+  const deptSelCount = selDepts.size;
+  const allDeptsSelected = p.children.length > 0 && selDepts.size === p.children.length;
+  const toggleDeptSel = (id: string) => setSelDepts((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+  const selectAllDepts = () => setSelDepts(new Set(p.children.map((x) => x.id)));
+  const clearDeptSelection = () => setSelDepts(new Set());
   useEffect(() => { if (allSelRef.current) allSelRef.current.indeterminate = !allSelected && selCount > 0; });
+  useEffect(() => { if (allDeptSelRef.current) allDeptSelRef.current.indeterminate = !allDeptsSelected && deptSelCount > 0; });
   const [over, setOver] = useState<string | null>(null);
   const [overPos, setOverPos] = useState<"before" | "after" | null>(null);
   const [headMove, setHeadMove] = useState<{ id: string; name: string; insertAt: number; n: number } | null>(null);
