@@ -190,7 +190,7 @@ function MorePage() {
         </label>
         <MarketRow />
         <AllMarketsRow />
-        <AppUpdateRow />
+
       </section>
 
       {/* Settings menu */}
@@ -251,7 +251,9 @@ function MorePage() {
       </section>
       <section className="divide-y divide-border rounded-2xl border border-border bg-card">
         <InstallAppRow />
+        <AppUpdateRow />
         <NotificationSettingsRow />
+
         <IconSetRow />
         <PreloadImagesRow />
         <FontSizeRow />
