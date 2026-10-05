@@ -895,6 +895,7 @@
   "tile.preview": "Aperçu",
   "tile.hint": "Faites glisser une image pour trier ou déplacer (sur une catégorie ou le chemin). Touchez pour modifier.",
   "tile.editItem": "Modifier",
+  "tile.editCat": "Modifier la catégorie",
   "tile.newCat": "Nouvelle catégorie",
   "tile.newProd": "Nouveau produit",
   "tile.name": "Nom",
