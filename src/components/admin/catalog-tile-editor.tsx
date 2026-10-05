@@ -323,8 +323,8 @@ export function CatalogTileEditor(p: {
   const lpTimer = useRef<number | null>(null);
   const lpFired = useRef(false);
 
-  /** Produktliste der aktuellen Kategorie als Text (Überschriften als #-Zeilen). */
-  const buildListText = () => {
+  /** Liste der aktuellen Kategorie inkl. aller Unterkategorien als Text (Überschriften als #-Zeilen, Unterkategorien als ##-Gruppen). */
+  const collectListText = async (): Promise<string> => {
     if (!p.cur) return "";
     const lines: string[] = [p.path.map((d) => p.nm(d.id, d.name)).join(" › "), ""];
     for (const x of p.products) {
@@ -333,6 +333,43 @@ export function CatalogTileEditor(p: {
       if (h) lines.push("", `# ${h.name}`);
       lines.push(p.nm(x.id, x.name));
     }
+    const kidsOf = new Map<string, TileDept[]>();
+    for (const d of p.depts) {
+      if (!d.parent_id) continue;
+      const arr = kidsOf.get(d.parent_id) ?? [];
+      arr.push(d);
+      kidsOf.set(d.parent_id, arr);
+    }
+    const pathOf = (id: string): string[] => {
+      const out: string[] = [];
+      let c = deptById.get(id); let g = 0;
+      while (c && g++ < 20) { out.unshift(p.nm(c.id, c.name)); c = c.parent_id ? deptById.get(c.parent_id) : undefined; }
+      return out;
+    };
+    const allIds: string[] = [];
+    const collectIds = (id: string) => { for (const d of kidsOf.get(id) ?? []) { if (!d.alias_id) { allIds.push(d.id); collectIds(d.id); } } };
+    collectIds(p.cur);
+    const subProds = new Map<string, { id: string; name: string; sort_order: number; alias_id?: string }[]>();
+    if (allIds.length) {
+      const { data } = await supabase.from("products").select("id, name, sort_order, alias_id, department_id").in("department_id", allIds);
+      for (const r of data ?? []) {
+        const arr = subProds.get(r.department_id) ?? [];
+        arr.push(r);
+        subProds.set(r.department_id, arr);
+      }
+    }
+    const walk = (id: string) => {
+      for (const d of (kidsOf.get(id) ?? []).sort((a, b) => a.sort_order - b.sort_order)) {
+        if (d.alias_id) continue;
+        lines.push("", `## ${pathOf(d.id).join(" › ")}`);
+        for (const pr of (subProds.get(d.id) ?? []).sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))) {
+          if (pr.alias_id) continue;
+          lines.push(p.nm(pr.id, pr.name));
+        }
+        walk(d.id);
+      }
+    };
+    walk(p.cur);
     return lines.join("\n") + "\n";
   };
 
