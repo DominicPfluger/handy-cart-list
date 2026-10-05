@@ -99,6 +99,13 @@ export function CatalogProductDialog({
   const [customInput, setCustomInput] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [brand, setBrand] = useState<string | undefined>(undefined);
+  const [hideConfirm, setHideConfirm] = useState(false);
+  const hideNow = () => {
+    if (!product) return;
+    hideProduct(product.id);
+    setHideConfirm(false);
+    onOpenChange(false);
+  };
 
   useEffect(() => {
     if (!product) return;
