@@ -414,6 +414,7 @@ export function CatalogTileEditor(p: {
       {editMode && (
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "department", id: null })}>+ {T("tile.newCat")}</Button>
+          {p.cur && <Button size="sm" variant="outline" onClick={() => setTarget({ kind: "department", id: p.cur })}>✎ {T("tile.editCat")}</Button>}
           {p.onAddDeptAlias && <Button size="sm" variant="outline" disabled={!p.cur} title={!p.cur ? T("tile.pickDeptAlias") : undefined} onClick={() => { setAliasSearch(""); setAliasPick(true); }}>+ {T("tile.newDeptAlias")}</Button>}
           {p.cur && p.onAddHeading && p.products.length > 0 && (
             <Button size="sm" variant="outline" onClick={() => { setNewTitle(""); setNewTitlePos(0); }}>+ {T("adm.heading")}</Button>
