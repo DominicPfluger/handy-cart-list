@@ -668,40 +668,63 @@ function AdminPage() {
     }, null);
   };
 
-  /** Löscht markierte Kategorien (mit Sicherungspunkt); nicht leere Kategorien werden übersprungen. */
+  /** Löscht markierte Kategorien rekursiv (mit Sicherungspunkt): inkl. Unterkategorien, Produkte, Überschriften, Aliase und Übersetzungen. */
   const deleteSelectedDepts = (sel: { deptIds: string[]; deptAliasIds: string[] }) => {
     const n = sel.deptIds.length + sel.deptAliasIds.length;
-    if (!n || !confirm(T("adm.deleteSelectedConfirm", { n }))) return;
+    if (!n || !confirm(T("adm.deleteSelectedDeptsConfirm", { n }))) return;
     run(async () => {
-      const nonEmpty = sel.deptIds.filter((id) => d?.depts.some((x) => x.parent_id === id) || d?.prods.some((x) => x.department_id === id));
-      const ids = sel.deptIds.filter((id) => !nonEmpty.includes(id));
-      const backupId = (ids.length || sel.deptAliasIds.length) ? await createBackupFn({ data: {
+      // Alle Nachfahren der markierten Kategorien rekursiv einsammeln
+      const deptIds = new Set(sel.deptIds);
+      let grew = true;
+      while (grew) {
+        grew = false;
+        for (const x of d?.depts ?? []) {
+          if (x.parent_id && deptIds.has(x.parent_id) && !deptIds.has(x.id)) { deptIds.add(x.id); grew = true; }
+        }
+      }
+      const deptIdList = [...deptIds];
+      const prodIds = (d?.prods ?? []).filter((x) => deptIds.has(x.department_id)).map((x) => x.id);
+      // Aliase, die auf betroffene Kategorien/Produkte zeigen oder in ihnen liegen
+      const prodAliasIds = (aliasQ.data ?? []).filter((a) => deptIds.has(a.department_id) || prodIds.includes(a.product_id)).map((a) => a.id);
+      const deptAliasIds = new Set(sel.deptAliasIds);
+      for (const a of deptAliasQ.data ?? []) {
+        if (deptIds.has(a.department_id) || deptIds.has(a.parent_id)) deptAliasIds.add(a.id);
+      }
+      const entityIds = [...deptIdList, ...prodIds];
+      const backupId = (deptIdList.length || deptAliasIds.size) ? await createBackupFn({ data: {
         label: T("adm.bulkDeleteLabel"),
         deletes: [
-          ...(sel.deptAliasIds.length ? [{ table: "department_aliases", filterColumn: "id", filterIds: sel.deptAliasIds }] : []),
-          ...(ids.length ? [
-            { table: "departments", filterColumn: "id", filterIds: ids },
-            { table: "product_headings", filterColumn: "department_id", filterIds: ids },
-            { table: "catalog_translations", filterColumn: "entity_id", filterIds: ids },
+          ...(deptAliasIds.size ? [{ table: "department_aliases", filterColumn: "id", filterIds: [...deptAliasIds] }] : []),
+          ...(prodAliasIds.length ? [{ table: "product_aliases", filterColumn: "id", filterIds: prodAliasIds }] : []),
+          ...(prodIds.length ? [{ table: "products", filterColumn: "id", filterIds: prodIds }] : []),
+          ...(deptIdList.length ? [
+            { table: "departments", filterColumn: "id", filterIds: deptIdList },
+            { table: "product_headings", filterColumn: "department_id", filterIds: deptIdList },
           ] : []),
+          ...(prodIds.length ? [{ table: "product_headings", filterColumn: "before_product_id", filterIds: prodIds }] : []),
+          ...(entityIds.length ? [{ table: "catalog_translations", filterColumn: "entity_id", filterIds: entityIds }] : []),
         ],
       } }) : null;
-      for (const id of sel.deptAliasIds) await must(supabase.from("department_aliases").delete().eq("id", id));
-      for (const id of ids) {
-        await must(supabase.from("product_headings").delete().eq("department_id", id));
+      for (const id of deptAliasIds) await must(supabase.from("department_aliases").delete().eq("id", id));
+      for (const id of prodAliasIds) await must(supabase.from("product_aliases").delete().eq("id", id));
+      for (const id of deptIdList) await must(supabase.from("product_headings").delete().eq("department_id", id));
+      for (const id of prodIds) {
+        await must(supabase.from("product_headings").delete().eq("before_product_id", id));
+        await must(supabase.from("products").delete().eq("id", id));
+      }
+      // Kategorien tiefste zuerst löschen
+      const depth = (id: string): number => { let n = 0, cur = id; while (true) { const p = d?.depts.find((x) => x.id === cur)?.parent_id; if (!p || !deptIds.has(p) || n > 50) return n; cur = p; n++; } };
+      for (const id of deptIdList.sort((a, b) => depth(b) - depth(a))) {
         await must(supabase.from("departments").delete().eq("id", id));
-        await must(supabase.from("catalog_translations").delete().eq("entity_id", id));
       }
+      for (const id of entityIds) await must(supabase.from("catalog_translations").delete().eq("entity_id", id));
       await qc.invalidateQueries({ queryKey: ALIAS_KEY });
-      if (nonEmpty.length) {
-        const names = nonEmpty.map((id) => nm(id, d?.depts.find((x) => x.id === id)?.name ?? id)).join(", ");
-        toast.error(T("adm.deleteSkippedNotEmpty", { n: nonEmpty.length, names }));
-      }
+      await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY });
       if (backupId) {
         toast.success(T("adm.deleted"), {
           action: { label: T("adm.undo"), onClick: () => { void undoBackupFn({ data: { id: backupId } }).then(() => { toast.success(T("adm.undone")); void refresh(); }); } },
         });
-      } else if (!nonEmpty.length) {
+      } else {
         toast.success(T("adm.deleted"));
       }
     }, null);
