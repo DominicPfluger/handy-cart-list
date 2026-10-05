@@ -50,8 +50,6 @@ export function ListEditDialog({ list, storeId, onClose, onSave }: Props) {
     onClose();
   };
 
-  const arrowBtn = "grid h-9 w-9 place-items-center rounded-xl border border-border text-foreground disabled:opacity-30 active:bg-muted";
-
   return (
     <div className="fixed inset-0 z-[70] flex items-end justify-center bg-foreground/30" onClick={onClose}>
       <div
