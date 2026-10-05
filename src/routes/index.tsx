@@ -28,6 +28,7 @@ import {
   ShareIcon,
 } from "../components/icons";
 import { ListManager, shareList } from "../components/list-manager";
+import { ListEditDialog } from "../components/list-edit-dialog";
 import { relocalizeQuantity } from "../lib/units";
 import { speakQuantity } from "../lib/speech-units";
 import { ExportListButton } from "../components/export-list-sheet";
@@ -77,6 +78,7 @@ function ListPage() {
   const [purchaseOpen, setPurchaseOpen] = useState(false);
   // Übersicht zuerst: erst nach Auswahl einer Liste wird deren Inhalt geladen.
   const [openListId, setOpenListId] = useState<string | null>(null);
+  const [editListId, setEditListId] = useState<string | null>(null);
   // Neue Liste erhält nach dem Speichern ihre endgültige Kennung: geöffnet bleiben.
   useEffect(() => {
     if (openListId?.startsWith("tmp-") && !activeList.id.startsWith("tmp-") && !lists.some((l) => l.id === openListId)) {
