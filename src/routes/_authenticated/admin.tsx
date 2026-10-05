@@ -1291,6 +1291,7 @@ function Editor(p: {
   })();
   const [headingSel, setHeadingSel] = useState(curHeadingId);
   const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
+  const dietRows = useDiets();
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantInput, setVariantInput] = useState("");
   const [vDrag, setVDrag] = useState<number | null>(null);

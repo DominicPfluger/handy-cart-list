@@ -415,6 +415,7 @@ function FontSizeRow() {
 function DietPreferenceRow() {
   const { t } = useT();
   const diets = useDietFilter();
+  const dietRows = useDiets();
   const [open, setOpen] = useState(false);
   return (
     <div>
