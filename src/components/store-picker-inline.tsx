@@ -1,4 +1,5 @@
-import { Check } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { Check, Plus } from "lucide-react";
 import { useStores } from "@/hooks/use-stores";
 import { useGroupOrder } from "@/hooks/use-group-order";
 import { useT } from "@/i18n";
@@ -8,9 +9,11 @@ import { cn } from "@/lib/utils";
  * Inline-Popup zur Laden-Wahl: erscheint im Seitenfluss unterhalb des Store-Icons
  * (Läden des gewählten Marktes + eigene Läden + „Standard") und schiebt die
  * Abteilungen nach unten, statt sie als Overlay zu überdecken.
+ * Zuunterst öffnet „+ Neuer Laden" die Einstellungen (Bereich „Abteilungen ordnen & umbenennen").
  */
-export function StorePickerInline({ open, onPick }: { open: boolean; onPick: (id: string) => void }) {
+export function StorePickerInline({ open, onPick, onClose }: { open: boolean; onPick: (id: string) => void; onClose: () => void }) {
   const { t } = useT();
+  const navigate = useNavigate();
   const stores = useStores();
   const { store } = useGroupOrder();
 
@@ -42,6 +45,21 @@ export function StorePickerInline({ open, onPick }: { open: boolean; onPick: (id
           </button>
         );
       })}
+      <div className="mt-1 border-t border-border pt-1">
+        <button
+          type="button"
+          onClick={() => {
+            onClose();
+            navigate({ to: "/mehr", search: { catOrder: 1 } });
+          }}
+          className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-primary transition active:bg-primary-soft/40"
+        >
+          <span className="grid h-7 w-7 shrink-0 place-items-center" aria-hidden="true">
+            <Plus className="h-4 w-4" />
+          </span>
+          <span className="min-w-0 flex-1 truncate">{t("store.new")}</span>
+        </button>
+      </div>
     </div>
   );
 }
