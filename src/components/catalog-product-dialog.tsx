@@ -356,17 +356,37 @@ export function CatalogProductDialog({
           </p>
         )}
 
-        <DialogFooter className="mt-2">
+        <DialogFooter className="mt-2 gap-2 sm:gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setHideConfirm(true)}
+            className="h-11 rounded-xl text-destructive"
+          >
+            <EyeOff className="h-4 w-4" /> {t("dlg.hide")}
+          </Button>
           <Button
             type="button"
             onClick={addProduct}
             disabled={!validAmount}
-            className="h-11 w-full rounded-xl font-semibold"
+            className="h-11 flex-1 rounded-xl font-semibold"
           >
             {selected.length > 1 ? t("dlg.addN", { n: selected.length }) : t("dlg.addToList")}
           </Button>
         </DialogFooter>
       </DialogContent>
+      <AlertDialog open={hideConfirm} onOpenChange={setHideConfirm}>
+        <AlertDialogContent className="max-w-[400px] rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("rename.confirmRemoveTitle", { name: product?.name ?? "" })}</AlertDialogTitle>
+            <AlertDialogDescription>{t("rename.confirmRemoveCatalog")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("rename.confirmCancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={hideNow}>{t("rename.confirmRemove")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 }
