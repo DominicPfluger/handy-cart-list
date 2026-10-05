@@ -34,22 +34,36 @@ export const translateMissing = createServerFn({ method: "POST" })
     const { translateNames } = await import("./translate.server");
     const sb = context.supabase;
 
-    const [deps, prods] = await Promise.all([
-      sb.from("departments").select("id, name"),
-      (async () => { const all: Array<{ id: string; name: string }> = []; for (let f = 0; ; f += 1000) { const r = await sb.from("products").select("id, name").order("id").range(f, f + 999); all.push(...(r.data ?? [])); if (!r.data || r.data.length < 1000) break; } return { data: all }; })(),
-    ]);
     type E = { id: string; name: string; type: "department" | "product" };
-    let entities: E[] = [
-      ...((deps.data ?? []) as Array<{ id: string; name: string }>).map((d) => ({ ...d, type: "department" as const })),
-      ...((prods.data ?? []) as Array<{ id: string; name: string }>).map((p) => ({ ...p, type: "product" as const })),
-    ];
-    if (data.ids) entities = entities.filter((e) => data.ids!.includes(e.id));
-
+    let entities: E[];
     const existing = new Set<string>();
-    for (let from = 0; ; from += 1000) {
-      const { data: rows } = await sb.from("catalog_translations").select("entity_id, locale").order("id").range(from, from + 999);
-      for (const r of rows ?? []) existing.add(`${r.entity_id}|${r.locale}`);
-      if (!rows || rows.length < 1000) break;
+    if (data.ids) {
+      // Gezielt: nur die angefragten Einträge und deren Übersetzungen laden (schnell)
+      const ids = data.ids.length ? data.ids : ["00000000-0000-0000-0000-000000000000"];
+      const [deps, prods, tr] = await Promise.all([
+        sb.from("departments").select("id, name").in("id", ids),
+        sb.from("products").select("id, name").in("id", ids),
+        sb.from("catalog_translations").select("entity_id, locale").in("entity_id", ids),
+      ]);
+      entities = [
+        ...((deps.data ?? []) as Array<{ id: string; name: string }>).map((d) => ({ ...d, type: "department" as const })),
+        ...((prods.data ?? []) as Array<{ id: string; name: string }>).map((p) => ({ ...p, type: "product" as const })),
+      ];
+      for (const r of tr.data ?? []) existing.add(`${r.entity_id}|${r.locale}`);
+    } else {
+      const [deps, prods] = await Promise.all([
+        sb.from("departments").select("id, name"),
+        (async () => { const all: Array<{ id: string; name: string }> = []; for (let f = 0; ; f += 1000) { const r = await sb.from("products").select("id, name").order("id").range(f, f + 999); all.push(...(r.data ?? [])); if (!r.data || r.data.length < 1000) break; } return { data: all }; })(),
+      ]);
+      entities = [
+        ...((deps.data ?? []) as Array<{ id: string; name: string }>).map((d) => ({ ...d, type: "department" as const })),
+        ...((prods.data ?? []) as Array<{ id: string; name: string }>).map((p) => ({ ...p, type: "product" as const })),
+      ];
+      for (let from = 0; ; from += 1000) {
+        const { data: rows } = await sb.from("catalog_translations").select("entity_id, locale").order("id").range(from, from + 999);
+        for (const r of rows ?? []) existing.add(`${r.entity_id}|${r.locale}`);
+        if (!rows || rows.length < 1000) break;
+      }
     }
 
     let written = 0;
