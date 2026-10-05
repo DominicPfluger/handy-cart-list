@@ -1,6 +1,8 @@
 # Roadmap
 
 ## Erledigt
+- [x] Admin «Bilder»-Tab: Bildergalerie in eigene Karte unterhalb der KI-Bilder-Karte — getestet
+- [x] Admin: Produkt-Bearbeiten-Dialog schliesst nach erfolgreichem Speichern automatisch (Kategorien/Überschriften bleiben offen) — getestet
 - [x] Admin: «Liste als Text kopieren» mit Unterkategorien — Knopf erscheint immer bei geöffneter Kategorie, Text enthält Einträge aller Unterkategorien rekursiv als «## Pfad»-Gruppen — getestet
 - [x] Stift-Icon in der Listenübersicht öffnet Bearbeitungsdialog (Name, Markt/Laden, Sortierung) — getestet
 - [x] Länderküchen-Auswahl im Rezept-Generator (nur bei gewählter Kategorie) — getestet
