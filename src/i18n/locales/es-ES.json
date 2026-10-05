@@ -1287,6 +1287,7 @@
   "store.add": "Añadir",
   "store.orderTitle": "Orden de secciones",
   "store.orderHint": "Define el orden de las secciones en tu lista para cada tienda.",
+  "store.dragHint": "Arrastra para cambiar el orden de las tiendas",
   "store.addCustom": "+ Tienda propia …",
   "store.newName": "Nombre de la tienda",
   "store.remove": "Eliminar",

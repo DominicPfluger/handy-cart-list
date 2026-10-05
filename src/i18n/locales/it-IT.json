@@ -1287,6 +1287,7 @@
   "store.add": "Aggiungi",
   "store.orderTitle": "Ordine dei reparti",
   "store.orderHint": "Imposta l'ordine dei reparti nella lista per ogni negozio.",
+  "store.dragHint": "Trascina per cambiare l'ordine dei negozi",
   "store.addCustom": "+ Negozio personale …",
   "store.newName": "Nome del negozio",
   "store.remove": "Rimuovi",

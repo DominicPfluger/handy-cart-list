@@ -66,10 +66,10 @@ type StoreRowProps = {
   label: string;
   selected: boolean;
   sortable: boolean;
-  custom?: boolean;
+  custom?: boolean | undefined;
   onPick: () => void;
-  onEdit?: () => void;
-  onRemove?: () => void;
+  onEdit?: (() => void) | undefined;
+  onRemove?: (() => void) | undefined;
 };
 
 function StoreRow({ id, label, selected, sortable, custom, onPick, onEdit, onRemove }: StoreRowProps) {
