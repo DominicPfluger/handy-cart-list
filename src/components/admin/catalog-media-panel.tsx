@@ -264,8 +264,13 @@ export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: {
           </div>
         )}
 
-        <ImageGallery />
       </section>
+      )}
+
+      {section === "images" && (
+        <section className="mt-4 rounded-2xl border border-border bg-card p-4">
+          <ImageGallery />
+        </section>
       )}
 
       {section === "prices" && (
@@ -422,7 +427,7 @@ function ImageGallery() {
   const pages = g ? Math.max(1, Math.ceil(g.total / perPage)) : 1;
 
   return (
-    <div className="mt-5 border-t border-border pt-4">
+    <div>
       <h3 className="text-sm font-semibold">{T("media.galleryTitle")}</h3>
       <p className="mt-1 text-sm text-muted-foreground">{T("media.galleryHint")}</p>
 
