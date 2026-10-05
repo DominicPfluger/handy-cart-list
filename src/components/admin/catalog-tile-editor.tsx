@@ -90,7 +90,7 @@ export function CatalogTileEditor(p: {
   /** Löscht alle markierten Kategorien (inkl. Kategorie-Aliasse). */
   onDeleteSelectedDepts?: (sel: { deptIds: string[]; deptAliasIds: string[] }) => void;
   /** Übernimmt per KI vorgeschlagene Überschriften-Gruppen. */
-  onApplyHeadingGroups?: (groups: HeadingGroup[]) => void;
+  onApplyHeadingGroups?: (groups: HeadingGroup[]) => Promise<void>;
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const [newTitlePos, setNewTitlePos] = useState(0);
