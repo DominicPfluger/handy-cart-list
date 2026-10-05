@@ -218,6 +218,7 @@ export const de = {
   "more.together": "Gemeinsam",
   "more.group.shopping": "Einkaufen",
   "more.group.app": "Sprache und Lokalisierung",
+  "more.group.appGeneral": "App",
   "more.group.admin": "Administration",
   "more.invite": "Einladen",
   "more.invitePeople": "Personen einladen",
