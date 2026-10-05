@@ -719,6 +719,7 @@ function AdminPage() {
       for (const id of entityIds) await must(supabase.from("catalog_translations").delete().eq("entity_id", id));
       await qc.invalidateQueries({ queryKey: ALIAS_KEY });
       await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY });
+      await refresh();
       if (backupId) {
         toast.success(T("adm.deleted"), {
           action: { label: T("adm.undo"), onClick: () => { void undoBackupFn({ data: { id: backupId } }).then(() => { toast.success(T("adm.undone")); void refresh(); }); } },
