@@ -169,6 +169,8 @@
   animation: check-pop 0.3s ease-out;
 }
 .strike-animate {
+  width: fit-content;
+  max-width: 100%;
   background-image: linear-gradient(currentColor, currentColor);
   background-repeat: no-repeat;
   background-position: 0 58%;
