@@ -288,6 +288,7 @@ function MorePage() {
             <span className="text-muted-foreground">›</span>
           </Link>
         </section>
+        </>
       )}
 
       <footer className="flex flex-col items-center gap-1 pt-4 pb-2 text-center">
