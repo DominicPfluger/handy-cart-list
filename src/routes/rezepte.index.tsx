@@ -27,9 +27,9 @@ export const Route = createFileRoute("/rezepte/")({
 type RecipeEntry = { id: string; to: "/rezepte/generator" | "/rezepte/inspirationen" | "/rezepte/listen" | "/rezepte/suchen"; icon: string; image?: string; bg: string; titleKey: MessageKey; descKey: MessageKey };
 
 const RECIPE_ENTRIES: RecipeEntry[] = [
+  { id: "rk-inspiration", to: "/rezepte/inspirationen", icon: "✨", image: imgInspiration, bg: "#FFF3D6", titleKey: "rec.entryInspTitle", descKey: "rec.entryInspDesc" },
   { id: "rk-search", to: "/rezepte/suchen", icon: "🔍", image: imgSearch, bg: "#F0E7F7", titleKey: "rec.entrySearchTitle", descKey: "rec.entrySearchDesc" },
   { id: "rk-lists", to: "/rezepte/listen", icon: "📁", image: imgLists, bg: "#E3EEF9", titleKey: "rec.entryListsTitle", descKey: "rec.entryListsDesc" },
-  { id: "rk-inspiration", to: "/rezepte/inspirationen", icon: "✨", image: imgInspiration, bg: "#FFF3D6", titleKey: "rec.entryInspTitle", descKey: "rec.entryInspDesc" },
 ];
 
 const GENERATOR_ENTRY: RecipeEntry = { id: "rk-generator", to: "/rezepte/generator", icon: "🧑‍🍳", image: imgGenerator, bg: "#E4F3E6", titleKey: "rec.entryGenTitle", descKey: "rec.entryGenDesc" };
