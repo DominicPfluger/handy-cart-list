@@ -37,7 +37,8 @@ import { HeadingDialog, type HeadingTarget } from "../components/heading-dialog"
 import { VoiceInputButton } from "../components/voice-input";
 import { useIsAdmin } from "../hooks/use-is-admin";
 import { Store } from "lucide-react";
-import { StorePickerSheet } from "../components/store-picker-sheet";
+import { StorePickerInline } from "../components/store-picker-inline";
+import { useGroupOrder } from "../hooks/use-group-order";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { saveHeading } from "../lib/admin.functions";
@@ -140,6 +141,8 @@ function DepartmentsPage() {
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
   const isAdmin = useIsAdmin();
   const [storeOpen, setStoreOpen] = useState(false);
+  const { setStore } = useGroupOrder();
+  const storeBarRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const saveHeadingFn = useServerFn(saveHeading);
@@ -414,6 +417,16 @@ function DepartmentsPage() {
     return () => window.removeEventListener("shoppi:abteilungen-reset", reset);
   }, []);
 
+  // Ladenwahl-Popup bei Klick ausserhalb des Suchleisten-Bereichs schliessen
+  useEffect(() => {
+    if (!storeOpen) return;
+    const onPointerDown = (e: PointerEvent) => {
+      if (!storeBarRef.current?.contains(e.target as Node)) setStoreOpen(false);
+    };
+    window.addEventListener("pointerdown", onPointerDown);
+    return () => window.removeEventListener("pointerdown", onPointerDown);
+  }, [storeOpen]);
+
   const quickAdd = (product: CatalogProduct, group: CatalogDepartment | null, variant?: string) => {
     const name = variant ? `${product.name} · ${variantLabel(product, variant)}` : product.name;
     const vi = variant ? product.variantImages?.[variant] : undefined;
@@ -473,31 +486,39 @@ function DepartmentsPage() {
         <p className="mt-1 text-sm text-muted-foreground">{t("dept.subtitle")}</p>
       </div>
 
-      <div className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
-        <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
-        <input
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder={t("dept.search")}
-          aria-label={t("dept.search")}
-          className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+      <div ref={storeBarRef} className="space-y-2">
+        <div className="flex h-12 items-center gap-2 rounded-xl border border-border bg-card px-3 shadow-sm">
+          <SearchIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t("dept.search")}
+            aria-label={t("dept.search")}
+            className="min-w-0 flex-1 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
+          />
+          <VoiceInputButton
+            onResult={handleVoiceResult}
+            className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
+          />
+          <button
+            type="button"
+            onClick={() => setStoreOpen((open) => !open)}
+            aria-label={t("store.label")}
+            aria-expanded={storeOpen}
+            className={`shrink-0 rounded-lg p-1 text-primary transition active:bg-muted ${storeOpen ? "bg-primary-soft/60" : ""}`}
+          >
+            <Store className="h-5 w-5" aria-hidden="true" />
+          </button>
+        </div>
+        <StorePickerInline
+          open={storeOpen}
+          onPick={(id) => {
+            setStore(id);
+            setStoreOpen(false);
+          }}
         />
-        <VoiceInputButton
-          onResult={handleVoiceResult}
-          className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
-        />
-        <button
-          type="button"
-          onClick={() => setStoreOpen(true)}
-          aria-label={t("store.label")}
-          className="shrink-0 rounded-lg p-1 text-primary transition active:bg-muted"
-        >
-          <Store className="h-5 w-5" aria-hidden="true" />
-        </button>
       </div>
-
-      <StorePickerSheet open={storeOpen} onOpenChange={setStoreOpen} />
 
       {!normalizedQuery && breadcrumbs.length > 0 && (
         <nav aria-label={t("dept.breadcrumb")} className="no-scrollbar flex items-center gap-1 overflow-x-auto text-xs">
