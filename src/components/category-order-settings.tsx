@@ -101,6 +101,7 @@ export function CategoryOrderSettings() {
   const customNames = useCustomNames();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const [storesOpen, setStoresOpen] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
   const [creating, setCreating] = useState(false);
@@ -116,6 +117,7 @@ export function CategoryOrderSettings() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("catOrder") !== "1") return;
     setOpen(true);
+    setStoresOpen(true);
     params.delete("catOrder");
     const qs = params.toString();
     window.history.replaceState(null, "", `${window.location.pathname}${qs ? `?${qs}` : ""}`);
@@ -222,6 +224,13 @@ export function CategoryOrderSettings() {
       {open && (
         <div className="space-y-3 border-t border-border px-4 py-3.5">
           <div>
+            <button type="button" onClick={() => setStoresOpen((v) => !v)} aria-expanded={storesOpen} className="flex w-full items-center gap-2 py-1.5 text-left">
+              <span aria-hidden="true">🏪</span>
+              <span className="flex-1 text-sm font-semibold text-foreground">{t("store.sectionTitle")}</span>
+              <span className="shrink-0 text-muted-foreground" aria-hidden="true">{storesOpen ? "▴" : "▾"}</span>
+            </button>
+            {storesOpen && (
+            <>
             <p className="mb-1 text-xs text-muted-foreground">{t("store.dragHint")}</p>
             <div className="divide-y divide-border rounded-xl border border-border">
               {defaultStore && (
@@ -248,6 +257,8 @@ export function CategoryOrderSettings() {
                 {t("store.addCustom")}
               </button>
             </div>
+            </>
+            )}
           </div>
           {creating && (
             <div className="flex items-start gap-2">

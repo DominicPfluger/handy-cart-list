@@ -10,3 +10,4 @@
 - [x] Grössere Produkt-Bildavatare (h-9) + Bild-Platzhalter-Fallbacks — getestet
 - [x] Freundliche leere Zustände für Listen/Vorlagen — getestet
 - [x] Produkt in der Einzelansicht (Abteilungen) ausblenden: «Ausblenden»-Button im CatalogProductDialog mit Bestätigung; geräte-lokal, wiederherstellbar unter «Mehr → Ausgeblendete Produkte» — getestet (Ausblenden, Verschwinden aus Liste, Wiederherstellen)
+- [x] Läden-Bereich in «Abteilungen ordnen & umbenennen» zugeklappt (Auf-/Zuklappen per Klick; Deep-Link ?catOrder=1 öffnet ihn mit) — getestet
