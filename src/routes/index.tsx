@@ -548,7 +548,7 @@ function ListPage() {
                   <Fragment key={item.id}>
                   {showH && <div className="bg-muted/50 px-4 pb-1.5 pt-3 text-sm font-bold text-foreground">{h.name}</div>}
                   <div
-                    className="relative flex items-center gap-2.5 py-2.5 pl-3 pr-3"
+                    className="cv-row relative flex items-center gap-2.5 py-2.5 pl-3 pr-3"
                   >
                     <button
                       onClick={() => toggleItem(item.id)}

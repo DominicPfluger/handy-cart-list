@@ -636,7 +636,7 @@ function DepartmentsPage() {
                   data-drop={draggable ? "product" : undefined}
                   data-id={product.id}
                   onClickCapture={(e) => { if (suppressClick.current) { e.stopPropagation(); e.preventDefault(); } }}
-                  className={`flex min-h-16 select-none items-center gap-2.5 px-2.5 py-2 ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" && !headingDrop ? "!border-b-2 !border-b-primary" : ""}`}
+                  className={`cv-row flex min-h-16 select-none items-center gap-2.5 px-2.5 py-2 ${drag?.what === "product" && drag.id === product.id ? "opacity-40" : ""} ${pt === "before" ? "!border-t-2 !border-t-primary" : ""} ${pt === "after" && !headingDrop ? "!border-b-2 !border-b-primary" : ""}`}
                 >
                   <button
                     type="button"
