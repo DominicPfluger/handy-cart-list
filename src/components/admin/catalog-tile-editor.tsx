@@ -443,13 +443,20 @@ export function CatalogTileEditor(p: {
         );
       })()}
 
-      {(p.children.length > 0 || editMode) && (
+      {p.children.length > 0 && (
+        <div className="flex justify-end gap-1">
+          <Button type="button" size="sm" variant={deptView === "tiles" ? "default" : "outline"} onClick={() => switchDeptView("tiles")} aria-label={T("tile.viewTiles")} title={T("tile.viewTiles")}><LayoutGrid className="h-3.5 w-3.5" /></Button>
+          <Button type="button" size="sm" variant={deptView === "list" ? "default" : "outline"} onClick={() => switchDeptView("list")} aria-label={T("tile.viewList")} title={T("tile.viewList")}><List className="h-3.5 w-3.5" /></Button>
+        </div>
+      )}
+
+      {(p.children.length > 0 || editMode) && deptView === "tiles" && (
         <div className="grid grid-cols-3 gap-2.5 md:grid-cols-5 xl:grid-cols-7">
           {p.children.map((c, i) => (
              <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
                style={{ background: rootColorByName(rootName(c)) }}
                className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""}`}>
-               <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
+                <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
                 onClick={click(() => p.setCur(c.dept_id ?? c.id))}
                 onDoubleClick={() => { const u = img(c.image_path); if (u) setZoom(u); }}
@@ -464,6 +471,37 @@ export function CatalogTileEditor(p: {
               {editMode && c.alias_id && (
                 <button type="button" onClick={() => p.onRemoveDeptAlias?.(c.alias_id!, p.nm(c.dept_id ?? c.id, c.name))} aria-label={T("adm.delete")}
                   className="absolute right-1 top-1 rounded-full bg-background/80 px-1.5 text-xs text-destructive">✕</button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {p.children.length > 0 && deptView === "list" && (
+        <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
+          {p.children.map((c, i) => (
+            <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
+              className={`flex items-center gap-3 px-3 py-2 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : "ring-2 ring-inset ring-primary") : ""}`}>
+              <span onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers} aria-label={T("adm.drag")} title={T("adm.drag")} className="cursor-grab touch-none select-none px-0.5 text-base text-muted-foreground">⠿</span>
+              <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
+                onClick={click(() => p.setCur(c.dept_id ?? c.id))}
+                onDoubleClick={() => { const u = img(c.image_path); if (u) setZoom(u); }}
+                className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl text-2xl"
+                style={{ background: rootColorByName(rootName(c)) }}>
+                {img(c.image_path) ? <ZoomableImage src={img(c.image_path)!} className="h-full w-full object-cover" /> : c.emoji ?? "📁"}
+              </button>
+              <button type="button" onClick={click(() => p.setCur(c.dept_id ?? c.id))} className="min-w-0 flex-1 text-left">
+                <span className="block truncate text-sm font-semibold text-foreground">{p.nm(c.dept_id ?? c.id, c.name)}{c.alias_id && <span className="ml-1 text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</span>
+              </button>
+              {editMode && !c.alias_id && (
+                <Button type="button" variant="ghost" size="icon" aria-label={T("tile.editItem")} title={T("tile.editItem")} onClick={() => setTarget({ kind: "department", id: c.id })} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                  <Pencil className="h-3.5 w-3.5" />
+                </Button>
+              )}
+              {editMode && c.alias_id && (
+                <Button type="button" variant="ghost" size="icon" aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => p.onRemoveDeptAlias?.(c.alias_id!, p.nm(c.dept_id ?? c.id, c.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </Button>
               )}
             </div>
           ))}
