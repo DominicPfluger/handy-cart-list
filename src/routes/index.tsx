@@ -557,7 +557,7 @@ function ListPage() {
                       const color = (colorDept ? deptColor(colorDept, deptById) : undefined) ?? deptColorByLabel(group.label);
                       return (
                     <div
-                      className={`grid h-7 w-7 shrink-0 select-none place-items-center overflow-hidden rounded-md text-[19px] ${color ? "" : "bg-primary-soft/25"}`}
+                      className={`grid h-9 w-9 shrink-0 select-none place-items-center overflow-hidden rounded-lg text-[20px] ${color ? "" : "bg-primary-soft/25"}`}
                       style={color ? { backgroundColor: color } : undefined}
                     >
                         {(() => {

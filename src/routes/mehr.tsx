@@ -14,7 +14,7 @@ import {
 } from "../components/icons";
 import { useAllLocales, getExplicitLocale, getLocale, setLocale, useT, type Locale } from "../i18n";
 import { useEffect, useState, type ReactNode } from "react";
-import { EyeOff, Images, Download } from "lucide-react";
+import { EyeOff, Images, Download, SunMoon } from "lucide-react";
 import { useSyncExternalStore } from "react";
 import { preloadCatalogImages, preloadState, subscribePreload } from "../lib/catalog-image-cache";
 import { getCatalogImageUrls } from "../lib/catalog.functions";
@@ -249,6 +249,7 @@ function MorePage() {
         <AppUpdateRow />
         <NotificationSettingsRow />
 
+        <ThemeRow />
         <IconSetRow />
         <PreloadImagesRow />
         <FontSizeRow />
