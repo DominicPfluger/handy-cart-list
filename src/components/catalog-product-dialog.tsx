@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { EyeOff } from "lucide-react";
 import { prepareItemPhoto } from "../lib/item-photo-store";
 import { brandsFor, departmentIdsOf, pathTo, useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
@@ -9,8 +10,19 @@ import { useT, pickName } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { getFavoriteQuantity } from "../hooks/use-favorite-quantity";
 import { usePantry } from "../hooks/use-pantry";
+import { hideProduct } from "../hooks/use-hidden-products";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
 import {
   Dialog,
   DialogContent,
