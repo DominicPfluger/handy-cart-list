@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { EyeOff } from "lucide-react";
 import { prepareItemPhoto } from "../lib/item-photo-store";
 import { brandsFor, departmentIdsOf, pathTo, useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
@@ -9,8 +10,19 @@ import { useT, pickName } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { getFavoriteQuantity } from "../hooks/use-favorite-quantity";
 import { usePantry } from "../hooks/use-pantry";
+import { hideProduct } from "../hooks/use-hidden-products";
 import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog";
 import {
   Dialog,
   DialogContent,
@@ -87,6 +99,13 @@ export function CatalogProductDialog({
   const [customInput, setCustomInput] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [brand, setBrand] = useState<string | undefined>(undefined);
+  const [hideConfirm, setHideConfirm] = useState(false);
+  const hideNow = () => {
+    if (!product) return;
+    hideProduct(product.id);
+    setHideConfirm(false);
+    onOpenChange(false);
+  };
 
   useEffect(() => {
     if (!product) return;
@@ -337,17 +356,37 @@ export function CatalogProductDialog({
           </p>
         )}
 
-        <DialogFooter className="mt-2">
+        <DialogFooter className="mt-2 gap-2 sm:gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => setHideConfirm(true)}
+            className="h-11 rounded-xl text-destructive"
+          >
+            <EyeOff className="h-4 w-4" /> {t("dlg.hide")}
+          </Button>
           <Button
             type="button"
             onClick={addProduct}
             disabled={!validAmount}
-            className="h-11 w-full rounded-xl font-semibold"
+            className="h-11 flex-1 rounded-xl font-semibold"
           >
             {selected.length > 1 ? t("dlg.addN", { n: selected.length }) : t("dlg.addToList")}
           </Button>
         </DialogFooter>
       </DialogContent>
+      <AlertDialog open={hideConfirm} onOpenChange={setHideConfirm}>
+        <AlertDialogContent className="max-w-[400px] rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("rename.confirmRemoveTitle", { name: product?.name ?? "" })}</AlertDialogTitle>
+            <AlertDialogDescription>{t("rename.confirmRemoveCatalog")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("rename.confirmCancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={hideNow}>{t("rename.confirmRemove")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 }

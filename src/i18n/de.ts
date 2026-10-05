@@ -205,6 +205,7 @@ export const de = {
 
   "dlg.add": "Produkt hinzufügen",
   "dlg.desc": "Lege Menge und gewünschte Variante fest.",
+  "dlg.hide": "Ausblenden",
   "dlg.qty": "Menge",
   "dlg.unit": "Masseinheit",
   "dlg.organic": "Bio-Produkt",

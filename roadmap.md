@@ -9,3 +9,4 @@
 - [x] Dark Mode (System/Hell/Dunkel, use-theme.ts, ThemeRow unter Mehr) — getestet
 - [x] Grössere Produkt-Bildavatare (h-9) + Bild-Platzhalter-Fallbacks — getestet
 - [x] Freundliche leere Zustände für Listen/Vorlagen — getestet
+- [x] Produkt in der Einzelansicht (Abteilungen) ausblenden: «Ausblenden»-Button im CatalogProductDialog mit Bestätigung; geräte-lokal, wiederherstellbar unter «Mehr → Ausgeblendete Produkte» — getestet (Ausblenden, Verschwinden aus Liste, Wiederherstellen)
