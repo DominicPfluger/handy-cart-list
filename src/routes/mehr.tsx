@@ -121,17 +121,12 @@ function MorePage() {
 
       <SectionHeader label={t("more.group.shopping")} />
 
-      {/* Ernährungsform */}
-      <section className="divide-y divide-border rounded-2xl border border-border bg-card">
+      <section className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
         <DietPreferenceRow />
-      </section>
-
-      <section className="rounded-2xl border border-border bg-card">
-        <CategoryOrderSettings />
-      </section>
-
-      {/* Ausgeblendete Produkte */}
-      <section className="rounded-2xl border border-border bg-card">
+        <div>
+          <CategoryOrderSettings />
+        </div>
+        {/* Ausgeblendete Produkte */}
         <div>
           <button
             type="button"
