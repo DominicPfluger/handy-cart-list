@@ -1006,6 +1006,7 @@ export const de = {
   "adm.clearSelection": "Auswahl aufheben",
   "adm.deleteSelected": "Auswahl löschen",
   "adm.deleteSelectedConfirm": "{n} Einträge wirklich löschen?",
+  "adm.deleteSelectedDeptsConfirm": "{n} Kategorien inkl. aller enthaltenen Produkte und Unterkategorien wirklich löschen?",
   "adm.deleteSkippedNotEmpty": "{n} Kategorien nicht gelöscht, da nicht leer: {names}",
   "adm.multiTitle": "Mehrere Produkte — ein Name pro Zeile",
   "adm.posLabel": "Position",
