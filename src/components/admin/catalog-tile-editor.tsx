@@ -350,9 +350,9 @@ export function CatalogTileEditor(p: {
     const allIds: string[] = [];
     const collectIds = (id: string) => { for (const d of kidsOf.get(id) ?? []) { if (!d.alias_id) { allIds.push(d.id); collectIds(d.id); } } };
     collectIds(p.cur);
-    const subProds = new Map<string, { id: string; name: string; sort_order: number; alias_id?: string }[]>();
+    const subProds = new Map<string, { id: string; name: string; sort_order: number }[]>();
     if (allIds.length) {
-      const { data } = await supabase.from("products").select("id, name, sort_order, alias_id, department_id").in("department_id", allIds);
+      const { data } = await supabase.from("products").select("id, name, sort_order, department_id").in("department_id", allIds);
       for (const r of data ?? []) {
         const arr = subProds.get(r.department_id) ?? [];
         arr.push(r);
