@@ -257,6 +257,8 @@ export function CategoryOrderSettings() {
                 {t("store.addCustom")}
               </button>
             </div>
+            </>
+            )}
           </div>
           {creating && (
             <div className="flex items-start gap-2">
