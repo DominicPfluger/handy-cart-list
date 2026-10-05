@@ -101,6 +101,7 @@ export function CategoryOrderSettings() {
   const customNames = useCustomNames();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const [storesOpen, setStoresOpen] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
   const [creating, setCreating] = useState(false);
@@ -116,6 +117,7 @@ export function CategoryOrderSettings() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("catOrder") !== "1") return;
     setOpen(true);
+    setStoresOpen(true);
     params.delete("catOrder");
     const qs = params.toString();
     window.history.replaceState(null, "", `${window.location.pathname}${qs ? `?${qs}` : ""}`);
