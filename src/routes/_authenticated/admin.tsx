@@ -552,7 +552,7 @@ function AdminPage() {
   };
 
   const createTree = (blocks: TreeBlock[]) => {
-    if (!cur || !d) return;
+    if (!d) return;
     const n = blocks.reduce((s, b) => s + b.items.length, 0);
     run(async () => {
       const children = d.depts.filter((x) => x.parent_id === cur);
@@ -880,7 +880,7 @@ function AdminPage() {
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onSortHeading={(id) => setSortDlg(id)}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
-            onBulkTree={cur ? () => setBulkTree(true) : undefined}
+            onBulkTree={() => setBulkTree(true)}
             onHeadingsToSub={cur && headings.length > 0 && !mk ? headingsToSubcategories : undefined}
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
             onDeleteSelected={deleteSelected}
@@ -892,7 +892,7 @@ function AdminPage() {
               deptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
               onSubmit={handleBulkSubmit} />
           )}
-          {bulkTree && cur && (
+          {bulkTree && (
             <BulkTreeForm existing={d.depts.filter((x) => x.parent_id === cur).map((x) => x.name)}
               onCancel={() => setBulkTree(false)} onSubmit={createTree} />
           )}
