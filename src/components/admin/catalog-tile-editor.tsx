@@ -18,6 +18,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
+import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { LayoutGrid, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -88,6 +89,8 @@ export function CatalogTileEditor(p: {
   onDeleteSelected?: (sel: { productIds: string[]; productAliasIds: string[] }) => void;
   /** Löscht alle markierten Kategorien (inkl. Kategorie-Aliasse). */
   onDeleteSelectedDepts?: (sel: { deptIds: string[]; deptAliasIds: string[] }) => void;
+  /** Übernimmt per KI vorgeschlagene Überschriften-Gruppen. */
+  onApplyHeadingGroups?: (groups: HeadingGroup[]) => void;
 }) {
   const [newTitle, setNewTitle] = useState<string | null>(null);
   const [newTitlePos, setNewTitlePos] = useState(0);
