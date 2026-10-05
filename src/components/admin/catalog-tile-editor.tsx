@@ -460,6 +460,13 @@ export function CatalogTileEditor(p: {
         );
       })()}
 
+      {p.cur && p.onApplyHeadingGroups && headingAi && (
+        <HeadingAiDialog open={headingAi} onOpenChange={setHeadingAi} nm={p.nm} hasHeadings={(p.headings ?? []).length > 0}
+          path={p.path.map((d) => d.name).join(" › ")}
+          products={p.products.filter((x) => !x.id.startsWith("alias:")).map((x) => ({ id: x.id, name: x.name, emoji: x.emoji }))}
+          onApply={p.onApplyHeadingGroups} />
+      )}
+
       {p.children.length > 0 && (
         <div className="flex justify-end gap-1">
           <Button type="button" size="sm" variant={deptView === "tiles" ? "default" : "outline"} onClick={() => switchDeptView("tiles")} aria-label={T("tile.viewTiles")} title={T("tile.viewTiles")}><LayoutGrid className="h-3.5 w-3.5" /></Button>
