@@ -5,7 +5,7 @@ import { getLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
 import { RecipeBuilder } from "../components/recipe-builder";
 import { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
-import { catalogQueryOptions } from "../lib/catalog-query";
+import { ensureCatalog, catalogQueryOptions } from "../lib/catalog-query";
 
 export const Route = createFileRoute("/rezepte/generator")({
   ssr: false,
@@ -27,7 +27,7 @@ export const Route = createFileRoute("/rezepte/generator")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
+  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
   component: Page,
 });
 

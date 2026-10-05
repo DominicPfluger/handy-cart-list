@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { getLocale, useT } from "../i18n";
 import type { MessageKey } from "../i18n/de";
-import { catalogQueryOptions } from "../lib/catalog-query";
+import { ensureCatalog, catalogQueryOptions } from "../lib/catalog-query";
 import { useRecipeTemplates, templateLabel } from "../lib/use-recipe-templates";
 import imgGenerator from "../assets/recipes/generator.png";
 import imgSearch from "../assets/recipes/search.png";
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/rezepte/")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
+  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
   component: RecipesPage,
 });
 

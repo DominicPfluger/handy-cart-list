@@ -809,5 +809,6 @@
   "theme.label": "Darstellung",
   "theme.system": "System",
   "theme.light": "Hell",
-  "theme.dark": "Dunkel"
+  "theme.dark": "Dunkel",
+  "list.merged": "{name} zusammengefasst: {qty}"
 }

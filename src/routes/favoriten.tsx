@@ -8,7 +8,7 @@ import { Button } from "../components/ui/button";
 import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
 import { useShoppingList, type FavoriteProduct, type ListItem } from "../hooks/use-shopping-list";
 import {
-  catalogQueryOptions,
+  ensureCatalog, catalogQueryOptions,
   useCatalog,
   compareByName,
   matchesProductSearch,
@@ -26,7 +26,7 @@ import { ProductIcon, DepartmentIcon } from "../components/catalog-icon";
 
 export const Route = createFileRoute("/favoriten")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
+  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
   head: () => ({
     meta: [
       { title: "Shoppi — Favoriten" },

@@ -265,3 +265,9 @@
 .strike-animate.is-checked {
   background-size: 100% 1.5px;
 }
+
+/* Virtualisiertes Rendering: Zeilen ausserhalb des Bildschirms werden vom Browser übersprungen. */
+.cv-row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 64px;
+}

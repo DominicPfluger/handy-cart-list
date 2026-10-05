@@ -84,11 +84,18 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
   return all;
 }
 
-async function loadAll() {
-  const [depts, prods, heads, trs, mo, mx] = await Promise.all([
+/** Kern (Kategorien, Produkte, Überschriften) sofort; Übersetzungen + Marktdaten separat nachgeladen. */
+async function loadCore() {
+  const [depts, prods, heads] = await Promise.all([
     paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path, icon_path").order("sort_order").order("id").range(a, b)),
     paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, excluded_diets, variants, markets, image_path, icon_path").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
+  ]);
+  return { depts, prods, heads };
+}
+
+async function loadExtra() {
+  const [trs, mo, mx] = await Promise.all([
     paged<Tr>((a, b) => supabase.from("catalog_translations").select("entity_id, locale, name, is_manual").order("id").range(a, b)),
     paged<{ product_id: string; market: string; sort_order: number }>((a, b) => supabase.from("product_market_order").select("product_id, market, sort_order").order("id").range(a, b)),
     paged<{ product_id: string; market: string }>((a, b) => supabase.from("product_market_exclusions").select("product_id, market").order("id").range(a, b)),
@@ -97,7 +104,12 @@ async function loadAll() {
   for (const t of trs) tr.set(t.entity_id, { ...(tr.get(t.entity_id) ?? {}), [t.locale]: t });
   const order = new Map(mo.map((o) => [`${o.product_id}|${o.market}`, o.sort_order]));
   const excl = new Set(mx.map((o) => `${o.product_id}|${o.market}`));
-  return { depts, prods, heads, tr, order, excl };
+  return { tr, order, excl };
+}
+
+const EMPTY_EXTRA: Awaited<ReturnType<typeof loadExtra>> = { tr: new Map(), order: new Map(), excl: new Set() };
+async function loadAll() {
+  return { ...(await loadCore()), ...EMPTY_EXTRA };
 }
 
 type AdminData = Awaited<ReturnType<typeof loadAll>>;
@@ -121,7 +133,13 @@ function AdminPage() {
   /** Anzeigesprache des Katalogs im Admin (nur Anzeige, Bearbeitung bleibt Deutsch). */
   const [viewLoc, setViewLoc] = useState<string>("de-DE");
   const admin = useQuery({ queryKey: ["admin-check"], queryFn: () => check() });
-  const q = useQuery({ queryKey: ["admin-catalog"], queryFn: loadAll, enabled: Boolean(admin.data?.isAdmin) });
+  const qCore = useQuery({ queryKey: ["admin-catalog"], queryFn: loadCore, enabled: Boolean(admin.data?.isAdmin) });
+  // Übersetzungen/Marktdaten erst nach dem Kern laden (gross, nur für Detailansichten nötig).
+  const qExtra = useQuery({ queryKey: ["admin-catalog", "extra"], queryFn: loadExtra, enabled: Boolean(qCore.data) });
+  const q = useMemo(() => ({
+    isLoading: qCore.isLoading,
+    data: qCore.data ? { ...qCore.data, ...(qExtra.data ?? EMPTY_EXTRA) } as AdminData : undefined,
+  }), [qCore.data, qCore.isLoading, qExtra.data]);
   const [cur, setCur] = useState<string | null>(null);
   const [sel, setSel] = useState<Sel>(null);
   const [imageEditor, setImageEditor] = useState<{ kind: "product"; id: string } | null>(null);

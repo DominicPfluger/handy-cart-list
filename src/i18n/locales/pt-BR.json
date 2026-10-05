@@ -1387,5 +1387,6 @@
   "theme.label": "Aparência",
   "theme.system": "Sistema",
   "theme.light": "Claro",
-  "theme.dark": "Escuro"
+  "theme.dark": "Escuro",
+  "list.merged": "{name} combinado: {qty}"
 }

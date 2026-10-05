@@ -3,7 +3,7 @@ import { useState } from "react";
 import { usePurchaseHistory } from "../hooks/use-purchase-history";
 import { useT, getLocale } from "../i18n";
 import { ProductIcon } from "../components/catalog-icon";
-import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
+import { ensureCatalog, catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 import {
   AlertDialog,
@@ -18,7 +18,7 @@ import {
 
 export const Route = createFileRoute("/verlauf")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
+  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
   head: () => ({
     meta: [
       { title: "Shoppi — Einkaufsverlauf" },

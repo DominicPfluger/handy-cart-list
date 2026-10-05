@@ -30,7 +30,7 @@ import { useIsAdmin } from "../hooks/use-is-admin";
 import { setAllMarkets, useAllMarkets } from "../hooks/use-all-markets";
 import { setMarketOverride, useMarket, useMarketOverride } from "../hooks/use-market";
 import { marketsQuery } from "../hooks/use-markets";
-import { catalogQueryOptions, useCatalog } from "../lib/catalog-query";
+import { ensureCatalog, catalogQueryOptions, useCatalog } from "../lib/catalog-query";
 import { Button } from "../components/ui/button";
 import { MemberAvatar } from "../components/member-avatar";
 import { openShareSheet } from "../components/share-sheet";
@@ -42,7 +42,7 @@ import { AppUpdateRow } from "../components/app-update-row";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
+  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
   head: () => ({
     meta: [
       { title: "Shoppi — Mehr" },
