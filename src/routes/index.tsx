@@ -346,6 +346,7 @@ function ListPage() {
           onReorder={reorderLists}
           onOpen={(id) => { setActiveListId(id); setOpenListId(id); }}
           onRename={renameList}
+          onEdit={(id) => setEditListId(id)}
           onSaveTemplate={(id) => { saveAsTemplate(id); toast.success(t("lm.templateSaved")); }}
           onDelete={(id) => {
             if (lists.length <= 1) { toast.error(t("lm.lastList")); return; }
@@ -353,6 +354,23 @@ function ListPage() {
             if (l && confirm(t("lm.confirmDelete").replace("{name}", l.name))) deleteList(id);
           }}
           t={t}
+        />
+        <ListEditDialog
+          list={lists.find((l) => l.id === editListId) ?? null}
+          index={lists.findIndex((l) => l.id === editListId)}
+          total={lists.length}
+          storeId={editListId ? (listStores[editListId] ?? "default") : "default"}
+          onClose={() => setEditListId(null)}
+          onSave={(name, storeId) => {
+            if (!editListId) return;
+            renameList(editListId, name);
+            setListStore(editListId, storeId);
+          }}
+          onMove={(dir) => {
+            const i = lists.findIndex((l) => l.id === editListId);
+            const j = i + dir;
+            if (editListId && i >= 0 && j >= 0 && j < lists.length) reorderLists(editListId, lists[j]!.id);
+          }}
         />
         <button
           onClick={() => setManagerOpen(true)}
