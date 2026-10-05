@@ -668,6 +668,45 @@ function AdminPage() {
     }, null);
   };
 
+  /** Löscht markierte Kategorien (mit Sicherungspunkt); nicht leere Kategorien werden übersprungen. */
+  const deleteSelectedDepts = (sel: { deptIds: string[]; deptAliasIds: string[] }) => {
+    const n = sel.deptIds.length + sel.deptAliasIds.length;
+    if (!n || !confirm(T("adm.deleteSelectedConfirm", { n }))) return;
+    run(async () => {
+      const nonEmpty = sel.deptIds.filter((id) => d?.depts.some((x) => x.parent_id === id) || d?.prods.some((x) => x.department_id === id));
+      const ids = sel.deptIds.filter((id) => !nonEmpty.includes(id));
+      const backupId = (ids.length || sel.deptAliasIds.length) ? await createBackupFn({ data: {
+        label: T("adm.bulkDeleteLabel"),
+        deletes: [
+          ...(sel.deptAliasIds.length ? [{ table: "department_aliases", filterColumn: "id", filterIds: sel.deptAliasIds }] : []),
+          ...(ids.length ? [
+            { table: "departments", filterColumn: "id", filterIds: ids },
+            { table: "product_headings", filterColumn: "department_id", filterIds: ids },
+            { table: "catalog_translations", filterColumn: "entity_id", filterIds: ids },
+          ] : []),
+        ],
+      } }) : null;
+      for (const id of sel.deptAliasIds) await must(supabase.from("department_aliases").delete().eq("id", id));
+      for (const id of ids) {
+        await must(supabase.from("product_headings").delete().eq("department_id", id));
+        await must(supabase.from("departments").delete().eq("id", id));
+        await must(supabase.from("catalog_translations").delete().eq("entity_id", id));
+      }
+      await qc.invalidateQueries({ queryKey: ALIAS_KEY });
+      if (nonEmpty.length) {
+        const names = nonEmpty.map((id) => nm(id, d?.depts.find((x) => x.id === id)?.name ?? id)).join(", ");
+        toast.error(T("adm.deleteSkippedNotEmpty", { n: nonEmpty.length, names }));
+      }
+      if (backupId) {
+        toast.success(T("adm.deleted"), {
+          action: { label: T("adm.undo"), onClick: () => { void undoBackupFn({ data: { id: backupId } }).then(() => { toast.success(T("adm.undone")); void refresh(); }); } },
+        });
+      } else if (!nonEmpty.length) {
+        toast.success(T("adm.deleted"));
+      }
+    }, null);
+  };
+
   const results = useMemo(() => {
     const n = search.trim().toLowerCase();
     if (!n || !d) return null;
@@ -884,6 +923,7 @@ function AdminPage() {
             onHeadingsToSub={cur && headings.length > 0 && !mk ? headingsToSubcategories : undefined}
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
             onDeleteSelected={deleteSelected}
+            onDeleteSelectedDepts={deleteSelectedDepts}
             onAdvanced={(kind, id) => setSel({ kind, id })} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
