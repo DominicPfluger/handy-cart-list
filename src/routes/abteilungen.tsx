@@ -517,6 +517,7 @@ function DepartmentsPage() {
             setStore(id);
             setStoreOpen(false);
           }}
+          onClose={() => setStoreOpen(false)}
         />
       </div>
 

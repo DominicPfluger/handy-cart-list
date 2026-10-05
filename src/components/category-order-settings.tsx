@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { DndContext, closestCenter, PointerSensor, TouchSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable, sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -70,6 +70,7 @@ export function CategoryOrderSettings() {
   const { all, store, setStore, saveFor, resetFor, addCustomStore, updateCustomStore, removeCustomStore } = useGroupOrder();
   const hidden = useHiddenDepartments();
   const customNames = useCustomNames();
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
@@ -79,6 +80,19 @@ export function CategoryOrderSettings() {
   const [editStore, setEditStore] = useState(false);
   const [editName, setEditName] = useState("");
   const [editEmoji, setEditEmoji] = useState("");
+
+  // Aufruf über „+ Neuer Laden" im Laden-Popup der Abteilungsansicht: /mehr?catOrder=1
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("catOrder") !== "1") return;
+    setOpen(true);
+    params.delete("catOrder");
+    const qs = params.toString();
+    window.history.replaceState(null, "", `${window.location.pathname}${qs ? `?${qs}` : ""}`);
+    requestAnimationFrame(() => wrapperRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+  }, []);
+
   const selected = stores.find((s) => s.id === store) ?? stores[0]!;
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
@@ -155,7 +169,7 @@ export function CategoryOrderSettings() {
   };
 
   return (
-    <div>
+    <div ref={wrapperRef}>
       <button type="button" onClick={() => setOpen((v) => !v)} aria-expanded={open} className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted">
         <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft/50 text-xl" aria-hidden="true">🗂️</div>
         <div className="min-w-0 flex-1">
