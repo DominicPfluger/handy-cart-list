@@ -295,7 +295,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
                       <Button size="sm" variant="outline" disabled={busy} onClick={() => void doMerge(p)}>{T("adm.health.merge")}</Button>
                       <Button size="sm" variant="outline" disabled={busy} onClick={() => void doLink(p)}>{T("adm.health.link")}</Button>
-                      <Button size="sm" variant="ghost" disabled={busy} onClick={() => ignore(p)}>{T("adm.health.ignore")}</Button>
+                      <Button size="sm" variant="outline" disabled={busy} onClick={() => ignore(p)}>{T("adm.health.ignore")}</Button>
                     </div>
                   </li>
                 ))}
