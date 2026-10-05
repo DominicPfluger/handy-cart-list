@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { MARKETS as FALLBACK } from "@/components/market-admin";
 
+export { MARKETS as FALLBACK_MARKETS } from "@/components/market-admin";
+
 export type MarketRow = { code: string; name: string; flag: string; currency: string; enabled: boolean; sort_order: number };
 
 export const marketsQuery = {
