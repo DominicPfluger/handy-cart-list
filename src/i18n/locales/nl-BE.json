@@ -1400,5 +1400,6 @@
   "diets.deleted": "Deleted",
   "diets.inUse": "Used by {n} products – cannot delete",
   "diets.exists": "This diet already exists",
-  "diets.editTitle": "Edit diet: {name}"
+  "diets.editTitle": "Edit diet: {name}",
+  "adm.tab.settings": "Instellingen"
 }
