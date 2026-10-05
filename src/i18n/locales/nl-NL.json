@@ -1377,5 +1377,12 @@
   "catOrder.reset": "Volgorde herstellen",
   "more.appUpdate": "App bijwerken",
   "more.appUpdateSub": "Nieuwste versie van de server laden",
-  "more.appUpdating": "Bijwerken …"
+  "more.appUpdating": "Bijwerken …",
+  "lm.templatesEmpty": "Nog geen sjablonen",
+  "lm.emptyTitle": "Nog geen lijsten",
+  "lm.emptyHint": "Tik op «Maken» om je eerste boodschappenlijst te maken.",
+  "theme.label": "Weergave",
+  "theme.system": "Systeem",
+  "theme.light": "Licht",
+  "theme.dark": "Donker"
 }

@@ -1377,5 +1377,12 @@
   "catOrder.reset": "Ripristina ordine",
   "more.appUpdate": "Aggiorna l'app",
   "more.appUpdateSub": "Carica la versione più recente dal server",
-  "more.appUpdating": "Aggiornamento …"
+  "more.appUpdating": "Aggiornamento …",
+  "lm.templatesEmpty": "Ancora nessun modello",
+  "lm.emptyTitle": "Ancora nessuna lista",
+  "lm.emptyHint": "Tocca «Crea» per iniziare la tua prima lista della spesa.",
+  "theme.label": "Aspetto",
+  "theme.system": "Sistema",
+  "theme.light": "Chiaro",
+  "theme.dark": "Scuro"
 }

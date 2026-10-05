@@ -1377,5 +1377,12 @@
   "catOrder.reset": "Réinitialiser l’ordre",
   "more.appUpdate": "Mettre à jour l'app",
   "more.appUpdateSub": "Charger la dernière version depuis le serveur",
-  "more.appUpdating": "Mise à jour …"
+  "more.appUpdating": "Mise à jour …",
+  "lm.templatesEmpty": "Aucun modèle pour l'instant",
+  "lm.emptyTitle": "Aucune liste pour l'instant",
+  "lm.emptyHint": "Touchez « Créer » pour créer votre première liste de courses.",
+  "theme.label": "Apparence",
+  "theme.system": "Système",
+  "theme.light": "Clair",
+  "theme.dark": "Sombre"
 }

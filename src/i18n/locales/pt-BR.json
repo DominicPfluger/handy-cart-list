@@ -1377,5 +1377,12 @@
   "catOrder.reset": "Repor ordem",
   "more.appUpdate": "Atualizar o app",
   "more.appUpdateSub": "Carregar a versão mais recente do servidor",
-  "more.appUpdating": "Atualizando …"
+  "more.appUpdating": "Atualizando …",
+  "lm.templatesEmpty": "Ainda sem modelos",
+  "lm.emptyTitle": "Ainda sem listas",
+  "lm.emptyHint": "Toque em «Criar» para criar a sua primeira lista de compras.",
+  "theme.label": "Aparência",
+  "theme.system": "Sistema",
+  "theme.light": "Claro",
+  "theme.dark": "Escuro"
 }
