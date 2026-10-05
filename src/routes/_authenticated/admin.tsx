@@ -47,7 +47,6 @@ const MarketsManager = lazy(() => import("@/components/admin/markets-manager").t
 const ImportPanel = lazy(() => import("@/components/admin/import-panel").then((m) => ({ default: m.ImportPanel })));
 const MarketDataImport = lazy(() => import("@/components/admin/market-data-import").then((m) => ({ default: m.MarketDataImport })));
 const CatalogPreview = lazy(() => import("@/components/admin/catalog-preview").then((m) => ({ default: m.CatalogPreview })));
-const HeadingAiDialog = lazy(() => import("@/components/admin/heading-ai-dialog").then((m) => ({ default: m.HeadingAiDialog })));
 const RecipeAdmin = lazy(() => import("@/components/recipe-admin").then((m) => ({ default: m.RecipeAdmin })));
 const RecipeAssignAdmin = lazy(() => import("@/components/recipe-admin").then((m) => ({ default: m.RecipeAssignAdmin })));
 const RecipeTraitsAdmin = lazy(() => import("@/components/recipe-traits-admin").then((m) => ({ default: m.RecipeTraitsAdmin })));
@@ -603,7 +602,6 @@ function AdminPage() {
 
   const createBackupFn = useServerFn(createBulkBackup);
   const undoBackupFn = useServerFn(undoBulkBackup);
-  const [headingAi, setHeadingAi] = useState(false);
   /** KI-Gruppen übernehmen: Produkte umsortieren, alte Überschriften (mit Sicherung) ersetzen. */
   const applyHeadingGroups = async (groups: HeadingGroup[]) => {
     if (!cur) return;
@@ -880,11 +878,6 @@ function AdminPage() {
               <option value="similarity">{T("adm.opt.similarity")}</option>
             </select>
             <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={() => sortProducts()}>↕ {busy ? T("adm.working") : T("adm.sort")}</Button>
-            {cur && <Button variant="outline" className="h-11 shrink-0 rounded-xl" disabled={busy} onClick={() => setHeadingAi(true)} title={T("adm.headingAi.title")}>✨ {T("adm.headingAi.btn")}</Button>}
-            {cur && headingAi && <HeadingAiDialog open={headingAi} onOpenChange={setHeadingAi} nm={nm} hasHeadings={headings.length > 0}
-              path={path(cur).map((p) => p.name).join(" › ")}
-              products={products.filter((x) => !x.id.startsWith("alias:")).map((x) => ({ id: x.id, name: x.name, emoji: x.emoji }))}
-              onApply={applyHeadingGroups} />}
           </div>
         )}
         <select value={cur ?? ""} onChange={(e) => { setCur(e.target.value || null); setSel(null); setSearch(""); }} aria-label={T("adm.categories")}
