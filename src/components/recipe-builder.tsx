@@ -549,26 +549,48 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
 
       {catalog.cuisines.length > 0 && (
         <div role="group" aria-label={t("cuisine.title")} className="space-y-1.5">
-          <p className="text-xs font-bold text-foreground">🌍 {t("cuisine.filter")}</p>
-          <div className="flex flex-wrap gap-1.5">
-            {catalog.cuisines.map((c) => {
-              const on = cuisineFilter.includes(c.id);
-              return (
-                <button
-                  key={c.id}
-                  onClick={() => toggleCuisine(c.id)}
-                  aria-pressed={on}
-                  className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${
-                    on ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
-                  }`}
-                >
-                  {c.name}
-                </button>
-              );
-            })}
-          </div>
-          {cuisineFilter.length > 0 && (
-            <p className="text-[11px] text-muted-foreground">{t("cuisine.hint")}</p>
+          <button
+            type="button"
+            onClick={() => setCuisineOpen((o) => !o)}
+            aria-expanded={cuisineOpen}
+            className="flex w-full items-center justify-between gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-left"
+          >
+            <span className="shrink-0 text-xs font-bold text-foreground">🌍 {t("cuisine.filter")}</span>
+            <span className="flex min-w-0 items-center gap-1.5">
+              {cuisineFilter.length > 0 && (
+                <span className="truncate text-[11px] font-semibold text-primary">
+                  {cuisineFilter
+                    .map((id) => catalog.cuisines.find((c) => c.id === id)?.name)
+                    .filter(Boolean)
+                    .join(", ")}
+                </span>
+              )}
+              <span aria-hidden="true" className="shrink-0 text-muted-foreground">{cuisineOpen ? "▴" : "▾"}</span>
+            </span>
+          </button>
+          {cuisineOpen && (
+            <>
+              <div className="flex flex-wrap gap-1.5">
+                {catalog.cuisines.map((c) => {
+                  const on = cuisineFilter.includes(c.id);
+                  return (
+                    <button
+                      key={c.id}
+                      onClick={() => toggleCuisine(c.id)}
+                      aria-pressed={on}
+                      className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${
+                        on ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
+                      }`}
+                    >
+                      {c.name}
+                    </button>
+                  );
+                })}
+              </div>
+              {cuisineFilter.length > 0 && (
+                <p className="text-[11px] text-muted-foreground">{t("cuisine.hint")}</p>
+              )}
+            </>
           )}
         </div>
       )}
