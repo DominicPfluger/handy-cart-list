@@ -159,6 +159,7 @@ function MorePage() {
             </div>
           )}
         </div>
+        <CheckedDisplayRow />
       </section>
 
       <SectionHeader label={t("more.group.app")} />
@@ -254,7 +255,6 @@ function MorePage() {
         <IconSetRow />
         <PreloadImagesRow />
         <FontSizeRow />
-        <CheckedDisplayRow />
         <SpeakLocaleRow />
         <SpeakRateRow />
       </section>
