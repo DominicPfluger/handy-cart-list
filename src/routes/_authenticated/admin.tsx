@@ -693,15 +693,14 @@ function AdminPage() {
       const entityIds = [...deptIdList, ...prodIds];
       const backupId = (deptIdList.length || deptAliasIds.size) ? await createBackupFn({ data: {
         label: T("adm.bulkDeleteLabel"),
+        // Reihenfolge beachten: Rückgängig stellt in dieser Reihenfolge wieder her (Eltern vor Kindern)
         deletes: [
+          ...(deptIdList.length ? [{ table: "departments", filterColumn: "id", filterIds: deptIdList }] : []),
+          ...(prodIds.length ? [{ table: "products", filterColumn: "id", filterIds: prodIds }] : []),
+          ...(deptIdList.length ? [{ table: "product_headings", filterColumn: "department_id", filterIds: deptIdList }] : []),
+          ...(prodIds.length ? [{ table: "product_headings", filterColumn: "before_product_id", filterIds: prodIds }] : []),
           ...(deptAliasIds.size ? [{ table: "department_aliases", filterColumn: "id", filterIds: [...deptAliasIds] }] : []),
           ...(prodAliasIds.length ? [{ table: "product_aliases", filterColumn: "id", filterIds: prodAliasIds }] : []),
-          ...(prodIds.length ? [{ table: "products", filterColumn: "id", filterIds: prodIds }] : []),
-          ...(deptIdList.length ? [
-            { table: "departments", filterColumn: "id", filterIds: deptIdList },
-            { table: "product_headings", filterColumn: "department_id", filterIds: deptIdList },
-          ] : []),
-          ...(prodIds.length ? [{ table: "product_headings", filterColumn: "before_product_id", filterIds: prodIds }] : []),
           ...(entityIds.length ? [{ table: "catalog_translations", filterColumn: "entity_id", filterIds: entityIds }] : []),
         ],
       } }) : null;
