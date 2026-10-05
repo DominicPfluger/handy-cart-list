@@ -1287,6 +1287,7 @@
   "store.add": "Toevoegen",
   "store.orderTitle": "Volgorde afdelingen",
   "store.orderHint": "Stel per winkel de volgorde van de afdelingen in je lijst in.",
+  "store.dragHint": "Sleep om de volgorde van winkels te wijzigen",
   "store.addCustom": "+ Eigen winkel …",
   "store.newName": "Naam van de winkel",
   "store.remove": "Verwijderen",

@@ -1287,6 +1287,7 @@
   "store.add": "Add",
   "store.orderTitle": "Ordre des rayons",
   "store.orderHint": "Définissez l'ordre des rayons de votre liste pour chaque magasin.",
+  "store.dragHint": "Glissez pour changer l'ordre des magasins",
   "store.addCustom": "+ Magasin perso …",
   "store.newName": "Nom du magasin",
   "store.remove": "Supprimer",

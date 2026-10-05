@@ -5,6 +5,7 @@ const STORE_KEY = "shoppi:active-store";
 const CUSTOM_KEY = "shoppi:custom-stores";
 const HIDDEN_KEY = "shoppi:hidden-groups";
 const LIST_STORES_KEY = "shoppi:list-stores";
+const STORE_ORDER_KEY = "shoppi:store-order";
 const EVENT = "shoppi:list-group-order-changed";
 
 export type CustomStore = { id: string; name: string; emoji?: string };
@@ -43,6 +44,14 @@ function readListStores(): Record<string, string> {
     return {};
   }
 }
+function readStoreOrder(): string[] {
+  try {
+    const v = JSON.parse(localStorage.getItem(STORE_ORDER_KEY) ?? "[]");
+    return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
+  } catch {
+    return [];
+  }
+}
 function emit() { window.dispatchEvent(new Event(EVENT)); }
 
 /** Persönliche (geräte-lokale) Reihenfolge der Abteilungen, pro Laden. */
@@ -52,9 +61,10 @@ export function useGroupOrder() {
   const [customStores, setCustom] = useState<CustomStore[]>([]);
   const [hiddenAll, setHiddenAll] = useState<Record<string, string[]>>({});
   const [listStores, setListStores] = useState<Record<string, string>>({});
+  const [storeOrder, setStoreOrder] = useState<string[]>([]);
 
   useEffect(() => {
-    const sync = () => { setAll(readAll()); setStoreState(readStore()); setCustom(readCustom()); setHiddenAll(readHidden()); setListStores(readListStores()); };
+    const sync = () => { setAll(readAll()); setStoreState(readStore()); setCustom(readCustom()); setHiddenAll(readHidden()); setListStores(readListStores()); setStoreOrder(readStoreOrder()); };
     sync();
     window.addEventListener(EVENT, sync);
     window.addEventListener("storage", sync);
@@ -131,9 +141,15 @@ export function useGroupOrder() {
     emit();
   }, []);
 
+  /** Speichert die geräte-lokale Reihenfolge der Läden (ohne „default"). */
+  const saveStoreOrder = useCallback((ids: string[]) => {
+    try { localStorage.setItem(STORE_ORDER_KEY, JSON.stringify(ids.filter((id) => id !== "default"))); } catch { /* ignore */ }
+    emit();
+  }, []);
+
   const order = all[store] ?? all["default"] ?? [];
   const hidden = hiddenAll[store] ?? [];
-  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, updateCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor, listStores, setListStore };
+  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, updateCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor, listStores, setListStore, storeOrder, saveStoreOrder };
 }
 
 /** Überträgt die Laden-Zuordnung, wenn eine Liste ihre endgültige Kennung erhält. */

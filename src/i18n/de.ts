@@ -158,6 +158,7 @@ export const de = {
   "store.add": "Hinzufügen",
   "store.orderTitle": "Abteilungs-Reihenfolge",
   "store.orderHint": "Pro Laden festlegen, in welcher Reihenfolge die Abteilungen in der Liste erscheinen.",
+  "store.dragHint": "Ziehen, um die Reihenfolge der Läden zu ändern",
   "store.addCustom": "+ Eigener Laden …",
   "store.newName": "Name des Ladens",
   "store.remove": "Entfernen",

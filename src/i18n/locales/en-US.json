@@ -1287,6 +1287,7 @@
   "store.add": "Add",
   "store.orderTitle": "Department order",
   "store.orderHint": "Set the order of departments in your list for each store.",
+  "store.dragHint": "Drag to change the order of stores",
   "store.addCustom": "+ Own store …",
   "store.newName": "Store name",
   "store.remove": "Remove",
