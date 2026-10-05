@@ -123,6 +123,8 @@ export function CategoryOrderSettings() {
   }, []);
 
   const selected = stores.find((s) => s.id === store) ?? stores[0]!;
+  const defaultStore = stores.find((s) => s.id === "default");
+  const sortableStores = stores.filter((s) => s.id !== "default");
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 8 } }),
@@ -219,17 +221,34 @@ export function CategoryOrderSettings() {
       </button>
       {open && (
         <div className="space-y-3 border-t border-border px-4 py-3.5">
-          <div className="flex gap-2">
-            <select value={creating ? "__new" : selected.id} onChange={(e) => choose(e.target.value)} aria-label={t("store.orderTitle")} className="min-w-0 flex-1 rounded-lg border border-input bg-background px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary">
-              {stores.map((s) => <option key={s.id} value={s.id}>{storeLabel(s)}</option>)}
-              <option value="__new">{t("store.addCustom")}</option>
-            </select>
-            {selected.custom && (
-              <>
-                <button type="button" aria-label={t("store.edit")} title={t("store.edit")} onClick={() => { setEditStore(true); setEditName(selected.name); setEditEmoji(selected.emoji ?? ""); setCreating(false); }} className="rounded-lg border border-border px-2 text-xs">✎</button>
-                <button type="button" onClick={() => { removeCustomStore(selected.id); setEditStore(false); setStore("default"); }} className="rounded-lg border border-border px-2 text-xs text-destructive">{t("store.remove")}</button>
-              </>
-            )}
+          <div>
+            <p className="mb-1 text-xs text-muted-foreground">{t("store.orderHint")}</p>
+            <div className="divide-y divide-border rounded-xl border border-border">
+              {defaultStore && (
+                <StoreRow id="default" label={storeLabel(defaultStore)} selected={selected.id === "default" && !creating} sortable={false} onPick={() => choose("default")} />
+              )}
+              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={reorderStores}>
+                <SortableContext items={sortableStores.map((s) => s.id)} strategy={verticalListSortingStrategy}>
+                  {sortableStores.map((s) => (
+                    <StoreRow
+                      key={s.id}
+                      id={s.id}
+                      label={storeLabel(s)}
+                      selected={selected.id === s.id && !creating}
+                      sortable
+                      custom={s.custom}
+                      onPick={() => choose(s.id)}
+                      onEdit={s.custom ? () => { setEditStore(true); setEditName(s.name); setEditEmoji(s.emoji ?? ""); setCreating(false); setStore(s.id); } : undefined}
+                      onRemove={s.custom ? () => { removeCustomStore(s.id); setEditStore(false); setStore("default"); } : undefined}
+                    />
+                  ))}
+                </SortableContext>
+              </DndContext>
+              <button type="button" onClick={() => choose("__new")} className={`flex w-full items-center gap-2 bg-card px-2 py-2 text-left text-sm ${creating ? "font-semibold text-primary" : "text-muted-foreground"}`}>
+                <span className="w-5 shrink-0 text-center" aria-hidden="true">+</span>
+                {t("store.addCustom")}
+              </button>
+            </div>
           </div>
           {creating && (
             <div className="flex items-start gap-2">
