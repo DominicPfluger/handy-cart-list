@@ -337,6 +337,13 @@ function ListPage() {
           onReorderTemplates={reorderTemplates}
         />
         <h1 className="text-2xl font-bold tracking-tight text-foreground">{t("list.lists")}</h1>
+        {lists.length === 0 && (
+          <div className="rounded-2xl border border-border bg-card px-6 py-8 text-center">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft/40 text-3xl" aria-hidden="true">🧺</div>
+            <p className="mt-3 text-sm font-semibold text-foreground">{t("lm.emptyTitle")}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{t("lm.emptyHint")}</p>
+          </div>
+        )}
         <OverviewSortable
           rows={lists.map((l) => ({
             id: l.id,
@@ -373,7 +380,11 @@ function ListPage() {
         </button>
         <h2 className="pt-2 text-lg font-bold tracking-tight text-foreground">{t("lm.templates")}</h2>
         {templates.length === 0 ? (
-          <p className="text-xs text-muted-foreground">{t("lm.templatesHint")}</p>
+          <div className="rounded-2xl border border-border bg-card px-6 py-8 text-center">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft/40 text-3xl" aria-hidden="true">📋</div>
+            <p className="mt-3 text-sm font-semibold text-foreground">{t("lm.templatesEmpty")}</p>
+            <p className="mt-1 text-xs text-muted-foreground">{t("lm.templatesHint")}</p>
+          </div>
         ) : (
           <OverviewSortable
             rows={templates.map((tp) => ({ id: tp.id, name: tp.name, sub: String(tp.items.length), emoji: "📋" }))}
