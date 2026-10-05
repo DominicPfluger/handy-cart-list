@@ -141,9 +141,15 @@ export function useGroupOrder() {
     emit();
   }, []);
 
+  /** Speichert die geräte-lokale Reihenfolge der Läden (ohne „default"). */
+  const saveStoreOrder = useCallback((ids: string[]) => {
+    try { localStorage.setItem(STORE_ORDER_KEY, JSON.stringify(ids.filter((id) => id !== "default"))); } catch { /* ignore */ }
+    emit();
+  }, []);
+
   const order = all[store] ?? all["default"] ?? [];
   const hidden = hiddenAll[store] ?? [];
-  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, updateCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor, listStores, setListStore };
+  return { order, all, store, setStore, save, saveFor, resetFor, customStores, addCustomStore, updateCustomStore, removeCustomStore, hasCustomOrder: order.length > 0, hidden, hiddenAll, hideFor, unhideFor, listStores, setListStore, storeOrder, saveStoreOrder };
 }
 
 /** Überträgt die Laden-Zuordnung, wenn eine Liste ihre endgültige Kennung erhält. */
