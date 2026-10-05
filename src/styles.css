@@ -117,6 +117,82 @@
   --cat-party-strong: #EBD8EA;
 }
 
+/*
+ * Dark Mode — dunkle Variante aller semantischen Tokens.
+ * Umschaltbar unter Einstellungen → Darstellung (System/Hell/Dunkel),
+ * Kategoriefarben automatisch als dunkle Tönungen der hellen Werte.
+ */
+.dark {
+  --background: oklch(0.17 0.012 200);
+  --foreground: oklch(0.93 0.008 90);
+  --card: oklch(0.21 0.014 200);
+  --card-foreground: oklch(0.93 0.008 90);
+  --popover: oklch(0.23 0.014 200);
+  --popover-foreground: oklch(0.93 0.008 90);
+
+  --primary: oklch(0.64 0.14 144);
+  --primary-foreground: oklch(0.98 0.003 90);
+  --primary-soft: oklch(0.32 0.06 144);
+
+  --secondary: oklch(0.27 0.012 90);
+  --secondary-foreground: oklch(0.93 0.008 90);
+  --muted: oklch(0.27 0.012 90);
+  --muted-foreground: oklch(0.68 0.012 90);
+
+  --accent: oklch(0.30 0.05 144);
+  --accent-foreground: oklch(0.86 0.1 144);
+
+  --coral: oklch(0.72 0.15 47);
+  --coral-foreground: oklch(0.99 0.003 90);
+
+  --border: oklch(0.30 0.012 200);
+  --input: oklch(0.30 0.012 200);
+  --ring: oklch(0.64 0.14 144);
+
+  --cat-frischmarkt: hsl(131 30% 14%);
+  --cat-milch: hsl(40 30% 14%);
+  --cat-fleisch: hsl(8 30% 14%);
+  --cat-deli: hsl(30 30% 14%);
+  --cat-backwaren: hsl(45 30% 14%);
+  --cat-vorraete: hsl(41 30% 14%);
+  --cat-kochzutaten: hsl(21 30% 14%);
+  --cat-tiefkuehl: hsl(201 30% 14%);
+  --cat-getraenke: hsl(171 30% 14%);
+  --cat-snacks: hsl(30 30% 14%);
+  --cat-suess: hsl(334 30% 14%);
+  --cat-koerperpflege: hsl(260 30% 14%);
+  --cat-haushalt: hsl(191 30% 14%);
+  --cat-apotheke: hsl(137 30% 14%);
+  --cat-tierbedarf: hsl(34 30% 14%);
+  --cat-buero: hsl(214 30% 14%);
+  --cat-tabak: hsl(30 30% 14%);
+  --cat-kleidung: hsl(218 30% 14%);
+  --cat-kuechenutensilien: hsl(23 30% 14%);
+  --cat-auto: hsl(220 30% 14%);
+  --cat-party: hsl(300 30% 14%);
+  --cat-frischmarkt-strong: hsl(133 40% 22%);
+  --cat-milch-strong: hsl(42 40% 22%);
+  --cat-fleisch-strong: hsl(9 40% 22%);
+  --cat-deli-strong: hsl(29 40% 22%);
+  --cat-backwaren-strong: hsl(45 40% 22%);
+  --cat-vorraete-strong: hsl(41 40% 22%);
+  --cat-kochzutaten-strong: hsl(20 40% 22%);
+  --cat-tiefkuehl-strong: hsl(203 40% 22%);
+  --cat-getraenke-strong: hsl(170 40% 22%);
+  --cat-snacks-strong: hsl(30 40% 22%);
+  --cat-suess-strong: hsl(332 40% 22%);
+  --cat-koerperpflege-strong: hsl(259 40% 22%);
+  --cat-haushalt-strong: hsl(191 40% 22%);
+  --cat-apotheke-strong: hsl(139 40% 22%);
+  --cat-tierbedarf-strong: hsl(35 40% 22%);
+  --cat-buero-strong: hsl(215 40% 22%);
+  --cat-tabak-strong: hsl(32 40% 22%);
+  --cat-kleidung-strong: hsl(218 40% 22%);
+  --cat-kuechenutensilien-strong: hsl(23 40% 22%);
+  --cat-auto-strong: hsl(218 40% 22%);
+  --cat-party-strong: hsl(303 40% 22%);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);

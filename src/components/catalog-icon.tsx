@@ -32,7 +32,8 @@ export function DepartmentIcon({ emoji, imageUrl, imagePath, className = "max-h-
   emoji?: string | null | undefined; imageUrl?: string | null | undefined; imagePath?: string | null | undefined; className?: string; symbolClassName?: string;
 }) {
   const mode = useIconSet();
+  const symbol = <span aria-hidden="true" className={symbolClassName}>{emoji || "🧺"}</span>;
   return mode === "images" && imagePath
-    ? <CachedImage key={imagePath} path={imagePath} signedUrl={imageUrl} className={className} fallback={<span aria-hidden="true" className={symbolClassName}>{emoji ?? "🧺"}</span>} />
-    : <span aria-hidden="true" className={symbolClassName}>{emoji ?? "🧺"}</span>;
+    ? <CachedImage key={imagePath} path={imagePath} signedUrl={imageUrl} className={className} fallback={symbol} />
+    : symbol;
 }

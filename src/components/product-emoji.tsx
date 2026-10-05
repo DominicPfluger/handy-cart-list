@@ -26,7 +26,7 @@ export function ProductEmoji({
   }
   return (
     <span aria-hidden="true" className={className}>
-      <span className="leading-none text-[0.7em]">{emoji ?? fallback}</span>
+      <span className="leading-none text-[0.7em]">{emoji || fallback}</span>
     </span>
   );
 }

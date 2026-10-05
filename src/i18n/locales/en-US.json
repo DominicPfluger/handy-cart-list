@@ -1377,5 +1377,12 @@
   "catOrder.reset": "Reset order",
   "more.appUpdate": "Update app",
   "more.appUpdateSub": "Load the latest version from the server",
-  "more.appUpdating": "Updating …"
+  "more.appUpdating": "Updating …",
+  "lm.templatesEmpty": "No templates yet",
+  "lm.emptyTitle": "No lists yet",
+  "lm.emptyHint": "Tap “Create” to start your first shopping list.",
+  "theme.label": "Appearance",
+  "theme.system": "System",
+  "theme.light": "Light",
+  "theme.dark": "Dark"
 }

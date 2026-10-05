@@ -801,5 +801,12 @@
   "dept.tip": "Tipp: Abteilungen ordnest, benennst und entfernst du unter Mehr › Abteilungen ordnen & umbenennen.",
   "more.appUpdate": "App aktualisieren",
   "more.appUpdateSub": "Neueste Version vom Server laden",
-  "more.appUpdating": "Aktualisiere …"
+  "more.appUpdating": "Aktualisiere …",
+  "lm.templatesEmpty": "Noch keine Vorlagen",
+  "lm.emptyTitle": "Noch keine Listen",
+  "lm.emptyHint": "Tippe auf «Erstellen», um deine erste Einkaufsliste anzulegen.",
+  "theme.label": "Darstellung",
+  "theme.system": "System",
+  "theme.light": "Hell",
+  "theme.dark": "Dunkel"
 }

@@ -12,6 +12,7 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { initLocale, useT } from "../i18n";
 import { initFontSize } from "../hooks/use-font-size";
+import { initTheme } from "../hooks/use-theme";
 import { loadUnits, useUnitsVersion } from "../lib/units";
 import type { MessageKey } from "../i18n/de";
 
@@ -167,7 +168,7 @@ function BottomNav() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  useEffect(() => { initLocale(); initFontSize(); void loadUnits(); }, []);
+  useEffect(() => { initLocale(); initFontSize(); initTheme(); void loadUnits(); }, []);
   useUnitsVersion();
   // Offline-Fähigkeit: Service Worker im Browser registrieren
   useEffect(() => {
