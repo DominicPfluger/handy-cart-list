@@ -1145,6 +1145,7 @@
   "adm.clearSelection": "Clear selection",
   "adm.deleteSelected": "Delete selection",
   "adm.deleteSelectedConfirm": "Really delete {n} entries?",
+  "adm.deleteSelectedDeptsConfirm": "Really delete {n} categories including all contained products and subcategories?",
   "adm.deleteSkippedNotEmpty": "{n} categories not deleted because not empty: {names}",
   "rk.progress": "{done} of {total} categories",
   "rk.toRecipe": "To recipe ({n} ingredients)",
