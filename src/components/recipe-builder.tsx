@@ -20,6 +20,7 @@ import { SavedRecipesBoard } from "./saved-recipes-board";
 import { RECIPE_TRAITS, TRAIT_GROUPS, TASTE_MAX, splitTaste, toggleTaste, type RecipeTraits } from "../lib/recipe-traits";
 import { SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
 import { QuantityInput, isValidQty, type QtyValue } from "./quantity-input";
+import { useCuisineFilter, toggleCuisine } from "../hooks/use-cuisine-filter";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -69,6 +70,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [onlyFav, setOnlyFav] = useState(false);
   const [showAllRecent, setShowAllRecent] = useState(false);
   const [showAllPopular, setShowAllPopular] = useState(false);
+  const cuisineFilter = useCuisineFilter();
 
   const favIds = useMemo(() => new Set(favorites.map((f) => f.productId)), [favorites]);
 
@@ -142,6 +144,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       const visible = base.filter((p) => {
         if (picked.includes(p.id)) return true;
         if (onlyFav && !favIds.has(p.id)) return false;
+        if (cuisineFilter.length > 0 && !p.cuisineIds.some((c) => cuisineFilter.includes(c))) return false;
         return true;
       });
       const groupByProduct = new Map(catalog.recipeIngredients
@@ -157,7 +160,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         groupByProduct,
       };
     }),
-    [tpl, byBase, onlyFav, favIds, picks, catalog.recipeIngredients, catalog.products, catalog.recipeGroups],
+    [tpl, byBase, onlyFav, favIds, picks, cuisineFilter, catalog.recipeIngredients, catalog.products, catalog.recipeGroups],
   );
 
   // Akkordeon: Pflicht-Schritte steuern Fortschritt und automatisches Weiterschalten.
@@ -542,6 +545,34 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             {t("rk.reset")}
           </button>
       </div>
+
+      {catalog.cuisines.length > 0 && (
+        <div role="group" aria-label={t("cuisine.title")} className="space-y-1.5">
+          <p className="text-xs font-bold text-foreground">🌍 {t("cuisine.filter")}</p>
+          <div className="flex flex-wrap gap-1.5">
+            {catalog.cuisines.map((c) => {
+              const on = cuisineFilter.includes(c.id);
+              return (
+                <button
+                  key={c.id}
+                  onClick={() => toggleCuisine(c.id)}
+                  aria-pressed={on}
+                  className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-tight transition ${
+                    on ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
+                  }`}
+                >
+                  {c.name}
+                </button>
+              );
+            })}
+          </div>
+          {cuisineFilter.length > 0 && (
+            <p className="text-[11px] text-muted-foreground">{t("cuisine.hint")}</p>
+          )}
+        </div>
+      )}
+
+
 
 
 
