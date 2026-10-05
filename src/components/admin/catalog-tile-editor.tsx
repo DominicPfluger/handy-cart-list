@@ -144,6 +144,7 @@ export function CatalogTileEditor(p: {
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
   const [genAllDlg, setGenAllDlg] = useState<{ all: boolean; hint: string; opts: AiImageOpts } | null>(null);
+  const [headingAi, setHeadingAi] = useState(false);
   const generateAllImages = () => {
     const missing = p.products.filter((x) => !x.image_path);
     setGenAllDlg({ all: missing.length === 0, hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS } });
