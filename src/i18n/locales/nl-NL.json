@@ -895,6 +895,7 @@
   "tile.preview": "Voorbeeld",
   "tile.hint": "Sleep een afbeelding om te sorteren of te verplaatsen (naar een categorie of het pad). Tik om te bewerken.",
   "tile.editItem": "Bewerken",
+  "tile.editCat": "Categorie bewerken",
   "tile.newCat": "Nieuwe categorie",
   "tile.newProd": "Nieuw product",
   "tile.name": "Naam",

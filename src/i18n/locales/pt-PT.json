@@ -895,6 +895,7 @@
   "tile.preview": "Pré-visualização",
   "tile.hint": "Arraste uma imagem para ordenar ou mover (para uma categoria ou o caminho). Toque para editar.",
   "tile.editItem": "Editar",
+  "tile.editCat": "Editar categoria",
   "tile.newCat": "Nova categoria",
   "tile.newProd": "Novo produto",
   "tile.name": "Nome",
