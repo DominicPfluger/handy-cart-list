@@ -7,6 +7,8 @@ import { useCustomCatalog } from "../hooks/use-custom-catalog";
 import { usePersonalVariants } from "../hooks/use-personal-variants";
 import { useAllMarkets } from "../hooks/use-all-markets";
 import { useMarket } from "../hooks/use-market";
+import { catalogCacheReady, idbGet, idbKeys, idbSet } from "./catalog-idb";
+import type { QueryClient } from "@tanstack/react-query";
 
 
 export function flagOf(market: string): string {
@@ -24,28 +26,23 @@ export function inMarket(p: Pick<CatalogProduct, "markets" | "excludedMarkets">,
 const coreCacheKey = (locale: string) => `shoppi:catalog-core-${locale}`;
 
 function readCoreCache(locale: string): { t: number; data: CatalogCore } | null {
-  try {
-    const raw = localStorage.getItem(coreCacheKey(locale));
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as { t: number; data: CatalogCore };
-    if (!parsed?.data?.products?.length) return null;
-    return parsed;
-  } catch {
-    return null;
-  }
+  const parsed = idbGet<{ t: number; data: CatalogCore }>(coreCacheKey(locale));
+  return parsed?.data?.products?.length ? parsed : null;
 }
 
 function writeCoreCache(locale: string, data: CatalogCore) {
-  try {
-    localStorage.setItem(coreCacheKey(locale), JSON.stringify({ t: Date.now(), data }));
-  } catch {
-    /* Speicher voll: Cache einfach weglassen */
-  }
+  idbSet(coreCacheKey(locale), { t: Date.now(), data });
+}
+
+/** Loader-Helfer: wartet auf den Offline-Katalog aus IndexedDB, damit er sofort erscheint. */
+export async function ensureCatalog(queryClient: QueryClient, locale: string) {
+  await catalogCacheReady;
+  return queryClient.ensureQueryData(catalogQueryOptions(locale));
 }
 
 /** Basis-Katalog für eine Sprachvariante; mit Geräte-Cache als sofortiger Startwert. */
 export const catalogQueryOptions = (locale: string) => {
-  const cached = typeof localStorage !== "undefined" ? readCoreCache(locale) : null;
+  const cached = typeof window !== "undefined" ? readCoreCache(locale) : null;
   return queryOptions({
     queryKey: ["catalog", "core", locale],
     queryFn: async () => {
@@ -59,9 +56,8 @@ export const catalogQueryOptions = (locale: string) => {
         if (cached) return cached.data;
         // Notfalls Katalog einer anderen Sprache — Namen enthalten alle Übersetzungen
         try {
-          for (let i = 0; i < localStorage.length; i++) {
-            const k = localStorage.key(i);
-            if (k?.startsWith("shoppi:catalog-core-")) {
+          for (const k of idbKeys()) {
+            if (k.startsWith("shoppi:catalog-core-")) {
               const other = readCoreCache(k.slice("shoppi:catalog-core-".length));
               if (other) return other.data;
             }
@@ -87,23 +83,18 @@ export const catalogQueryOptions = (locale: string) => {
 
 const detailsCacheKey = (locale: string) => `shoppi:catalog-details-${locale}`;
 function readDetailsCache(locale: string): { t: number; data: CatalogDetails } | null {
-  try {
-    const raw = localStorage.getItem(detailsCacheKey(locale));
-    return raw ? (JSON.parse(raw) as { t: number; data: CatalogDetails }) : null;
-  } catch {
-    return null;
-  }
+  return idbGet<{ t: number; data: CatalogDetails }>(detailsCacheKey(locale)) ?? null;
 }
 
 /** Details (Länderküchen, Marken, Synonyme, Varianten, Rezepte) – im Hintergrund nachgeladen, offline aus dem Geräte-Cache. */
 export const catalogDetailsQueryOptions = (locale: string) => {
-  const cached = typeof localStorage !== "undefined" ? readDetailsCache(locale) : null;
+  const cached = typeof window !== "undefined" ? readDetailsCache(locale) : null;
   return queryOptions({
     queryKey: ["catalog", "details", locale],
     queryFn: async () => {
       try {
         const fresh = await getCatalogDetails({ data: { locale } });
-        try { localStorage.setItem(detailsCacheKey(locale), JSON.stringify({ t: Date.now(), data: fresh })); } catch { /* Speicher voll */ }
+        idbSet(detailsCacheKey(locale), { t: Date.now(), data: fresh });
         return fresh;
       } catch (e) {
         const c = readDetailsCache(locale);

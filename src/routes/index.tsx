@@ -13,7 +13,7 @@ import {
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
 import {
-  catalogQueryOptions,
+  ensureCatalog, catalogQueryOptions,
   useCatalog,
   headingByProduct,
   departmentIdsOf,
@@ -51,7 +51,7 @@ const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR
 
 export const Route = createFileRoute("/")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
+  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
   head: () => ({
     meta: [
       { title: "Shoppi — Unsere Einkaufsliste" },

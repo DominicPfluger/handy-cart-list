@@ -17,7 +17,7 @@ import { AddEntryDialog, type AddEntryTarget } from "../components/add-entry-dia
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { useDietFilter } from "../hooks/use-diet-filter";
 import {
-  catalogQueryOptions,
+  ensureCatalog, catalogQueryOptions,
   useCatalog,
   childrenOf,
   compareByName,
@@ -49,7 +49,7 @@ import { removePersonalVariant, usePersonalVariants } from "../hooks/use-persona
 
 export const Route = createFileRoute("/abteilungen")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
+  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
   head: () => ({
     meta: [
       { title: "Shoppi — Abteilungen" },

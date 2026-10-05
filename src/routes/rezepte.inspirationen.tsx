@@ -5,7 +5,7 @@ import { getLocale, useT } from "../i18n";
 import { RecipeBuilder } from "../components/recipe-builder";
 import { RecipeFeed, FavoritesRow, MostSavedRow } from "../components/recipe-feed";
 import { CommunitySection } from "../components/community-section";
-import { catalogQueryOptions } from "../lib/catalog-query";
+import { ensureCatalog, catalogQueryOptions } from "../lib/catalog-query";
 
 const searchSchema = z.object({
   tab: fallback(z.string(), "all").default("all"),
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/rezepte/inspirationen")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
+  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
   component: Page,
 });
 

@@ -9,7 +9,7 @@ import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { ProductEmoji } from "../components/product-emoji";
 import { HeartIcon, PlusIcon } from "../components/icons";
 import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
-import { catalogQueryOptions, brandsFor, originalName, useCatalog } from "../lib/catalog-query";
+import { ensureCatalog, catalogQueryOptions, brandsFor, originalName, useCatalog } from "../lib/catalog-query";
 import { CachedImage } from "../components/catalog-icon";
 import { useCustomNames } from "../hooks/use-custom-names";
 import { formatQuantity, getUnits } from "../lib/units";
@@ -22,7 +22,7 @@ import { addPersonalVariant, removePersonalVariant, usePersonalVariants } from "
 
 export const Route = createFileRoute("/produkt/$id")({
   ssr: false,
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQueryOptions(getLocale())),
+  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
   head: () => ({
     meta: [
       { title: "Shoppi — Produkt" },
