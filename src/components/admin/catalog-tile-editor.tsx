@@ -408,8 +408,8 @@ export function CatalogTileEditor(p: {
               🖼️ {imgProg ? T("tile.genAllBusy", { done: imgProg.done, total: imgProg.total }) : T("tile.genAll")}
             </Button>
           )}
-          {p.cur && p.products.length > 0 && (
-            <Button size="sm" variant="outline" onClick={() => setCopyOpen(true)}>{T("adm.copyList")}</Button>
+          {p.cur && (
+            <Button size="sm" variant="outline" onClick={() => void collectListText().then((text) => { if (text) { setCopyText(text); setCopyOpen(true); } })}>{T("adm.copyList")}</Button>
           )}
           {p.onTranslateMissing && <Button size="sm" variant="outline" disabled={p.busy} onClick={p.onTranslateMissing}>🌐 {p.busy ? T("adm.working") : T("adm.trMissing")}</Button>}
         </div>
