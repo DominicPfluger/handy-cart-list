@@ -1289,6 +1289,7 @@
   "store.orderTitle": "Ordem das secções",
   "store.orderHint": "Defina a ordem das secções na lista para cada loja.",
   "store.dragHint": "Arraste para alterar a ordem das lojas",
+  "store.sectionTitle": "Lojas",
   "store.addCustom": "+ Loja própria …",
   "store.newName": "Nome da loja",
   "store.remove": "Remover",
