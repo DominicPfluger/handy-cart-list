@@ -5,6 +5,7 @@ const STORE_KEY = "shoppi:active-store";
 const CUSTOM_KEY = "shoppi:custom-stores";
 const HIDDEN_KEY = "shoppi:hidden-groups";
 const LIST_STORES_KEY = "shoppi:list-stores";
+const STORE_ORDER_KEY = "shoppi:store-order";
 const EVENT = "shoppi:list-group-order-changed";
 
 export type CustomStore = { id: string; name: string; emoji?: string };
@@ -41,6 +42,14 @@ function readListStores(): Record<string, string> {
     return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, string>) : {};
   } catch {
     return {};
+  }
+}
+function readStoreOrder(): string[] {
+  try {
+    const v = JSON.parse(localStorage.getItem(STORE_ORDER_KEY) ?? "[]");
+    return Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
+  } catch {
+    return [];
   }
 }
 function emit() { window.dispatchEvent(new Event(EVENT)); }
