@@ -13,6 +13,8 @@ type Actions = {
   onSaveTemplate?: ((id: string) => void) | undefined;
   onDelete: (id: string) => void;
   onRename?: ((id: string, name: string) => void) | undefined;
+  /** Wenn gesetzt, öffnet der Stift den Bearbeitungsdialog statt Inline-Umbenennen. */
+  onEdit?: ((id: string) => void) | undefined;
   t: (k: "lm.move" | "lm.rename" | "lm.saveAsTemplate" | "lm.delete") => string;
 };
 
@@ -37,7 +39,7 @@ export function OverviewSortable({ rows, onReorder, ...a }: Actions & { rows: Ov
   );
 }
 
-function OverviewRow({ row, onOpen, onSaveTemplate, onDelete, onRename, t }: Actions & { row: OverviewRowData }) {
+function OverviewRow({ row, onOpen, onSaveTemplate, onDelete, onRename, onEdit, t }: Actions & { row: OverviewRowData }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: row.id });
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(row.name);
@@ -60,7 +62,7 @@ function OverviewRow({ row, onOpen, onSaveTemplate, onDelete, onRename, t }: Act
           <circle cx="15" cy="12" r="1.5" /><circle cx="9" cy="18" r="1.5" /><circle cx="15" cy="18" r="1.5" />
         </svg>
       </button>
-      {editing ? (
+      {editing && !onEdit ? (
         <input autoFocus value={name} onChange={(e) => setName(e.target.value)} onBlur={save}
           onKeyDown={(e) => { if (e.key === "Enter") save(); if (e.key === "Escape") { setName(row.name); setEditing(false); } }}
           aria-label={t("lm.rename")}
@@ -75,7 +77,7 @@ function OverviewRow({ row, onOpen, onSaveTemplate, onDelete, onRename, t }: Act
       </button>
       )}
       {onRename && !editing && (
-        <button onClick={() => { setName(row.name); setEditing(true); }} aria-label={t("lm.rename")} title={t("lm.rename")} className={iconBtn}>
+        <button onClick={() => { if (onEdit) { onEdit(row.id); return; } setName(row.name); setEditing(true); }} aria-label={t("lm.rename")} title={t("lm.rename")} className={iconBtn}>
           <PencilIcon className="h-4 w-4" />
         </button>
       )}
