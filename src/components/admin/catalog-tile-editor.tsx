@@ -757,6 +757,18 @@ export function CatalogTileEditor(p: {
                     className="rounded-full px-2 text-xs text-destructive">✕</button>
                 )}
               </div>
+              {!x.alias_id && (x.variants ?? []).length > 0 && (
+                <div className="flex flex-wrap items-center gap-1 bg-muted/30 py-1.5 pl-14 pr-3">
+                  <Tags className="h-3 w-3 shrink-0 text-muted-foreground" aria-hidden />
+                  {(x.variants ?? []).map((v) => (
+                    <button key={v} type="button" disabled={!editMode}
+                      onClick={() => setTarget({ kind: "product", id: x.id })}
+                      className="rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
+                      {v}
+                    </button>
+                  ))}
+                </div>
+              )}
               </Fragment>
             );
           })}
