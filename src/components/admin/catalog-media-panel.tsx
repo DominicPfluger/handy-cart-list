@@ -14,6 +14,7 @@ import { saveProductIconFromPath } from "@/lib/product-icon";
 import { ChevronDown, ChevronRight, Pencil, Sparkles } from "lucide-react";
 import { MissingImagesPanel } from "./missing-images-panel";
 import { CategoryImageGallery } from "./category-image-gallery";
+import { ImageOptimizer } from "./image-optimizer";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -216,6 +217,8 @@ export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: {
     });
   return (
     <>
+      {section === "images" && <div className="mb-6"><ImageOptimizer /></div>}
+
       {section === "images" && onEdit && (
         <MissingImagesPanel depts={depts} prods={prods} onEdit={onEdit}>
           <CategoryImageGallery depts={depts} prods={prods} onEdit={onEdit} />

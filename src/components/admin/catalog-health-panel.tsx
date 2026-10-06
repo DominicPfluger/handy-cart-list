@@ -9,6 +9,7 @@ import { mergeProducts } from "@/lib/admin.functions";
 import { useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ImageOptimizer } from "./image-optimizer";
 
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; image_path: string | null };
 type Prod = { id: string; name: string; emoji: string | null; department_id: string; image_path: string | null; icon_path?: string | null };
@@ -234,6 +235,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
 
   return (
     <div className="space-y-6 pt-2">
+      <ImageOptimizer />
       <section className="space-y-2">
         <h2 className="text-sm font-semibold text-foreground">{T("adm.health.gaps")}</h2>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
