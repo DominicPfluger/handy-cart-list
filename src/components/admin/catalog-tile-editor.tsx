@@ -1432,11 +1432,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             <VariantAiSuggest name={prod?.name ?? ""} variants={variants} onAdd={(vs) => setVariants((x) => [...x, ...vs.filter((v) => !x.some((y) => y.toLowerCase() === v.toLowerCase()))])} />
             <div className="flex flex-wrap gap-1.5">
               {commonVariants.map((cv) => {
-                const on = variants.some((x) => x.toLowerCase() === cv.toLowerCase());
+                const on = variants.some((x) => x.toLowerCase() === cv.value.toLowerCase());
                 return (
-                  <button key={cv} type="button" disabled={on} onClick={() => addVariant(cv)}
+                  <button key={cv.value} type="button" disabled={on} onClick={() => addVariant(cv.value)}
                     className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-muted-foreground line-through" : "border-border bg-background text-muted-foreground"}`}>
-                    {on ? "✓ " : "+ "}{cv}
+                    {on ? "✓ " : "+ "}{cv.label}
                   </button>
                 );
               })}

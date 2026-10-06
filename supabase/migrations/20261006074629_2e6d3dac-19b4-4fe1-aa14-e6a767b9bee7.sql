@@ -1,0 +1,1 @@
+ALTER TABLE public.standard_variants ADD COLUMN IF NOT EXISTS labels jsonb NOT NULL DEFAULT '{}'::jsonb;
