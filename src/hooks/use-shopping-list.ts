@@ -180,7 +180,11 @@ const DRIED_HERBS_DEPARTMENT_ID = "089a5c11-ff00-4716-b0f0-3d1421c2969f";
 /** Katalogname für die Einkaufsliste ergänzen, ohne den Namen im Katalog selbst zu verändern. */
 export function catalogListName(name: string, departmentId?: string): string {
   if (departmentId !== DRIED_HERBS_DEPARTMENT_ID) return name;
-  return translate(getLocale(), "list.driedProduct", { name });
+  const marker = "__SHOPPI_PRODUCT__";
+  const pattern = translate(getLocale(), "list.driedProduct", { name: marker });
+  const qualifier = pattern.replace(marker, "").trim().toLocaleLowerCase();
+  if (qualifier && name.toLocaleLowerCase().includes(qualifier)) return name;
+  return pattern.replace(marker, name);
 }
 
 function prepareCatalogInput(input: AddCatalogItemInput): AddCatalogItemInput {
