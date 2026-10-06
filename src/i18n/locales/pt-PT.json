@@ -15,6 +15,7 @@
   "common.tryOther": "Tente outro termo de pesquisa.",
   "common.searchResults": "Resultados da pesquisa",
   "common.addedToList": "{name} adicionado à lista",
+  "list.driedProduct": "{name} · seco",
   "common.removeFavorite": "Remover {name} dos favoritos",
   "common.addFavorite": "Adicionar {name} aos favoritos",
   "common.quickAdd": "Adição rápida de {name} (quantidade padrão)",

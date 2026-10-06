@@ -287,6 +287,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
       const q = qtyOf(p);
       addCatalogItem({
         productId: p.id,
+        departmentId: p.departmentId,
         name: p.name,
         quantity: isValidQty(q) ? formatQuantity(q.qty, q.unit) : formatQuantity(p.defaultQuantity, p.defaultUnit),
         unit: isValidQty(q) ? q.unit : p.defaultUnit,

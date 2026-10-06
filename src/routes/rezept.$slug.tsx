@@ -77,7 +77,7 @@ function RecipePage() {
     queryKey: ["recipe-names", r.id],
     enabled: r.items.some((i) => !i.name),
     queryFn: async () => {
-      const { data } = await supabase.from("products").select("id, name, emoji").in("id", r.items.map((i) => i.productId).filter((id) => !id.startsWith("any:")));
+      const { data } = await supabase.from("products").select("id, name, emoji, department_id").in("id", r.items.map((i) => i.productId).filter((id) => !id.startsWith("any:")));
       return new Map((data ?? []).map((p) => [p.id, p]));
     },
   });
@@ -143,7 +143,7 @@ function RecipePage() {
   const addAll = () => {
     for (const i of scaled) {
       if (i.productId.startsWith("any:")) { addItem(i.name, i.quantity || "1", "sonstiges"); continue; }
-      addCatalogItem({ productId: i.productId, name: i.name, quantity: i.quantity || "1", unit: i.unit ?? "stueck", organic: false, emoji: i.emoji ?? undefined });
+      addCatalogItem({ productId: i.productId, departmentId: names?.get(i.productId)?.department_id, name: i.name, quantity: i.quantity || "1", unit: i.unit ?? "stueck", organic: false, emoji: i.emoji ?? undefined });
     }
     setAdded(true);
   };

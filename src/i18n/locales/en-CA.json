@@ -15,6 +15,7 @@
   "common.tryOther": "Try a different search term.",
   "common.searchResults": "Search Results",
   "common.addedToList": "{name} added to list",
+  "list.driedProduct": "{name} · dried",
   "common.removeFavorite": "Remove {name} from favourites",
   "common.addFavorite": "Add {name} to favourites",
   "common.quickAdd": "Quick add {name} (default qty)",

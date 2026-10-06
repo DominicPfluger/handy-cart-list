@@ -196,6 +196,7 @@ function ScannerView() {
     const group = product.departmentId ? deptById.get(product.departmentId) : null;
     addCatalogItem({
       productId: product.id,
+      departmentId: product.departmentId,
       name: product.name,
       quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
       unit: product.defaultUnit,

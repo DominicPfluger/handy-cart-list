@@ -158,6 +158,7 @@ const DEFAULT_LISTS: ShoppingList[] = [
 
 export interface AddCatalogItemInput {
   productId: string;
+  departmentId?: string | undefined;
   name: string;
   quantity: string;
   unit: string;
@@ -173,6 +174,18 @@ export interface AddCatalogItemInput {
 
 const t = (key: MessageKey, vars?: Record<string, string | number>) =>
   translate(getLocale(), key, vars);
+
+const DRIED_HERBS_DEPARTMENT_ID = "089a5c11-ff00-4716-b0f0-3d1421c2969f";
+
+/** Katalogname für die Einkaufsliste ergänzen, ohne den Namen im Katalog selbst zu verändern. */
+export function catalogListName(name: string, departmentId?: string): string {
+  if (departmentId !== DRIED_HERBS_DEPARTMENT_ID) return name;
+  return translate(getLocale(), "list.driedProduct", { name });
+}
+
+function prepareCatalogInput(input: AddCatalogItemInput): AddCatalogItemInput {
+  return { ...input, name: catalogListName(input.name, input.departmentId) };
+}
 
 // ============================================================
 // Lokaler Modus (ohne Anmeldung): unverändert wie bisher
@@ -1069,7 +1082,8 @@ function useCloudLists(
 
   const addCatalogItem = useCallback(
     (input: AddCatalogItemInput, _user = "Du") => {
-      const merge = findMergeTarget(activeList.items, input);
+      const prepared = prepareCatalogInput(input);
+      const merge = findMergeTarget(activeList.items, prepared);
       if (merge) {
         const { item: hit, quantity } = merge;
         setItems((prev) => prev.map((it) => (it.id === hit.id ? { ...it, quantity } : it)));
@@ -1081,10 +1095,10 @@ function useCloudLists(
         }
         return;
       }
-      const item = buildCatalogItem(`tmp-${Date.now()}${Math.round(Math.random() * 1000)}`, input, selfName);
-      const photoSaved = input.photo ? putItemPhoto(item.id, input.photo).catch(() => {}) : Promise.resolve();
+      const item = buildCatalogItem(`tmp-${Date.now()}${Math.round(Math.random() * 1000)}`, prepared, selfName);
+      const photoSaved = prepared.photo ? putItemPhoto(item.id, prepared.photo).catch(() => {}) : Promise.resolve();
       setItems((prev) => [...prev, item]);
-      logActivity(selfName, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
+      logActivity(selfName, "hat hinzugefügt", prepared.organic ? `${prepared.name} (Bio)` : prepared.name);
       if (isLocalList(activeListId)) return markDirty(activeListId);
       const payload = { listId: activeListId, items: [itemToCloudInput(item, selfName)] };
       runCloud(
@@ -1093,7 +1107,7 @@ function useCloudLists(
           const row = (res.items as CloudRow[])[0];
           if (!row) return;
           const next = rowToItem(row);
-          if (!input.photo) return replaceItemLocally(item.id, next);
+          if (!prepared.photo) return replaceItemLocally(item.id, next);
           return photoSaved.then(() => moveItemPhoto(item.id, next.id)).then(() => replaceItemLocally(item.id, next));
         })
       );
@@ -1421,16 +1435,17 @@ export function useShoppingList() {
 
   const localAddCatalogItem = useCallback(
     (input: AddCatalogItemInput, user_ = "Du") => {
-      const m = findMergeTarget(local.activeList.items, input);
+      const prepared = prepareCatalogInput(input);
+      const m = findMergeTarget(local.activeList.items, prepared);
       if (m) {
         local.setItems((prev) => prev.map((it) => (it.id === m.item.id ? { ...it, quantity: m.quantity } : it)));
         toast.success(t("list.merged", { name: m.item.name, qty: `${m.quantity}${m.item.unit ? ` ${m.item.unit}` : ""}` }));
         return;
       }
-      const localItem = buildCatalogItem(`i${Date.now()}${Math.round(Math.random() * 1000)}`, input, user_);
-      if (input.photo) putItemPhoto(localItem.id, input.photo).catch(() => {});
+      const localItem = buildCatalogItem(`i${Date.now()}${Math.round(Math.random() * 1000)}`, prepared, user_);
+      if (prepared.photo) putItemPhoto(localItem.id, prepared.photo).catch(() => {});
       local.setItems((prev) => [...prev, localItem]);
-      logActivity(user_, "hat hinzugefügt", input.organic ? `${input.name} (Bio)` : input.name);
+      logActivity(user_, "hat hinzugefügt", prepared.organic ? `${prepared.name} (Bio)` : prepared.name);
     },
     [local, logActivity]
   );
