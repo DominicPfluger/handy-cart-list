@@ -1077,11 +1077,48 @@ function useCloudLists(
     }
   }, [fetchCloud]);
 
+  // Aktuelle Einträge inkl. noch nicht gerenderter Hinzufügungen (Mehrfach-Hinzufügen im selben Takt).
+  const liveItemsRef = useRef<{ listId: string; items: ListItem[] }>({ listId: activeListId, items: activeList.items });
+  liveItemsRef.current = { listId: activeListId, items: activeList.items };
+  const liveItems = () => liveItemsRef.current.items;
+  const pendingQtyRef = useRef(new Map<string, string>());
+
+  /** Gemeinsame Merge-Behandlung; true = zusammengeführt. */
+  const tryMerge = useCallback(
+    (input: MergeInput): boolean => {
+      const merge = findMergeTarget(liveItems(), input);
+      if (!merge) return false;
+      const { item: hit, quantity } = merge;
+      liveItemsRef.current.items = liveItems().map((it) => (it.id === hit.id ? { ...it, quantity } : it));
+      setItems((prev) => prev.map((it) => (it.id === hit.id ? { ...it, quantity } : it)));
+      toast.success(t("list.merged", { name: hit.name, qty: `${quantity}${hit.unit ? ` ${hit.unit}` : ""}` }));
+      if (isLocalList(activeListId)) { markDirty(activeListId); return true; }
+      if (hit.id.startsWith("tmp-")) pendingQtyRef.current.set(hit.id, quantity);
+      else {
+        const patch = { id: hit.id, quantity };
+        runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
+      }
+      return true;
+    },
+    [activeListId, setItems]
+  );
+
+  /** Nach dem Speichern eines tmp-Eintrags eine inzwischen zusammengeführte Menge nachsenden. */
+  const flushPendingQty = useCallback((tmpId: string, realId: string) => {
+    const q = pendingQtyRef.current.get(tmpId);
+    if (q == null) return;
+    pendingQtyRef.current.delete(tmpId);
+    setItems((prev) => prev.map((it) => (it.id === realId ? { ...it, quantity: q } : it)));
+    const patch = { id: realId, quantity: q };
+    runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
+  }, [setItems]);
+
   const addItem = useCallback(
     (name: string, quantity: string, category: CategoryId, _user = "Du") => {
       void category;
+      if (tryMerge({ name, quantity })) return;
       const item: ListItem = {
-        id: `tmp-${Date.now()}`,
+        id: `tmp-${Date.now()}${Math.round(Math.random() * 1000)}`,
         name: name.trim(),
         quantity: quantity.trim(),
         category: "sonstiges",
@@ -1089,6 +1126,7 @@ function useCloudLists(
         addedBy: selfName,
         addedAt: Date.now(),
       };
+      liveItemsRef.current.items = [...liveItems(), item];
       setItems((prev) => [...prev, item]);
       logActivity(selfName, "hat hinzugefügt", item.name);
       if (isLocalList(activeListId)) return markDirty(activeListId);
@@ -1097,30 +1135,23 @@ function useCloudLists(
         { fn: "addItems", data: payload },
         () => addCloudItems({ data: payload }).then((res) => {
           const row = (res.items as CloudRow[])[0];
-          if (row) replaceItemLocally(item.id, rowToItem(row));
+          if (!row) return;
+          const next = rowToItem(row);
+          replaceItemLocally(item.id, next);
+          flushPendingQty(item.id, next.id);
         })
       );
     },
-    [selfName, activeListId, setItems, replaceItemLocally, logActivity]
+    [selfName, activeListId, setItems, replaceItemLocally, logActivity, tryMerge, flushPendingQty]
   );
 
   const addCatalogItem = useCallback(
     (input: AddCatalogItemInput, _user = "Du") => {
       const prepared = prepareCatalogInput(input);
-      const merge = findMergeTarget(activeList.items, prepared);
-      if (merge) {
-        const { item: hit, quantity } = merge;
-        setItems((prev) => prev.map((it) => (it.id === hit.id ? { ...it, quantity } : it)));
-        toast.success(t("list.merged", { name: hit.name, qty: `${quantity}${hit.unit ? ` ${hit.unit}` : ""}` }));
-        if (isLocalList(activeListId)) return markDirty(activeListId);
-        if (!hit.id.startsWith("tmp-")) {
-          const patch = { id: hit.id, quantity };
-          runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
-        }
-        return;
-      }
+      if (tryMerge(prepared)) return;
       const item = buildCatalogItem(`tmp-${Date.now()}${Math.round(Math.random() * 1000)}`, prepared, selfName);
       const photoSaved = prepared.photo ? putItemPhoto(item.id, prepared.photo).catch(() => {}) : Promise.resolve();
+      liveItemsRef.current.items = [...liveItems(), item];
       setItems((prev) => [...prev, item]);
       logActivity(selfName, "hat hinzugefügt", prepared.organic ? `${prepared.name} (Bio)` : prepared.name);
       if (isLocalList(activeListId)) return markDirty(activeListId);
@@ -1131,12 +1162,13 @@ function useCloudLists(
           const row = (res.items as CloudRow[])[0];
           if (!row) return;
           const next = rowToItem(row);
-          if (!prepared.photo) return replaceItemLocally(item.id, next);
-          return photoSaved.then(() => moveItemPhoto(item.id, next.id)).then(() => replaceItemLocally(item.id, next));
+          const done = () => { replaceItemLocally(item.id, next); flushPendingQty(item.id, next.id); };
+          if (!prepared.photo) return done();
+          return photoSaved.then(() => moveItemPhoto(item.id, next.id)).then(done);
         })
       );
     },
-    [selfName, activeListId, activeList, setItems, replaceItemLocally, logActivity]
+    [selfName, activeListId, setItems, replaceItemLocally, logActivity, tryMerge, flushPendingQty]
   );
 
   const toggleItem = useCallback(
