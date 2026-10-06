@@ -1,3 +1,4 @@
+import { VariantAiSuggest } from "@/components/admin/variant-ai-suggest";
 import { VariantSynonyms } from "@/components/admin/variant-synonyms";
 import { useStandardVariants } from "@/hooks/use-standard-variants";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
@@ -1428,6 +1429,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               />
               <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
             </div>
+            <VariantAiSuggest name={prod?.name ?? ""} variants={variants} onAdd={(vs) => setVariants((x) => [...x, ...vs.filter((v) => !x.some((y) => y.toLowerCase() === v.toLowerCase()))])} />
             <div className="flex flex-wrap gap-1.5">
               {commonVariants.map((cv) => {
                 const on = variants.some((x) => x.toLowerCase() === cv.toLowerCase());
