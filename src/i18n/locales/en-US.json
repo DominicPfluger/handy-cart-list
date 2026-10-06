@@ -1415,5 +1415,8 @@
   "stdv.delete": "Delete",
   "stdv.drag": "Drag to sort",
   "stdv.exists": "“{name}” already exists",
-  "stdv.confirmDelete": "Delete “{name}” from standard variants?"
+  "stdv.confirmDelete": "Delete “{name}” from standard variants?",
+  "vsyn.button": "Synonyms",
+  "vsyn.placeholder": "Type a synonym, Enter adds it",
+  "vsyn.exists": "Synonym already exists"
 }

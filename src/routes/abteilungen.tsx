@@ -193,7 +193,7 @@ function DepartmentsPage() {
   const locale = getLocale();
   const variantLabel = (product: CatalogProduct, v: string) => pickName(product.variantNames?.[v], locale, v);
   const matchedVariant = (product: CatalogProduct) =>
-    (product.variants ?? []).find((v) => matchesProductSearch(variantLabel(product, v), normalizedQuery));
+    (product.variants ?? []).find((v) => matchesProductSearch(variantLabel(product, v), normalizedQuery) || (product.variantSynonyms?.[v] ?? []).some((s) => matchesProductSearch(s, normalizedQuery)));
   const matchedSynonym = (product: CatalogProduct) =>
     (product.synonyms ?? []).find((s) => matchesProductSearch(s, normalizedQuery));
   // Bezeichnungen aus verwandten Sprachvarianten (gleicher Sprachstamm, z. B. de/de-CH/de-AT)
@@ -460,7 +460,11 @@ function DepartmentsPage() {
       const product =
         products.find((p) => p.name.toLocaleLowerCase() === q) ??
         products.find((p) => matchesProductSearch(p.name, q));
-      if (product) {
+      const synHit = product ? undefined : products.flatMap((p) => Object.entries(p.variantSynonyms ?? {}).filter(([v, terms]) => p.variants.includes(v) && terms.some((s) => s.toLocaleLowerCase() === q)).map(([v]) => ({ p, v })))[0];
+      if (synHit) {
+        quickAdd(synHit.p, groupFor(synHit.p), synHit.v);
+        added += 1;
+      } else if (product) {
         quickAdd(product, groupFor(product));
         added += 1;
       }

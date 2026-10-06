@@ -1,3 +1,4 @@
+import { VariantSynonyms } from "@/components/admin/variant-synonyms";
 import { useStandardVariants } from "@/hooks/use-standard-variants";
 import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
@@ -1444,13 +1445,14 @@ function Editor(p: {
                       setVDrag(null); setVOver(null);
                     }}
                     onDragEnd={() => { setVDrag(null); setVOver(null); }}
-                    className={`flex items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
+                    className={`flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
                   >
                     <span className="flex min-w-0 items-center gap-2">
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
                       <VariantNameEdit productId={prod.id} variant={v} saved={(prod.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
                     </span>
                     {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
+                    {(prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}
                     <button
                       type="button"
                       aria-label={`${v} entfernen`}
