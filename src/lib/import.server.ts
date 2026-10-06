@@ -115,7 +115,7 @@ export async function matchCatalog(sb: any, items: Extracted[]): Promise<Candida
   const rest = out.map((c, i) => ({ c, i })).filter((x) => !x.c.match_product_id);
   if (rest.length === 0) return out;
 
-  const { data: deps } = await sb.from("departments").select("id, name, parent_id");
+  const { data: deps } = await sb.from("departments").select("id, name, parent_id").order("sort_order");
   const depList = (deps ?? []) as Array<{ id: string; name: string }>;
   const catalog = prods.map((p, i) => `${i}:${p.name}`).join("\n");
   const r = await aiJson<{ items: { i: number; similar: number; dept: number; emoji: string }[] }>(

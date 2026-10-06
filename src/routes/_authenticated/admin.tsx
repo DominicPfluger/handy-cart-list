@@ -435,9 +435,8 @@ function AdminPage() {
     }
     for (const x of d.depts) if (x.parent_id === cur) blocked.add(x.id);
     for (const a of deptAliasQ.data ?? []) if (a.parent_id === cur) blocked.add(a.department_id);
-    return d.depts.filter((x) => !blocked.has(x.id))
-      .map((x) => ({ id: x.id, label: `${path(x.parent_id).map((p) => nm(p.id, p.name)).join(" › ")}${x.parent_id ? " › " : ""}${nm(x.id, x.name)}` }))
-      .sort((a, b) => a.label.localeCompare(b.label));
+    return deptTreeOrder(d.depts).filter((x) => !blocked.has(x.id))
+      .map((x) => ({ id: x.id, label: `${path(x.parent_id).map((p) => nm(p.id, p.name)).join(" › ")}${x.parent_id ? " › " : ""}${nm(x.id, x.name)}` }));
   }, [d, cur, deptAliasQ.data]);
   /** Wählbare Produkte für „Alias-Produkt": ohne Produkte, die bereits in der offenen Kategorie liegen (eigene oder verlinkte). */
   const productAliasOptions = useMemo(() => {
@@ -981,13 +980,13 @@ function AdminPage() {
             onDeleteSelected={deleteSelected}
             onDeleteSelectedDepts={deleteSelectedDepts}
             onMoveSelected={moveSelected}
-            moveDeptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => nm(p.id, p.name)).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
+            moveDeptOptions={deptTreeOrder(d.depts).map((x) => ({ id: x.id, label: path(x.id).map((p) => nm(p.id, p.name)).join(" › ") }))}
             onAdvanced={(kind, id) => setSel({ kind, id })} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
               headings={headings} products={products}
               curDept={cur ?? undefined}
-              deptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
+              deptOptions={deptTreeOrder(d.depts).map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") }))}
               onSubmit={handleBulkSubmit} />
           )}
           {bulkTree && (
@@ -1051,7 +1050,7 @@ function AdminPage() {
               await saveH({ data: { id: h.id, departmentId: h.department_id, beforeProductId: h.before_product_id, name: h.name } });
             } else await translateIds([sel.id]);
           }, T("adm.retranslated"))}
-          deptOptions={d.depts.map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") })).sort((a, b) => a.label.localeCompare(b.label, "de"))}
+          deptOptions={deptTreeOrder(d.depts).map((x) => ({ id: x.id, label: path(x.id).map((p) => p.name).join(" › ") }))}
           onImageChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }}
         />
       )}

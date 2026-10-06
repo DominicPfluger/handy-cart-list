@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { deptTreeOrder } from "@/lib/dept-order";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -113,7 +114,7 @@ export function ImportPanel({ depts, prods }: { depts: Dept[]; prods: Prod[] }) 
   const deptOptions = useMemo(() => {
     const byId = new Map(depts.map((d) => [d.id, d]));
     const label = (d: Dept) => (d.parent_id && byId.get(d.parent_id) ? `${byId.get(d.parent_id)!.name} › ` : "") + d.name;
-    return depts.map((d) => ({ id: d.id, label: label(d) })).sort((a, b) => a.label.localeCompare(b.label));
+    return deptTreeOrder(depts).map((d) => ({ id: d.id, label: label(d) }));
   }, [depts]);
 
   const chip = (t: string) => t === "similar"
