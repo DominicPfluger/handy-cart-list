@@ -80,10 +80,11 @@ export function StandardVariantsPanel() {
   );
 }
 
-function Row({ v, onRename, onRemove }: { v: StandardVariant; onRename: (v: StandardVariant, n: string) => Promise<boolean>; onRemove: (v: StandardVariant) => void }) {
+function Row({ v, onRename, onRemove, onTranslate }: { v: StandardVariant; onRename: (v: StandardVariant, n: string) => Promise<boolean>; onRemove: (v: StandardVariant) => void; onTranslate: (v: StandardVariant) => void }) {
   const { t } = useT();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: v.id });
   const [edit, setEdit] = useState<string | null>(null);
+  const translated = Object.keys(v.labels ?? {}).length;
   const commit = async () => {
     const n = (edit ?? "").trim();
     if (!n || n === v.name) { setEdit(null); return; }
@@ -95,6 +96,9 @@ function Row({ v, onRename, onRemove }: { v: StandardVariant; onRename: (v: Stan
       {edit === null ? (
         <>
           <span className="min-w-0 flex-1 truncate">{v.name}</span>
+          <Button type="button" variant="outline" size="sm" className="h-7 gap-1 px-2" aria-label={t("stdv.translate")} title={t("stdv.translate")} onClick={() => onTranslate(v)}>
+            <Languages className="h-3.5 w-3.5" />{translated > 0 && <span className="text-xs">{translated}</span>}
+          </Button>
           <Button type="button" variant="outline" size="icon" className="h-7 w-7" aria-label={t("stdv.rename")} onClick={() => setEdit(v.name)}><Pencil className="h-3.5 w-3.5" /></Button>
           <Button type="button" variant="outline" size="icon" className="h-7 w-7 text-destructive" aria-label={t("stdv.delete")} onClick={() => onRemove(v)}><Trash2 className="h-3.5 w-3.5" /></Button>
         </>
