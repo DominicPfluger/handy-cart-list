@@ -165,16 +165,20 @@ function UnitEditDialog({ u, onClose, onSaved }: { u: UnitRow; onClose: () => vo
   const translateFn = useServerFn(translateUnitLabels);
   const def = (loc: string, kind: "label" | "short") =>
     u.builtin ? translate(loc, `${kind === "label" ? "unit" : "unitS"}.${u.id}` as MessageKey) : "";
-  const [draft, setDraft] = useState<Draft>(() => Object.fromEntries(locales.map((l) => [l.id, {
-    label: u.labels?.[l.id]?.label ?? def(l.id, "label"),
-    short: u.labels?.[l.id]?.short ?? def(l.id, "short"),
-  }])));
+  // Only German defaults are reliable here (other dictionaries aren't loaded), so other locales start empty.
+  const [draft, setDraft] = useState<Draft>(() => Object.fromEntries(locales.map((l) => {
+    const isDe = l.id.startsWith("de");
+    return [l.id, {
+      label: u.labels?.[l.id]?.label ?? (isDe ? def("de-DE", "label") : ""),
+      short: u.labels?.[l.id]?.short ?? (isDe ? def("de-DE", "short") : ""),
+    }];
+  })));
   const [busy, setBusy] = useState(false);
   const set = (loc: string, kind: "label" | "short", v: string) => setDraft((d) => ({ ...d, [loc]: { ...d[loc]!, [kind]: v } }));
 
   const fillAi = async () => {
     const de = draft["de-DE"];
-    if (!de?.label.trim() || !de.short.trim()) return;
+    if (!de?.label.trim() || !de.short.trim()) { toast.error(t("units.saveError")); return; }
     setBusy(true);
     try {
       const out = await translateFn({ data: { label: de.label.trim(), short: de.short.trim() } });
@@ -194,8 +198,8 @@ function UnitEditDialog({ u, onClose, onSaved }: { u: UnitRow; onClose: () => vo
     const labels: UnitLabels = {};
     for (const [loc, v] of Object.entries(draft)) {
       const entry: { label?: string; short?: string } = {};
-      if (v.label.trim() && v.label.trim() !== def(loc, "label")) entry.label = v.label.trim();
-      if (v.short.trim() && v.short.trim() !== def(loc, "short")) entry.short = v.short.trim();
+      if (v.label.trim()) entry.label = v.label.trim();
+      if (v.short.trim()) entry.short = v.short.trim();
       if (entry.label || entry.short) labels[loc] = entry;
     }
     const { error } = await db.from("units").update({ labels }).eq("id", u.id);
