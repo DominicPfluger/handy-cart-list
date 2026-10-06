@@ -70,10 +70,11 @@ export function StandardVariantsPanel() {
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={(e) => void onDragEnd(e)}>
         <SortableContext items={list.map((v) => v.id)} strategy={verticalListSortingStrategy}>
           <ul className="divide-y divide-border rounded-xl border border-border">
-            {list.map((v) => <Row key={v.id} v={v} onRename={rename} onRemove={remove} />)}
+            {list.map((v) => <Row key={v.id} v={v} onRename={rename} onRemove={remove} onTranslate={setTranslating} />)}
           </ul>
         </SortableContext>
       </DndContext>
+      {translating && <VariantTranslateDialog v={translating} onClose={() => setTranslating(null)} onSaved={async () => { setTranslating(null); await refresh(); }} />}
     </div>
   );
 }
