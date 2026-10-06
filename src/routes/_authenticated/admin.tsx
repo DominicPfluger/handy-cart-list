@@ -1307,6 +1307,7 @@ function Editor(p: {
   const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
   const dietRows = useDiets();
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
+  const commonVariants = useStandardVariants();
   const [variantInput, setVariantInput] = useState("");
   const [vDrag, setVDrag] = useState<number | null>(null);
   const [vOver, setVOver] = useState<number | null>(null);

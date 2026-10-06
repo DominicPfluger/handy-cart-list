@@ -914,6 +914,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     return () => { off = true; };
   }, [isDept, prod?.id]);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
+  const commonVariants = useStandardVariants();
   const [variantInput, setVariantInput] = useState("");
   const [vDrag, setVDrag] = useState<number | null>(null);
   const [vOver, setVOver] = useState<number | null>(null);
