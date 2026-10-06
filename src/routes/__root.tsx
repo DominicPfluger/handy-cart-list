@@ -20,6 +20,7 @@ import type { MessageKey } from "../i18n/de";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { EscapeCloser } from "@/components/escape-closer";
 import { ShareSheet } from "@/components/share-sheet";
 import {
   ListIcon,
@@ -185,6 +186,7 @@ function RootComponent() {
         <main className="px-5 pb-36 pt-5">
           <Outlet />
           <Toaster position="top-center" />
+          <EscapeCloser />
           <ShareSheet />
         </main>
 
