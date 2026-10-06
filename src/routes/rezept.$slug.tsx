@@ -75,7 +75,7 @@ function RecipePage() {
   // Namen ggf. aus dem Katalog ergänzen (z. B. bei übernommenen Altrezepten)
   const { data: names } = useQuery({
     queryKey: ["recipe-names", r.id],
-    enabled: r.items.some((i) => !i.name),
+    enabled: r.items.some((i) => !i.productId.startsWith("any:")),
     queryFn: async () => {
       const { data } = await supabase.from("products").select("id, name, emoji, department_id").in("id", r.items.map((i) => i.productId).filter((id) => !id.startsWith("any:")));
       return new Map((data ?? []).map((p) => [p.id, p]));

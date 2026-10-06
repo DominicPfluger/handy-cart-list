@@ -15,7 +15,7 @@
   "common.tryOther": "Probeer een andere zoekterm.",
   "common.searchResults": "Zoekresultaten",
   "common.addedToList": "{name} toegevoegd aan lijst",
-  "list.driedProduct": "{name} · gedroogd",
+  "list.driedProduct": "gedroogde {name}",
   "common.removeFavorite": "{name} uit favorieten verwijderen",
   "common.addFavorite": "{name} als favoriet markeren",
   "common.quickAdd": "{name} snel toevoegen (standaardhoeveelheid)",

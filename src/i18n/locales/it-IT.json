@@ -15,7 +15,7 @@
   "common.tryOther": "Prova un altro termine di ricerca.",
   "common.searchResults": "Risultati di ricerca",
   "common.addedToList": "{name} aggiunto alla lista",
-  "list.driedProduct": "{name} · essiccato",
+  "list.driedProduct": "{name} essiccato",
   "common.removeFavorite": "Rimuovi {name} dai preferiti",
   "common.addFavorite": "Aggiungi {name} ai preferiti",
   "common.quickAdd": "Aggiunta rapida {name} (quantità predefinita)",
