@@ -1,5 +1,5 @@
 import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
-import { VariantRenameButton } from "@/components/admin/variant-rename-button";
+import { VariantNameEdit } from "@/components/admin/variant-rename-button";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { createFileRoute } from "@tanstack/react-router";
@@ -1445,10 +1445,8 @@ function Editor(p: {
                   >
                     <span className="flex min-w-0 items-center gap-2">
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
-                      <span className="truncate">{v}</span>
+                      <VariantNameEdit productId={prod.id} variant={v} saved={(prod.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
                     </span>
-                    <VariantRenameButton productId={prod.id} variant={v} saved={(prod.variants ?? []).includes(v)} existing={variants}
-                      onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
                     {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                     <button
                       type="button"
