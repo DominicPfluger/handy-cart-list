@@ -1446,6 +1446,8 @@ function Editor(p: {
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
                       <span className="truncate">{v}</span>
                     </span>
+                    <VariantRenameButton productId={prod.id} variant={v} saved={(prod.variants ?? []).includes(v)} existing={variants}
+                      onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
                     {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                     <button
                       type="button"
