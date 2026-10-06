@@ -1405,6 +1405,8 @@ export const de = {
   "stdv.drag": "Ziehen zum Sortieren",
   "stdv.exists": "„{name}“ existiert bereits",
   "stdv.confirmDelete": "„{name}“ aus den Standard-Varianten löschen?",
+  "stdv.translate": "Übersetzen",
+  "stdv.translateTitle": "Übersetzungen für „{name}“",
   "vsyn.button": "Synonyme",
   "vsyn.placeholder": "Synonym eingeben, Enter fügt hinzu",
   "vsyn.exists": "Synonym existiert bereits",
