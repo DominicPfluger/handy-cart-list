@@ -1349,6 +1349,7 @@
   "units.inUse": "Gebruikt door {n} producten – kan niet worden verwijderd",
   "units.visible": "Zichtbaar",
   "units.hidden": "Verborgen",
+  "units.markets": "Zichtbaar in markten (tik om te verbergen)",
   "units.delete": "Verwijderen",
   "units.cancel": "Annuleren",
   "units.exists": "Deze eenheid bestaat al",

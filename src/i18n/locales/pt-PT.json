@@ -1349,6 +1349,7 @@
   "units.inUse": "Usada por {n} produtos – não pode ser eliminada",
   "units.visible": "Visível",
   "units.hidden": "Oculta",
+  "units.markets": "Visível nos mercados (toque para ocultar)",
   "units.delete": "Eliminar",
   "units.cancel": "Cancelar",
   "units.exists": "Esta unidade já existe",
