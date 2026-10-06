@@ -923,6 +923,24 @@ export const translateUnitLabels = createServerFn({ method: "POST" })
     return out;
   });
 
+/** Übersetzt eine Standard-Variante (z. B. „Bio“, „Vollkorn“) in alle Zielsprachen (Admin). */
+export const translateVariantName = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ label: z.string().min(1).max(60) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { translateUiTexts } = await import("./translate.server");
+    const locales = await targetLocales(context.supabase);
+    const out: Record<string, string> = { "de-DE": data.label };
+    await Promise.all(locales.map(async (loc) => {
+      try {
+        const r = await translateUiTexts({ label: data.label }, loc, `${loc} — this is a standard product variant chip in a grocery shopping app (e.g. organic, whole grain, vegan, lactose-free, mild, spicy)`);
+        out[loc] = r['label'] || data.label;
+      } catch { /* einzelne Sprache überspringen */ }
+    }));
+    return out;
+  });
+
 export const translateDietLabel = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ label: z.string().min(1).max(60) }).parse(d))
