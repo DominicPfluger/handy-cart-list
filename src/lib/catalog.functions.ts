@@ -35,6 +35,8 @@ export interface CatalogProduct {
   variants: string[];
   /** Suchbegriffe wie „Passionsfrucht" für Maracuja (alle Sprachen) */
   synonyms?: string[];
+  /** Suchbegriffe je Variante: Variante → Begriffe */
+  variantSynonyms?: Record<string, string[]>;
   /** Übersetzte Varianten: Variante → { locale: Name } */
   variantNames: Record<string, Record<string, string>>;
   /** Bilder je Variante: Pfade aus der DB, Adressen werden im Client aufgelöst */
@@ -171,6 +173,8 @@ export interface CatalogDetails {
   recipePopular: RecipePopularRow[];
   /** productId → Suchbegriffe */
   synonyms: Record<string, string[]>;
+  /** productId → Variante → Suchbegriffe */
+  variantSynonyms?: Record<string, Record<string, string[]>>;
   /** productId → Variante → locale → Name */
   variantNames: Record<string, Record<string, Record<string, string>>>;
   /** productId → Variante → Bildpfade */
@@ -280,6 +284,7 @@ export const getCatalogCore = createServerFn({ method: "GET" })
       fetchAll(supabase, "product_market_exclusions", "product_id, market", ["id"]),
       fetchAll(supabase, "product_market_order", "product_id, market, sort_order", ["id"]),
       loadTranslations(supabase, locale),
+      (supabase as any).from("variant_synonyms").select("product_id, variant, term").limit(10000),
     ]);
 
     const excluded = new Map<string, string[]>();
@@ -363,7 +368,7 @@ export const getCatalogDetails = createServerFn({ method: "GET" })
     const locale = typeof input?.locale === "string" && input.locale ? input.locale : null;
     const supabase = publicClient();
 
-    const [cuiRes, pcRes, brRes, riRes, rgRes, vtRes, rtRes, rsRes, rpRes, synRes, viRes, names] = await Promise.all([
+    const [cuiRes, pcRes, brRes, riRes, rgRes, vtRes, rtRes, rsRes, rpRes, synRes, viRes, names, vsRes] = await Promise.all([
       supabase.from("cuisines").select("id, name, emoji, sort_order").order("sort_order", { ascending: true }),
       fetchAll(supabase, "product_cuisines", "product_id, cuisine_id", ["id"]),
       fetchAll(supabase, "product_brands", "product_id, name, locales, sort_order", ["sort_order", "id"]),
@@ -384,6 +389,8 @@ export const getCatalogDetails = createServerFn({ method: "GET" })
     }
     const synonyms: CatalogDetails["synonyms"] = {};
     for (const r of (synRes.data ?? []) as Array<{ product_id: string; term: string }>) (synonyms[r.product_id] ??= []).push(r.term);
+    const variantSynonyms: Record<string, Record<string, string[]>> = {};
+    for (const r of ((vsRes as any)?.data ?? []) as Array<{ product_id: string; variant: string; term: string }>) ((variantSynonyms[r.product_id] ??= {})[r.variant] ??= []).push(r.term);
     const variantNames: CatalogDetails["variantNames"] = {};
     for (const r of (vtRes.data ?? []) as Array<{ product_id: string; variant: string; locale: string; name: string }>) {
       ((variantNames[r.product_id] ??= {})[r.variant] ??= {})[r.locale] = r.name;
@@ -451,6 +458,7 @@ export const getCatalogDetails = createServerFn({ method: "GET" })
         sortOrder: (r["sort_order"] as number) ?? 0,
       })),
       synonyms,
+      variantSynonyms,
       variantNames,
       variantImages,
       cuisineIds,

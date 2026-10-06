@@ -156,6 +156,7 @@ export function useCatalog(): Catalog {
         return {
           ...p,
           synonyms: d?.synonyms[p.id] ?? [],
+          variantSynonyms: d?.variantSynonyms?.[p.id] ?? {},
           variantNames: d?.variantNames[p.id] ?? {},
           cuisineIds: d?.cuisineIds[p.id] ?? [],
           brands: d?.brands[p.id] ?? [],

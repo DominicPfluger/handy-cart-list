@@ -26,6 +26,7 @@ export function VariantNameEdit({ productId, variant, saved, existing, onRenamed
     try {
       if (saved && productId) {
         const a = await supabase.from("product_variant_images").update({ variant: next }).eq("product_id", productId).eq("variant", variant);
+        await supabase.from("variant_synonyms" as any).update({ variant: next }).eq("product_id", productId).eq("variant", variant);
         const b = await supabase.from("variant_translations").delete().eq("product_id", productId).eq("variant", variant);
         const err = a.error ?? b.error;
         if (err) { toast.error(err.message); return; }
