@@ -1472,10 +1472,22 @@ export function useShoppingList() {
   }, []);
 
   // ---- Lokaler Modus: Item-Funktionen wie bisher ----
+  const localLiveRef = useRef<ListItem[]>(local.activeList.items);
+  localLiveRef.current = local.activeList.items;
+  const localTryMerge = useCallback((input: MergeInput): boolean => {
+    const m = findMergeTarget(localLiveRef.current, input);
+    if (!m) return false;
+    localLiveRef.current = localLiveRef.current.map((it) => (it.id === m.item.id ? { ...it, quantity: m.quantity } : it));
+    local.setItems((prev) => prev.map((it) => (it.id === m.item.id ? { ...it, quantity: m.quantity } : it)));
+    toast.success(t("list.merged", { name: m.item.name, qty: `${m.quantity}${m.item.unit ? ` ${m.item.unit}` : ""}` }));
+    return true;
+  }, [local]);
+
   const localAddItem = useCallback(
     (name: string, quantity: string, category: CategoryId, user_ = "Du") => {
+      if (localTryMerge({ name, quantity })) return;
       const item: ListItem = {
-        id: `i${Date.now()}`,
+        id: `i${Date.now()}${Math.round(Math.random() * 1000)}`,
         name: name.trim(),
         quantity: quantity.trim(),
         category,
@@ -1483,27 +1495,24 @@ export function useShoppingList() {
         addedBy: user_,
         addedAt: Date.now(),
       };
+      localLiveRef.current = [...localLiveRef.current, item];
       local.setItems((prev) => [...prev, item]);
       logActivity(user_, "hat hinzugefügt", item.name);
     },
-    [local, logActivity]
+    [local, logActivity, localTryMerge]
   );
 
   const localAddCatalogItem = useCallback(
     (input: AddCatalogItemInput, user_ = "Du") => {
       const prepared = prepareCatalogInput(input);
-      const m = findMergeTarget(local.activeList.items, prepared);
-      if (m) {
-        local.setItems((prev) => prev.map((it) => (it.id === m.item.id ? { ...it, quantity: m.quantity } : it)));
-        toast.success(t("list.merged", { name: m.item.name, qty: `${m.quantity}${m.item.unit ? ` ${m.item.unit}` : ""}` }));
-        return;
-      }
+      if (localTryMerge(prepared)) return;
       const localItem = buildCatalogItem(`i${Date.now()}${Math.round(Math.random() * 1000)}`, prepared, user_);
       if (prepared.photo) putItemPhoto(localItem.id, prepared.photo).catch(() => {});
+      localLiveRef.current = [...localLiveRef.current, localItem];
       local.setItems((prev) => [...prev, localItem]);
       logActivity(user_, "hat hinzugefügt", prepared.organic ? `${prepared.name} (Bio)` : prepared.name);
     },
-    [local, logActivity]
+    [local, logActivity, localTryMerge]
   );
 
   const localSetItemGroup = useCallback(
