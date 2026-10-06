@@ -178,7 +178,7 @@ function UnitEditDialog({ u, onClose, onSaved }: { u: UnitRow; onClose: () => vo
 
   const fillAi = async () => {
     const de = draft["de-DE"];
-    if (!de?.label.trim() || !de.short.trim()) { toast.error(t("units.saveError")); return; }
+    if (!de?.label.trim() || !de.short.trim()) { return; }
     setBusy(true);
     try {
       const out = await translateFn({ data: { label: de.label.trim(), short: de.short.trim() } });
@@ -220,8 +220,8 @@ function UnitEditDialog({ u, onClose, onSaved }: { u: UnitRow; onClose: () => vo
           {locales.map((l) => (
             <div key={l.id} className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1.5fr)_minmax(0,0.8fr)] items-center gap-2 px-1 py-1">
               <span className="truncate text-sm">{l.flag} {l.label}</span>
-              <Input className="h-8" value={draft[l.id]?.label ?? ""} placeholder={def(l.id, "label")} onChange={(e) => set(l.id, "label", e.target.value)} />
-              <Input className="h-8" value={draft[l.id]?.short ?? ""} placeholder={def(l.id, "short")} onChange={(e) => set(l.id, "short", e.target.value)} />
+              <Input className="h-8" value={draft[l.id]?.label ?? ""} placeholder={l.id.startsWith("de") ? def("de-DE", "label") : ""} onChange={(e) => set(l.id, "label", e.target.value)} />
+              <Input className="h-8" value={draft[l.id]?.short ?? ""} placeholder={l.id.startsWith("de") ? def("de-DE", "short") : ""} onChange={(e) => set(l.id, "short", e.target.value)} />
             </div>
           ))}
         </div>
