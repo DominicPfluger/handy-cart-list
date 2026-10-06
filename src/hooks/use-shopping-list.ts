@@ -477,23 +477,42 @@ function itemToCloudInput(it: ListItem, addedByName: string) {
 }
 
 /** Baut einen Listeneintrag aus einem Katalogartikel (lokal und Cloud identisch). */
-/** Intelligente Mengenzusammenführung: gleicher offener Eintrag (Produkt, Bio, Einheit) → Mengen addieren. */
-function findMergeTarget(items: ListItem[], input: AddCatalogItemInput): { item: ListItem; quantity: string } | null {
+/** Menge zerlegen: "1,5 kg" → { amount: 1.5, rest: "kg" }. */
+function splitQty(q: string | undefined): { amount: number; rest: string } | null {
+  const m = /^\s*(\d+(?:[.,]\d+)?)\s*(.*)$/.exec(String(q ?? "").trim() || "1");
+  if (!m) return null;
+  const amount = Number(m[1]!.replace(",", "."));
+  return Number.isFinite(amount) && amount > 0 ? { amount, rest: m[2]!.trim() } : null;
+}
+const unitKey = (u: string | null | undefined) => String(u ?? "").trim().toLocaleLowerCase().replace(/\s+/g, "");
+
+type MergeInput = { name: string; productId?: string | null; quantity: string; unit?: string | null; organic?: boolean; note?: string | null; photo?: unknown };
+
+/** Intelligente Mengenzusammenführung: gleicher offener Eintrag (Produkt/Name, Bio) mit umrechenbarer Einheit → Mengen addieren. */
+function findMergeTarget(items: ListItem[], input: MergeInput): { item: ListItem; quantity: string } | null {
   if (input.photo || input.note?.trim()) return null;
-  const num = (q: string | undefined) => {
-    const v = parseFloat(String(q ?? "").replace(",", "."));
-    return /^\s*\d+(?:[.,]\d+)?\s*$/.test(String(q ?? "")) && isFinite(v) ? v : null;
-  };
-  const add = num(input.quantity);
-  if (add == null) return null;
+  const add = splitQty(input.quantity);
+  if (!add) return null;
+  const addUnit = unitKey(input.unit) || unitKey(add.rest);
   const name = input.name.trim().toLocaleLowerCase();
-  const hit = items.find((it) =>
-    !it.checked && !it.note &&
-    (input.productId ? it.productId === input.productId && it.name.trim().toLocaleLowerCase() === name : it.name.trim().toLocaleLowerCase() === name) &&
-    !!it.organic === !!input.organic && (it.unit ?? "") === (input.unit ?? "") && num(it.quantity) != null);
-  if (!hit) return null;
-  const sum = Math.round((num(hit.quantity)! + add) * 100) / 100;
-  return { item: hit, quantity: String(sum).replace(".", ",") };
+  for (const it of items) {
+    if (it.checked || !!it.organic !== !!input.organic) continue;
+    const sameName = it.name.trim().toLocaleLowerCase() === name;
+    if (!(input.productId ? it.productId === input.productId && sameName : sameName)) continue;
+    const have = splitQty(it.quantity);
+    if (!have) continue;
+    const hitUnit = unitKey(it.unit) || unitKey(have.rest);
+    let addAmount: number | null = null;
+    if (hitUnit === addUnit) addAmount = add.amount;
+    else {
+      const a = scaleOf(addUnit), h = scaleOf(hitUnit);
+      if (a && h && a.kind === h.kind) addAmount = (add.amount * a.factor) / h.factor;
+    }
+    if (addAmount == null) continue;
+    const sum = String(Math.round((have.amount + addAmount) * 100) / 100).replace(".", ",");
+    return { item: it, quantity: it.unit || !have.rest ? sum : `${sum} ${have.rest}` };
+  }
+  return null;
 }
 
 function buildCatalogItem(id: string, input: AddCatalogItemInput, user: string): ListItem {
