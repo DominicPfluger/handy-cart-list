@@ -17,6 +17,7 @@ export const de = {
   "common.tryOther": "Versuche einen anderen Suchbegriff.",
   "common.searchResults": "Suchergebnisse",
   "common.addedToList": "{name} zur Liste hinzugefügt",
+  "list.driedProduct": "{name} getrocknet",
   "common.removeFavorite": "{name} aus Favoriten entfernen",
   "common.addFavorite": "{name} favorisieren",
   "dept.variants": "{count} Varianten",

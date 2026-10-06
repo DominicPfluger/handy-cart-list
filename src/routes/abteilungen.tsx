@@ -432,6 +432,7 @@ function DepartmentsPage() {
     const vi = variant ? product.variantImages?.[variant] : undefined;
     addCatalogItem({
       productId: product.id,
+      departmentId: product.departmentId,
       name,
       quantity: formatQuantity(product.defaultQuantity, product.defaultUnit),
       unit: product.defaultUnit,

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
 import { Button } from "../components/ui/button";
 import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
-import { useShoppingList, type FavoriteProduct, type ListItem } from "../hooks/use-shopping-list";
+import { catalogListName, useShoppingList, type FavoriteProduct, type ListItem } from "../hooks/use-shopping-list";
 import {
   ensureCatalog, catalogQueryOptions,
   useCatalog,
@@ -265,6 +265,7 @@ function FavoritesPage() {
     const name = displayName(row);
     addCatalogItem({
       productId: row.product.departmentId ? row.product.id : row.favorite.productId,
+      departmentId: row.product.departmentId || undefined,
       name,
       quantity: formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit),
       unit: row.favorite.defaultUnit,
@@ -321,7 +322,7 @@ function FavoritesPage() {
       const group = groupOfRow(row);
       return {
         id: `i${Date.now()}-${i}`,
-        name: displayName(row),
+        name: catalogListName(displayName(row), row.product.departmentId || undefined),
         quantity: formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit),
         category: "sonstiges",
         checked: false,

@@ -153,6 +153,7 @@ export function CatalogProductDialog({
     const names = brand ? base.map((n) => `${n} · ${brand}`) : base;
     for (const name of names) addCatalogItem({
       productId: product.id,
+      departmentId: product.departmentId,
       name,
       quantity: formatQuantity(amount, unit),
       unit,
