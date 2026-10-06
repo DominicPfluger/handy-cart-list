@@ -6,15 +6,17 @@ import { useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 
 const BUCKET = "catalog-images";
-const MAX_EDGE = 512;
+const MAX_EDGE = 1024; // scharf auf Retina-Displays (bis 3x) bei Vollbreite auf Mobilgeräten
+const QUALITY = 0.92; // nahezu verlustfrei, keine sichtbaren Artefakte
+const AUTO_MIN_BYTES = 200 * 1024; // kleinere Dateien gelten als bereits komprimiert
+const MAX_BYTES_PER_PIXEL = 0.6; // darunter ist ein Bild bereits effizient komprimiert
 
 type Obj = { path: string; size: number };
 
 const TXT = {
   de: {
     title: "Grosse Bilder komprimieren & skalieren",
-    hint: "Sucht Bilder über der Grenze, verkleinert sie auf höchstens 512 px und speichert sie komprimiert unter derselben Adresse.",
-    limit: "Grenze (KB)",
+    hint: "Sucht grosse Bilder. Grenze und Qualität werden automatisch gewählt: hohe Qualität ohne sichtbare Artefakte (max. 1024 px). Bereits komprimierte Bilder bleiben unverändert.",
     scan: "Prüfen",
     run: "Jetzt optimieren",
     stop: "Stopp",
@@ -24,8 +26,7 @@ const TXT = {
   },
   en: {
     title: "Compress & resize large images",
-    hint: "Finds images above the limit, resizes them to at most 512 px and stores them compressed at the same address.",
-    limit: "Limit (KB)",
+    hint: "Finds large images. Limit and quality are chosen automatically: high quality without visible artifacts (max 1024 px). Already compressed images are skipped.",
     scan: "Check",
     run: "Optimize now",
     stop: "Stop",
@@ -54,16 +55,20 @@ async function listAll(prefix = ""): Promise<Obj[]> {
 
 async function shrink(blob: Blob, ext: string): Promise<{ blob: Blob; type: string } | null> {
   const bmp = await createImageBitmap(blob);
+  // Bereits komprimiert: klein genug in Pixeln und effizient gespeichert -> unverändert lassen.
+  if (Math.max(bmp.width, bmp.height) <= MAX_EDGE && blob.size / (bmp.width * bmp.height) <= MAX_BYTES_PER_PIXEL) { bmp.close(); return null; }
   const scale = Math.min(1, MAX_EDGE / Math.max(bmp.width, bmp.height));
   const c = document.createElement("canvas");
   c.width = Math.max(1, Math.round(bmp.width * scale));
   c.height = Math.max(1, Math.round(bmp.height * scale));
   const ctx = c.getContext("2d");
   if (!ctx) return null;
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
   ctx.drawImage(bmp, 0, 0, c.width, c.height);
   bmp.close();
   const type = ext === "jpg" || ext === "jpeg" ? "image/jpeg" : ext === "png" ? "image/png" : "image/webp";
-  const out = await new Promise<Blob | null>((r) => c.toBlob(r, type, type === "image/png" ? undefined : 0.8));
+  const out = await new Promise<Blob | null>((r) => c.toBlob(r, type, type === "image/png" ? undefined : QUALITY));
   return out ? { blob: out, type } : null;
 }
 
@@ -71,7 +76,6 @@ async function shrink(blob: Blob, ext: string): Promise<{ blob: Blob; type: stri
 export function ImageOptimizer() {
   const { locale } = useT();
   const t = locale.startsWith("de") ? TXT.de : TXT.en;
-  const [limitKb, setLimitKb] = useState(150);
   const [items, setItems] = useState<Obj[] | null>(null);
   const [busy, setBusy] = useState<"scan" | "run" | null>(null);
   const [prog, setProg] = useState<{ done: number; total: number; saved: number } | null>(null);
@@ -81,7 +85,7 @@ export function ImageOptimizer() {
     setBusy("scan");
     try {
       const all = await listAll();
-      setItems(all.filter((o) => /\.(png|jpe?g|webp)$/i.test(o.path) && o.size > limitKb * 1024).sort((a, b) => b.size - a.size));
+      setItems(all.filter((o) => /\.(png|jpe?g|webp)$/i.test(o.path) && o.size > AUTO_MIN_BYTES).sort((a, b) => b.size - a.size));
     } catch (e) {
       toast.error(e instanceof Error ? e.message : String(e));
     } finally { setBusy(null); }
@@ -121,11 +125,6 @@ export function ImageOptimizer() {
       <h2 className="text-base font-semibold">{t.title}</h2>
       <p className="mt-1 text-sm text-muted-foreground">{t.hint}</p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <label className="flex items-center gap-2 text-sm">
-          {t.limit}
-          <input type="number" min={20} step={10} value={limitKb} onChange={(e) => setLimitKb(Number(e.target.value) || 150)}
-            className="w-20 rounded-md border border-border bg-background px-2 py-1 text-sm" />
-        </label>
         <Button variant="outline" size="sm" disabled={!!busy} onClick={scan}>{busy === "scan" ? "…" : t.scan}</Button>
         <Button size="sm" disabled={!!busy || !items?.length} onClick={run}>{t.run}</Button>
         {busy === "run" && <Button variant="outline" size="sm" onClick={() => { stop.current = true; }}>{t.stop}</Button>}
