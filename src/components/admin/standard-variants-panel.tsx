@@ -113,3 +113,64 @@ function Row({ v, onRename, onRemove, onTranslate }: { v: StandardVariant; onRen
     </li>
   );
 }
+
+function VariantTranslateDialog({ v, onClose, onSaved }: { v: StandardVariant; onClose: () => void; onSaved: () => void }) {
+  const { t } = useT();
+  const locales = useAllLocales();
+  const translateFn = useServerFn(translateVariantName);
+  const [draft, setDraft] = useState<Record<string, string>>(() =>
+    Object.fromEntries(locales.map((l) => [l.id, v.labels?.[l.id] ?? (l.id.startsWith("de") ? v.name : "")])),
+  );
+  const [busy, setBusy] = useState(false);
+
+  const fillAi = async () => {
+    const de = draft["de-DE"]?.trim() || v.name;
+    setBusy(true);
+    try {
+      const out = await translateFn({ data: { label: de } });
+      setDraft((d) => {
+        const n = { ...d };
+        for (const [loc, val] of Object.entries(out)) {
+          if (!n[loc]?.trim()) n[loc] = val;
+        }
+        return n;
+      });
+    } catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
+  };
+
+  const save = async () => {
+    setBusy(true);
+    const labels: Record<string, string> = {};
+    for (const [loc, val] of Object.entries(draft)) {
+      if (val.trim()) labels[loc] = val.trim();
+    }
+    const { error } = await db.from("standard_variants").update({ labels }).eq("id", v.id);
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    toast.success(t("units.saved"));
+    onSaved();
+  };
+
+  return (
+    <Dialog open onOpenChange={(o) => { if (!o) onClose(); }}>
+      <DialogContent className="flex max-h-[85vh] max-w-lg flex-col overflow-hidden">
+        <DialogHeader><DialogTitle>{t("stdv.translateTitle", { name: v.name })}</DialogTitle></DialogHeader>
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          {locales.map((l) => (
+            <div key={l.id} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] items-center gap-2 px-1 py-1">
+              <span className="truncate text-sm">{l.flag} {l.label}</span>
+              <Input className="h-8" value={draft[l.id] ?? ""} placeholder={l.id.startsWith("de") ? v.name : ""} onChange={(e) => setDraft((d) => ({ ...d, [l.id]: e.target.value }))} />
+            </div>
+          ))}
+        </div>
+        <DialogFooter className="gap-2 sm:justify-between">
+          <Button variant="outline" onClick={fillAi} disabled={busy}><Sparkles className="mr-1 h-4 w-4" />{busy ? t("units.translating") : t("units.aiFill")}</Button>
+          <div className="flex gap-2">
+            <Button variant="ghost" onClick={onClose}>{t("units.cancel")}</Button>
+            <Button onClick={save} disabled={busy}>{t("units.save")}</Button>
+          </div>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
