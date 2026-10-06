@@ -487,7 +487,7 @@ function splitQty(q: string | undefined): { amount: number; rest: string } | nul
 }
 const unitKey = (u: string | null | undefined) => String(u ?? "").trim().toLocaleLowerCase().replace(/\s+/g, "");
 
-type MergeInput = { name: string; productId?: string | null; quantity: string; unit?: string | null; organic?: boolean; note?: string | null; photo?: unknown };
+type MergeInput = { name: string; productId?: string | null; quantity: string; unit?: string | null | undefined; organic?: boolean; note?: string | null | undefined; photo?: unknown };
 
 /** Intelligente Mengenzusammenführung: gleicher offener Eintrag (Produkt/Name, Bio) mit umrechenbarer Einheit → Mengen addieren. */
 function findMergeTarget(items: ListItem[], input: MergeInput): { item: ListItem; quantity: string } | null {
