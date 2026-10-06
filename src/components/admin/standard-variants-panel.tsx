@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { DndContext, closestCenter, PointerSensor, TouchSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable, sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Pencil, Trash2 } from "lucide-react";
+import { GripVertical, Pencil, Trash2, Languages, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { useT } from "@/i18n";
+import { useT, useAllLocales } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { fetchStandardVariants, STANDARD_VARIANTS_KEY, type StandardVariant } from "@/hooks/use-standard-variants";
+import { translateVariantName } from "@/lib/admin.functions";
 
 const db = supabase as any;
 
