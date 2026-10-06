@@ -284,7 +284,6 @@ export const getCatalogCore = createServerFn({ method: "GET" })
       fetchAll(supabase, "product_market_exclusions", "product_id, market", ["id"]),
       fetchAll(supabase, "product_market_order", "product_id, market, sort_order", ["id"]),
       loadTranslations(supabase, locale),
-      (supabase as any).from("variant_synonyms").select("product_id, variant, term").limit(10000),
     ]);
 
     const excluded = new Map<string, string[]>();
@@ -381,6 +380,7 @@ export const getCatalogDetails = createServerFn({ method: "GET" })
       fetchAll(supabase, "product_synonyms", "product_id, term", ["id"]),
       supabase.from("product_variant_images").select("product_id, variant, image_path, icon_path"),
       loadTranslations(supabase, locale),
+      (supabase as any).from("variant_synonyms").select("product_id, variant, term").limit(10000),
     ]);
 
     const variantImages: CatalogDetails["variantImages"] = {};
