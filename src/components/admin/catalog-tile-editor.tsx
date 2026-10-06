@@ -19,6 +19,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
 import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
+import { VariantImageButton } from "@/components/admin/variant-image-button";
+import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
+import { VariantRenameButton } from "@/components/admin/variant-rename-button";
 import { LayoutGrid, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -1378,7 +1381,10 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         )}
         {!p.imageOnly && !isDept && (
           <div className="space-y-1.5">
-            <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
+              {prod && <VariantAiBulkButton productId={prod.id} productName={prod.name} variants={prod.variants ?? []} />}
+            </div>
             {variants.length > 0 && (
               <div className="divide-y divide-border rounded-lg border border-border">
                 {variants.map((v, vi) => (
@@ -1400,7 +1406,12 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
                       <span className="truncate">{v}</span>
                     </span>
-                    <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
+                    <span className="flex shrink-0 items-center gap-1.5">
+                      <VariantRenameButton productId={prod?.id} variant={v} saved={(prod?.variants ?? []).includes(v)} existing={variants}
+                        onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
+                      {prod && (prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
+                      <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
+                    </span>
                   </div>
                 ))}
               </div>

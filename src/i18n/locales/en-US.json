@@ -1223,6 +1223,7 @@
   "adm.variantImage": "Variant image",
   "adm.variantImageUpload": "Upload image",
   "adm.variantImageRemove": "Delete image",
+  "adm.variantRename": "Rename variant",
   "adm.variantImageSaved": "Variant image saved",
   "adm.variantImageAiConfirm": "Generate an AI image for “{name}”? This uses credits.",
   "adm.variantAdd": "Add variant",
