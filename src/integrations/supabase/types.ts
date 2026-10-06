@@ -1684,6 +1684,7 @@ export type Database = {
           builtin: boolean
           created_at: string
           enabled: boolean
+          hidden_markets: string[]
           id: string
           labels: Json
           sort_order: number
@@ -1693,6 +1694,7 @@ export type Database = {
           builtin?: boolean
           created_at?: string
           enabled?: boolean
+          hidden_markets?: string[]
           id: string
           labels?: Json
           sort_order?: number
@@ -1702,6 +1704,7 @@ export type Database = {
           builtin?: boolean
           created_at?: string
           enabled?: boolean
+          hidden_markets?: string[]
           id?: string
           labels?: Json
           sort_order?: number

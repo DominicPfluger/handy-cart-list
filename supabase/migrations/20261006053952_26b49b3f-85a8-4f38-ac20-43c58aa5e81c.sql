@@ -1,0 +1,1 @@
+ALTER TABLE public.units ADD COLUMN hidden_markets text[] NOT NULL DEFAULT '{}';
