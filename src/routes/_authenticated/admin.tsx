@@ -884,9 +884,10 @@ function AdminPage() {
 
       <Suspense fallback={<p className="pt-2 text-sm text-muted-foreground">{T("adm.loading")}</p>}>
       {tab === "catalog" && (<>
-      <div className="grid grid-cols-4 gap-2 text-center md:max-w-xl">
+      <div className="grid grid-cols-5 gap-2 text-center md:max-w-xl">
         <Stat label={T("adm.categories")} value={d?.depts.length} />
         <Stat label={T("adm.products")} value={d?.prods.length} />
+        <Stat label={T("adm.variants")} value={d ? d.prods.reduce((s, x) => s + (x.variants?.length ?? 0), 0) : undefined} />
         <Stat label={T("adm.headings")} value={d?.heads.length} />
         <Stat label={T("adm.tab.media")} value={d ? new Set([...d.depts, ...d.prods].flatMap((item) => [item.image_path, item.icon_path]).filter((path): path is string => Boolean(path))).size : undefined} />
       </div>
