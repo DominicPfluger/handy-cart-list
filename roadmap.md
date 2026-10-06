@@ -16,3 +16,7 @@
 - [x] Läden-Bereich in «Abteilungen ordnen & umbenennen» zugeklappt (Auf-/Zuklappen per Klick; Deep-Link ?catOrder=1 öffnet ihn mit) — getestet
 - [x] Rezept-Generator: Länderküchen-Chips beim Aufklappen inline direkt nach dem «Länderküche»-Knopf in derselben Reihe (Schnellwahl-Knöpfe darunter) — getestet
 - Admin-Katalog: «Kategorien & Produkte anlegen» auch auf oberster Ebene (Hauptkategorien), Knopf + createTree ohne geöffnete Kategorie
+
+## Offen
+- [ ] Sämtliche Dialoge per ESC abbrechen
+- [ ] Alle Bilder (App + Katalog) skalieren und komprimieren
