@@ -108,11 +108,11 @@ function ProductPage() {
       </button>
 
       <div className="mt-4 flex flex-col items-center text-center">
-        <div className="grid h-28 w-28 place-items-center overflow-hidden rounded-3xl bg-primary-soft/25">
+        <div className="grid aspect-square w-full max-w-xs place-items-center overflow-hidden rounded-3xl bg-primary-soft/25">
           {product.imagePath ? (
-            <CachedImage key={product.imagePath} path={product.imagePath} signedUrl={product.imageUrl} className="h-full w-full object-cover" fallback={<ProductEmoji emoji={product.emoji} className="text-6xl" />} />
+            <CachedImage key={product.imagePath} path={product.imagePath} signedUrl={product.imageUrl} className="h-full w-full object-cover" fallback={<ProductEmoji emoji={product.emoji} className="text-8xl" />} />
           ) : (
-            <ProductEmoji emoji={product.emoji} className="text-6xl" />
+            <ProductEmoji emoji={product.emoji} className="text-8xl" />
           )}
         </div>
         <div className="mt-4 flex max-w-full items-center justify-center gap-2">
