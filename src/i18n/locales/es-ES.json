@@ -1415,5 +1415,9 @@
   "stdv.confirmDelete": "Delete “{name}” from standard variants?",
   "vsyn.button": "Synonyms",
   "vsyn.placeholder": "Type a synonym, Enter adds it",
-  "vsyn.exists": "Synonym already exists"
+  "vsyn.exists": "Synonym already exists",
+  "adm.variantAi.go": "Suggest variants with AI",
+  "adm.variantAi.again": "New suggestions",
+  "adm.variantAi.addAll": "Add all",
+  "adm.variantAi.none": "No new suggestions found"
 }
