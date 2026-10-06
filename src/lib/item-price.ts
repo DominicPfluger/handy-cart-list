@@ -1,7 +1,7 @@
 type Scale = { kind: "weight" | "volume"; factor: number };
 
 /** App-Einheiten und Import-Kürzel → Basis (g bzw. ml). */
-const UNIT_SCALE: Record<string, Scale> = {
+export const UNIT_SCALE: Record<string, Scale> = {
   gramm: { kind: "weight", factor: 1 }, kilogramm: { kind: "weight", factor: 1000 }, milligramm: { kind: "weight", factor: 0.001 },
   pfund: { kind: "weight", factor: 453.6 }, unzen: { kind: "weight", factor: 28.35 },
   milliliter: { kind: "volume", factor: 1 }, deziliter: { kind: "volume", factor: 100 }, liter: { kind: "volume", factor: 1000 },
@@ -11,7 +11,7 @@ const UNIT_SCALE: Record<string, Scale> = {
   ml: { kind: "volume", factor: 1 }, cl: { kind: "volume", factor: 10 }, dl: { kind: "volume", factor: 100 },
   l: { kind: "volume", factor: 1000 }, "100ml": { kind: "volume", factor: 100 },
 };
-const scaleOf = (u: string | null | undefined) => (u ? UNIT_SCALE[u.trim().toLowerCase().replace(/\s+/g, "")] : undefined);
+export const scaleOf = (u: string | null | undefined) => (u ? UNIT_SCALE[u.trim().toLowerCase().replace(/\s+/g, "")] : undefined);
 
 export type PriceRow = { price: number | string; pack_size?: number | string | null; pack_unit?: string | null; unit_price?: number | string | null; unit_basis?: string | null };
 
