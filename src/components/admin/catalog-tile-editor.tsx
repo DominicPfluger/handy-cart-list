@@ -150,6 +150,15 @@ export function CatalogTileEditor(p: {
       await qc.invalidateQueries({ queryKey: ["catalog"] });
     }, T("adm.defaultsSaved"));
   };
+  /** Setzt die Mengeneinheit für alle ausgewählten echten Produkte (Aliase ausgeschlossen). */
+  const bulkSetUnit = (unit: string) => {
+    const ids = [...selected].filter((id) => !id.startsWith("alias:")).map((id) => p.products.find((x) => x.id === id)?.product_id ?? id);
+    if (!ids.length) return;
+    void p.run(async () => {
+      await p.must(supabase.from("products").update({ default_unit: unit } as never).in("id", ids));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
   const QTY_OPTIONS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 50, 100, 250, 500];
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
@@ -600,6 +609,18 @@ export function CatalogTileEditor(p: {
           <Button size="sm" variant="ghost" onClick={clearSelection}>{T("adm.clearSelection")}</Button>
           {p.onMoveSelected && [...selected].some((id) => !id.startsWith("alias:")) && (
             <Button size="sm" variant="outline" onClick={() => { setMoveSearch(""); setMovePick(true); }}>{T("adm.moveSelected")}</Button>
+          )}
+          {[...selected].some((id) => !id.startsWith("alias:")) && (
+            <select
+              value=""
+              aria-label={T("adm.setUnitSelected")}
+              title={T("adm.setUnitSelected")}
+              onChange={(e) => { const v = e.target.value; if (v) bulkSetUnit(v); e.target.value = ""; }}
+              className="h-8 shrink-0 rounded-lg border border-input bg-background px-1 text-xs text-foreground"
+            >
+              <option value="" disabled>{T("adm.setUnitSelected")}</option>
+              {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+            </select>
           )}
           {p.onDeleteSelected && (
             <Button size="sm" variant="destructive" onClick={() => {

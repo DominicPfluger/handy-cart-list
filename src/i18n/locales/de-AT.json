@@ -843,5 +843,6 @@
   "adm.variantAi.go": "Varianten per KI vorschlagen",
   "adm.variantAi.again": "Neue Vorschläge",
   "adm.variantAi.addAll": "Alle hinzufügen",
-  "adm.variantAi.none": "Keine neuen Vorschläge gefunden"
+  "adm.variantAi.none": "Keine neuen Vorschläge gefunden",
+  "adm.setUnitSelected": "Einheit ändern …"
 }
