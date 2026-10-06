@@ -27,6 +27,7 @@ import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
 import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
+import { PreviewCollapse } from "@/components/admin/preview-collapse";
 import { signedCategoryImageUrl } from "@/lib/image-upload";
 import { deptTreeOrder } from "@/lib/dept-order";
 import { isNonFoodRootName } from "@/lib/dept-colors";
@@ -1348,13 +1349,16 @@ function Editor(p: {
   const tr = data.tr.get(sel.id) ?? {};
   const title = T(`adm.edit.${sel.kind}` as MessageKey);
   const [prodImgUrl, setProdImgUrl] = useState<string | null>(null);
+  const [prodIconUrl, setProdIconUrl] = useState<string | null>(null);
   useEffect(() => {
     let alive = true;
     setProdImgUrl(null);
+    setProdIconUrl(null);
     if (!prod?.image_path) return;
     signedCategoryImageUrl(prod.image_path).then((u) => { if (alive) setProdImgUrl(u); });
+    if (prod.icon_path) signedCategoryImageUrl(prod.icon_path).then((u) => { if (alive) setProdIconUrl(u); });
     return () => { alive = false; };
-  }, [prod?.image_path]);
+  }, [prod?.image_path, prod?.icon_path]);
 
   // ESC bricht ab wie Klick daneben
   useEffect(() => {
@@ -1381,12 +1385,19 @@ function Editor(p: {
             {p.deptOptions.filter((o) => o.id !== sel.id).map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
           </select>
         )}
-        {prod && <div className="flex flex-wrap items-center gap-3">
-          {prodImgUrl && <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-border bg-background">
-            <ZoomableImage src={prodImgUrl} className="h-full w-full object-contain" />
-          </div>}
-          <Button type="button" variant="outline" onClick={p.onEditImage}>🖼️ {T("adm.previewImage")}</Button>
-        </div>}
+        {prod && (
+          <PreviewCollapse label={T("adm.previewImage")} src={prodImgUrl} emoji={prod.emoji}>
+            <Button type="button" variant="outline" onClick={p.onEditImage}>🖼️ {T("adm.previewImage")}</Button>
+          </PreviewCollapse>
+        )}
+        {prod && prodIconUrl && (
+          <div className="flex items-center gap-2">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
+              <img src={prodIconUrl} alt="" className="h-full w-full object-contain" />
+            </div>
+            <p className="text-sm font-semibold text-foreground">{T("adm.iconImage")}</p>
+          </div>
+        )}
         {prod && (
           <div className="grid grid-cols-2 gap-2">
             <Input inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} />
