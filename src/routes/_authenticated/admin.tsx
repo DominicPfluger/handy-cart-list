@@ -1073,6 +1073,7 @@ function AdminPage() {
         {setTab2 === "diets" && <DietsPanel />}
         {setTab2 === "units" && <UnitsPanel />}
         {setTab2 === "cuisines" && (d ? <CuisineAdmin depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
+        {setTab2 === "speech" && <SpeechTextsPanel />}
       </>)}
 
       {tab === "markets" && (<div className="space-y-4">
