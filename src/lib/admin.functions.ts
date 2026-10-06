@@ -979,3 +979,33 @@ export const suggestHeadings = createServerFn({ method: "POST" })
     }
     return { groups };
   });
+
+/** KI-Vorschlag: passende Varianten (Sorten, Formen, Geschmacksrichtungen) für ein Produkt. */
+export const suggestProductVariants = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) =>
+    z.object({
+      name: z.string().min(1).max(120),
+      category: z.string().max(300).default(""),
+      existing: z.array(z.string().max(80)).max(100).default([]),
+    }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { aiJson } = await import("./translate.server");
+    const r = await aiJson<{ variants: string[] }>(
+      "Du kuratierst den Katalog einer deutschsprachigen Einkaufslisten-App. Schlage 8 bis 12 gängige, im Einzelhandel erhältliche Varianten für das Produkt vor " +
+        "(z. B. Sorten, Formen, Geschmacksrichtungen, Fettstufen, Zubereitungsarten). Jede Variante ist ein kurzer Chip-Text (1–3 Wörter, de-DE, ss statt ß), " +
+        "ohne den Produktnamen zu wiederholen. Keine bereits vorhandenen Varianten. Sortiere nach Relevanz.",
+      JSON.stringify({ produkt: data.name, kategorie: data.category, vorhanden: data.existing }),
+      "variants",
+      { type: "object", additionalProperties: false, required: ["variants"], properties: { variants: { type: "array", items: { type: "string" } } } },
+    );
+    const have = new Set(data.existing.map((v) => v.toLowerCase()));
+    const out: string[] = [];
+    for (const raw of r.variants ?? []) {
+      const v = raw.trim().replace(/ß/g, "ss").slice(0, 60);
+      if (v && !have.has(v.toLowerCase())) { have.add(v.toLowerCase()); out.push(v); }
+    }
+    return { variants: out.slice(0, 16) };
+  });
