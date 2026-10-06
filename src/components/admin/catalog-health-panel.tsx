@@ -44,6 +44,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   const [openEmptyRows, setOpenEmptyRows] = useState<Set<string>>(new Set());
   const [synSearch, setSynSearch] = useState("");
   const [copyOpen, setCopyOpen] = useState(false);
+  const [dupCat, setDupCat] = useState("");
 
   const syns = useQuery({
     queryKey: ["health-synonyms"],
@@ -153,8 +154,17 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
         if (!seen.has(k)) { seen.add(k); out.push({ a: hit, b: owner, kind: "synonym" }); }
       }
     }
-    return out.filter((p) => !ignored.has(keyOf(p.a.id, p.b.id)));
-  }, [scanned, prods, syns.data, prodById, ignored]);
+    const inCat = (deptId: string) => {
+      if (!dupCat) return true;
+      let c = deptById.get(deptId); let g = 0;
+      while (c && g++ < 20) { if (c.id === dupCat) return true; c = c.parent_id ? deptById.get(c.parent_id) : undefined; }
+      return false;
+    };
+    return out.filter((p) => !ignored.has(keyOf(p.a.id, p.b.id)) && (inCat(p.a.department_id) || inCat(p.b.department_id)));
+  }, [scanned, prods, syns.data, prodById, ignored, dupCat, deptById]);
+  const catOptions = useMemo(() => deptTreeOrder(depts).map((d) => ({ id: d.id, label: deptPath(d.id) })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [depts]);
 
   const ignore = (p: Pair) => {
     const next = new Set(ignored);
@@ -273,7 +283,14 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
       <section className="space-y-2">
         <div className="flex items-center justify-between gap-2">
           <h2 className="text-sm font-semibold text-foreground">{T("adm.health.dupes")}</h2>
-          <Button size="sm" variant="outline" disabled={busy} onClick={() => setScanned(true)}>{scanned ? T("adm.health.scan") : T("adm.health.scan")}</Button>
+          <div className="flex items-center gap-2">
+            <select value={dupCat} onChange={(e) => setDupCat(e.target.value)} aria-label={T("adm.noImg.cat")}
+              className="max-w-56 rounded-lg border border-input bg-background px-2 py-1 text-xs">
+              <option value="">{T("adm.noImg.cat")}</option>
+              {catOptions.map((c) => <option key={c.id} value={c.id}>{c.label}</option>)}
+            </select>
+            <Button size="sm" variant="outline" disabled={busy} onClick={() => setScanned(true)}>{T("adm.health.scan")}</Button>
+          </div>
         </div>
         {scanned && (
           pairs.length === 0 ? <p className="text-sm text-muted-foreground">{T("adm.health.noDupes")}</p> : (
