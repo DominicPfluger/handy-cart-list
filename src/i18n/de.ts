@@ -1021,6 +1021,7 @@ export const de = {
   "adm.clearSelection": "Auswahl aufheben",
   "adm.deleteSelected": "Auswahl löschen",
   "adm.moveSelected": "In Kategorie verschieben",
+  "adm.setUnitSelected": "Einheit ändern …",
   "adm.moveSelectedTitle": "{n} Einträge verschieben nach …",
   "adm.moved": "{n} Einträge verschoben",
   "adm.deleteSelectedConfirm": "{n} Einträge wirklich löschen?",
