@@ -1754,6 +1754,41 @@ export type Database = {
         }
         Relationships: []
       }
+      variant_synonyms: {
+        Row: {
+          created_at: string
+          id: string
+          locale: string
+          product_id: string
+          term: string
+          variant: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          locale: string
+          product_id: string
+          term: string
+          variant: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          locale?: string
+          product_id?: string
+          term?: string
+          variant?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "variant_synonyms_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       variant_translations: {
         Row: {
           created_at: string
