@@ -1,4 +1,5 @@
 import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
+import { VariantRenameButton } from "@/components/admin/variant-rename-button";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { createFileRoute } from "@tanstack/react-router";
