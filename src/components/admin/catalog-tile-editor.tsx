@@ -21,6 +21,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
+import { PreviewCollapse } from "@/components/admin/preview-collapse";
 import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
@@ -1207,6 +1208,59 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         <div className="flex items-center justify-between gap-2"><h2 className="text-lg font-bold text-foreground">{p.imageOnly ? T("adm.previewImage") : item ? T("tile.editItem") : isDept ? T("tile.newCat") : T("tile.newProd")}</h2><Button type="button" variant="ghost" size="icon" aria-label={T("adm.close")} onClick={p.onClose}>✕</Button></div>
         {enrichStatus && <div role="status" className="text-sm text-foreground">{enriching && <span aria-hidden="true">⏳ </span>}{enrichStatus}</div>}
         {enrichErrors.length > 0 && <ul className="max-h-24 overflow-auto text-xs text-destructive">{enrichErrors.map((error) => <li key={error}>{error}</li>)}</ul>}
+        {!p.imageOnly && <div className="flex gap-2">
+          <Input aria-label={T("tile.emoji")} placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} className="h-11 w-16 rounded-xl text-center text-xl" />
+          <Input aria-label={T("tile.name")} placeholder={T("tile.name")} value={name} onChange={(e) => setName(e.target.value)} className="h-11 flex-1 rounded-xl" />
+        </div>}
+        {effId && (
+          <PreviewCollapse label={T("adm.previewImage")} src={(imagePreview === undefined ? p.imgUrl : imagePreview) ?? null} emoji={emoji || (isDept ? "📁" : "🛒")} defaultOpen={Boolean(p.imageOnly)}>
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
+              <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
+              <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
+            </div>
+            <details className="rounded-xl border border-border p-2">
+              <summary className="cursor-pointer select-none text-sm font-medium text-foreground">✨ {T("tile.aiOptions")}</summary>
+              <div className="mt-2 space-y-2">
+                <div className="flex gap-2">
+                  <Input aria-label={T("tile.aiHint")} placeholder={suggesting ? T("tile.aiSuggestLoading") : isDept ? T("tile.aiHintEmpty") : T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 flex-1 rounded-xl text-sm" />
+                  {isDept && (
+                    <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true, [...picked])}>↻</Button>
+                  )}
+                </div>
+                <AiImageOptionSelects value={imgOpts} onChange={setImgOpts} />
+              </div>
+            </details>
+            {isDept && pickList.length > 0 && (
+              <details className="rounded-xl border border-border p-2 text-sm">
+                <summary className="cursor-pointer select-none font-medium text-foreground">
+                  {T("tile.imgProducts")} · {T("tile.imgProductsCount", { n: picked.size })}
+                </summary>
+                <div className="mt-2 space-y-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => setPicked(new Set(pickList.map((x) => x.id)))}>{T("tile.imgProductsAll")}</Button>
+                    <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => setPicked(new Set())}>{T("tile.imgProductsNone")}</Button>
+                    {pickList.length > 12 && <Input value={pickSearch} onChange={(e) => setPickSearch(e.target.value)} placeholder={T("tile.deptAliasSearch")} className="h-7 flex-1 text-xs" />}
+                  </div>
+                  <div className="max-h-48 space-y-1 overflow-y-auto">
+                    {pickList.filter((x) => !pickSearch.trim() || x.name.toLowerCase().includes(pickSearch.trim().toLowerCase())).map((x) => (
+                      <label key={x.id} className="flex items-center gap-2 text-xs text-foreground">
+                        <input type="checkbox" checked={picked.has(x.id)} onChange={(e) => setPicked((s) => { const n = new Set(s); if (e.target.checked) n.add(x.id); else n.delete(x.id); return n; })} />
+                        <span>{x.emoji ?? ""} {x.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">{T("tile.imgProductsHint")}</p>
+                </div>
+              </details>
+            )}
+            <div className="flex flex-wrap gap-2">
+              <Button size="sm" variant="outline" disabled={imageBusy || p.busy} onClick={() => void generateDialogImage()}>{imageBusy ? T("adm.working") : isDept || !item ? `✨ ${T("tile.aiImage")}` : `✨ ${T("tile.regenerateImage")}`}</Button>
+              {(imagePreview === undefined ? Boolean(p.imgUrl) : Boolean(imagePreview)) && item &&
+                <Button size="sm" variant="outline" className="text-destructive" disabled={imageBusy || p.busy} onClick={() => void removeImage()}>{T("tile.removeImage")}</Button>}
+            </div>
+          </PreviewCollapse>
+        )}
         {effId && (
           <div className="space-y-2 rounded-xl border border-border p-2">
             <div className="flex flex-wrap items-center gap-2">
@@ -1235,61 +1289,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </details>
           </div>
         )}
-        {effId && <p className="-mb-1 text-sm font-semibold text-foreground">{T("adm.previewImage")}</p>}
-        <div className="flex flex-wrap items-start gap-3">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-muted text-4xl">
-            {(imagePreview === undefined ? p.imgUrl : imagePreview) ? <ZoomableImage src={(imagePreview === undefined ? p.imgUrl : imagePreview) ?? ""} className="h-full w-full object-cover" /> : emoji || (isDept ? "📁" : "🛒")}
-          </div>
-          {effId && (
-            <div className="flex min-w-0 flex-1 flex-col gap-2">
-              <div className="flex flex-wrap gap-2">
-                <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
-                <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
-                <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) void upload(f); }} />
-              </div>
-              <details className="rounded-xl border border-border p-2">
-                <summary className="cursor-pointer select-none text-sm font-medium text-foreground">✨ {T("tile.aiOptions")}</summary>
-                <div className="mt-2 space-y-2">
-                  <div className="flex gap-2">
-                    <Input aria-label={T("tile.aiHint")} placeholder={suggesting ? T("tile.aiSuggestLoading") : isDept ? T("tile.aiHintEmpty") : T("tile.aiHint")} value={hint} onChange={(e) => setHint(e.target.value)} className="h-10 flex-1 rounded-xl text-sm" />
-                    {isDept && (
-                      <Button size="sm" variant="outline" className="h-10 px-3" disabled={suggesting} aria-label={T("tile.aiSuggestReload")} title={T("tile.aiSuggestReload")} onClick={() => loadSuggestion(true, [...picked])}>↻</Button>
-                    )}
-                  </div>
-                  <AiImageOptionSelects value={imgOpts} onChange={setImgOpts} />
-                </div>
-              </details>
-              {isDept && effId && pickList.length > 0 && (
-                <details className="rounded-xl border border-border p-2 text-sm">
-                  <summary className="cursor-pointer select-none font-medium text-foreground">
-                    {T("tile.imgProducts")} · {T("tile.imgProductsCount", { n: picked.size })}
-                  </summary>
-                  <div className="mt-2 space-y-2">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => setPicked(new Set(pickList.map((x) => x.id)))}>{T("tile.imgProductsAll")}</Button>
-                      <Button size="sm" variant="outline" className="h-7 px-2 text-xs" onClick={() => setPicked(new Set())}>{T("tile.imgProductsNone")}</Button>
-                      {pickList.length > 12 && <Input value={pickSearch} onChange={(e) => setPickSearch(e.target.value)} placeholder={T("tile.deptAliasSearch")} className="h-7 flex-1 text-xs" />}
-                    </div>
-                    <div className="max-h-48 space-y-1 overflow-y-auto">
-                      {pickList.filter((x) => !pickSearch.trim() || x.name.toLowerCase().includes(pickSearch.trim().toLowerCase())).map((x) => (
-                        <label key={x.id} className="flex items-center gap-2 text-xs text-foreground">
-                          <input type="checkbox" checked={picked.has(x.id)} onChange={(e) => setPicked((s) => { const n = new Set(s); if (e.target.checked) n.add(x.id); else n.delete(x.id); return n; })} />
-                          <span>{x.emoji ?? ""} {x.name}</span>
-                        </label>
-                      ))}
-                    </div>
-                    <p className="text-[11px] text-muted-foreground">{T("tile.imgProductsHint")}</p>
-                  </div>
-                </details>
-              )}
-              <div className="flex flex-wrap gap-2">
-                <Button size="sm" variant="outline" disabled={imageBusy || p.busy} onClick={() => void generateDialogImage()}>{imageBusy ? T("adm.working") : isDept || !item ? `✨ ${T("tile.aiImage")}` : `✨ ${T("tile.regenerateImage")}`}</Button>
-                {(imagePreview === undefined ? Boolean(p.imgUrl) : Boolean(imagePreview)) && item &&
-                  <Button size="sm" variant="outline" className="text-destructive" disabled={imageBusy || p.busy} onClick={() => void removeImage()}>{T("tile.removeImage")}</Button>}
-              </div>
-            </div>
-          )}
-        </div>
         {!p.imageOnly && !isDept && !item && (
           <label className="flex items-center gap-2 text-sm">
             <span className="shrink-0 text-muted-foreground">{T("adm.category")}</span>
@@ -1298,10 +1297,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </select>
           </label>
         )}
-        {!p.imageOnly && <div className="flex gap-2">
-          <Input aria-label={T("tile.emoji")} placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} className="h-11 w-16 rounded-xl text-center text-xl" />
-          <Input aria-label={T("tile.name")} placeholder={T("tile.name")} value={name} onChange={(e) => setName(e.target.value)} className="h-11 flex-1 rounded-xl" />
-        </div>}
         {!p.imageOnly && isDept && !item && (
           <div className="space-y-1">
             <h3 className="text-sm font-semibold text-foreground">{T("tile.deptProducts")}</h3>
