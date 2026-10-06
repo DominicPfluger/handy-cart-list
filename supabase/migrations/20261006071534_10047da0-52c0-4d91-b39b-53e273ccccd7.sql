@@ -1,0 +1,66 @@
+-- Falsche Übersetzungen an Schwarztee-Produkten entfernen
+DELETE FROM catalog_translations WHERE entity_type = 'product' AND entity_id IN ('a1b2c3d4-2a10-4000-8000-000000002a10','a1b2c3d4-2a11-4000-8000-000000002a11','a1b2c3d4-2a12-4000-8000-000000002a12','a1b2c3d4-2a13-4000-8000-000000002a13') AND name IN ('Pai Mu Tan','Silver Needle','White Peony','Jasmine White Tea','Té blanco de jazmín','Thé blanc au jasmin','Tè bianco al gelsomino','Witte jasmijnthee','Chá branco de jasmim');
+
+-- Weisser-Tee-Produkte mit freien IDs anlegen
+INSERT INTO products (id, department_id, name, emoji, default_quantity, default_unit, organic_available, sort_order, variants, excluded_diets, markets, icon_custom) VALUES
+  ('a1b2c3d4-2a20-4000-8000-000000002a20', 'a1b2c3d4-2a04-4000-8000-000000002a04', 'Pai Mu Tan', '🍵', 1, 'packung', false, 5, '{}', '{}', '{}', false),
+  ('a1b2c3d4-2a21-4000-8000-000000002a21', 'a1b2c3d4-2a04-4000-8000-000000002a04', 'Silver Needle', '🍵', 1, 'packung', false, 6, '{}', '{}', '{}', false),
+  ('a1b2c3d4-2a22-4000-8000-000000002a22', 'a1b2c3d4-2a04-4000-8000-000000002a04', 'White Peony', '🍵', 1, 'packung', false, 7, '{}', '{}', '{}', false),
+  ('a1b2c3d4-2a23-4000-8000-000000002a23', 'a1b2c3d4-2a04-4000-8000-000000002a04', 'Jasmin-Weißtee', '🍵', 1, 'packung', false, 8, '{}', '{}', '{}', false)
+ON CONFLICT (id) DO NOTHING;
+
+-- Übersetzungen der neuen Produkte
+INSERT INTO catalog_translations (entity_type, entity_id, locale, name, is_manual) VALUES
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'en-US', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'en-GB', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'en-CA', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'es-ES', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'es-MX', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'fr-FR', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'fr-CA', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'it-IT', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'it-CH', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'nl-NL', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'nl-BE', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'pt-PT', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a20-4000-8000-000000002a20', 'pt-BR', 'Pai Mu Tan', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'en-US', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'en-GB', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'en-CA', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'es-ES', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'es-MX', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'fr-FR', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'fr-CA', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'it-IT', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'it-CH', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'nl-NL', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'nl-BE', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'pt-PT', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a21-4000-8000-000000002a21', 'pt-BR', 'Silver Needle', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'en-US', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'en-GB', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'en-CA', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'es-ES', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'es-MX', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'fr-FR', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'fr-CA', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'it-IT', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'it-CH', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'nl-NL', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'nl-BE', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'pt-PT', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a22-4000-8000-000000002a22', 'pt-BR', 'White Peony', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'en-US', 'Jasmine White Tea', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'en-GB', 'Jasmine White Tea', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'en-CA', 'Jasmine White Tea', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'es-ES', 'Té blanco de jazmín', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'es-MX', 'Té blanco de jazmín', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'fr-FR', 'Thé blanc au jasmin', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'fr-CA', 'Thé blanc au jasmin', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'it-IT', 'Tè bianco al gelsomino', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'it-CH', 'Tè bianco al gelsomino', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'nl-NL', 'Witte jasmijnthee', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'nl-BE', 'Witte jasmijnthee', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'pt-PT', 'Chá branco de jasmim', true),
+  ('product', 'a1b2c3d4-2a23-4000-8000-000000002a23', 'pt-BR', 'Chá branco de jasmim', true)
+ON CONFLICT (entity_type, entity_id, locale) DO UPDATE SET name = EXCLUDED.name, updated_at = now();
