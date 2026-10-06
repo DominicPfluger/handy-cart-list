@@ -825,5 +825,14 @@
   "diets.inUse": "Wird von {n} Produkten verwendet – nicht löschbar",
   "diets.exists": "Diese Ernährungsform gibt es schon",
   "diets.editTitle": "Ernährungsform bearbeiten: {name}",
-  "adm.tab.settings": "Einstellungen"
+  "adm.tab.settings": "Einstellungen",
+  "stdv.title": "Standard-Varianten",
+  "stdv.hint": "Vorschläge, die im Produkt-Dialog als Schnellauswahl erscheinen. Bereits gespeicherte Produkt-Varianten bleiben unverändert.",
+  "stdv.placeholder": "Neue Standard-Variante",
+  "stdv.add": "Hinzufügen",
+  "stdv.rename": "Umbenennen",
+  "stdv.delete": "Löschen",
+  "stdv.drag": "Ziehen zum Sortieren",
+  "stdv.exists": "„{name}“ existiert bereits",
+  "stdv.confirmDelete": "„{name}“ aus den Standard-Varianten löschen?"
 }

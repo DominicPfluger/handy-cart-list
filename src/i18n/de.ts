@@ -1392,6 +1392,15 @@ export const de = {
   "install.title": "App installieren",
   "install.desc": "Shoppi auf dem Startbildschirm",
   "install.manualHint": "Im Browser-Menü «Zum Startbildschirm hinzufügen» wählen.",
+  "stdv.title": "Standard-Varianten",
+  "stdv.hint": "Vorschläge, die im Produkt-Dialog als Schnellauswahl erscheinen. Bereits gespeicherte Produkt-Varianten bleiben unverändert.",
+  "stdv.placeholder": "Neue Standard-Variante",
+  "stdv.add": "Hinzufügen",
+  "stdv.rename": "Umbenennen",
+  "stdv.delete": "Löschen",
+  "stdv.drag": "Ziehen zum Sortieren",
+  "stdv.exists": "„{name}“ existiert bereits",
+  "stdv.confirmDelete": "„{name}“ aus den Standard-Varianten löschen?",
 } as const;
 
 export type MessageKey = keyof typeof de;
