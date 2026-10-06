@@ -5,6 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { translate, getLocale } from "../i18n";
 import { moveItemPhoto, putItemPhoto } from "../lib/item-photo-store";
+import { scaleOf } from "../lib/item-price";
 import {
   getMyLists,
   createCloudList,
@@ -477,23 +478,42 @@ function itemToCloudInput(it: ListItem, addedByName: string) {
 }
 
 /** Baut einen Listeneintrag aus einem Katalogartikel (lokal und Cloud identisch). */
-/** Intelligente Mengenzusammenführung: gleicher offener Eintrag (Produkt, Bio, Einheit) → Mengen addieren. */
-function findMergeTarget(items: ListItem[], input: AddCatalogItemInput): { item: ListItem; quantity: string } | null {
+/** Menge zerlegen: "1,5 kg" → { amount: 1.5, rest: "kg" }. */
+function splitQty(q: string | undefined): { amount: number; rest: string } | null {
+  const m = /^\s*(\d+(?:[.,]\d+)?)\s*(.*)$/.exec(String(q ?? "").trim() || "1");
+  if (!m) return null;
+  const amount = Number(m[1]!.replace(",", "."));
+  return Number.isFinite(amount) && amount > 0 ? { amount, rest: m[2]!.trim() } : null;
+}
+const unitKey = (u: string | null | undefined) => String(u ?? "").trim().toLocaleLowerCase().replace(/\s+/g, "");
+
+type MergeInput = { name: string; productId?: string | null; quantity: string; unit?: string | null | undefined; organic?: boolean; note?: string | null | undefined; photo?: unknown };
+
+/** Intelligente Mengenzusammenführung: gleicher offener Eintrag (Produkt/Name, Bio) mit umrechenbarer Einheit → Mengen addieren. */
+function findMergeTarget(items: ListItem[], input: MergeInput): { item: ListItem; quantity: string } | null {
   if (input.photo || input.note?.trim()) return null;
-  const num = (q: string | undefined) => {
-    const v = parseFloat(String(q ?? "").replace(",", "."));
-    return /^\s*\d+(?:[.,]\d+)?\s*$/.test(String(q ?? "")) && isFinite(v) ? v : null;
-  };
-  const add = num(input.quantity);
-  if (add == null) return null;
+  const add = splitQty(input.quantity);
+  if (!add) return null;
+  const addUnit = unitKey(input.unit) || unitKey(add.rest);
   const name = input.name.trim().toLocaleLowerCase();
-  const hit = items.find((it) =>
-    !it.checked && !it.note &&
-    (input.productId ? it.productId === input.productId && it.name.trim().toLocaleLowerCase() === name : it.name.trim().toLocaleLowerCase() === name) &&
-    !!it.organic === !!input.organic && (it.unit ?? "") === (input.unit ?? "") && num(it.quantity) != null);
-  if (!hit) return null;
-  const sum = Math.round((num(hit.quantity)! + add) * 100) / 100;
-  return { item: hit, quantity: String(sum).replace(".", ",") };
+  for (const it of items) {
+    if (it.checked || !!it.organic !== !!input.organic) continue;
+    const sameName = it.name.trim().toLocaleLowerCase() === name;
+    if (!(input.productId ? it.productId === input.productId && sameName : sameName)) continue;
+    const have = splitQty(it.quantity);
+    if (!have) continue;
+    const hitUnit = unitKey(it.unit) || unitKey(have.rest);
+    let addAmount: number | null = null;
+    if (hitUnit === addUnit) addAmount = add.amount;
+    else {
+      const a = scaleOf(addUnit), h = scaleOf(hitUnit);
+      if (a && h && a.kind === h.kind) addAmount = (add.amount * a.factor) / h.factor;
+    }
+    if (addAmount == null) continue;
+    const sum = String(Math.round((have.amount + addAmount) * 100) / 100).replace(".", ",");
+    return { item: it, quantity: it.unit || !have.rest ? sum : `${sum} ${have.rest}` };
+  }
+  return null;
 }
 
 function buildCatalogItem(id: string, input: AddCatalogItemInput, user: string): ListItem {
@@ -1057,11 +1077,48 @@ function useCloudLists(
     }
   }, [fetchCloud]);
 
+  // Aktuelle Einträge inkl. noch nicht gerenderter Hinzufügungen (Mehrfach-Hinzufügen im selben Takt).
+  const liveItemsRef = useRef<{ listId: string; items: ListItem[] }>({ listId: activeListId, items: activeList.items });
+  liveItemsRef.current = { listId: activeListId, items: activeList.items };
+  const liveItems = () => liveItemsRef.current.items;
+  const pendingQtyRef = useRef(new Map<string, string>());
+
+  /** Gemeinsame Merge-Behandlung; true = zusammengeführt. */
+  const tryMerge = useCallback(
+    (input: MergeInput): boolean => {
+      const merge = findMergeTarget(liveItems(), input);
+      if (!merge) return false;
+      const { item: hit, quantity } = merge;
+      liveItemsRef.current.items = liveItems().map((it) => (it.id === hit.id ? { ...it, quantity } : it));
+      setItems((prev) => prev.map((it) => (it.id === hit.id ? { ...it, quantity } : it)));
+      toast.success(t("list.merged", { name: hit.name, qty: `${quantity}${hit.unit ? ` ${hit.unit}` : ""}` }));
+      if (isLocalList(activeListId)) { markDirty(activeListId); return true; }
+      if (hit.id.startsWith("tmp-")) pendingQtyRef.current.set(hit.id, quantity);
+      else {
+        const patch = { id: hit.id, quantity };
+        runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
+      }
+      return true;
+    },
+    [activeListId, setItems]
+  );
+
+  /** Nach dem Speichern eines tmp-Eintrags eine inzwischen zusammengeführte Menge nachsenden. */
+  const flushPendingQty = useCallback((tmpId: string, realId: string) => {
+    const q = pendingQtyRef.current.get(tmpId);
+    if (q == null) return;
+    pendingQtyRef.current.delete(tmpId);
+    setItems((prev) => prev.map((it) => (it.id === realId ? { ...it, quantity: q } : it)));
+    const patch = { id: realId, quantity: q };
+    runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
+  }, [setItems]);
+
   const addItem = useCallback(
     (name: string, quantity: string, category: CategoryId, _user = "Du") => {
       void category;
+      if (tryMerge({ name, quantity })) return;
       const item: ListItem = {
-        id: `tmp-${Date.now()}`,
+        id: `tmp-${Date.now()}${Math.round(Math.random() * 1000)}`,
         name: name.trim(),
         quantity: quantity.trim(),
         category: "sonstiges",
@@ -1069,6 +1126,7 @@ function useCloudLists(
         addedBy: selfName,
         addedAt: Date.now(),
       };
+      liveItemsRef.current.items = [...liveItems(), item];
       setItems((prev) => [...prev, item]);
       logActivity(selfName, "hat hinzugefügt", item.name);
       if (isLocalList(activeListId)) return markDirty(activeListId);
@@ -1077,30 +1135,23 @@ function useCloudLists(
         { fn: "addItems", data: payload },
         () => addCloudItems({ data: payload }).then((res) => {
           const row = (res.items as CloudRow[])[0];
-          if (row) replaceItemLocally(item.id, rowToItem(row));
+          if (!row) return;
+          const next = rowToItem(row);
+          replaceItemLocally(item.id, next);
+          flushPendingQty(item.id, next.id);
         })
       );
     },
-    [selfName, activeListId, setItems, replaceItemLocally, logActivity]
+    [selfName, activeListId, setItems, replaceItemLocally, logActivity, tryMerge, flushPendingQty]
   );
 
   const addCatalogItem = useCallback(
     (input: AddCatalogItemInput, _user = "Du") => {
       const prepared = prepareCatalogInput(input);
-      const merge = findMergeTarget(activeList.items, prepared);
-      if (merge) {
-        const { item: hit, quantity } = merge;
-        setItems((prev) => prev.map((it) => (it.id === hit.id ? { ...it, quantity } : it)));
-        toast.success(t("list.merged", { name: hit.name, qty: `${quantity}${hit.unit ? ` ${hit.unit}` : ""}` }));
-        if (isLocalList(activeListId)) return markDirty(activeListId);
-        if (!hit.id.startsWith("tmp-")) {
-          const patch = { id: hit.id, quantity };
-          runCloud({ fn: "updateItem", data: patch }, () => updateCloudItem({ data: patch }));
-        }
-        return;
-      }
+      if (tryMerge(prepared)) return;
       const item = buildCatalogItem(`tmp-${Date.now()}${Math.round(Math.random() * 1000)}`, prepared, selfName);
       const photoSaved = prepared.photo ? putItemPhoto(item.id, prepared.photo).catch(() => {}) : Promise.resolve();
+      liveItemsRef.current.items = [...liveItems(), item];
       setItems((prev) => [...prev, item]);
       logActivity(selfName, "hat hinzugefügt", prepared.organic ? `${prepared.name} (Bio)` : prepared.name);
       if (isLocalList(activeListId)) return markDirty(activeListId);
@@ -1111,12 +1162,13 @@ function useCloudLists(
           const row = (res.items as CloudRow[])[0];
           if (!row) return;
           const next = rowToItem(row);
-          if (!prepared.photo) return replaceItemLocally(item.id, next);
-          return photoSaved.then(() => moveItemPhoto(item.id, next.id)).then(() => replaceItemLocally(item.id, next));
+          const done = () => { replaceItemLocally(item.id, next); flushPendingQty(item.id, next.id); };
+          if (!prepared.photo) return done();
+          return photoSaved.then(() => moveItemPhoto(item.id, next.id)).then(done);
         })
       );
     },
-    [selfName, activeListId, activeList, setItems, replaceItemLocally, logActivity]
+    [selfName, activeListId, setItems, replaceItemLocally, logActivity, tryMerge, flushPendingQty]
   );
 
   const toggleItem = useCallback(
@@ -1420,10 +1472,22 @@ export function useShoppingList() {
   }, []);
 
   // ---- Lokaler Modus: Item-Funktionen wie bisher ----
+  const localLiveRef = useRef<ListItem[]>(local.activeList.items);
+  localLiveRef.current = local.activeList.items;
+  const localTryMerge = useCallback((input: MergeInput): boolean => {
+    const m = findMergeTarget(localLiveRef.current, input);
+    if (!m) return false;
+    localLiveRef.current = localLiveRef.current.map((it) => (it.id === m.item.id ? { ...it, quantity: m.quantity } : it));
+    local.setItems((prev) => prev.map((it) => (it.id === m.item.id ? { ...it, quantity: m.quantity } : it)));
+    toast.success(t("list.merged", { name: m.item.name, qty: `${m.quantity}${m.item.unit ? ` ${m.item.unit}` : ""}` }));
+    return true;
+  }, [local]);
+
   const localAddItem = useCallback(
     (name: string, quantity: string, category: CategoryId, user_ = "Du") => {
+      if (localTryMerge({ name, quantity })) return;
       const item: ListItem = {
-        id: `i${Date.now()}`,
+        id: `i${Date.now()}${Math.round(Math.random() * 1000)}`,
         name: name.trim(),
         quantity: quantity.trim(),
         category,
@@ -1431,27 +1495,24 @@ export function useShoppingList() {
         addedBy: user_,
         addedAt: Date.now(),
       };
+      localLiveRef.current = [...localLiveRef.current, item];
       local.setItems((prev) => [...prev, item]);
       logActivity(user_, "hat hinzugefügt", item.name);
     },
-    [local, logActivity]
+    [local, logActivity, localTryMerge]
   );
 
   const localAddCatalogItem = useCallback(
     (input: AddCatalogItemInput, user_ = "Du") => {
       const prepared = prepareCatalogInput(input);
-      const m = findMergeTarget(local.activeList.items, prepared);
-      if (m) {
-        local.setItems((prev) => prev.map((it) => (it.id === m.item.id ? { ...it, quantity: m.quantity } : it)));
-        toast.success(t("list.merged", { name: m.item.name, qty: `${m.quantity}${m.item.unit ? ` ${m.item.unit}` : ""}` }));
-        return;
-      }
+      if (localTryMerge(prepared)) return;
       const localItem = buildCatalogItem(`i${Date.now()}${Math.round(Math.random() * 1000)}`, prepared, user_);
       if (prepared.photo) putItemPhoto(localItem.id, prepared.photo).catch(() => {});
+      localLiveRef.current = [...localLiveRef.current, localItem];
       local.setItems((prev) => [...prev, localItem]);
       logActivity(user_, "hat hinzugefügt", prepared.organic ? `${prepared.name} (Bio)` : prepared.name);
     },
-    [local, logActivity]
+    [local, logActivity, localTryMerge]
   );
 
   const localSetItemGroup = useCallback(
