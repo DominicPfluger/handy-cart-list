@@ -1,3 +1,4 @@
+import { VariantSynonyms } from "@/components/admin/variant-synonyms";
 import { useStandardVariants } from "@/hooks/use-standard-variants";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -1401,7 +1402,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       setVDrag(null); setVOver(null);
                     }}
                     onDragEnd={() => { setVDrag(null); setVOver(null); }}
-                    className={`flex items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
+                    className={`flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
                   >
                     <span className="flex min-w-0 items-center gap-2">
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
@@ -1411,6 +1412,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       {prod && (prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                       <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
                     </span>
+                    {prod && (prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}
                   </div>
                 ))}
               </div>
