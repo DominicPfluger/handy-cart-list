@@ -22,6 +22,7 @@ export function StandardVariantsPanel() {
   const { data: list = [] } = useQuery({ queryKey: STANDARD_VARIANTS_KEY, queryFn: fetchStandardVariants });
   const [name, setName] = useState("");
   const [busy, setBusy] = useState(false);
+  const [translating, setTranslating] = useState<StandardVariant | null>(null);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }), useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
   const refresh = () => qc.invalidateQueries({ queryKey: STANDARD_VARIANTS_KEY });
   const dup = (n: string, except?: string) => list.some((v) => v.id !== except && v.name.toLowerCase() === n.toLowerCase());
