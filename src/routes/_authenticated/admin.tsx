@@ -869,7 +869,7 @@ function AdminPage() {
         {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["recipes", "adm.tab.recipes"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["health", "adm.tab.health"], ["settings", "adm.tab.settings"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
-            {id === "speech" ? "🔊 " : ""}{T(key)}
+            {T(key)}
           </button>
         ))}
         <button type="button" onClick={() => setPreview(true)}
@@ -1061,10 +1061,9 @@ function AdminPage() {
       {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
       {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={(id) => setSel({ kind: "product", id })}
         onOpenDept={(id) => { setSearch(""); setSel(null); setCur(id); setTab("catalog"); }} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
-      {tab === "speech" && <SpeechTextsPanel />}
       {tab === "settings" && (<>
         <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.tab.settings")}>
-          {([["diets", "adm.tab.diets"], ["units", "adm.tab.units"], ["cuisines", "adm.tab.cuisines"]] as const).map(([id, key]) => (
+          {([["diets", "adm.tab.diets"], ["units", "adm.tab.units"], ["cuisines", "adm.tab.cuisines"], ["speech", "stx.title"]] as const).map(([id, key]) => (
             <button key={id} role="tab" aria-selected={setTab2 === id} type="button" onClick={() => setSetTab2(id)}
               className={`whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold ${setTab2 === id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-card text-muted-foreground"}`}>
               {T(key)}
