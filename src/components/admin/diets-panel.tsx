@@ -77,7 +77,7 @@ export function DietsPanel() {
   };
 
   return (
-    <div className="mx-auto max-w-xl space-y-4">
+    <div className="space-y-4">
       <div>
         <h2 className="text-lg font-semibold">{t("diets.title")}</h2>
         <p className="text-sm text-muted-foreground">{t("diets.hint")}</p>
