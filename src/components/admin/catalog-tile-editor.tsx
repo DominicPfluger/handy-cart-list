@@ -1,3 +1,4 @@
+import { useStandardVariants } from "@/hooks/use-standard-variants";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -33,7 +34,6 @@ export type TileDept = { id: string; name: string; emoji: string | null; parent_
 /** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
 export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; image_path?: string | null; icon_path?: string | null; variants?: string[]; alias_id?: string; product_id?: string };
 
-const COMMON_VARIANTS = ["Bio", "Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
 type Target = { kind: "department" | "product"; id: string | null } | null;
 type Drag = { kind: "department" | "product" | "heading"; id: string; index: number; x: number; y: number; label: string } | null;
@@ -1426,7 +1426,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
             </div>
             <div className="flex flex-wrap gap-1.5">
-              {COMMON_VARIANTS.map((cv) => {
+              {commonVariants.map((cv) => {
                 const on = variants.some((x) => x.toLowerCase() === cv.toLowerCase());
                 return (
                   <button key={cv} type="button" disabled={on} onClick={() => addVariant(cv)}

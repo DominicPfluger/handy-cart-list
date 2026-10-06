@@ -1,3 +1,4 @@
+import { useStandardVariants } from "@/hooks/use-standard-variants";
 import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
@@ -42,6 +43,7 @@ const CatalogTileEditor = lazy(() => import("@/components/admin/catalog-tile-edi
 const CatalogMediaPanel = lazy(() => import("@/components/admin/catalog-media-panel").then((m) => ({ default: m.CatalogMediaPanel })));
 const CatalogHealthPanel = lazy(() => import("@/components/admin/catalog-health-panel").then((m) => ({ default: m.CatalogHealthPanel })));
 const LocaleAdminPanel = lazy(() => import("@/components/admin/locale-admin-panel").then((m) => ({ default: m.LocaleAdminPanel })));
+const StandardVariantsPanel = lazy(() => import("@/components/admin/standard-variants-panel").then((m) => ({ default: m.StandardVariantsPanel })));
 const SpeechTextsPanel = lazy(() => import("@/components/admin/speech-texts-panel").then((m) => ({ default: m.SpeechTextsPanel })));
 const DietsPanel = lazy(() => import("@/components/admin/diets-panel").then((m) => ({ default: m.DietsPanel })));
 const UnitsPanel = lazy(() => import("@/components/admin/units-panel").then((m) => ({ default: m.UnitsPanel })));
@@ -152,7 +154,7 @@ function AdminPage() {
   const [sortDlg, setSortDlg] = useState<string | null>(null);
   /** Aktiver Admin-Bereich (Tabs). */
   const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "settings" | "more">("catalog");
-  const [setTab2, setSetTab2] = useState<"diets" | "units" | "cuisines" | "speech">("diets");
+  const [setTab2, setSetTab2] = useState<"diets" | "units" | "cuisines" | "speech" | "variants">("diets");
   const [preview, setPreview] = useState(false);
   useEffect(() => {
     window.dispatchEvent(new CustomEvent("shoppi:admin-tiles", { detail: true }));
@@ -1063,7 +1065,7 @@ function AdminPage() {
         onOpenDept={(id) => { setSearch(""); setSel(null); setCur(id); setTab("catalog"); }} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "settings" && (<>
         <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.tab.settings")}>
-          {([["diets", "adm.tab.diets"], ["units", "adm.tab.units"], ["cuisines", "adm.tab.cuisines"], ["speech", "stx.title"]] as const).map(([id, key]) => (
+          {([["diets", "adm.tab.diets"], ["units", "adm.tab.units"], ["cuisines", "adm.tab.cuisines"], ["speech", "stx.title"], ["variants", "stdv.title"]] as const).map(([id, key]) => (
             <button key={id} role="tab" aria-selected={setTab2 === id} type="button" onClick={() => setSetTab2(id)}
               className={`whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold ${setTab2 === id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-card text-muted-foreground"}`}>
               {T(key)}
@@ -1074,6 +1076,7 @@ function AdminPage() {
         {setTab2 === "units" && <UnitsPanel />}
         {setTab2 === "cuisines" && (d ? <CuisineAdmin depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
         {setTab2 === "speech" && <SpeechTextsPanel />}
+        {setTab2 === "variants" && <StandardVariantsPanel />}
       </>)}
 
       {tab === "markets" && (<div className="space-y-4">
@@ -1262,7 +1265,6 @@ function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) 
 
 type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; before?: string; diets?: string[]; variants?: string[]; heading?: string };
 
-const COMMON_VARIANTS = ["Bio", "Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
 
 function Editor(p: {
@@ -1472,7 +1474,7 @@ function Editor(p: {
               <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
             </div>
             <div className="flex flex-wrap gap-1.5">
-              {COMMON_VARIANTS.map((cv) => {
+              {commonVariants.map((cv) => {
                 const on = variants.some((x) => x.toLowerCase() === cv.toLowerCase());
                 return (
                   <button

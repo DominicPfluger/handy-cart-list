@@ -1403,5 +1403,14 @@
   "diets.inUse": "Used by {n} products – cannot delete",
   "diets.exists": "This diet already exists",
   "diets.editTitle": "Edit diet: {name}",
-  "adm.tab.settings": "Instellingen"
+  "adm.tab.settings": "Instellingen",
+  "stdv.title": "Standard variants",
+  "stdv.hint": "Suggestions shown as quick picks in the product dialog. Variants already saved on products stay unchanged.",
+  "stdv.placeholder": "New standard variant",
+  "stdv.add": "Add",
+  "stdv.rename": "Rename",
+  "stdv.delete": "Delete",
+  "stdv.drag": "Drag to sort",
+  "stdv.exists": "“{name}” already exists",
+  "stdv.confirmDelete": "Delete “{name}” from standard variants?"
 }
