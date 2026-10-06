@@ -18,5 +18,5 @@
 - Admin-Katalog: «Kategorien & Produkte anlegen» auch auf oberster Ebene (Hauptkategorien), Knopf + createTree ohne geöffnete Kategorie
 
 ## Offen
-- [ ] Sämtliche Dialoge per ESC abbrechen
-- [ ] Alle Bilder (App + Katalog) skalieren und komprimieren
+- [x] Sämtliche Dialoge per ESC abbrechen
+- [x] Alle Bilder (App + Katalog) skalieren und komprimieren
