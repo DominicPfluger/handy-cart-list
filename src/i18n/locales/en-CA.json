@@ -1349,6 +1349,7 @@
   "units.inUse": "Used by {n} products – cannot delete",
   "units.visible": "Visible",
   "units.hidden": "Hidden",
+  "units.markets": "Visible in markets (tap to hide)",
   "units.delete": "Delete",
   "units.cancel": "Cancel",
   "units.exists": "This unit already exists",

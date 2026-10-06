@@ -757,6 +757,7 @@ export const de = {
   "units.inUse": "Wird von {n} Produkten verwendet – nicht löschbar",
   "units.visible": "Sichtbar",
   "units.hidden": "Ausgeblendet",
+  "units.markets": "Sichtbar in Märkten (antippen zum Ausblenden)",
   "units.delete": "Löschen",
   "units.cancel": "Abbrechen",
   "units.exists": "Diese Mengenangabe gibt es schon",

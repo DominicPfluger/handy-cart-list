@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { getLocale, translate, swissify } from "../i18n";
 import type { MessageKey } from "../i18n/de";
+import { currentMarket } from "../hooks/use-market";
 
 const BUILTIN_IDS = [
   "stueck", "artikel", "gramm", "kilogramm", "milligramm", "pfund", "unzen", "milliliter", "deziliter",
@@ -11,7 +12,7 @@ const BUILTIN_IDS = [
 
 export type UnitId = string;
 export type UnitLabels = Record<string, { label?: string; short?: string }>;
-export type UnitRow = { id: string; sort_order: number; enabled: boolean; builtin: boolean; labels: UnitLabels };
+export type UnitRow = { id: string; sort_order: number; enabled: boolean; builtin: boolean; labels: UnitLabels; hidden_markets?: string[] };
 
 // ---- Store: Einheiten aus der Datenbank (Reihenfolge, Sichtbarkeit, eigene Bezeichnungen) ----
 let rows: UnitRow[] = BUILTIN_IDS.map((id, i) => ({ id, sort_order: i + 1, enabled: true, builtin: true, labels: {} }));
@@ -23,7 +24,7 @@ const emit = () => { version++; listeners.forEach((l) => l()); };
 export async function loadUnits(): Promise<UnitRow[]> {
   try {
     const { supabase } = await import("@/integrations/supabase/client");
-    const { data } = await (supabase as any).from("units").select("id, sort_order, enabled, builtin, labels").order("sort_order");
+    const { data } = await (supabase as any).from("units").select("id, sort_order, enabled, builtin, labels, hidden_markets").order("sort_order");
     if (data && data.length) {
       rows = data as UnitRow[];
       byId = new Map(rows.map((r) => [r.id, r]));
@@ -50,8 +51,9 @@ function labelOf(id: string, locale: string, kind: "label" | "short"): string {
 export function unitLabel(id: string, locale: string = getLocale()) { return labelOf(id, locale, "label"); }
 
 /** Sichtbare Einheiten in Admin-Reihenfolge mit Bezeichnungen in der aktuellen Sprache. */
-export function getUnits(locale: string = getLocale()) {
-  return rows.filter((r) => r.enabled).map((r) => ({
+export function getUnits(locale: string = getLocale(), keep?: string) {
+  const m = currentMarket();
+  return rows.filter((r) => r.id === keep || (r.enabled && !(r.hidden_markets ?? []).includes(m))).map((r) => ({
     id: r.id,
     label: labelOf(r.id, locale, "label"),
     short: labelOf(r.id, locale, "short"),
