@@ -6,7 +6,7 @@ export type QtyValue = { qty: string; unit: string };
 /** Mengen-Eingabe: Zahl + Einheit (kurze Einheitenbeschriftungen, alle Sprachen). */
 export function QuantityInput({ value, onChange, ariaLabel }: { value: QtyValue; onChange: (v: QtyValue) => void; ariaLabel?: string | undefined }) {
   const { t } = useT();
-  const units = getUnits();
+  const units = getUnits(undefined, value.unit);
   return (
     <span className="inline-flex items-center gap-1">
       <input

@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { DndContext, closestCenter, PointerSensor, TouchSensor, KeyboardSensor, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, useSortable, sortableKeyboardCoordinates, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Pencil, Trash2, Eye, EyeOff, Sparkles } from "lucide-react";
+import { GripVertical, Pencil, Trash2, Eye, EyeOff, Sparkles, Globe } from "lucide-react";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { MessageKey } from "@/i18n/de";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { allUnitRows, loadUnits, unitLabel, unitShort, useUnitsVersion, type UnitRow, type UnitLabels } from "@/lib/units";
 import { translateUnitLabels } from "@/lib/admin.functions";
+import { useMarketCodes } from "@/hooks/use-markets";
 
 const db = supabase as any;
 const slug = (s: string) => s.toLowerCase().replace(/ß/g, "ss").replace(/ä/g, "ae").replace(/ö/g, "oe").replace(/ü/g, "ue").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
@@ -69,6 +70,14 @@ export function UnitsPanel() {
     if (error) toast.error(error.message); else await refresh();
   };
 
+  const toggleMarket = async (u: UnitRow, m: string) => {
+    const cur = u.hidden_markets ?? [];
+    const next = cur.includes(m) ? cur.filter((x) => x !== m) : [...cur, m];
+    setList((l) => l.map((x) => (x.id === u.id ? { ...x, hidden_markets: next } : x)));
+    const { error } = await db.from("units").update({ hidden_markets: next }).eq("id", u.id);
+    if (error) toast.error(error.message); else await refresh();
+  };
+
   const remove = async (u: UnitRow) => {
     const { count } = await db.from("products").select("id", { count: "exact", head: true }).eq("default_unit", u.id);
     if (count) { toast.error(t("units.inUse", { n: count })); return; }
@@ -91,7 +100,7 @@ export function UnitsPanel() {
         <SortableContext items={list.map((u) => u.id)} strategy={verticalListSortingStrategy}>
           <ul className="divide-y rounded-xl border bg-card">
             {list.map((u) => (
-              <UnitItem key={u.id} u={u} locale={locale} onToggle={toggle} onEdit={setEditing} onRemove={remove} />
+              <UnitItem key={u.id} u={u} locale={locale} onToggle={toggle} onToggleMarket={toggleMarket} onEdit={setEditing} onRemove={remove} />
             ))}
           </ul>
         </SortableContext>
@@ -101,25 +110,48 @@ export function UnitsPanel() {
   );
 }
 
-function UnitItem({ u, locale, onToggle, onEdit, onRemove }: {
+function UnitItem({ u, locale, onToggle, onToggleMarket, onEdit, onRemove }: {
   u: UnitRow; locale: string;
-  onToggle: (u: UnitRow) => void; onEdit: (u: UnitRow) => void; onRemove: (u: UnitRow) => void;
+  onToggle: (u: UnitRow) => void; onToggleMarket: (u: UnitRow, m: string) => void; onEdit: (u: UnitRow) => void; onRemove: (u: UnitRow) => void;
 }) {
   const { t } = useT();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: u.id });
+  const markets = useMarketCodes();
+  const [open, setOpen] = useState(false);
+  const hidden = u.hidden_markets ?? [];
   return (
-    <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-center gap-2 px-2 py-2 ${isDragging ? "bg-muted" : ""} ${u.enabled ? "" : "opacity-50"}`}>
+    <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={isDragging ? "bg-muted" : ""}>
+    <div className={`flex items-center gap-2 px-2 py-2 ${isDragging ? "bg-muted" : ""} ${u.enabled ? "" : "opacity-50"}`}>
       <button className="cursor-grab touch-none p-1 text-muted-foreground" {...attributes} {...listeners} aria-label="drag">
         <GripVertical className="h-4 w-4" />
       </button>
       <span className="min-w-0 flex-1 truncate">{unitLabel(u.id, locale)}</span>
       <span className="w-16 text-sm text-muted-foreground">{unitShort(u.id, locale)}</span>
+      <Button size="sm" variant="outline" className="h-8 gap-1 px-2" aria-label={t("units.markets")} title={t("units.markets")} onClick={() => setOpen((o) => !o)}>
+        <Globe className="h-4 w-4" />{hidden.length > 0 && <span className="text-xs">−{hidden.length}</span>}
+      </Button>
       <Button size="icon" variant="ghost" aria-label={u.enabled ? t("units.visible") : t("units.hidden")} title={u.enabled ? t("units.visible") : t("units.hidden")} onClick={() => onToggle(u)}>
         {u.enabled ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
       </Button>
       <Button size="icon" variant="ghost" aria-label={t("units.edit")} title={t("units.edit")} onClick={() => onEdit(u)}><Pencil className="h-4 w-4" /></Button>
       <Button size="icon" variant="ghost" aria-label={t("units.delete")} title={t("units.delete")} onClick={() => onRemove(u)}><Trash2 className="h-4 w-4" /></Button>
+    </div>
+    {open && (
+      <div className="px-3 pb-3">
+        <p className="mb-1 text-xs text-muted-foreground">{t("units.markets")}</p>
+        <div className="flex flex-wrap gap-1">
+          {markets.map((m) => {
+            const off = hidden.includes(m);
+            return (
+              <button key={m} type="button" onClick={() => onToggleMarket(u, m)}
+                className={`rounded-full border px-2 py-0.5 text-xs ${off ? "border-border text-muted-foreground line-through opacity-60" : "border-primary bg-primary/10 text-foreground"}`}>
+                {m}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    )}
     </li>
   );
 }
