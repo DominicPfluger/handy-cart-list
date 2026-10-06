@@ -1,0 +1,1 @@
+UPDATE products SET department_id = 'a1b2c3d4-2a04-4000-8000-000000002a04', updated_at = now() WHERE id IN ('a1b2c3d4-2a20-4000-8000-000000002a20','a1b2c3d4-2a21-4000-8000-000000002a21','a1b2c3d4-2a22-4000-8000-000000002a22','a1b2c3d4-2a23-4000-8000-000000002a23') AND name IN ('Pai Mu Tan','Silver Needle','White Peony','Jasmin-Weißtee');
