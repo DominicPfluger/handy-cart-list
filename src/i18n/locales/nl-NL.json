@@ -1220,6 +1220,7 @@
   "adm.variantImage": "Variantafbeelding",
   "adm.variantImageUpload": "Afbeelding uploaden",
   "adm.variantImageRemove": "Afbeelding verwijderen",
+  "adm.variantRename": "Variant hernoemen",
   "adm.variantImageSaved": "Variantafbeelding opgeslagen",
   "adm.variantImageAiConfirm": "AI-afbeelding maken voor „{name}”? Dit kost credits.",
   "adm.variantAdd": "Variant toevoegen",

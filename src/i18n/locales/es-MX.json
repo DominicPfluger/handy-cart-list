@@ -1220,6 +1220,7 @@
   "adm.variantImage": "Imagen de variante",
   "adm.variantImageUpload": "Subir imagen",
   "adm.variantImageRemove": "Eliminar imagen",
+  "adm.variantRename": "Renombrar variante",
   "adm.variantImageSaved": "Imagen de variante guardada",
   "adm.variantImageAiConfirm": "¿Generar imagen IA para «{name}»? Consume créditos.",
   "adm.variantAdd": "Agregar variante",

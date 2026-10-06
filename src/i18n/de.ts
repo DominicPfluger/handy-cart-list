@@ -28,6 +28,7 @@ export const de = {
   "adm.variantImage": "Variantenbild",
   "adm.variantImageUpload": "Bild hochladen",
   "adm.variantImageRemove": "Bild löschen",
+  "adm.variantRename": "Variante umbenennen",
   "adm.variantImageSaved": "Variantenbild gespeichert",
   "adm.variantImageAiConfirm": "KI-Bild für „{name}“ erzeugen? Dies verbraucht Credits.",
   "common.quickAdd": "{name} schnell hinzufügen (Standardmenge)",

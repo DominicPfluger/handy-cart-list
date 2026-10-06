@@ -674,6 +674,7 @@
   "adm.variantImage": "Variantenbild",
   "adm.variantImageUpload": "Bild hochladen",
   "adm.variantImageRemove": "Bild löschen",
+  "adm.variantRename": "Variante umbenennen",
   "adm.variantImageSaved": "Variantenbild gespeichert",
   "adm.variantImageAiConfirm": "KI-Bild für „{name}“ erzeugen? Dies verbraucht Credits.",
   "adm.variantAdd": "Variante hinzufügen",
