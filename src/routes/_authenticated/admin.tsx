@@ -1392,12 +1392,7 @@ function Editor(p: {
           </PreviewCollapse>
         )}
         {prod && prodIconUrl && (
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
-              <img src={prodIconUrl} alt="" className="h-full w-full object-contain" />
-            </div>
-            <p className="text-sm font-semibold text-foreground">{T("adm.iconImage")}</p>
-          </div>
+          <IconCollapse label={T("adm.iconImage")} src={prodIconUrl} emoji={prod.emoji} />
         )}
         {prod && (
           <div className="grid grid-cols-2 gap-2">
