@@ -36,7 +36,7 @@ const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR
 /** Alias-Kategorien: id = "deptalias:<aliasId>", alias_id + dept_id (Original) gesetzt. */
 export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; icon_path?: string | null; alias_id?: string; dept_id?: string };
 /** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
-export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; image_path?: string | null; icon_path?: string | null; variants?: string[]; alias_id?: string; product_id?: string };
+export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; image_path?: string | null; icon_path?: string | null; variants?: string[]; alias_id?: string; product_id?: string };
 
 
 type Target = { kind: "department" | "product"; id: string | null } | null;
@@ -881,6 +881,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [qty, setQty] = useState(prod?.default_quantity ?? 1);
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [allowedUnits, setAllowedUnits] = useState<string[]>(prod?.allowed_units ?? []);
+  const [unitQuantities, setUnitQuantities] = useState<Record<string, number>>({ ...(prod?.unit_quantities ?? {}), [prod?.default_unit ?? "stueck"]: prod?.default_quantity ?? 1 });
   const [hint, setHint] = useState("");
   const [imgOpts, setImgOpts] = useState<AiImageOpts>(DEFAULT_AI_IMAGE_OPTS);
   const [iconHint, setIconHint] = useState("");
@@ -1037,7 +1038,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
-        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), variants } as never).eq("id", item.id));
+        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, variants } as never).eq("id", item.id));
       if (item.name !== base.name) {
         await p.must(supabase.from("catalog_translations").delete().eq("entity_id", item.id).eq("is_manual", false));
         await p.translateIds([item.id]);
@@ -1053,7 +1054,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               ? p.products.length + 1
               : await supabase.from("products").select("sort_order").eq("department_id", targetDept).order("sort_order", { ascending: false }).limit(1)
                   .then(({ data }) => ((data?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1);
-            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), variants, sort_order: nextSort } as never).select("id").single();
+            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, variants, sort_order: nextSort } as never).select("id").single();
           })();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
@@ -1317,15 +1318,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             {prodLines.trim() && <p className="text-[11px] text-muted-foreground">{T("adm.detected", { n: new Set(prodLines.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)).size })}</p>}
           </div>
         )}
-        {!p.imageOnly && !isDept && (
-          <div className="flex gap-2">
-            <Input aria-label={T("tile.qty")} type="number" min={0} step="any" value={qty} onChange={(e) => setQty(Number(e.target.value))} className="h-11 w-24 rounded-xl" />
-            <select aria-label={T("tile.unit")} value={unit} onChange={(e) => setUnit(e.target.value)} className="h-11 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
-              {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
-            </select>
-          </div>
-        )}
-        {!p.imageOnly && !isDept && <AllowedUnitsPicker value={allowedUnits} primary={unit} onChange={setAllowedUnits} />}
+        {!p.imageOnly && !isDept && <AllowedUnitsPicker value={{ primary: unit, units: allowedUnits, quantities: unitQuantities }} onChange={(next) => { setUnit(next.primary); setAllowedUnits(next.units); setUnitQuantities(next.quantities); setQty(next.quantities[next.primary] ?? 1); }} />}
         {!p.imageOnly && !isDept && (
           <div className="space-y-2">
             <div className="flex gap-2">
@@ -1472,7 +1465,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           {item && p.onAdvanced && <Button variant="outline" className="h-11 rounded-xl" onClick={() => { p.onAdvanced!(p.target.kind, item.id); p.onClose(); }}>⚙ {T("tile.advanced")}</Button>}
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
           <Button variant="outline" className="h-11 rounded-xl" onClick={p.onClose}>{T("common.cancel")}</Button>
-          <Button className="h-11 flex-1 rounded-xl" disabled={enriching} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
+          <Button className="h-11 flex-1 rounded-xl" disabled={enriching || (!isDept && Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0))} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
         </div>}
         </div>
       </div>
