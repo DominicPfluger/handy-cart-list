@@ -27,7 +27,7 @@ import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
 import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
-import { PreviewCollapse } from "@/components/admin/preview-collapse";
+import { PreviewCollapse, IconCollapse } from "@/components/admin/preview-collapse";
 import { signedCategoryImageUrl } from "@/lib/image-upload";
 import { deptTreeOrder } from "@/lib/dept-order";
 import { isNonFoodRootName } from "@/lib/dept-colors";
@@ -1392,12 +1392,7 @@ function Editor(p: {
           </PreviewCollapse>
         )}
         {prod && prodIconUrl && (
-          <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
-              <img src={prodIconUrl} alt="" className="h-full w-full object-contain" />
-            </div>
-            <p className="text-sm font-semibold text-foreground">{T("adm.iconImage")}</p>
-          </div>
+          <IconCollapse label={T("adm.iconImage")} src={prodIconUrl} emoji={prod.emoji} />
         )}
         {prod && (
           <div className="grid grid-cols-2 gap-2">
