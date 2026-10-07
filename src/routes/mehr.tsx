@@ -39,6 +39,7 @@ import { APP_VERSION } from "../lib/app-version";
 import { InstallAppRow } from "../components/install-app-row";
 import { CategoryOrderSettings } from "../components/category-order-settings";
 import { AppUpdateRow } from "../components/app-update-row";
+import { UserUnitsSettings } from "../components/user-units-settings";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
@@ -124,6 +125,7 @@ function MorePage() {
 
       <section className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
         <DietPreferenceRow />
+        <UserUnitsSettings />
         <div>
           <CategoryOrderSettings />
         </div>
