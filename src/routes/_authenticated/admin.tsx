@@ -1361,7 +1361,7 @@ function Editor(p: {
     setProdImgUrl(null);
     setProdIconUrl(null);
     if (prod?.image_path) signedCategoryImageUrl(prod.image_path).then((u) => { if (alive) setProdImgUrl(u); });
-    if (prod.icon_path) signedCategoryImageUrl(prod.icon_path).then((u) => { if (alive) setProdIconUrl(u); });
+    if (prod?.icon_path) signedCategoryImageUrl(prod.icon_path).then((u) => { if (alive) setProdIconUrl(u); });
     return () => { alive = false; };
   }, [prod?.image_path, prod?.icon_path]);
 
@@ -1547,7 +1547,7 @@ function Editor(p: {
           </select>
         )}
         <div className="flex gap-2">
-          <Button className="flex-1" disabled={p.busy || !name.trim()} onClick={() => p.onSave({
+          <Button className="flex-1" disabled={p.busy || !name.trim() || (prod ? Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0) : false)} onClick={() => p.onSave({
             name: name.trim(), emoji, before,
             ...(sel.kind !== "heading" ? { parent } : {}),
             ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, allowedUnits, unitQuantities, diets, variants, heading: headingSel } : {}),

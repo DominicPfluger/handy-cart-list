@@ -1465,7 +1465,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           {item && p.onAdvanced && <Button variant="outline" className="h-11 rounded-xl" onClick={() => { p.onAdvanced!(p.target.kind, item.id); p.onClose(); }}>⚙ {T("tile.advanced")}</Button>}
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
           <Button variant="outline" className="h-11 rounded-xl" onClick={p.onClose}>{T("common.cancel")}</Button>
-          <Button className="h-11 flex-1 rounded-xl" disabled={enriching} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
+          <Button className="h-11 flex-1 rounded-xl" disabled={enriching || (!isDept && Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0))} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
         </div>}
         </div>
       </div>
