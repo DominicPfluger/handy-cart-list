@@ -141,7 +141,7 @@ function AdminPage() {
   /** Anzeigesprache des Katalogs im Admin (nur Anzeige, Bearbeitung bleibt Deutsch). */
   const [viewLoc, setViewLoc] = useState<string>("de-DE");
   const admin = useQuery({ queryKey: ["admin-check"], queryFn: () => check() });
-  const qCore = useQuery({ queryKey: ["admin-catalog"], queryFn: loadCore, enabled: Boolean(admin.data?.isAdmin) });
+  const qCore = useQuery({ queryKey: ["admin-catalog"], queryFn: loadCore, enabled: Boolean(admin.data?.isAdmin || admin.data?.isViewer) });
   // Übersetzungen/Marktdaten erst nach dem Kern laden (gross, nur für Detailansichten nötig).
   const qExtra = useQuery({ queryKey: ["admin-catalog", "extra"], queryFn: loadExtra, enabled: Boolean(qCore.data) });
   const q = useMemo(() => ({
@@ -781,7 +781,7 @@ function AdminPage() {
   }, [search, d]);
 
   if (admin.isLoading) return <p className="pt-6 text-sm text-muted-foreground">{T("adm.loading")}</p>;
-  if (!admin.data?.isAdmin && admin.data?.markets?.length)
+  if (!admin.data?.isAdmin && !admin.data?.isViewer && admin.data?.markets?.length)
     return (
       <div className="space-y-4 pb-10">
         <div className="flex items-center justify-between gap-2">
@@ -791,7 +791,7 @@ function AdminPage() {
         <MarketAdmin markets={admin.data.markets} />
       </div>
     );
-  if (!admin.data?.isAdmin)
+  if (!admin.data?.isAdmin && !admin.data?.isViewer)
     return (
       <div className="space-y-3 pt-6">
         <h1 className="text-2xl font-bold text-foreground">{T("adm.title")}</h1>
