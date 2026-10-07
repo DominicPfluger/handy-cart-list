@@ -31,3 +31,37 @@ export function PreviewCollapse({ label, src, emoji, defaultOpen = false, childr
     </div>
   );
 }
+
+/** Aufklappbares Icon: zugeklappt nur kleine Vorschau mit Pfeil, aufgeklappt grössere Vorschau plus Aktionen. */
+export function IconCollapse({ label, hint, src, emoji, defaultOpen = false, children }: {
+  label: string;
+  hint?: string;
+  src?: string | null;
+  emoji?: string | null;
+  defaultOpen?: boolean;
+  children?: ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="space-y-2 rounded-xl border border-border p-2">
+      <button type="button" aria-expanded={open} onClick={() => setOpen((v) => !v)} className="flex w-full items-center gap-3 text-left">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-border bg-muted">
+          {src ? <img src={src} alt="" className="h-full w-full object-contain" /> : <span className="text-xl">{emoji || "🛒"}</span>}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm font-semibold text-foreground">{label}</span>
+          {hint && <span className="block text-[11px] text-muted-foreground">{hint}</span>}
+        </span>
+        <span aria-hidden="true" className="shrink-0 text-muted-foreground">{open ? "▾" : "▸"}</span>
+      </button>
+      {open && (
+        <>
+          <div className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-muted">
+            {src ? <img src={src} alt="" className="h-24 w-auto object-contain" /> : <span className="py-6 text-4xl">{emoji || "🛒"}</span>}
+          </div>
+          {children}
+        </>
+      )}
+    </div>
+  );
+}
