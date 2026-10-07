@@ -35,9 +35,9 @@ export function PreviewCollapse({ label, src, emoji, defaultOpen = false, childr
 /** Aufklappbares Icon: zugeklappt nur kleine Vorschau mit Pfeil, aufgeklappt grössere Vorschau plus Aktionen. */
 export function IconCollapse({ label, hint, src, emoji, defaultOpen = false, children }: {
   label: string;
-  hint?: string;
-  src?: string | null;
-  emoji?: string | null;
+  hint?: string | undefined;
+  src?: string | null | undefined;
+  emoji?: string | null | undefined;
   defaultOpen?: boolean;
   children?: ReactNode;
 }) {
