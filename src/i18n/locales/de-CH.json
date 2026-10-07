@@ -845,5 +845,11 @@
   "adm.variantAi.again": "Neue Vorschläge",
   "adm.variantAi.addAll": "Alle hinzufügen",
   "adm.variantAi.none": "Keine neuen Vorschläge gefunden",
-  "adm.setUnitSelected": "Einheit ändern …"
+  "adm.setUnitSelected": "Einheit ändern …",
+  "list.frozenProduct": "{name} (TK)",
+  "list.cannedProduct": "{name} (Konserve)",
+  "rk.formFresh": "Frisch",
+  "rk.formFrozen": "Tiefgekühlt",
+  "rk.formCanned": "Konserve",
+  "rk.form": "Lagerform"
 }

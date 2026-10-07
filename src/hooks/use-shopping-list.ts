@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { translate, getLocale } from "../i18n";
 import { moveItemPhoto, putItemPhoto } from "../lib/item-photo-store";
 import { scaleOf } from "../lib/item-price";
+import { storageFormOf, hasFormWord } from "../lib/storage-form";
 import {
   getMyLists,
   createCloudList,
@@ -180,8 +181,13 @@ const DRIED_HERBS_DEPARTMENT_ID = "089a5c11-ff00-4716-b0f0-3d1421c2969f";
 
 /** Katalogname für die Einkaufsliste ergänzen, ohne den Namen im Katalog selbst zu verändern. */
 export function catalogListName(name: string, departmentId?: string): string {
-  if (departmentId !== DRIED_HERBS_DEPARTMENT_ID) return name;
   const marker = "__SHOPPI_PRODUCT__";
+  const form = storageFormOf(departmentId);
+  if (form !== "fresh") {
+    if (hasFormWord(name, form)) return name;
+    return translate(getLocale(), form === "frozen" ? "list.frozenProduct" : "list.cannedProduct", { name: marker }).replace(marker, name);
+  }
+  if (departmentId !== DRIED_HERBS_DEPARTMENT_ID) return name;
   const pattern = translate(getLocale(), "list.driedProduct", { name: marker });
   const qualifier = pattern.replace(marker, "").trim().toLocaleLowerCase();
   if (qualifier && name.toLocaleLowerCase().includes(qualifier)) return name;

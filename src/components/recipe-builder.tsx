@@ -21,6 +21,7 @@ import { RECIPE_TRAITS, TRAIT_GROUPS, TASTE_MAX, splitTaste, toggleTaste, type R
 import { SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
 import { QuantityInput, isValidQty, type QtyValue } from "./quantity-input";
 import { useCuisineFilter, toggleCuisine } from "../hooks/use-cuisine-filter";
+import { STORAGE_FORMS, formAlternatives, storageFormOf, type StorageForm } from "../lib/storage-form";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -47,6 +48,8 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const locale = useLocale();
   // Gewählte Produkt-Variante je Zutat (leer = Standard).
   const [variants, setVariants] = useState<Record<string, string>>({});
+  // Gewählte Lagerform je Zutat (Frisch / TK / Konserve), tauscht auf das gleichnamige Produkt der anderen Abteilung.
+  const [forms, setForms] = useState<Record<string, StorageForm>>({});
   // Eigene Mengen je Zutat (überschreiben die Produkt-Standardmenge nur für dieses Rezept).
   const [qty, setQty] = useState<Record<string, QtyValue>>({});
   const qtyOf = (p: CatalogProduct): QtyValue => qty[p.id] ?? { qty: String(p.defaultQuantity), unit: p.defaultUnit };
@@ -274,6 +277,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     return null;
   };
   const chosen = steps.flatMap((s) => (picks[s.key] ?? []).map((id) => (id.startsWith("any:") ? resolveAny(s, id) : s.products.find((p) => p.id === id)) ?? null).filter((p): p is CatalogProduct => !!p))
+    .map((p) => { const f = forms[p.id]; const alt = f ? formAlternatives(catalog.products, p)[f] : undefined; return alt && alt.id !== p.id ? alt : p; })
     .map((p) => { const v = variants[p.id]; return v && p.variants?.includes(v) ? { ...p, name: `${p.name} · ${vName(p, v)}`, chosenVariant: v } : p; }) as (CatalogProduct & { chosenVariant?: string })[];
   const catName = tpl ? templateLabel(tpl, t) : "";
   const title = chosen.length
@@ -679,11 +683,29 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   </button>
                 );
                 const vs = p.variants ?? [];
-                if (!on || vs.length === 0) return btn;
+                const alts = on ? formAlternatives(catalog.products, p) : {};
+                const formList = STORAGE_FORMS.filter((f) => alts[f]);
+                const curForm: StorageForm = forms[p.id] ?? storageFormOf(p.departmentId);
+                const formLabel: Record<StorageForm, string> = { fresh: t("rk.formFresh"), frozen: t("rk.formFrozen"), canned: t("rk.formCanned") };
+                const formSeg = formList.length > 1 ? (
+                  <span role="group" aria-label={t("rk.form")} className="inline-flex overflow-hidden rounded-full border border-border">
+                    {formList.map((f) => (
+                      <button key={f} type="button" aria-pressed={curForm === f}
+                        onClick={() => { setSavedMsg(false); setAdded(false); setForms((x) => ({ ...x, [p.id]: f })); }}
+                        className={`px-2 py-0.5 text-[11px] font-medium ${curForm === f ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground"}`}>
+                        {formLabel[f]}
+                      </button>
+                    ))}
+                  </span>
+                ) : null;
+                if (!on || (vs.length === 0 && !formSeg)) return btn;
+                if (vs.length === 0) return (
+                  <span key={p.id} className="inline-flex flex-wrap items-center gap-1 rounded-2xl border border-dashed border-primary/50 p-1">{btn}{formSeg}</span>
+                );
                 const cur = variants[p.id] ?? "";
                 return (
                   <span key={p.id} className="inline-flex flex-wrap items-center gap-1 rounded-2xl border border-dashed border-primary/50 p-1">
-                    {btn}
+                    {btn}{formSeg}
                     <span role="group" aria-label={t("rk.variant")} className="inline-flex flex-wrap gap-1">
                       {["", ...vs].map((v) => (
                         <button key={v || "std"} type="button" aria-pressed={cur === v}
