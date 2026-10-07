@@ -128,6 +128,15 @@ export function MarketsManager() {
                 <button type="button" aria-label={T("mkt.edit")} onClick={() => { setEdit(m.code); setForm({ code: m.code, name: m.name, flag: m.flag, currency: m.currency }); }} className="text-sm">✎</button>
                 <button type="button" aria-label={T("mkt.delete")} onClick={() => delMarket(m)} className="text-sm text-destructive">✕</button>
               </div>
+              {localesOf(m.code).length > 0 && (
+                <div className="flex flex-wrap items-center gap-1 border-t border-border px-2 py-1.5 text-xs">
+                  {localesOf(m.code).map((l) => (
+                    <span key={l.id} title={l.label} className="rounded-full bg-muted px-1.5 py-0.5 text-muted-foreground">
+                      {l.flag} {l.id.toLowerCase()}
+                    </span>
+                  ))}
+                </div>
+              )}
               {open === m.code && (
                 <div className="space-y-1.5 border-t border-border px-3 py-2">
                   {list.map((s) => (
