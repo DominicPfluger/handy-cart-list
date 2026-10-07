@@ -21,7 +21,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
-import { PreviewCollapse } from "@/components/admin/preview-collapse";
+import { PreviewCollapse, IconCollapse } from "@/components/admin/preview-collapse";
 import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
@@ -1274,15 +1274,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </PreviewCollapse>
         )}
         {effId && (
-          <div className="space-y-2 rounded-xl border border-border p-2">
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted text-2xl">
-                {iconInfo.url ? <img src={iconInfo.url} alt="" className="h-full w-full object-contain" /> : emoji || (isDept ? "📁" : "🛒")}
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-foreground">{T("adm.iconImage")}</p>
-                {!iconInfo.custom && <p className="text-[11px] text-muted-foreground">{T("adm.iconAutoHint")}</p>}
-              </div>
+          <IconCollapse label={T("adm.iconImage")} hint={iconInfo.custom ? undefined : T("adm.iconAutoHint")} src={iconInfo.url} emoji={emoji || (isDept ? "📁" : "🛒")}>
+            <div className="flex flex-wrap gap-2">
               <Button size="sm" variant="outline" onClick={() => iconFileRef.current?.click()}>{T("tile.upload")}</Button>
               {iconInfo.custom && <Button size="sm" variant="ghost" className="text-destructive" onClick={() => { if (window.confirm(T("tile.removeImageConfirm"))) void p.run(async () => { await clearCustomIcon(isDept ? "department" : "product", effId); await loadIcon(effId); await qc.invalidateQueries({ queryKey: ["catalog"] }); }); }}>{T("tile.removeImage")}</Button>}
               <input ref={iconFileRef} type="file" accept="image/*" hidden onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void p.run(async () => { await saveCustomIcon(isDept ? "department" : "product", effId, f); await loadIcon(effId); await qc.invalidateQueries({ queryKey: ["catalog"] }); }); }} />
@@ -1299,7 +1292,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 <AiImageOptionSelects value={iconImgOpts} onChange={setIconImgOpts} />
               </div>
             </details>
-          </div>
+          </IconCollapse>
         )}
         {!p.imageOnly && !isDept && !item && (
           <label className="flex items-center gap-2 text-sm">

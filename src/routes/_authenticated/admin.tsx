@@ -27,7 +27,7 @@ import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
 import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
-import { PreviewCollapse } from "@/components/admin/preview-collapse";
+import { PreviewCollapse, IconCollapse } from "@/components/admin/preview-collapse";
 import { signedCategoryImageUrl } from "@/lib/image-upload";
 import { deptTreeOrder } from "@/lib/dept-order";
 import { isNonFoodRootName } from "@/lib/dept-colors";
