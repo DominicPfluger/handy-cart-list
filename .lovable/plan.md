@@ -1,7 +1,7 @@
 # Varianten im Produktdialog per Drag & Drop sortieren
 
 ## Ziel
-Varianten lassen sich in der Produktbearbeitung durch Ziehen am Griff neu anordnen – mit Maus und auf Mobilgeräten per Finger. Die neue Reihenfolge wird beim Speichern des Produkts übernommen.
+Varianten lassen sich direkt in der Variantenliste des Admin-Produkt-Bearbeiten-Dialogs durch Ziehen am Griff neu anordnen – mit Maus und auf Mobilgeräten per Finger. Die neue Reihenfolge wird beim Speichern des Produkts übernommen.
 
 ## Aktueller Stand
 Die Variantenlisten in beiden Produkt-Bearbeiten-Dialogen besitzen bereits Ziehgriffe und Browser-Drag-&-Drop. Diese Umsetzung funktioniert jedoch primär mit der Maus; die bestehende mobile Zeigersteuerung des Admin-Katalogs wird dort noch nicht verwendet. Auch der separate Dialog zum schnellen Hinzufügen von Varianten nutzt dieselbe Desktop-Technik.
@@ -18,7 +18,7 @@ Die Variantenlisten in beiden Produkt-Bearbeiten-Dialogen besitzen bereits Ziehg
    - Vertikales Scrollen ausserhalb des Griffs weiterhin ermöglichen.
 
 3. **Alle Variantenansichten vereinheitlichen**
-   - Die neue Sortierung im erweiterten Produktdialog und im Kachel-Produktdialog einsetzen.
+   - Die neue Sortierung ausdrücklich in der Variantenliste des Admin-Produkt-Bearbeiten-Dialogs sowie im Kachel-Produktdialog einsetzen.
    - Den separaten Schnell-Dialog für Varianten ebenfalls auf dieselbe mobile Sortierung umstellen.
    - Im Produktdialog bleibt die Änderung bis „Speichern“ lokal; im Schnell-Dialog wird die neue Reihenfolge wie bisher direkt gespeichert.
 
