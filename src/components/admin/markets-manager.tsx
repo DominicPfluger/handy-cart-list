@@ -98,6 +98,16 @@ export function MarketsManager() {
     refresh();
   };
 
+  /** Alle Sprachvarianten eines Markts (Regionsteil des Locale-Codes, z. B. CH → de-CH, fr-CH, it-CH). */
+  const localesOf = (code: string) => {
+    const seen = new Set<string>();
+    return [...LOCALES, ...appLocales].filter((l) => {
+      if (seen.has(l.id)) return false;
+      seen.add(l.id);
+      return l.id.split("-")[1] === code;
+    });
+  };
+
   return (
     <section className="space-y-3 rounded-xl border border-border bg-card p-3">
       <h2 className="text-base font-bold text-foreground">🏪 {T("mkt.title")}</h2>
