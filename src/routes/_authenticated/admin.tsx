@@ -1100,10 +1100,6 @@ function AdminPage() {
         {setTab2 === "variants" && <StandardVariantsPanel />}
       </>)}
 
-      {tab === "markets" && (<div className="space-y-4">
-        <MarketsManager />
-        <MarketAdminsManager />
-      </div>)}
 
       {preview && <CatalogPreview onClose={() => setPreview(false)} />}
       </Suspense>
