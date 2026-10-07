@@ -965,7 +965,6 @@
   "adm.tab.prices": "Preços",
   "adm.tab.import": "Import",
   "adm.tab.languages": "Idiomas",
-
   "adm.tab.langMarkets": "Idiomas & Mercados",
   "adm.tab.markets": "Mercados",
   "adm.tab.recipes": "Gestão de receitas",
@@ -1432,5 +1431,6 @@
   "rk.formFrozen": "Congelado",
   "rk.formCanned": "Enlatado",
   "rk.form": "Formato",
-  "adm.allowedUnits": "Outras unidades padrão (mostradas primeiro)"
+  "adm.allowedUnits": "Outras unidades padrão (mostradas primeiro)",
+  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved."
 }

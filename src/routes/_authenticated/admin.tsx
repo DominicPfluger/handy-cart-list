@@ -870,6 +870,11 @@ function AdminPage() {
         <h1 className="text-2xl font-bold text-foreground">{T("adm.title")}</h1>
         <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
       </div>
+      {admin.data?.isViewer && !admin.data?.isAdmin && (
+        <div className="sticky top-0 z-30 rounded-xl border border-primary/40 bg-primary-soft px-4 py-2.5 text-sm font-medium text-foreground">
+          {T("adm.viewerMode")}
+        </div>
+      )}
 
       <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.title")}>
         {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["recipes", "adm.tab.recipes"], ["settings", "adm.tab.settings"], ["health", "adm.tab.health"], ["langMarkets", "adm.tab.langMarkets"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"]] as const).map(([id, key]) => (

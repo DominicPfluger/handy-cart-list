@@ -965,7 +965,6 @@
   "adm.tab.prices": "Prices",
   "adm.tab.import": "Import",
   "adm.tab.languages": "Languages",
-
   "adm.tab.langMarkets": "Languages & Markets",
   "adm.tab.markets": "Markets",
   "adm.tab.recipes": "Recipe Management",
@@ -1435,5 +1434,6 @@
   "rk.formFrozen": "Frozen",
   "rk.formCanned": "Canned",
   "rk.form": "Form",
-  "adm.allowedUnits": "Additional default units (shown first)"
+  "adm.allowedUnits": "Additional default units (shown first)",
+  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved."
 }
