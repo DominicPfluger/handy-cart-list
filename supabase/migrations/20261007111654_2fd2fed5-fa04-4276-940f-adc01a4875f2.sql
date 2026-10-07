@@ -1,0 +1,3 @@
+CREATE POLICY "Viewers read admin_backups" ON public.admin_backups FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'viewer'));
+CREATE POLICY "Viewers read import_candidates" ON public.import_candidates FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'viewer'));
+CREATE POLICY "Viewers read import_sources" ON public.import_sources FOR SELECT TO authenticated USING (public.has_role(auth.uid(), 'viewer'));
