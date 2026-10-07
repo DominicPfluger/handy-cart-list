@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { getLocale, translate } from "@/i18n";
+import { getLocale, LOCALES, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,15 @@ function check(r: { error: { message: string } | null }) {
 export function MarketsManager() {
   const qc = useQueryClient();
   const { data: markets = [] } = useQuery(marketsQuery);
+  const { data: appLocales = [] } = useQuery({
+    queryKey: ["app-locales-all"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("app_locales").select("id, label, flag");
+      if (error) throw new Error(error.message);
+      return (data ?? []) as { id: string; label: string; flag: string }[];
+    },
+    staleTime: 60_000,
+  });
   const { data: shops = [] } = useQuery({
     queryKey: ["supermarkets"],
     queryFn: async () => {
