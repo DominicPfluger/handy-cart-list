@@ -77,7 +77,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 type Kind = "department" | "product" | "heading";
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; icon_path: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; allowed_units?: string[]; excluded_diets: string[]; variants: string[]; markets: string[]; image_path: string | null; icon_path: string | null };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets: string[]; variants: string[]; markets: string[]; image_path: string | null; icon_path: string | null };
 type Head = { id: string; name: string; department_id: string; before_product_id: string };
 type Tr = { entity_id: string; locale: string; name: string; is_manual: boolean };
 type Sel = { kind: Kind; id: string } | null;
@@ -96,7 +96,7 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
 async function loadCore() {
   const [depts, prods, heads] = await Promise.all([
     paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path, icon_path").order("sort_order").order("id").range(a, b)),
-    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, allowed_units, excluded_diets, variants, markets, image_path, icon_path").order("sort_order").order("id").range(a, b) as never),
+    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, allowed_units, unit_quantities, excluded_diets, variants, markets, image_path, icon_path").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
   ]);
   return { depts, prods, heads };
@@ -1033,6 +1033,7 @@ function AdminPage() {
               if (patch.qty !== undefined) upd['default_quantity'] = patch.qty;
               if (patch.unit) upd['default_unit'] = patch.unit;
               if (patch.allowedUnits) upd['allowed_units'] = patch.allowedUnits.filter((u) => u !== patch.unit);
+              if (patch.unitQuantities) upd['unit_quantities'] = patch.unitQuantities;
               if (patch.diets) upd['excluded_diets'] = patch.diets;
               if (patch.variants) upd['variants'] = patch.variants;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
@@ -1268,7 +1269,7 @@ function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) 
   );
 }
 
-type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; allowedUnits?: string[]; before?: string; diets?: string[]; variants?: string[]; heading?: string };
+type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; allowedUnits?: string[]; unitQuantities?: Record<string, number>; before?: string; diets?: string[]; variants?: string[]; heading?: string };
 
 
 
@@ -1299,6 +1300,7 @@ function Editor(p: {
   const [qty, setQty] = useState(String(prod?.default_quantity ?? 1));
   const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
   const [allowedUnits, setAllowedUnits] = useState<string[]>(prod?.allowed_units ?? []);
+  const [unitQuantities, setUnitQuantities] = useState<Record<string, number>>({ ...(prod?.unit_quantities ?? {}), [prod?.default_unit ?? "stueck"]: prod?.default_quantity ?? 1 });
   const [before, setBefore] = useState(head?.before_product_id ?? "");
   const deptProds = prod ? data.prods.filter((x) => x.department_id === prod.department_id).slice().sort((a, b) => a.sort_order - b.sort_order) : [];
   const deptHeads = prod ? data.heads.filter((h) => h.department_id === prod.department_id) : [];
@@ -1358,8 +1360,7 @@ function Editor(p: {
     let alive = true;
     setProdImgUrl(null);
     setProdIconUrl(null);
-    if (!prod?.image_path) return;
-    signedCategoryImageUrl(prod.image_path).then((u) => { if (alive) setProdImgUrl(u); });
+    if (prod?.image_path) signedCategoryImageUrl(prod.image_path).then((u) => { if (alive) setProdImgUrl(u); });
     if (prod.icon_path) signedCategoryImageUrl(prod.icon_path).then((u) => { if (alive) setProdIconUrl(u); });
     return () => { alive = false; };
   }, [prod?.image_path, prod?.icon_path]);
@@ -1394,16 +1395,10 @@ function Editor(p: {
             <Button type="button" variant="outline" onClick={p.onEditImage}>🖼️ {T("adm.previewImage")}</Button>
           </PreviewCollapse>
         )}
-        {prod && prodIconUrl && (
+        {prod && (
           <IconCollapse label={T("adm.iconImage")} src={prodIconUrl} emoji={prod.emoji} />
         )}
-        {prod && (
-          <div className="grid grid-cols-2 gap-2">
-            <Input inputMode="decimal" value={qty} onChange={(e) => setQty(e.target.value)} />
-            <UnitSelect value={unit} onChange={setUnit} />
-          </div>
-        )}
-        {prod && <AllowedUnitsPicker value={allowedUnits} primary={unit} onChange={setAllowedUnits} />}
+        {prod && <AllowedUnitsPicker value={{ primary: unit, units: allowedUnits, quantities: unitQuantities }} onChange={(next) => { setUnit(next.primary); setAllowedUnits(next.units); setUnitQuantities(next.quantities); setQty(String(next.quantities[next.primary] ?? 1)); }} />}
         {prod && deptHeads.length > 0 && (
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-foreground">{T("adm.headingAssign")}</h3>
@@ -1555,7 +1550,7 @@ function Editor(p: {
           <Button className="flex-1" disabled={p.busy || !name.trim()} onClick={() => p.onSave({
             name: name.trim(), emoji, before,
             ...(sel.kind !== "heading" ? { parent } : {}),
-            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, allowedUnits, diets, variants, heading: headingSel } : {}),
+            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, allowedUnits, unitQuantities, diets, variants, heading: headingSel } : {}),
           })}>{T("adm.save")}</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>

@@ -5,7 +5,7 @@ import { brandsFor, departmentIdsOf, pathTo, useCatalog, type CatalogProduct } f
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { useMarket } from "../hooks/use-market";
 import { getUnits, formatQuantity, unitLabel, type UnitId } from "../lib/units";
-import { preferredUnits, sortByPreferred } from "../lib/product-units";
+import { preferredUnits, quantityForUnit, sortByPreferred } from "../lib/product-units";
 import { useT, pickName } from "../i18n";
 
 import { useShoppingList } from "../hooks/use-shopping-list";
@@ -195,7 +195,7 @@ export function CatalogProductDialog({
           </div>
           <div className="space-y-2">
             <Label>{t("dlg.unit")}</Label>
-            <Select value={unit} onValueChange={(value) => setUnit(value as UnitId)}>
+            <Select value={unit} onValueChange={(value) => { setUnit(value as UnitId); if (product) setQuantity(String(quantityForUnit(product, value))); }}>
               <SelectTrigger className="h-11 rounded-xl bg-card">
                 <SelectValue />
               </SelectTrigger>
@@ -212,7 +212,7 @@ export function CatalogProductDialog({
         {prefUnits.length > 1 && (
           <div className="-mt-1 flex flex-wrap gap-1.5">
             {prefUnits.map((u) => (
-              <button key={u} type="button" aria-pressed={unit === u} onClick={() => setUnit(u as UnitId)}
+              <button key={u} type="button" aria-pressed={unit === u} onClick={() => { setUnit(u as UnitId); if (product) setQuantity(String(quantityForUnit(product, u))); }}
                 className={`rounded-full border px-3 py-1 text-xs font-medium ${unit === u ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
                 {unitLabel(u, locale)}
               </button>

@@ -40,3 +40,9 @@ export function sortByPreferred<T extends { id: string }>(units: T[], preferred:
   const rank = (id: string) => { const i = preferred.indexOf(id); return i < 0 ? 999 : i; };
   return [...units].sort((a, b) => rank(a.id) - rank(b.id));
 }
+
+/** Standardmenge für eine Einheit; alte Produkte fallen auf ihre bisherige Hauptmenge zurück. */
+export function quantityForUnit(product: { defaultQuantity: number; defaultUnit: string; unitQuantities?: Record<string, number> }, unit: string): number {
+  const stored = product.unitQuantities?.[unit];
+  return typeof stored === "number" && Number.isFinite(stored) && stored > 0 ? stored : unit === product.defaultUnit ? product.defaultQuantity : 1;
+}
