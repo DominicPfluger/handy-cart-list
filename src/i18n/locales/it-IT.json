@@ -1432,5 +1432,16 @@
   "rk.formCanned": "In scatola",
   "rk.form": "Formato",
   "adm.allowedUnits": "Altre unità predefinite (mostrate per prime)",
-  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved."
+  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved.",
+  "uu.title": "Unità di misura",
+  "uu.hint": "Crea, ordina e nascondi le tue unità",
+  "uu.label": "Nome",
+  "uu.short": "Abbr.",
+  "uu.add": "Aggiungi",
+  "uu.exists": "Questa unità esiste già",
+  "uu.reset": "Ripristina ordine e unità nascoste",
+  "uu.move": "Sposta unità",
+  "uu.delete": "Elimina unità",
+  "uu.show": "Mostra unità",
+  "uu.hide": "Nascondi unità"
 }

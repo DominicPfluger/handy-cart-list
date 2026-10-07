@@ -1432,5 +1432,16 @@
   "rk.formCanned": "Blik",
   "rk.form": "Vorm",
   "adm.allowedUnits": "Extra standaardeenheden (eerst getoond)",
-  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved."
+  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved.",
+  "uu.title": "Eenheden",
+  "uu.hint": "Eigen eenheden maken, sorteren, verbergen",
+  "uu.label": "Naam",
+  "uu.short": "Kort",
+  "uu.add": "Toevoegen",
+  "uu.exists": "Deze eenheid bestaat al",
+  "uu.reset": "Volgorde en verborgen herstellen",
+  "uu.move": "Eenheid verplaatsen",
+  "uu.delete": "Eenheid verwijderen",
+  "uu.show": "Eenheid tonen",
+  "uu.hide": "Eenheid verbergen"
 }

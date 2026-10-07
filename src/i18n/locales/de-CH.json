@@ -854,5 +854,16 @@
   "rk.formCanned": "Konserve",
   "rk.form": "Lagerform",
   "adm.allowedUnits": "Weitere Standard-Einheiten (oben im Mengendialog)",
-  "adm.viewerMode": "👀 Nur-Ansicht: Du kannst dich frei umsehen. Änderungen werden nicht gespeichert."
+  "adm.viewerMode": "👀 Nur-Ansicht: Du kannst dich frei umsehen. Änderungen werden nicht gespeichert.",
+  "uu.title": "Mengenangaben",
+  "uu.hint": "Eigene Einheiten anlegen, sortieren, ausblenden",
+  "uu.label": "Bezeichnung",
+  "uu.short": "Kurz",
+  "uu.add": "Hinzufügen",
+  "uu.exists": "Diese Einheit gibt es schon",
+  "uu.reset": "Reihenfolge & Ausblendungen zurücksetzen",
+  "uu.move": "Einheit verschieben",
+  "uu.delete": "Einheit löschen",
+  "uu.show": "Einheit einblenden",
+  "uu.hide": "Einheit ausblenden"
 }

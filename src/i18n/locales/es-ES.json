@@ -1432,5 +1432,16 @@
   "rk.formCanned": "Conserva",
   "rk.form": "Formato",
   "adm.allowedUnits": "Otras unidades predeterminadas (se muestran primero)",
-  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved."
+  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved.",
+  "uu.title": "Unidades",
+  "uu.hint": "Crea, ordena y oculta tus unidades",
+  "uu.label": "Nombre",
+  "uu.short": "Abrev.",
+  "uu.add": "Añadir",
+  "uu.exists": "Esta unidad ya existe",
+  "uu.reset": "Restablecer orden y ocultas",
+  "uu.move": "Mover unidad",
+  "uu.delete": "Eliminar unidad",
+  "uu.show": "Mostrar unidad",
+  "uu.hide": "Ocultar unidad"
 }

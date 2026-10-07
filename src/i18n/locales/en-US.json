@@ -1435,5 +1435,16 @@
   "rk.formCanned": "Canned",
   "rk.form": "Form",
   "adm.allowedUnits": "Additional default units (shown first)",
-  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved."
+  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved.",
+  "uu.title": "Units",
+  "uu.hint": "Create, sort and hide your own units",
+  "uu.label": "Name",
+  "uu.short": "Short",
+  "uu.add": "Add",
+  "uu.exists": "This unit already exists",
+  "uu.reset": "Reset order & hidden units",
+  "uu.move": "Move unit",
+  "uu.delete": "Delete unit",
+  "uu.show": "Show unit",
+  "uu.hide": "Hide unit"
 }
