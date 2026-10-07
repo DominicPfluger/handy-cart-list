@@ -19,7 +19,8 @@ export const checkAdmin = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
     const { data: m } = await context.supabase.from("market_admins").select("market").eq("user_id", context.userId);
-    return { isAdmin: Boolean(data), userId: context.userId, markets: ((m ?? []) as Array<{ market: string }>).map((r) => r.market) };
+    const { data: v } = data ? { data: false } : await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "viewer" });
+    return { isAdmin: Boolean(data), isViewer: Boolean(v), userId: context.userId, markets: ((m ?? []) as Array<{ market: string }>).map((r) => r.market) };
   });
 
 /**

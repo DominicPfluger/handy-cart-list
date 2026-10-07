@@ -965,7 +965,6 @@
   "adm.tab.prices": "Prijzen",
   "adm.tab.import": "Import",
   "adm.tab.languages": "Talen",
-
   "adm.tab.langMarkets": "Talen & Markten",
   "adm.tab.markets": "Markten",
   "adm.tab.recipes": "Receptenbeheer",
@@ -1432,5 +1431,6 @@
   "rk.formFrozen": "Diepvries",
   "rk.formCanned": "Blik",
   "rk.form": "Vorm",
-  "adm.allowedUnits": "Extra standaardeenheden (eerst getoond)"
+  "adm.allowedUnits": "Extra standaardeenheden (eerst getoond)",
+  "adm.viewerMode": "👀 View only: feel free to look around. Changes are not saved."
 }

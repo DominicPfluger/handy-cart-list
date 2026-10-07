@@ -418,7 +418,6 @@
   "adm.tab.prices": "Preise",
   "adm.tab.import": "Import",
   "adm.tab.languages": "Sprachen",
-
   "adm.tab.langMarkets": "Sprachen & Märkte",
   "adm.tab.markets": "Märkte",
   "adm.tab.recipes": "Rezept-Verwaltung",
@@ -854,5 +853,6 @@
   "rk.formFrozen": "Tiefgekühlt",
   "rk.formCanned": "Konserve",
   "rk.form": "Lagerform",
-  "adm.allowedUnits": "Weitere Standard-Einheiten (oben im Mengendialog)"
+  "adm.allowedUnits": "Weitere Standard-Einheiten (oben im Mengendialog)",
+  "adm.viewerMode": "👀 Nur-Ansicht: Du kannst dich frei umsehen. Änderungen werden nicht gespeichert."
 }

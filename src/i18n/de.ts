@@ -693,6 +693,7 @@ export const de = {
   "adm.loading": "Lädt …",
   "adm.title": "Admin-Panel",
   "adm.noAccess": "Dein Konto hat noch keine Admin-Berechtigung. Gib Bescheid, dann wird sie freigeschaltet.",
+  "adm.viewerMode": "👀 Nur-Ansicht: Du kannst dich frei umsehen. Änderungen werden nicht gespeichert.",
   "adm.signOut": "Abmelden",
   "adm.categories": "Kategorien",
   "adm.products": "Produkte",
