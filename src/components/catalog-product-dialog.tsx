@@ -67,6 +67,7 @@ export function CatalogProductDialog({
   const market = useMarket();
   const { preferred, setPreferred } = usePreferredDept();
   const deptIds = product ? departmentIdsOf(product, catalog.productAliases ?? []).filter((id) => catalog.departments.some((d) => d.id === id)) : [];
+  const prefUnits = product ? preferredUnits(product, catalog.departments) : [];
   const [deptId, setDeptId] = useState<string>("");
   const { addCatalogItem } = useShoppingList();
   const pantry = usePantry();
