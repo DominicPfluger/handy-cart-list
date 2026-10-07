@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup } from "@/lib/admin.functions";
-import { LOCALES, getLocale, translate } from "@/i18n";
+import { LOCALES, allLocales, getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -895,7 +895,7 @@ function AdminPage() {
 
       <div className="flex flex-wrap gap-2">
         {(
-          <select value={mk} onChange={(e) => { setMk(e.target.value); if (!e.target.value && sortBy === "marketRelevance") setSortBy("popularity"); }} aria-label={T("adm.marketChoice")}
+          <select value={mk} onChange={(e) => { const v = e.target.value; setMk(v); if (v && viewLoc.split("-")[1] !== v) setViewLoc(allLocales().find((l) => l.id.split("-")[1] === v)?.id ?? "de-DE"); if (!e.target.value && sortBy === "marketRelevance") setSortBy("popularity"); }} aria-label={T("adm.marketChoice")}
             className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
             <optgroup label={T("adm.marketChoice")}>
               <option value="">{T("adm.marketGlobal")}</option>
