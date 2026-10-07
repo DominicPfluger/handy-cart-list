@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup } from "@/lib/admin.functions";
-import { LOCALES, getLocale, translate } from "@/i18n";
+import { LOCALES, allLocales, getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -894,8 +894,8 @@ function AdminPage() {
       </div>
 
       <div className="flex flex-wrap gap-2">
-        {cur && (
-          <select value={mk} onChange={(e) => { setMk(e.target.value); if (!e.target.value && sortBy === "marketRelevance") setSortBy("popularity"); }} aria-label={T("adm.marketChoice")}
+        {(
+          <select value={mk} onChange={(e) => { const v = e.target.value; setMk(v); if (v && viewLoc.split("-")[1] !== v) setViewLoc(allLocales().find((l) => l.id.split("-")[1] === v)?.id ?? "de-DE"); if (!e.target.value && sortBy === "marketRelevance") setSortBy("popularity"); }} aria-label={T("adm.marketChoice")}
             className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
             <optgroup label={T("adm.marketChoice")}>
               <option value="">{T("adm.marketGlobal")}</option>
@@ -905,7 +905,7 @@ function AdminPage() {
         )}
         <select aria-label={T("adm.viewLocale")} value={viewLoc} onChange={(e) => setViewLoc(e.target.value)} className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
           <optgroup label={T("adm.viewLocale")}>
-            {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
+            {allLocales().filter((l) => !mk || l.id.split("-")[1] === mk).map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
           </optgroup>
         </select>
         {products.length > 1 && (
@@ -1018,7 +1018,7 @@ function AdminPage() {
       )}
 
       {sel && d && (
-        <Editor key={sel.kind + sel.id} sel={sel} name={selName} data={d} products={(d.prods).filter((p) => p.department_id === (sel.kind === "heading" ? d.heads.find((h) => h.id === sel.id)?.department_id : undefined))}
+        <Editor key={sel.kind + sel.id} market={mk} sel={sel} name={selName} data={d} products={(d.prods).filter((p) => p.department_id === (sel.kind === "heading" ? d.heads.find((h) => h.id === sel.id)?.department_id : undefined))}
           busy={busy} onClose={() => setSel(null)} onDelete={() => remove(sel, selName)}
           onEditImage={() => { if (sel.kind === "product") { setSearch(""); setTab("catalog"); setImageEditor({ kind: "product", id: sel.id }); } }}
           onSave={(patch) => run(async () => {
@@ -1274,6 +1274,7 @@ type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; uni
 
 
 function Editor(p: {
+  market: string;
   sel: NonNullable<Sel>; name: string; data: Awaited<ReturnType<typeof loadAll>>; products: Prod[]; busy: boolean;
   deptOptions: { id: string; label: string }[];
   onClose: () => void; onDelete: () => void; onSave: (patch: Patch) => void;
@@ -1567,7 +1568,7 @@ function Editor(p: {
         </div>
         <p className="text-[11px] text-muted-foreground">{T("adm.trHint")}</p>
         <div className="space-y-1.5">
-          {LOCALES.filter((l) => l.id !== "de-DE").map((l) => (
+          {allLocales().filter((l) => p.market ? l.id.split("-")[1] === p.market : l.id !== "de-DE").map((l) => (
             <TrField key={l.id + (tr[l.id]?.name ?? "")} label={`${l.flag} ${l.id}`} value={tr[l.id]?.name ?? ""} manual={tr[l.id]?.is_manual}
               onSave={(v) => p.onTr(l.id, v, tr[l.id]?.name)} />
           ))}
