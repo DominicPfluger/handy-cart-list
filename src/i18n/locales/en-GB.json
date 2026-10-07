@@ -1429,5 +1429,6 @@
   "rk.formFresh": "Fresh",
   "rk.formFrozen": "Frozen",
   "rk.formCanned": "Tinned",
-  "rk.form": "Form"
+  "rk.form": "Form",
+  "adm.allowedUnits": "Additional default units (shown first)"
 }

@@ -798,6 +798,7 @@ export const de = {
   "adm.tab.import": "Import",
   "adm.tab.markets": "Märkte",
   "adm.iconImage": "Icon (klein)",
+  "adm.allowedUnits": "Weitere Standard-Einheiten (oben im Mengendialog)",
   "adm.previewImage": "Vorschaubild (gross)",
   "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt",
   "adm.aiImagesNew": "KI-Bilder erzeugen",
