@@ -66,7 +66,7 @@ function AuthPage() {
       <div className="space-y-3">
         <Input type="email" placeholder={t("auth.email")} value={email} onChange={(e) => setEmail(e.target.value)} className="h-11 rounded-xl" />
         <Input type="password" placeholder={t("auth.password")} value={password} onChange={(e) => setPassword(e.target.value)} className="h-11 rounded-xl" />
-        <Button className="h-11 w-full rounded-xl" disabled={busy || !email || password.length < 6} onClick={submit}>
+        <Button className="h-11 w-full rounded-xl" disabled={busy || !email || password.length < 4} onClick={submit}>
           {mode === "in" ? t("auth.signIn") : t("auth.signUp")}
         </Button>
         <button className="w-full text-center text-sm font-medium text-primary" onClick={() => setMode(mode === "in" ? "up" : "in")}>
