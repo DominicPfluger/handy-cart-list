@@ -157,7 +157,8 @@ function AdminPage() {
   const [bulkTree, setBulkTree] = useState(false);
   const [sortDlg, setSortDlg] = useState<string | null>(null);
   /** Aktiver Admin-Bereich (Tabs). */
-  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "languages" | "markets" | "health" | "settings" | "more">("catalog");
+  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "langMarkets" | "health" | "settings" | "more">("catalog");
+  const [langMk, setLangMk] = useState<"languages" | "markets">("languages");
   const [setTab2, setSetTab2] = useState<"diets" | "units" | "cuisines" | "speech" | "variants">("diets");
   const [preview, setPreview] = useState(false);
   useEffect(() => {
@@ -871,7 +872,7 @@ function AdminPage() {
       </div>
 
       <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["recipes", "adm.tab.recipes"], ["settings", "adm.tab.settings"], ["health", "adm.tab.health"], ["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["recipes", "adm.tab.recipes"], ["settings", "adm.tab.settings"], ["health", "adm.tab.health"], ["langMarkets", "adm.tab.langMarkets"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
             {T(key)}
@@ -1066,7 +1067,21 @@ function AdminPage() {
 
 
 {tab === "recipes" && (d ? <><RecipeAdmin depts={d.depts} prods={d.prods} /><RecipeAssignAdmin depts={d.depts} prods={d.prods} /><RecipeTraitsAdmin /></> : <LoadingGate d={d}>{null}</LoadingGate>)}
-      {tab === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
+      {tab === "langMarkets" && (<div className="space-y-4">
+        <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.tab.langMarkets")}>
+          {([["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"]] as const).map(([id, key]) => (
+            <button key={id} role="tab" aria-selected={langMk === id} type="button" onClick={() => setLangMk(id)}
+              className={`whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold ${langMk === id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-card text-muted-foreground"}`}>
+              {T(key)}
+            </button>
+          ))}
+        </div>
+        {langMk === "languages" && <LoadingGate d={d}><LocaleAdminPanel /></LoadingGate>}
+        {langMk === "markets" && (<>
+          <MarketsManager />
+          <MarketAdminsManager />
+        </>)}
+      </div>)}
       {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={(id) => setSel({ kind: "product", id })}
         onOpenDept={(id) => { setSearch(""); setSel(null); setCur(id); setTab("catalog"); }} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "settings" && (<>
@@ -1085,10 +1100,6 @@ function AdminPage() {
         {setTab2 === "variants" && <StandardVariantsPanel />}
       </>)}
 
-      {tab === "markets" && (<div className="space-y-4">
-        <MarketsManager />
-        <MarketAdminsManager />
-      </div>)}
 
       {preview && <CatalogPreview onClose={() => setPreview(false)} />}
       </Suspense>

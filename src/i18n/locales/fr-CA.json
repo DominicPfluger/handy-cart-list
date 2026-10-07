@@ -965,6 +965,8 @@
   "adm.tab.prices": "Prix",
   "adm.tab.import": "Import",
   "adm.tab.languages": "Langues",
+
+  "adm.tab.langMarkets": "Langues & Marchés",
   "adm.tab.markets": "Marchés",
   "adm.tab.recipes": "Gestion des recettes",
   "adm.tab.more": "Plus",
