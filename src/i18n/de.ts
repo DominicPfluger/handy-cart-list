@@ -813,6 +813,7 @@ export const de = {
   "adm.tab.settings": "Einstellungen",
   "adm.tab.cuisines": "Länderküchen",
   "adm.tab.languages": "Sprachen",
+  "adm.tab.langMarkets": "Sprachen & Märkte",
   "tile.estimateAll": "Preise für alle Märkte schätzen",
   "tile.estimateMarket": "Preis für {market} per KI schätzen",
   "tile.estimateDone": "Preis geschätzt",
