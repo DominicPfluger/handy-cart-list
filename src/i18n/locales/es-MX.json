@@ -1429,5 +1429,6 @@
   "rk.formFresh": "Fresco",
   "rk.formFrozen": "Congelado",
   "rk.formCanned": "Conserva",
-  "rk.form": "Formato"
+  "rk.form": "Formato",
+  "adm.allowedUnits": "Otras unidades predeterminadas (se muestran primero)"
 }

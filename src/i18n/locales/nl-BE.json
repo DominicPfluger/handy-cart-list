@@ -1429,5 +1429,6 @@
   "rk.formFresh": "Vers",
   "rk.formFrozen": "Diepvries",
   "rk.formCanned": "Blik",
-  "rk.form": "Vorm"
+  "rk.form": "Vorm",
+  "adm.allowedUnits": "Extra standaardeenheden (eerst getoond)"
 }

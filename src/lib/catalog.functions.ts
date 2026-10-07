@@ -31,6 +31,8 @@ export interface CatalogProduct {
   iconUrl?: string | null;
   defaultQuantity: number;
   defaultUnit: string;
+  /** Weitere Standard-Einheiten (Admin) */
+  allowedUnits?: string[];
   organicAvailable: boolean;
   variants: string[];
   /** Suchbegriffe wie „Passionsfrucht" für Maracuja (alle Sprachen) */
@@ -275,7 +277,7 @@ export const getCatalogCore = createServerFn({ method: "GET" })
       fetchAll(
         supabase,
         "products",
-        "id, department_id, name, emoji, image_path, icon_path, default_quantity, default_unit, organic_available, variants, excluded_diets, markets, sort_order",
+        "id, department_id, name, emoji, image_path, icon_path, default_quantity, default_unit, allowed_units, organic_available, variants, excluded_diets, markets, sort_order",
         ["sort_order", "id"],
       ),
       supabase.from("product_headings").select("id, department_id, before_product_id, name"),
@@ -324,6 +326,7 @@ export const getCatalogCore = createServerFn({ method: "GET" })
         iconUrl: null,
         defaultQuantity: Number(r["default_quantity"] ?? 1),
         defaultUnit: (r["default_unit"] as string) ?? "stueck",
+        allowedUnits: (r["allowed_units"] as string[] | null) ?? [],
         organicAvailable: (r["organic_available"] as boolean) ?? true,
         variants: (r["variants"] as string[] | null) ?? [],
         synonyms: [],

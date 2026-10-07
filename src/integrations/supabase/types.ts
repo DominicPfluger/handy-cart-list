@@ -975,6 +975,7 @@ export type Database = {
       }
       products: {
         Row: {
+          allowed_units: string[]
           created_at: string
           default_quantity: number
           default_unit: string
@@ -993,6 +994,7 @@ export type Database = {
           variants: string[]
         }
         Insert: {
+          allowed_units?: string[]
           created_at?: string
           default_quantity?: number
           default_unit?: string
@@ -1011,6 +1013,7 @@ export type Database = {
           variants?: string[]
         }
         Update: {
+          allowed_units?: string[]
           created_at?: string
           default_quantity?: number
           default_unit?: string

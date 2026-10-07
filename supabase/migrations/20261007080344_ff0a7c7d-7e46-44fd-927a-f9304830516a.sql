@@ -1,0 +1,1 @@
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS allowed_units text[] NOT NULL DEFAULT '{}';

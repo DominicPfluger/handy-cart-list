@@ -851,5 +851,6 @@
   "rk.formFresh": "Frisch",
   "rk.formFrozen": "Tiefgekühlt",
   "rk.formCanned": "Konserve",
-  "rk.form": "Lagerform"
+  "rk.form": "Lagerform",
+  "adm.allowedUnits": "Weitere Standard-Einheiten (oben im Mengendialog)"
 }

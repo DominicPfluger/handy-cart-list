@@ -4,7 +4,8 @@ import { prepareItemPhoto } from "../lib/item-photo-store";
 import { brandsFor, departmentIdsOf, pathTo, useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { useMarket } from "../hooks/use-market";
-import { getUnits, formatQuantity, type UnitId } from "../lib/units";
+import { getUnits, formatQuantity, unitLabel, type UnitId } from "../lib/units";
+import { preferredUnits, sortByPreferred } from "../lib/product-units";
 import { useT, pickName } from "../i18n";
 
 import { useShoppingList } from "../hooks/use-shopping-list";
@@ -66,6 +67,7 @@ export function CatalogProductDialog({
   const market = useMarket();
   const { preferred, setPreferred } = usePreferredDept();
   const deptIds = product ? departmentIdsOf(product, catalog.productAliases ?? []).filter((id) => catalog.departments.some((d) => d.id === id)) : [];
+  const prefUnits = product ? preferredUnits(product, catalog.departments) : [];
   const [deptId, setDeptId] = useState<string>("");
   const { addCatalogItem } = useShoppingList();
   const pantry = usePantry();
@@ -198,7 +200,7 @@ export function CatalogProductDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="max-h-64">
-                {getUnits(locale).map((entry) => (
+                {sortByPreferred(getUnits(locale), prefUnits).map((entry) => (
                   <SelectItem key={entry.id} value={entry.id}>
                     {entry.label}
                   </SelectItem>
@@ -207,6 +209,16 @@ export function CatalogProductDialog({
             </Select>
           </div>
         </div>
+        {prefUnits.length > 1 && (
+          <div className="-mt-1 flex flex-wrap gap-1.5">
+            {prefUnits.map((u) => (
+              <button key={u} type="button" aria-pressed={unit === u} onClick={() => setUnit(u as UnitId)}
+                className={`rounded-full border px-3 py-1 text-xs font-medium ${unit === u ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
+                {unitLabel(u, locale)}
+              </button>
+            ))}
+          </div>
+        )}
 
         {deptIds.length > 1 && (
           <div className="space-y-2">
