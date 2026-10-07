@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { getLocale, translate } from "@/i18n";
+import { getLocale, LOCALES, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +20,15 @@ function check(r: { error: { message: string } | null }) {
 export function MarketsManager() {
   const qc = useQueryClient();
   const { data: markets = [] } = useQuery(marketsQuery);
+  const { data: appLocales = [] } = useQuery({
+    queryKey: ["app-locales-all"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("app_locales").select("id, label, flag");
+      if (error) throw new Error(error.message);
+      return (data ?? []) as { id: string; label: string; flag: string }[];
+    },
+    staleTime: 60_000,
+  });
   const { data: shops = [] } = useQuery({
     queryKey: ["supermarkets"],
     queryFn: async () => {
@@ -89,6 +98,16 @@ export function MarketsManager() {
     refresh();
   };
 
+  /** Alle Sprachvarianten eines Markts (Regionsteil des Locale-Codes, z. B. CH → de-CH, fr-CH, it-CH). */
+  const localesOf = (code: string) => {
+    const seen = new Set<string>();
+    return [...LOCALES, ...appLocales].filter((l) => {
+      if (seen.has(l.id)) return false;
+      seen.add(l.id);
+      return l.id.split("-")[1] === code;
+    });
+  };
+
   return (
     <section className="space-y-3 rounded-xl border border-border bg-card p-3">
       <h2 className="text-base font-bold text-foreground">🏪 {T("mkt.title")}</h2>
@@ -109,6 +128,15 @@ export function MarketsManager() {
                 <button type="button" aria-label={T("mkt.edit")} onClick={() => { setEdit(m.code); setForm({ code: m.code, name: m.name, flag: m.flag, currency: m.currency }); }} className="text-sm">✎</button>
                 <button type="button" aria-label={T("mkt.delete")} onClick={() => delMarket(m)} className="text-sm text-destructive">✕</button>
               </div>
+              {localesOf(m.code).length > 0 && (
+                <div className="flex flex-wrap items-center gap-1 border-t border-border px-2 py-1.5 text-xs">
+                  {localesOf(m.code).map((l) => (
+                    <span key={l.id} title={l.label} className="rounded-full bg-muted px-1.5 py-0.5 text-muted-foreground">
+                      {l.flag} {l.id.toLowerCase()}
+                    </span>
+                  ))}
+                </div>
+              )}
               {open === m.code && (
                 <div className="space-y-1.5 border-t border-border px-3 py-2">
                   {list.map((s) => (
