@@ -21,6 +21,7 @@ import { RECIPE_TRAITS, TRAIT_GROUPS, TASTE_MAX, splitTaste, toggleTaste, type R
 import { SectionTitle, ListCardBody, LIST_CARD_CLASS } from "./recipe-feed";
 import { QuantityInput, isValidQty, type QtyValue } from "./quantity-input";
 import { useCuisineFilter, toggleCuisine } from "../hooks/use-cuisine-filter";
+import { STORAGE_FORMS, formAlternatives, storageFormOf, type StorageForm } from "../lib/storage-form";
 
 type Picks = Record<string, string[]>; // stepKey -> productIds
 
@@ -47,6 +48,8 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const locale = useLocale();
   // Gewählte Produkt-Variante je Zutat (leer = Standard).
   const [variants, setVariants] = useState<Record<string, string>>({});
+  // Gewählte Lagerform je Zutat (Frisch / TK / Konserve), tauscht auf das gleichnamige Produkt der anderen Abteilung.
+  const [forms, setForms] = useState<Record<string, StorageForm>>({});
   // Eigene Mengen je Zutat (überschreiben die Produkt-Standardmenge nur für dieses Rezept).
   const [qty, setQty] = useState<Record<string, QtyValue>>({});
   const qtyOf = (p: CatalogProduct): QtyValue => qty[p.id] ?? { qty: String(p.defaultQuantity), unit: p.defaultUnit };
@@ -702,7 +705,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 const cur = variants[p.id] ?? "";
                 return (
                   <span key={p.id} className="inline-flex flex-wrap items-center gap-1 rounded-2xl border border-dashed border-primary/50 p-1">
-                    {btn}
+                    {btn}{formSeg}
                     <span role="group" aria-label={t("rk.variant")} className="inline-flex flex-wrap gap-1">
                       {["", ...vs].map((v) => (
                         <button key={v || "std"} type="button" aria-pressed={cur === v}
