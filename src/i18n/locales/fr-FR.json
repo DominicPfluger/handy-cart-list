@@ -1423,5 +1423,11 @@
   "adm.variantAi.again": "New suggestions",
   "adm.variantAi.addAll": "Add all",
   "adm.variantAi.none": "No new suggestions found",
-  "adm.setUnitSelected": "Changer l’unité …"
+  "adm.setUnitSelected": "Changer l’unité …",
+  "list.frozenProduct": "{name} (surgelé)",
+  "list.cannedProduct": "{name} (en conserve)",
+  "rk.formFresh": "Frais",
+  "rk.formFrozen": "Surgelé",
+  "rk.formCanned": "Conserve",
+  "rk.form": "Format"
 }

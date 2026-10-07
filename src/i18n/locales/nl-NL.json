@@ -1423,5 +1423,11 @@
   "adm.variantAi.again": "New suggestions",
   "adm.variantAi.addAll": "Add all",
   "adm.variantAi.none": "No new suggestions found",
-  "adm.setUnitSelected": "Eenheid wijzigen …"
+  "adm.setUnitSelected": "Eenheid wijzigen …",
+  "list.frozenProduct": "{name} (diepvries)",
+  "list.cannedProduct": "{name} (blik)",
+  "rk.formFresh": "Vers",
+  "rk.formFrozen": "Diepvries",
+  "rk.formCanned": "Blik",
+  "rk.form": "Vorm"
 }
