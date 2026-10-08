@@ -25,6 +25,14 @@ export interface PurchaseItem {
   /** Grosses Produktbild (Pfad im Bild-Speicher + signierte Adresse). */
   imagePath?: string | null | undefined;
   imageUrl?: string | null | undefined;
+  group?: string;
+  groupEmoji?: string;
+  note?: string;
+  organic?: boolean;
+}
+
+function vibrate(ms: number | number[]) {
+  try { navigator.vibrate?.(ms); } catch { /* ignore */ }
 }
 
 /** Freihändiger Kaufmodus: zeigt jeweils den nächsten offenen Artikel gross an,
@@ -38,9 +46,62 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   const [rate] = useSpeakRate();
   const [speakLocale] = useSpeakLocale();
   const [speakOn, setSpeakOn] = useState<boolean>(readSpeakEnabled);
-  const current = items.find((i) => !i.checked);
+  // Übersprungene Artikel ans Ende der offenen Reihenfolge stellen.
+  const [skipped, setSkipped] = useState<string[]>([]);
+  const [pos, setPos] = useState(0);
+  const [doneStack, setDoneStack] = useState<string[]>([]);
+  const [viewDone, setViewDone] = useState<string | null>(null);
+  const open = items.filter((i) => !i.checked);
+  const seq = [
+    ...open.filter((i) => !skipped.includes(i.id)),
+    ...skipped.map((id) => open.find((i) => i.id === id)).filter((i): i is PurchaseItem => !!i),
+  ];
+  const safePos = Math.min(pos, Math.max(0, seq.length - 1));
+  const doneItem = viewDone ? items.find((i) => i.id === viewDone && i.checked) : undefined;
+  const current = doneItem ?? seq[safePos];
+  const nextItem = doneItem ? seq[safePos] : seq[safePos + 1];
+  const nextDept = seq.slice(doneItem ? safePos : safePos + 1).find((i) => i.group && i.group !== current?.group);
   const done = items.filter((i) => i.checked).length;
   const allDone = !current;
+  const lastDone = [...doneStack].reverse().find((id) => items.some((i) => i.id === id && i.checked));
+
+  // Bildschirm aktiv halten, solange der Kaufmodus offen ist.
+  useEffect(() => {
+    const nav = navigator as Navigator & { wakeLock?: { request: (t: "screen") => Promise<{ release: () => Promise<void> }> } };
+    if (!nav.wakeLock) return;
+    let lock: { release: () => Promise<void> } | null = null;
+    let alive = true;
+    const req = async () => {
+      try { const l = await nav.wakeLock!.request("screen"); if (alive) lock = l; else void l.release(); } catch { /* ignore */ }
+    };
+    const onVis = () => { if (document.visibilityState === "visible") void req(); };
+    void req();
+    document.addEventListener("visibilitychange", onVis);
+    return () => { alive = false; document.removeEventListener("visibilitychange", onVis); void lock?.release().catch(() => {}); };
+  }, []);
+
+  const markDone = () => {
+    if (!current) return;
+    vibrate(35);
+    if (doneItem) { onToggle(doneItem.id); setViewDone(null); return; }
+    setDoneStack((s) => [...s, current.id]);
+    setSkipped((s) => s.filter((x) => x !== current.id));
+    onToggle(current.id);
+  };
+  const skip = () => {
+    if (!current || doneItem || seq.length < 2) return;
+    vibrate(15);
+    setSkipped((s) => [...s.filter((x) => x !== current.id), current.id]);
+  };
+  const goPrev = () => {
+    if (doneItem) return;
+    if (safePos > 0) setPos(safePos - 1);
+    else if (lastDone) setViewDone(lastDone);
+  };
+  const goNext = () => {
+    if (doneItem) { setViewDone(null); return; }
+    if (safePos < seq.length - 1) setPos(safePos + 1);
+  };
   const progress = items.length ? (done / items.length) * 100 : 0;
 
   // Aktuellen Artikel vorlesen; beim Wechsel zum nächsten erneut.
@@ -145,9 +206,15 @@ export function PurchaseMode({ items, onToggle, onClose }: {
         </div>
       ) : (
         <>
-          <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 text-center">
+          <div className="flex flex-1 flex-col items-center justify-center gap-5 px-8 text-center">
+            {current.group && (
+              <span className="rounded-full px-4 py-1 text-sm font-semibold text-foreground" style={current.color ? { backgroundColor: current.color } : undefined}>
+                {current.groupEmoji} {current.group}
+              </span>
+            )}
+            {doneItem && <span className="text-sm font-semibold text-primary">✓ {t("purchase.alreadyDone")}</span>}
             <div
-              className="grid h-56 w-56 place-items-center overflow-hidden rounded-3xl text-8xl"
+              className="grid h-48 w-48 place-items-center overflow-hidden rounded-3xl text-8xl"
               style={current.color ? { backgroundColor: current.color } : undefined}
             >
               {current.imagePath ? (
@@ -162,15 +229,40 @@ export function PurchaseMode({ items, onToggle, onClose }: {
                 current.emoji || "🛒"
               )}
             </div>
-            <p className="break-words text-3xl font-bold leading-tight text-foreground">{current.name}</p>
-            {current.quantity && <p className="text-lg font-medium text-muted-foreground">{current.quantity}</p>}
+            <div className="flex flex-col items-center gap-2">
+              <p className="break-words text-3xl font-bold leading-tight text-foreground">{(() => { const k = current.name.indexOf(" · "); return k >= 0 ? current.name.slice(0, k) : current.name; })()}</p>
+              {current.quantity && <p className="text-lg font-medium text-muted-foreground">{current.quantity}</p>}
+              <div className="flex flex-wrap justify-center gap-2">
+                {current.organic && <span className="rounded-full bg-primary-soft px-3 py-1 text-sm font-semibold text-primary">🌱 {t("purchase.organic")}</span>}
+                {current.name.includes(" · ") && <span className="rounded-full border border-border px-3 py-1 text-sm font-medium text-foreground">{current.name.slice(current.name.indexOf(" · ") + 3)}</span>}
+              </div>
+              {current.note && (
+                <p className="max-w-xs rounded-xl bg-muted px-4 py-2 text-base text-foreground"><span aria-hidden="true">📝 </span><span className="sr-only">{t("purchase.note")}: </span>{current.note}</p>
+              )}
+            </div>
+          </div>
+          {(nextItem || nextDept) && !doneItem && (
+            <div className="mx-5 mb-3 rounded-2xl border border-border bg-card px-4 py-2 text-sm text-muted-foreground">
+              {nextItem && <p className="truncate"><span className="font-semibold">{t("purchase.upNext")}:</span> {nextItem.name}</p>}
+              {nextDept && nextDept.group !== nextItem?.group && (
+                <p className="truncate"><span className="font-semibold">{t("purchase.nextDept")}:</span> {nextDept.groupEmoji} {nextDept.group}</p>
+              )}
+              {nextDept && nextDept.group === nextItem?.group && (
+                <p className="truncate"><span className="font-semibold">{t("purchase.nextDept")}:</span> {nextDept.groupEmoji} {nextDept.group}</p>
+              )}
+            </div>
+          )}
+          <div className="flex items-center gap-2 px-5 pb-3">
+            <button onClick={goPrev} disabled={!!doneItem || (safePos === 0 && !lastDone)} aria-label={t("purchase.prev")} className="grid h-14 w-14 place-items-center rounded-2xl border border-border text-2xl text-foreground disabled:opacity-30 active:bg-muted">‹</button>
+            <button onClick={skip} disabled={!!doneItem || seq.length < 2} className="h-14 flex-1 rounded-2xl border border-border text-lg font-semibold text-foreground disabled:opacity-30 active:bg-muted">↷ {t("purchase.skip")}</button>
+            <button onClick={goNext} disabled={!doneItem && safePos >= seq.length - 1} aria-label={t("purchase.next")} className="grid h-14 w-14 place-items-center rounded-2xl border border-border text-2xl text-foreground disabled:opacity-30 active:bg-muted">›</button>
           </div>
           <div className="px-5 pb-10">
             <button
-              onClick={() => onToggle(current.id)}
+              onClick={markDone}
               className="flex w-full items-center justify-center gap-3 rounded-3xl bg-primary py-8 text-2xl font-bold text-primary-foreground shadow-lg transition active:scale-[0.97]"
             >
-              <CheckIcon className="h-7 w-7" /> {t("purchase.done")}
+              {doneItem ? <>↺ {t("purchase.reopen")}</> : <><CheckIcon className="h-7 w-7" /> {t("purchase.done")}</>}
             </button>
           </div>
         </>
