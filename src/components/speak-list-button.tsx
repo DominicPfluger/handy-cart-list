@@ -54,9 +54,13 @@ export function speakSentences(sentences: string[], locale: string, rate: number
   if (!list.length) { onDone?.(); return; }
   const token = ++speakToken;
   let finished = false;
+  // Chrome auf dem Desktop bricht lange Ausgaben nach ca. 15 s still ab;
+  // periodisches resume() hält sie am Laufen (nur während sie wirklich spricht).
+  let keepAlive = 0;
   const finish = () => {
     if (finished || token !== speakToken) return;
     finished = true;
+    if (keepAlive) { window.clearInterval(keepAlive); keepAlive = 0; }
     onDone?.();
   };
   const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
