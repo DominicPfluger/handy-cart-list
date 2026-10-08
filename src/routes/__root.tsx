@@ -178,6 +178,17 @@ function RootComponent() {
   useUnitsVersion();
   // Offline-Fähigkeit: Service Worker im Browser registrieren
   useEffect(() => {
+    // In der Vorschau (iframe / Preview-Host / Dev) keinen Service Worker: alte entfernen,
+    // sonst liefern veraltete Zwischenspeicher leere Bilder.
+    const host = location.hostname;
+    const preview = import.meta.env.DEV || window.self !== window.top
+      || host.includes("id-preview--") || host.endsWith("lovableproject.com");
+    if (preview) {
+      navigator.serviceWorker?.getRegistrations().then((rs) => rs.forEach((r) => r.unregister())).catch(() => {});
+      if ("caches" in window) void caches.delete("shoppi-catalog-images").catch(() => {});
+      return;
+    }
+    if ("caches" in window) void caches.delete("shoppi-catalog-images").catch(() => {});
     import("virtual:pwa-register")
       .then(({ registerSW }) => registerSW({ immediate: true }))
       .catch(() => {});

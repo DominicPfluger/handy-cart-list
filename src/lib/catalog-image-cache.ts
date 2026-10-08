@@ -14,7 +14,9 @@ async function loadBlob(path: string, signedUrl?: string | null): Promise<Blob> 
   if (cache) {
     const hit = await cache.match(key(path));
     if (hit && Date.now() - Number(hit.headers.get("x-shoppi-saved") ?? 0) < MAX_AGE) {
-      return hit.blob();
+      const b = await hit.blob();
+      if (b.size > 0 && b.type.startsWith("image/")) return b;
+      await cache.delete(key(path)).catch(() => {});
     }
   }
   if (!signedUrl) throw new Error("Image has not been cached yet");
