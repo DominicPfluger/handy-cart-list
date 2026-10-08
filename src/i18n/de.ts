@@ -1011,6 +1011,8 @@ export const de = {
   "adm.noProducts": "Keine Produkte in dieser Kategorie.",
   "adm.drag": "Ziehen",
   "adm.retranslated": "Neu übersetzt",
+  "adm.aiTrOne": "KI-Übersetzung für {l}",
+  "adm.aiTrEmpty": "Keine Übersetzung erhalten",
   "adm.image": "Kategoriebild",
   "adm.imageUpload": "Bild hochladen",
   "adm.imageUploading": "Wird hochgeladen…",
