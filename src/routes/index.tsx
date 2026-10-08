@@ -121,6 +121,17 @@ function ListPage() {
       "",
     ).trim();
   /** Katalogartikel in der gewählten Sprache anzeigen (Sorte bleibt erhalten). */
+  const toggleWithUndo = (id: string) => {
+    const it = items.find((i) => i.id === id);
+    toggleItem(id);
+    if (it && !it.checked) {
+      toast(`✓ ${displayName(it)}`, {
+        id: "check-undo",
+        duration: 4000,
+        action: { label: t("common.undo"), onClick: () => toggleItem(id) },
+      });
+    }
+  };
   const displayName = (item: ListItem) => {
     const product = item.productId ? productById.get(item.productId) : undefined;
     if (!product) return stripAnyPrefix(item.name);
@@ -591,7 +602,7 @@ function ListPage() {
                     className="cv-row relative flex items-center gap-2.5 py-2.5 pl-3 pr-3"
                   >
                     <button
-                      onClick={() => toggleItem(item.id)}
+                      onClick={() => toggleWithUndo(item.id)}
                       className={`grid h-6 w-6 shrink-0 place-items-center rounded-full border-2 transition active:scale-90 ${
 
                         item.checked
