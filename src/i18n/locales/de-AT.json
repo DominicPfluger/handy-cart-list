@@ -865,5 +865,14 @@
   "uu.move": "Einheit verschieben",
   "uu.delete": "Einheit löschen",
   "uu.show": "Einheit einblenden",
-  "uu.hide": "Einheit ausblenden"
+  "uu.hide": "Einheit ausblenden",
+  "purchase.skip": "Später",
+  "purchase.prev": "Zurück",
+  "purchase.next": "Weiter",
+  "purchase.reopen": "Wieder öffnen",
+  "purchase.alreadyDone": "Bereits erledigt",
+  "purchase.upNext": "Als Nächstes",
+  "purchase.nextDept": "Nächste Abteilung",
+  "purchase.organic": "Bio",
+  "purchase.note": "Notiz"
 }

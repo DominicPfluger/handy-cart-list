@@ -1443,5 +1443,14 @@
   "uu.move": "Mover unidade",
   "uu.delete": "Eliminar unidade",
   "uu.show": "Mostrar unidade",
-  "uu.hide": "Ocultar unidade"
+  "uu.hide": "Ocultar unidade",
+  "purchase.skip": "Mais tarde",
+  "purchase.prev": "Voltar",
+  "purchase.next": "Seguinte",
+  "purchase.reopen": "Reabrir",
+  "purchase.alreadyDone": "Já feito",
+  "purchase.upNext": "A seguir",
+  "purchase.nextDept": "Próxima secção",
+  "purchase.organic": "Bio",
+  "purchase.note": "Nota"
 }

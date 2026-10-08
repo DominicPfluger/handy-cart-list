@@ -1446,5 +1446,14 @@
   "uu.move": "Move unit",
   "uu.delete": "Delete unit",
   "uu.show": "Show unit",
-  "uu.hide": "Hide unit"
+  "uu.hide": "Hide unit",
+  "purchase.skip": "Later",
+  "purchase.prev": "Back",
+  "purchase.next": "Next",
+  "purchase.reopen": "Reopen",
+  "purchase.alreadyDone": "Already done",
+  "purchase.upNext": "Up next",
+  "purchase.nextDept": "Next aisle",
+  "purchase.organic": "Organic",
+  "purchase.note": "Note"
 }
