@@ -158,14 +158,17 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     const voice = findVoice(speakLocale);
     if (voice) u.voice = voice;
     u.rate = rate;
+    let started = false;
+    u.onstart = () => { started = true; if (uttRef.current === u) blockedRef.current = null; };
+    u.onend = () => { started = true; };
     uttRef.current = u;
+    blockedRef.current = null;
+    try { synth.resume(); } catch { /* ignore */ }
     synth.speak(u);
+    // Nur als blockiert merken, wenn die Ausgabe nachweislich nie gestartet ist.
     window.setTimeout(() => {
-      try {
-        if (uttRef.current === u && !synth.speaking && !synth.pending) blockedRef.current = text;
-        else blockedRef.current = null;
-      } catch { /* ignore */ }
-    }, 400);
+      if (uttRef.current === u && !started && !synth.speaking) blockedRef.current = text;
+    }, 1500);
   };
 
   // Blockierte Ausgabe bei der nächsten Berührung nachholen (zählt als Geste).
