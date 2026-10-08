@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useT } from "../i18n";
+import { translate, useT } from "../i18n";
 import { useSpeakRate } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { expandAbbreviations, findVoice } from "./speak-list-button";
@@ -106,6 +106,14 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   };
   const progress = items.length ? (done / items.length) * 100 : 0;
 
+  // Vor dem ersten Artikel einer neuen Abteilung die Abteilung ansagen.
+  const lastDeptRef = useRef<string | null>(null);
+  const withDept = (item: PurchaseItem) => {
+    if (doneItem || !item.group || item.group === lastDeptRef.current) return item.spoken;
+    lastDeptRef.current = item.group;
+    return `${translate(speakLocale, "purchase.deptAnnounce").replace("{dept}", item.group)} ${item.spoken}`;
+  };
+
   // Aktuellen Artikel vorlesen; beim Wechsel zum nächsten erneut.
   // Kurze Verzögerung: Chrome verwirft speak() direkt nach cancel(); Stimmen laden evtl. asynchron.
   useEffect(() => {
@@ -117,7 +125,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
       if (cancelled || spoken) return;
       spoken = true;
       try { synth.resume(); } catch { /* ignore */ }
-      speakNow(current.spoken);
+      speakNow(withDept(current));
     };
     let timer: number;
     if (synth.getVoices().length === 0) {
