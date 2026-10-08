@@ -20,7 +20,7 @@
 - Recipe creator: step groups in one scrollable row with inline expandable ingredients; managed templates use only admin-assigned ingredients; steps edited beside the template in admin. Why: discoverable editing, no surprise defaults.
 - Aliases: `department_aliases`/`product_aliases` show items in extra places; data lives once; list category = list_items.group_label. Why: single source of truth.
 - Variant favorites retain their composite favorite key while resolving the base catalog product for category, imagery, and list transfers. Why: keep variant identity without losing catalog placement.
-- Read-aloud: own language (default de-DE) + admin templates in `speech_texts`. Why: mother tongue regardless of UI.
+- Read-aloud: chosen locale + admin templates; pronunciation rules are local. Why: tune speech without renaming catalog items.
 - Recipe folders nest via recipe_folders.parent_id (DB trigger blocks cycles); deleting a folder moves its recipes and subfolders up one level. Why: themed sorting without data loss.
 - Recipe cuisines are explicit, optional many-to-many recipe assignments, independent of the device-local ingredient cuisine filter. Why: shared recipe search must not infer cuisines from personal ingredient preferences.
 
