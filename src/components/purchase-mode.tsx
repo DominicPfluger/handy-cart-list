@@ -108,10 +108,21 @@ export function PurchaseMode({ items, onToggle, onClose }: {
 
   // Vor dem ersten Artikel einer neuen Abteilung die Abteilung ansagen.
   const lastDeptRef = useRef<string | null>(null);
-  const withDept = (item: PurchaseItem) => {
-    if (doneItem || !item.group || item.group === lastDeptRef.current) return item.spoken;
+  const deptIntro = (item: PurchaseItem): string | null => {
+    if (doneItem || !item.group || item.group === lastDeptRef.current) return null;
     lastDeptRef.current = item.group;
-    return `${translate(speakLocale, "purchase.deptAnnounce").replace("{dept}", item.group)} ${item.spoken}`;
+    return translate(speakLocale, "purchase.deptAnnounce").replace("{dept}", item.group);
+  };
+  // Abteilung und Artikel getrennt sprechen, mit kurzer Pause dazwischen.
+  const seqTimerRef = useRef(0);
+  const speakItem = (item: PurchaseItem, isCancelled: () => boolean = () => false) => {
+    window.clearTimeout(seqTimerRef.current);
+    const intro = deptIntro(item);
+    if (!intro) { speakNow(item.spoken); return; }
+    speakNow(intro, () => {
+      if (isCancelled()) return;
+      seqTimerRef.current = window.setTimeout(() => { if (!isCancelled()) speakNow(item.spoken); }, 500);
+    });
   };
 
   // Aktuellen Artikel vorlesen; beim Wechsel zum nächsten erneut.
@@ -125,7 +136,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
       if (cancelled || spoken) return;
       spoken = true;
       try { synth.resume(); } catch { /* ignore */ }
-      speakNow(withDept(current));
+      speakItem(current, () => cancelled);
     };
     let timer = 0;
     // Vor der Ansage einer neuen Abteilung kurz innehalten.
@@ -147,6 +158,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
+      window.clearTimeout(seqTimerRef.current);
       try { synth.cancel(); } catch { /* ignore */ }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,7 +170,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   // Safari/iOS blockiert Sprachausgabe ohne vorherige Nutzer-Geste: blockierte
   // Ausgabe merken und beim nächsten Antippen nachholen.
   const blockedRef = useRef<string | null>(null);
-  const speakNow = (text: string) => {
+  const speakNow = (text: string, onDone?: () => void) => {
     const synth = window.speechSynthesis;
     if (!synth || !text.trim()) return;
     const u = new SpeechSynthesisUtterance(expandAbbreviations(text, speakLocale));
@@ -168,7 +180,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     u.rate = rate;
     let started = false;
     u.onstart = () => { started = true; if (uttRef.current === u) blockedRef.current = null; };
-    u.onend = () => { started = true; };
+    u.onend = () => { started = true; if (onDone && uttRef.current === u) onDone(); };
     uttRef.current = u;
     blockedRef.current = null;
     try { synth.resume(); } catch { /* ignore */ }
@@ -210,7 +222,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     try { window.localStorage.setItem(SPEAK_KEY, next ? "1" : "0"); } catch { /* ignore */ }
     if (!next) { try { window.speechSynthesis?.cancel(); } catch { /* ignore */ } }
     // Direkt in der Klick-Geste sprechen (Safari/iOS gibt Sprachausgabe nur so frei).
-    else if (current) { try { window.speechSynthesis.cancel(); lastDeptRef.current = null; speakNow(withDept(current)); } catch { /* ignore */ } }
+    else if (current) { try { window.speechSynthesis.cancel(); lastDeptRef.current = null; speakItem(current); } catch { /* ignore */ } }
   };
 
   return (
