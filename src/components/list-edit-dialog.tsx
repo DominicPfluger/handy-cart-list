@@ -142,7 +142,7 @@ export function ListEditDialog({ list, storeId, onClose, onSave, onSaveTemplate,
               )}
               {onDelete && (
                 <button onClick={onDelete} className="flex-1 rounded-xl border border-destructive/40 py-2.5 text-sm font-semibold text-destructive active:bg-muted">
-                  {t("common.delete")}
+                  {t("lm.delete")}
                 </button>
               )}
             </div>
