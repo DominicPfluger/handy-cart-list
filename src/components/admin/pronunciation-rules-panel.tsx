@@ -18,6 +18,7 @@ export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
   const [written, setWritten] = useState("");
   const [spoken, setSpoken] = useState("");
   const [saving, setSaving] = useState(false);
+  const [subTab, setSubTab] = useState<"products" | "rules">("products");
   const visible = rules.filter((rule) => rule.locale === locale);
   const refresh = () => queryClient.invalidateQueries({ queryKey: pronunciationRulesQueryKey });
 
@@ -53,6 +54,15 @@ export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
         <span className="block text-sm font-semibold text-foreground">{t("speak.locale")}</span>
         <SpeakLocaleChips value={locale} onChange={setLocale} />
       </div>
+      <div className="flex gap-1.5" role="tablist">
+        {(["products", "rules"] as const).map((id) => (
+          <button key={id} type="button" role="tab" aria-selected={subTab === id} onClick={() => setSubTab(id)}
+            className={`rounded-full border px-3 py-1.5 text-sm font-medium transition-colors ${subTab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground hover:text-foreground"}`}>
+            {t(id === "products" ? "speak.tabProducts" : "speak.tabRules")}
+          </button>
+        ))}
+      </div>
+      {subTab === "rules" && <>
       <div className="divide-y divide-border rounded-lg border border-border bg-card">
         {visible.length === 0 && <p className="px-3 py-4 text-sm text-muted-foreground">{t("speak.pronunciationEmpty")}</p>}
         {visible.map((rule) => (
@@ -72,7 +82,8 @@ export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
         <Button type="button" variant="outline" size="sm" onClick={() => hear(spoken.trim() ? spoken : written)} disabled={!written.trim() && !spoken.trim()} className="w-full gap-2"><Volume2 className="h-4 w-4" /> ▶</Button>
         <Button type="button" variant="outline" size="sm" onClick={() => void add()} disabled={saving || !written.trim() || !spoken.trim()} className="w-full gap-2"><Plus className="h-4 w-4" /> {t("speak.pronunciationAdd")}</Button>
       </div>}
-      <ProductPronunciationList locale={locale} rules={rules} canEdit={canEdit} />
+      </>}
+      {subTab === "products" && <ProductPronunciationList locale={locale} rules={rules} canEdit={canEdit} />}
     </div>
   );
 }
