@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus, Save, Trash2, Volume2, X } from "lucide-react";
+import { Languages, Plus, Save, Trash2, Volume2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { LOCALES, useT, type Locale } from "@/i18n";
@@ -16,9 +16,12 @@ export function LocaleRuleChips({ name, all, current, canEdit }: { name: string;
   const [adding, setAdding] = useState(false);
   const [spoken, setSpoken] = useState("");
   const [busy, setBusy] = useState(false);
+  const [allVariants, setAllVariants] = useState(false);
   const sorted = [...all].sort((a, b) => a.locale.localeCompare(b.locale));
   const rule = open ? all.find((r) => r.locale === open) : undefined;
   const missing = LOCALES.filter((l) => !all.some((r) => r.locale === l.id));
+  /** Sprachvarianten der offenen Lokalisierung, z. B. de-DE/de-AT/de-CH. */
+  const variants = open ? LOCALES.filter((l) => l.id.split("-")[0] === open.split("-")[0]).map((l) => l.id as Locale) : [];
 
   const select = (l: Locale) => {
     setAdding(false);
