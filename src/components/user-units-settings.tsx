@@ -15,7 +15,7 @@ export function UserUnitsSettings() {
   const [open, setOpen] = useState(false);
   const [label, setLabel] = useState("");
   const [short, setShort] = useState("");
-  const list = userUnitList(locale);
+  const list = userUnitList(locale, true);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 6 } }),
@@ -76,9 +76,9 @@ function Row({ u, onToggle, onRemove }: { u: U; onToggle: (u: U) => void; onRemo
   const { t } = useT();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: u.id });
   return (
-    <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={`flex items-center gap-2 bg-card px-2 py-2 ${isDragging ? "relative z-10 shadow-lg" : ""} ${u.hidden ? "opacity-50" : ""}`}>
+    <li ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition }} className={`flex items-center gap-2 bg-card px-2 py-2 ${isDragging ? "relative z-10 shadow-lg" : ""} ${u.hidden || u.notOffered ? "opacity-50" : ""}`}>
       <button type="button" aria-label={t("uu.move")} className="touch-none cursor-grab px-1 text-muted-foreground" {...attributes} {...listeners}>⋮⋮</button>
-      <span className="min-w-0 flex-1 truncate text-sm text-foreground">{u.label} <span className="text-muted-foreground">({u.short})</span></span>
+      <span className="min-w-0 flex-1 truncate text-sm text-foreground">{u.label} <span className="text-muted-foreground">({u.short})</span>{u.notOffered && <span className="ml-1 text-xs text-muted-foreground" title={t("uu.notOffered")}>🌐</span>}</span>
       {u.custom ? (
         <button type="button" aria-label={t("uu.delete")} onClick={() => onRemove(u)} className="p-1.5 text-muted-foreground hover:text-destructive"><Trash2 className="h-4 w-4" /></button>
       ) : (

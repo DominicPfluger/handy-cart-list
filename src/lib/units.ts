@@ -71,18 +71,21 @@ function labelOf(id: string, locale: string, kind: "label" | "short"): string {
 
 export function unitLabel(id: string, locale: string = getLocale()) { return labelOf(id, locale, "label"); }
 
-/** Alle für den Markt verfügbaren Einheiten (inkl. eigener) in persönlicher Reihenfolge, ohne Ausblend-Filter. */
-export function userUnitList(locale: string = getLocale()) {
+/** Alle für den Markt verfügbaren Einheiten (inkl. eigener) in persönlicher Reihenfolge, ohne Ausblend-Filter.
+ *  Mit includeAll=true auch Einheiten, die der Admin deaktiviert oder für den Markt versteckt hat (notOffered). */
+export function userUnitList(locale: string = getLocale(), includeAll = false) {
   const m = currentMarket();
   const p = getPrefs();
+  const offered = new Set(rows.filter((r) => r.enabled && !(r.hidden_markets ?? []).includes(m)).map((r) => r.id));
   const ids = [
-    ...rows.filter((r) => r.enabled && !(r.hidden_markets ?? []).includes(m)).map((r) => r.id),
+    ...(includeAll ? rows.map((r) => r.id) : [...offered]),
     ...p.custom.map((c) => c.id),
   ];
   const rank = (id: string) => { const i = p.order.indexOf(id); return i < 0 ? 10000 + ids.indexOf(id) : i; };
   return [...ids].sort((a, b) => rank(a) - rank(b)).map((id) => ({
     id, label: labelOf(id, locale, "label"), short: labelOf(id, locale, "short"),
     custom: !!customOf(id), hidden: p.hidden.includes(id),
+    notOffered: includeAll && !offered.has(id),
   }));
 }
 
