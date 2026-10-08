@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Volume2 } from "lucide-react";
+import { speakSentences } from "@/components/speak-list-button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { LOCALES, useT, type Locale } from "@/i18n";
@@ -17,6 +18,11 @@ export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
   const [saving, setSaving] = useState(false);
   const visible = rules.filter((rule) => rule.locale === locale);
   const refresh = () => queryClient.invalidateQueries({ queryKey: pronunciationRulesQueryKey });
+
+  const hear = (text: string) => {
+    if (typeof window === "undefined" || !("speechSynthesis" in window) || !text.trim()) { toast.error(t("speak.unsupported")); return; }
+    speakSentences([text], locale, 1);
+  };
 
   const add = async () => {
     const cleanWritten = written.trim();
@@ -52,6 +58,7 @@ export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
         {visible.map((rule) => (
           <div key={rule.id} className="flex items-center gap-2 px-3 py-2.5">
             <div className="min-w-0 flex-1 text-sm text-foreground"><span className="font-medium">{rule.written}</span><span className="mx-2 text-muted-foreground" aria-hidden="true">→</span><span>{rule.spoken}</span></div>
+            <Button type="button" size="icon" variant="outline" onClick={() => hear(rule.written)} aria-label="▶" className="h-9 w-9 shrink-0"><Volume2 className="h-4 w-4" /></Button>
             {canEdit && <Button type="button" size="icon" variant="outline" onClick={() => void remove(rule.id)} aria-label={t("speak.pronunciationDelete", { name: rule.written })} className="h-9 w-9 shrink-0"><Trash2 className="h-4 w-4" /></Button>}
           </div>
         ))}
@@ -62,6 +69,7 @@ export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
           <span className="text-muted-foreground" aria-hidden="true">→</span>
           <input value={spoken} onChange={(event) => setSpoken(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") void add(); }} placeholder={t("speak.pronunciationSpoken")} aria-label={t("speak.pronunciationSpoken")} className="min-w-0 rounded-lg border border-border bg-background px-2 py-2 text-sm text-foreground outline-none focus:border-primary" />
         </div>
+        <Button type="button" variant="outline" size="sm" onClick={() => hear(spoken.trim() ? spoken : written)} disabled={!written.trim() && !spoken.trim()} className="w-full gap-2"><Volume2 className="h-4 w-4" /> ▶</Button>
         <Button type="button" variant="outline" size="sm" onClick={() => void add()} disabled={saving || !written.trim() || !spoken.trim()} className="w-full gap-2"><Plus className="h-4 w-4" /> {t("speak.pronunciationAdd")}</Button>
       </div>}
     </div>
