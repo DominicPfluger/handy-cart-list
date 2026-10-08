@@ -147,6 +147,9 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   // Eigene Ausgabe ohne cancel() direkt vor speak() (Chrome verwirft sonst die Ausgabe);
   // Referenz halten, damit Chrome die Äusserung nicht vorzeitig verwirft.
   const uttRef = useRef<SpeechSynthesisUtterance | null>(null);
+  // Safari/iOS blockiert Sprachausgabe ohne vorherige Nutzer-Geste: blockierte
+  // Ausgabe merken und beim nächsten Antippen nachholen.
+  const blockedRef = useRef<string | null>(null);
   const speakNow = (text: string) => {
     const synth = window.speechSynthesis;
     if (!synth || !text.trim()) return;
@@ -157,7 +160,27 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     u.rate = rate;
     uttRef.current = u;
     synth.speak(u);
+    window.setTimeout(() => {
+      try {
+        if (uttRef.current === u && !synth.speaking && !synth.pending) blockedRef.current = text;
+        else blockedRef.current = null;
+      } catch { /* ignore */ }
+    }, 400);
   };
+
+  // Blockierte Ausgabe bei der nächsten Berührung nachholen (zählt als Geste).
+  useEffect(() => {
+    const retry = () => {
+      const text = blockedRef.current;
+      if (!text || !speakOn) return;
+      blockedRef.current = null;
+      try { window.speechSynthesis.cancel(); } catch { /* ignore */ }
+      speakNow(text);
+    };
+    window.addEventListener("pointerdown", retry);
+    return () => window.removeEventListener("pointerdown", retry);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [speakOn, speakLocale, rate]);
 
   const toggleSpeak = () => {
     const next = !speakOn;
