@@ -1464,5 +1464,7 @@
   "speak.pronunciationWritten": "Productnaam",
   "speak.pronunciationSpoken": "Uitspreken als",
   "speak.pronunciationAdd": "Uitspraakregel toevoegen",
-  "speak.pronunciationDelete": "Uitspraakregel voor {name} verwijderen"
+  "speak.pronunciationDelete": "Uitspraakregel voor {name} verwijderen",
+  "speak.pronunciationEmpty": "No pronunciation rules have been added for this language.",
+  "speak.pronunciationSaved": "Pronunciation rule saved"
 }

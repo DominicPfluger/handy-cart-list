@@ -886,5 +886,7 @@
   "speak.pronunciationWritten": "Produktname",
   "speak.pronunciationSpoken": "So aussprechen",
   "speak.pronunciationAdd": "Ausspracheregel hinzufügen",
-  "speak.pronunciationDelete": "Ausspracheregel für {name} löschen"
+  "speak.pronunciationDelete": "Ausspracheregel für {name} löschen",
+  "speak.pronunciationEmpty": "No pronunciation rules have been added for this language.",
+  "speak.pronunciationSaved": "Pronunciation rule saved"
 }

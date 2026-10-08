@@ -1464,5 +1464,7 @@
   "speak.pronunciationWritten": "Nome del prodotto",
   "speak.pronunciationSpoken": "Pronuncia come",
   "speak.pronunciationAdd": "Aggiungi regola di pronuncia",
-  "speak.pronunciationDelete": "Elimina la regola di pronuncia per {name}"
+  "speak.pronunciationDelete": "Elimina la regola di pronuncia per {name}",
+  "speak.pronunciationEmpty": "No pronunciation rules have been added for this language.",
+  "speak.pronunciationSaved": "Pronunciation rule saved"
 }
