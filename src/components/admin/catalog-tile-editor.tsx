@@ -217,9 +217,11 @@ export function CatalogTileEditor(p: {
     enabled: paths.length > 0,
     staleTime: 30 * 60_000,
     queryFn: async () => {
-      const { data } = await supabase.storage.from("catalog-images").createSignedUrls(paths, 3600);
       const m = new Map<string, string>();
-      for (const e of data ?? []) if (e.path && e.signedUrl) m.set(e.path, e.signedUrl);
+      for (let i = 0; i < paths.length; i += 500) {
+        const { data } = await supabase.storage.from("catalog-images").createSignedUrls(paths.slice(i, i + 500), 3600);
+        for (const e of data ?? []) if (e.path && e.signedUrl) m.set(e.path, e.signedUrl);
+      }
       return m;
     },
   });
