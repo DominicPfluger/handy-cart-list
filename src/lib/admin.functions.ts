@@ -1051,10 +1051,7 @@ export const translateProductSynonyms = createServerFn({ method: "POST" })
       const out = await translateNames(names, locale);
       const terms = [...new Set(Object.values(out).map((t) => t.trim()).filter(Boolean))].filter((t) => !have.has(t.toLowerCase()));
       if (!terms.length) return;
-      const { error: e } = await sb.from("product_synonyms").upsert(
-        terms.map((term) => ({ product_id: data.productId, locale, term })),
-        { onConflict: "product_id,locale,lower(term)", ignoreDuplicates: true },
-      );
+      const { error: e } = await sb.from("product_synonyms").insert(terms.map((term) => ({ product_id: data.productId, locale, term })));
       if (!e) added += terms.length;
     }));
     return { added };
