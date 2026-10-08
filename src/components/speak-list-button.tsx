@@ -30,7 +30,9 @@ export function expandAbbreviations(text: string, locale: string): string {
   if (!locale.toLowerCase().startsWith("de")) return text;
   return text
     .replace(/\bStk\.?/g, "Stück")
-    .replace(/\bPkg\.?/g, "Packung");
+    .replace(/\bPkg\.?/g, "Packung")
+    // „1 Stück“ natürlich als „ein Stück“ statt „eins Stück“ sprechen.
+    .replace(/(^|[^\d.,'’])1\s+Stück\b/g, "$1ein Stück");
 }
 
 export function speakSentences(sentences: string[], locale: string, rate: number, onDone?: () => void) {
