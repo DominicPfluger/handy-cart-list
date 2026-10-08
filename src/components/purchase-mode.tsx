@@ -128,7 +128,12 @@ export function PurchaseMode({ items, onToggle, onClose }: {
       speakNow(withDept(current));
     };
     let timer = 0;
-    if (synth.getVoices().length === 0) {
+    // Vor der Ansage einer neuen Abteilung kurz innehalten.
+    const deptChange = !doneItem && !!current.group && lastDeptRef.current !== null && current.group !== lastDeptRef.current;
+    if (deptChange) {
+      try { if (synth.speaking || synth.pending) synth.cancel(); } catch { /* ignore */ }
+      timer = window.setTimeout(run, 800);
+    } else if (synth.getVoices().length === 0) {
       const onVoices = () => { synth.removeEventListener("voiceschanged", onVoices); run(); };
       synth.addEventListener("voiceschanged", onVoices);
       timer = window.setTimeout(() => { synth.removeEventListener("voiceschanged", onVoices); run(); }, 600);
