@@ -1416,6 +1416,13 @@ function Editor(p: {
     return () => window.removeEventListener("keydown", onKey);
   }, [p.onClose]);
 
+  const saveDisabled = p.busy || !name.trim() || (prod ? Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0) : false);
+  const saveItem = () => p.onSave({
+    name: name.trim(), emoji, before,
+    ...(sel.kind !== "heading" ? { parent } : {}),
+    ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, allowedUnits, unitQuantities, diets, variants, heading: headingSel } : {}),
+  });
+
   return (
     <div className="fixed inset-0 z-[60] flex items-end justify-center bg-foreground/30" onClick={p.onClose}>
       <div className="max-h-[88dvh] w-full max-w-[440px] space-y-3 overflow-y-auto rounded-t-3xl bg-background p-5 pb-[calc(5rem+env(safe-area-inset-bottom))]" onClick={(e) => e.stopPropagation()}>
@@ -1428,6 +1435,7 @@ function Editor(p: {
           <Input value={name} onChange={(e) => setName(e.target.value)} placeholder={T("adm.nameDe")} />
           {sel.kind !== "heading" && <Input value={emoji} onChange={(e) => setEmoji(e.target.value)} placeholder="🙂" />}
         </div>
+        <Button className="w-full" disabled={saveDisabled} onClick={saveItem}>{T("adm.save")}</Button>
         {sel.kind !== "heading" && (
           <select value={parent} onChange={(e) => setParent(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
             {sel.kind === "department" && <option value="">{T("adm.topLevel")}</option>}
@@ -1591,11 +1599,7 @@ function Editor(p: {
           </select>
         )}
         <div className="flex gap-2">
-          <Button className="flex-1" disabled={p.busy || !name.trim() || (prod ? Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0) : false)} onClick={() => p.onSave({
-            name: name.trim(), emoji, before,
-            ...(sel.kind !== "heading" ? { parent } : {}),
-            ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, allowedUnits, unitQuantities, diets, variants, heading: headingSel } : {}),
-          })}>{T("adm.save")}</Button>
+          <Button className="flex-1" disabled={saveDisabled} onClick={saveItem}>{T("adm.save")}</Button>
           <Button variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
         </div>
         {dept && <DeptImageEditor deptId={dept.id} imagePath={dept.image_path} onChanged={p.onImageChanged} />}
