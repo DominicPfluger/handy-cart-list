@@ -114,9 +114,15 @@ function FavoritesPage() {
     return { product: toCatalogProduct(favorite), favorite };
   };
 
-  const displayName = (row: FavRow) => row.variant && row.product.variants.includes(row.variant)
-    ? `${row.product.name} · ${pickName(row.product.variantNames?.[row.variant], locale, row.variant)}`
-    : row.favorite.name;
+  // Katalogprodukte immer in der aktuellen Sprache anzeigen; nur eigene Einträge behalten den gespeicherten Namen.
+  const displayName = (row: FavRow) => {
+    if (row.variant) {
+      return row.product.variants.includes(row.variant)
+        ? `${row.product.name} · ${pickName(row.product.variantNames?.[row.variant], locale, row.variant)}`
+        : row.favorite.name;
+    }
+    return productById.has(row.product.id) ? row.product.name : row.favorite.name;
+  };
 
   /** Hauptabteilungen (oberste Ebene), sortiert wie in der Abteilungsansicht. */
   const rootDepartments = useMemo(
