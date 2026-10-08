@@ -140,7 +140,7 @@ function AdminPage() {
   const [mk, setMk] = useState<string>("");
   /** Anzeigesprache des Katalogs im Admin (nur Anzeige, Bearbeitung bleibt Deutsch). */
   const { locale: uiLocale } = useT();
-  const [viewLoc, setViewLoc] = useState<string>(() => (getLocale().startsWith("en") ? "en-US" : "de-DE"));
+  const [viewLoc, setViewLoc] = useState<string>(() => getLocale());
   const admin = useQuery({ queryKey: ["admin-check"], queryFn: () => check() });
   const qCore = useQuery({ queryKey: ["admin-catalog"], queryFn: loadCore, enabled: Boolean(admin.data?.isAdmin || admin.data?.isViewer) });
   // Übersetzungen/Marktdaten erst nach dem Kern laden (gross, nur für Detailansichten nötig).
@@ -887,11 +887,10 @@ function AdminPage() {
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-2xl font-bold text-foreground">{T("adm.title")}</h1>
         <div className="flex items-center gap-2">
-          <select aria-label="Language" value={uiLocale.startsWith("en") ? "en-US" : "de-DE"}
+          <select aria-label="Language" value={uiLocale}
             onChange={(e) => { const v = e.target.value; setLocale(v); setViewLoc(v); }}
-            className="h-9 rounded-lg border border-input bg-background px-2 text-sm">
-            <option value="de-DE">🇩🇪 Deutsch</option>
-            <option value="en-US">🇺🇸 English</option>
+            className="h-9 max-w-52 rounded-lg border border-input bg-background px-2 text-sm">
+            {allLocales().map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
           </select>
           <Button variant="outline" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
         </div>
