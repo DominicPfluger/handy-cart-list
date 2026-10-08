@@ -93,8 +93,8 @@ export function speakQuantity(stored: string, unit: string | undefined, locale: 
     const inner = Number(compound[2]?.replace(",", "."));
     const innerUnit = unitFromText(compound[3] ?? "") ?? unit;
     if (Number.isFinite(packs) && Number.isFinite(inner)) {
-      const packForms = PACKAGES[language] ?? PACKAGES.en;
-      const per = PER_WORD[language] ?? PER_WORD.en;
+      const packForms = PACKAGES[language] ?? PACKAGES["en"] ?? ["pack", "packs"];
+      const per = PER_WORD[language] ?? PER_WORD["en"] ?? "of";
       return `${numberText(packs, locale)} ${wordForm(packForms, packs, locale)} ${per} ${speakQuantity(String(inner), innerUnit, locale)}`;
     }
   }
@@ -106,7 +106,7 @@ export function speakQuantity(stored: string, unit: string | undefined, locale: 
   const resolvedUnit = unit ?? unitFromText(m[2] ?? "");
   if (!resolvedUnit) {
     if (m[2]?.trim()) return `${num} ${m[2].trim()}`;
-    const fallback = FALLBACK_UNIT[language] ?? FALLBACK_UNIT.en;
+    const fallback = FALLBACK_UNIT[language] ?? FALLBACK_UNIT["en"] ?? ["unit", "units"];
     return `${num} ${wordForm(fallback, n, locale)}`;
   }
   const forms = SPOKEN[language]?.[resolvedUnit];
