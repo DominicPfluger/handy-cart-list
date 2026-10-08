@@ -431,6 +431,28 @@ function ListPage() {
         onReorderTemplates={reorderTemplates}
       />
 
+      <ListEditDialog
+        list={lists.find((l) => l.id === editListId) ?? null}
+        storeId={editListId ? (listStores[editListId] ?? "default") : "default"}
+        onClose={() => setEditListId(null)}
+        onSave={(name, storeId) => {
+          if (!editListId) return;
+          renameList(editListId, name);
+          setListStore(editListId, storeId);
+        }}
+        onSaveTemplate={() => { if (editListId) { saveAsTemplate(editListId); toast.success(t("lm.templateSaved")); } }}
+        onDelete={() => {
+          if (!editListId) return;
+          if (lists.length <= 1) { toast.error(t("lm.lastList")); return; }
+          const l = lists.find((x) => x.id === editListId);
+          if (l && confirm(t("lm.confirmDelete").replace("{name}", l.name))) {
+            setEditListId(null);
+            setOpenListId(null);
+            deleteList(l.id);
+          }
+        }}
+      />
+
       {/* Zurück zur Listen-Übersicht */}
       <button
         onClick={() => setOpenListId(null)}
@@ -445,7 +467,7 @@ function ListPage() {
       {/* Title + progress */}
       <div>
         <div className="flex items-center gap-2">
-          <button onClick={() => setManagerOpen(true)} className="min-w-0 flex-1 text-left">
+          <button onClick={() => setEditListId(activeList.id)} className="min-w-0 flex-1 text-left">
             <h1 className="truncate text-2xl font-bold tracking-tight text-foreground">{activeList.name}</h1>
             {activeStore && <p className="truncate text-xs text-muted-foreground">{activeStore.emoji ?? "🏪"} {activeStore.name}</p>}
           </button>

@@ -877,5 +877,6 @@
   "purchase.note": "Notiz",
   "common.addedToNamedList": "{name} zu «{list}» hinzugefügt",
   "purchase.deptAnnounce": "Nächste Abteilung: {dept}.",
+  "purchase.allDoneSpoken": "Super, alles erledigt! Dein Einkauf ist komplett.",
   "tile.replaceIconConfirm": "Kleines Icon ebenfalls durch das neue Bild ersetzen?\n\nOK = Icon ersetzen · Abbrechen = bisheriges Icon behalten"
 }

@@ -11,10 +11,14 @@ interface Props {
   storeId: string;
   onClose: () => void;
   onSave: (name: string, storeId: string) => void;
+  /** Optional: Liste als Vorlage speichern. */
+  onSaveTemplate?: () => void;
+  /** Optional: Liste löschen (Bestätigung erfolgt hier). */
+  onDelete?: () => void;
 }
 
 /** Bearbeitungsdialog einer Einkaufsliste: Name und Markt/Laden. */
-export function ListEditDialog({ list, storeId, onClose, onSave }: Props) {
+export function ListEditDialog({ list, storeId, onClose, onSave, onSaveTemplate, onDelete }: Props) {
   const { t } = useT();
   const stores = useStores();
   const { addCustomStore } = useGroupOrder();
@@ -129,6 +133,20 @@ export function ListEditDialog({ list, storeId, onClose, onSave }: Props) {
           >
             {t("common.save")}
           </button>
+          {(onSaveTemplate || onDelete) && (
+            <div className="flex gap-2 pt-1">
+              {onSaveTemplate && (
+                <button onClick={() => { onSaveTemplate(); onClose(); }} className="flex-1 rounded-xl border border-border py-2.5 text-sm font-semibold text-foreground active:bg-muted">
+                  📋 {t("lm.saveAsTemplate")}
+                </button>
+              )}
+              {onDelete && (
+                <button onClick={onDelete} className="flex-1 rounded-xl border border-destructive/40 py-2.5 text-sm font-semibold text-destructive active:bg-muted">
+                  {t("lm.delete")}
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

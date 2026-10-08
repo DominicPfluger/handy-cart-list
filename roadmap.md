@@ -20,3 +20,5 @@
 ## Offen
 - [x] Sämtliche Dialoge per ESC abbrechen
 - [x] Alle Bilder (App + Katalog) skalieren und komprimieren
+- [x] Listeneinzelansicht: Bearbeiten nur Umbenennen, Laden, Vorlage, Löschen
+- [x] Einkaufsmodus: Abschluss per Sprachausgabe ansagen

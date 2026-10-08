@@ -1455,5 +1455,6 @@
   "purchase.note": "Nota",
   "common.addedToNamedList": "{name} aggiunto a «{list}»",
   "purchase.deptAnnounce": "Prossimo reparto: {dept}.",
+  "purchase.allDoneSpoken": "Ottimo, tutto fatto! La tua spesa è completa.",
   "tile.replaceIconConfirm": "Sostituire anche l’icona piccola con la nuova immagine?\n\nOK = sostituisci · Annulla = mantieni icona"
 }
