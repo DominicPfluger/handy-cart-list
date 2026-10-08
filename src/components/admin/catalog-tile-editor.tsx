@@ -1247,6 +1247,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           <Input aria-label={T("tile.emoji")} placeholder="🙂" value={emoji} onChange={(e) => setEmoji(e.target.value)} className="h-11 w-16 rounded-xl text-center text-xl" />
           <Input aria-label={T("tile.name")} placeholder={T("tile.name")} value={name} onChange={(e) => setName(e.target.value)} className="h-11 flex-1 rounded-xl" />
         </div>}
+        {!p.imageOnly && (
+          <Button className="h-11 w-full rounded-xl" disabled={enriching || (!isDept && Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0))} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
+        )}
         {effId && (
           <PreviewCollapse label={T("adm.previewImage")} src={(imagePreview === undefined ? p.imgUrl : imagePreview) ?? null} emoji={emoji || (isDept ? "📁" : "🛒")} defaultOpen={Boolean(p.imageOnly)}>
             <div className="flex flex-wrap gap-2">
