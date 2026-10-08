@@ -9,8 +9,15 @@ export interface AuthUser {
 }
 
 /** undefined = wird noch geprüft, null = abgemeldet, sonst angemeldet. */
+// Letzter bekannter Stand: beim Seitenwechsel sofort verfügbar (kein Ladebildschirm).
+let lastKnown: AuthUser | null | undefined = undefined;
+
 export function useAuthUser(): AuthUser | null | undefined {
-  const [user, setUser] = useState<AuthUser | null | undefined>(undefined);
+  const [user, setUserState] = useState<AuthUser | null | undefined>(lastKnown);
+  const setUser = (u: AuthUser | null) => {
+    lastKnown = u;
+    setUserState((prev) => (prev && u && prev.id === u.id && prev.email === u.email && prev.name === u.name ? prev : u));
+  };
 
   useEffect(() => {
     let active = true;
