@@ -1093,8 +1093,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       }
       if (changed) void qc.invalidateQueries();
     }
-    // Bei neuen Einträgen offen lassen, damit gleich ein Bild ergänzt werden kann.
-    if (item) p.onClose();
+    // Neue Produkte bleiben offen für die automatische Ergänzung (Bild, Preise); sonst schliessen.
+    if (!isNewProduct) p.onClose();
     });
     if (createdId) {
       const id = createdId;

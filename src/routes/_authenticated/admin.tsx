@@ -1055,7 +1055,7 @@ function AdminPage() {
               if (sel.kind === "product" && patch.variants) void trVariants({ data: { productId: sel.id } }).catch(() => {});
               if (sel.kind === "product" && patch.heading !== undefined) await assignHeading(sel.id, patch.heading);
             }
-            if (sel.kind === "product") setSel(null);
+            setSel(null);
           })}
           onTr={(locale, value, prev) => {
             if ((prev ?? "") === value.trim()) return;
