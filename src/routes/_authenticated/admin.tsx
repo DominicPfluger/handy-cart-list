@@ -1,5 +1,6 @@
 import { VariantAiSuggest } from "@/components/admin/variant-ai-suggest";
 import { VariantSynonyms } from "@/components/admin/variant-synonyms";
+import { VariantTranslations } from "@/components/admin/variant-translations";
 import { useStandardVariants } from "@/hooks/use-standard-variants";
 import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
@@ -1511,6 +1512,7 @@ function Editor(p: {
                     </span>
                     {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                     {(prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}
+                    {(prod.variants ?? []).includes(v) && <VariantTranslations productId={prod.id} variant={v} />}
                     <button
                       type="button"
                       aria-label={`${v} entfernen`}

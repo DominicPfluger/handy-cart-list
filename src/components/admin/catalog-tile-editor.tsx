@@ -1,5 +1,6 @@
 import { VariantAiSuggest } from "@/components/admin/variant-ai-suggest";
 import { VariantSynonyms } from "@/components/admin/variant-synonyms";
+import { VariantTranslations } from "@/components/admin/variant-translations";
 import { useStandardVariants } from "@/hooks/use-standard-variants";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -1398,6 +1399,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
                     </span>
                     {prod && (prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}
+                    {prod && (prod.variants ?? []).includes(v) && <VariantTranslations productId={prod.id} variant={v} />}
                   </div>
                 ))}
               </div>
