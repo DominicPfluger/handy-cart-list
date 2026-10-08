@@ -12,12 +12,16 @@ export interface SpeakGroup {
 }
 
 /** Liest Sätze mit passender Stimme der gewünschten Sprache vor. */
+const NOVELTY = /bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|albert|fred|junior|ralph|kathy|grandma|grandpa|eddy|flo|reed|rocko|sandy|shelley/i;
 export function findVoice(locale: string): SpeechSynthesisVoice | undefined {
-  const voices = window.speechSynthesis.getVoices();
+  const voices = window.speechSynthesis.getVoices().filter((v) => !NOVELTY.test(v.name));
   const norm = (l: string) => l.replace("_", "-").toLowerCase();
   const lang = locale.slice(0, 2).toLowerCase();
-  return voices.find((v) => norm(v.lang) === locale.toLowerCase())
-    ?? voices.find((v) => norm(v.lang).split("-")[0] === lang);
+  // Lokale Stimmen bevorzugen: Netzwerkstimmen (z. B. Google) starten oft nicht oder brechen ab.
+  const rank = (v: SpeechSynthesisVoice) => (v.localService ? 0 : 2) + (v.default ? 0 : 1);
+  const pick = (list: SpeechSynthesisVoice[]) => list.sort((a, b) => rank(a) - rank(b))[0];
+  return pick(voices.filter((v) => norm(v.lang) === locale.toLowerCase()))
+    ?? pick(voices.filter((v) => norm(v.lang).split("-")[0] === lang));
 }
 
 /** true wenn Stimmen geladen sind, aber keine zur Sprache passt. */
@@ -61,7 +65,7 @@ export function speakSentences(sentences: string[], locale: string, rate: number
     u.lang = locale;
     if (withVoice && voice) u.voice = voice;
     u.rate = Math.min(2, Math.max(0.5, rate || 1));
-    if (i === 0) u.onstart = () => { started = true; };
+    u.onstart = () => { started = true; };
     if (i === list.length - 1) {
       u.onend = finish;
       u.onerror = (e) => {
@@ -90,13 +94,22 @@ export function speakSentences(sentences: string[], locale: string, rate: number
     try { synth.resume(); } catch { /* ignore */ }
     utts.forEach((u) => synth.speak(u));
     window.setTimeout(() => {
-      if (token === speakToken && !started && !synth.speaking) {
+      if (token === speakToken && !started && !synth.speaking && !synth.pending) {
         if (voice) retry(); else finish();
       }
-    }, 1500);
+    }, 2500);
   };
   // iOS Safari braucht speak() direkt in der Tipp-Geste; Chrome verwirft speak() direkt nach cancel().
-  if (busy && !isIOS) window.setTimeout(run, 120); else run();
+  if (isIOS) { run(); return; }
+  // Chrome liefert Stimmen erst asynchron: beim allerersten Aufruf kurz darauf warten.
+  if (!synth.getVoices().length) {
+    let done = false;
+    const go = () => { if (done) return; done = true; synth.removeEventListener?.("voiceschanged", go); run(); };
+    synth.addEventListener?.("voiceschanged", go);
+    window.setTimeout(go, 400);
+    return;
+  }
+  if (busy) window.setTimeout(run, 120); else run();
 }
 let activeUtterances: SpeechSynthesisUtterance[] = [];
 let speakToken = 0;
