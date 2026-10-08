@@ -7,6 +7,7 @@ import { LOCALES, useT, type Locale } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { speakSentences } from "@/components/speak-list-button";
 import { pronunciationRulesQueryKey, type PronunciationRule } from "@/lib/pronunciation-rules";
+import { LocaleRuleChips } from "@/components/admin/locale-rule-chips";
 
 type Prod = { id: string; name: string };
 
