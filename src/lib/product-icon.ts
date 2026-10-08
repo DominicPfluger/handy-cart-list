@@ -30,10 +30,10 @@ export async function makeProductIcon(source: Blob): Promise<Blob> {
   }
 }
 
-/** Commits the icon after upload; an old icon is hidden first to avoid displaying stale imagery. */
+/** Creates a missing icon; an existing icon is preserved unless replacement was explicitly confirmed. */
 export async function saveProductIcon(productId: string, source: Blob, imagePath: string, force = false): Promise<void> {
-  const { data: cur } = await supabase.from("products").select("icon_custom").eq("id", productId).single();
-  if (cur?.icon_custom && !force) {
+  const { data: cur } = await supabase.from("products").select("icon_path").eq("id", productId).single();
+  if (cur?.icon_path && !force) {
     const { error } = await supabase.from("products").update({ image_path: imagePath }).eq("id", productId);
     if (error) throw error;
     await forgetCatalogImage(imagePath);

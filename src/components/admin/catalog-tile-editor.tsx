@@ -181,8 +181,7 @@ export function CatalogTileEditor(p: {
       setImgProg({ done: 0, total: list.length });
       try {
         for (let i = 0; i < list.length; i++) {
-          const result = await genImgAll({ data: { id: list[i]!.id, kind: "product", hint: h, opts } });
-          await saveProductIconFromPath(list[i]!.id, result.path);
+          await genImgAll({ data: { id: list[i]!.id, kind: "product", hint: h, opts } });
           setImgProg({ done: i + 1, total: list.length });
         }
       } finally { setImgProg(null); }
@@ -196,8 +195,7 @@ export function CatalogTileEditor(p: {
     setAiBusy(prod.id);
     void p.run(async () => {
       try {
-        const result = await genImgAll({ data: { id: prod.id, kind: "product" } });
-        await saveProductIconFromPath(prod.id, result.path);
+        await genImgAll({ data: { id: prod.id, kind: "product" } });
       } catch (e) {
         toast.error(e instanceof Error ? e.message : String(e));
       } finally { setAiBusy(null); }
@@ -1182,7 +1180,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       await p.run(async () => {
         const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined, opts: imgOpts } });
         await forgetCatalogImage(generated.path);
-        await applyPreview(effId, generated.path, await askReplaceIcon(effId));
+        await applyPreview(effId, generated.path, false);
         const { data, error } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
         if (error) throw error;
         if (data?.signedUrl) setImagePreview(data.signedUrl);
