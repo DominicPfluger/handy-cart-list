@@ -7,6 +7,7 @@ import { LOCALES, useT, type Locale } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { speakSentences } from "@/components/speak-list-button";
 import { pronunciationRulesQueryKey, type PronunciationRule } from "@/lib/pronunciation-rules";
+import { LocaleRuleChips } from "@/components/admin/locale-rule-chips";
 
 type Prod = { id: string; name: string };
 
@@ -129,21 +130,7 @@ function Row({ name, locale, rule, all, canEdit }: { name: string; locale: Local
     <tr className="align-top">
       <td className="px-3 py-2">
         <div className="font-medium text-foreground">{name}</div>
-        {all.length > 0 && (
-          <div className="mt-1 flex flex-wrap gap-1">
-            {[...all].sort((a, b) => a.locale.localeCompare(b.locale)).map((r) => {
-              const info = LOCALES.find((l) => l.id === r.locale);
-              return (
-                <span key={r.id} title={info?.label ?? r.locale}
-                  className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[11px] ${r.locale === locale ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}>
-                  <span aria-hidden="true">{info?.flag ?? "🌐"}</span>
-                  <span className="font-medium">{r.locale.split("-")[1] ?? r.locale}</span>
-                  <span>{r.spoken}</span>
-                </span>
-              );
-            })}
-          </div>
-        )}
+        <LocaleRuleChips name={name} all={all} current={locale} canEdit={canEdit} />
       </td>
       <td className="px-3 py-2">
         {editing && (
