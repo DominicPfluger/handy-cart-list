@@ -276,9 +276,7 @@ export function CatalogTileEditor(p: {
         return;
       }
       if (t.kind === "department" || (t.kind === "crumb" && t.id)) {
-        const own = ids.filter((id) => !id.startsWith("alias:"));
-        if (own.length === 0) return;
-        void p.run(() => p.must(supabase.from("products").update({ department_id: t.id }).in("id", own)), T("tile.moved"));
+        if (p.onMoveSelected) p.onMoveSelected(ids, t.id);
         setSelected(new Set());
       }
       return;
@@ -323,6 +321,10 @@ export function CatalogTileEditor(p: {
       return;
     }
     const isAlias = d.id.startsWith("alias:") || d.id.startsWith("deptalias:");
+    if (d.id.startsWith("alias:") && d.kind === "product" && (t.kind === "department" || (t.kind === "crumb" && t.id))) {
+      if (!t.id.startsWith("deptalias:")) p.onMoveSelected?.([d.id], t.id);
+      return;
+    }
     if (isAlias && (t.kind === "crumb" || (t.kind === "department" && d.kind !== "department"))) return;
     const after = (() => { const r = t.el.getBoundingClientRect(); return d.kind === "product" ? e.clientY > r.top + r.height / 2 : e.clientX > r.left + r.width / 2; })();
     if (t.kind === "crumb") {
@@ -615,7 +617,7 @@ export function CatalogTileEditor(p: {
           <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: selCount })}</span>
           <Button size="sm" variant="ghost" onClick={selectAll}>{T("adm.selectAll")}</Button>
           <Button size="sm" variant="ghost" onClick={clearSelection}>{T("adm.clearSelection")}</Button>
-          {p.onMoveSelected && [...selected].some((id) => !id.startsWith("alias:")) && (
+          {p.onMoveSelected && (
             <Button size="sm" variant="outline" onClick={() => { setMoveSearch(""); setMovePick(true); }}>{T("adm.moveSelected")}</Button>
           )}
           {[...selected].some((id) => !id.startsWith("alias:")) && (
@@ -811,11 +813,11 @@ export function CatalogTileEditor(p: {
       {movePick && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setMovePick(false)}>
           <div className="flex max-h-[80vh] w-full max-w-md flex-col gap-2 rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
-            <p className="text-sm font-bold text-foreground">{T("adm.moveSelectedTitle", { n: [...selected].filter((id) => !id.startsWith("alias:")).length })}</p>
+            <p className="text-sm font-bold text-foreground">{T("adm.moveSelectedTitle", { n: selected.size })}</p>
             <Input autoFocus value={moveSearch} onChange={(e) => setMoveSearch(e.target.value)} placeholder={T("adm.search")} className="h-10 rounded-xl" />
             <div className="min-h-0 flex-1 space-y-1 overflow-y-auto">
               {(p.moveDeptOptions ?? []).filter((o) => o.id !== p.cur && o.label.toLowerCase().includes(moveSearch.trim().toLowerCase())).map((o) => (
-                <button key={o.id} type="button" onClick={() => { p.onMoveSelected!([...selected].filter((id) => !id.startsWith("alias:")), o.id); setMovePick(false); clearSelection(); }}
+                <button key={o.id} type="button" onClick={() => { p.onMoveSelected!([...selected], o.id); setMovePick(false); clearSelection(); }}
                   className="w-full truncate rounded-lg border border-border px-3 py-2 text-left text-sm text-foreground">{o.label}</button>
               ))}
             </div>
@@ -910,7 +912,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
   // Kategorie-Wahl beim Anlegen eines neuen Produkts (Vorauswahl: aktuell geöffnete Kategorie)
-  const [newDept, setNewDept] = useState<string>(prod?.department_id ?? p.cur ?? "");
+  const [newDept, setNewDept] = useState<string>((prod?.alias_id ? p.cur : prod?.department_id) ?? p.cur ?? "");
   const newDeptOpts = (() => {
     const byId = new Map(p.depts.map((d) => [d.id, d]));
     const label = (id: string) => {
@@ -1050,7 +1052,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         await p.translateIds([item.id]);
       }
       if (!isDept) void trVariants({ data: { productId: item.id } }).catch(() => {});
-      if (!isDept && prod && !prod.alias_id && newDept && newDept !== prod.department_id) p.onMoveSelected?.([item.id], newDept);
+      if (!isDept && prod && newDept && newDept !== (prod.alias_id ? p.cur : prod.department_id)) p.onMoveSelected?.([prod.alias_id ? `alias:${prod.alias_id}` : item.id], newDept);
     } else {
       const r = isDept
         ? await supabase.from("departments").insert({ ...base, parent_id: p.cur, sort_order: p.children.length + 1 }).select("id").single()
@@ -1318,10 +1320,10 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </details>
           </IconCollapse>
         )}
-        {!p.imageOnly && !isDept && !prod?.alias_id && (
+        {!p.imageOnly && !isDept && (
           <label className="flex items-center gap-2 text-sm">
             <span className="shrink-0 text-muted-foreground">{T("adm.category")}</span>
-            <select aria-label={T("adm.category")} value={newDept || prod?.department_id || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
+            <select aria-label={T("adm.category")} value={newDept || (prod?.alias_id ? p.cur : prod?.department_id) || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
               {newDeptOpts.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
             </select>
           </label>
