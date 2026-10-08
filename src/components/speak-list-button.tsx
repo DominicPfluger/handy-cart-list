@@ -99,6 +99,12 @@ export function speakSentences(sentences: string[], locale: string, rate: number
     if (token !== speakToken) return;
     try { synth.resume(); } catch { /* ignore */ }
     utts.forEach((u) => synth.speak(u));
+    if (!keepAlive) {
+      keepAlive = window.setInterval(() => {
+        if (token !== speakToken || finished) { window.clearInterval(keepAlive); keepAlive = 0; return; }
+        try { if (synth.speaking && !synth.paused) synth.resume(); } catch { /* ignore */ }
+      }, 5000);
+    }
     window.setTimeout(() => {
       if (token === speakToken && !started && !synth.speaking && !synth.pending) {
         if (voice) retry(); else finish();
