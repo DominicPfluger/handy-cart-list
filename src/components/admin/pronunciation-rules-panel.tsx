@@ -8,6 +8,7 @@ import { useT, type Locale } from "@/i18n";
 import { SpeakLocaleChips } from "@/components/admin/speak-locale-chips";
 import { Button } from "@/components/ui/button";
 import { pronunciationRulesQueryKey, usePronunciationRules } from "@/lib/pronunciation-rules";
+import { ProductPronunciationList } from "@/components/admin/product-pronunciation-list";
 
 export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
   const { t } = useT();
@@ -71,6 +72,7 @@ export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
         <Button type="button" variant="outline" size="sm" onClick={() => hear(spoken.trim() ? spoken : written)} disabled={!written.trim() && !spoken.trim()} className="w-full gap-2"><Volume2 className="h-4 w-4" /> ▶</Button>
         <Button type="button" variant="outline" size="sm" onClick={() => void add()} disabled={saving || !written.trim() || !spoken.trim()} className="w-full gap-2"><Plus className="h-4 w-4" /> {t("speak.pronunciationAdd")}</Button>
       </div>}
+      <ProductPronunciationList locale={locale} rules={rules} canEdit={canEdit} />
     </div>
   );
 }
