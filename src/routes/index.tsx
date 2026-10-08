@@ -709,6 +709,7 @@ function LandingGate() {
       <LandingPage
         onEnterApp={() => {
           markLandingDone();
+          landingDecided = true;
           setDecided(true);
         }}
       />
