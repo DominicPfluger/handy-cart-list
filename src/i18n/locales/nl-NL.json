@@ -1443,5 +1443,14 @@
   "uu.move": "Eenheid verplaatsen",
   "uu.delete": "Eenheid verwijderen",
   "uu.show": "Eenheid tonen",
-  "uu.hide": "Eenheid verbergen"
+  "uu.hide": "Eenheid verbergen",
+  "purchase.skip": "Later",
+  "purchase.prev": "Terug",
+  "purchase.next": "Volgende",
+  "purchase.reopen": "Heropenen",
+  "purchase.alreadyDone": "Al gedaan",
+  "purchase.upNext": "Hierna",
+  "purchase.nextDept": "Volgende afdeling",
+  "purchase.organic": "Bio",
+  "purchase.note": "Notitie"
 }

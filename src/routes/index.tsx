@@ -284,6 +284,10 @@ function ListPage() {
         emoji: i.emoji || product?.emoji || "🛒",
         ...(product?.imagePath ? { imagePath: product.imagePath, imageUrl: product.imageUrl } : {}),
         ...(color ? { color } : {}),
+        group: g.label,
+        groupEmoji: g.items[0]?.groupEmoji || colorDept?.emoji || "",
+        ...(i.note ? { note: i.note } : {}),
+        ...(i.organic ? { organic: true } : {}),
       };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
