@@ -40,7 +40,10 @@ export function expandAbbreviations(text: string, locale: string): string {
     .replace(/\bStk\.?/g, "Stück")
     .replace(/\bPkg\.?/g, "Packung")
     // „1 Stück“ natürlich als „ein Stück“ statt „eins Stück“ sprechen.
-    .replace(/(^|[^\d.,'’])1\s+Stück\b/g, "$1ein Stück");
+    .replace(/(^|[^\d.,'’])1\s+Stück\b/g, "$1ein Stück")
+    // Weibliche Einheiten: „eine Dose“, „zwei Dosen“ usw.
+    .replace(/(^|[^\d.,'’])1\s+(Dose|Flasche|Packung|Tube|Rolle)\b/gi, "$1eine $2")
+    .replace(/(^|[^\d.,'’])2\s+(Dosen|Flaschen|Packungen|Tuben|Rollen)\b/gi, "$1zwei $2");
 }
 
 export function speakSentences(sentences: string[], locale: string, rate: number, onDone?: () => void) {
