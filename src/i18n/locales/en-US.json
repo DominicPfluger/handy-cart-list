@@ -457,6 +457,8 @@
   "adm.noProducts": "No products in this category.",
   "adm.drag": "Drag",
   "adm.retranslated": "Re-translated",
+  "adm.aiTrOne": "AI translation for {l}",
+  "adm.aiTrEmpty": "No translation received",
   "adm.edit": "Edit",
   "adm.new.department": "New Category",
   "adm.new.product": "New Product",

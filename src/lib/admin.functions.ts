@@ -1056,3 +1056,15 @@ export const translateProductSynonyms = createServerFn({ method: "POST" })
     }));
     return { added };
   });
+
+/** KI-Übersetzung eines einzelnen Namens in genau eine Lokalisierung (nur Admins). */
+export const translateSingleName = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ name: z.string().min(1).max(200), locale: z.string().min(2).max(20) }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { data: ok } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
+    if (!ok) throw new Error("Kein Zugriff");
+    const { translateNames } = await import("./translate.server");
+    const r = await translateNames({ x: data.name }, data.locale);
+    return { name: r["x"] ?? "" };
+  });
