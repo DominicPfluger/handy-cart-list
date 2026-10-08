@@ -1862,7 +1862,7 @@ function SheetTranslations({ kind, id, baseName }: { kind: "product" | "departme
   );
 }
 
-function SheetTrField({ label, value, manual, locale, source, onSave }: { label: string; value: string; manual?: boolean; locale: string; source: string; onSave: (v: string) => void }) {
+function SheetTrField({ label, value, manual, locale, source, onSave }: { label: string; value: string; manual?: boolean | undefined; locale: string; source: string; onSave: (v: string) => void }) {
   const [v, setV] = useState(value);
   const [busy, setBusy] = useState(false);
   const trFn = useServerFn(translateSingleName);
