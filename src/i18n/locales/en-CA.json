@@ -1454,5 +1454,6 @@
   "purchase.organic": "Organic",
   "purchase.note": "Note",
   "common.addedToNamedList": "{name} added to “{list}”",
-  "purchase.deptAnnounce": "Next aisle: {dept}."
+  "purchase.deptAnnounce": "Next aisle: {dept}.",
+  "tile.replaceIconConfirm": "Also replace the small icon with the new image?\n\nOK = replace icon · Cancel = keep current icon"
 }

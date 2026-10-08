@@ -13,7 +13,7 @@ import { AllowedUnitsPicker } from "@/components/admin/allowed-units-picker";
 import { rootColorByName } from "@/lib/dept-colors";
 import { deptTreeOrder } from "@/lib/dept-order";
 import { prepareCategoryImage } from "@/lib/image-upload";
-import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIcon, saveProductIconFromPath } from "@/lib/product-icon";
+import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIcon, saveProductIconFromPath, setPreviewImageOnly } from "@/lib/product-icon";
 import { toast } from "sonner";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPrice, estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
@@ -1128,16 +1128,31 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (!isDept && item && headingSel !== curHeadingId) p.onAssignHeading?.(item.id, headingSel);
   };
 
+  /** Fragt nach, ob ein vorhandenes kleines Icon durch das neue Vorschaubild ersetzt werden soll. */
+  const askReplaceIcon = async (id: string): Promise<boolean> => {
+    const { data } = await supabase.from(isDept ? "departments" : "products").select("icon_path").eq("id", id).single();
+    const has = Boolean((data as { icon_path: string | null } | null)?.icon_path);
+    if (!has) return !isDept;
+    return window.confirm(T("tile.replaceIconConfirm"));
+  };
+  const applyPreview = async (id: string, path: string, replace: boolean, blob?: Blob) => {
+    const kind = isDept ? "department" : "product";
+    if (!replace) { await setPreviewImageOnly(kind, id, path); return; }
+    if (isDept) { await setPreviewImageOnly(kind, id, path); await saveCustomIconFromPath(kind, id, path); }
+    else if (blob) await saveProductIcon(id, blob, path, true);
+    else { await setPreviewImageOnly(kind, id, path); const r = await supabase.storage.from("catalog-images").createSignedUrl(path, 600); if (r.data?.signedUrl) await saveProductIcon(id, await (await fetch(r.data.signedUrl)).blob(), path, true); }
+    await forgetCatalogImage(path);
+    await loadIcon(id);
+  };
+
   const upload = (file: File) => p.run(async () => {
     const blob = await prepareCategoryImage(file);
     if (!effId) throw new Error(T("tile.nameRequired"));
     const path = `${table}/${effId}-${crypto.randomUUID()}.webp`;
-    if (!isDept) await p.must(supabase.from("products").update({ icon_path: null }).eq("id", effId));
+    const replace = await askReplaceIcon(effId);
     const { error } = await supabase.storage.from("catalog-images").upload(path, blob, { contentType: "image/webp", upsert: true });
     if (error) throw new Error(error.message);
-    if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
-    else await saveProductIcon(effId, blob, path);
-    await forgetCatalogImage(path);
+    await applyPreview(effId, path, replace, blob);
     const { data: signed } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
     setImagePreview(signed?.signedUrl ?? null);
   });
@@ -1165,7 +1180,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       await p.run(async () => {
         const generated = await genImg({ data: { id: effId, kind: isDept ? "department" : "product", hint: hint.trim() || undefined, opts: imgOpts } });
         await forgetCatalogImage(generated.path);
-        if (!isDept) await saveProductIconFromPath(effId, generated.path);
+        await applyPreview(effId, generated.path, await askReplaceIcon(effId));
         const { data, error } = await supabase.storage.from("catalog-images").createSignedUrl(generated.path, 600);
         if (error) throw error;
         if (data?.signedUrl) setImagePreview(data.signedUrl);
@@ -1214,8 +1229,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       <div role="dialog" aria-modal="true" aria-label={p.imageOnly ? T("adm.previewImage") : T("tile.editItem")} className="max-h-[calc(100dvh-1rem)] w-full max-w-[440px] overflow-x-hidden overflow-y-auto overscroll-contain rounded-t-3xl bg-background p-4 pb-[calc(1.5rem+env(safe-area-inset-bottom))] sm:max-h-[90dvh] sm:p-5" onClick={(e) => e.stopPropagation()}>
         <div className="space-y-3">
         {picking && effId && <ImagePicker onClose={() => setPicking(false)} onPick={(path) => { setPicking(false); void p.run(async () => {
-          if (isDept) await p.must(supabase.from(table).update({ image_path: path }).eq("id", effId));
-          else await saveProductIconFromPath(effId, path);
+          await applyPreview(effId, path, await askReplaceIcon(effId));
           const { data: signed } = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
           setImagePreview(signed?.signedUrl ?? null);
         }); }} />}

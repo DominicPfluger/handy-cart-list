@@ -1454,5 +1454,6 @@
   "purchase.organic": "Bio",
   "purchase.note": "Notitie",
   "common.addedToNamedList": "{name} toegevoegd aan ‘{list}’",
-  "purchase.deptAnnounce": "Volgende afdeling: {dept}."
+  "purchase.deptAnnounce": "Volgende afdeling: {dept}.",
+  "tile.replaceIconConfirm": "Ook het kleine pictogram vervangen door de nieuwe afbeelding?\n\nOK = vervangen · Annuleren = huidig pictogram behouden"
 }

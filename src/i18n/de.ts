@@ -941,6 +941,7 @@ export const de = {
   "tile.imgDone": "Bild erzeugt",
   "tile.regenerateImage": "Bild neu generieren",
   "tile.removeImage": "Bild entfernen",
+  "tile.replaceIconConfirm": "Kleines Icon ebenfalls durch das neue Bild ersetzen?\n\nOK = Icon ersetzen · Abbrechen = bisheriges Icon behalten",
   "tile.removeImageConfirm": "Produktbild und Listen-Icon entfernen? Das Produkt bleibt erhalten.",
   "tile.imageRemoved": "Produktbild entfernt",
   "tile.save": "Speichern",

@@ -876,5 +876,6 @@
   "purchase.organic": "Bio",
   "purchase.note": "Notiz",
   "common.addedToNamedList": "{name} zu «{list}» hinzugefügt",
-  "purchase.deptAnnounce": "Nächste Abteilung: {dept}."
+  "purchase.deptAnnounce": "Nächste Abteilung: {dept}.",
+  "tile.replaceIconConfirm": "Kleines Icon ebenfalls durch das neue Bild ersetzen?\n\nOK = Icon ersetzen · Abbrechen = bisheriges Icon behalten"
 }
