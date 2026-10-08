@@ -75,7 +75,7 @@ function ProductThumb({ row }: { row: FavRow }) {
 }
 
 function FavoritesPage() {
-  const { addCatalogItem, createListFromItems, favorites, hydrated, selfName, toggleFavorite } = useShoppingList();
+  const { activeList, addCatalogItem, createListFromItems, favorites, hydrated, selfName, toggleFavorite } = useShoppingList();
   const navigate = useNavigate();
   const favOrder = useFavoriteOrder();
   const data = useCatalog();
@@ -275,7 +275,7 @@ function FavoritesPage() {
       groupLabel: group?.name ?? row.favorite.groupLabel,
       groupEmoji: (group?.emoji ?? row.favorite.groupEmoji) ?? undefined,
     });
-    toast.success(t("common.addedToList", { name }));
+    toast.success(activeList?.name ? t("common.addedToNamedList", { name, list: activeList.name }) : t("common.addedToList", { name }));
   };
 
   const removeFavorite = (row: FavRow) => {

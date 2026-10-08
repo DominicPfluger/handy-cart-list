@@ -127,7 +127,7 @@ function DepartmentsPage() {
   const { t } = useT();
   const personalVariants = usePersonalVariants();
   const refPrices = useReferencePrices();
-  const { addCatalogItem, isFavorite, toggleFavorite } = useShoppingList();
+  const { addCatalogItem, isFavorite, toggleFavorite, activeList } = useShoppingList();
   const { preferred: preferredDept } = usePreferredDept();
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
@@ -442,7 +442,7 @@ function DepartmentsPage() {
       groupLabel: group?.name,
       groupEmoji: group?.emoji ?? undefined,
     });
-    toast.success(t("common.addedToList", { name }));
+    toast.success(activeList?.name ? t("common.addedToNamedList", { name, list: activeList.name }) : t("common.addedToList", { name }));
   };
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const toggleExpanded = (id: string) => {

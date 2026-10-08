@@ -1452,5 +1452,6 @@
   "purchase.upNext": "A seguir",
   "purchase.nextDept": "Próxima secção",
   "purchase.organic": "Bio",
-  "purchase.note": "Nota"
+  "purchase.note": "Nota",
+  "common.addedToNamedList": "{name} adicionado a «{list}»"
 }
