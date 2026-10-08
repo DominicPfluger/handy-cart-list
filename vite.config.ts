@@ -40,27 +40,20 @@ export default defineConfig({
               // Every image (storage photos, recipe images, app artwork) is
               // fetched once from the server, then served from the device.
               // Storage URLs are keyed without their expiring signature.
+              // Catalog storage artwork is cached by the app itself (catalog-image-cache).
               urlPattern: ({ request, url }) =>
-                request.destination === "image" ||
-                url.pathname.includes("/storage/v1/object/") ||
-                /\.(png|jpe?g|webp|gif|svg|avif)$/i.test(url.pathname),
+                !url.pathname.includes("/storage/v1/object/") &&
+                (request.destination === "image" ||
+                /\.(png|jpe?g|webp|gif|svg|avif)$/i.test(url.pathname)),
               handler: "CacheFirst",
               options: {
-                cacheName: "shoppi-catalog-images",
-                plugins: [{ cacheKeyWillBeUsed: async ({ request }) => {
-                  const url = new URL(request.url);
-                  if (url.pathname.includes("/storage/v1/object/")) {
-                    url.search = "";
-                    url.pathname = url.pathname.replace(/\/object\/(sign|public|authenticated)\//, "/object/");
-                  }
-                  return url.href;
-                } }],
-                cacheableResponse: { statuses: [0, 200] },
-                expiration: { maxEntries: 3000, maxAgeSeconds: 30 * 24 * 60 * 60, purgeOnQuotaError: true },
+                cacheName: "shoppi-static-images",
+                cacheableResponse: { statuses: [200] },
+                expiration: { maxEntries: 300, maxAgeSeconds: 30 * 24 * 60 * 60, purgeOnQuotaError: true },
               },
             },
             {
-              urlPattern: ({ url }) => url.hostname.includes("supabase"),
+              urlPattern: ({ url }) => url.hostname.includes("supabase") && !url.pathname.includes("/storage/v1/object/"),
               handler: "NetworkFirst",
               options: {
                 cacheName: "shoppi-api",
@@ -71,7 +64,7 @@ export default defineConfig({
           ],
           navigateFallback: "/",
         },
-        devOptions: { enabled: true },
+        devOptions: { enabled: false },
       }),
     ],
   },
