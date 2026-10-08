@@ -11,7 +11,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup } from "@/lib/admin.functions";
+import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup, translateSingleName } from "@/lib/admin.functions";
 import { LOCALES, allLocales, getLocale, translate, setLocale, useT } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
@@ -1618,6 +1618,7 @@ function Editor(p: {
         <div className="space-y-1.5">
           {allLocales().map((l) => (
             <TrField key={l.id + (tr[l.id]?.name ?? "")} label={`${l.flag} ${l.id}`} value={tr[l.id]?.name ?? ""} manual={tr[l.id]?.is_manual}
+              locale={l.id} source={sel.kind === "heading" ? "" : name.trim()}
               onSave={(v) => p.onTr(l.id, v, tr[l.id]?.name)} />
           ))}
         </div>
@@ -1626,14 +1627,31 @@ function Editor(p: {
   );
 }
 
-function TrField({ label, value, manual, onSave }: { label: string; value: string; manual?: boolean | undefined; onSave: (v: string) => void }) {
+function TrField({ label, value, manual, locale, source, onSave }: { label: string; value: string; manual?: boolean | undefined; locale: string; source: string; onSave: (v: string) => void }) {
   const [v, setV] = useState(value);
+  const [busy, setBusy] = useState(false);
+  const trFn = useServerFn(translateSingleName);
+  const aiTranslate = async () => {
+    if (!source) return;
+    setBusy(true);
+    try {
+      const r = await trFn({ data: { name: source, locale } });
+      if (r.name) { setV(r.name); onSave(r.name); }
+      else toast.error(T("adm.aiTrEmpty"));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally { setBusy(false); }
+  };
   return (
-    <label className="grid grid-cols-[5.5rem_1fr] items-center gap-2 text-xs">
+    <div className="grid grid-cols-[5.5rem_1fr_auto] items-center gap-2 text-xs">
       <span className="text-muted-foreground">{label}</span>
-      <input value={v} onChange={(e) => setV(e.target.value)} onBlur={() => onSave(v)}
+      <input aria-label={label} value={v} onChange={(e) => setV(e.target.value)} onBlur={() => onSave(v)}
         onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
-        className={`rounded-lg border px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary ${manual ? "border-primary bg-primary-soft/30" : "border-input bg-background"}`} />
-    </label>
+        className={`min-w-0 rounded-lg border px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary ${manual ? "border-primary bg-primary-soft/30" : "border-input bg-background"}`} />
+      <Button type="button" size="sm" variant="outline" disabled={busy || !source} onClick={() => void aiTranslate()}
+        aria-label={T("adm.aiTrOne", { l: locale })} title={T("adm.aiTrOne", { l: locale })} className="h-8 px-2">
+        {busy ? "…" : "✨"}
+      </Button>
+    </div>
   );
 }

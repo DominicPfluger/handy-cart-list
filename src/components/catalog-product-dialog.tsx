@@ -251,7 +251,7 @@ export function CatalogProductDialog({
           </div>
         )}
 
-        {product?.organicAvailable && (
+        {product?.variants.some((v) => v.trim().toLowerCase() === "bio") && (
           <Label
             htmlFor="catalog-organic"
             className="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-primary-soft/30 px-3 py-2"
@@ -269,7 +269,7 @@ export function CatalogProductDialog({
         <div className="space-y-2">
           <Label htmlFor="catalog-variant">{t("dlg.variant")}</Label>
           {(() => {
-            const all = [...(product?.variants ?? []), ...custom];
+            const all = [...(product?.variants ?? []), ...custom].filter((v) => v.trim().toLowerCase() !== "bio");
             if (all.length === 0) return null;
             const limit = 12;
             const collapsible = all.length > limit;
