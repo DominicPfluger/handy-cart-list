@@ -875,5 +875,6 @@
   "purchase.nextDept": "Nächste Abteilung",
   "purchase.organic": "Bio",
   "purchase.note": "Notiz",
-  "common.addedToNamedList": "{name} zu „{list}“ hinzugefügt"
+  "common.addedToNamedList": "{name} zu „{list}“ hinzugefügt",
+  "purchase.deptAnnounce": "Nächste Abteilung: {dept}."
 }

@@ -1425,6 +1425,7 @@ export const de = {
   "purchase.nextDept": "Nächste Abteilung",
   "purchase.organic": "Bio",
   "purchase.note": "Notiz",
+  "purchase.deptAnnounce": "Nächste Abteilung: {dept}.",
   "install.title": "App installieren",
   "install.desc": "Shoppi auf dem Startbildschirm",
   "install.manualHint": "Im Browser-Menü «Zum Startbildschirm hinzufügen» wählen.",

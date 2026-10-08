@@ -1453,5 +1453,6 @@
   "purchase.nextDept": "Next aisle",
   "purchase.organic": "Organic",
   "purchase.note": "Note",
-  "common.addedToNamedList": "{name} added to “{list}”"
+  "common.addedToNamedList": "{name} added to “{list}”",
+  "purchase.deptAnnounce": "Next aisle: {dept}."
 }
