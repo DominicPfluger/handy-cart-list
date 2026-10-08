@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
 import { PreviewCollapse, IconCollapse } from "@/components/admin/preview-collapse";
 import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
+import { ProductPronunciationEditor } from "@/components/admin/product-pronunciation-editor";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
@@ -1480,6 +1481,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
           </div>
         )}
+        {!p.imageOnly && !isDept && item && <ProductPronunciationEditor name={item.name} />}
         {!p.imageOnly && <div className="flex flex-wrap gap-2 pt-1">
           {item && p.onAdvanced && <Button variant="outline" className="h-11 rounded-xl" onClick={() => { p.onAdvanced!(p.target.kind, item.id); p.onClose(); }}>⚙ {T("tile.advanced")}</Button>}
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { const aid = (item as { alias_id?: string }).alias_id; if (aid && !isDept) p.onRemoveAlias?.(aid, item.name); else p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
