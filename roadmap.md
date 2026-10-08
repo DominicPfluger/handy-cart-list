@@ -29,3 +29,4 @@
 - [x] Einkaufsmodus: fehlende/unklare Mengen natürlich sprechen und zentrale Ausspracheregeln im Adminpanel verwalten
 - [x] Unterer Listen-Button öffnet immer die Hauptübersicht aller Einkaufslisten
 - [x] Aperogebäck sortiert: 5 Überschriften-Gruppen + 4 neue Produkte (Mini-Grissini, Blätterteig-Schinkengipfeli, Käsefüsschen, Taralli), Übersetzungen in 15 Sprachen
+- [x] Hülsenfrüchte-Konserven nach Vorschlag 3: 6 Überschriften, 33 Produkte (14 neu), Übersetzungen in 16 Sprachen
