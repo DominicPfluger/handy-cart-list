@@ -937,7 +937,7 @@ function AdminPage() {
         )}
         <select aria-label={T("adm.viewLocale")} value={viewLoc} onChange={(e) => setViewLoc(e.target.value)} className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
           <optgroup label={T("adm.viewLocale")}>
-            {allLocales().filter((l) => !mk || l.id.split("-")[1] === mk).map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
+            {allLocales().map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
           </optgroup>
         </select>
         {products.length > 1 && (
