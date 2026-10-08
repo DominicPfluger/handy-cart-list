@@ -1148,6 +1148,7 @@
   "adm.clearSelection": "Clear selection",
   "adm.deleteSelected": "Delete selection",
   "adm.moveSelected": "Move to category",
+  "adm.moveSelectHint": "Tick products to move them",
   "adm.moveSelectedTitle": "Move {n} entries to …",
   "adm.moved": "{n} entries moved",
   "adm.deleteSelectedConfirm": "Really delete {n} entries?",
