@@ -17,6 +17,8 @@ export const de = {
   "common.tryOther": "Versuche einen anderen Suchbegriff.",
   "common.searchResults": "Suchergebnisse",
   "common.addedToList": "{name} zur Liste hinzugefügt",
+  "listPick.title": "Auf welche Liste?",
+  "listPick.sub": "Wähle die Einkaufsliste für diese Sitzung.",
   "common.addedToNamedList": "{name} zu „{list}“ hinzugefügt",
   "list.driedProduct": "{name} getrocknet",
   "list.frozenProduct": "{name} (TK)",

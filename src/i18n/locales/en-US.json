@@ -1459,5 +1459,7 @@
   "common.addedToNamedList": "{name} added to “{list}”",
   "purchase.deptAnnounce": "Next aisle: {dept}.",
   "purchase.allDoneSpoken": "Great, all done! Your shopping is complete.",
-  "tile.replaceIconConfirm": "Also replace the small icon with the new image?\n\nOK = replace icon · Cancel = keep current icon"
+  "tile.replaceIconConfirm": "Also replace the small icon with the new image?\n\nOK = replace icon · Cancel = keep current icon",
+  "listPick.title": "Which list?",
+  "listPick.sub": "Choose the shopping list for this session."
 }

@@ -1456,5 +1456,7 @@
   "common.addedToNamedList": "{name} ajouté à « {list} »",
   "purchase.deptAnnounce": "Rayon suivant : {dept}.",
   "purchase.allDoneSpoken": "Super, tout est fait ! Tes courses sont terminées.",
-  "tile.replaceIconConfirm": "Remplacer aussi la petite icône par la nouvelle image ?\n\nOK = remplacer · Annuler = garder l’icône"
+  "tile.replaceIconConfirm": "Remplacer aussi la petite icône par la nouvelle image ?\n\nOK = remplacer · Annuler = garder l’icône",
+  "listPick.title": "Sur quelle liste ?",
+  "listPick.sub": "Choisis la liste de courses pour cette session."
 }

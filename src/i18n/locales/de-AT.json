@@ -878,5 +878,7 @@
   "common.addedToNamedList": "{name} zu „{list}“ hinzugefügt",
   "purchase.deptAnnounce": "Nächste Abteilung: {dept}.",
   "purchase.allDoneSpoken": "Super, alles erledigt! Dein Einkauf ist komplett.",
-  "tile.replaceIconConfirm": "Kleines Icon ebenfalls durch das neue Bild ersetzen?\n\nOK = Icon ersetzen · Abbrechen = bisheriges Icon behalten"
+  "tile.replaceIconConfirm": "Kleines Icon ebenfalls durch das neue Bild ersetzen?\n\nOK = Icon ersetzen · Abbrechen = bisheriges Icon behalten",
+  "listPick.title": "Auf welche Liste?",
+  "listPick.sub": "Wähle die Einkaufsliste für diese Sitzung."
 }
