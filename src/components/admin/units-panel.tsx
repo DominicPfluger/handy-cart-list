@@ -8,7 +8,7 @@ import { GripVertical, Pencil, Trash2, Eye, EyeOff, Sparkles, Globe } from "luci
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { MessageKey } from "@/i18n/de";
 import { supabase } from "@/integrations/supabase/client";
-import { useT, useLocale, useAllLocales, translate } from "@/i18n";
+import { useT, useLocale, useAllLocales, translate, loadAllDicts } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { allUnitRows, loadUnits, unitLabel, unitShort, useUnitsVersion, type UnitRow, type UnitLabels } from "@/lib/units";
