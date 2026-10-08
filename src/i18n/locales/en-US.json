@@ -1479,5 +1479,6 @@
   "speak.pronunciationEmpty": "No pronunciation rules have been added for this language.",
   "speak.pronunciationSaved": "Pronunciation rule saved",
   "speak.tabProducts": "Products",
-  "speak.tabRules": "Saved pronunciations"
+  "speak.tabRules": "Saved pronunciations",
+  "speak.applyToVariants": "Apply to all language variants"
 }
