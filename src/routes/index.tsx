@@ -566,13 +566,9 @@ function ListPage() {
                 <h2 className="text-sm font-semibold text-foreground">{group.label}</h2>
               </div>
               <div className="divide-y divide-border rounded-2xl border border-border bg-card">
-                {group.items.map((item, index) => {
-                  const h = group.items.length > 5 && !item.checked && item.productId ? headingOf.get(item.productId) : undefined;
-                  const prev = group.items[index - 1];
-                  const showH = h && (prev?.productId ? headingOf.get(prev.productId) : undefined) !== h;
+                {group.items.map((item) => {
                   return (
                   <Fragment key={item.id}>
-                  {showH && <div className="bg-muted/50 px-4 pb-1.5 pt-3 text-sm font-bold text-foreground">{h.name}</div>}
                   <div
                     className="cv-row relative flex items-center gap-2.5 py-2.5 pl-3 pr-3"
                   >
