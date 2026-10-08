@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { EyeOff } from "lucide-react";
+import { toast } from "sonner";
 import { prepareItemPhoto } from "../lib/item-photo-store";
 import { brandsFor, departmentIdsOf, pathTo, useCatalog, type CatalogProduct } from "../lib/catalog-query";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
@@ -69,7 +70,7 @@ export function CatalogProductDialog({
   const deptIds = product ? departmentIdsOf(product, catalog.productAliases ?? []).filter((id) => catalog.departments.some((d) => d.id === id)) : [];
   const prefUnits = product ? preferredUnits(product, catalog.departments) : [];
   const [deptId, setDeptId] = useState<string>("");
-  const { addCatalogItem } = useShoppingList();
+  const { addCatalogItem, activeList } = useShoppingList();
   const pantry = usePantry();
   const pantryEntry = product ? pantry.isInPantry(product.id) : undefined;
   const { t, locale } = useT();
@@ -168,6 +169,8 @@ export function CatalogProductDialog({
       photo,
     });
     if (chosenDept) setPreferred(product.id, chosenDept.id);
+    const shown = names.length === 1 ? names[0]! : `${product.name} (${names.length})`;
+    toast.success(activeList?.name ? t("common.addedToNamedList", { name: shown, list: activeList.name }) : t("common.addedToList", { name: shown }));
     onOpenChange(false);
   };
 
