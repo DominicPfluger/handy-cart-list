@@ -48,7 +48,7 @@ export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
   };
 
   return (
-    <div className="max-w-xl space-y-4">
+    <div className="w-full space-y-4">
       <p className="text-sm text-muted-foreground">{t("speak.pronunciationSub")}</p>
       <div className="space-y-1.5">
         <span className="block text-sm font-semibold text-foreground">{t("speak.locale")}</span>
