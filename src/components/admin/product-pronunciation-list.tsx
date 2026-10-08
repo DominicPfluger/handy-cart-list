@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Pencil, Save, Search, Trash2, Volume2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { useT, type Locale } from "@/i18n";
+import { LOCALES, useT, type Locale } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { speakSentences } from "@/components/speak-list-button";
 import { pronunciationRulesQueryKey, type PronunciationRule } from "@/lib/pronunciation-rules";
@@ -54,6 +54,16 @@ export function ProductPronunciationList({ locale, rules, canEdit }: { locale: L
   const needle = q.trim().toLowerCase();
   const filtered = needle ? rows.filter((r) => r.name.toLowerCase().includes(needle) || r.base.toLowerCase().includes(needle)) : rows;
   const ruleMap = useMemo(() => new Map(rules.filter((r) => r.locale === locale).map((r) => [r.written.toLowerCase(), r])), [rules, locale]);
+  const allByWritten = useMemo(() => {
+    const m = new Map<string, PronunciationRule[]>();
+    for (const r of rules) { const k = r.written.toLowerCase(); m.set(k, [...(m.get(k) ?? []), r]); }
+    return m;
+  }, [rules]);
+  const rulesFor = (name: string, base: string) => {
+    const set = new Map<string, PronunciationRule>();
+    for (const k of [name.toLowerCase(), base.toLowerCase()]) for (const r of allByWritten.get(k) ?? []) set.set(r.id, r);
+    return [...set.values()];
+  };
 
   return (
     <div className="space-y-2">
@@ -71,7 +81,7 @@ export function ProductPronunciationList({ locale, rules, canEdit }: { locale: L
           <tbody className="divide-y divide-border">
             {(products.isLoading || translations.isLoading) && <tr><td colSpan={2} className="px-3 py-4 text-muted-foreground">…</td></tr>}
             {filtered.slice(0, limit).map((r) => (
-              <Row key={r.id + locale} name={r.name} locale={locale} rule={ruleMap.get(r.name.toLowerCase())} canEdit={canEdit} />
+              <Row key={r.id + locale} name={r.name} locale={locale} rule={ruleMap.get(r.name.toLowerCase())} all={rulesFor(r.name, r.base)} canEdit={canEdit} />
             ))}
           </tbody>
         </table>
@@ -85,7 +95,7 @@ export function ProductPronunciationList({ locale, rules, canEdit }: { locale: L
   );
 }
 
-function Row({ name, locale, rule, canEdit }: { name: string; locale: Locale; rule?: PronunciationRule | undefined; canEdit: boolean }) {
+function Row({ name, locale, rule, all, canEdit }: { name: string; locale: Locale; rule?: PronunciationRule | undefined; all: PronunciationRule[]; canEdit: boolean }) {
   const { t } = useT();
   const qc = useQueryClient();
   const [editing, setEditing] = useState(false);
@@ -119,7 +129,21 @@ function Row({ name, locale, rule, canEdit }: { name: string; locale: Locale; ru
     <tr className="align-top">
       <td className="px-3 py-2">
         <div className="font-medium text-foreground">{name}</div>
-        {rule && <div className="text-xs text-primary">→ {rule.spoken}</div>}
+        {all.length > 0 && (
+          <div className="mt-1 flex flex-wrap gap-1">
+            {[...all].sort((a, b) => a.locale.localeCompare(b.locale)).map((r) => {
+              const info = LOCALES.find((l) => l.id === r.locale);
+              return (
+                <span key={r.id} title={info?.label ?? r.locale}
+                  className={`inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[11px] ${r.locale === locale ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}>
+                  <span aria-hidden="true">{info?.flag ?? "🌐"}</span>
+                  <span className="font-medium">{r.locale.split("-")[1] ?? r.locale}</span>
+                  <span>{r.spoken}</span>
+                </span>
+              );
+            })}
+          </div>
+        )}
       </td>
       <td className="px-3 py-2">
         {editing && (
