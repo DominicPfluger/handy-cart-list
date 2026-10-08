@@ -64,8 +64,17 @@ export const Route = createFileRoute("/abteilungen")({
   component: DepartmentsPage,
 });
 
+const isBio = (v: string) => v.trim().toLowerCase() === "bio";
+const hasBio = (p: CatalogProduct) => p.variants.some(isBio);
+const expandVariants = (p: CatalogProduct) => p.variants.filter((v) => !isBio(v));
+
 function ProductThumb({ product }: { product: CatalogProduct }) {
-  return <ProductIcon emoji={product.emoji} iconUrl={product.iconUrl} iconPath={product.iconPath} symbolClassName="text-4xl" />;
+  return (
+    <span className="relative grid h-full w-full place-items-center">
+      <ProductIcon emoji={product.emoji} iconUrl={product.iconUrl} iconPath={product.iconPath} symbolClassName="text-4xl" />
+      {hasBio(product) && <span aria-label="Bio" className="absolute bottom-0 right-0 text-xs leading-none">🌿</span>}
+    </span>
+  );
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
@@ -655,7 +664,7 @@ function DepartmentsPage() {
                     onPointerUp={draggable ? cancelPress : undefined}
                     onPointerLeave={draggable ? cancelPress : undefined}
                     onContextMenu={draggable ? (e) => e.preventDefault() : undefined}
-                    aria-expanded={product.variants.length > 0 ? expandedId === product.id : undefined}
+                    aria-expanded={expandVariants(product).length > 0 ? expandedId === product.id : undefined}
                     onClick={() => {
                       if (suppressClick.current) return;
                       navigate({ to: "/produkt/$id", params: { id: product.id } });
@@ -672,9 +681,9 @@ function DepartmentsPage() {
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
                     </p>
-                    {product.variants.length > 0 && (
-                      <button type="button" onClick={() => toggleExpanded(product.id)} aria-expanded={expandedId === product.id} aria-label={t("dept.variants", { count: product.variants.length })} className="mt-0.5 block max-w-full truncate text-left text-xs font-medium text-primary">
-                        {t("dept.variants", { count: product.variants.length })} {expandedId === product.id ? "▴" : "▾"}
+                    {expandVariants(product).length > 0 && (
+                      <button type="button" onClick={() => toggleExpanded(product.id)} aria-expanded={expandedId === product.id} aria-label={t("dept.variants", { count: expandVariants(product).length })} className="mt-0.5 block max-w-full truncate text-left text-xs font-medium text-primary">
+                        {t("dept.variants", { count: expandVariants(product).length })} {expandedId === product.id ? "▴" : "▾"}
                       </button>
                     )}
                   </div>
@@ -723,7 +732,7 @@ function DepartmentsPage() {
                 </div>
                 {expandedId === product.id && (
                   <div className="border-t border-dashed border-border bg-muted/30 py-1 pl-8 pr-2.5">
-                    {product.variants.map((v) => {
+                    {expandVariants(product).map((v) => {
                       const vi = product.variantImages?.[v];
                       const vName = variantLabel(product, v);
                       const vFav = isFavorite(`${product.id}::${v}`);

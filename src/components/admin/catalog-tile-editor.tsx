@@ -1342,77 +1342,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </div>
         )}
         {!p.imageOnly && !isDept && <AllowedUnitsPicker value={{ primary: unit, units: allowedUnits, quantities: unitQuantities }} onChange={(next) => { setUnit(next.primary); setAllowedUnits(next.units); setUnitQuantities(next.quantities); setQty(next.quantities[next.primary] ?? 1); }} />}
-        {!p.imageOnly && !isDept && (
-          <div className="space-y-2">
-            <div className="flex gap-2">
-              <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 flex-1 rounded-xl" />
-              {item && (
-                <Button variant="outline" className="h-11 rounded-xl" disabled={estimating} onClick={() => {
-                  if (!window.confirm(T("tile.estimateAllConfirm"))) return;
-                  setEstimating(true);
-                  void p.run(async () => {
-                    const r = await estAll({ data: { productId: item.id } });
-                    setEstimates(r.items);
-                    const mine = r.items.find((x) => x.market === currentMarket());
-                    if (mine) setPrice(String(mine.price));
-                    const est: Record<string, string> = {};
-                    for (const x of r.items) est[x.market] = String(x.price);
-                    setMp((o) => ({ ...o, ...est }));
-                    setMpOrig((o) => ({ ...o, ...est }));
-                    void qc.invalidateQueries();
-                    if (r.failed > 0) throw new Error(T("tile.estimateAllFailed", { n: r.failed }));
-                  }, T("tile.estimateAllDone")).finally(() => setEstimating(false));
-                }}>{estimating ? "…" : `✨ ${T("tile.estimateAll")}`}</Button>
-              )}
-            </div>
-            {mkts.length > 0 && (
-              <div ref={priceRef} className="rounded-xl border border-border">
-                <button type="button" onClick={() => setMpOpen((v) => !v)} className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold text-foreground">
-                  <span>{T("tile.marketPrices")} ({Object.values({ ...mp, [currentMarket()]: price }).filter((v) => v.trim()).length}/{mkts.length})</span>
-                  <span className="text-muted-foreground">{mpOpen ? "▾" : "▸"}</span>
-                </button>
-                {mpOpen && (
-                  <div className="space-y-1.5 border-t border-border p-2">
-                    <p className="text-xs text-muted-foreground">{T("tile.marketPricesHint")}</p>
-                    {mkts.map((m) => {
-                      const isCur = m.code === currentMarket();
-                      const v = isCur ? price : (mp[m.code] ?? "");
-                      return (
-                        <div key={m.code} className="flex items-center gap-2 text-sm">
-                          <span className="w-6 text-center">{m.flag}</span>
-                          <span className="flex-1 truncate text-foreground">{m.name}</span>
-                          <span className="w-10 text-xs text-muted-foreground">{m.currency}</span>
-                          <Input aria-label={`${m.name} ${m.currency}`} type="number" min={0} step="any" value={v} onChange={(e) => (isCur ? setPrice(e.target.value) : setMp((o) => ({ ...o, [m.code]: e.target.value })))} className="h-9 w-28 rounded-lg" />
-                          {item && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              aria-label={T("tile.estimateMarket", { market: m.name })}
-                              title={T("tile.estimateMarket", { market: m.name })}
-                              disabled={estOne === m.code}
-                              onClick={() => {
-                                setEstOne(m.code);
-                                void p.run(async () => {
-                                  const r = await estOneFn({ data: { productId: item.id, market: m.code } });
-                                  if (isCur) setPrice(String(r.price));
-                                  else setMp((o) => ({ ...o, [m.code]: String(r.price) }));
-                                }, T("tile.estimateDone")).finally(() => setEstOne(null));
-                              }}
-                              className="h-9 w-9 shrink-0 rounded-lg px-0"
-                            >
-                              {estOne === m.code ? "…" : "✨"}
-                            </Button>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
         {!p.imageOnly && !isDept && item && heads.length > 0 && (
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-foreground">{T("adm.headingAssign")}</h3>
@@ -1485,6 +1414,78 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </div>
         )}
         {!p.imageOnly && !isDept && item && <ProductPronunciationEditor name={item.name} />}
+        {!p.imageOnly && !isDept && (
+          <div className="space-y-2">
+            <h3 className="text-sm font-semibold text-foreground">{T("tile.priceEstimate")}</h3>
+            <div className="flex gap-2">
+              <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 flex-1 rounded-xl" />
+              {item && (
+                <Button variant="outline" className="h-11 rounded-xl" disabled={estimating} onClick={() => {
+                  if (!window.confirm(T("tile.estimateAllConfirm"))) return;
+                  setEstimating(true);
+                  void p.run(async () => {
+                    const r = await estAll({ data: { productId: item.id } });
+                    setEstimates(r.items);
+                    const mine = r.items.find((x) => x.market === currentMarket());
+                    if (mine) setPrice(String(mine.price));
+                    const est: Record<string, string> = {};
+                    for (const x of r.items) est[x.market] = String(x.price);
+                    setMp((o) => ({ ...o, ...est }));
+                    setMpOrig((o) => ({ ...o, ...est }));
+                    void qc.invalidateQueries();
+                    if (r.failed > 0) throw new Error(T("tile.estimateAllFailed", { n: r.failed }));
+                  }, T("tile.estimateAllDone")).finally(() => setEstimating(false));
+                }}>{estimating ? "…" : `✨ ${T("tile.estimateAll")}`}</Button>
+              )}
+            </div>
+            {mkts.length > 0 && (
+              <div ref={priceRef} className="rounded-xl border border-border">
+                <button type="button" onClick={() => setMpOpen((v) => !v)} className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold text-foreground">
+                  <span>{T("tile.marketPrices")} ({Object.values({ ...mp, [currentMarket()]: price }).filter((v) => v.trim()).length}/{mkts.length})</span>
+                  <span className="text-muted-foreground">{mpOpen ? "▾" : "▸"}</span>
+                </button>
+                {mpOpen && (
+                  <div className="space-y-1.5 border-t border-border p-2">
+                    <p className="text-xs text-muted-foreground">{T("tile.marketPricesHint")}</p>
+                    {mkts.map((m) => {
+                      const isCur = m.code === currentMarket();
+                      const v = isCur ? price : (mp[m.code] ?? "");
+                      return (
+                        <div key={m.code} className="flex items-center gap-2 text-sm">
+                          <span className="w-6 text-center">{m.flag}</span>
+                          <span className="flex-1 truncate text-foreground">{m.name}</span>
+                          <span className="w-10 text-xs text-muted-foreground">{m.currency}</span>
+                          <Input aria-label={`${m.name} ${m.currency}`} type="number" min={0} step="any" value={v} onChange={(e) => (isCur ? setPrice(e.target.value) : setMp((o) => ({ ...o, [m.code]: e.target.value })))} className="h-9 w-28 rounded-lg" />
+                          {item && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              aria-label={T("tile.estimateMarket", { market: m.name })}
+                              title={T("tile.estimateMarket", { market: m.name })}
+                              disabled={estOne === m.code}
+                              onClick={() => {
+                                setEstOne(m.code);
+                                void p.run(async () => {
+                                  const r = await estOneFn({ data: { productId: item.id, market: m.code } });
+                                  if (isCur) setPrice(String(r.price));
+                                  else setMp((o) => ({ ...o, [m.code]: String(r.price) }));
+                                }, T("tile.estimateDone")).finally(() => setEstOne(null));
+                              }}
+                              className="h-9 w-9 shrink-0 rounded-lg px-0"
+                            >
+                              {estOne === m.code ? "…" : "✨"}
+                            </Button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
         {!p.imageOnly && <div className="flex flex-wrap gap-2 pt-1">
           {item && p.onAdvanced && <Button variant="outline" className="h-11 rounded-xl" onClick={() => { p.onAdvanced!(p.target.kind, item.id); p.onClose(); }}>⚙ {T("tile.advanced")}</Button>}
           {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { const aid = (item as { alias_id?: string }).alias_id; if (aid && !isDept) p.onRemoveAlias?.(aid, item.name); else p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}

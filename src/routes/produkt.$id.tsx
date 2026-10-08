@@ -152,7 +152,7 @@ function ProductPage() {
             </select>
           </dd>
         </div>
-        {product.organicAvailable && (
+        {product.variants.some((v) => v.trim().toLowerCase() === "bio") && (
           <div className="flex items-center justify-between text-sm">
             <dt className="text-muted-foreground">{t("common.organic")}</dt>
             <dd className="font-semibold text-foreground">🌿</dd>
