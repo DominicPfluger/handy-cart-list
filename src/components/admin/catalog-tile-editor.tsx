@@ -5,7 +5,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { getLocale, translate } from "@/i18n";
+import { allLocales, getLocale, translate } from "@/i18n";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "./ai-image-options";
 import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
@@ -17,7 +17,7 @@ import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIco
 import { toast } from "sonner";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPrice, estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
-import { suggestCategoryProducts, suggestImagePrompt, translateVariants, suggestVariants } from "@/lib/admin.functions";
+import { suggestCategoryProducts, suggestImagePrompt, translateSingleName, translateVariants, suggestVariants } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1429,6 +1429,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </div>
         )}
         {!p.imageOnly && !isDept && item && <ProductPronunciationEditor name={item.name} />}
+        {!p.imageOnly && item && effId && (
+          <SheetTranslations kind={isDept ? "department" : "product"} id={isDept ? effId : (prod?.product_id ?? effId)} baseName={item.name} />
+        )}
         {!p.imageOnly && !isDept && (
           <div className="space-y-2">
             <h3 className="text-sm font-semibold text-foreground">{T("tile.priceEstimate")}</h3>
@@ -1815,6 +1818,75 @@ function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>,
           <Button className="flex-1" disabled={busy || !text.trim()} onClick={() => void add()}>{busy ? T("adm.working") : T("adm.variantAdd")}</Button>
         </div>
       </div>
+    </div>
+  );
+}
+
+/** Übersetzungen eines Eintrags im Produkt-Dialog – pro Sprache ein Feld mit KI-Knopf. */
+function SheetTranslations({ kind, id, baseName }: { kind: "product" | "department"; id: string; baseName: string }) {
+  const [rows, setRows] = useState<Record<string, { name: string; is_manual: boolean }>>({});
+  useEffect(() => {
+    let off = false;
+    void supabase.from("catalog_translations").select("locale, name, is_manual").eq("entity_id", id).then(({ data }) => {
+      if (off) return;
+      const map: Record<string, { name: string; is_manual: boolean }> = {};
+      for (const r of (data ?? []) as { locale: string; name: string; is_manual: boolean }[]) map[r.locale] = { name: r.name, is_manual: r.is_manual };
+      setRows(map);
+    });
+    return () => { off = true; };
+  }, [id]);
+
+  const save = (locale: string, v: string) => {
+    if ((rows[locale]?.name ?? "") === v.trim()) return;
+    setRows((o) => ({ ...o, [locale]: { name: v.trim(), is_manual: true } }));
+    if (v.trim()) {
+      void supabase.from("catalog_translations").upsert(
+        { entity_type: kind, entity_id: id, locale, name: v.trim(), is_manual: true },
+        { onConflict: "entity_type,entity_id,locale" },
+      ).then(({ error }) => error && toast.error(error.message));
+    } else {
+      void supabase.from("catalog_translations").delete().eq("entity_id", id).eq("locale", locale);
+    }
+  };
+
+  return (
+    <div className="space-y-1.5">
+      <h3 className="text-sm font-semibold text-foreground">{T("adm.languages")}</h3>
+      <div className="space-y-1.5">
+        {allLocales().map((l) => (
+          <SheetTrField key={l.id + (rows[l.id]?.name ?? "")} label={`${l.flag} ${l.id}`} value={rows[l.id]?.name ?? ""} manual={rows[l.id]?.is_manual}
+            locale={l.id} source={baseName.trim()} onSave={(v) => save(l.id, v)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SheetTrField({ label, value, manual, locale, source, onSave }: { label: string; value: string; manual?: boolean | undefined; locale: string; source: string; onSave: (v: string) => void }) {
+  const [v, setV] = useState(value);
+  const [busy, setBusy] = useState(false);
+  const trFn = useServerFn(translateSingleName);
+  const aiTranslate = async () => {
+    if (!source) return;
+    setBusy(true);
+    try {
+      const r = await trFn({ data: { name: source, locale } });
+      if (r.name) { setV(r.name); onSave(r.name); }
+      else toast.error(T("adm.aiTrEmpty"));
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : String(e));
+    } finally { setBusy(false); }
+  };
+  return (
+    <div className="grid grid-cols-[5.5rem_1fr_auto] items-center gap-2 text-xs">
+      <span className="text-muted-foreground">{label}</span>
+      <input aria-label={label} value={v} onChange={(e) => setV(e.target.value)} onBlur={() => onSave(v)}
+        onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
+        className={`min-w-0 rounded-lg border px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary ${manual ? "border-primary bg-primary-soft/30" : "border-input bg-background"}`} />
+      <Button type="button" size="sm" variant="outline" disabled={busy || !source} onClick={() => void aiTranslate()}
+        aria-label={T("adm.aiTrOne", { l: locale })} title={T("adm.aiTrOne", { l: locale })} className="h-8 px-2">
+        {busy ? "…" : "✨"}
+      </Button>
     </div>
   );
 }
