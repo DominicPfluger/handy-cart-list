@@ -72,7 +72,7 @@ export function VariantTranslations({ productId, variant }: { productId: string;
   );
 }
 
-function TrField({ label, value, manual, onSave, onAi }: { label: string; value: string; manual?: boolean; onSave: (v: string) => void; onAi: () => Promise<string | undefined> }) {
+function TrField({ label, value, manual, onSave, onAi }: { label: string; value: string; manual?: boolean | undefined; onSave: (v: string) => void; onAi: () => Promise<string | undefined> }) {
   const [v, setV] = useState(value);
   const [busy, setBusy] = useState(false);
   return (
