@@ -2,7 +2,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { LOCALES, translate, useT, type Locale } from "@/i18n";
+import { translate, useT, type Locale } from "@/i18n";
+import { SpeakLocaleChips } from "@/components/admin/speak-locale-chips";
 import { Button } from "@/components/ui/button";
 import { useSpeakLocale } from "@/hooks/use-speak-locale";
 import { useSpeakRate } from "@/hooks/use-speak-rate";
@@ -73,12 +74,10 @@ export function SpeechTextsPanel() {
       <p className="rounded-lg bg-muted px-3 py-2 text-xs text-muted-foreground">{t("stx.placeholders")}: {"{name}"}, {"{count}"}, {"{kategorie}"}, {"{artikel}"}</p>
 
       <div className="max-w-xl space-y-4">
-        <label className="block text-sm font-semibold text-foreground">
-          {t("speak.locale")}
-          <select value={locale} onChange={(e) => setLocale(e.target.value as Locale)} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
-            {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}{rows?.some((r) => r.locale === l.id) ? ` · ✎ ${t("stx.custom")}` : ""}</option>)}
-          </select>
-        </label>
+        <div className="space-y-1.5">
+          <span className="block text-sm font-semibold text-foreground">{t("speak.locale")}</span>
+          <SpeakLocaleChips value={locale} onChange={setLocale} marked={(l) => rows?.some((r) => r.locale === l) ?? false} />
+        </div>
 
         {SPEECH_KEYS.map((k) => (
           <div key={k} className="space-y-1">

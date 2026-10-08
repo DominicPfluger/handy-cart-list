@@ -3,7 +3,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Trash2, Volume2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { LOCALES, useT, type Locale } from "@/i18n";
+import { useT, type Locale } from "@/i18n";
+import { SpeakLocaleChips } from "@/components/admin/speak-locale-chips";
 import { Button } from "@/components/ui/button";
 import { speakSentences } from "@/components/speak-list-button";
 import { pronunciationRulesQueryKey, usePronunciationRules } from "@/lib/pronunciation-rules";
@@ -47,10 +48,8 @@ export function ProductPronunciationEditor({ name, canEdit = true }: { name: str
     <div className="space-y-1.5 rounded-xl border border-border p-2">
       <div className="flex items-center justify-between gap-2">
         <h3 className="text-sm font-semibold text-foreground">{t("speak.pronunciation")}</h3>
-        <select aria-label={t("speak.locale")} value={locale} onChange={(e) => setLocale(e.target.value as Locale)} className="h-9 rounded-lg border border-input bg-background px-2 text-xs">
-          {LOCALES.map((l) => <option key={l.id} value={l.id}>{l.flag} {l.id}</option>)}
-        </select>
       </div>
+      <SpeakLocaleChips value={locale} onChange={setLocale} />
       <div className="flex items-center gap-2">
         <input value={spoken} disabled={!canEdit} onChange={(e) => setSpoken(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); void save(); } }}
           placeholder={written} aria-label={t("speak.pronunciationSpoken")}
