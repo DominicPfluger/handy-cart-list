@@ -48,6 +48,9 @@ const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR
 
 
 
+// Ladebildschirm nur beim ersten Start der App zeigen, nicht bei jedem Seitenwechsel.
+let splashShown = false;
+
 export const Route = createFileRoute("/")({
   ssr: false,
   loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
@@ -310,7 +313,8 @@ function ListPage() {
   };
 
   // Erst nach Anmeldeprüfung und Laden der Listen anzeigen — keine aufblitzende Beispiel-Liste.
-  if (loading || !hydrated) return <SplashScreen />;
+  if (loading || !hydrated) return splashShown ? null : <SplashScreen />;
+  splashShown = true;
 
   // ---- Übersicht: zuerst alle Listen anzeigen, Inhalt erst nach Auswahl laden ----
   if (!openListId || !lists.some((l) => l.id === openListId)) {
