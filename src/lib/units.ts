@@ -93,7 +93,7 @@ export function userUnitList(locale: string = getLocale(), includeAll = false) {
 export function getUnits(locale: string = getLocale(), keep?: string) {
   const list = userUnitList(locale).filter((u) => !u.hidden || u.id === keep);
   if (keep && !list.some((u) => u.id === keep) && byId.has(keep)) {
-    list.push({ id: keep, label: labelOf(keep, locale, "label"), short: labelOf(keep, locale, "short"), custom: false, hidden: false });
+    list.push({ id: keep, label: labelOf(keep, locale, "label"), short: labelOf(keep, locale, "short"), custom: false, hidden: false, notOffered: false });
   }
   return list.map(({ id, label, short }) => ({ id, label, short }));
 }
