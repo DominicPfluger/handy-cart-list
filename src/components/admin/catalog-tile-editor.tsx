@@ -780,7 +780,7 @@ export function CatalogTileEditor(p: {
                 </Button>
               </div>
               {!x.alias_id && (x.variants ?? []).length > 0 && (
-                <div className="flex flex-wrap items-center gap-1 bg-muted/30 py-1.5 pl-14 pr-3">
+                <div className="flex flex-wrap items-center gap-1 bg-primary-soft/40 py-1.5 pl-14 pr-3">
                   <Tags className="h-3 w-3 shrink-0 text-muted-foreground" aria-hidden />
                   {(x.variants ?? []).map((v) => (
                     <button key={v} type="button" disabled={!editMode}
