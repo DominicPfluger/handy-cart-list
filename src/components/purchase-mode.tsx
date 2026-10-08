@@ -253,12 +253,10 @@ export function PurchaseMode({ items, onToggle, onClose }: {
           </div>
           {(nextItem || nextDept) && !doneItem && (
             <div className="mx-5 mb-3 rounded-2xl border border-border bg-card px-4 py-2 text-sm text-muted-foreground">
-              {nextItem && <p className="truncate"><span className="font-semibold">{t("purchase.upNext")}:</span> {nextItem.name}</p>}
-              {nextDept && nextDept.group !== nextItem?.group && (
+              {nextDept ? (
                 <p className="truncate"><span className="font-semibold">{t("purchase.nextDept")}:</span> {nextDept.groupEmoji} {nextDept.group}</p>
-              )}
-              {nextDept && nextDept.group === nextItem?.group && (
-                <p className="truncate"><span className="font-semibold">{t("purchase.nextDept")}:</span> {nextDept.groupEmoji} {nextDept.group}</p>
+              ) : nextItem && (
+                <p className="truncate"><span className="font-semibold">{t("purchase.upNext")}:</span> {nextItem.name}</p>
               )}
             </div>
           )}
