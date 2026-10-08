@@ -1452,5 +1452,6 @@
   "purchase.upNext": "Hierna",
   "purchase.nextDept": "Volgende afdeling",
   "purchase.organic": "Bio",
-  "purchase.note": "Notitie"
+  "purchase.note": "Notitie",
+  "common.addedToNamedList": "{name} toegevoegd aan ‘{list}’"
 }

@@ -1455,5 +1455,6 @@
   "purchase.upNext": "Up next",
   "purchase.nextDept": "Next aisle",
   "purchase.organic": "Organic",
-  "purchase.note": "Note"
+  "purchase.note": "Note",
+  "common.addedToNamedList": "{name} added to “{list}”"
 }
