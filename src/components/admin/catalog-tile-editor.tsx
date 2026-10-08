@@ -162,6 +162,16 @@ export function CatalogTileEditor(p: {
       await qc.invalidateQueries({ queryKey: ["catalog"] });
     }, T("adm.defaultsSaved"));
   };
+  /** Schaltet die Bio-Variante eines Produkts direkt aus der Zeile um. */
+  const toggleBio = (prod: TileProd) => {
+    const cur = prod.variants ?? [];
+    const has = cur.some((v) => v.toLowerCase() === "bio");
+    const next = has ? cur.filter((v) => v.toLowerCase() !== "bio") : [...cur, "Bio"];
+    void p.run(async () => {
+      await p.must(supabase.from("products").update({ variants: next } as never).eq("id", prod.product_id ?? prod.id));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
   const QTY_OPTIONS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 50, 100, 250, 500];
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
