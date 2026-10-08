@@ -32,7 +32,9 @@ export function missingVoice(locale: string): boolean {
 
 /** Kürzel, die die deutsche Sprachausgabe ausschreiben soll. */
 export function expandAbbreviations(text: string, locale: string): string {
-  const corrected = applyPronunciationRules(text, locale, getPronunciationRules());
+  // Eine fehlerhafte Regel darf die Sprachausgabe nie komplett blockieren.
+  let corrected = text;
+  try { corrected = applyPronunciationRules(text, locale, getPronunciationRules()); } catch { /* ignore */ }
   if (!locale.toLowerCase().startsWith("de")) return corrected;
   return corrected
     .replace(/\bStk\.?/g, "Stück")
