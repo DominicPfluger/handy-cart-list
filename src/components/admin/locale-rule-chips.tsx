@@ -25,6 +25,7 @@ export function LocaleRuleChips({ name, all, current, canEdit }: { name: string;
 
   const select = (l: Locale) => {
     setAdding(false);
+    setAllVariants(false);
     if (open === l) { setOpen(null); return; }
     setOpen(l);
     setSpoken(all.find((r) => r.locale === l)?.spoken ?? "");
@@ -37,7 +38,9 @@ export function LocaleRuleChips({ name, all, current, canEdit }: { name: string;
   const save = async () => {
     if (!open || !spoken.trim()) return;
     setBusy(true);
-    const { error } = await supabase.from("pronunciation_rules").upsert({ locale: open, written: rule?.written ?? name, spoken: spoken.trim() }, { onConflict: "locale,written" });
+    const targets = allVariants ? variants : [open];
+    const rows = targets.map((loc) => ({ locale: loc, written: all.find((r) => r.locale === loc)?.written ?? name, spoken: spoken.trim() }));
+    const { error } = await supabase.from("pronunciation_rules").upsert(rows, { onConflict: "locale,written" });
     setBusy(false);
     if (error) { toast.error(error.message); return; }
     await qc.invalidateQueries({ queryKey: pronunciationRulesQueryKey });
