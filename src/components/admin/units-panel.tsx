@@ -235,8 +235,8 @@ function UnitEditDialog({ u, onClose, onSaved }: { u: UnitRow; onClose: () => vo
           {locales.map((l) => (
             <div key={l.id} className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1.5fr)_minmax(0,0.8fr)] items-center gap-2 px-1 py-1">
               <span className="truncate text-sm">{l.flag} {l.label}</span>
-              <Input className="h-8" value={draft[l.id]?.label ?? ""} placeholder={l.id.startsWith("de") ? def("de-DE", "label") : ""} onChange={(e) => set(l.id, "label", e.target.value)} />
-              <Input className="h-8" value={draft[l.id]?.short ?? ""} placeholder={l.id.startsWith("de") ? def("de-DE", "short") : ""} onChange={(e) => set(l.id, "short", e.target.value)} />
+              <Input className="h-8" value={draft[l.id]?.label ?? ""} placeholder={u.builtin ? def(l.id, "label") : ""} onChange={(e) => set(l.id, "label", e.target.value)} />
+              <Input className="h-8" value={draft[l.id]?.short ?? ""} placeholder={u.builtin ? def(l.id, "short") : ""} onChange={(e) => set(l.id, "short", e.target.value)} />
             </div>
           ))}
         </div>
