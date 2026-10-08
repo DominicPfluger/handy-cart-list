@@ -48,12 +48,10 @@ export function PronunciationRulesPanel({ canEdit }: { canEdit: boolean }) {
   return (
     <div className="max-w-xl space-y-4">
       <p className="text-sm text-muted-foreground">{t("speak.pronunciationSub")}</p>
-      <label className="block text-sm font-semibold text-foreground">
-        {t("speak.locale")}
-        <select value={locale} onChange={(event) => setLocale(event.target.value as Locale)} className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm">
-          {LOCALES.map((item) => <option key={item.id} value={item.id}>{item.flag} {item.label}</option>)}
-        </select>
-      </label>
+      <div className="space-y-1.5">
+        <span className="block text-sm font-semibold text-foreground">{t("speak.locale")}</span>
+        <SpeakLocaleChips value={locale} onChange={setLocale} />
+      </div>
       <div className="divide-y divide-border rounded-lg border border-border bg-card">
         {visible.length === 0 && <p className="px-3 py-4 text-sm text-muted-foreground">{t("speak.pronunciationEmpty")}</p>}
         {visible.map((rule) => (
