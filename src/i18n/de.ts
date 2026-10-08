@@ -1225,6 +1225,7 @@ export const de = {
   "uu.delete": "Einheit löschen",
   "uu.show": "Einheit einblenden",
   "uu.hide": "Einheit ausblenden",
+  "uu.notOffered": "Für deinen Markt nicht angeboten",
   "more.preload": "Alle Bilder vorladen",
   "more.preloadHint": "Lädt alle Produkt- und Kategoriebilder einmal aufs Gerät (ca. 15 MB). Danach auch offline sichtbar.",
   "more.preloadStart": "Jetzt vorladen",
