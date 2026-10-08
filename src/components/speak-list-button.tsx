@@ -51,7 +51,6 @@ export function speakSentences(sentences: string[], locale: string, rate: number
   const finish = () => {
     if (finished || token !== speakToken) return;
     finished = true;
-    stopKeepAlive();
     onDone?.();
   };
   const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -101,8 +100,6 @@ export function speakSentences(sentences: string[], locale: string, rate: number
 }
 let activeUtterances: SpeechSynthesisUtterance[] = [];
 let speakToken = 0;
-let keepAlive: number | undefined;
-function stopKeepAlive() { if (keepAlive) { window.clearInterval(keepAlive); keepAlive = undefined; } }
 // Stimmen früh laden (Chrome liefert sie erst asynchron).
 if (typeof window !== "undefined" && "speechSynthesis" in window) {
   try { window.speechSynthesis.getVoices(); window.speechSynthesis.addEventListener?.("voiceschanged", () => window.speechSynthesis.getVoices()); } catch { /* ignore */ }
