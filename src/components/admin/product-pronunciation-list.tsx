@@ -85,7 +85,7 @@ export function ProductPronunciationList({ locale, rules, canEdit }: { locale: L
   );
 }
 
-function Row({ name, locale, rule, canEdit }: { name: string; locale: Locale; rule?: PronunciationRule; canEdit: boolean }) {
+function Row({ name, locale, rule, canEdit }: { name: string; locale: Locale; rule?: PronunciationRule | undefined; canEdit: boolean }) {
   const { t } = useT();
   const qc = useQueryClient();
   const [editing, setEditing] = useState(false);
