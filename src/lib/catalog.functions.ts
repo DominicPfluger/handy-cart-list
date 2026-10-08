@@ -210,19 +210,34 @@ function publicClient() {
 /** Nur die signierten Bild-Adressen (leichtgewichtig; wird häufiger erneuert als der Katalog). */
 export const getCatalogImageUrls = createServerFn({ method: "GET" }).handler(async (): Promise<Record<string, string>> => {
   const supabase = publicClient();
-  const [deptRes, prodRes, varRes] = await Promise.all([
-    supabase.from("departments").select("image_path, icon_path").or("image_path.not.is.null,icon_path.not.is.null"),
-    supabase.from("products").select("image_path, icon_path").or("image_path.not.is.null,icon_path.not.is.null"),
-    supabase.from("product_variant_images").select("image_path, icon_path"),
+  type Row = { image_path: string | null; icon_path: string | null };
+  // Paginiert laden: die DB liefert maximal 1000 Zeilen pro Anfrage.
+  const loadAll = async (table: string, withFilter: boolean): Promise<Row[]> => {
+    const out: Row[] = [];
+    for (let from = 0; ; from += 1000) {
+      let q = (supabase as any).from(table).select("image_path, icon_path");
+      if (withFilter) q = q.or("image_path.not.is.null,icon_path.not.is.null");
+      const { data } = await q.range(from, from + 999);
+      const rows = (data ?? []) as Row[];
+      out.push(...rows);
+      if (rows.length < 1000) break;
+    }
+    return out;
+  };
+  const [deptRows, prodRows, varRows] = await Promise.all([
+    loadAll("departments", true),
+    loadAll("products", true),
+    loadAll("product_variant_images", false),
   ]);
-  const paths = [
-    ...((deptRes.data ?? []) as Array<{ image_path: string | null; icon_path: string | null }>).flatMap((r) => [r.image_path, r.icon_path]),
-    ...((prodRes.data ?? []) as Array<{ image_path: string | null; icon_path: string | null }>).flatMap((r) => [r.image_path, r.icon_path]),
-    ...((varRes.data ?? []) as Array<{ image_path: string | null; icon_path: string | null }>).flatMap((r) => [r.image_path, r.icon_path]),
-  ].filter((p): p is string => Boolean(p));
+  const paths = [...new Set(
+    [...deptRows, ...prodRows, ...varRows].flatMap((r) => [r.image_path, r.icon_path]).filter((p): p is string => Boolean(p)),
+  )];
   const out: Record<string, string> = {};
-  if (paths.length > 0) {
-    const { data } = await supabase.storage.from("catalog-images").createSignedUrls([...new Set(paths)], 60 * 60);
+  // In Paketen signieren, damit grosse Mengen nicht abgewiesen werden.
+  const chunks: string[][] = [];
+  for (let i = 0; i < paths.length; i += 500) chunks.push(paths.slice(i, i + 500));
+  const results = await Promise.all(chunks.map((c) => supabase.storage.from("catalog-images").createSignedUrls(c, 60 * 60)));
+  for (const { data } of results) {
     for (const entry of data ?? []) {
       if (entry.path && entry.signedUrl) out[entry.path] = entry.signedUrl;
     }
