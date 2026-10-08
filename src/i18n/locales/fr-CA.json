@@ -1454,5 +1454,6 @@
   "purchase.organic": "Bio",
   "purchase.note": "Note",
   "common.addedToNamedList": "{name} ajouté à « {list} »",
-  "purchase.deptAnnounce": "Rayon suivant : {dept}."
+  "purchase.deptAnnounce": "Rayon suivant : {dept}.",
+  "tile.replaceIconConfirm": "Remplacer aussi la petite icône par la nouvelle image ?\n\nOK = remplacer · Annuler = garder l’icône"
 }
