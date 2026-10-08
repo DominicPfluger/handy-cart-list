@@ -169,6 +169,12 @@ function Row({ name, locale, rule, all, parts, canEdit }: { name: string; locale
             onKeyDown={(e) => { if (e.key === "Enter") void savePart(); if (e.key === "Escape") setPartOpen(false); }}
             className="h-8 w-32 rounded-lg border border-input bg-background px-2 text-sm text-foreground outline-none focus:border-primary" />
           <Button type="button" size="sm" variant="outline" className="h-8" onClick={() => speakSentences([partS.trim() || partW], locale, 1)} disabled={!partW.trim() && !partS.trim()}><Volume2 className="h-3.5 w-3.5" /></Button>
+          {variants.length > 1 && (
+            <Button type="button" size="sm" variant={partAll ? "default" : "outline"} className="h-8 gap-1" title={t("speak.applyToVariants")} aria-label={t("speak.applyToVariants")} aria-pressed={partAll} onClick={() => setPartAll((v) => !v)}>
+              <Languages className="h-3.5 w-3.5" />
+              <span className="text-[11px]">{partAll ? variants.map((v) => v.split("-")[1]).join("+") : variants.length + "×"}</span>
+            </Button>
+          )}
           <Button type="button" size="sm" variant="outline" className="h-8" onClick={() => void savePart()} disabled={!partW.trim() || !partS.trim()}><Save className="h-3.5 w-3.5" /></Button>
         </div>}
       </td>
