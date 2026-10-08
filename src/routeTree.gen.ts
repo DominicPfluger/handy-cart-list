@@ -25,6 +25,7 @@ import { Route as MehrRouteImport } from './routes/mehr'
 import { Route as RezepteRouteImport } from './routes/rezepte'
 import { Route as ScannerRouteImport } from './routes/scanner'
 import { Route as StartRouteImport } from './routes/start'
+import { Route as TmpPurchaseCheckRouteImport } from './routes/tmp-purchase-check'
 import { Route as VerlaufRouteImport } from './routes/verlauf'
 import { Route as VorratRouteImport } from './routes/vorrat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -118,6 +119,11 @@ const StartRoute = StartRouteImport.update({
   path: '/start',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TmpPurchaseCheckRoute = TmpPurchaseCheckRouteImport.update({
+  id: '/tmp-purchase-check',
+  path: '/tmp-purchase-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerlaufRoute = VerlaufRouteImport.update({
   id: '/verlauf',
   path: '/verlauf',
@@ -202,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/rezepte': typeof RezepteRouteWithChildren
   '/scanner': typeof ScannerRoute
   '/start': typeof StartRoute
+  '/tmp-purchase-check': typeof TmpPurchaseCheckRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -231,6 +238,7 @@ export interface FileRoutesByTo {
   '/mehr': typeof MehrRoute
   '/scanner': typeof ScannerRoute
   '/start': typeof StartRoute
+  '/tmp-purchase-check': typeof TmpPurchaseCheckRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/admin': typeof AuthenticatedAdminRoute
@@ -263,6 +271,7 @@ export interface FileRoutesById {
   '/rezepte': typeof RezepteRouteWithChildren
   '/scanner': typeof ScannerRoute
   '/start': typeof StartRoute
+  '/tmp-purchase-check': typeof TmpPurchaseCheckRoute
   '/verlauf': typeof VerlaufRoute
   '/vorrat': typeof VorratRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
@@ -295,6 +304,7 @@ export interface FileRouteTypes {
     | '/rezepte'
     | '/scanner'
     | '/start'
+    | '/tmp-purchase-check'
     | '/verlauf'
     | '/vorrat'
     | '/admin'
@@ -324,6 +334,7 @@ export interface FileRouteTypes {
     | '/mehr'
     | '/scanner'
     | '/start'
+    | '/tmp-purchase-check'
     | '/verlauf'
     | '/vorrat'
     | '/admin'
@@ -355,6 +366,7 @@ export interface FileRouteTypes {
     | '/rezepte'
     | '/scanner'
     | '/start'
+    | '/tmp-purchase-check'
     | '/verlauf'
     | '/vorrat'
     | '/_authenticated/admin'
@@ -387,6 +399,7 @@ export interface RootRouteChildren {
   RezepteRoute: typeof RezepteRouteWithChildren
   ScannerRoute: typeof ScannerRoute
   StartRoute: typeof StartRoute
+  TmpPurchaseCheckRoute: typeof TmpPurchaseCheckRoute
   VerlaufRoute: typeof VerlaufRoute
   VorratRoute: typeof VorratRoute
   ProduktIdRoute: typeof ProduktIdRoute
@@ -507,6 +520,13 @@ declare module '@tanstack/react-router' {
       path: '/start'
       fullPath: '/start'
       preLoaderRoute: typeof StartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tmp-purchase-check': {
+      id: '/tmp-purchase-check'
+      path: '/tmp-purchase-check'
+      fullPath: '/tmp-purchase-check'
+      preLoaderRoute: typeof TmpPurchaseCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/verlauf': {
@@ -652,6 +672,7 @@ const rootRouteChildren: RootRouteChildren = {
   RezepteRoute: RezepteRouteWithChildren,
   ScannerRoute: ScannerRoute,
   StartRoute: StartRoute,
+  TmpPurchaseCheckRoute: TmpPurchaseCheckRoute,
   VerlaufRoute: VerlaufRoute,
   VorratRoute: VorratRoute,
   ProduktIdRoute: ProduktIdRoute,
