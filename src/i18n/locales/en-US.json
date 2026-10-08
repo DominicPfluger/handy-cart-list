@@ -1066,6 +1066,7 @@
   "adm.headingMoveBefore": "Before \"{name}\"",
   "adm.headingMoveEnd": "At the very end",
   "tile.marketPrices": "Prices per market",
+  "tile.priceEstimate": "Price estimate",
   "tile.marketPricesHint": "Enter manually (no AI). An empty field removes the price. Applied on save.",
   "tile.estimateMarket": "Estimate price for {market} with AI",
   "tile.estimateDone": "Price estimated",

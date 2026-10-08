@@ -40,8 +40,11 @@ export function expandAbbreviations(text: string, locale: string): string {
 export function speakSentences(sentences: string[], locale: string, rate: number, onDone?: () => void) {
   const synth = window.speechSynthesis;
   const voice = findVoice(locale);
-  synth.cancel();
+  const busy = synth.speaking || synth.pending;
+  if (busy) synth.cancel();
+  try { synth.resume(); } catch { /* ignore */ }
   const list = sentences.filter((s) => s.trim()).map((s) => expandAbbreviations(s, locale));
+  const utts: SpeechSynthesisUtterance[] = [];
   list.forEach((text, i) => {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = locale;
@@ -51,7 +54,13 @@ export function speakSentences(sentences: string[], locale: string, rate: number
       u.onend = onDone;
       u.onerror = onDone;
     }
-    synth.speak(u);
+    utts.push(u);
   });
+  // Referenzen halten, sonst verwirft Chrome die Äusserungen vorzeitig.
+  activeUtterances = utts;
+  // Chrome verwirft speak() direkt nach cancel(): nur dann kurz warten.
+  const run = () => utts.forEach((u) => synth.speak(u));
+  if (busy) window.setTimeout(run, 120); else run();
 }
+let activeUtterances: SpeechSynthesisUtterance[] = [];
 

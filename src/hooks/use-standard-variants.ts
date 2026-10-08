@@ -4,7 +4,7 @@ import { useLocale } from "@/i18n";
 
 export type StandardVariant = { id: string; name: string; sort_order: number; labels?: Record<string, string> };
 export const STANDARD_VARIANTS_KEY = ["standard-variants"] as const;
-const FALLBACK = ["Bio", "Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
+const FALLBACK = ["Vollkorn", "vegan", "laktosefrei", "glutenfrei", "zuckerfrei", "light", "groß", "klein", "mild", "scharf"];
 
 export async function fetchStandardVariants(): Promise<StandardVariant[]> {
   const { data, error } = await (supabase as any).from("standard_variants").select("id,name,sort_order,labels").order("sort_order");
