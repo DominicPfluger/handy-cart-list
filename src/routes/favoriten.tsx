@@ -117,8 +117,10 @@ function FavoritesPage() {
   // Katalogprodukte immer in der aktuellen Sprache anzeigen; nur eigene Einträge behalten den gespeicherten Namen.
   const displayName = (row: FavRow) => {
     if (row.variant) {
+      const translated = pickName(row.product.variantNames?.[row.variant], locale, "");
+      if (translated) return `${row.product.name} · ${translated}`;
       return row.product.variants.includes(row.variant)
-        ? `${row.product.name} · ${pickName(row.product.variantNames?.[row.variant], locale, row.variant)}`
+        ? `${row.product.name} · ${row.variant}`
         : row.favorite.name;
     }
     return productById.has(row.product.id) ? row.product.name : row.favorite.name;
