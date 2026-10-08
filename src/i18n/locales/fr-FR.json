@@ -1453,5 +1453,6 @@
   "purchase.nextDept": "Rayon suivant",
   "purchase.organic": "Bio",
   "purchase.note": "Note",
-  "common.addedToNamedList": "{name} ajouté à « {list} »"
+  "common.addedToNamedList": "{name} ajouté à « {list} »",
+  "purchase.deptAnnounce": "Rayon suivant : {dept}."
 }

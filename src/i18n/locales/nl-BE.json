@@ -1453,5 +1453,6 @@
   "purchase.nextDept": "Volgende afdeling",
   "purchase.organic": "Bio",
   "purchase.note": "Notitie",
-  "common.addedToNamedList": "{name} toegevoegd aan ‘{list}’"
+  "common.addedToNamedList": "{name} toegevoegd aan ‘{list}’",
+  "purchase.deptAnnounce": "Volgende afdeling: {dept}."
 }

@@ -1453,5 +1453,6 @@
   "purchase.nextDept": "Reparto successivo",
   "purchase.organic": "Bio",
   "purchase.note": "Nota",
-  "common.addedToNamedList": "{name} aggiunto a «{list}»"
+  "common.addedToNamedList": "{name} aggiunto a «{list}»",
+  "purchase.deptAnnounce": "Prossimo reparto: {dept}."
 }
