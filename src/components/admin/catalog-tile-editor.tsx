@@ -28,7 +28,7 @@ import { ProductPronunciationEditor } from "@/components/admin/product-pronuncia
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
-import { LayoutGrid, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
+import { LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
