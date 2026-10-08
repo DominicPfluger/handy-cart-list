@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Erledigt
+- [x] Fertiggerichte-Konserven nach Vorschlag 2 in vier kompakte Gruppen sortiert: Nudel- & Fleischgerichte, Eintöpfe & Bohnengerichte, Suppen, Currys & Salate; Überschriften in allen 16 Katalogsprachen
 - [x] Admin «Bilder»-Tab: Bildergalerie in eigene Karte unterhalb der KI-Bilder-Karte — getestet
 - [x] Admin: Produkt-Bearbeiten-Dialog schliesst nach erfolgreichem Speichern automatisch (Kategorien/Überschriften bleiben offen) — getestet
 - [x] Admin: «Liste als Text kopieren» mit Unterkategorien — Knopf erscheint immer bei geöffneter Kategorie, Text enthält Einträge aller Unterkategorien rekursiv als «## Pfad»-Gruppen — getestet
