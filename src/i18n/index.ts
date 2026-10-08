@@ -73,6 +73,11 @@ async function loadDict(locale: string) {
   localesVersion++;
   emit();
 }
+/** Lädt alle eingebauten Sprachdateien (z. B. für Mehrsprachen-Editoren im Admin). */
+export async function loadAllDicts() {
+  await Promise.all(LOCALES.map((l) => loadDict(l.id)));
+}
+
 /** Lädt angelegte Sprachen aus der Datenbank (nur im Browser). */
 export async function loadExtraLocales(force = false) {
   try {
