@@ -165,14 +165,29 @@ function UnitEditDialog({ u, onClose, onSaved }: { u: UnitRow; onClose: () => vo
   const translateFn = useServerFn(translateUnitLabels);
   const def = (loc: string, kind: "label" | "short") =>
     u.builtin ? translate(loc, `${kind === "label" ? "unit" : "unitS"}.${u.id}` as MessageKey) : "";
-  // Only German defaults are reliable here (other dictionaries aren't loaded), so other locales start empty.
-  const [draft, setDraft] = useState<Draft>(() => Object.fromEntries(locales.map((l) => {
-    const isDe = l.id.startsWith("de");
-    return [l.id, {
-      label: u.labels?.[l.id]?.label ?? (isDe ? def("de-DE", "label") : ""),
-      short: u.labels?.[l.id]?.short ?? (isDe ? def("de-DE", "short") : ""),
-    }];
-  })));
+  const buildDraft = (): Draft => Object.fromEntries(locales.map((l) => [l.id, {
+    label: u.labels?.[l.id]?.label ?? (u.builtin ? def(l.id, "label") : ""),
+    short: u.labels?.[l.id]?.short ?? (u.builtin ? def(l.id, "short") : ""),
+  }]));
+  const [draft, setDraft] = useState<Draft>(buildDraft);
+  // Eingebaute Übersetzungen aller Sprachen nachladen, damit alle Felder vorausgefüllt sind.
+  useEffect(() => {
+    if (!u.builtin) return;
+    let alive = true;
+    void loadAllDicts().then(() => { if (alive) setDraft((d) => {
+      const n = { ...d };
+      for (const l of locales) {
+        const cur = n[l.id] ?? { label: "", short: "" };
+        n[l.id] = {
+          label: cur.label.trim() || def(l.id, "label"),
+          short: cur.short.trim() || def(l.id, "short"),
+        };
+      }
+      return n;
+    }); });
+    return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [busy, setBusy] = useState(false);
   const set = (loc: string, kind: "label" | "short", v: string) => setDraft((d) => ({ ...d, [loc]: { ...d[loc]!, [kind]: v } }));
 
