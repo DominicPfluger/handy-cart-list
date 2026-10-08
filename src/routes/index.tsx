@@ -90,6 +90,13 @@ function ListPage() {
   // Übersicht zuerst: erst nach Auswahl einer Liste wird deren Inhalt geladen.
   const [openListId, setOpenListId] = useState<string | null>(null);
   const [editListId, setEditListId] = useState<string | null>(null);
+  // Aus den Favoriten neu erstellte Liste direkt öffnen.
+  useEffect(() => {
+    try {
+      const id = sessionStorage.getItem("shoppi:open-list");
+      if (id) { sessionStorage.removeItem("shoppi:open-list"); setOpenListId(id); }
+    } catch { /* ignore */ }
+  }, []);
   // Neue Liste erhält nach dem Speichern ihre endgültige Kennung: geöffnet bleiben.
   useEffect(() => {
     if (openListId?.startsWith("tmp-") && !activeList.id.startsWith("tmp-") && !lists.some((l) => l.id === openListId)) {

@@ -347,6 +347,7 @@ function FavoritesPage() {
     setNewStore("default");
     setNewStoreName("");
     setNewStoreEmoji("");
+    if (createdId) try { sessionStorage.setItem("shoppi:open-list", createdId); } catch { /* ignore */ }
     toast.success(t("fav.toListDone", { count: items.length }));
     navigate({ to: "/" });
   };
