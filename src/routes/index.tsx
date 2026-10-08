@@ -15,7 +15,6 @@ import { useProductOrder } from "../hooks/use-product-order";
 import {
   ensureCatalog, catalogQueryOptions,
   useCatalog,
-  headingByProduct,
   departmentIdsOf,
   type CatalogDepartment,
 } from "../lib/catalog-query";
@@ -242,7 +241,6 @@ function ListPage() {
   }
 
 
-  const headingOf = useMemo(() => headingByProduct(data.products, data.headings), [data.products, data.headings]);
   const doneCount = items.filter((i) => i.checked).length;
   const [checkedDisplay] = useCheckedDisplay();
   const [showDone, setShowDone] = useState(false);
