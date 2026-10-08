@@ -1467,5 +1467,7 @@
   "speak.pronunciationAdd": "Add pronunciation rule",
   "speak.pronunciationDelete": "Delete pronunciation rule for {name}",
   "speak.pronunciationEmpty": "No pronunciation rules have been added for this language.",
-  "speak.pronunciationSaved": "Pronunciation rule saved"
+  "speak.pronunciationSaved": "Pronunciation rule saved",
+  "speak.tabProducts": "Products",
+  "speak.tabRules": "Saved pronunciations"
 }

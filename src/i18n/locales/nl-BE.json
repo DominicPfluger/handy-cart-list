@@ -1467,5 +1467,7 @@
   "speak.pronunciationAdd": "Uitspraakregel toevoegen",
   "speak.pronunciationDelete": "Uitspraakregel voor {name} verwijderen",
   "speak.pronunciationEmpty": "No pronunciation rules have been added for this language.",
-  "speak.pronunciationSaved": "Pronunciation rule saved"
+  "speak.pronunciationSaved": "Pronunciation rule saved",
+  "speak.tabProducts": "Producten",
+  "speak.tabRules": "Opgeslagen uitspraken"
 }
