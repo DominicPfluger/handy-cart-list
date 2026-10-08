@@ -127,14 +127,17 @@ export function PurchaseMode({ items, onToggle, onClose }: {
       try { synth.resume(); } catch { /* ignore */ }
       speakNow(withDept(current));
     };
-    let timer: number;
+    let timer = 0;
     if (synth.getVoices().length === 0) {
       const onVoices = () => { synth.removeEventListener("voiceschanged", onVoices); run(); };
       synth.addEventListener("voiceschanged", onVoices);
       timer = window.setTimeout(() => { synth.removeEventListener("voiceschanged", onVoices); run(); }, 600);
-    } else {
+    } else if (synth.speaking || synth.pending) {
+      // Chrome verwirft speak() direkt nach cancel() – nur dann kurz warten.
       synth.cancel();
-      timer = window.setTimeout(run, 150);
+      timer = window.setTimeout(run, 120);
+    } else {
+      run();
     }
     return () => {
       cancelled = true;
@@ -158,14 +161,17 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     const voice = findVoice(speakLocale);
     if (voice) u.voice = voice;
     u.rate = rate;
+    let started = false;
+    u.onstart = () => { started = true; if (uttRef.current === u) blockedRef.current = null; };
+    u.onend = () => { started = true; };
     uttRef.current = u;
+    blockedRef.current = null;
+    try { synth.resume(); } catch { /* ignore */ }
     synth.speak(u);
+    // Nur als blockiert merken, wenn die Ausgabe nachweislich nie gestartet ist.
     window.setTimeout(() => {
-      try {
-        if (uttRef.current === u && !synth.speaking && !synth.pending) blockedRef.current = text;
-        else blockedRef.current = null;
-      } catch { /* ignore */ }
-    }, 400);
+      if (uttRef.current === u && !started && !synth.speaking) blockedRef.current = text;
+    }, 1500);
   };
 
   // Blockierte Ausgabe bei der nächsten Berührung nachholen (zählt als Geste).
