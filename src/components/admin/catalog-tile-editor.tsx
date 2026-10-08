@@ -604,6 +604,12 @@ export function CatalogTileEditor(p: {
         </div>
       )}
 
+      {selCount === 0 && p.cur && p.onMoveSelected && p.products.length > 0 && (
+        <div className="flex items-center gap-2 px-1 text-xs text-muted-foreground">
+          <Button size="sm" variant="outline" disabled>{T("adm.moveSelected")}</Button>
+          <span>{T("adm.moveSelectHint")}</span>
+        </div>
+      )}
       {selCount > 0 && (
         <div className="flex items-center gap-2 rounded-xl bg-primary-soft px-3 py-2 text-sm">
           <span className="flex-1 font-semibold text-foreground">{T("adm.selectedCount", { n: selCount })}</span>
@@ -904,7 +910,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
   // Kategorie-Wahl beim Anlegen eines neuen Produkts (Vorauswahl: aktuell geöffnete Kategorie)
-  const [newDept, setNewDept] = useState<string>(p.cur ?? "");
+  const [newDept, setNewDept] = useState<string>(prod?.department_id ?? p.cur ?? "");
   const newDeptOpts = (() => {
     const byId = new Map(p.depts.map((d) => [d.id, d]));
     const label = (id: string) => {
@@ -1044,6 +1050,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         await p.translateIds([item.id]);
       }
       if (!isDept) void trVariants({ data: { productId: item.id } }).catch(() => {});
+      if (!isDept && prod && !prod.alias_id && newDept && newDept !== prod.department_id) p.onMoveSelected?.([item.id], newDept);
     } else {
       const r = isDept
         ? await supabase.from("departments").insert({ ...base, parent_id: p.cur, sort_order: p.children.length + 1 }).select("id").single()
@@ -1311,10 +1318,10 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </details>
           </IconCollapse>
         )}
-        {!p.imageOnly && !isDept && !item && (
+        {!p.imageOnly && !isDept && !prod?.alias_id && (
           <label className="flex items-center gap-2 text-sm">
             <span className="shrink-0 text-muted-foreground">{T("adm.category")}</span>
-            <select aria-label={T("adm.category")} value={newDept || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
+            <select aria-label={T("adm.category")} value={newDept || prod?.department_id || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
               {newDeptOpts.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
             </select>
           </label>
