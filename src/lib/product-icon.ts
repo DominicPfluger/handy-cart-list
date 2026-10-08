@@ -31,9 +31,9 @@ export async function makeProductIcon(source: Blob): Promise<Blob> {
 }
 
 /** Commits the icon after upload; an old icon is hidden first to avoid displaying stale imagery. */
-export async function saveProductIcon(productId: string, source: Blob, imagePath: string): Promise<void> {
+export async function saveProductIcon(productId: string, source: Blob, imagePath: string, force = false): Promise<void> {
   const { data: cur } = await supabase.from("products").select("icon_custom").eq("id", productId).single();
-  if (cur?.icon_custom) {
+  if (cur?.icon_custom && !force) {
     const { error } = await supabase.from("products").update({ image_path: imagePath }).eq("id", productId);
     if (error) throw error;
     await forgetCatalogImage(imagePath);
@@ -45,7 +45,7 @@ export async function saveProductIcon(productId: string, source: Blob, imagePath
   const path = `product-icons/${productId}-${crypto.randomUUID()}.webp`;
   const { error: uploadError } = await supabase.storage.from("catalog-images").upload(path, icon, { contentType: "image/webp" });
   if (uploadError) throw uploadError;
-  const { error: updateError } = await supabase.from("products").update({ icon_path: path, image_path: imagePath }).eq("id", productId);
+  const { error: updateError } = await supabase.from("products").update({ icon_path: path, image_path: imagePath, ...(force ? { icon_custom: false } : {}) }).eq("id", productId);
   if (updateError) throw updateError;
   await forgetCatalogImage(imagePath);
 }
@@ -87,4 +87,11 @@ export async function clearCustomIcon(kind: IconKind, id: string): Promise<void>
   const { error: e2 } = await supabase.from(iconTable(kind)).update({ icon_path: null, icon_custom: false }).eq("id", id);
   if (e2) throw e2;
   if (kind === "product" && data?.image_path) await saveProductIconFromPath(id, data.image_path);
+}
+
+/** Sets only the large preview image; an existing small icon stays untouched. */
+export async function setPreviewImageOnly(kind: IconKind, id: string, imagePath: string): Promise<void> {
+  const { error } = await supabase.from(iconTable(kind)).update({ image_path: imagePath }).eq("id", id);
+  if (error) throw error;
+  await forgetCatalogImage(imagePath);
 }
