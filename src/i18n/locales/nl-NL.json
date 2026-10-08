@@ -1458,5 +1458,11 @@
   "purchase.allDoneSpoken": "Super, alles klaar! Je boodschappen zijn compleet.",
   "tile.replaceIconConfirm": "Ook het kleine pictogram vervangen door de nieuwe afbeelding?\n\nOK = vervangen · Annuleren = huidig pictogram behouden",
   "listPick.title": "Op welke lijst?",
-  "listPick.sub": "Kies de boodschappenlijst voor deze sessie."
+  "listPick.sub": "Kies de boodschappenlijst voor deze sessie.",
+  "speak.pronunciation": "Uitspraak van productnamen",
+  "speak.pronunciationSub": "Stel eigen uitspraken alleen voor voorlezen in",
+  "speak.pronunciationWritten": "Productnaam",
+  "speak.pronunciationSpoken": "Uitspreken als",
+  "speak.pronunciationAdd": "Uitspraakregel toevoegen",
+  "speak.pronunciationDelete": "Uitspraakregel voor {name} verwijderen"
 }
