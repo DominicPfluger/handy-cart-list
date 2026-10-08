@@ -4,6 +4,7 @@ import { translate, useT } from "../i18n";
 import { useSpeakRate } from "../hooks/use-speak-rate";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { fillSpeech, resolveSpeechText, useSpeechTexts } from "../lib/speech-texts";
+import { applyPronunciationRules, getPronunciationRules } from "../lib/pronunciation-rules";
 
 export interface SpeakGroup {
   label: string;
@@ -27,8 +28,9 @@ export function missingVoice(locale: string): boolean {
 
 /** Kürzel, die die deutsche Sprachausgabe ausschreiben soll. */
 export function expandAbbreviations(text: string, locale: string): string {
-  if (!locale.toLowerCase().startsWith("de")) return text;
-  return text
+  const personalized = applyPronunciationRules(text, locale, getPronunciationRules());
+  if (!locale.toLowerCase().startsWith("de")) return personalized;
+  return personalized
     .replace(/\bStk\.?/g, "Stück")
     .replace(/\bPkg\.?/g, "Packung")
     // „1 Stück“ natürlich als „ein Stück“ statt „eins Stück“ sprechen.

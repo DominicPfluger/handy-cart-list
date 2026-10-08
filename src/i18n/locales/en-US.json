@@ -1461,5 +1461,11 @@
   "purchase.allDoneSpoken": "Great, all done! Your shopping is complete.",
   "tile.replaceIconConfirm": "Also replace the small icon with the new image?\n\nOK = replace icon · Cancel = keep current icon",
   "listPick.title": "Which list?",
-  "listPick.sub": "Choose the shopping list for this session."
+  "listPick.sub": "Choose the shopping list for this session.",
+  "speak.pronunciation": "Product name pronunciation",
+  "speak.pronunciationSub": "Set custom pronunciations for speech output only",
+  "speak.pronunciationWritten": "Product name",
+  "speak.pronunciationSpoken": "Pronounce as",
+  "speak.pronunciationAdd": "Add pronunciation rule",
+  "speak.pronunciationDelete": "Delete pronunciation rule for {name}"
 }

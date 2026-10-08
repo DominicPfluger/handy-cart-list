@@ -1458,5 +1458,11 @@
   "purchase.allDoneSpoken": "Ottimo, tutto fatto! La tua spesa è completa.",
   "tile.replaceIconConfirm": "Sostituire anche l’icona piccola con la nuova immagine?\n\nOK = sostituisci · Annulla = mantieni icona",
   "listPick.title": "Su quale lista?",
-  "listPick.sub": "Scegli la lista della spesa per questa sessione."
+  "listPick.sub": "Scegli la lista della spesa per questa sessione.",
+  "speak.pronunciation": "Pronuncia dei nomi dei prodotti",
+  "speak.pronunciationSub": "Imposta pronunce personalizzate solo per la lettura vocale",
+  "speak.pronunciationWritten": "Nome del prodotto",
+  "speak.pronunciationSpoken": "Pronuncia come",
+  "speak.pronunciationAdd": "Aggiungi regola di pronuncia",
+  "speak.pronunciationDelete": "Elimina la regola di pronuncia per {name}"
 }

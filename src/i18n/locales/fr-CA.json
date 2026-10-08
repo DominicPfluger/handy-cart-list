@@ -1458,5 +1458,11 @@
   "purchase.allDoneSpoken": "Super, tout est fait ! Tes courses sont terminées.",
   "tile.replaceIconConfirm": "Remplacer aussi la petite icône par la nouvelle image ?\n\nOK = remplacer · Annuler = garder l’icône",
   "listPick.title": "Sur quelle liste ?",
-  "listPick.sub": "Choisis la liste de courses pour cette session."
+  "listPick.sub": "Choisis la liste de courses pour cette session.",
+  "speak.pronunciation": "Prononciation des noms de produits",
+  "speak.pronunciationSub": "Définir des prononciations personnalisées uniquement pour la lecture",
+  "speak.pronunciationWritten": "Nom du produit",
+  "speak.pronunciationSpoken": "Prononcer comme",
+  "speak.pronunciationAdd": "Ajouter une règle de prononciation",
+  "speak.pronunciationDelete": "Supprimer la règle de prononciation pour {name}"
 }
