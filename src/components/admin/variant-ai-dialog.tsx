@@ -28,6 +28,13 @@ async function fetchBlob(path: string) {
 export async function generateVariantWithOptions(gen: GenFn, productId: string, variant: string, c: VariantAiChoice) {
   const hint = c.hint.trim() || undefined;
   const { path } = await gen({ data: { productId, variant, hint, opts: c.opts } });
+  const { data: existing, error: readError } = await supabase.from("product_variant_images").select("icon_path").eq("product_id", productId).eq("variant", variant).maybeSingle();
+  if (readError) throw readError;
+  if (existing?.icon_path) {
+    const { error } = await supabase.from("product_variant_images").upsert({ product_id: productId, variant, image_path: path, icon_path: existing.icon_path }, { onConflict: "product_id,variant" });
+    if (error) throw error;
+    return;
+  }
   let iconSource = await fetchBlob(path);
   if (c.both) {
     const r = await gen({ data: { productId, variant, hint, opts: c.opts, iconOnly: true } });

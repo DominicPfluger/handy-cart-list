@@ -129,7 +129,7 @@ export const generateProductImages = createServerFn({ method: "POST" })
         const path = `products/${p.id}-${crypto.randomUUID()}.webp`;
         const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
         if (up.error) throw new Error(up.error.message);
-        const upd = await sb.from("products").update({ image_path: path, icon_path: null }).eq("id", p.id);
+        const upd = await sb.from("products").update({ image_path: path }).eq("id", p.id);
         if (upd.error) throw new Error(upd.error.message);
         const signed = await supabaseAdmin.storage.from("catalog-images").createSignedUrl(path, 3600);
         items.push({ id: p.id, name: p.name, path, url: signed.data?.signedUrl ?? null });
@@ -172,9 +172,7 @@ export const generateImageFor = createServerFn({ method: "POST" })
     const up = await supabaseAdmin.storage.from("catalog-images").upload(path, bytes, { contentType: "image/webp", upsert: true });
     if (up.error) throw new Error(up.error.message);
     if (!data.iconOnly) {
-      const upd = data.kind === "product"
-        ? await context.supabase.from("products").update({ image_path: path, icon_path: null }).eq("id", p.id)
-        : await context.supabase.from("departments").update({ image_path: path }).eq("id", p.id);
+      const upd = await context.supabase.from(table).update({ image_path: path }).eq("id", p.id);
       if (upd.error) throw new Error(upd.error.message);
     }
     return { path };

@@ -38,7 +38,6 @@ import { flagOf } from "@/lib/catalog-query";
 import { useDiets, dietEmoji, dietLabel } from "@/hooks/use-diet-filter";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
 import { generateImageFor } from "@/lib/product-media.functions";
-import { saveProductIconFromPath } from "@/lib/product-icon";
 import type { HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { useReferencePrices } from "@/hooks/use-reference-prices";
 
@@ -811,8 +810,7 @@ function AdminPage() {
     try {
       for (const id of ids) {
         toast.loading(T("adm.aiImagesProgress", { i: done + 1, n: ids.length }), { id: tid });
-        const g = await genImgFor({ data: { id, kind: "product", hint: ai.hint || undefined, opts: ai.opts } });
-        await saveProductIconFromPath(id, g.path);
+        await genImgFor({ data: { id, kind: "product", hint: ai.hint || undefined, opts: ai.opts } });
         done++;
       }
       toast.success(T("tile.imgDone"), { id: tid });
