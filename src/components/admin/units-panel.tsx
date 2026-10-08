@@ -8,7 +8,7 @@ import { GripVertical, Pencil, Trash2, Eye, EyeOff, Sparkles, Globe } from "luci
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import type { MessageKey } from "@/i18n/de";
 import { supabase } from "@/integrations/supabase/client";
-import { useT, useLocale, useAllLocales, translate } from "@/i18n";
+import { useT, useLocale, useAllLocales, translate, loadAllDicts } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { allUnitRows, loadUnits, unitLabel, unitShort, useUnitsVersion, type UnitRow, type UnitLabels } from "@/lib/units";
@@ -165,14 +165,29 @@ function UnitEditDialog({ u, onClose, onSaved }: { u: UnitRow; onClose: () => vo
   const translateFn = useServerFn(translateUnitLabels);
   const def = (loc: string, kind: "label" | "short") =>
     u.builtin ? translate(loc, `${kind === "label" ? "unit" : "unitS"}.${u.id}` as MessageKey) : "";
-  // Only German defaults are reliable here (other dictionaries aren't loaded), so other locales start empty.
-  const [draft, setDraft] = useState<Draft>(() => Object.fromEntries(locales.map((l) => {
-    const isDe = l.id.startsWith("de");
-    return [l.id, {
-      label: u.labels?.[l.id]?.label ?? (isDe ? def("de-DE", "label") : ""),
-      short: u.labels?.[l.id]?.short ?? (isDe ? def("de-DE", "short") : ""),
-    }];
-  })));
+  const buildDraft = (): Draft => Object.fromEntries(locales.map((l) => [l.id, {
+    label: u.labels?.[l.id]?.label ?? (u.builtin ? def(l.id, "label") : ""),
+    short: u.labels?.[l.id]?.short ?? (u.builtin ? def(l.id, "short") : ""),
+  }]));
+  const [draft, setDraft] = useState<Draft>(buildDraft);
+  // Eingebaute Übersetzungen aller Sprachen nachladen, damit alle Felder vorausgefüllt sind.
+  useEffect(() => {
+    if (!u.builtin) return;
+    let alive = true;
+    void loadAllDicts().then(() => { if (alive) setDraft((d) => {
+      const n = { ...d };
+      for (const l of locales) {
+        const cur = n[l.id] ?? { label: "", short: "" };
+        n[l.id] = {
+          label: cur.label.trim() || def(l.id, "label"),
+          short: cur.short.trim() || def(l.id, "short"),
+        };
+      }
+      return n;
+    }); });
+    return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [busy, setBusy] = useState(false);
   const set = (loc: string, kind: "label" | "short", v: string) => setDraft((d) => ({ ...d, [loc]: { ...d[loc]!, [kind]: v } }));
 
@@ -220,8 +235,8 @@ function UnitEditDialog({ u, onClose, onSaved }: { u: UnitRow; onClose: () => vo
           {locales.map((l) => (
             <div key={l.id} className="grid grid-cols-[minmax(0,1.3fr)_minmax(0,1.5fr)_minmax(0,0.8fr)] items-center gap-2 px-1 py-1">
               <span className="truncate text-sm">{l.flag} {l.label}</span>
-              <Input className="h-8" value={draft[l.id]?.label ?? ""} placeholder={l.id.startsWith("de") ? def("de-DE", "label") : ""} onChange={(e) => set(l.id, "label", e.target.value)} />
-              <Input className="h-8" value={draft[l.id]?.short ?? ""} placeholder={l.id.startsWith("de") ? def("de-DE", "short") : ""} onChange={(e) => set(l.id, "short", e.target.value)} />
+              <Input className="h-8" value={draft[l.id]?.label ?? ""} placeholder={u.builtin ? def(l.id, "label") : ""} onChange={(e) => set(l.id, "label", e.target.value)} />
+              <Input className="h-8" value={draft[l.id]?.short ?? ""} placeholder={u.builtin ? def(l.id, "short") : ""} onChange={(e) => set(l.id, "short", e.target.value)} />
             </div>
           ))}
         </div>
