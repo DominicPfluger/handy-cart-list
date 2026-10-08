@@ -401,6 +401,7 @@ export const de = {
   "speak.pronunciationDelete": "Ausspracheregel für {name} löschen",
   "speak.pronunciationEmpty": "Für diese Sprache sind noch keine Ausspracheregeln hinterlegt.",
   "speak.pronunciationSaved": "Ausspracheregel gespeichert",
+  "speak.applyToVariants": "Für alle Sprachvarianten übernehmen",
   "speak.tabProducts": "Produkte",
   "speak.tabRules": "Angelegte Aussprachen",
   "stx.title": "Vorlese-Texte",

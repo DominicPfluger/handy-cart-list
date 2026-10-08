@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { Plus, Save, Trash2, Volume2, X } from "lucide-react";
+import { Languages, Plus, Save, Trash2, Volume2, X } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { LOCALES, useT, type Locale } from "@/i18n";
@@ -16,12 +16,16 @@ export function LocaleRuleChips({ name, all, current, canEdit }: { name: string;
   const [adding, setAdding] = useState(false);
   const [spoken, setSpoken] = useState("");
   const [busy, setBusy] = useState(false);
+  const [allVariants, setAllVariants] = useState(false);
   const sorted = [...all].sort((a, b) => a.locale.localeCompare(b.locale));
   const rule = open ? all.find((r) => r.locale === open) : undefined;
   const missing = LOCALES.filter((l) => !all.some((r) => r.locale === l.id));
+  /** Sprachvarianten der offenen Lokalisierung, z. B. de-DE/de-AT/de-CH. */
+  const variants = open ? LOCALES.filter((l) => l.id.split("-")[0] === open.split("-")[0]).map((l) => l.id as Locale) : [];
 
   const select = (l: Locale) => {
     setAdding(false);
+    setAllVariants(false);
     if (open === l) { setOpen(null); return; }
     setOpen(l);
     setSpoken(all.find((r) => r.locale === l)?.spoken ?? "");
@@ -34,7 +38,9 @@ export function LocaleRuleChips({ name, all, current, canEdit }: { name: string;
   const save = async () => {
     if (!open || !spoken.trim()) return;
     setBusy(true);
-    const { error } = await supabase.from("pronunciation_rules").upsert({ locale: open, written: rule?.written ?? name, spoken: spoken.trim() }, { onConflict: "locale,written" });
+    const targets = allVariants ? variants : [open];
+    const rows = targets.map((loc) => ({ locale: loc, written: all.find((r) => r.locale === loc)?.written ?? name, spoken: spoken.trim() }));
+    const { error } = await supabase.from("pronunciation_rules").upsert(rows, { onConflict: "locale,written" });
     setBusy(false);
     if (error) { toast.error(error.message); return; }
     await qc.invalidateQueries({ queryKey: pronunciationRulesQueryKey });
@@ -88,6 +94,12 @@ export function LocaleRuleChips({ name, all, current, canEdit }: { name: string;
             onKeyDown={(e) => { if (e.key === "Enter") void save(); if (e.key === "Escape") setOpen(null); }}
             className="h-8 min-w-0 flex-1 rounded-md border border-input bg-background px-2 text-sm text-foreground outline-none focus:border-primary" />
           <Button type="button" size="sm" variant="outline" className="h-8 px-2" onClick={hear} aria-label="▶"><Volume2 className="h-3.5 w-3.5" /></Button>
+          {canEdit && variants.length > 1 && (
+            <Button type="button" size="sm" variant={allVariants ? "default" : "outline"} className="h-8 gap-1 px-2" title={t("speak.applyToVariants")} aria-label={t("speak.applyToVariants")} aria-pressed={allVariants} onClick={() => setAllVariants((v) => !v)}>
+              <Languages className="h-3.5 w-3.5" />
+              <span className="text-[11px]">{allVariants ? variants.map((v) => v.split("-")[1]).join("+") : variants.length + "×"}</span>
+            </Button>
+          )}
           {canEdit && <Button type="button" size="sm" variant="outline" className="h-8 px-2" disabled={busy || !spoken.trim() || spoken.trim() === rule?.spoken} onClick={() => void save()}><Save className="h-3.5 w-3.5" /></Button>}
           {canEdit && rule && <Button type="button" size="sm" variant="outline" className="h-8 px-2" onClick={() => void remove()} aria-label={t("speak.pronunciationDelete", { name })}><Trash2 className="h-3.5 w-3.5" /></Button>}
           <Button type="button" size="sm" variant="outline" className="h-8 px-2" onClick={() => setOpen(null)} aria-label="✕"><X className="h-3.5 w-3.5" /></Button>
