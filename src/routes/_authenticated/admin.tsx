@@ -1611,7 +1611,7 @@ function Editor(p: {
         </div>
         <p className="text-[11px] text-muted-foreground">{T("adm.trHint")}</p>
         <div className="space-y-1.5">
-          {allLocales().filter((l) => p.market ? l.id.split("-")[1] === p.market : l.id !== "de-DE").map((l) => (
+          {allLocales().map((l) => (
             <TrField key={l.id + (tr[l.id]?.name ?? "")} label={`${l.flag} ${l.id}`} value={tr[l.id]?.name ?? ""} manual={tr[l.id]?.is_manual}
               onSave={(v) => p.onTr(l.id, v, tr[l.id]?.name)} />
           ))}
