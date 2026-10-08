@@ -401,6 +401,8 @@ export const de = {
   "speak.pronunciationDelete": "Ausspracheregel für {name} löschen",
   "speak.pronunciationEmpty": "Für diese Sprache sind noch keine Ausspracheregeln hinterlegt.",
   "speak.pronunciationSaved": "Ausspracheregel gespeichert",
+  "speak.tabProducts": "Produkte",
+  "speak.tabRules": "Angelegte Aussprachen",
   "stx.title": "Vorlese-Texte",
   "stx.hint": "Diese Ansagen gelten beim Vorlesen jeder Einkaufsliste. Leere Felder verwenden den Standardtext.",
   "stx.placeholders": "Platzhalter",
