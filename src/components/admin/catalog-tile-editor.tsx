@@ -766,6 +766,11 @@ export function CatalogTileEditor(p: {
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.variantAdd")} title={T("adm.variantAdd")} onClick={() => setVariantAdd(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   <Tags className="h-3.5 w-3.5" />
                 </Button>
+                {!x.alias_id && (
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label="Bio" title="Bio-Variante umschalten" onClick={() => toggleBio(x)} className={`h-6 w-6 shrink-0 rounded ${(x.variants ?? []).some((v) => v.toLowerCase() === "bio") ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+                    <Leaf className="h-3.5 w-3.5" />
+                  </Button>
+                )}
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode || aiBusy === pid} aria-label={T("tile.aiImage")} title={T("tile.aiImage")} onClick={() => quickAiImage(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   {aiBusy === pid ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                 </Button>
