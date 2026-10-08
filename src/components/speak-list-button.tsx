@@ -51,45 +51,55 @@ export function speakSentences(sentences: string[], locale: string, rate: number
   const finish = () => {
     if (finished || token !== speakToken) return;
     finished = true;
-    stopKeepAlive();
     onDone?.();
   };
-  const utts: SpeechSynthesisUtterance[] = [];
-  list.forEach((text, i) => {
+  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  // Mit gewählter Stimme sprechen; schlägt das fehl (Stimme nicht verfügbar,
+  // Ausgabe startet nicht), einmal mit der Standardstimme des Geräts wiederholen.
+  const build = (withVoice: boolean) => list.map((text, i) => {
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = voice?.lang ?? locale;
-    if (voice) u.voice = voice;
+    u.lang = locale;
+    if (withVoice && voice) u.voice = voice;
     u.rate = Math.min(2, Math.max(0.5, rate || 1));
+    if (i === 0) u.onstart = () => { started = true; };
     if (i === list.length - 1) {
       u.onend = finish;
       u.onerror = (e) => {
-        // Abbruch durch neues Vorlesen ist kein Fehler.
         if (e.error === "interrupted" || e.error === "canceled") return;
+        if (withVoice && voice && !started) { retry(); return; }
         finish();
       };
     }
-    utts.push(u);
+    return u;
   });
+  let started = false;
+  let retried = false;
+  const retry = () => {
+    if (retried || token !== speakToken) return;
+    retried = true;
+    try { synth.cancel(); } catch { /* ignore */ }
+    const again = build(false);
+    activeUtterances = again;
+    window.setTimeout(() => { if (token === speakToken) again.forEach((u) => synth.speak(u)); }, 80);
+  };
+  const utts = build(true);
   // Referenzen halten, sonst verwirft Chrome die Äusserungen vorzeitig.
   activeUtterances = utts;
   const run = () => {
     if (token !== speakToken) return;
+    try { synth.resume(); } catch { /* ignore */ }
     utts.forEach((u) => synth.speak(u));
-    // Chrome stoppt lange Ausgaben nach ~15 s: regelmässig anstossen.
-    stopKeepAlive();
-    if (!isIOS) keepAlive = window.setInterval(() => {
-      if (!synth.speaking) { stopKeepAlive(); return; }
-      try { synth.pause(); synth.resume(); } catch { /* ignore */ }
-    }, 10000);
+    window.setTimeout(() => {
+      if (token === speakToken && !started && !synth.speaking) {
+        if (voice) retry(); else finish();
+      }
+    }, 1500);
   };
   // iOS Safari braucht speak() direkt in der Tipp-Geste; Chrome verwirft speak() direkt nach cancel().
-  const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   if (busy && !isIOS) window.setTimeout(run, 120); else run();
 }
 let activeUtterances: SpeechSynthesisUtterance[] = [];
 let speakToken = 0;
-let keepAlive: number | undefined;
-function stopKeepAlive() { if (keepAlive) { window.clearInterval(keepAlive); keepAlive = undefined; } }
 // Stimmen früh laden (Chrome liefert sie erst asynchron).
 if (typeof window !== "undefined" && "speechSynthesis" in window) {
   try { window.speechSynthesis.getVoices(); window.speechSynthesis.addEventListener?.("voiceschanged", () => window.speechSynthesis.getVoices()); } catch { /* ignore */ }
