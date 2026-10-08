@@ -90,6 +90,18 @@ function ListPage() {
   // Übersicht zuerst: erst nach Auswahl einer Liste wird deren Inhalt geladen.
   const [openListId, setOpenListId] = useState<string | null>(null);
   const [editListId, setEditListId] = useState<string | null>(null);
+  // Der Listen-Button in der unteren Navigation führt auch innerhalb von „/“
+  // zuverlässig zurück zur Übersicht aller Listen.
+  useEffect(() => {
+    const showOverview = () => {
+      setOpenListId(null);
+      setEditListId(null);
+      setManagerOpen(false);
+      setPurchaseOpen(false);
+    };
+    window.addEventListener("shoppi:lists-overview", showOverview);
+    return () => window.removeEventListener("shoppi:lists-overview", showOverview);
+  }, []);
   // Aus den Favoriten neu erstellte Liste direkt öffnen.
   useEffect(() => {
     try {

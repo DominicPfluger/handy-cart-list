@@ -23,3 +23,4 @@
 - [x] Listeneinzelansicht: Bearbeiten nur Umbenennen, Laden, Vorlage, Löschen
 - [x] Einkaufsmodus: Abschluss per Sprachausgabe ansagen
 - [x] Einkaufsmodus: fehlende/unklare Mengen natürlich sprechen und persönliche Ausspracheregeln für Produktnamen
+- [x] Unterer Listen-Button öffnet immer die Hauptübersicht aller Einkaufslisten
