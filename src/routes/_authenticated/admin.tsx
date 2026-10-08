@@ -698,11 +698,29 @@ function AdminPage() {
   const moveSelected = (ids: string[], deptId: string) => {
     if (!ids.length) return;
     void run(async () => {
-      const { data: maxRow } = await supabase.from("products").select("sort_order").eq("department_id", deptId).order("sort_order", { ascending: false }).limit(1);
-      let next = ((maxRow?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1;
-      for (const id of ids) {
-        await must(supabase.from("product_headings").delete().eq("before_product_id", id));
-        await must(supabase.from("products").update({ department_id: deptId, sort_order: next++ }).eq("id", id));
+      const own = ids.filter((id) => !id.startsWith("alias:"));
+      const aliasIds = ids.filter((id) => id.startsWith("alias:")).map((id) => id.slice(6));
+      if (own.length) {
+        const { data: maxRow } = await supabase.from("products").select("sort_order").eq("department_id", deptId).order("sort_order", { ascending: false }).limit(1);
+        let next = ((maxRow?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1;
+        for (const id of own) {
+          await must(supabase.from("product_headings").delete().eq("before_product_id", id));
+          await must(supabase.from("products").update({ department_id: deptId, sort_order: next++ }).eq("id", id));
+        }
+      }
+      if (aliasIds.length) {
+        const aliases = (aliasQ.data ?? []);
+        const { data: maxA } = await supabase.from("product_aliases").select("sort_order").eq("department_id", deptId).order("sort_order", { ascending: false }).limit(1);
+        let nextA = ((maxA?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1;
+        for (const aid of aliasIds) {
+          const a = aliases.find((x) => x.id === aid);
+          const prod = a ? d?.prods.find((x) => x.id === a.product_id) : undefined;
+          // Ziel ist die Stammkategorie des Produkts oder dort existiert schon ein Alias → Alias entfernen
+          const dup = a && aliases.some((x) => x.id !== aid && x.product_id === a.product_id && x.department_id === deptId);
+          if (prod?.department_id === deptId || dup) await must(supabase.from("product_aliases").delete().eq("id", aid));
+          else await must(supabase.from("product_aliases").update({ department_id: deptId, sort_order: nextA++ }).eq("id", aid));
+        }
+        await qc.invalidateQueries({ queryKey: ALIAS_KEY });
       }
       await refresh();
     }, T("adm.moved", { n: ids.length }));
