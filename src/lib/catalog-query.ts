@@ -237,8 +237,46 @@ export function matchesProductSearch(name: string, query: string): boolean {
   const n = normalizeSearch(name);
   const q = normalizeSearch(query);
   if (!q) return false;
-  if (q.length >= 3) return n.includes(q);
-  return n.split(/[^\p{L}\p{N}]+/u).some((w) => w.startsWith(q));
+  if (q.length >= 3 && n.includes(q)) return true;
+  const words = n.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  if (q.length < 3) return words.some((w) => w.startsWith(q));
+  if (q.length < 4) return false;
+  // Fehlertoleranz: 1 Tippfehler ab 4, 2 ab 7 Zeichen (gegen Wortanfang bzw. ganzes Wort).
+  const max = q.length >= 7 ? 2 : 1;
+  for (const w of words) {
+    if (Math.abs(w.length - q.length) <= max && editDistance(w, q, max) <= max) return true;
+    if (w.length > q.length && editDistance(w.slice(0, q.length), q, max) <= max) return true;
+  }
+  // Auch zusammengesetzte Wörter: beliebige Teilstücke gleicher Länge prüfen.
+  if (q.length >= 5) {
+    for (let i = 1; i + q.length - 1 <= n.length; i++) {
+      if (editDistance(n.slice(i, i + q.length), q, 1) <= 1) return true;
+    }
+  }
+  return false;
+}
+
+/** Damerau-Levenshtein (mit Vertauschung), bricht ab, sobald > max. */
+function editDistance(a: string, b: string, max: number): number {
+  const m = a.length, k = b.length;
+  if (Math.abs(m - k) > max) return max + 1;
+  let prev2: number[] = [];
+  let prev = Array.from({ length: k + 1 }, (_, j) => j);
+  for (let i = 1; i <= m; i++) {
+    const cur = [i];
+    let rowMin = i;
+    for (let j = 1; j <= k; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      let v = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) v = Math.min(v, prev2[j - 2] + 1);
+      cur[j] = v;
+      if (v < rowMin) rowMin = v;
+    }
+    if (rowMin > max) return max + 1;
+    prev2 = prev;
+    prev = cur;
+  }
+  return prev[k];
 }
 
 /** Alphabetische Sortierung der Suchtreffer (deutsche Regeln). */

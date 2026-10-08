@@ -117,7 +117,11 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   // (Timer würden auf Mobilgeräten die Audio-Freigabe verlieren).
   const speakItem = (item: PurchaseItem) => {
     const intro = deptIntro(item);
-    speakNow(intro ? `${intro} … ${item.spoken}` : item.spoken);
+    if (intro) {
+      // Zwei Äusserungen direkt nacheinander einreihen → natürliche Pause, ohne Timer.
+      speakNow(intro);
+      speakNow(item.spoken, true);
+    } else speakNow(item.spoken);
   };
 
   // Aktuellen Artikel vorlesen; beim Wechsel zum nächsten erneut.
@@ -159,7 +163,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   // Safari/iOS blockiert Sprachausgabe ohne vorherige Nutzer-Geste: blockierte
   // Ausgabe merken und beim nächsten Antippen nachholen.
   const blockedRef = useRef<string | null>(null);
-  const speakNow = (text: string) => {
+  const speakNow = (text: string, queued = false) => {
     const synth = window.speechSynthesis;
     if (!synth || !text.trim()) return;
     const u = new SpeechSynthesisUtterance(expandAbbreviations(text, speakLocale));
