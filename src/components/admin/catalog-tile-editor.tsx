@@ -758,13 +758,9 @@ export function CatalogTileEditor(p: {
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode || aiBusy === pid} aria-label={T("tile.aiImage")} title={T("tile.aiImage")} onClick={() => quickAiImage(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   {aiBusy === pid ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                 </Button>
-                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => x.alias_id ? p.onRemoveAlias?.(x.alias_id, p.nm(pid, x.name)) : p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
-                {editMode && x.alias_id && (
-                  <button type="button" onClick={() => p.onRemoveAlias?.(x.alias_id!, p.nm(pid, x.name))} aria-label={T("adm.delete")}
-                    className="rounded-full px-2 text-xs text-destructive">✕</button>
-                )}
               </div>
               {!x.alias_id && (x.variants ?? []).length > 0 && (
                 <div className="flex flex-wrap items-center gap-1 bg-muted/30 py-1.5 pl-14 pr-3">
@@ -1486,7 +1482,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         )}
         {!p.imageOnly && <div className="flex flex-wrap gap-2 pt-1">
           {item && p.onAdvanced && <Button variant="outline" className="h-11 rounded-xl" onClick={() => { p.onAdvanced!(p.target.kind, item.id); p.onClose(); }}>⚙ {T("tile.advanced")}</Button>}
-          {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
+          {item && <Button variant="outline" className="h-11 rounded-xl text-destructive" onClick={() => { const aid = (item as { alias_id?: string }).alias_id; if (aid && !isDept) p.onRemoveAlias?.(aid, item.name); else p.remove(p.target.kind, item.id, item.name); p.onClose(); }}>{T("tile.delete")}</Button>}
           <Button variant="outline" className="h-11 rounded-xl" onClick={p.onClose}>{T("common.cancel")}</Button>
           <Button className="h-11 flex-1 rounded-xl" disabled={enriching || (!isDept && Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0))} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
         </div>}
