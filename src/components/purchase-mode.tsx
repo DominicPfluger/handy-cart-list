@@ -182,6 +182,17 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [speakOn, speakLocale, rate]);
 
+  // Abschluss einmalig ansagen, sobald der letzte Artikel erledigt ist.
+  const doneSpokenRef = useRef(false);
+  useEffect(() => {
+    if (!allDone) { doneSpokenRef.current = false; return; }
+    if (doneSpokenRef.current || !speakOn || items.length === 0 || !window.speechSynthesis) return;
+    doneSpokenRef.current = true;
+    const timer = window.setTimeout(() => speakNow(translate(speakLocale, "purchase.allDoneSpoken")), 200);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allDone, speakOn, speakLocale]);
+
   const toggleSpeak = () => {
     const next = !speakOn;
     setSpeakOn(next);
