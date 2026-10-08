@@ -4,7 +4,8 @@ import { Plus, Trash2, Volume2 } from "lucide-react";
 import { speakSentences } from "@/components/speak-list-button";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { LOCALES, useT, type Locale } from "@/i18n";
+import { useT, type Locale } from "@/i18n";
+import { SpeakLocaleChips } from "@/components/admin/speak-locale-chips";
 import { Button } from "@/components/ui/button";
 import { pronunciationRulesQueryKey, usePronunciationRules } from "@/lib/pronunciation-rules";
 
