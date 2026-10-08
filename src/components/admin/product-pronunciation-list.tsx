@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Pencil, Save, Search, Trash2, Volume2 } from "lucide-react";
+import { Pencil, Plus, Puzzle, Save, Search, Trash2, Volume2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { LOCALES, useT, type Locale } from "@/i18n";
@@ -60,6 +60,8 @@ export function ProductPronunciationList({ locale, rules, canEdit }: { locale: L
     for (const r of rules) { const k = r.written.toLowerCase(); m.set(k, [...(m.get(k) ?? []), r]); }
     return m;
   }, [rules]);
+  const localeRules = useMemo(() => rules.filter((r) => r.locale === locale && r.written.trim()), [rules, locale]);
+  const partsFor = (name: string) => { const n = name.toLowerCase(); return localeRules.filter((r) => { const w = r.written.toLowerCase(); return w !== n && n.includes(w); }); };
   const rulesFor = (name: string, base: string) => {
     const set = new Map<string, PronunciationRule>();
     for (const k of [name.toLowerCase(), base.toLowerCase()]) for (const r of allByWritten.get(k) ?? []) set.set(r.id, r);
@@ -82,7 +84,7 @@ export function ProductPronunciationList({ locale, rules, canEdit }: { locale: L
           <tbody className="divide-y divide-border">
             {(products.isLoading || translations.isLoading) && <tr><td colSpan={2} className="px-3 py-4 text-muted-foreground">…</td></tr>}
             {filtered.slice(0, limit).map((r) => (
-              <Row key={r.id + locale} name={r.name} locale={locale} rule={ruleMap.get(r.name.toLowerCase())} all={rulesFor(r.name, r.base)} canEdit={canEdit} />
+              <Row key={r.id + locale} name={r.name} locale={locale} rule={ruleMap.get(r.name.toLowerCase())} all={rulesFor(r.name, r.base)} parts={partsFor(r.name)} canEdit={canEdit} />
             ))}
           </tbody>
         </table>
@@ -96,12 +98,29 @@ export function ProductPronunciationList({ locale, rules, canEdit }: { locale: L
   );
 }
 
-function Row({ name, locale, rule, all, canEdit }: { name: string; locale: Locale; rule?: PronunciationRule | undefined; all: PronunciationRule[]; canEdit: boolean }) {
+function Row({ name, locale, rule, all, parts, canEdit }: { name: string; locale: Locale; rule?: PronunciationRule | undefined; all: PronunciationRule[]; parts: PronunciationRule[]; canEdit: boolean }) {
   const { t } = useT();
   const qc = useQueryClient();
   const [editing, setEditing] = useState(false);
   const [spoken, setSpoken] = useState(rule?.spoken ?? "");
   const [busy, setBusy] = useState(false);
+  const [partOpen, setPartOpen] = useState(false);
+  const [partW, setPartW] = useState("");
+  const [partS, setPartS] = useState("");
+  const savePart = async () => {
+    const w = partW.trim(), sp = partS.trim();
+    if (!w || !sp) return;
+    const { error } = await supabase.from("pronunciation_rules").upsert({ locale, written: w, spoken: sp }, { onConflict: "locale,written" });
+    if (error) { toast.error(error.message); return; }
+    setPartW(""); setPartS(""); setPartOpen(false);
+    await qc.invalidateQueries({ queryKey: pronunciationRulesQueryKey });
+    toast.success(t("speak.pronunciationSaved"));
+  };
+  const removePart = async (id: string) => {
+    const { error } = await supabase.from("pronunciation_rules").delete().eq("id", id);
+    if (error) { toast.error(error.message); return; }
+    await qc.invalidateQueries({ queryKey: pronunciationRulesQueryKey });
+  };
   useEffect(() => { setSpoken(rule?.spoken ?? ""); }, [rule?.spoken]);
 
   const hear = () => {
@@ -131,6 +150,24 @@ function Row({ name, locale, rule, all, canEdit }: { name: string; locale: Local
       <td className="px-3 py-2">
         <div className="font-medium text-foreground">{name}</div>
         <LocaleRuleChips name={name} all={all} current={locale} canEdit={canEdit} />
+        {parts.length > 0 && <div className="mt-1 flex flex-wrap gap-1">
+          {parts.map((p) => (
+            <span key={p.id} className="inline-flex items-center gap-1 rounded-full border border-border bg-muted/50 px-2 py-0.5 text-xs text-foreground">
+              <Puzzle className="h-3 w-3 text-muted-foreground" />{p.written} → {p.spoken}
+              {canEdit && <button type="button" aria-label={t("speak.pronunciationDelete", { name: p.written })} onClick={() => void removePart(p.id)} className="text-muted-foreground hover:text-foreground"><Trash2 className="h-3 w-3" /></button>}
+            </span>
+          ))}
+        </div>}
+        {partOpen && <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+          <input autoFocus value={partW} onChange={(e) => setPartW(e.target.value)} placeholder="z. B. Smoothie" aria-label={t("speak.pronunciationWritten")}
+            className="h-8 w-32 rounded-lg border border-input bg-background px-2 text-sm text-foreground outline-none focus:border-primary" />
+          <span className="text-muted-foreground" aria-hidden="true">→</span>
+          <input value={partS} onChange={(e) => setPartS(e.target.value)} placeholder={t("speak.pronunciationSpoken")} aria-label={t("speak.pronunciationSpoken")}
+            onKeyDown={(e) => { if (e.key === "Enter") void savePart(); if (e.key === "Escape") setPartOpen(false); }}
+            className="h-8 w-32 rounded-lg border border-input bg-background px-2 text-sm text-foreground outline-none focus:border-primary" />
+          <Button type="button" size="sm" variant="outline" className="h-8" onClick={() => speakSentences([partS.trim() || partW], locale, 1)} disabled={!partW.trim() && !partS.trim()}><Volume2 className="h-3.5 w-3.5" /></Button>
+          <Button type="button" size="sm" variant="outline" className="h-8" onClick={() => void savePart()} disabled={!partW.trim() || !partS.trim()}><Save className="h-3.5 w-3.5" /></Button>
+        </div>}
       </td>
       <td className="px-3 py-2">
         {editing && (
@@ -141,6 +178,7 @@ function Row({ name, locale, rule, all, canEdit }: { name: string; locale: Local
         <div className="flex flex-wrap gap-1.5">
           <Button type="button" size="sm" variant="outline" className="h-8 gap-1" onClick={hear}><Volume2 className="h-3.5 w-3.5" /> ▶</Button>
           {canEdit && <Button type="button" size="sm" variant="outline" className="h-8 gap-1" onClick={() => setEditing((v) => !v)} aria-label={t("speak.pronunciationSpoken")}><Pencil className="h-3.5 w-3.5" /></Button>}
+          {canEdit && <Button type="button" size="sm" variant="outline" className="h-8 gap-1" title="Wortteil" onClick={() => setPartOpen((v) => !v)}><Plus className="h-3.5 w-3.5" /><Puzzle className="h-3.5 w-3.5" /></Button>}
           {canEdit && <Button type="button" size="sm" variant="outline" className="h-8 gap-1" disabled={busy || !spoken.trim() || spoken.trim() === rule?.spoken} onClick={() => void save()}><Save className="h-3.5 w-3.5" /></Button>}
           {canEdit && rule && <Button type="button" size="sm" variant="outline" className="h-8" onClick={() => void remove()} aria-label={t("speak.pronunciationDelete", { name })}><Trash2 className="h-3.5 w-3.5" /></Button>}
         </div>
