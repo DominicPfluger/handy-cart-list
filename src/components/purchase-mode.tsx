@@ -176,7 +176,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     u.onend = () => { started = true; };
     uttRef.current = u;
     blockedRef.current = null;
-    try { synth.resume(); } catch { /* ignore */ }
+    if (!queued) { try { synth.resume(); } catch { /* ignore */ } }
     synth.speak(u);
     // Nur als blockiert merken, wenn die Ausgabe nachweislich nie gestartet ist.
     window.setTimeout(() => {
