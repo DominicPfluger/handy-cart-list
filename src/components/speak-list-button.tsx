@@ -65,7 +65,7 @@ export function speakSentences(sentences: string[], locale: string, rate: number
     u.lang = locale;
     if (withVoice && voice) u.voice = voice;
     u.rate = Math.min(2, Math.max(0.5, rate || 1));
-    if (i === 0) u.onstart = () => { started = true; };
+    u.onstart = () => { started = true; };
     if (i === list.length - 1) {
       u.onend = finish;
       u.onerror = (e) => {
@@ -94,13 +94,22 @@ export function speakSentences(sentences: string[], locale: string, rate: number
     try { synth.resume(); } catch { /* ignore */ }
     utts.forEach((u) => synth.speak(u));
     window.setTimeout(() => {
-      if (token === speakToken && !started && !synth.speaking) {
+      if (token === speakToken && !started && !synth.speaking && !synth.pending) {
         if (voice) retry(); else finish();
       }
-    }, 1500);
+    }, 2500);
   };
   // iOS Safari braucht speak() direkt in der Tipp-Geste; Chrome verwirft speak() direkt nach cancel().
-  if (busy && !isIOS) window.setTimeout(run, 120); else run();
+  if (isIOS) { run(); return; }
+  // Chrome liefert Stimmen erst asynchron: beim allerersten Aufruf kurz darauf warten.
+  if (!synth.getVoices().length) {
+    let done = false;
+    const go = () => { if (done) return; done = true; synth.removeEventListener?.("voiceschanged", go); run(); };
+    synth.addEventListener?.("voiceschanged", go);
+    window.setTimeout(go, 400);
+    return;
+  }
+  if (busy) window.setTimeout(run, 120); else run();
 }
 let activeUtterances: SpeechSynthesisUtterance[] = [];
 let speakToken = 0;
