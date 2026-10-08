@@ -5,7 +5,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { getLocale, translate } from "@/i18n";
+import { allLocales, getLocale, translate } from "@/i18n";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "./ai-image-options";
 import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
@@ -17,7 +17,7 @@ import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIco
 import { toast } from "sonner";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPrice, estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
-import { suggestCategoryProducts, suggestImagePrompt, translateVariants, suggestVariants } from "@/lib/admin.functions";
+import { suggestCategoryProducts, suggestImagePrompt, translateSingleName, translateVariants, suggestVariants } from "@/lib/admin.functions";
 import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-reference-prices";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1429,6 +1429,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </div>
         )}
         {!p.imageOnly && !isDept && item && <ProductPronunciationEditor name={item.name} />}
+        {!p.imageOnly && item && effId && (
+          <SheetTranslations kind={isDept ? "department" : "product"} id={isDept ? effId : (prod?.product_id ?? effId)} baseName={item.name} />
+        )}
         {!p.imageOnly && !isDept && (
           <div className="space-y-2">
             <h3 className="text-sm font-semibold text-foreground">{T("tile.priceEstimate")}</h3>
