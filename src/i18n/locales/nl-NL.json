@@ -1455,5 +1455,6 @@
   "purchase.note": "Notitie",
   "common.addedToNamedList": "{name} toegevoegd aan ‘{list}’",
   "purchase.deptAnnounce": "Volgende afdeling: {dept}.",
+  "purchase.allDoneSpoken": "Super, alles klaar! Je boodschappen zijn compleet.",
   "tile.replaceIconConfirm": "Ook het kleine pictogram vervangen door de nieuwe afbeelding?\n\nOK = vervangen · Annuleren = huidig pictogram behouden"
 }
