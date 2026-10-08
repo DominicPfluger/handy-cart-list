@@ -55,6 +55,10 @@ export function usePronunciationRules(): PronunciationRule[] {
   return useSyncExternalStore(subscribe, snapshot, () => EMPTY);
 }
 
+export function getPronunciationRules(): PronunciationRule[] {
+  return snapshot();
+}
+
 export function savePronunciationRules(rules: PronunciationRule[]) {
   window.localStorage.setItem(STORAGE_KEY, JSON.stringify(rules));
   cachedRaw = undefined;

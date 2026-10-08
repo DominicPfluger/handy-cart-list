@@ -53,20 +53,65 @@ const SPOKEN: Record<string, Record<string, [string, string]>> = {
   },
 };
 
+const FALLBACK_UNIT: Record<string, [string, string]> = {
+  de: ["Einheit", "Einheiten"], en: ["unit", "units"], fr: ["unité", "unités"],
+  es: ["unidad", "unidades"], it: ["unità", "unità"], pt: ["unidade", "unidades"], nl: ["eenheid", "eenheden"],
+};
+const PACKAGES: Record<string, [string, string]> = {
+  de: ["Packung", "Packungen"], en: ["pack", "packs"], fr: ["paquet", "paquets"],
+  es: ["paquete", "paquetes"], it: ["confezione", "confezioni"], pt: ["pacote", "pacotes"], nl: ["pak", "pakken"],
+};
+const PER_WORD: Record<string, string> = { de: "à", en: "of", fr: "de", es: "de", it: "da", pt: "de", nl: "van" };
+const UNIT_ALIASES: Record<string, string> = {
+  "stk": "stueck", "stk.": "stueck", "stück": "stueck", "stueck": "stueck",
+  "g": "gramm", "gr": "gramm", "gramm": "gramm", "kg": "kilogramm", "kilogramm": "kilogramm",
+  "mg": "milligramm", "milligramm": "milligramm", "ml": "milliliter", "milliliter": "milliliter",
+  "dl": "deziliter", "deziliter": "deziliter", "l": "liter", "lt": "liter", "liter": "liter",
+  "pkg": "packung", "pkg.": "packung", "packung": "packung",
+};
+
+function numberText(n: number, locale: string): string {
+  return new Intl.NumberFormat(locale, { maximumFractionDigits: 3 }).format(n);
+}
+
+function wordForm(forms: [string, string], n: number, locale: string): string {
+  let word = new Intl.PluralRules(locale).select(n) === "one" ? forms[0] : forms[1];
+  if (locale === "de-CH") word = word.replace(/ß/g, "ss");
+  return word;
+}
+
+function unitFromText(text: string): string | undefined {
+  return UNIT_ALIASES[text.trim().toLocaleLowerCase()];
+}
+
 /** "2 Flaschen" / "2 bottles" – Menge ausgeschrieben in der Vorlese-Sprache. */
 export function speakQuantity(stored: string, unit: string | undefined, locale: string): string {
-  const m = /^\s*([\d.,]+)/.exec(stored);
+  const language = locale.slice(0, 2);
+  const compound = /^\s*([\d.,]+)\s*[x×]\s*([\d.,]+)\s*([^\d\s]+)\s*$/iu.exec(stored);
+  if (compound) {
+    const packs = Number(compound[1]?.replace(",", "."));
+    const inner = Number(compound[2]?.replace(",", "."));
+    const innerUnit = unitFromText(compound[3] ?? "") ?? unit;
+    if (Number.isFinite(packs) && Number.isFinite(inner)) {
+      const packForms = PACKAGES[language] ?? PACKAGES.en;
+      const per = PER_WORD[language] ?? PER_WORD.en;
+      return `${numberText(packs, locale)} ${wordForm(packForms, packs, locale)} ${per} ${speakQuantity(String(inner), innerUnit, locale)}`;
+    }
+  }
+  const m = /^\s*([\d.,]+)\s*(.*?)\s*$/.exec(stored);
   if (!m) return stored;
   const n = Number(m[1]!.replace(",", "."));
   if (!Number.isFinite(n)) return stored;
-  const num = new Intl.NumberFormat(locale, { maximumFractionDigits: 3 }).format(n);
-  if (!unit) return num;
-  const forms = SPOKEN[locale.slice(0, 2)]?.[unit];
-  if (forms) {
-    const one = new Intl.PluralRules(locale).select(n) === "one";
-    let word = one ? forms[0] : forms[1];
-    if (locale === "de-CH") word = word.replace(/ß/g, "ss");
-    return `${num} ${word}`;
+  const num = numberText(n, locale);
+  const resolvedUnit = unit ?? unitFromText(m[2] ?? "");
+  if (!resolvedUnit) {
+    if (m[2]?.trim()) return `${num} ${m[2].trim()}`;
+    const fallback = FALLBACK_UNIT[language] ?? FALLBACK_UNIT.en;
+    return `${num} ${wordForm(fallback, n, locale)}`;
   }
-  return `${num} ${unitLabel(unit, locale)}`;
+  const forms = SPOKEN[language]?.[resolvedUnit];
+  if (forms) {
+    return `${num} ${wordForm(forms, n, locale)}`;
+  }
+  return `${num} ${unitLabel(resolvedUnit, locale)}`;
 }
