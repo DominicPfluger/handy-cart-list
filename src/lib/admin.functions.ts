@@ -1028,3 +1028,34 @@ export const suggestProductVariants = createServerFn({ method: "POST" })
     }
     return { variants: out.slice(0, 16) };
   });
+
+/** Übersetzt die deutschen Synonyme eines Produkts per KI in alle Zielsprachen (bestehende bleiben). */
+export const translateProductSynonyms = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ productId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { translateNames } = await import("./translate.server");
+    const sb = context.supabase;
+    const { data: rows, error } = await sb.from("product_synonyms").select("locale, term").eq("product_id", data.productId);
+    if (error) throw new Error(error.message);
+    const all = (rows ?? []) as Array<{ locale: string; term: string }>;
+    const src = all.filter((r) => r.locale.startsWith("de"));
+    if (!src.length) return { added: 0 };
+    const names: Record<string, string> = {};
+    src.forEach((r, i) => { names[`s${i}`] = r.term; });
+    const locales = (await targetLocales(sb)).filter((l) => l !== "de-DE");
+    let added = 0;
+    await Promise.all(locales.map(async (locale) => {
+      const have = new Set(all.filter((r) => r.locale === locale).map((r) => r.term.toLowerCase()));
+      const out = await translateNames(names, locale);
+      const terms = [...new Set(Object.values(out).map((t) => t.trim()).filter(Boolean))].filter((t) => !have.has(t.toLowerCase()));
+      if (!terms.length) return;
+      const { error: e } = await sb.from("product_synonyms").upsert(
+        terms.map((term) => ({ product_id: data.productId, locale, term })),
+        { onConflict: "product_id,locale,lower(term)", ignoreDuplicates: true },
+      );
+      if (!e) added += terms.length;
+    }));
+    return { added };
+  });
