@@ -165,7 +165,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     try { window.localStorage.setItem(SPEAK_KEY, next ? "1" : "0"); } catch { /* ignore */ }
     if (!next) { try { window.speechSynthesis?.cancel(); } catch { /* ignore */ } }
     // Direkt in der Klick-Geste sprechen (Safari/iOS gibt Sprachausgabe nur so frei).
-    else if (current) { try { window.speechSynthesis.cancel(); speakNow(current.spoken); } catch { /* ignore */ } }
+    else if (current) { try { window.speechSynthesis.cancel(); lastDeptRef.current = null; speakNow(withDept(current)); } catch { /* ignore */ } }
   };
 
   return (
