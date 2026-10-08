@@ -912,7 +912,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [picking, setPicking] = useState(false);
   const [newId, setNewId] = useState<string | null>(null);
   // Kategorie-Wahl beim Anlegen eines neuen Produkts (Vorauswahl: aktuell geöffnete Kategorie)
-  const [newDept, setNewDept] = useState<string>(prod?.department_id ?? p.cur ?? "");
+  const [newDept, setNewDept] = useState<string>((prod?.alias_id ? p.cur : prod?.department_id) ?? p.cur ?? "");
   const newDeptOpts = (() => {
     const byId = new Map(p.depts.map((d) => [d.id, d]));
     const label = (id: string) => {
@@ -1320,10 +1320,10 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </details>
           </IconCollapse>
         )}
-        {!p.imageOnly && !isDept && !prod?.alias_id && (
+        {!p.imageOnly && !isDept && (
           <label className="flex items-center gap-2 text-sm">
             <span className="shrink-0 text-muted-foreground">{T("adm.category")}</span>
-            <select aria-label={T("adm.category")} value={newDept || prod?.department_id || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
+            <select aria-label={T("adm.category")} value={newDept || (prod?.alias_id ? p.cur : prod?.department_id) || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
               {newDeptOpts.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
             </select>
           </label>
