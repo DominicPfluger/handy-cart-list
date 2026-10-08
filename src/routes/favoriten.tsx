@@ -4,6 +4,7 @@ import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useFavoriteOrder, saveFavoriteOrder } from "../hooks/use-item-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
+import { useListChoiceGate } from "../components/list-choice-gate";
 import { Button } from "../components/ui/button";
 import { BoltIcon, HeartIcon, PlusIcon, SearchIcon } from "../components/icons";
 import { catalogListName, useShoppingList, type FavoriteProduct, type ListItem } from "../hooks/use-shopping-list";
@@ -278,6 +279,10 @@ function FavoritesPage() {
     toast.success(activeList?.name ? t("common.addedToNamedList", { name, list: activeList.name }) : t("common.addedToList", { name }));
   };
 
+  const quickAddRef = useRef(quickAdd);
+  quickAddRef.current = quickAdd;
+  const { gate, dialog: listChoiceDialog } = useListChoiceGate();
+
   const removeFavorite = (row: FavRow) => {
     toggleFavorite({
       productId: row.favorite.productId,
@@ -385,7 +390,7 @@ function FavoritesPage() {
           variant="ghost"
           size="icon"
           aria-label={t("common.quickAdd", { name: displayName(row) })}
-          onClick={() => quickAdd(row)}
+          onClick={() => gate(() => quickAddRef.current(row))}
           className="h-8 w-8 rounded-full text-muted-foreground"
         >
           <BoltIcon className="h-3.5 w-3.5" />
@@ -394,7 +399,7 @@ function FavoritesPage() {
           type="button"
           size="icon"
           aria-label={t("common.addWithQty", { name: displayName(row) })}
-          onClick={() => setSelected(row)}
+          onClick={() => gate(() => setSelected(row))}
           className="h-8 w-8 rounded-full shadow-none"
         >
           <PlusIcon className="h-3.5 w-3.5" />
@@ -577,6 +582,7 @@ function FavoritesPage() {
         </div>
       )}
 
+      {listChoiceDialog}
       <CatalogProductDialog
         product={selected ? selected.product : null}
         groupLabel={selected ? groupOfRow(selected)?.name ?? selected.favorite.groupLabel : undefined}

@@ -4,6 +4,7 @@ import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useProductOrder } from "../hooks/use-product-order";
 import { toast } from "sonner";
 import { CatalogProductDialog } from "../components/catalog-product-dialog";
+import { useListChoiceGate } from "../components/list-choice-gate";
 import { usePreferredDept } from "../hooks/use-preferred-dept";
 import { Button } from "../components/ui/button";
 import { BoltIcon, HeartIcon, PencilIcon, PlusIcon, ScanIcon, SearchIcon, TrashIcon } from "../components/icons";
@@ -444,6 +445,9 @@ function DepartmentsPage() {
     });
     toast.success(activeList?.name ? t("common.addedToNamedList", { name, list: activeList.name }) : t("common.addedToList", { name }));
   };
+  const quickAddRef = useRef(quickAdd);
+  quickAddRef.current = quickAdd;
+  const { gate, dialog: listChoiceDialog } = useListChoiceGate();
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const toggleExpanded = (id: string) => {
     setExpandedId((previous) => previous === id ? null : id);
@@ -700,7 +704,7 @@ function DepartmentsPage() {
                     variant="ghost"
                     size="icon"
                     aria-label={t("common.quickAdd", { name: product.name })}
-                    onClick={() => quickAdd(product, group)}
+                    onClick={() => gate(() => quickAddRef.current(product, group))}
                     className="h-8 w-8 rounded-full text-muted-foreground"
                   >
                     <BoltIcon className="h-3.5 w-3.5" />
@@ -709,7 +713,7 @@ function DepartmentsPage() {
                     type="button"
                     size="icon"
                     aria-label={t("common.addWithQty", { name: product.name })}
-                    onClick={() => { setSelectedBrand(normalizedQuery ? matchedBrand(product) : undefined); setSelectedVariant(undefined); setSelectedProduct(product); }}
+                    onClick={() => { const b = normalizedQuery ? matchedBrand(product) : undefined; gate(() => { setSelectedBrand(b); setSelectedVariant(undefined); setSelectedProduct(product); }); }}
                     className="h-8 w-8 rounded-full shadow-none"
                   >
                     <PlusIcon className="h-3.5 w-3.5" />
@@ -760,7 +764,7 @@ function DepartmentsPage() {
                               variant="ghost"
                               size="icon"
                               aria-label={t("common.quickAdd", { name: `${product.name} · ${vName}` })}
-                              onClick={() => quickAdd(product, group, v)}
+                              onClick={() => gate(() => quickAddRef.current(product, group, v))}
                               className="h-8 w-8 rounded-full text-muted-foreground"
                             >
                               <BoltIcon className="h-3.5 w-3.5" />
@@ -769,7 +773,7 @@ function DepartmentsPage() {
                               type="button"
                               size="icon"
                               aria-label={t("common.addWithQty", { name: `${product.name} · ${vName}` })}
-                              onClick={() => { setSelectedBrand(undefined); setSelectedVariant(v); setSelectedProduct(product); }}
+                              onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v); setSelectedProduct(product); })}
                               className="h-8 w-8 rounded-full shadow-none"
                             >
                               <PlusIcon className="h-3.5 w-3.5" />
@@ -842,6 +846,7 @@ function DepartmentsPage() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      {listChoiceDialog}
       <CatalogProductDialog
         product={selectedProduct}
         groupLabel={selectedProduct ? groupFor(selectedProduct)?.name : undefined}
