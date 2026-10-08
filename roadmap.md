@@ -17,6 +17,8 @@
 - [x] Läden-Bereich in «Abteilungen ordnen & umbenennen» zugeklappt (Auf-/Zuklappen per Klick; Deep-Link ?catOrder=1 öffnet ihn mit) — getestet
 - [x] Rezept-Generator: Länderküchen-Chips beim Aufklappen inline direkt nach dem «Länderküche»-Knopf in derselben Reihe (Schnellwahl-Knöpfe darunter) — getestet
 - Admin-Katalog: «Kategorien & Produkte anlegen» auch auf oberster Ebene (Hauptkategorien), Knopf + createTree ohne geöffnete Kategorie
+- [x] Abteilungsansicht: Alias-Kategorien in der Farbe der Oberkategorie, unter der sie eingeordnet sind (auch beim HineinNavigieren) — getestet
+- [x] Einkaufsmodus: Produktvariante gross direkt neben der Produktbezeichnung (gleiche Schriftgrösse/-art, grün) — getestet
 
 ## Offen
 - [x] Einstellungen: alle Kategorie- und Produktbilder inklusive WebP-Icons auf das Gerät vorladen

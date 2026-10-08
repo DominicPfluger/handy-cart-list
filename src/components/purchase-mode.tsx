@@ -66,6 +66,10 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   const done = items.filter((i) => i.checked).length;
   const allDone = !current;
   const lastDone = [...doneStack].reverse().find((id) => items.some((i) => i.id === id && i.checked));
+  // Variante (bzw. Zusatz) steht im Namen hinter „ · " und wird gross neben dem Produktnamen angezeigt.
+  const nameCut = current?.name.indexOf(" · ") ?? -1;
+  const baseName = current ? (nameCut >= 0 ? current.name.slice(0, nameCut) : current.name) : "";
+  const variantName = current && nameCut >= 0 ? current.name.slice(nameCut + 3) : "";
 
   // Bildschirm aktiv halten, solange der Kaufmodus offen ist.
   useEffect(() => {
@@ -290,11 +294,10 @@ export function PurchaseMode({ items, onToggle, onClose }: {
               )}
             </div>
             <div className="flex flex-col items-center gap-2">
-              <p className="break-words text-3xl font-bold leading-tight text-foreground">{(() => { const k = current.name.indexOf(" · "); return k >= 0 ? current.name.slice(0, k) : current.name; })()}</p>
+              <p className="break-words text-3xl font-bold leading-tight text-foreground">{baseName}{variantName && <span className="text-primary"> {variantName}</span>}</p>
               {current.quantity && <p className="text-lg font-medium text-muted-foreground">{current.quantity}</p>}
               <div className="flex flex-wrap justify-center gap-2">
                 {current.organic && <span className="rounded-full bg-primary-soft px-3 py-1 text-sm font-semibold text-primary">🌱 {t("purchase.organic")}</span>}
-                {current.name.includes(" · ") && <span className="rounded-full border border-border px-3 py-1 text-sm font-medium text-foreground">{current.name.slice(current.name.indexOf(" · ") + 3)}</span>}
               </div>
               {current.note && (
                 <p className="max-w-xs rounded-xl bg-muted px-4 py-2 text-base text-foreground"><span aria-hidden="true">📝 </span><span className="sr-only">{t("purchase.note")}: </span>{current.note}</p>

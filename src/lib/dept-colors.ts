@@ -40,15 +40,22 @@ export function isNonFoodRootName(name: string): boolean {
   return NON_FOOD_ROOTS.has(name);
 }
 
-/** Wurzelkategorie einer Kategorie ermitteln (steigt den parentId-Baum hinauf). */
+/**
+ * Wurzelkategorie einer Kategorie ermitteln (steigt den parentId-Baum hinauf).
+ * aliasVia (deptId → Alias-Oberkategorie) lässt eine Kategorie über die
+ * Alias-Einordnung laufen, sodass sie die Farbe der Oberkategorie erbt,
+ * unter der sie gerade angezeigt wird.
+ */
 export function rootOf(
   department: CatalogDepartment,
   byId: Map<string, CatalogDepartment>,
+  aliasVia?: Record<string, string>,
 ): CatalogDepartment {
   let current = department;
   let guard = 0;
   while (current.parentId && guard++ < 20) {
-    const parent = byId.get(current.parentId);
+    const via = aliasVia?.[current.id];
+    const parent = via ? byId.get(via) : byId.get(current.parentId);
     if (!parent) break;
     current = parent;
   }
@@ -63,8 +70,9 @@ export function rootOf(
 export function deptColor(
   department: CatalogDepartment,
   byId: Map<string, CatalogDepartment>,
+  aliasVia?: Record<string, string>,
 ): string | undefined {
-  return ROOT_COLORS[rootOf(department, byId).baseName];
+  return ROOT_COLORS[rootOf(department, byId, aliasVia).baseName];
 }
 
 /** Farbe anhand des deutschen Namens der Wurzelkategorie (z. B. für den Admin-Bereich). */
@@ -104,7 +112,8 @@ export function deptColorByLabel(label: string | undefined): string | undefined 
 export function deptColorStrong(
   department: CatalogDepartment,
   byId: Map<string, CatalogDepartment>,
+  aliasVia?: Record<string, string>,
 ): string | undefined {
-  const c = deptColor(department, byId);
+  const c = deptColor(department, byId, aliasVia);
   return c ? c.replace(")", "-strong)") : undefined;
 }
