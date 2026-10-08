@@ -75,7 +75,7 @@ export function StandardVariantsPanel() {
           </ul>
         </SortableContext>
       </DndContext>
-      {translating && <VariantTranslateDialog v={translating} onClose={() => setTranslating(null)} onSaved={async () => { setTranslating(null); await refresh(); }} />}
+      {translating && <VariantTranslateDialog v={translating} onRename={rename} onClose={() => setTranslating(null)} onSaved={async () => { setTranslating(null); await refresh(); }} />}
     </div>
   );
 }
@@ -99,7 +99,7 @@ function Row({ v, onRename, onRemove, onTranslate }: { v: StandardVariant; onRen
           <Button type="button" variant="outline" size="sm" className="h-7 gap-1 px-2" aria-label={t("stdv.translate")} title={t("stdv.translate")} onClick={() => onTranslate(v)}>
             <Languages className="h-3.5 w-3.5" />{translated > 0 && <span className="text-xs">{translated}</span>}
           </Button>
-          <Button type="button" variant="outline" size="icon" className="h-7 w-7" aria-label={t("stdv.rename")} onClick={() => setEdit(v.name)}><Pencil className="h-3.5 w-3.5" /></Button>
+          <Button type="button" variant="outline" size="icon" className="h-7 w-7" aria-label={t("stdv.rename")} onClick={() => onTranslate(v)}><Pencil className="h-3.5 w-3.5" /></Button>
           <Button type="button" variant="outline" size="icon" className="h-7 w-7 text-destructive" aria-label={t("stdv.delete")} onClick={() => onRemove(v)}><Trash2 className="h-3.5 w-3.5" /></Button>
         </>
       ) : (
@@ -114,13 +114,14 @@ function Row({ v, onRename, onRemove, onTranslate }: { v: StandardVariant; onRen
   );
 }
 
-function VariantTranslateDialog({ v, onClose, onSaved }: { v: StandardVariant; onClose: () => void; onSaved: () => void }) {
+function VariantTranslateDialog({ v, onClose, onSaved, onRename }: { v: StandardVariant; onClose: () => void; onSaved: () => void; onRename: (v: StandardVariant, n: string) => Promise<boolean> }) {
   const { t } = useT();
   const locales = useAllLocales();
   const translateFn = useServerFn(translateVariantName);
   const [draft, setDraft] = useState<Record<string, string>>(() =>
     Object.fromEntries(locales.map((l) => [l.id, v.labels?.[l.id] ?? (l.id.startsWith("de") ? v.name : "")])),
   );
+  const [baseName, setBaseName] = useState(v.name);
   const [busy, setBusy] = useState(false);
 
   const fillAi = async () => {
@@ -139,6 +140,9 @@ function VariantTranslateDialog({ v, onClose, onSaved }: { v: StandardVariant; o
   };
 
   const save = async () => {
+    const n = baseName.trim();
+    if (!n) return;
+    if (n !== v.name && !(await onRename(v, n))) return;
     setBusy(true);
     const labels: Record<string, string> = {};
     for (const [loc, val] of Object.entries(draft)) {
@@ -155,6 +159,7 @@ function VariantTranslateDialog({ v, onClose, onSaved }: { v: StandardVariant; o
     <Dialog open onOpenChange={(o) => { if (!o) onClose(); }}>
       <DialogContent className="flex max-h-[85vh] max-w-lg flex-col overflow-hidden">
         <DialogHeader><DialogTitle>{t("stdv.translateTitle", { name: v.name })}</DialogTitle></DialogHeader>
+        <Input value={baseName} onChange={(e) => setBaseName(e.target.value)} maxLength={60} aria-label={t("stdv.rename")} />
         <div className="min-h-0 flex-1 overflow-y-auto">
           {locales.map((l) => (
             <div key={l.id} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] items-center gap-2 px-1 py-1">
