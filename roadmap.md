@@ -18,7 +18,7 @@
 - Admin-Katalog: «Kategorien & Produkte anlegen» auch auf oberster Ebene (Hauptkategorien), Knopf + createTree ohne geöffnete Kategorie
 
 ## Offen
-- [ ] Einstellungen: alle Kategorie- und Produktbilder inklusive WebP-Icons auf das Gerät vorladen
+- [x] Einstellungen: alle Kategorie- und Produktbilder inklusive WebP-Icons auf das Gerät vorladen
 - [x] Sämtliche Dialoge per ESC abbrechen
 - [x] Alle Bilder (App + Katalog) skalieren und komprimieren
 - [x] Listeneinzelansicht: Bearbeiten nur Umbenennen, Laden, Vorlage, Löschen
