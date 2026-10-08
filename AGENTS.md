@@ -10,7 +10,7 @@
 <!-- LOVABLE:END -->
 - i18n: UI strings in `src/i18n/de.ts` + `messages.json`; catalog names in `catalog_translations` via `pickName` (de-CH ß→ss). Why: light store, no SSR mismatch.
 - Admin writes via RLS `has_role`; AI translation in `translate.server.ts`. Why: no service-role in app code.
-- Personal data device-only localStorage (custom names, hidden items, diet/cuisine selection, purchase history, `shoppi:product-dept`, `shoppi:speak-locale`). Why: shared catalog admin-controlled.
+- Personal data stays device-only. Why: shared catalog is admin-controlled.
 - User-created product variants are device-local and merged into catalog reads; only admins change shared variants. Why: shoppers can personalize products without altering the common catalog.
 - Diet filter: products.excluded_diets. Cuisine filter: `cuisines`+`product_cuisines`. Why: simple, editable.
 - Diet/cuisine filters exempt non-food roots via NON_FOOD_ROOTS/isNonFoodRootName in src/lib/dept-colors.ts (also hides admin cuisine picker). Why: non-food stays visible; one source of truth.
@@ -20,7 +20,7 @@
 - Recipe creator: step groups in one scrollable row with inline expandable ingredients; managed templates use only admin-assigned ingredients; steps edited beside the template in admin. Why: discoverable editing, no surprise defaults.
 - Aliases: `department_aliases`/`product_aliases` show items in extra places; data lives once; list category = list_items.group_label. Why: single source of truth.
 - Variant favorites retain their composite favorite key while resolving the base catalog product for category, imagery, and list transfers. Why: keep variant identity without losing catalog placement.
-- Read-aloud: chosen locale + admin templates; pronunciation rules are local. Why: tune speech without renaming catalog items.
+- Read-aloud: locale, templates and pronunciation rules are admin-managed. Why: consistent speech without catalog renaming.
 - Recipe folders nest via recipe_folders.parent_id (DB trigger blocks cycles); deleting a folder moves its recipes and subfolders up one level. Why: themed sorting without data loss.
 - Recipe cuisines are explicit, optional many-to-many recipe assignments, independent of the device-local ingredient cuisine filter. Why: shared recipe search must not infer cuisines from personal ingredient preferences.
 

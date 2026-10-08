@@ -28,9 +28,9 @@ export function missingVoice(locale: string): boolean {
 
 /** Kürzel, die die deutsche Sprachausgabe ausschreiben soll. */
 export function expandAbbreviations(text: string, locale: string): string {
-  const personalized = applyPronunciationRules(text, locale, getPronunciationRules());
-  if (!locale.toLowerCase().startsWith("de")) return personalized;
-  return personalized
+  const corrected = applyPronunciationRules(text, locale, getPronunciationRules());
+  if (!locale.toLowerCase().startsWith("de")) return corrected;
+  return corrected
     .replace(/\bStk\.?/g, "Stück")
     .replace(/\bPkg\.?/g, "Packung")
     // „1 Stück“ natürlich als „ein Stück“ statt „eins Stück“ sprechen.

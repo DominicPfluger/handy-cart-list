@@ -1044,6 +1044,30 @@ export type Database = {
           },
         ]
       }
+      pronunciation_rules: {
+        Row: {
+          created_at: string
+          id: string
+          locale: string
+          spoken: string
+          written: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          locale: string
+          spoken: string
+          written: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          locale?: string
+          spoken?: string
+          written?: string
+        }
+        Relationships: []
+      }
       push_subscriptions: {
         Row: {
           created_at: string

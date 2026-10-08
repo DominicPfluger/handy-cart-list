@@ -15,6 +15,7 @@ import { initFontSize } from "../hooks/use-font-size";
 import { initTheme } from "../hooks/use-theme";
 import { loadUnits, useUnitsVersion } from "../lib/units";
 import { loadDiets } from "../hooks/use-diet-filter";
+import { usePronunciationRules } from "../lib/pronunciation-rules";
 import type { MessageKey } from "../i18n/de";
 
 import appCss from "../styles.css?url";
@@ -185,6 +186,7 @@ function RootComponent() {
   const isAdmin = useRouterState({ select: (s) => s.location.pathname.startsWith("/admin") });
   return (
     <QueryClientProvider client={queryClient}>
+      <PronunciationRulesLoader />
       <div className={`relative mx-auto min-h-screen w-full bg-background ${isAdmin ? "max-w-[440px] md:max-w-5xl xl:max-w-7xl md:px-4" : "max-w-[440px]"}`}>
         <main className="px-5 pb-36 pt-5">
           <Outlet />
@@ -197,4 +199,9 @@ function RootComponent() {
       </div>
     </QueryClientProvider>
   );
+}
+
+function PronunciationRulesLoader() {
+  usePronunciationRules();
+  return null;
 }
