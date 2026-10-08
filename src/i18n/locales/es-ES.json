@@ -1456,5 +1456,7 @@
   "common.addedToNamedList": "{name} añadido a «{list}»",
   "purchase.deptAnnounce": "Siguiente sección: {dept}.",
   "purchase.allDoneSpoken": "¡Genial, todo listo! Tu compra está completa.",
-  "tile.replaceIconConfirm": "¿Reemplazar también el icono pequeño con la nueva imagen?\n\nAceptar = reemplazar · Cancelar = conservar icono"
+  "tile.replaceIconConfirm": "¿Reemplazar también el icono pequeño con la nueva imagen?\n\nAceptar = reemplazar · Cancelar = conservar icono",
+  "listPick.title": "¿En qué lista?",
+  "listPick.sub": "Elige la lista de compras para esta sesión."
 }
