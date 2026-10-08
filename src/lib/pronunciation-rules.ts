@@ -1,4 +1,5 @@
-import { useSyncExternalStore } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface PronunciationRule {
   id: string;
@@ -7,69 +8,32 @@ export interface PronunciationRule {
   spoken: string;
 }
 
-const STORAGE_KEY = "shoppi:pronunciation-rules";
-const EVENT = "shoppi:pronunciation-rules-changed";
 const EMPTY: PronunciationRule[] = [];
+export const pronunciationRulesQueryKey = ["pronunciation-rules"];
+let cachedRules: PronunciationRule[] = EMPTY;
 
-function readRules(): PronunciationRule[] {
-  if (typeof window === "undefined") return EMPTY;
-  try {
-    const parsed = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "[]") as unknown;
-    if (!Array.isArray(parsed)) return EMPTY;
-    return parsed.filter((rule): rule is PronunciationRule => {
-      if (!rule || typeof rule !== "object") return false;
-      const candidate = rule as Partial<PronunciationRule>;
-      return typeof candidate.id === "string"
-        && typeof candidate.locale === "string"
-        && typeof candidate.written === "string"
-        && typeof candidate.spoken === "string";
-    });
-  } catch {
-    return EMPTY;
-  }
-}
-
-let cachedRaw: string | null | undefined;
-let cachedRules = EMPTY;
-
-function snapshot(): PronunciationRule[] {
-  if (typeof window === "undefined") return EMPTY;
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (raw === cachedRaw) return cachedRules;
-  cachedRaw = raw;
-  cachedRules = readRules();
-  return cachedRules;
-}
-
-function subscribe(callback: () => void) {
-  const notify = () => callback();
-  window.addEventListener(EVENT, notify);
-  window.addEventListener("storage", notify);
-  return () => {
-    window.removeEventListener(EVENT, notify);
-    window.removeEventListener("storage", notify);
-  };
-}
-
-export function usePronunciationRules(): PronunciationRule[] {
-  return useSyncExternalStore(subscribe, snapshot, () => EMPTY);
+export function usePronunciationRules() {
+  return useQuery({
+    queryKey: pronunciationRulesQueryKey,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("pronunciation_rules").select("id, locale, written, spoken").order("written");
+      if (error) throw error;
+      cachedRules = (data ?? []) as PronunciationRule[];
+      return cachedRules;
+    },
+    staleTime: 5 * 60_000,
+  });
 }
 
 export function getPronunciationRules(): PronunciationRule[] {
-  return snapshot();
-}
-
-export function savePronunciationRules(rules: PronunciationRule[]) {
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(rules));
-  cachedRaw = undefined;
-  window.dispatchEvent(new Event(EVENT));
+  return cachedRules;
 }
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/** Ersetzt persönliche Schreibweisen nur für die Sprachausgabe, nie in der sichtbaren Produktbezeichnung. */
+/** Ersetzt zentral verwaltete Schreibweisen nur für die Sprachausgabe, nie im sichtbaren Produktnamen. */
 export function applyPronunciationRules(text: string, locale: string, rules: PronunciationRule[]): string {
   const applicable = rules
     .filter((rule) => rule.locale === locale && rule.written.trim() && rule.spoken.trim())

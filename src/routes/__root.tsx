@@ -15,6 +15,7 @@ import { initFontSize } from "../hooks/use-font-size";
 import { initTheme } from "../hooks/use-theme";
 import { loadUnits, useUnitsVersion } from "../lib/units";
 import { loadDiets } from "../hooks/use-diet-filter";
+import { usePronunciationRules } from "../lib/pronunciation-rules";
 import type { MessageKey } from "../i18n/de";
 
 import appCss from "../styles.css?url";
@@ -175,6 +176,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   useEffect(() => { initLocale(); initFontSize(); initTheme(); void loadUnits(); void loadDiets(); }, []);
   useUnitsVersion();
+  usePronunciationRules();
   // Offline-Fähigkeit: Service Worker im Browser registrieren
   useEffect(() => {
     import("virtual:pwa-register")

@@ -40,7 +40,6 @@ import { InstallAppRow } from "../components/install-app-row";
 import { CategoryOrderSettings } from "../components/category-order-settings";
 import { AppUpdateRow } from "../components/app-update-row";
 import { UserUnitsSettings } from "../components/user-units-settings";
-import { PronunciationRulesSettings } from "../components/pronunciation-rules-settings";
 
 export const Route = createFileRoute("/mehr")({
   ssr: false,
@@ -259,7 +258,6 @@ function MorePage() {
         <FontSizeRow />
         <SpeakLocaleRow />
         <SpeakRateRow />
-        <PronunciationRulesSettings />
       </section>
 
       {isAdmin && (

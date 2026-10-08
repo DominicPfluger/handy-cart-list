@@ -1463,9 +1463,11 @@
   "listPick.title": "Which list?",
   "listPick.sub": "Choose the shopping list for this session.",
   "speak.pronunciation": "Product name pronunciation",
-  "speak.pronunciationSub": "Set custom pronunciations for speech output only",
+  "speak.pronunciationSub": "Set central pronunciations for all users",
   "speak.pronunciationWritten": "Product name",
   "speak.pronunciationSpoken": "Pronounce as",
   "speak.pronunciationAdd": "Add pronunciation rule",
-  "speak.pronunciationDelete": "Delete pronunciation rule for {name}"
+  "speak.pronunciationDelete": "Delete pronunciation rule for {name}",
+  "speak.pronunciationEmpty": "No pronunciation rules have been added for this language.",
+  "speak.pronunciationSaved": "Pronunciation rule saved"
 }
