@@ -94,6 +94,12 @@ export function LocaleRuleChips({ name, all, current, canEdit }: { name: string;
             onKeyDown={(e) => { if (e.key === "Enter") void save(); if (e.key === "Escape") setOpen(null); }}
             className="h-8 min-w-0 flex-1 rounded-md border border-input bg-background px-2 text-sm text-foreground outline-none focus:border-primary" />
           <Button type="button" size="sm" variant="outline" className="h-8 px-2" onClick={hear} aria-label="▶"><Volume2 className="h-3.5 w-3.5" /></Button>
+          {canEdit && variants.length > 1 && (
+            <Button type="button" size="sm" variant={allVariants ? "default" : "outline"} className="h-8 gap-1 px-2" title={t("speak.applyToVariants")} aria-label={t("speak.applyToVariants")} aria-pressed={allVariants} onClick={() => setAllVariants((v) => !v)}>
+              <Languages className="h-3.5 w-3.5" />
+              <span className="text-[11px]">{allVariants ? variants.map((v) => v.split("-")[1]).join("+") : variants.length + "×"}</span>
+            </Button>
+          )}
           {canEdit && <Button type="button" size="sm" variant="outline" className="h-8 px-2" disabled={busy || !spoken.trim() || spoken.trim() === rule?.spoken} onClick={() => void save()}><Save className="h-3.5 w-3.5" /></Button>}
           {canEdit && rule && <Button type="button" size="sm" variant="outline" className="h-8 px-2" onClick={() => void remove()} aria-label={t("speak.pronunciationDelete", { name })}><Trash2 className="h-3.5 w-3.5" /></Button>}
           <Button type="button" size="sm" variant="outline" className="h-8 px-2" onClick={() => setOpen(null)} aria-label="✕"><X className="h-3.5 w-3.5" /></Button>
