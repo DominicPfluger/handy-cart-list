@@ -3,10 +3,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { saveCuisine, deleteCuisine, suggestCuisineProducts } from "@/lib/admin.functions";
+import { saveCuisine, deleteCuisine, suggestCuisineProducts, translateSingleName } from "@/lib/admin.functions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getLocale, translate } from "@/i18n";
+import { allLocales, getLocale, translate } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -281,7 +281,65 @@ function CuisineDetail(p: { cuisine: Cuisine; busy: boolean; onBack: () => void;
         <Button className="flex-1" size="sm" disabled={p.busy || !name.trim()} onClick={() => p.onSave(name.trim(), emoji.trim() || null)}>{T("adm.save")}</Button>
         <Button size="sm" variant="destructive" disabled={p.busy} onClick={p.onDelete}>{T("adm.delete")}</Button>
       </div>
+      <CuisineTranslations id={p.cuisine.id} source={p.cuisine.name} />
       {p.children}
+    </div>
+  );
+}
+
+type TrRow = { locale: string; name: string; is_manual: boolean };
+
+function CuisineTranslations({ id, source }: { id: string; source: string }) {
+  const qc = useQueryClient();
+  const key = ["cuisine-tr", id];
+  const { data: rows = [] } = useQuery({
+    queryKey: key,
+    queryFn: async () => {
+      const { data } = await supabase.from("catalog_translations").select("locale, name, is_manual").eq("entity_id", id);
+      return (data ?? []) as TrRow[];
+    },
+  });
+  const byLoc = new Map(rows.map((r) => [r.locale, r]));
+  const saveTr = async (locale: string, value: string) => {
+    const v = value.trim();
+    if ((byLoc.get(locale)?.name ?? "") === v) return;
+    const { error } = v
+      ? await supabase.from("catalog_translations").upsert({ entity_type: "cuisine", entity_id: id, locale, name: v, is_manual: true }, { onConflict: "entity_type,entity_id,locale" })
+      : await supabase.from("catalog_translations").delete().eq("entity_id", id).eq("locale", locale);
+    if (error) { toast.error(error.message); return; }
+    await qc.invalidateQueries({ queryKey: key });
+    qc.invalidateQueries({ queryKey: ["catalog"] });
+  };
+  return (
+    <div className="space-y-1.5">
+      <h3 className="text-sm font-semibold text-foreground">{T("adm.languages")}</h3>
+      {allLocales().map((l) => (
+        <CuisineTrField key={l.id + (byLoc.get(l.id)?.name ?? "")} label={`${l.flag} ${l.id}`} locale={l.id} source={source}
+          value={byLoc.get(l.id)?.name ?? ""} manual={byLoc.get(l.id)?.is_manual} onSave={(v) => void saveTr(l.id, v)} />
+      ))}
+    </div>
+  );
+}
+
+function CuisineTrField({ label, locale, source, value, manual, onSave }: { label: string; locale: string; source: string; value: string; manual?: boolean | undefined; onSave: (v: string) => void }) {
+  const [v, setV] = useState(value);
+  const [busy, setBusy] = useState(false);
+  const trFn = useServerFn(translateSingleName);
+  const ai = async () => {
+    setBusy(true);
+    try {
+      const r = await trFn({ data: { name: `${source} (Küche)`, locale } });
+      const n = r.name.replace(/\s*\([^)]*\)\s*$/, "").trim();
+      if (n) { setV(n); onSave(n); } else toast.error(T("adm.aiTrEmpty"));
+    } catch (e) { toast.error((e as Error).message); } finally { setBusy(false); }
+  };
+  return (
+    <div className="grid grid-cols-[5.5rem_1fr_auto] items-center gap-2 text-xs">
+      <span className="text-muted-foreground">{label}</span>
+      <input aria-label={label} value={v} onChange={(e) => setV(e.target.value)} onBlur={() => onSave(v)}
+        onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
+        className={`min-w-0 rounded-lg border px-2 py-1.5 text-sm text-foreground outline-none focus:border-primary ${manual ? "border-primary bg-primary-soft/30" : "border-input bg-background"}`} />
+      <Button type="button" size="sm" variant="outline" disabled={busy} onClick={() => void ai()} title={T("adm.aiTrOne", { l: locale })} aria-label={T("adm.aiTrOne", { l: locale })} className="h-8 px-2">{busy ? "…" : "✨"}</Button>
     </div>
   );
 }
