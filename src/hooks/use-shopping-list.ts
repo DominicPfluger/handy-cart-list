@@ -299,6 +299,11 @@ function useLocalLists(): LocalListsApi {
       items,
       createdAt: Date.now(),
     };
+    // Sofort speichern: der Aufrufer navigiert direkt weiter.
+    try {
+      localStorage.setItem(LISTS_KEY, JSON.stringify([...localListsRef.current, list]));
+      localStorage.setItem(ACTIVE_KEY, list.id);
+    } catch { /* ignore */ }
     setLists((prev) => [...prev, list]);
     setActiveListId(list.id);
     return list.id;
@@ -469,17 +474,20 @@ function rowToItem(r: CloudRow): ListItem {
 
 function itemToCloudInput(it: ListItem, addedByName: string) {
   return {
-    productId: it.productId ?? null,
-    name: it.name,
+    productId: (() => {
+      const base = it.productId?.split("::")[0];
+      return base && /^[0-9a-f-]{36}$/i.test(base) ? base : null;
+    })(),
+    name: it.name.slice(0, 300),
     quantity: it.quantity ?? "",
     unit: it.unit ?? null,
     organic: !!it.organic,
     emoji: it.emoji ?? null,
-    imageUrl: it.imageUrl ?? null,
-    groupLabel: it.groupLabel ?? null,
-    groupEmoji: it.groupEmoji ?? null,
-    note: it.note ?? null,
-    addedByName,
+    imageUrl: it.imageUrl && it.imageUrl.length <= 500 && /^https?:/.test(it.imageUrl) ? it.imageUrl : null,
+    groupLabel: it.groupLabel?.slice(0, 120) ?? null,
+    groupEmoji: it.groupEmoji?.slice(0, 16) ?? null,
+    note: it.note?.slice(0, 500) ?? null,
+    addedByName: addedByName.slice(0, 80),
   };
 }
 
