@@ -50,10 +50,19 @@ const MARKET_CURRENCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR
 
 // Ladebildschirm nur beim ersten Start der App zeigen, nicht bei jedem Seitenwechsel.
 let splashShown = false;
+let landingDecided: boolean | null = null;
 
 export const Route = createFileRoute("/")({
   ssr: false,
-  loader: ({ context }) => ensureCatalog(context.queryClient, getLocale()),
+  // Katalog schon im Speicher → Listen sofort zeigen, Aktualisierung läuft im Hintergrund.
+  loader: ({ context }) => {
+    const loc = getLocale();
+    if (context.queryClient.getQueryData(catalogQueryOptions(loc).queryKey)) {
+      void context.queryClient.prefetchQuery(catalogQueryOptions(loc));
+      return;
+    }
+    return ensureCatalog(context.queryClient, loc).then(() => undefined);
+  },
   head: () => ({
     meta: [
       { title: "Shoppi — Unsere Einkaufsliste" },
@@ -687,10 +696,11 @@ function ListPage() {
 
 // Erster Besuch: Landingpage zeigen, danach direkt die Einkaufsliste.
 function LandingGate() {
-  const [decided, setDecided] = useState<boolean | null>(null);
+  const [decided, setDecided] = useState<boolean | null>(landingDecided);
 
   useEffect(() => {
-    setDecided(!shouldShowLanding());
+    landingDecided = !shouldShowLanding();
+    setDecided(landingDecided);
   }, []);
 
   if (decided === null) return <SplashScreen />;
@@ -699,6 +709,7 @@ function LandingGate() {
       <LandingPage
         onEnterApp={() => {
           markLandingDone();
+          landingDecided = true;
           setDecided(true);
         }}
       />
