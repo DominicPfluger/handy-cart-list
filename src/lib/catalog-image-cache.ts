@@ -1,6 +1,7 @@
 /** Store catalog artwork by its storage path, not by expiring signed URL. */
 const CACHE = "shoppi-catalog-artwork-v2";
-const MAX_ENTRIES = 2000;
+// Vollständiger Katalog inklusive grosser Bilder, 64-px-Icons und Variantenbilder.
+const MAX_ENTRIES = 20000;
 const MAX_AGE = 30 * 24 * 60 * 60 * 1000;
 const pending = new Map<string, Promise<Blob>>();
 
@@ -8,7 +9,12 @@ function key(path: string): string {
   return `${location.origin}/__shoppi-catalog-artwork/${encodeURIComponent(path)}`;
 }
 
-async function loadBlob(path: string, signedUrl?: string | null): Promise<Blob> {
+async function trimCache(cache: Cache): Promise<void> {
+  const keys = await cache.keys();
+  for (const old of keys.slice(0, Math.max(0, keys.length - MAX_ENTRIES))) await cache.delete(old);
+}
+
+async function loadBlob(path: string, signedUrl?: string | null, trim = true): Promise<Blob> {
   // CacheStorage works on ordinary browser visits as well as installed apps.
   const cache = "caches" in window ? await caches.open(CACHE).catch(() => null) : null;
   if (cache) {
@@ -29,8 +35,7 @@ async function loadBlob(path: string, signedUrl?: string | null): Promise<Blob> 
       await cache.put(key(path), new Response(blob, {
         headers: { "content-type": blob.type, "x-shoppi-saved": String(Date.now()) },
       }));
-      const keys = await cache.keys();
-      for (const old of keys.slice(0, Math.max(0, keys.length - MAX_ENTRIES))) await cache.delete(old);
+      if (trim) await trimCache(cache);
     } catch { /* Private mode or storage quota: still show the image. */ }
   }
   return blob;
@@ -81,11 +86,15 @@ export async function preloadCatalogImages(urls: Record<string, string>): Promis
   const worker = async () => {
     while (i < paths.length) {
       const path = paths[i++]!;
-      try { const t = pending.get(path) ?? loadBlob(path, urls[path]); await t; } catch { failed++; }
+      try { const t = pending.get(path) ?? loadBlob(path, urls[path], false); await t; } catch { failed++; }
       done++;
       emit({ done, failed });
     }
   };
   await Promise.all(Array.from({ length: 4 }, worker));
+  if ("caches" in window) {
+    const cache = await caches.open(CACHE).catch(() => null);
+    if (cache) await trimCache(cache).catch(() => {});
+  }
   emit({ running: false });
 }
