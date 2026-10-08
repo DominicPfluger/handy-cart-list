@@ -12,12 +12,16 @@ export interface SpeakGroup {
 }
 
 /** Liest Sätze mit passender Stimme der gewünschten Sprache vor. */
+const NOVELTY = /bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|albert|fred|junior|ralph|kathy|grandma|grandpa|eddy|flo|reed|rocko|sandy|shelley/i;
 export function findVoice(locale: string): SpeechSynthesisVoice | undefined {
-  const voices = window.speechSynthesis.getVoices();
+  const voices = window.speechSynthesis.getVoices().filter((v) => !NOVELTY.test(v.name));
   const norm = (l: string) => l.replace("_", "-").toLowerCase();
   const lang = locale.slice(0, 2).toLowerCase();
-  return voices.find((v) => norm(v.lang) === locale.toLowerCase())
-    ?? voices.find((v) => norm(v.lang).split("-")[0] === lang);
+  // Lokale Stimmen bevorzugen: Netzwerkstimmen (z. B. Google) starten oft nicht oder brechen ab.
+  const rank = (v: SpeechSynthesisVoice) => (v.localService ? 0 : 2) + (v.default ? 0 : 1);
+  const pick = (list: SpeechSynthesisVoice[]) => list.sort((a, b) => rank(a) - rank(b))[0];
+  return pick(voices.filter((v) => norm(v.lang) === locale.toLowerCase()))
+    ?? pick(voices.filter((v) => norm(v.lang).split("-")[0] === lang));
 }
 
 /** true wenn Stimmen geladen sind, aber keine zur Sprache passt. */
