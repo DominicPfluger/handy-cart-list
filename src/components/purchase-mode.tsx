@@ -60,7 +60,9 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   const doneItem = viewDone ? items.find((i) => i.id === viewDone && i.checked) : undefined;
   const current = doneItem ?? seq[safePos];
   const nextItem = doneItem ? seq[safePos] : seq[safePos + 1];
-  const nextDept = seq.slice(doneItem ? safePos : safePos + 1).find((i) => i.group && i.group !== current?.group);
+  // Nächste Abteilung erst zeigen, wenn in der aktuellen Abteilung nichts mehr offen ist.
+  const moreInDept = !!current?.group && seq.some((i) => i.id !== current.id && i.group === current.group);
+  const nextDept = moreInDept ? undefined : seq.slice(doneItem ? safePos : safePos + 1).find((i) => i.group && i.group !== current?.group);
   const done = items.filter((i) => i.checked).length;
   const allDone = !current;
   const lastDone = [...doneStack].reverse().find((id) => items.some((i) => i.id === id && i.checked));
