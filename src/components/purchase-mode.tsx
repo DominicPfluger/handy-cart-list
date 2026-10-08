@@ -127,14 +127,17 @@ export function PurchaseMode({ items, onToggle, onClose }: {
       try { synth.resume(); } catch { /* ignore */ }
       speakNow(withDept(current));
     };
-    let timer: number;
+    let timer = 0;
     if (synth.getVoices().length === 0) {
       const onVoices = () => { synth.removeEventListener("voiceschanged", onVoices); run(); };
       synth.addEventListener("voiceschanged", onVoices);
       timer = window.setTimeout(() => { synth.removeEventListener("voiceschanged", onVoices); run(); }, 600);
-    } else {
+    } else if (synth.speaking || synth.pending) {
+      // Chrome verwirft speak() direkt nach cancel() – nur dann kurz warten.
       synth.cancel();
-      timer = window.setTimeout(run, 150);
+      timer = window.setTimeout(run, 120);
+    } else {
+      run();
     }
     return () => {
       cancelled = true;
