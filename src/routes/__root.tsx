@@ -151,6 +151,9 @@ function BottomNav() {
               if (item.to === "/abteilungen" && pathname === "/abteilungen") {
                 window.dispatchEvent(new Event("shoppi:abteilungen-reset"));
               }
+              if (item.to === "/") {
+                window.dispatchEvent(new Event("shoppi:lists-overview"));
+              }
             }}
           >
             {({ isActive }) => (
