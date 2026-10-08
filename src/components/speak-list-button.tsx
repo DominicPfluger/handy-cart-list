@@ -77,7 +77,7 @@ export function speakSentences(sentences: string[], locale: string, rate: number
     utts.forEach((u) => synth.speak(u));
     // Chrome stoppt lange Ausgaben nach ~15 s: regelmässig anstossen.
     stopKeepAlive();
-    keepAlive = window.setInterval(() => {
+    if (!isIOS) keepAlive = window.setInterval(() => {
       if (!synth.speaking) { stopKeepAlive(); return; }
       try { synth.pause(); synth.resume(); } catch { /* ignore */ }
     }, 10000);
