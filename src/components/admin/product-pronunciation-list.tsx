@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Pencil, Plus, Puzzle, Save, Search, Trash2, Volume2 } from "lucide-react";
+import { Languages, Pencil, Plus, Puzzle, Save, Search, Trash2, Volume2 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { LOCALES, useT, type Locale } from "@/i18n";
@@ -107,10 +107,13 @@ function Row({ name, locale, rule, all, parts, canEdit }: { name: string; locale
   const [partOpen, setPartOpen] = useState(false);
   const [partW, setPartW] = useState("");
   const [partS, setPartS] = useState("");
+  const [partAll, setPartAll] = useState(false);
+  const variants = LOCALES.filter((l) => l.id.split("-")[0] === locale.split("-")[0]).map((l) => l.id as Locale);
   const savePart = async () => {
     const w = partW.trim(), sp = partS.trim();
     if (!w || !sp) return;
-    const { error } = await supabase.from("pronunciation_rules").upsert({ locale, written: w, spoken: sp }, { onConflict: "locale,written" });
+    const rows = (partAll ? variants : [locale]).map((loc) => ({ locale: loc, written: w, spoken: sp }));
+    const { error } = await supabase.from("pronunciation_rules").upsert(rows, { onConflict: "locale,written" });
     if (error) { toast.error(error.message); return; }
     setPartW(""); setPartS(""); setPartOpen(false);
     await qc.invalidateQueries({ queryKey: pronunciationRulesQueryKey });
