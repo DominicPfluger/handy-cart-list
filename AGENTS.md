@@ -31,7 +31,7 @@
 - Products keep full image_path plus separate 64px icon_path (compressed in admin browser, also after AI generation; icon-only generation leaves image_path untouched). Why: light list rows, detail imagery preserved.
 - Admin AI image generation preserves existing icon_path values. Why: refreshing a large image must not silently change list artwork.
 - Small catalog and list icons share a device-local image/symbol preference; full product photos remain unchanged. Why: one visual choice should apply consistently without changing shared catalog data.
-- Displayed catalog icons use bounded device CacheStorage keyed by stable image path, with symbol fallback; expiring signed links only authorize cache misses. Why: image links rotate while artwork should download once per device.
+- Catalog artwork uses stable-path CacheStorage for 30 days; Settings can persist every category/product/variant image and icon. Why: expiring links only authorize cache misses and the full catalog stays offline.
 - Vorlagen in "Listen bearbeiten" sind per Drag & Drop sortierbar (reorderTemplates, sort_order auf shopping_lists). Why: gleiche Bedienung wie bei Listen.
 - Produktanlage im Admin bietet bei Abteilungen mit Überschriften eine Positions-Auswahl; neue Produkte werden am Gruppenende der gewählten Überschrift eingereiht und bestehende sort_order-Werte verschoben. Why: gezieltes Einordnen ohne nachträgliches Ziehen.
 - Units live in public.units; products keep ordered preferred units with a quantity per unit, and the first mirrors the legacy default. Why: editable units and package-specific defaults.

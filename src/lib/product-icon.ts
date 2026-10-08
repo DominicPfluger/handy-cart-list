@@ -15,16 +15,21 @@ export async function makeProductIcon(source: Blob): Promise<Blob> {
     canvas.width = canvas.height = 64;
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("Bild konnte nicht verkleinert werden");
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
     const scale = Math.min(60 / image.naturalWidth, 60 / image.naturalHeight);
     const width = image.naturalWidth * scale;
     const height = image.naturalHeight * scale;
     ctx.drawImage(image, (64 - width) / 2, (64 - height) / 2, width, height);
-    for (const quality of [0.68, 0.5, 0.35]) {
+    // Icons werden immer als WebP und möglichst unter 8 KB gespeichert.
+    for (const quality of [0.72, 0.58, 0.44, 0.3, 0.2]) {
       const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", quality));
       if (!blob || blob.type !== "image/webp") throw new Error("WebP-Komprimierung nicht verfügbar");
-      if (blob.size <= 8 * 1024 || quality === 0.35) return blob;
+      if (blob.size <= 8 * 1024) return blob;
     }
-    throw new Error("Bild konnte nicht komprimiert werden");
+    const fallback = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", 0.12));
+    if (!fallback || fallback.type !== "image/webp") throw new Error("Bild konnte nicht komprimiert werden");
+    return fallback;
   } finally {
     URL.revokeObjectURL(url);
   }

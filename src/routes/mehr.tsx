@@ -368,7 +368,11 @@ function PreloadImagesRow() {
   const { t } = useT();
   const st = useSyncExternalStore(subscribePreload, preloadState, preloadState);
   const start = async () => {
-    try { await preloadCatalogImages(await getCatalogImageUrls()); toast.success(t("more.preloadDone")); }
+    try {
+      await navigator.storage?.persist?.().catch(() => false);
+      await preloadCatalogImages(await getCatalogImageUrls());
+      toast.success(t("more.preloadDone"));
+    }
     catch { toast.error(t("more.preloadError")); }
   };
   const pct = st.total ? Math.round((st.done / st.total) * 100) : 0;
