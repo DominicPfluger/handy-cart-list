@@ -32,7 +32,9 @@ export function missingVoice(locale: string): boolean {
 
 /** Kürzel, die die deutsche Sprachausgabe ausschreiben soll. */
 export function expandAbbreviations(text: string, locale: string): string {
-  const corrected = applyPronunciationRules(text, locale, getPronunciationRules());
+  // Eine fehlerhafte Regel darf die Sprachausgabe nie komplett blockieren.
+  let corrected = text;
+  try { corrected = applyPronunciationRules(text, locale, getPronunciationRules()); } catch { /* ignore */ }
   if (!locale.toLowerCase().startsWith("de")) return corrected;
   return corrected
     .replace(/\bStk\.?/g, "Stück")
@@ -52,9 +54,13 @@ export function speakSentences(sentences: string[], locale: string, rate: number
   if (!list.length) { onDone?.(); return; }
   const token = ++speakToken;
   let finished = false;
+  // Chrome auf dem Desktop bricht lange Ausgaben nach ca. 15 s still ab;
+  // periodisches resume() hält sie am Laufen (nur während sie wirklich spricht).
+  let keepAlive = 0;
   const finish = () => {
     if (finished || token !== speakToken) return;
     finished = true;
+    if (keepAlive) { window.clearInterval(keepAlive); keepAlive = 0; }
     onDone?.();
   };
   const isIOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -93,6 +99,12 @@ export function speakSentences(sentences: string[], locale: string, rate: number
     if (token !== speakToken) return;
     try { synth.resume(); } catch { /* ignore */ }
     utts.forEach((u) => synth.speak(u));
+    if (!keepAlive) {
+      keepAlive = window.setInterval(() => {
+        if (token !== speakToken || finished) { window.clearInterval(keepAlive); keepAlive = 0; return; }
+        try { if (synth.speaking && !synth.paused) synth.resume(); } catch { /* ignore */ }
+      }, 5000);
+    }
     window.setTimeout(() => {
       if (token === speakToken && !started && !synth.speaking && !synth.pending) {
         if (voice) retry(); else finish();
