@@ -12,7 +12,7 @@ import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup } from "@/lib/admin.functions";
-import { LOCALES, allLocales, getLocale, translate } from "@/i18n";
+import { LOCALES, allLocales, getLocale, translate, setLocale, useT } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
@@ -139,7 +139,8 @@ function AdminPage() {
   /** "" = globale Reihenfolge, sonst Marktcode (z. B. CH) für marktspezifische Relevanz. */
   const [mk, setMk] = useState<string>("");
   /** Anzeigesprache des Katalogs im Admin (nur Anzeige, Bearbeitung bleibt Deutsch). */
-  const [viewLoc, setViewLoc] = useState<string>("de-DE");
+  const { locale: uiLocale } = useT();
+  const [viewLoc, setViewLoc] = useState<string>(() => (getLocale().startsWith("en") ? "en-US" : "de-DE"));
   const admin = useQuery({ queryKey: ["admin-check"], queryFn: () => check() });
   const qCore = useQuery({ queryKey: ["admin-catalog"], queryFn: loadCore, enabled: Boolean(admin.data?.isAdmin || admin.data?.isViewer) });
   // Übersetzungen/Marktdaten erst nach dem Kern laden (gross, nur für Detailansichten nötig).
@@ -868,7 +869,15 @@ function AdminPage() {
     <div className="space-y-4 pb-10">
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-2xl font-bold text-foreground">{T("adm.title")}</h1>
-        <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
+        <div className="flex items-center gap-2">
+          <select aria-label="Language" value={uiLocale.startsWith("en") ? "en-US" : "de-DE"}
+            onChange={(e) => { const v = e.target.value; setLocale(v); setViewLoc(v); }}
+            className="h-9 rounded-lg border border-input bg-background px-2 text-sm">
+            <option value="de-DE">🇩🇪 Deutsch</option>
+            <option value="en-US">🇺🇸 English</option>
+          </select>
+          <Button variant="outline" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
+        </div>
       </div>
       {admin.data?.isViewer && !admin.data?.isAdmin && (
         <div className="sticky top-0 z-30 rounded-xl border border-primary/40 bg-primary-soft px-4 py-2.5 text-sm font-medium text-foreground">
