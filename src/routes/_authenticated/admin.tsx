@@ -866,6 +866,18 @@ function AdminPage() {
     const name = v.trim() && v.trim() !== base ? v.trim() : null;
     void storeUpsert(kind, [{ [key]: id, name }]);
   };
+  /** Laden-Modus: Produkte nur in der Laden-Reihenfolge verschieben (Überschriften bleiben global unverändert). */
+  const storeMoveProduct = (productIds: string | string[], to: number) => {
+    const sel = new Set(Array.isArray(productIds) ? productIds : [productIds]);
+    const list = tileProducts.map((x) => x.id);
+    const block = list.filter((id) => sel.has(id));
+    if (!block.length) return;
+    const before = list.slice(0, to).filter((id) => !sel.has(id)).length;
+    const rest = list.filter((id) => !sel.has(id));
+    const ids = [...rest.slice(0, before), ...block, ...rest.slice(before)];
+    void storeUpsert("product", ids.map((id, k) => ({ product_id: id, sort_order: k * 10 })));
+  };
+  const storeOnly = () => toast.info(T("st.globalOnly"));
   const curStore = storesQ.data?.find((s) => s.id === storeId);
 
   if (admin.isLoading) return <p className="pt-6 text-sm text-muted-foreground">{T("adm.loading")}</p>;

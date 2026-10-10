@@ -1303,6 +1303,8 @@ export const de = {
   "st.categories": "Kategorien",
   "st.products": "Produkte",
   "st.hide": "Ausblenden",
+  "st.globalOnly": "Im Laden-Modus nicht möglich – nur im gemeinsamen Katalog (ohne Ladenauswahl).",
+  "st.hideSelectedConfirm": "{n} Einträge nur für diesen Laden ausblenden?",
   "st.show": "Einblenden",
   "st.reset": "Zurücksetzen",
   "st.resetAll": "Ganzen Laden zurücksetzen",
