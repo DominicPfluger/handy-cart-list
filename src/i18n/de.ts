@@ -851,7 +851,7 @@ export const de = {
   "tile.enrichImage": "Produktbild erstellen …",
   "tile.enrichPrices": "Marktpreise schätzen …",
   "tile.enrichPartial": "Produkt gespeichert; einzelne Ergänzungen fehlgeschlagen",
-  "tile.enrichDone": "Produktbild, Übersetzungen und Marktpreise ergänzt",
+  "tile.enrichDone": "Übersetzungen und Marktpreise ergänzt",
   "adm.tab.more": "Mehr",
   "mkt.title": "Märkte verwalten",
   "mkt.toggle": "Ein-/Ausblenden",
