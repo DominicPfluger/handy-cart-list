@@ -811,6 +811,8 @@ export const de = {
   "adm.health.renamed": "Produkt umbenannt",
   "adm.health.synonyms": "Alle Synonyme",
   "adm.health.synSearch": "Synonym suchen …",
+  "adm.health.synProduct": "Produkt wählen …",
+  "adm.health.synAddMissing": "Bitte Sprache, Produkt und Synonym angeben",
   "adm.health.collision": "Kollidiert mit Produktname",
   "adm.health.pairs": "{n} Paare",
   "adm.health.open": "Bearbeiten",
