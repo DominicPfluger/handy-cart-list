@@ -94,8 +94,8 @@ function TileThumb({ product }: { product: CatalogProduct }) {
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
-  // Bilder in den Kategorie-Kacheln füllt die (um ca. 20 % größere) Bildfläche aus.
-  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl ?? department.iconUrl} imagePath={department.imagePath ?? department.iconPath} className="h-full w-full object-contain" symbolClassName="text-[4.4rem] leading-none" />;
+  // Bilder in den Kategorie-Kacheln füllen die (um ca. 20 % größere) Bildfläche ohne Abschneiden.
+  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl ?? department.iconUrl} imagePath={department.imagePath ?? department.iconPath} className="max-h-full max-w-full object-contain" symbolClassName="text-[4.4rem] leading-none" />;
 }
 
 function DepartmentsPage() {
