@@ -628,6 +628,7 @@
   "adm.dietsHint": "The product is hidden when this filter is active.",
   "adm.variants": "Variants",
   "adm.variantsHint": "Variants apply only to this product and are offered when adding it to the shopping list.",
+  "adm.variantPosHint": "Tap to place the variant before (Strawberry-Yogurt) or after (Yogurt Strawberry) the product name – applies to display and speech.",
   "adm.variantPlaceholder": "New variant…",
   "more.allMarkets": "Show products from all markets",
   "more.allMarketsSub": "Full catalog incl. products from other countries (with flag)",

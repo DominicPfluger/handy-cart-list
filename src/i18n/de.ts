@@ -1166,6 +1166,7 @@ export const de = {
   "adm.synTranslated": "{n} Synonyme übersetzt",
   "search.alsoKnownAs": "auch: {name}",
   "adm.variantsHint": "Varianten gelten nur für dieses Produkt und erscheinen beim Hinzufügen zur Einkaufsliste zur Auswahl.",
+  "adm.variantPosHint": "Antippen, um die Variante vor (Erdbeer-Joghurt) oder hinter (Joghurt Erdbeere) den Produktnamen zu setzen – gilt für Anzeige und Sprachausgabe.",
   "adm.variantAdd": "Variante hinzufügen",
   "adm.estimatePrice": "Preis schätzen",
   "adm.defaultQty": "Standard-Menge",

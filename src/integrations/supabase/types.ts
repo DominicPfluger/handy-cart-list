@@ -989,6 +989,7 @@ export type Database = {
           markets: string[]
           name: string
           organic_available: boolean
+          prefix_variants: string[]
           sort_order: number
           unit_quantities: Json
           updated_at: string
@@ -1009,6 +1010,7 @@ export type Database = {
           markets?: string[]
           name: string
           organic_available?: boolean
+          prefix_variants?: string[]
           sort_order?: number
           unit_quantities?: Json
           updated_at?: string
@@ -1029,6 +1031,7 @@ export type Database = {
           markets?: string[]
           name?: string
           organic_available?: boolean
+          prefix_variants?: string[]
           sort_order?: number
           unit_quantities?: Json
           updated_at?: string

@@ -1,3 +1,4 @@
+import { joinVariantName } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
 import { useCheckedDisplay } from "../hooks/use-checked-display";
 import { Fragment, useEffect, useState, useMemo } from "react";
@@ -148,8 +149,7 @@ function ListPage() {
     const product = item.productId ? productById.get(item.productId) : undefined;
     if (!product) return stripAnyPrefix(item.name);
     const i = item.name.indexOf(" · ");
-    const base = i >= 0 ? product.name + item.name.slice(i) : product.name;
-    return stripAnyPrefix(base);
+    return stripAnyPrefix(i >= 0 ? joinVariantName(product.name, item.name.slice(i + 3), product) : product.name);
   };
   const { departments } = useDepartmentOrder(data.departments);
 
@@ -313,7 +313,7 @@ function ListPage() {
       if (product) {
         const k = i.name.indexOf(" · ");
         const base = pickName(product.names, speakLocale, product.baseName);
-        name = stripAnyPrefix(k >= 0 ? base + i.name.slice(k) : base);
+        name = stripAnyPrefix(k >= 0 ? joinVariantName(base, i.name.slice(k + 3), product) : base);
       }
       return {
         id: i.id,
