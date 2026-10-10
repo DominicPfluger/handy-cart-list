@@ -14,7 +14,7 @@ import { AllowedUnitsPicker } from "@/components/admin/allowed-units-picker";
 import { rootColorByName } from "@/lib/dept-colors";
 import { deptTreeOrder } from "@/lib/dept-order";
 import { prepareCategoryImage } from "@/lib/image-upload";
-import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIcon, saveProductIconFromPath, setPreviewImageOnly } from "@/lib/product-icon";
+import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIcon, setPreviewImageOnly } from "@/lib/product-icon";
 import { toast } from "sonner";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPrice, estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
@@ -1152,14 +1152,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         try { await fn(); } catch (e) { errors.push(`${label}: ${e instanceof Error ? e.message : String(e)}`); setEnrichErrors([...errors]); }
       };
       await step(T("tile.enrichTranslation"), async () => { await p.translateIds([id]); });
-      await step(T("tile.enrichImage"), async () => {
-        const { data, error } = await supabase.from("products").select("image_path, icon_path").eq("id", id).single();
-        if (error) throw new Error(error.message);
-        const path = data?.image_path ?? (await genImg({ data: { id, kind: "product" } })).path;
-        if (!data?.icon_path) await saveProductIconFromPath(id, path);
-        const signed = await supabase.storage.from("catalog-images").createSignedUrl(path, 600);
-        if (signed.data?.signedUrl) setLarge(signed.data.signedUrl);
-      });
+      // Kein automatisches KI-Bild mehr: Bilder gibt es nur noch auf ausdrücklichen Knopfdruck.
+
       await step(T("tile.enrichPrices"), async () => {
         const r = await estAll({ data: { productId: id, skipExisting: true } });
         setEstimates(r.items);
