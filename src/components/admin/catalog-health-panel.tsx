@@ -188,7 +188,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
 
   const doLink = async (p: Pair) => {
     setBusy(true);
-    const { error } = await supabase.from("product_aliases").insert({ product_id: p.a.id, department_id: p.b.department_id, sort_order: 999 } as never);
+    const { error } = await supabase.from("product_aliases").upsert({ product_id: p.a.id, department_id: p.b.department_id, sort_order: 999 } as never, { onConflict: "product_id,department_id", ignoreDuplicates: true });
     setBusy(false);
     if (error) { toast.error(error.message); return; }
     toast.success(T("adm.health.linked"));
