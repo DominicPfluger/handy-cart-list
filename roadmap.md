@@ -1,6 +1,8 @@
 # Roadmap
 
 ## Aktueller Auftrag
+- [x] Umschalter vorangestellt/nachgestellt auch in der Kachelansicht des Produkt-Dialogs
+- [ ] Zwei Varianten-Arten: Sorten am Produkt + Zusätze aus zentralem Pool, beim Einkauf frei kombinierbar
 - [x] Vier Überschriften unter „Küchenfertiges Gemüse & Obst“ in Unterkategorien umgewandelt; 80 Artikel (26/18/18/18) und 60 Kategorieübersetzungen übernommen und geprüft; keine Überschriften verblieben.
 - [x] 80 vorgeschlagene Artikel unter „Küchenfertiges Gemüse & Obst“ mit vier Überschriften und 1260 Übersetzungen in 15 weiteren Sprachversionen eingeordnet; ohne KI-Bilder. Daten und Anzeige mit 80 Produktzeilen und vier Überschriften geprüft.
 
