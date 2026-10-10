@@ -1098,9 +1098,9 @@ function AdminPage() {
               await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY });
             }, T("adm.created")); }}
             onRemoveDeptAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("department_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: DEPT_ALIAS_KEY }); }, T("adm.deleted")); }}
-            onMoveHeading={moveHeading}
-            onMoveProduct={(id, to, headingId) => moveProduct(products, id, to, headingId)}
-            onAssignHeading={(productId, headingId) => run(() => assignHeading(productId, headingId), T("adm.saved"))}
+            onMoveHeading={storeId ? storeOnly : moveHeading}
+            onMoveProduct={(id, to, headingId) => (storeId ? storeMoveProduct(id, to) : moveProduct(products, id, to, headingId))}
+            onAssignHeading={(productId, headingId) => storeId ? storeOnly() : run(() => assignHeading(productId, headingId), T("adm.saved"))}
             onRenameHeading={(id, name) => { const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
             onDeleteHeading={(id, name) => { if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onSortHeading={(id) => setSortDlg(id)}
@@ -1108,9 +1108,9 @@ function AdminPage() {
             onBulkTree={() => setBulkTree(true)}
             onHeadingsToSub={cur && headings.length > 0 && !mk ? headingsToSubcategories : undefined}
             onTranslateMissing={() => run(async () => toast.info(T("adm.trAdded", { n: await translateIds() })), T("adm.trDone"))}
-            onDeleteSelected={deleteSelected}
-            onDeleteSelectedDepts={deleteSelectedDepts}
-            onMoveSelected={moveSelected}
+            onDeleteSelected={storeId ? (sel) => { if (sel.productIds.length && confirm(T("st.hideSelectedConfirm", { n: sel.productIds.length }))) void storeUpsert("product", sel.productIds.map((id) => ({ product_id: id, hidden: true }))); } : deleteSelected}
+            onDeleteSelectedDepts={storeId ? (sel) => { if (sel.deptIds.length && confirm(T("st.hideSelectedConfirm", { n: sel.deptIds.length }))) void storeUpsert("department", sel.deptIds.map((id) => ({ department_id: id, hidden: true }))); } : deleteSelectedDepts}
+            onMoveSelected={storeId ? storeOnly : moveSelected}
             moveDeptOptions={deptTreeOrder(d.depts).map((x) => ({ id: x.id, label: path(x.id).map((p) => nm(p.id, p.name)).join(" › ") }))}
             {...(storeId ? {} : { onAdvanced: (kind: "department" | "product", id: string) => setSel({ kind, id }) })} />
           {bulk && (
