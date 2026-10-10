@@ -34,5 +34,5 @@
 - [ ] Weitere Haushaltsartikel nach Vorschlag 3
 - [ ] Varianten: Tahin (7), Gorgonzola (8), Gemüserollen, Wedges, Kroketten
 - [ ] Käse-Lücken füllen (Feta, Halloumi, Reibekäse, Blauschimmel, Burrata, Fondue, Schmelzkäse, pflanzlich)
-- [ ] Rezept → Liste: Vorrat-Zutaten vorab abwählen + Hinweis
-- [ ] Vibration beim Abhaken (Liste + Einkaufsmodus)
+- [x] Rezept → Liste: Vorrat-Zutaten vorab abwählen + Hinweis
+- [x] Vibration beim Abhaken (Liste + Einkaufsmodus)

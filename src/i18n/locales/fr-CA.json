@@ -1470,5 +1470,7 @@
   "speak.pronunciationSaved": "Pronunciation rule saved",
   "speak.tabProducts": "Produits",
   "speak.tabRules": "Prononciations enregistrées",
-  "speak.applyToVariants": "Appliquer à toutes les variantes de la langue"
+  "speak.applyToVariants": "Appliquer à toutes les variantes de la langue",
+  "rk.inPantry": "En réserve",
+  "rk.pantryHint": "Les ingrédients de ta réserve sont décochés – touche-les pour les ajouter quand même."
 }

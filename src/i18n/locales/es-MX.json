@@ -1470,5 +1470,7 @@
   "speak.pronunciationSaved": "Pronunciation rule saved",
   "speak.tabProducts": "Productos",
   "speak.tabRules": "Pronunciaciones guardadas",
-  "speak.applyToVariants": "Aplicar a todas las variantes del idioma"
+  "speak.applyToVariants": "Aplicar a todas las variantes del idioma",
+  "rk.inPantry": "En despensa",
+  "rk.pantryHint": "Los ingredientes de tu despensa están desmarcados; tócalos para añadirlos igualmente."
 }
