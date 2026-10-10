@@ -917,7 +917,7 @@ function AdminPage() {
       </div>
 
       <Suspense fallback={<p className="pt-2 text-sm text-muted-foreground">{T("adm.loading")}</p>}>
-      {tab === "catalog" && (<>
+      {(tab === "catalog" || tab === "health") && (
       <div className="grid grid-cols-5 gap-2 text-center md:max-w-xl">
         <Stat label={T("adm.categories")} value={d?.depts.length} />
         <Stat label={T("adm.products")} value={d?.prods.length} />
@@ -925,6 +925,9 @@ function AdminPage() {
         <Stat label={T("adm.headings")} value={d?.heads.length} />
         <Stat label={T("adm.tab.media")} value={d ? new Set([...d.depts, ...d.prods].flatMap((item) => [item.image_path, item.icon_path]).filter((path): path is string => Boolean(path))).size : undefined} />
       </div>
+      )}
+      {tab === "catalog" && (<>
+
 
       <div className="flex flex-wrap gap-2">
         {(
