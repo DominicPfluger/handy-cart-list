@@ -1133,7 +1133,7 @@
   "adm.health.similar": "Vergelijkbare naam",
   "adm.health.synConflict": "Synoniemconflict",
   "adm.health.merge": "Samenvoegen",
-  "adm.health.mergeConfirm": "{remove} wordt samengevoegd in {keep} en verwijderd. Doorgaan?",
+  "adm.health.mergeConfirm": "{remove} ({removeCat}) wordt samengevoegd in {keep} ({keepCat}) en verwijderd. Doorgaan?",
   "adm.health.merged": "Samengevoegd",
   "adm.health.link": "Koppelen",
   "adm.health.linked": "Gekoppeld",

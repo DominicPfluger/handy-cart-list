@@ -586,7 +586,7 @@
   "adm.health.similar": "Ähnlicher Name",
   "adm.health.synConflict": "Synonym-Konflikt",
   "adm.health.merge": "Zusammenführen",
-  "adm.health.mergeConfirm": "{remove} wird in {keep} überführt und gelöscht. Fortfahren?",
+  "adm.health.mergeConfirm": "{remove} ({removeCat}) wird in {keep} ({keepCat}) überführt und gelöscht. Fortfahren?",
   "adm.health.merged": "Zusammengeführt",
   "adm.health.link": "Verknüpfen",
   "adm.health.linked": "Verknüpft",

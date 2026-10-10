@@ -175,7 +175,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   };
 
   const doMerge = async (p: Pair) => {
-    if (!confirm(T("adm.health.mergeConfirm", { remove: p.b.name, keep: p.a.name }))) return;
+    if (!confirm(T("adm.health.mergeConfirm", { remove: p.b.name, keep: p.a.name, removeCat: deptPath(p.b.department_id), keepCat: deptPath(p.a.department_id) }))) return;
     setBusy(true);
     try {
       await merge({ data: { keepId: p.a.id, removeId: p.b.id } });
