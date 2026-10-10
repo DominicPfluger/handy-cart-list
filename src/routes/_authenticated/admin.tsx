@@ -1071,7 +1071,7 @@ function AdminPage() {
             imageEditor={imageEditor} imageEditorProduct={imageEditor ? d.prods.find((x) => x.id === imageEditor.id) : undefined} onCloseImageEditor={() => setImageEditor(null)}
             path={path(cur)} nm={storeId ? nmStore : nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
             reorder={storeId ? storeReorder : reorder} remove={(kind, id, name) => (storeId ? storeToggleHidden(kind, id) : remove({ kind, id }, name))}
-            {...(storeId ? { onAdvanced: storeRename } : {})}
+            {...(storeId ? { onAdvanced: storeRename, onToggleHidden: storeToggleHidden, isHidden: (id: string) => Boolean(ovOf(id)?.hidden) } : {})}
             busy={busy}
             headings={headings}
             onAddHeading={(name, insertAt) => { const anchor = products.slice(insertAt).find((x) => !x.id.startsWith("alias:")); if (cur && anchor) void run(() => saveH({ data: { departmentId: cur, beforeProductId: anchor.id, name } }), T("adm.created")); else toast.error(T("adm.headingMoveNoTarget")); }}
