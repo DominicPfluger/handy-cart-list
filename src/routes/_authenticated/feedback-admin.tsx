@@ -66,10 +66,10 @@ function FeedbackInbox() {
       </div>
       {!isAdmin ? null : (
         <>
-          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1">
+          <div className="flex flex-wrap gap-2 pb-1">
             {[{ key: "all", label: "fb.all" as const }, ...FEEDBACK_SUBJECTS].map((s) => (
               <button key={s.key} onClick={() => setFilter(s.key)}
-                className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium ${filter === s.key ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
+                className={`rounded-full border px-3 py-1.5 text-xs font-medium ${filter === s.key ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
                 {t(s.label)}
               </button>
             ))}
