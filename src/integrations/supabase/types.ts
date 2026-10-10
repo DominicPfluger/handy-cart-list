@@ -1663,6 +1663,143 @@ export type Database = {
         }
         Relationships: []
       }
+      store_admins: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          supermarket_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          supermarket_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          supermarket_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_admins_supermarket_id_fkey"
+            columns: ["supermarket_id"]
+            isOneToOne: false
+            referencedRelation: "supermarkets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_department_overrides: {
+        Row: {
+          created_at: string
+          department_id: string
+          hidden: boolean
+          id: string
+          name: string | null
+          sort_order: number | null
+          supermarket_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department_id: string
+          hidden?: boolean
+          id?: string
+          name?: string | null
+          sort_order?: number | null
+          supermarket_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department_id?: string
+          hidden?: boolean
+          id?: string
+          name?: string | null
+          sort_order?: number | null
+          supermarket_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_department_overrides_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_department_overrides_supermarket_id_fkey"
+            columns: ["supermarket_id"]
+            isOneToOne: false
+            referencedRelation: "supermarkets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      store_product_overrides: {
+        Row: {
+          created_at: string
+          default_quantity: number | null
+          default_unit: string | null
+          emoji: string | null
+          hidden: boolean
+          id: string
+          name: string | null
+          product_id: string
+          sort_order: number | null
+          supermarket_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_quantity?: number | null
+          default_unit?: string | null
+          emoji?: string | null
+          hidden?: boolean
+          id?: string
+          name?: string | null
+          product_id: string
+          sort_order?: number | null
+          supermarket_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_quantity?: number | null
+          default_unit?: string | null
+          emoji?: string | null
+          hidden?: boolean
+          id?: string
+          name?: string | null
+          product_id?: string
+          sort_order?: number | null
+          supermarket_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "store_product_overrides_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "store_product_overrides_supermarket_id_fkey"
+            columns: ["supermarket_id"]
+            isOneToOne: false
+            referencedRelation: "supermarkets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       supermarkets: {
         Row: {
           created_at: string
@@ -1896,6 +2033,10 @@ export type Database = {
       }
       is_market_product_admin: {
         Args: { _product_id: string; _user_id: string }
+        Returns: boolean
+      }
+      is_store_admin: {
+        Args: { _supermarket_id: string; _user_id: string }
         Returns: boolean
       }
       join_list_by_invite: { Args: { _code: string }; Returns: string }

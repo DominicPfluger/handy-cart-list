@@ -15,6 +15,13 @@
       "when": 1791645423487,
       "tag": "0001_products_prefix_variants",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791664915441,
+      "tag": "0002_store_catalog_overrides",
+      "breakpoints": true
     }
   ]
 }
