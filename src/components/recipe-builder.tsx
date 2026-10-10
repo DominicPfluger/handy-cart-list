@@ -644,7 +644,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
               )}
             </span>
           </div>
-          <div className="space-y-2 border-t border-border px-3 py-3">
+          <div className="flex min-w-0 flex-wrap items-center gap-2 border-t border-border px-3 py-3">
           {(() => {
             const ap = anyProduct(s);
             const on = sel0.includes(ap.id);
@@ -725,7 +725,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 const shownIds = new Set(ordered.slice(0, expanded ? ordered.length : limit).map((p) => p.id));
                 for (const id of sel) shownIds.add(id);
                 const hiddenCount = ordered.filter((p) => !shownIds.has(p.id)).length;
-                return <div className="space-y-3">
+                return <div className="contents">
                   {ordered.filter((p) => shownIds.has(p.id)).map(chip)}
                   {ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
                     onClick={() => setVisibleCount((x) => ({ ...x, [s.key]: expanded ? PAGE : Math.min(ordered.length, limit + PAGE) }))}
@@ -735,7 +735,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 </div>;
               }
               // Zutaten erscheinen direkt neben ihrer Oberkategorie in derselben umbruchenden Reihe.
-              return <div className="flex min-w-0 flex-wrap items-center gap-2" role="group">
+              return <div className="contents" role="group">
                 {groups.map((group) => {
                   const gKey = `${s.key}:${group.key}`;
                   const gOpen = !!openGroups[gKey];
