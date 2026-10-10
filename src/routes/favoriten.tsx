@@ -92,7 +92,7 @@ function FavoritesPage() {
   const [newStoreEmoji, setNewStoreEmoji] = useState("");
   const [transferMode, setTransferMode] = useState<"new" | "existing">("new");
   const [targetListId, setTargetListId] = useState("");
-  const pendingTransferRef = useRef<{ listId: string; items: ListItem[] } | null>(null);
+  const pendingTransferRef = useRef<{ listId: string; add: () => void; count: number } | null>(null);
   const stores = useStores();
   const { setListStore, addCustomStore } = useGroupOrder();
 
@@ -408,7 +408,7 @@ function FavoritesPage() {
     if (!pending || activeList.id !== pending.listId) return;
     pendingTransferRef.current = null;
     pending.add();
-    toast.success(t("fav.toListDone", { count: pending.items.length }));
+    toast.success(t("fav.toListDone", { count: pending.count }));
     navigate({ to: "/" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeList.id]);
