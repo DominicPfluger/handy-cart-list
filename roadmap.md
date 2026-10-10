@@ -55,3 +55,4 @@
 - [x] «Ganzen Laden zurücksetzen» deaktiviert (Knopf im Kachelmodus und im Bereich «Läden-Katalog» entfernt; Zurücksetzen pro Eintrag bleibt)
 - [x] Abteilungs-Kachelmodus: grünes Plus öffnet den Hinzufügen-Dialog; Umschalter-Labels in allen 15 Sprachen
 - [x] Abteilungsmodus: Kategoriebilder grösser (Bildfläche 125 -> 150 px, dann um 10 % zurück auf 135 px; füllen die Fläche ohne Abschneiden)
+- [x] Abteilungs-Kachelmodus: Überschriften werden über ihren Produktgruppen angezeigt
