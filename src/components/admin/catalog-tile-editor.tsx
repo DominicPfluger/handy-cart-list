@@ -1453,7 +1453,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
                     </span>
                     {prod && (prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}
-                    {prod && (prod.variants ?? []).includes(v) && <VariantTranslations productId={prod.id} variant={v}  productName={() => name || prod?.name || ""} isPrefix={(l) => (prefixByLocale[l] ?? prefixVariants).includes(v)} onTogglePrefix={(l) => togglePrefixLocale(l, v)} />
+                    {prod && (prod.variants ?? []).includes(v) && <VariantTranslations productId={prod.id} variant={v}  productName={() => name || prod?.name || ""} isPrefix={(l) => (prefixByLocale[l] ?? prefixVariants).includes(v)} onTogglePrefix={(l) => togglePrefixLocale(l, v)} />}
                   </div>
                 ))}
               </div>

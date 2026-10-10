@@ -1626,7 +1626,7 @@ function Editor(p: {
                     </button>
                     {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                     {(prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}
-                    {(prod.variants ?? []).includes(v) && <VariantTranslations productId={prod.id} variant={v}  productName={() => prod.name} isPrefix={(l) => (prefixByLocale[l] ?? prefixVariants).includes(v)} onTogglePrefix={(l) => togglePrefixLocale(l, v)} />
+                    {(prod.variants ?? []).includes(v) && <VariantTranslations productId={prod.id} variant={v}  productName={() => prod.name} isPrefix={(l) => (prefixByLocale[l] ?? prefixVariants).includes(v)} onTogglePrefix={(l) => togglePrefixLocale(l, v)} />}
                     <button
                       type="button"
                       aria-label={`${v} entfernen`}
