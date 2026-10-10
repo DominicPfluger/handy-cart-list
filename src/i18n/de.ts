@@ -1055,6 +1055,8 @@ export const de = {
   "adm.moveSelected": "In Kategorie verschieben",
   "adm.moveSelectHint": "Produkte anhaken, um sie zu verschieben",
   "adm.setUnitSelected": "Einheit ändern …",
+  "adm.setUnitAll": "Einheit für alle …",
+  "adm.setUnitAllConfirm": "Einheit für alle {n} Produkte auf „{unit}“ ändern?",
   "adm.moveSelectedTitle": "{n} Einträge verschieben nach …",
   "adm.moved": "{n} Einträge verschoben",
   "adm.deleteSelectedConfirm": "{n} Einträge wirklich löschen?",
