@@ -34,17 +34,12 @@ export function joinVariantName(
   return [head, ...extra].join(" · ");
 }
 
-/** Vorangestellte Varianten für eine Sprache: exakte Locale, dann Sprachfamilie, sonst Standard. */
+/** Vorangestellte Varianten für eine Sprache: eigene Einstellung der Sprache, sonst Standard. */
 export function prefixListFor(
   product: { prefixVariants?: string[]; prefixVariantsByLocale?: Record<string, string[]> } | undefined,
   locale?: string,
 ): string[] {
   const by = product?.prefixVariantsByLocale ?? {};
-  if (locale) {
-    if (by[locale]) return by[locale]!;
-    const lang = locale.split("-")[0];
-    const fam = Object.keys(by).find((k) => k.split("-")[0] === lang);
-    if (fam) return by[fam]!;
-  }
+  if (locale && by[locale]) return by[locale]!;
   return product?.prefixVariants ?? [];
 }
