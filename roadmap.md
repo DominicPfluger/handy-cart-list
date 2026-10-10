@@ -37,3 +37,4 @@
 - [x] Rezept → Liste: Vorrat-Zutaten vorab abwählen + Hinweis
 - [x] Vibration beim Abhaken (Liste + Einkaufsmodus)
 - [x] Produkt bearbeiten: Variantenbild anklicken zeigt Grossansicht, Menü (⋮) für Hochladen/KI/Löschen
+- [x] Bilder-Tab: KI-Bilder zwischen Produkte ohne Bild und eigenständiger Bildergalerie

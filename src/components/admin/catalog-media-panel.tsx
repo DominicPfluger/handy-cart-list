@@ -220,9 +220,7 @@ export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: {
       {section === "images" && <div className="mb-6"><ImageOptimizer /></div>}
 
       {section === "images" && onEdit && (
-        <MissingImagesPanel depts={depts} prods={prods} onEdit={onEdit}>
-          <CategoryImageGallery depts={depts} prods={prods} onEdit={onEdit} />
-        </MissingImagesPanel>
+        <MissingImagesPanel depts={depts} prods={prods} onEdit={onEdit} />
       )}
       {section === "images" && (
       <section className="mt-8 rounded-2xl border border-border bg-card p-4">
@@ -270,6 +268,7 @@ export function CatalogMediaPanel({ section, depts = [], prods = [], onEdit }: {
       </section>
       )}
 
+      {section === "images" && onEdit && <CategoryImageGallery depts={depts} prods={prods} onEdit={onEdit} />}
 
       {section === "prices" && (
       <section className="mt-8 rounded-2xl border border-border bg-card p-4">
