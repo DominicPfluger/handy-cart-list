@@ -74,23 +74,21 @@ export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; 
 
   return (
     <section className="space-y-3 border-t border-border pt-4">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-foreground">{t("adm.imgGallery.title")}{cat || q.trim() ? ` (${items.length})` : ""}</h3>
-        <input
-          type="search"
-          value={q}
-          onChange={(e) => { setQ(e.target.value); setLimit(PAGE); }}
-          placeholder={t("adm.noImg.search")}
-          aria-label={t("adm.noImg.search")}
-          className="w-36 rounded-lg border border-input bg-background px-2 py-1 text-xs"
-        />
-      </div>
+      <h3 className="text-sm font-semibold text-foreground">{t("adm.imgGallery.title")}{cat || q.trim() ? ` (${items.length})` : ""}</h3>
       <div className="flex items-center gap-1.5">
         <button type="button" onClick={openPicker} aria-label={t("adm.imgGallery.title")}
           className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2 text-left text-sm text-foreground hover:border-primary">
           <span className="min-w-0 flex-1 truncate">{catLabel ?? t("mk.pickCategory")}</span>
           <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
         </button>
+        <input
+          type="search"
+          value={q}
+          onChange={(e) => { setQ(e.target.value); setLimit(PAGE); }}
+          placeholder={t("adm.noImg.search")}
+          aria-label={t("adm.noImg.search")}
+          className="w-40 rounded-lg border border-input bg-background px-2 py-2 text-sm"
+        />
       </div>
       {!cat && !q.trim() && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.hint")}</p>}
       {(cat || q.trim()) && visible.length === 0 && !imgs.isLoading && <p className="text-xs text-muted-foreground">{t("adm.imgGallery.none")}</p>}
