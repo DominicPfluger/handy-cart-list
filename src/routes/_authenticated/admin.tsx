@@ -802,6 +802,74 @@ function AdminPage() {
     ].slice(0, 60);
   }, [search, d]);
 
+  // ── Laden-Katalog im Kachelmodus ──
+  const storesQ = useQuery({
+    queryKey: ["adm-stores"],
+    queryFn: async () => ((await supabase.from("supermarkets").select("id, name, emoji, market_code").order("market_code").order("sort_order")).data ?? []) as Array<{ id: string; name: string; emoji: string | null; market_code: string }>,
+  });
+  const storeChoices = (storesQ.data ?? []).filter((s) => !mk || s.market_code === mk);
+  const storeOvQ = useQuery({
+    queryKey: ["st-ov", storeId],
+    enabled: Boolean(storeId),
+    queryFn: async () => {
+      const [dd, pp] = await Promise.all([
+        supabase.from("store_department_overrides").select("department_id, name, sort_order, hidden").eq("supermarket_id", storeId),
+        supabase.from("store_product_overrides").select("product_id, name, sort_order, hidden").eq("supermarket_id", storeId),
+      ]);
+      type O = { name: string | null; sort_order: number | null; hidden: boolean };
+      return {
+        d: new Map(((dd.data ?? []) as Array<O & { department_id: string }>).map((r) => [r.department_id, r as O])),
+        p: new Map(((pp.data ?? []) as Array<O & { product_id: string }>).map((r) => [r.product_id, r as O])),
+      };
+    },
+  });
+  const sOv = storeId ? storeOvQ.data : undefined;
+  const ovOf = (id: string) => sOv?.d.get(id) ?? sOv?.p.get(id);
+  const nmStore = (id: string, base: string) => {
+    const o = ovOf(id);
+    const n = o?.name ?? nm(id, base);
+    return o?.hidden ? `🚫 ${n}` : n;
+  };
+  const applyStore = <X extends { id: string; sort_order: number }>(list: X[], m?: Map<string, { sort_order: number | null }>) => {
+    if (!m) return list;
+    const idx = new Map(list.map((x, i) => [x.id, i]));
+    return list.slice().sort((a, b) => (m.get(a.id)?.sort_order ?? idx.get(a.id)! * 10) - (m.get(b.id)?.sort_order ?? idx.get(b.id)! * 10));
+  };
+  const tileChildren = storeId ? applyStore(children.filter((x) => !x.alias_id), sOv?.d) : children;
+  const tileProducts = storeId ? applyStore(products.filter((x) => !x.alias_id), sOv?.p) : products;
+  const storeUpsert = async (kind: "department" | "product", rows: Array<Record<string, unknown>>) => {
+    const table = kind === "department" ? "store_department_overrides" : "store_product_overrides";
+    const key = kind === "department" ? "department_id" : "product_id";
+    const r = await supabase.from(table).upsert(rows.map((x) => ({ ...x, supermarket_id: storeId })) as never, { onConflict: `supermarket_id,${key}` });
+    if (r.error) toast.error(r.error.message);
+    else { toast.success(T("adm.saved")); void qc.invalidateQueries({ queryKey: ["st-ov", storeId] }); void qc.invalidateQueries({ queryKey: ["store-overrides"] }); }
+  };
+  const storeReorder = (kind: "department" | "product", list: { id: string }[], from: number, to: number) => {
+    const ids = list.map((x) => x.id);
+    const [m] = ids.splice(from, 1); ids.splice(to, 0, m!);
+    const key = kind === "department" ? "department_id" : "product_id";
+    void storeUpsert(kind, ids.map((id, k) => ({ [key]: id, sort_order: k * 10 })));
+  };
+  const storeToggleHidden = (kind: "department" | "product", id: string) => {
+    const key = kind === "department" ? "department_id" : "product_id";
+    void storeUpsert(kind, [{ [key]: id, hidden: !ovOf(id)?.hidden }]);
+  };
+  const storeRename = (kind: "department" | "product", id: string) => {
+    const base = kind === "department" ? deptById.get(id)?.name : d?.prods.find((x) => x.id === id)?.name;
+    const v = prompt(T("st.renamePrompt"), ovOf(id)?.name ?? base ?? "");
+    if (v === null) return;
+    const key = kind === "department" ? "department_id" : "product_id";
+    const name = v.trim() && v.trim() !== base ? v.trim() : null;
+    void storeUpsert(kind, [{ [key]: id, name }]);
+  };
+  const storeResetAll = async () => {
+    if (!storeId || !confirm(T("st.resetAllConfirm"))) return;
+    await supabase.from("store_department_overrides").delete().eq("supermarket_id", storeId);
+    await supabase.from("store_product_overrides").delete().eq("supermarket_id", storeId);
+    void qc.invalidateQueries({ queryKey: ["st-ov", storeId] });
+  };
+  const curStore = storesQ.data?.find((s) => s.id === storeId);
+
   if (admin.isLoading) return <p className="pt-6 text-sm text-muted-foreground">{T("adm.loading")}</p>;
   if (!admin.data?.isAdmin && !admin.data?.isViewer && (admin.data?.markets?.length || admin.data?.stores?.length))
     return (
