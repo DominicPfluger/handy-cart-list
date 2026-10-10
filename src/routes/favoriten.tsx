@@ -76,7 +76,7 @@ function ProductThumb({ row }: { row: FavRow }) {
 }
 
 function FavoritesPage() {
-  const { activeList, addCatalogItem, createListFromItems, favorites, hydrated, selfName, toggleFavorite } = useShoppingList();
+  const { activeList, addCatalogItem, createListFromItems, favorites, hydrated, lists, selfName, setActiveListId, toggleFavorite } = useShoppingList();
   const navigate = useNavigate();
   const favOrder = useFavoriteOrder();
   const data = useCatalog();
@@ -90,6 +90,9 @@ function FavoritesPage() {
   const [newStore, setNewStore] = useState("default");
   const [newStoreName, setNewStoreName] = useState("");
   const [newStoreEmoji, setNewStoreEmoji] = useState("");
+  const [transferMode, setTransferMode] = useState<"new" | "existing">("new");
+  const [targetListId, setTargetListId] = useState("");
+  const pendingTransferRef = useRef<{ listId: string; items: ListItem[] } | null>(null);
   const stores = useStores();
   const { setListStore, addCustomStore } = useGroupOrder();
 
