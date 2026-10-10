@@ -27,6 +27,15 @@ export function VariantTranslations({ productId, variant, productName, isPrefix,
       return (data ?? []) as Row[];
     },
   });
+  const { data: prodTr = [] } = useQuery({
+    queryKey: ["admin-product-translations", productId],
+    enabled: !!onTogglePrefix,
+    queryFn: async () => {
+      const { data } = await db.from("catalog_translations").select("locale, name").eq("entity_id", productId);
+      return (data ?? []) as { locale: string; name: string }[];
+    },
+  });
+  const prodName = (l: string) => prodTr.find((r) => r.locale === l)?.name || productName?.(l) || "";
   const rows = Object.fromEntries(data.filter((r) => r.variant === variant).map((r) => [r.locale, r]));
   const locales = allLocales();
   const [open, setOpen] = useState(false);
@@ -72,7 +81,7 @@ export function VariantTranslations({ productId, variant, productName, isPrefix,
             <TrField key={l.id + (rows[l.id]?.name ?? "")} label={`${l.flag} ${l.id}`} value={rows[l.id]?.name ?? ""}
               manual={rows[l.id]?.is_manual} onSave={(v) => void save(l.id, v)} onAi={() => ai(l.id)}
               order={isPrefix && onTogglePrefix ? (() => {
-                const vn = rows[l.id]?.name || variant; const pn = productName?.(l.id) ?? "";
+                const vn = rows[l.id]?.name || variant; const pn = prodName(l.id);
                 const pre = isPrefix(l.id);
                 return (
                   <button type="button" onClick={() => onTogglePrefix(l.id)} aria-pressed={pre}
