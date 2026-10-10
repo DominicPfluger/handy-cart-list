@@ -6,7 +6,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { mergeProducts } from "@/lib/admin.functions";
-import { useT } from "@/i18n";
+import { allLocales, useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageOptimizer } from "./image-optimizer";
@@ -44,6 +44,9 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   const [openGap, setOpenGap] = useState<string | null>(null);
   const [openEmptyRows, setOpenEmptyRows] = useState<Set<string>>(new Set());
   const [synSearch, setSynSearch] = useState("");
+  const [synLocale, setSynLocale] = useState("*");
+  const [synProd, setSynProd] = useState("");
+  const [synTerm, setSynTerm] = useState("");
   const [copyOpen, setCopyOpen] = useState(false);
   const [dupCat, setDupCat] = useState("");
 
@@ -223,7 +226,20 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
     { id: "deptNoImage", label: T("adm.health.deptNoImage"), count: gaps.deptNoImage.length, items: gaps.deptNoImage.map((d) => ({ id: d.id, label: `${d.emoji ?? "📁"} ${d.name}` })) },
   ];
 
-  const filteredSyns = (syns.data ?? []).filter((s) => !synSearch.trim() || s.term.toLowerCase().includes(synSearch.trim().toLowerCase()) || (prodById.get(s.product_id)?.name ?? "").toLowerCase().includes(synSearch.trim().toLowerCase()));
+  const addSyn = async () => {
+    const prod = prods.find((p) => `${p.name} (${deptName.get(p.department_id) ?? "?"})` === synProd || p.name === synProd);
+    const terms = synTerm.split(/[,\n]/).map((x) => x.trim()).filter(Boolean);
+    if (!prod || synLocale === "*" || !terms.length) { toast.error(T("adm.health.synAddMissing")); return; }
+    const existing = new Set((syns.data ?? []).filter((x) => x.product_id === prod.id && x.locale === synLocale).map((x) => x.term.toLowerCase()));
+    const rows = terms.filter((t) => !existing.has(t.toLowerCase())).map((term) => ({ product_id: prod.id, locale: synLocale, term }));
+    if (rows.length) {
+      const { error } = await supabase.from("product_synonyms" as never).insert(rows as never);
+      if (error) { toast.error(error.message); return; }
+    }
+    setSynTerm("");
+    void syns.refetch();
+  };
+  const filteredSyns = (syns.data ?? []).filter((s) => synLocale === "*" || s.locale === synLocale).filter((s) => !synSearch.trim() || s.term.toLowerCase().includes(synSearch.trim().toLowerCase()) || (prodById.get(s.product_id)?.name ?? "").toLowerCase().includes(synSearch.trim().toLowerCase()));
   const synNameSet = new Set(prods.map((p) => norm(p.name)));
 
   /** Gesamter Katalog als Text: Kategorie-Baum mit #-Überschriften, Produkte ohne Emojis. */
@@ -344,7 +360,28 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
 
       <section className="space-y-2">
         <h2 className="text-sm font-semibold text-foreground">{T("adm.health.synonyms")}</h2>
-        <Input value={synSearch} onChange={(e) => setSynSearch(e.target.value)} placeholder={T("adm.health.synSearch")} />
+        <div className="flex gap-2">
+          <select value={synLocale} onChange={(e) => setSynLocale(e.target.value)} aria-label={T("adm.synonyms")}
+            className="max-w-48 rounded-lg border border-input bg-background px-2 py-1 text-xs">
+            <option value="*">🌐 {T("adm.synAllLocales")} ({syns.data?.length ?? 0})</option>
+            {allLocales().map((l) => {
+              const n = (syns.data ?? []).filter((x) => x.locale === l.id).length;
+              return <option key={l.id} value={l.id}>{l.flag} {l.label}{n ? ` (${n})` : ""}</option>;
+            })}
+          </select>
+          <Input value={synSearch} onChange={(e) => setSynSearch(e.target.value)} placeholder={T("adm.health.synSearch")} />
+        </div>
+        {synLocale !== "*" && (
+          <form className="flex flex-wrap gap-2" onSubmit={(e) => { e.preventDefault(); void addSyn(); }}>
+            <Input className="min-w-40 flex-1" list="syn-prod-list" value={synProd} onChange={(e) => setSynProd(e.target.value)} placeholder={T("adm.health.synProduct")} />
+            <datalist id="syn-prod-list">
+              {synProd.trim().length >= 2 && prods.filter((p) => p.name.toLowerCase().includes(synProd.trim().toLowerCase())).slice(0, 50)
+                .map((p) => <option key={p.id} value={`${p.name} (${deptName.get(p.department_id) ?? "?"})`} />)}
+            </datalist>
+            <Input className="min-w-40 flex-1" value={synTerm} onChange={(e) => setSynTerm(e.target.value)} placeholder={T("adm.synonymPlaceholder")} />
+            <Button type="submit" variant="outline" disabled={!synProd.trim() || !synTerm.trim()}>+</Button>
+          </form>
+        )}
         <ul className="max-h-72 space-y-1 overflow-y-auto rounded-xl border border-border bg-card p-2 text-sm">
           {filteredSyns.slice(0, 200).map((s) => {
             const prod = prodById.get(s.product_id);
