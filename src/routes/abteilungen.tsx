@@ -141,6 +141,9 @@ function DepartmentsPage() {
   const { addCatalogItem, isFavorite, toggleFavorite, activeList } = useShoppingList();
   const { preferred: preferredDept } = usePreferredDept();
   const [currentId, setCurrentId] = useState<string | null>(null);
+  const [tileMode, setTileMode] = useState(false);
+  useEffect(() => { setTileMode(localStorage.getItem("shoppi:dept-tiles") === "1"); }, []);
+  const toggleTileMode = () => setTileMode((v) => { localStorage.setItem("shoppi:dept-tiles", v ? "0" : "1"); return !v; });
   const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
   const customNames = useCustomNames();
