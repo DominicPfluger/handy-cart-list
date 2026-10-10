@@ -1082,7 +1082,7 @@ function AdminPage() {
             {...(storeId ? { onAdvanced: storeRename, onToggleHidden: storeToggleHidden, isHidden: (id: string) => Boolean(ovOf(id)?.hidden) } : {})}
             busy={busy}
             headings={headings}
-            onAddHeading={(name, insertAt) => { if (storeId) return storeOnly(); const anchor = products.slice(insertAt).find((x) => !x.id.startsWith("alias:")); if (cur && anchor) void run(() => saveH({ data: { departmentId: cur, beforeProductId: anchor.id, name } }), T("adm.created")); else toast.error(T("adm.headingMoveNoTarget")); }}
+            onAddHeading={(name, insertAt) => { if (storeId) { storeOnly(); return; } const anchor = products.slice(insertAt).find((x) => !x.id.startsWith("alias:")); if (cur && anchor) void run(() => saveH({ data: { departmentId: cur, beforeProductId: anchor.id, name } }), T("adm.created")); else toast.error(T("adm.headingMoveNoTarget")); }}
             onApplyHeadingGroups={applyHeadingGroups}
             onRemoveAlias={(aliasId, name) => { if (confirm(T("adm.aliasRemove", { name }))) void run(async () => { await must(supabase.from("product_aliases").delete().eq("id", aliasId)); await qc.invalidateQueries({ queryKey: ALIAS_KEY }); }, T("adm.deleted")); }}
             productAliasOptions={productAliasOptions}
@@ -1101,8 +1101,8 @@ function AdminPage() {
             onMoveHeading={storeId ? storeOnly : moveHeading}
             onMoveProduct={(id, to, headingId) => (storeId ? storeMoveProduct(id, to) : moveProduct(products, id, to, headingId))}
             onAssignHeading={(productId, headingId) => storeId ? storeOnly() : run(() => assignHeading(productId, headingId), T("adm.saved"))}
-            onRenameHeading={(id, name) => { if (storeId) return storeOnly(); const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
-            onDeleteHeading={(id, name) => { if (storeId) return storeOnly(); if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
+            onRenameHeading={(id, name) => { if (storeId) { storeOnly(); return; } const h = headings.find((x) => x.id === id); if (h) void run(() => saveH({ data: { id, departmentId: h.department_id, beforeProductId: h.before_product_id, name } }), T("adm.saved")); }}
+            onDeleteHeading={(id, name) => { if (storeId) { storeOnly(); return; } if (confirm(`${T("adm.delete")}: ${name}?`)) void run(() => delH({ data: { id } }), T("adm.deleted")); }}
             onSortHeading={(id) => setSortDlg(id)}
             onBulkAdd={cur ? () => setBulk("plain") : undefined}
             onBulkTree={() => setBulkTree(true)}
