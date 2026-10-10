@@ -94,8 +94,8 @@ function TileThumb({ product }: { product: CatalogProduct }) {
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
-  // Bilder in den Kategorie-Kacheln: Bildfläche 135 px (10 % kleiner als die 150 px zuvor).
-  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl ?? department.iconUrl} imagePath={department.imagePath ?? department.iconPath} className="h-[135px] w-auto max-w-full object-contain" symbolClassName="text-4xl leading-none" />;
+  // Standardgrösse: DepartmentIcon-Defaults (74 % der Bildfläche) in einer 4:3-Bildfläche.
+  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl ?? department.iconUrl} imagePath={department.imagePath ?? department.iconPath} />;
 }
 
 function DepartmentsPage() {
@@ -633,7 +633,7 @@ function DepartmentsPage() {
                 className={`group/tile relative w-full select-none ${drag?.id === department.id ? "opacity-40" : ""} ${dropKind === "into" ? "ring-2 ring-primary" : ""} ${dropKind === "before" ? "!border-l-4 !border-l-primary" : ""} ${dropKind === "after" ? "!border-r-4 !border-r-primary" : ""} h-auto min-w-0 flex-col items-stretch gap-0 overflow-hidden rounded-xl border border-border bg-card p-0 text-left shadow-sm active:scale-[0.98]`}
               >
                 <span
-                  className={`grid h-[135px] w-full place-items-center overflow-hidden ${tileColor ? "" : "bg-primary-soft/25"}`}
+                  className={`grid aspect-[4/3] w-full place-items-center overflow-hidden ${tileColor ? "" : "bg-primary-soft/25"}`}
                   style={tileColor ? { backgroundColor: tileColor } : undefined}
                 >
                   <DepartmentThumb department={department} />
