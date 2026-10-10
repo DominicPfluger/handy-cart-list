@@ -37,6 +37,8 @@ export interface CatalogProduct {
   unitQuantities?: Record<string, number>;
   organicAvailable: boolean;
   variants: string[];
+  /** Varianten, die vor dem Produktnamen stehen („Erdbeer-Joghurt“) */
+  prefixVariants?: string[];
   /** Suchbegriffe wie „Passionsfrucht" für Maracuja (alle Sprachen) */
   synonyms?: string[];
   /** Suchbegriffe je Variante: Variante → Begriffe */
@@ -294,7 +296,7 @@ export const getCatalogCore = createServerFn({ method: "GET" })
       fetchAll(
         supabase,
         "products",
-        "id, department_id, name, emoji, image_path, icon_path, default_quantity, default_unit, allowed_units, unit_quantities, organic_available, variants, excluded_diets, markets, sort_order",
+        "id, department_id, name, emoji, image_path, icon_path, default_quantity, default_unit, allowed_units, unit_quantities, organic_available, variants, prefix_variants, excluded_diets, markets, sort_order",
         ["sort_order", "id"],
       ),
       supabase.from("product_headings").select("id, department_id, before_product_id, name"),
@@ -347,6 +349,7 @@ export const getCatalogCore = createServerFn({ method: "GET" })
         unitQuantities: (r["unit_quantities"] as Record<string, number> | null) ?? {},
         organicAvailable: (r["organic_available"] as boolean) ?? true,
         variants: (r["variants"] as string[] | null) ?? [],
+        prefixVariants: (r["prefix_variants"] as string[] | null) ?? [],
         synonyms: [],
         variantNames: {},
         variantImages: {},
