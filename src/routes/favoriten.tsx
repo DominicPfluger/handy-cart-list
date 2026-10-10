@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDepartmentOrder } from "../hooks/use-department-order";
 import { useFavoriteOrder, saveFavoriteOrder } from "../hooks/use-item-order";
 import { toast } from "sonner";
@@ -76,7 +76,7 @@ function ProductThumb({ row }: { row: FavRow }) {
 }
 
 function FavoritesPage() {
-  const { activeList, addCatalogItem, createListFromItems, favorites, hydrated, selfName, toggleFavorite } = useShoppingList();
+  const { activeList, addCatalogItem, createListFromItems, favorites, hydrated, lists, selfName, setActiveListId, toggleFavorite } = useShoppingList();
   const navigate = useNavigate();
   const favOrder = useFavoriteOrder();
   const data = useCatalog();
@@ -90,6 +90,9 @@ function FavoritesPage() {
   const [newStore, setNewStore] = useState("default");
   const [newStoreName, setNewStoreName] = useState("");
   const [newStoreEmoji, setNewStoreEmoji] = useState("");
+  const [transferMode, setTransferMode] = useState<"new" | "existing">("new");
+  const [targetListId, setTargetListId] = useState("");
+  const pendingTransferRef = useRef<{ listId: string; add: () => void; count: number } | null>(null);
   const stores = useStores();
   const { setListStore, addCustomStore } = useGroupOrder();
 
@@ -312,6 +315,8 @@ function FavoritesPage() {
     setNewStore("default");
     setNewStoreName("");
     setNewStoreEmoji("");
+    setTransferMode("new");
+    setTargetListId(lists[0]?.id ?? "");
     setListNameOpen(true);
   };
 
@@ -324,14 +329,14 @@ function FavoritesPage() {
     setNewStoreEmoji("");
   };
 
-  /** Alle Favoriten (in angezeigter Reihenfolge) in eine neue Einkaufsliste übertragen. */
-  const transferAllToNewList = (name: string) => {
+  /** Alle Favoriten (in angezeigter Reihenfolge) als Listeneinträge aufbereiten. */
+  const buildTransferItems = (): ListItem[] => {
     const rows: FavRow[] = [
       ...sections.flatMap((s) => s.entries.map((e) => e.row)),
       ...[...looseFavorites].sort((a, b) => (favOrder[a.favorite.productId] ?? 1e9) - (favOrder[b.favorite.productId] ?? 1e9)),
     ];
-    if (!rows.length) return;
-    const items: ListItem[] = rows.map((row, i) => {
+    if (!rows.length) return [];
+    return rows.map((row, i) => {
       const group = groupOfRow(row);
       return {
         id: `i${Date.now()}-${i}`,
@@ -349,16 +354,65 @@ function FavoritesPage() {
         productId: row.product.departmentId ? row.product.id : row.favorite.productId,
       };
     });
-    const createdId = createListFromItems(name, items);
-    if (createdId && newStore !== "__new__") setListStore(createdId, newStore);
+  };
+
+  const closeTransferDialog = () => {
     setListNameOpen(false);
     setNewStore("default");
     setNewStoreName("");
     setNewStoreEmoji("");
+  };
+
+  /** Alle Favoriten in eine neue Einkaufsliste übertragen. */
+  const transferAllToNewList = (name: string) => {
+    const items = buildTransferItems();
+    if (!items.length) return;
+    const createdId = createListFromItems(name, items);
+    if (createdId && newStore !== "__new__") setListStore(createdId, newStore);
+    closeTransferDialog();
     if (createdId) try { sessionStorage.setItem("shoppi:open-list", createdId); } catch { /* ignore */ }
     toast.success(t("fav.toListDone", { count: items.length }));
     navigate({ to: "/" });
   };
+
+  /** Alle Favoriten einer bestehenden Liste hinzufügen (nach dem Wechsel zur Zielliste). */
+  const transferAllToExistingList = (listId: string) => {
+    const items = buildTransferItems();
+    if (!items.length || !listId) return;
+    closeTransferDialog();
+    const addAll = () => {
+      for (const item of items) addCatalogItem({
+        productId: item.productId ?? item.id,
+        name: item.name,
+        quantity: item.quantity,
+        unit: item.unit ?? "stueck",
+        organic: false,
+        emoji: item.emoji,
+        imageUrl: item.imageUrl,
+        groupLabel: item.groupLabel,
+        groupEmoji: item.groupEmoji,
+      });
+    };
+    try { sessionStorage.setItem("shoppi:open-list", listId); } catch { /* ignore */ }
+    if (listId === activeList.id) {
+      addAll();
+      toast.success(t("fav.toListDone", { count: items.length }));
+      navigate({ to: "/" });
+      return;
+    }
+    pendingTransferRef.current = { listId, add: addAll, count: items.length };
+    setActiveListId(listId);
+  };
+
+  useEffect(() => {
+    const pending = pendingTransferRef.current;
+    if (!pending || activeList.id !== pending.listId) return;
+    pendingTransferRef.current = null;
+    pending.add();
+    toast.success(t("fav.toListDone", { count: pending.count }));
+    navigate({ to: "/" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeList.id]);
 
   const renderRow = (row: FavRow, { showCategory = false, sec, ids }: { showCategory?: boolean; sec?: string; ids?: string[] } = {}) => {
     const group = groupOfRow(row);
@@ -519,6 +573,36 @@ function FavoritesPage() {
           >
             <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-muted" />
             <h2 className="mb-4 text-lg font-bold text-foreground">{t("fav.listNameTitle")}</h2>
+            <div className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-muted p-1">
+              {(["new", "existing"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  aria-pressed={transferMode === mode}
+                  onClick={() => setTransferMode(mode)}
+                  className={`rounded-lg px-3 py-2 text-sm font-semibold ${transferMode === mode ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}
+                >
+                  {mode === "new" ? t("fav.modeNew") : t("fav.modeExisting")}
+                </button>
+              ))}
+            </div>
+            {transferMode === "existing" ? (
+              <div className="max-h-56 space-y-1.5 overflow-y-auto">
+                {lists.map((l) => (
+                  <button
+                    key={l.id}
+                    type="button"
+                    onClick={() => setTargetListId(l.id)}
+                    aria-pressed={targetListId === l.id}
+                    className={`flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-2.5 text-left ${targetListId === l.id ? "border-primary bg-primary/10" : "border-border"}`}
+                  >
+                    <span className="min-w-0 truncate text-sm font-semibold text-foreground">{l.name}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{l.items.filter((i) => !i.checked).length}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+            <>
             <input
               autoFocus
               value={listName}
@@ -572,6 +656,8 @@ function FavoritesPage() {
                 </div>
               </div>
             )}
+            </>
+            )}
             <div className="mt-4 flex gap-2">
               <button
                 onClick={() => setListNameOpen(false)}
@@ -580,11 +666,17 @@ function FavoritesPage() {
                 {t("common.cancel")}
               </button>
               <button
-                onClick={() => listName.trim() && newStore !== "__new__" && transferAllToNewList(listName.trim())}
-                disabled={!listName.trim() || newStore === "__new__"}
+                onClick={() => {
+                  if (transferMode === "existing") {
+                    if (targetListId) transferAllToExistingList(targetListId);
+                  } else if (listName.trim() && newStore !== "__new__") {
+                    transferAllToNewList(listName.trim());
+                  }
+                }}
+                disabled={transferMode === "existing" ? !targetListId : !listName.trim() || newStore === "__new__"}
                 className="flex-1 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
               >
-                {t("lm.create")}
+                {transferMode === "existing" ? t("fav.addToExisting") : t("lm.create")}
               </button>
             </div>
           </div>
