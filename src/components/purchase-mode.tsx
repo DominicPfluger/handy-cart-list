@@ -135,11 +135,17 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     const synth = window.speechSynthesis;
     let cancelled = false;
     let spoken = false;
+    let keepAlive = 0;
     const run = () => {
       if (cancelled || spoken) return;
       spoken = true;
       try { synth.resume(); } catch { /* ignore */ }
       speakItem(current);
+      // Chrome bricht lange Ausgaben nach ca. 15 s still ab; periodisches resume() hält sie am Laufen.
+      keepAlive = window.setInterval(() => {
+        if (cancelled) { window.clearInterval(keepAlive); return; }
+        try { if (synth.speaking && !synth.paused) synth.resume(); } catch { /* ignore */ }
+      }, 5000);
     };
     let timer = 0;
     if (synth.getVoices().length === 0) {
@@ -156,6 +162,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
+      if (keepAlive) window.clearInterval(keepAlive);
       try { synth.cancel(); } catch { /* ignore */ }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -167,24 +174,32 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   // Safari/iOS blockiert Sprachausgabe ohne vorherige Nutzer-Geste: blockierte
   // Ausgabe merken und beim nächsten Antippen nachholen.
   const blockedRef = useRef<string | null>(null);
-  const speakNow = (text: string, queued = false) => {
+  const speakNow = (text: string, queued = false, retried = false) => {
     const synth = window.speechSynthesis;
     if (!synth || !text.trim()) return;
     const u = new SpeechSynthesisUtterance(expandAbbreviations(text, speakLocale));
     u.lang = speakLocale;
-    const voice = findVoice(speakLocale);
+    const voice = retried ? undefined : findVoice(speakLocale);
     if (voice) u.voice = voice;
     u.rate = rate;
     let started = false;
     u.onstart = () => { started = true; if (uttRef.current === u) blockedRef.current = null; };
     u.onend = () => { started = true; };
+    u.onerror = (e) => {
+      if (e.error === "interrupted" || e.error === "canceled") return;
+      // Gewählte Stimme schlug fehl: einmal mit der Geräte-Standardstimme wiederholen.
+      if (!retried && uttRef.current === u && !started) speakNow(text, queued, true);
+    };
     uttRef.current = u;
     blockedRef.current = null;
     if (!queued) { try { synth.resume(); } catch { /* ignore */ } }
     synth.speak(u);
     // Nur als blockiert merken, wenn die Ausgabe nachweislich nie gestartet ist.
     window.setTimeout(() => {
-      if (uttRef.current === u && !started && !synth.speaking) blockedRef.current = text;
+      if (uttRef.current === u && !started && !synth.speaking && !synth.pending) {
+        if (!retried) speakNow(text, queued, true);
+        else blockedRef.current = text;
+      }
     }, 1500);
   };
 
