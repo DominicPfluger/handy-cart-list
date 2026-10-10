@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Aktueller Auftrag
+- [ ] Vier Überschriften unter „Küchenfertiges Gemüse & Obst“ in Unterkategorien umwandeln; Artikel und Übersetzungen übernehmen.
 - [x] 80 vorgeschlagene Artikel unter „Küchenfertiges Gemüse & Obst“ mit vier Überschriften und 1260 Übersetzungen in 15 weiteren Sprachversionen eingeordnet; ohne KI-Bilder. Daten und Anzeige mit 80 Produktzeilen und vier Überschriften geprüft.
 
 ## Erledigt
