@@ -9,6 +9,48 @@ import { useAllMarkets } from "../hooks/use-all-markets";
 import { useMarket } from "../hooks/use-market";
 import { catalogCacheReady, idbGet, idbKeys, idbSet } from "./catalog-idb";
 import type { QueryClient } from "@tanstack/react-query";
+import { useGroupOrder } from "../hooks/use-group-order";
+import { supabase } from "@/integrations/supabase/client";
+
+type StoreOverrides = {
+  d: Record<string, { name: string | null; sort_order: number | null; hidden: boolean }>;
+  p: Record<string, { name: string | null; emoji: string | null; default_quantity: number | null; default_unit: string | null; sort_order: number | null; hidden: boolean }>;
+};
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Laden-spezifische Katalog-Abweichungen (offline im Geräte-Cache). */
+function useStoreOverrides(store: string): StoreOverrides | undefined {
+  const enabled = UUID_RE.test(store);
+  const key = `shoppi:store-ov-${store}`;
+  const cached = enabled && typeof window !== "undefined" ? idbGet<{ t: number; data: StoreOverrides }>(key) : null;
+  const { data } = useQuery({
+    queryKey: ["store-overrides", store],
+    enabled,
+    queryFn: async () => {
+      try {
+        const [d, p] = await Promise.all([
+          supabase.from("store_department_overrides").select("department_id, name, sort_order, hidden").eq("supermarket_id", store),
+          supabase.from("store_product_overrides").select("product_id, name, emoji, default_quantity, default_unit, sort_order, hidden").eq("supermarket_id", store),
+        ]);
+        if (d.error || p.error) throw new Error((d.error ?? p.error)!.message);
+        const out: StoreOverrides = {
+          d: Object.fromEntries((d.data ?? []).map(({ department_id, ...r }) => [department_id, r])),
+          p: Object.fromEntries((p.data ?? []).map(({ product_id, ...r }) => [product_id, r])),
+        };
+        idbSet(key, { t: Date.now(), data: out });
+        return out;
+      } catch (e) {
+        const c = idbGet<{ t: number; data: StoreOverrides }>(key);
+        if (c) return c.data;
+        throw e;
+      }
+    },
+    initialData: cached?.data,
+    initialDataUpdatedAt: cached?.t ?? 0,
+    staleTime: 5 * 60 * 1000,
+  });
+  return enabled ? data : undefined;
+}
 
 
 export function flagOf(market: string): string {
@@ -147,8 +189,37 @@ export function useCatalog(): Catalog {
   const own = useCustomCatalog();
   const personalVariants = usePersonalVariants();
   const allMarkets = useAllMarkets();
+  const { store } = useGroupOrder();
+  const so = useStoreOverrides(store);
   return useMemo(() => {
-    const core: CatalogCore = data ?? { departments: [], products: [], headings: [], departmentAliases: [], productAliases: [] };
+    const raw: CatalogCore = data ?? { departments: [], products: [], headings: [], departmentAliases: [], productAliases: [] };
+    let core = raw;
+    if (so) {
+      const hiddenD = new Set(Object.entries(so.d).filter(([, o]) => o.hidden).map(([id]) => id));
+      // Unterkategorien ausgeblendeter Kategorien ebenfalls ausblenden
+      let grew = hiddenD.size > 0;
+      while (grew) { grew = false; for (const d of raw.departments) if (d.parentId && hiddenD.has(d.parentId) && !hiddenD.has(d.id)) { hiddenD.add(d.id); grew = true; } }
+      core = {
+        ...raw,
+        departments: raw.departments.filter((d) => !hiddenD.has(d.id)).map((d) => {
+          const o = so.d[d.id];
+          if (!o) return d;
+          return { ...d, sortOrder: o.sort_order ?? d.sortOrder, ...(o.name ? { baseName: o.name, names: {} } : {}) };
+        }),
+        products: raw.products.filter((p) => !hiddenD.has(p.departmentId) && !so.p[p.id]?.hidden).map((p) => {
+          const o = so.p[p.id];
+          if (!o) return p;
+          return {
+            ...p,
+            ...(o.name ? { baseName: o.name, names: {} } : {}),
+            ...(o.emoji ? { emoji: o.emoji } : {}),
+            ...(o.default_quantity != null ? { defaultQuantity: o.default_quantity } : {}),
+            ...(o.default_unit ? { defaultUnit: o.default_unit } : {}),
+            ...(o.sort_order != null ? { sortOrder: o.sort_order, marketOrder: {} } : {}),
+          };
+        }),
+      };
+    }
     const img = (path: string | null | undefined) => (path ? (images?.[path] ?? null) : null);
     const d: CatalogDetails | undefined = details;
     const ownDepts: CatalogDepartment[] = own.departments.map((d, i) => ({
@@ -190,7 +261,7 @@ export function useCatalog(): Catalog {
       recipeSteps: (d?.recipeSteps ?? []).map((r) => ({ ...r, name: pickName(r.names, locale, r.baseName) })),
       recipePopular: d?.recipePopular ?? [],
     };
-  }, [data, details, images, locale, market, custom, own, allMarkets, personalVariants]);
+  }, [data, details, images, locale, market, custom, own, allMarkets, personalVariants, so]);
 }
 
 export type { Catalog, CatalogCuisine, CatalogDepartment, CatalogHeading, CatalogProduct };

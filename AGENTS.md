@@ -25,16 +25,16 @@
 - Recipe cuisines are explicit, optional many-to-many recipe assignments, independent of the device-local ingredient cuisine filter. Why: shared recipe search must not infer cuisines from personal ingredient preferences.
 
 ## Landingpage
-- Erster Besuch auf `/` zeigt die Landingpage (`src/components/landing/landing-page.tsx`, Flag `shoppi:landing-seen` via `src/lib/landing.ts`); danach direkt die Einkaufsliste. Die Website-Variante liegt auf `/start` mit eigenem head(). Warum: öffentliche Seite unter der künftigen Domain, App-Entscheid bleibt geräte-lokal.
+- First visit to `/` shows the landing page (flag `shoppi:landing-seen`, src/lib/landing.ts), then the list; website version on `/start`. Why: public page, device-local choice.
 - Admin tile view (catalog-tile-editor.tsx) reuses admin.tsx data + save/reorder/remove callbacks. Why: one write path for list and tile editing.
 - Admin-created locales live in app_locales + ui_translations, loaded at runtime by src/i18n; server translation targets = built-in + app_locales (targetLocales). Why: add languages without redeploy.
-- Products keep full image_path plus separate 64px icon_path (compressed in admin browser, also after AI generation; icon-only generation leaves image_path untouched). Why: light list rows, detail imagery preserved.
-- Admin AI image generation preserves existing icon_path values. Why: refreshing a large image must not silently change list artwork.
+- Products keep image_path plus separate 64px icon_path; AI generation of either never overwrites the other. Why: light list rows, stable artwork.
 - Small catalog and list icons share a device-local image/symbol preference; full product photos remain unchanged. Why: one visual choice should apply consistently without changing shared catalog data.
 - Catalog artwork uses stable-path CacheStorage for 30 days; Settings can persist every category/product/variant image and icon. Why: expiring links only authorize cache misses and the full catalog stays offline.
 - Vorlagen in "Listen bearbeiten" sind per Drag & Drop sortierbar (reorderTemplates, sort_order auf shopping_lists). Why: gleiche Bedienung wie bei Listen.
-- Produktanlage im Admin bietet bei Abteilungen mit Überschriften eine Positions-Auswahl; neue Produkte werden am Gruppenende der gewählten Überschrift eingereiht und bestehende sort_order-Werte verschoben. Why: gezieltes Einordnen ohne nachträgliches Ziehen.
+- Admin product creation can target a heading; new items go to that group's end, shifting sort_order. Why: precise placement.
 - Units live in public.units; products keep ordered preferred units with a quantity per unit, and the first mirrors the legacy default. Why: editable units and package-specific defaults.
 - Unshared cloud lists are edited device-locally (`shoppi:local-lists` holds dirty ids + last synced base) and pushed only via the manual sync button as a diff; shared lists (>1 member) stay live. Why: no network traffic while shopping, user controls when the web copy updates.
 - Offline catalog cache lives in IndexedDB (src/lib/catalog-idb.ts) with an in-memory mirror; route loaders use ensureCatalog to await it. Why: localStorage 5 MB limit and synchronous parsing.
 - Adding a catalog item that matches an open entry (same product/name, organic flag, unit, numeric qty, no note/photo) sums quantities instead of duplicating. Why: avoid duplicate rows.
+- Store-specific catalog changes live as overrides in store_department_overrides/store_product_overrides (merged in useCatalog by the device-selected store); store_admins + is_store_admin gate writes. Why: shared catalog stays untouched, per-store views stay resettable.
