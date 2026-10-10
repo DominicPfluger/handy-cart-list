@@ -653,8 +653,19 @@ function DepartmentsPage() {
               {shownProducts.map((product) => {
                 const group = groupFor(product);
                 const favorite = isFavorite(product.id);
+                // Überschriften erscheinen auch im Kachelmodus direkt vor ihrem Anker-Produkt
+                const heading = !normalizedQuery ? headingBefore.get(product.id) : undefined;
                 return (
-                  <div key={product.id} className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+                  <Fragment key={product.id}>
+                  {heading && (
+                    <div
+                      onClick={() => { if (isAdmin && !suppressClick.current) setHeadingTarget({ departmentId: heading.departmentId, products: directProducts, heading }); }}
+                      className={`col-span-2 select-none px-1 pt-1 text-sm font-bold text-foreground ${isAdmin ? "cursor-pointer" : ""}`}
+                    >
+                      {heading.name}
+                    </div>
+                  )}
+                  <div className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm">
                     <button type="button" aria-label={product.name} onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="grid aspect-square w-full place-items-center overflow-hidden bg-primary-soft/25">
                       <TileThumb product={product} />
                     </button>
@@ -705,6 +716,7 @@ function DepartmentsPage() {
                     </div>
 
                   </div>
+                  </Fragment>
                 );
               })}
             </div>
