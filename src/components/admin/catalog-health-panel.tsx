@@ -195,6 +195,20 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
     ignore(p);
   };
 
+  const doRename = async (p: Pair, target: Prod) => {
+    const next = prompt(T("adm.health.renamePrompt", { name: target.name, cat: deptPath(target.department_id) }), target.name)?.trim();
+    if (!next || next === target.name) return;
+    setBusy(true);
+    const { error } = await supabase.from("products").update({ name: next } as never).eq("id", target.id);
+    setBusy(false);
+    if (error) { toast.error(error.message); return; }
+    target.name = next;
+    toast.success(T("adm.health.renamed"));
+    ignore(p);
+    await qc.invalidateQueries({ queryKey: ["admin-catalog"] });
+    await qc.invalidateQueries({ queryKey: ["catalog"] });
+  };
+
   const removeSyn = async (id: string) => {
     const { error } = await supabase.from("product_synonyms" as never).delete().eq("id", id);
     if (error) toast.error(error.message); else void syns.refetch();
@@ -314,6 +328,10 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
                       <Button size="sm" variant="outline" disabled={busy} onClick={() => void doMerge(p)}>{T("adm.health.merge")}</Button>
                       <Button size="sm" variant="outline" disabled={busy} onClick={() => void doLink(p)}>{T("adm.health.link")}</Button>
+                      {norm(p.a.name) === norm(p.b.name) && (<>
+                        <Button size="sm" variant="outline" disabled={busy} onClick={() => void doRename(p, p.a)}>✏️ {T("adm.health.rename")}: {deptName.get(p.a.department_id) ?? "?"}</Button>
+                        <Button size="sm" variant="outline" disabled={busy} onClick={() => void doRename(p, p.b)}>✏️ {T("adm.health.rename")}: {deptName.get(p.b.department_id) ?? "?"}</Button>
+                      </>)}
                       <Button size="sm" variant="outline" disabled={busy} onClick={() => ignore(p)}>{T("adm.health.ignore")}</Button>
                     </div>
                   </li>
