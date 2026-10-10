@@ -1003,7 +1003,7 @@ function AdminPage() {
 
       <div className="flex flex-wrap gap-2">
         {(
-          <select value={mk} onChange={(e) => { const v = e.target.value; setMk(v); if (v && viewLoc.split("-")[1] !== v) setViewLoc(allLocales().find((l) => l.id.split("-")[1] === v)?.id ?? "de-DE"); if (!e.target.value && sortBy === "marketRelevance") setSortBy("popularity"); }} aria-label={T("adm.marketChoice")}
+          <select value={mk} onChange={(e) => { const v = e.target.value; setMk(v); if (v && storeId && storesQ.data?.find((x) => x.id === storeId)?.market_code !== v) setStoreId(""); if (v && viewLoc.split("-")[1] !== v) setViewLoc(allLocales().find((l) => l.id.split("-")[1] === v)?.id ?? "de-DE"); if (!e.target.value && sortBy === "marketRelevance") setSortBy("popularity"); }} aria-label={T("adm.marketChoice")}
             className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
             <optgroup label={T("adm.marketChoice")}>
               <option value="">{T("adm.marketGlobal")}</option>
@@ -1061,10 +1061,17 @@ function AdminPage() {
         </div>
       ) : d ? (
         <>
-          <CatalogTileEditor depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={children} products={products}
+          {curStore && (
+            <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/40 bg-primary-soft px-3 py-2 text-sm text-foreground">
+              <span className="min-w-0 flex-1">🏪 <b>{curStore.name}</b> – {T("st.tileHint")}</span>
+              <Button size="sm" variant="outline" onClick={storeResetAll}>{T("st.resetAll")}</Button>
+            </div>
+          )}
+          <CatalogTileEditor key={storeId || "shared"} depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={tileChildren} products={tileProducts}
             imageEditor={imageEditor} imageEditorProduct={imageEditor ? d.prods.find((x) => x.id === imageEditor.id) : undefined} onCloseImageEditor={() => setImageEditor(null)}
-            path={path(cur)} nm={nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
-            reorder={reorder} remove={(kind, id, name) => remove({ kind, id }, name)}
+            path={path(cur)} nm={storeId ? nmStore : nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
+            reorder={storeId ? storeReorder : reorder} remove={(kind, id, name) => (storeId ? storeToggleHidden(kind, id) : remove({ kind, id }, name))}
+            {...(storeId ? { onAdvanced: storeRename } : {})}
             busy={busy}
             headings={headings}
             onAddHeading={(name, insertAt) => { const anchor = products.slice(insertAt).find((x) => !x.id.startsWith("alias:")); if (cur && anchor) void run(() => saveH({ data: { departmentId: cur, beforeProductId: anchor.id, name } }), T("adm.created")); else toast.error(T("adm.headingMoveNoTarget")); }}
@@ -1097,7 +1104,7 @@ function AdminPage() {
             onDeleteSelectedDepts={deleteSelectedDepts}
             onMoveSelected={moveSelected}
             moveDeptOptions={deptTreeOrder(d.depts).map((x) => ({ id: x.id, label: path(x.id).map((p) => nm(p.id, p.name)).join(" › ") }))}
-            onAdvanced={(kind, id) => setSel({ kind, id })} />
+            {...(storeId ? {} : { onAdvanced: (kind: "department" | "product", id: string) => setSel({ kind, id }) })} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
               headings={headings} products={products}
