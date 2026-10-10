@@ -1139,7 +1139,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
       }
       if (changed) void qc.invalidateQueries();
     }
-    // Neue Produkte bleiben offen für die automatische Ergänzung (Bild, Preise); sonst schliessen.
+    // Neue Produkte bleiben offen für die automatische Ergänzung (Übersetzungen, Preise); sonst schliessen.
     if (!isNewProduct) p.onClose();
     });
     if (createdId) {

@@ -1038,7 +1038,7 @@
   "tile.enrichImage": "Creating product image …",
   "tile.enrichPrices": "Estimating market prices …",
   "tile.enrichPartial": "Product saved; some additions failed",
-  "tile.enrichDone": "Product image, translations and market prices added",
+  "tile.enrichDone": "Translations and market prices added",
   "more.dietPreference": "Preferred diet",
   "more.dietNone": "No restrictions",
   "more.market": "Market",
