@@ -393,6 +393,7 @@ function FavoritesPage() {
         groupEmoji: item.groupEmoji,
       });
     };
+    try { sessionStorage.setItem("shoppi:open-list", listId); } catch { /* ignore */ }
     if (listId === activeList.id) {
       addAll();
       toast.success(t("fav.toListDone", { count: items.length }));
