@@ -13,7 +13,7 @@ export function joinVariantName(
 ): string {
   if (!rest) return base;
   const [variant, ...extra] = rest.split(" · ");
-  const v = variant.trim();
+  const v = (variant ?? "").trim();
   const lower = v.toLocaleLowerCase();
   const prefix = (product?.prefixVariants ?? []).some((p) =>
     p.toLocaleLowerCase() === lower || Object.values(product?.variantNames?.[p] ?? {}).some((n) => n.toLocaleLowerCase() === lower));
