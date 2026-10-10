@@ -36,6 +36,8 @@ export const de = {
   "dept.removeVariant": "Eigene Variante {name} entfernen",
   "dept.details": "Details",
   "adm.variantImage": "Variantenbild",
+  "adm.variantImageBig": "Bild gross anzeigen",
+  "adm.variantImageMenu": "Bild anpassen",
   "adm.variantImageUpload": "Bild hochladen",
   "adm.variantImageRemove": "Bild löschen",
   "adm.variantRename": "Variante umbenennen",
