@@ -38,3 +38,4 @@
 - [x] Vibration beim Abhaken (Liste + Einkaufsmodus)
 - [x] Produkt bearbeiten: Variantenbild anklicken zeigt Grossansicht, Menü (⋮) für Hochladen/KI/Löschen
 - [x] Bilder-Tab: KI-Bilder zwischen Produkte ohne Bild und eigenständiger Bildergalerie
+- [x] Neue Hauptkategorie „Wohnen & Möbel“: 9 Bereiche, 257 Artikel, Übersetzungen in 15 Sprachen, ohne Icons (Icons folgen später)

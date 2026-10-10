@@ -32,7 +32,7 @@ const ROOT_COLORS: Record<string, string> = {
 /** Wurzelkategorien ohne Lebensmittel — Ernährungs- und Länderküchenfilter greifen dort nicht. */
 export const NON_FOOD_ROOTS: ReadonlySet<string> = new Set([
   "Körperpflege", "Haushalt", "Tierbedarf", "Apotheke & Drogerie", "Büroartikel",
-  "Autozubehör", "Elektronik", "Kleidung & Textilien", "Küchenutensilien", "Tabak & Dampfen",
+  "Autozubehör", "Elektronik", "Kleidung & Textilien", "Küchenutensilien", "Tabak & Dampfen", "Wohnen & Möbel",
 ]);
 
 /** Prüft anhand des deutschen Basisnamens, ob eine Wurzelkategorie Non-Food ist. */
