@@ -17,6 +17,6 @@ export function joinVariantName(
   const lower = v.toLocaleLowerCase();
   const prefix = (product?.prefixVariants ?? []).some((p) =>
     p.toLocaleLowerCase() === lower || Object.values(product?.variantNames?.[p] ?? {}).some((n) => n.toLocaleLowerCase() === lower));
-  const head = !v ? base : prefix ? `${v}-${base}` : `${base} ${v}`;
+  const head = !v ? base : prefix ? `${v} ${base}` : `${base} ${v}`;
   return [head, ...extra].join(" · ");
 }

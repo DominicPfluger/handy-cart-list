@@ -1522,7 +1522,7 @@ function Editor(p: {
                       title={T("adm.variantPosHint")}
                       className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${prefixVariants.includes(v) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}
                     >
-                      {prefixVariants.includes(v) ? `${v}-${prod.name}` : `${prod.name} ${v}`}
+                      {prefixVariants.includes(v) ? `${v} ${prod.name}` : `${prod.name} ${v}`}
                     </button>
                     {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                     {(prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}
