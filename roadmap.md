@@ -54,3 +54,4 @@
 - [x] Bereich «Bilder» in Produktbilder und Kategorien & Unterkategorien geteilt
 - [x] «Ganzen Laden zurücksetzen» deaktiviert (Knopf im Kachelmodus und im Bereich «Läden-Katalog» entfernt; Zurücksetzen pro Eintrag bleibt)
 - [x] Abteilungs-Kachelmodus: grünes Plus öffnet den Hinzufügen-Dialog; Umschalter-Labels in allen 15 Sprachen
+- [x] Abteilungsmodus: Kategoriebilder ca. 20% grösser (Bildfläche 125 -> 150 px, Bilder füllen die Fläche ohne Abschneiden)
