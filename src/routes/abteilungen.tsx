@@ -46,6 +46,7 @@ import { saveHeading } from "../lib/admin.functions";
 import { useReferencePrices, formatRefPrice } from "../hooks/use-reference-prices";
 import { useMarket } from "../hooks/use-market";
 import { removePersonalVariant, usePersonalVariants } from "../hooks/use-personal-variants";
+import { variantDisplayName } from "../lib/utils";
 
 
 export const Route = createFileRoute("/abteilungen")({
@@ -201,7 +202,7 @@ function DepartmentsPage() {
   const aliasProductIds = new Set(directProducts.filter((p) => p.departmentId !== currentId).map((p) => p.id));
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const locale = getLocale();
-  const variantLabel = (product: CatalogProduct, v: string) => pickName(product.variantNames?.[v], locale, v);
+  const variantLabel = (product: CatalogProduct, v: string) => variantDisplayName(v, pickName(product.variantNames?.[v], locale, v));
   const matchedVariant = (product: CatalogProduct) =>
     (product.variants ?? []).find((v) => matchesProductSearch(variantLabel(product, v), normalizedQuery) || (product.variantSynonyms?.[v] ?? []).some((s) => matchesProductSearch(s, normalizedQuery)));
   const matchedSynonym = (product: CatalogProduct) =>

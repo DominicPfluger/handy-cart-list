@@ -5,6 +5,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+/** Preserve the initial casing chosen in the variant editor across translations. */
+export function variantDisplayName(variant: string, localizedName: string): string {
+  const initial = Array.from(variant.trim())[0];
+  const letters = Array.from(localizedName);
+  const first = letters[0];
+  if (!initial || !first || initial.toLocaleLowerCase() === initial.toLocaleUpperCase()) return localizedName;
+  letters[0] = initial === initial.toLocaleLowerCase()
+    ? first.toLocaleLowerCase()
+    : first.toLocaleUpperCase();
+  return letters.join("");
+}
+
 /** Setzt Produkt und Variante zusammen: vorangestellt „Variante-Produkt“, sonst „Produkt Variante“; weitere Zusätze (Marke) bleiben mit „ · “. */
 export function joinVariantName(
   base: string,

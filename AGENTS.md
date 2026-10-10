@@ -11,7 +11,7 @@
 - i18n: UI strings in `src/i18n/de.ts` + `messages.json`; catalog names in `catalog_translations` via `pickName` (de-CH ß→ss). Why: light store, no SSR mismatch.
 - Admin writes via RLS `has_role`; AI translation in `translate.server.ts`. Why: no service-role in app code.
 - Personal data stays device-only. Why: shared catalog is admin-controlled.
-- User-created product variants are device-local and merged into catalog reads; only admins change shared variants. Why: shoppers can personalize products without altering the common catalog.
+- Personal variants merge into reads locally; shared variants are admin-only. Why: private personalization. Department labels use variantDisplayName for editor casing. Why: preserve casing across translations.
 - Diet filter: products.excluded_diets. Cuisine filter: `cuisines`+`product_cuisines`. Why: simple, editable.
 - Diet/cuisine filters exempt non-food roots via NON_FOOD_ROOTS/isNonFoodRootName in src/lib/dept-colors.ts (also hides admin cuisine picker). Why: non-food stays visible; one source of truth.
 - Catalog routes `ssr: false`. Why: SSR-embedded catalog caused 'aborted' blank screens.
