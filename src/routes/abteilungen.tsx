@@ -837,6 +837,7 @@ function DepartmentsPage() {
               );
             })}
           </div>
+          )}
           {!normalizedQuery && currentId && (
             <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "product", parentId: currentId, parentName: current?.name })} className="mt-3 w-full rounded-xl">
               <PlusIcon className="h-4 w-4" /> {t("add.product")}

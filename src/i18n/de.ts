@@ -87,6 +87,8 @@ export const de = {
   "dept.categories": "Kategorien",
   "dept.allDepartments": "Alle Abteilungen",
   "dept.products": "Produkte",
+  "dept.viewList": "Liste",
+  "dept.viewTiles": "Kacheln",
   "dept.tip": "Tipp: Abteilungen ordnest, benennst und entfernst du unter Mehr › Abteilungen ordnen & umbenennen.",
   "catOrder.title": "Abteilungen ordnen & umbenennen",
   "catOrder.hint": "Haupt- und Unterkategorien sortieren, umbenennen oder entfernen",
