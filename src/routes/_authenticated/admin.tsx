@@ -866,12 +866,6 @@ function AdminPage() {
     const name = v.trim() && v.trim() !== base ? v.trim() : null;
     void storeUpsert(kind, [{ [key]: id, name }]);
   };
-  const storeResetAll = async () => {
-    if (!storeId || !confirm(T("st.resetAllConfirm"))) return;
-    await supabase.from("store_department_overrides").delete().eq("supermarket_id", storeId);
-    await supabase.from("store_product_overrides").delete().eq("supermarket_id", storeId);
-    void qc.invalidateQueries({ queryKey: ["st-ov", storeId] });
-  };
   const curStore = storesQ.data?.find((s) => s.id === storeId);
 
   if (admin.isLoading) return <p className="pt-6 text-sm text-muted-foreground">{T("adm.loading")}</p>;
@@ -1066,9 +1060,9 @@ function AdminPage() {
           {curStore && (
             <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/40 bg-primary-soft px-3 py-2 text-sm text-foreground">
               <span className="min-w-0 flex-1">🏪 <b>{curStore.name}</b> – {T("st.tileHint")}</span>
-              <Button size="sm" variant="outline" onClick={storeResetAll}>{T("st.resetAll")}</Button>
             </div>
           )}
+
           <CatalogTileEditor key={storeId || "shared"} depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={tileChildren} products={tileProducts}
             imageEditor={imageEditor} imageEditorProduct={imageEditor ? d.prods.find((x) => x.id === imageEditor.id) : undefined} onCloseImageEditor={() => setImageEditor(null)}
             path={path(cur)} nm={storeId ? nmStore : nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}

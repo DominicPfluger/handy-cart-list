@@ -94,12 +94,6 @@ export function StoreCatalogAdmin({ storeIds }: { storeIds?: string[] }) {
   };
   const resetD = async (id: string) => { const r = await supabase.from("store_department_overrides").delete().eq("supermarket_id", store).eq("department_id", id); if (r.error) toast.error(r.error.message); else refresh(); };
   const resetP = async (id: string) => { const r = await supabase.from("store_product_overrides").delete().eq("supermarket_id", store).eq("product_id", id); if (r.error) toast.error(r.error.message); else refresh(); };
-  const resetAll = async () => {
-    if (!confirm(T("st.resetAllConfirm"))) return;
-    await supabase.from("store_department_overrides").delete().eq("supermarket_id", store);
-    await supabase.from("store_product_overrides").delete().eq("supermarket_id", store);
-    refresh();
-  };
 
   const moveD = (i: number, dir: -1 | 1) => {
     const j = i + dir; if (j < 0 || j >= childDepts.length) return;
@@ -132,8 +126,8 @@ export function StoreCatalogAdmin({ storeIds }: { storeIds?: string[] }) {
         <select value={store} onChange={(e) => setStore(e.target.value)} className="h-10 min-w-0 flex-1 rounded-lg border border-input bg-background px-2 text-sm">
           {stores.data.map((s) => <option key={s.id} value={s.id}>{storeLabel(s)}</option>)}
         </select>
-        <Button variant="outline" size="sm" onClick={resetAll}>{T("st.resetAll")}</Button>
       </div>
+
 
       <nav className="flex flex-wrap items-center gap-1 text-sm">
         <button type="button" className="font-semibold text-primary" onClick={() => setCur(null)}>{T("st.root")}</button>
