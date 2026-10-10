@@ -380,13 +380,26 @@ function FavoritesPage() {
     const items = buildTransferItems();
     if (!items.length || !listId) return;
     closeTransferDialog();
+    const addAll = () => {
+      for (const item of items) addCatalogItem({
+        productId: item.productId ?? item.id,
+        name: item.name,
+        quantity: item.quantity,
+        unit: item.unit,
+        organic: false,
+        emoji: item.emoji,
+        imageUrl: item.imageUrl,
+        groupLabel: item.groupLabel,
+        groupEmoji: item.groupEmoji,
+      });
+    };
     if (listId === activeList.id) {
-      for (const item of items) addCatalogItem(item);
+      addAll();
       toast.success(t("fav.toListDone", { count: items.length }));
       navigate({ to: "/" });
       return;
     }
-    pendingTransferRef.current = { listId, items };
+    pendingTransferRef.current = { listId, add: addAll, count: items.length };
     setActiveListId(listId);
   };
 
@@ -394,7 +407,7 @@ function FavoritesPage() {
     const pending = pendingTransferRef.current;
     if (!pending || activeList.id !== pending.listId) return;
     pendingTransferRef.current = null;
-    for (const item of pending.items) addCatalogItem(item);
+    pending.add();
     toast.success(t("fav.toListDone", { count: pending.items.length }));
     navigate({ to: "/" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
