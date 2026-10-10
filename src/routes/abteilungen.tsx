@@ -167,6 +167,13 @@ function DepartmentsPage() {
   const [selectedProduct, setSelectedProduct] = useState<CatalogProduct | null>(null);
   const [selectedBrand, setSelectedBrand] = useState<string | undefined>(undefined);
   const [selectedVariant, setSelectedVariant] = useState<string | undefined>(undefined);
+  // Produkt-Varianten-Ebene: Klick auf ein Produkt mit Sorten öffnet eine eigene Hierarchie-Ebene
+  const [variantLevelId, setVariantLevelId] = useState<string | null>(null);
+  const variantProduct = variantLevelId ? products.find((p) => p.id === variantLevelId) ?? null : null;
+  const openProduct = (product: CatalogProduct) => {
+    if (expandVariants(product).length > 0) { setVariantLevelId(product.id); setQuery(""); window.scrollTo({ top: 0 }); }
+    else navigate({ to: "/produkt/$id", params: { id: product.id } });
+  };
   const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
   const isAdmin = useIsAdmin();
@@ -434,6 +441,7 @@ function DepartmentsPage() {
     });
     setCurrentId(id);
     setQuery("");
+    setVariantLevelId(null);
     if (id === null) window.scrollTo({ top: 0 });
   };
 
@@ -580,6 +588,12 @@ function DepartmentsPage() {
               </Button>
             </div>
           ))}
+          {variantProduct && (
+            <div className="flex shrink-0 items-center gap-1">
+              <span className="text-muted-foreground" aria-hidden="true">›</span>
+              <span className="px-2 font-semibold text-primary">{variantProduct.name}</span>
+            </div>
+          )}
         </nav>
       )}
 
@@ -589,7 +603,7 @@ function DepartmentsPage() {
         </div>
       )}
 
-      {!normalizedQuery && childDepartments.length > 0 && (
+      {!variantProduct && !normalizedQuery && childDepartments.length > 0 && (
         <section>
           <div className="mb-3 flex items-end justify-between">
             <h2 className="text-base font-semibold text-foreground">{current ? t("dept.categories") : t("dept.allDepartments")}</h2>
@@ -639,7 +653,58 @@ function DepartmentsPage() {
         </section>
       )}
 
-      {(normalizedQuery || shownProducts.length > 0) && (
+      {variantProduct && (() => {
+        const product = variantProduct;
+        const group = groupFor(product);
+        return (
+          <section>
+            <div className="mb-3 flex items-center gap-3">
+              <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl bg-primary-soft/25"><ProductThumb product={product} /></div>
+              <div className="min-w-0 flex-1">
+                <h2 className="truncate text-base font-semibold text-foreground">{product.name}</h2>
+                <p className="text-xs text-muted-foreground">{t("dept.productVariants")}</p>
+              </div>
+              <Button type="button" variant="outline" size="sm" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="shrink-0 rounded-lg">{t("dept.details")}</Button>
+            </div>
+            <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
+              {[null, ...expandVariants(product)].map((v) => {
+                const vi = v ? product.variantImages?.[v] : undefined;
+                const vName = v ? variantLabel(product, v) : t("dept.variantStandard");
+                const full = v ? `${product.name} · ${vName}` : product.name;
+                const favKey = v ? `${product.id}::${v}` : product.id;
+                const vFav = isFavorite(favKey);
+                return (
+                  <div key={v ?? "_"} className="flex min-h-14 items-center gap-2.5 px-2.5 py-1.5">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-md bg-primary-soft/25">
+                      <ProductIcon emoji={product.emoji} iconUrl={vi?.iconUrl ?? vi?.imageUrl ?? product.iconUrl} iconPath={vi?.iconPath ?? vi?.imagePath ?? product.iconPath} symbolClassName="text-2xl" />
+                    </div>
+                    <span className={`min-w-0 flex-1 truncate text-sm ${v ? "text-foreground" : "italic text-muted-foreground"}`}>{vName}</span>
+                    {v && (personalVariants[product.id] ?? []).includes(v) && (
+                      <Button type="button" variant="ghost" size="icon" aria-label={t("dept.removeVariant", { name: vName })} onClick={() => removePersonalVariant(product.id, v)} className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive">
+                        <TrashIcon className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                    <Button type="button" variant="ghost" size="icon"
+                      aria-label={vFav ? t("common.removeFavorite", { name: full }) : t("common.addFavorite", { name: full })}
+                      onClick={() => toggleFavorite({ productId: favKey, name: full, emoji: product.emoji, imageUrl: vi?.imageUrl ?? product.imageUrl ?? undefined, defaultQuantity: product.defaultQuantity, defaultUnit: product.defaultUnit, organicAvailable: product.organicAvailable, groupLabel: group?.name, groupEmoji: group?.emoji ?? undefined })}
+                      className={`h-8 w-8 rounded-full ${vFav ? "bg-coral/15 text-coral" : "text-muted-foreground"}`}>
+                      <HeartIcon className={`h-3.5 w-3.5 ${vFav ? "fill-current" : ""}`} />
+                    </Button>
+                    <Button type="button" variant="ghost" size="icon" aria-label={t("common.quickAdd", { name: full })} onClick={() => gate(() => quickAddRef.current(product, group, v ?? undefined))} className="h-8 w-8 rounded-full text-muted-foreground">
+                      <BoltIcon className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button type="button" size="icon" aria-label={t("common.addWithQty", { name: full })} onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v ?? undefined); setSelectedProduct(product); })} className="h-8 w-8 rounded-full shadow-none">
+                      <PlusIcon className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })()}
+
+      {!variantProduct && (normalizedQuery || shownProducts.length > 0) && (
         <section>
           <div className="mb-3 flex items-end justify-between gap-3">
             <h2 className="text-base font-semibold text-foreground">{normalizedQuery ? t("common.searchResults") : t("dept.products")}</h2>
@@ -666,7 +731,7 @@ function DepartmentsPage() {
                     </div>
                   )}
                   <div className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-                    <button type="button" aria-label={product.name} onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="grid aspect-square w-full place-items-center overflow-hidden bg-primary-soft/25">
+                    <button type="button" aria-label={product.name} onClick={() => openProduct(product)} className="grid aspect-square w-full place-items-center overflow-hidden bg-primary-soft/25">
                       <TileThumb product={product} />
                     </button>
                     <Button
@@ -766,14 +831,14 @@ function DepartmentsPage() {
                     aria-expanded={expandVariants(product).length > 0 ? expandedId === product.id : undefined}
                     onClick={() => {
                       if (suppressClick.current) return;
-                      navigate({ to: "/produkt/$id", params: { id: product.id } });
+                      openProduct(product);
                     }}
                     className={`grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25 ${draggable ? "cursor-grab touch-none" : "cursor-pointer"}`}
                   >
                     <ProductThumb product={product} />
                   </button>
                   <div className="min-w-0 flex-1">
-                    <button type="button" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="inline-flex max-w-full text-left text-sm font-semibold text-foreground">
+                    <button type="button" onClick={() => openProduct(product)} className="inline-flex max-w-full text-left text-sm font-semibold text-foreground">
                       <span className="truncate">{product.name}</span>
                     </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">

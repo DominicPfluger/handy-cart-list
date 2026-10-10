@@ -1476,5 +1476,8 @@
   "speak.tabRules": "Pronunce salvate",
   "speak.applyToVariants": "Applica a tutte le varianti della lingua",
   "rk.inPantry": "In dispensa",
-  "rk.pantryHint": "Gli ingredienti in dispensa sono deselezionati: toccali per aggiungerli comunque."
+  "rk.pantryHint": "Gli ingredienti in dispensa sono deselezionati: toccali per aggiungerli comunque.",
+  "dept.productVariants": "Varianti del prodotto",
+  "dept.variantStandard": "Senza varietà",
+  "dlg.properties": "Proprietà (facoltativo)"
 }

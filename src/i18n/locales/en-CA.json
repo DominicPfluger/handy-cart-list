@@ -1477,5 +1477,8 @@
   "speak.tabRules": "Saved pronunciations",
   "speak.applyToVariants": "Apply to all language variants",
   "rk.inPantry": "In pantry",
-  "rk.pantryHint": "Ingredients in your pantry are unselected – tap to add them anyway."
+  "rk.pantryHint": "Ingredients in your pantry are unselected – tap to add them anyway.",
+  "dept.productVariants": "Product variants",
+  "dept.variantStandard": "No variety",
+  "dlg.properties": "Properties (optional)"
 }

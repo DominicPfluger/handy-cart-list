@@ -490,7 +490,7 @@
   "tile.enrichImage": "Produktbild erstellen …",
   "tile.enrichPrices": "Marktpreise schätzen …",
   "tile.enrichPartial": "Produkt gespeichert; einzelne Ergänzungen fehlgeschlagen",
-  "tile.enrichDone": "\u00dcbersetzungen und Marktpreise erg\u00e4nzt",
+  "tile.enrichDone": "Übersetzungen und Marktpreise ergänzt",
   "more.dietPreference": "Gewünschte Ernährungsform",
   "more.dietNone": "Keine Einschränkung",
   "more.market": "Markt",
@@ -898,5 +898,8 @@
   "rk.inPantry": "Im Vorrat",
   "rk.pantryHint": "Zutaten aus deinem Vorrat sind abgewählt – antippen, um sie trotzdem zu übernehmen.",
   "dept.viewList": "Liste",
-  "dept.viewTiles": "Kacheln"
+  "dept.viewTiles": "Kacheln",
+  "dept.productVariants": "Produkt-Varianten",
+  "dept.variantStandard": "Ohne Sorte",
+  "dlg.properties": "Eigenschaften (optional)"
 }
