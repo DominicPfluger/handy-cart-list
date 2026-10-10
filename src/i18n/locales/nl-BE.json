@@ -1470,5 +1470,7 @@
   "speak.pronunciationSaved": "Pronunciation rule saved",
   "speak.tabProducts": "Producten",
   "speak.tabRules": "Opgeslagen uitspraken",
-  "speak.applyToVariants": "Toepassen op alle taalvarianten"
+  "speak.applyToVariants": "Toepassen op alle taalvarianten",
+  "rk.inPantry": "In voorraad",
+  "rk.pantryHint": "Ingrediënten uit je voorraad zijn uitgevinkt – tik om ze toch toe te voegen."
 }

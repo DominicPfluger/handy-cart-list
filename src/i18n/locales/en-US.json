@@ -1480,5 +1480,7 @@
   "speak.pronunciationSaved": "Pronunciation rule saved",
   "speak.tabProducts": "Products",
   "speak.tabRules": "Saved pronunciations",
-  "speak.applyToVariants": "Apply to all language variants"
+  "speak.applyToVariants": "Apply to all language variants",
+  "rk.inPantry": "In pantry",
+  "rk.pantryHint": "Ingredients in your pantry are unselected – tap to add them anyway."
 }

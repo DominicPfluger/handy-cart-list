@@ -1691,7 +1691,7 @@ export function useShoppingList() {
       loading: user === undefined,
       addItem: localAddItem,
       addCatalogItem: localAddCatalogItem,
-      toggleItem: localToggleItem,
+      toggleItem: (id: string) => { buzz(); localToggleItem(id); },
       setItemGroup: localSetItemGroup,
       setItemQuantity: localSetItemQuantity,
       removeItem: localRemoveItem,
@@ -1731,7 +1731,7 @@ export function useShoppingList() {
     loading: false,
     addItem: cloud.addItem,
     addCatalogItem: cloud.addCatalogItem,
-    toggleItem: cloud.toggleItem,
+    toggleItem: (id: string) => { buzz(); cloud.toggleItem(id); },
     setItemGroup: cloud.setItemGroup,
     setItemQuantity: cloud.setItemQuantity,
     removeItem: cloud.removeItem,
@@ -1750,3 +1750,8 @@ export function useShoppingList() {
 }
 
 export type UseShoppingListReturn = ReturnType<typeof useShoppingList>;
+
+/** Kurzes haptisches Feedback beim Abhaken (wo unterstützt). */
+function buzz() {
+  try { navigator.vibrate?.(15); } catch { /* ignore */ }
+}

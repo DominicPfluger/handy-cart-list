@@ -8,6 +8,7 @@ import { getRecipeBySlug } from "../lib/recipes.functions";
 import { RECIPE_TEMPLATES } from "../lib/recipe-templates";
 import { useAuthUser } from "../hooks/use-auth-user";
 import { useShoppingList } from "../hooks/use-shopping-list";
+import { usePantry } from "../hooks/use-pantry";
 import { useRecipeCollections, saveToFolder, createCollection } from "../hooks/use-saved-recipes";
 import { useIsAdmin } from "../hooks/use-is-admin";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
@@ -69,6 +70,11 @@ function RecipePage() {
   const [saveOpen, setSaveOpen] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [portions, setPortions] = useState(1);
+  const pantry = usePantry();
+  const [skip, setSkip] = useState<Set<string> | null>(null);
+  const inPantry = (pid: string) => !pid.startsWith("any:") && !!pantry.isInPantry(pid);
+  const skipped = skip ?? new Set(pantry.hydrated ? (r.items as { productId: string }[]).map((x) => x.productId).filter(inPantry) : []);
+  const toggleSkip = (pid: string) => { const n = new Set(skipped); if (n.has(pid)) n.delete(pid); else n.add(pid); setSkip(n); };
   const [speakRate] = useSpeakRate();
   const [speakLocale] = useSpeakLocale();
 
@@ -142,6 +148,7 @@ function RecipePage() {
 
   const addAll = () => {
     for (const i of scaled) {
+      if (skipped.has(i.productId)) continue;
       if (i.productId.startsWith("any:")) { addItem(i.name, i.quantity || "1", "sonstiges"); continue; }
       addCatalogItem({ productId: i.productId, departmentId: names?.get(i.productId)?.department_id, name: i.name, quantity: i.quantity || "1", unit: i.unit ?? "stueck", organic: false, emoji: i.emoji ?? undefined });
     }
@@ -211,10 +218,19 @@ function RecipePage() {
           </div>
         </div>
         <ul className="space-y-1 text-sm text-foreground">
-          {scaled.map((i) => <li key={i.productId}>{i.emoji ? `${i.emoji} ` : "• "}{i.name}{i.quantity ? ` — ${i.quantity}` : ""}</li>)}
+          {scaled.map((i) => (
+            <li key={i.productId}>
+              <label className="flex items-center gap-2">
+                <input type="checkbox" className="h-4 w-4 accent-primary" checked={!skipped.has(i.productId)} onChange={() => toggleSkip(i.productId)} />
+                <span className={skipped.has(i.productId) ? "text-muted-foreground line-through" : ""}>{i.emoji ? `${i.emoji} ` : ""}{i.name}{i.quantity ? ` — ${i.quantity}` : ""}</span>
+                {inPantry(i.productId) && <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] text-muted-foreground">{t("rk.inPantry")}</span>}
+              </label>
+            </li>
+          ))}
         </ul>
+        {scaled.some((i) => inPantry(i.productId)) && <p className="mt-2 text-xs text-muted-foreground">{t("rk.pantryHint")}</p>}
         <button onClick={addAll} disabled={added} className="mt-3 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-60">
-          {added ? `✓ ${t("rk.added")}` : t("rk.addAll", { n: items.length })}
+          {added ? `✓ ${t("rk.added")}` : t("rk.addAll", { n: scaled.filter((i) => !skipped.has(i.productId)).length })}
         </button>
         <div className="mt-2 flex gap-2">
           {user ? (

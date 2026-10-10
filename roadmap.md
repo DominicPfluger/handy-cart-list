@@ -31,3 +31,8 @@
 - [x] Aperogebäck sortiert: 5 Überschriften-Gruppen + 4 neue Produkte (Mini-Grissini, Blätterteig-Schinkengipfeli, Käsefüsschen, Taralli), Übersetzungen in 15 Sprachen
 - [x] Hülsenfrüchte-Konserven nach Vorschlag 3: 6 Überschriften, 33 Produkte (14 neu), Übersetzungen in 16 Sprachen
 - Dosen-Pilze nach Vorschlag 3: 6 Überschriften, 30 Produkte (19 neu), Übersetzungen in 16 Sprachen
+- [x] Weitere Haushaltsartikel nach Vorschlag 3
+- [x] Varianten: Tahin (7), Gorgonzola (8), Gemüserollen, Wedges, Kroketten
+- [x] Käse-Lücken füllen (Feta, Halloumi, Reibekäse, Blauschimmel, Burrata, Fondue, Schmelzkäse, pflanzlich)
+- [x] Rezept → Liste: Vorrat-Zutaten vorab abwählen + Hinweis
+- [x] Vibration beim Abhaken (Liste + Einkaufsmodus)

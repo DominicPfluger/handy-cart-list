@@ -1470,5 +1470,7 @@
   "speak.pronunciationSaved": "Pronunciation rule saved",
   "speak.tabProducts": "Prodotti",
   "speak.tabRules": "Pronunce salvate",
-  "speak.applyToVariants": "Applica a tutte le varianti della lingua"
+  "speak.applyToVariants": "Applica a tutte le varianti della lingua",
+  "rk.inPantry": "In dispensa",
+  "rk.pantryHint": "Gli ingredienti in dispensa sono deselezionati: toccali per aggiungerli comunque."
 }

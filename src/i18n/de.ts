@@ -522,6 +522,8 @@ export const de = {
   "rk.yourRecipe": "Dein Rezept",
   "rk.addAll": "{n} Zutaten zur Liste",
   "rk.added": "Zutaten zur Liste hinzugefügt",
+  "rk.inPantry": "Im Vorrat",
+  "rk.pantryHint": "Zutaten aus deinem Vorrat sind abgewählt – antippen, um sie trotzdem zu übernehmen.",
   "rk.nothing": "Wähle Zutaten, um dein Rezept zu sehen.",
   "rk.save": "Rezept speichern",
   "rk.saveTo": "In Liste speichern",
