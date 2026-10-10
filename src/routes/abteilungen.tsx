@@ -94,7 +94,8 @@ function TileThumb({ product }: { product: CatalogProduct }) {
 }
 
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
-  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl ?? department.iconUrl} imagePath={department.imagePath ?? department.iconPath} />;
+  // Bilder in den Kategorie-Kacheln etwas grösser darstellen als im Standard.
+  return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl ?? department.iconUrl} imagePath={department.imagePath ?? department.iconPath} className="max-h-[88%] max-w-[88%] object-contain" symbolClassName="text-[3.6rem] leading-none" />;
 }
 
 function DepartmentsPage() {
