@@ -657,17 +657,41 @@ export function CatalogTileEditor(p: {
         </div>
       )}
       {p.cur && p.products.length > 0 && (
-        <label className="flex cursor-pointer items-center gap-2 px-1 py-1 text-sm font-medium text-foreground">
-          <input
-            ref={allSelRef}
-            type="checkbox"
-            checked={allSelected}
-            onChange={() => (allSelected ? clearSelection() : selectAll())}
-            className="h-4 w-4 shrink-0 accent-primary"
-            aria-label={T("adm.selectAll")}
-          />
-          {T("adm.selectAll")}
-        </label>
+        <div className="flex items-center gap-2 px-1 py-1">
+          <label className="flex flex-1 cursor-pointer items-center gap-2 text-sm font-medium text-foreground">
+            <input
+              ref={allSelRef}
+              type="checkbox"
+              checked={allSelected}
+              onChange={() => (allSelected ? clearSelection() : selectAll())}
+              className="h-4 w-4 shrink-0 accent-primary"
+              aria-label={T("adm.selectAll")}
+            />
+            {T("adm.selectAll")}
+          </label>
+          {p.products.some((x) => !x.id.startsWith("alias:")) && (
+            <select
+              value=""
+              aria-label={T("adm.setUnitAll")}
+              title={T("adm.setUnitAll")}
+              onChange={(e) => {
+                const v = e.target.value; e.target.value = "";
+                if (!v) return;
+                const ids = [...new Set(p.products.filter((x) => !x.id.startsWith("alias:")).map((x) => x.product_id ?? x.id))];
+                const label = getUnits(getLocale()).find((u) => u.id === v)?.label ?? v;
+                if (!window.confirm(T("adm.setUnitAllConfirm", { n: ids.length, unit: label }))) return;
+                void p.run(async () => {
+                  await p.must(supabase.from("products").update({ default_unit: v } as never).in("id", ids));
+                  await qc.invalidateQueries({ queryKey: ["catalog"] });
+                }, T("adm.defaultsSaved"));
+              }}
+              className="h-8 shrink-0 rounded-lg border border-input bg-background px-1 text-xs text-foreground"
+            >
+              <option value="" disabled>{T("adm.setUnitAll")}</option>
+              {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+            </select>
+          )}
+        </div>
       )}
 
       {p.cur && (
