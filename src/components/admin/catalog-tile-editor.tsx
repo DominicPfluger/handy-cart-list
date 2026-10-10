@@ -819,7 +819,7 @@ export function CatalogTileEditor(p: {
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode || aiBusy === pid} aria-label={T("tile.aiImage")} title={T("tile.aiImage")} onClick={() => quickAiImage(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   {aiBusy === pid ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                 </Button>
-                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => x.alias_id ? p.onRemoveAlias?.(x.alias_id, p.nm(pid, x.name)) : p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={p.onToggleHidden && !x.alias_id ? T("adm.hide") : T("adm.delete")} title={p.onToggleHidden && !x.alias_id ? T("adm.hide") : T("adm.delete")} onClick={() => x.alias_id ? p.onRemoveAlias?.(x.alias_id, p.nm(pid, x.name)) : p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>
