@@ -1414,6 +1414,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       <VariantNameEdit productId={prod?.id} variant={v} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
                     </span>
                     <span className="flex shrink-0 items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={() => setPrefixVariants((x) => (x.includes(v) ? x.filter((y) => y !== v) : [...x, v]))}
+                        aria-pressed={prefixVariants.includes(v)}
+                        title={T("adm.variantPosHint")}
+                        className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${prefixVariants.includes(v) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}
+                      >
+                        {prefixVariants.includes(v) ? `${v} ${name || prod?.name || ""}` : `${name || prod?.name || ""} ${v}`}
+                      </button>
                       {prod && (prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                       <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
                     </span>
