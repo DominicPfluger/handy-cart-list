@@ -48,3 +48,8 @@
 - [x] Kategorie Feinkostsalate strukturiert: 5 Überschriften (Klassiker, Fisch & Meeresfrüchte, Gemüsesalate, Körner- & Getreidesalate, Internationale Salate), 5 neue Artikel (Budapester Salat, Roter Heringssalat, Garnelensalat, Hirtenkäsesalat, Tomate-Mozzarella-Salat), 41 Artikel neu sortiert, Übersetzungen in 15 Sprachen
 - [x] Sandwiches & Wraps: 5 Gruppen (Vorschlag 1), 10 neue Artikel, doppelte Überschrift entfernt, Übersetzungen in 15 Sprachen
 - [x] Katalog pro Laden + Laden-Admins
+- [x] Laden-Kataloge im Kachelmodus bearbeiten (Laden-Dropdown zwischen Markt- und Sprachauswahl)
+- [x] Laden-Katalog in «Sprachen & Märkte» verschoben (dritter Unter-Reiter)
+- [x] Auge-Symbol im Kachelmodus; Löschen im Laden-Modus blendt nur aus
+- [x] Bereich «Bilder» in Produktbilder und Kategorien & Unterkategorien geteilt
+- [x] «Ganzen Laden zurücksetzen» deaktiviert (Knopf im Kachelmodus und im Bereich «Läden-Katalog» entfernt; Zurücksetzen pro Eintrag bleibt)
