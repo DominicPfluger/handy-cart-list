@@ -40,3 +40,4 @@
 - [x] Bilder-Tab: KI-Bilder zwischen Produkte ohne Bild und eigenständiger Bildergalerie
 - [x] Neue Hauptkategorie „Wohnen & Möbel“: 9 Bereiche, 257 Artikel, Übersetzungen in 15 Sprachen, ohne Icons (Icons folgen später)
 - [x] Kategorie Feinkostsalate strukturiert: 5 Überschriften (Klassiker, Fisch & Meeresfrüchte, Gemüsesalate, Körner- & Getreidesalate, Internationale Salate), 5 neue Artikel (Budapester Salat, Roter Heringssalat, Garnelensalat, Hirtenkäsesalat, Tomate-Mozzarella-Salat), 41 Artikel neu sortiert, Übersetzungen in 15 Sprachen
+- [x] Sandwiches & Wraps: 5 Gruppen (Vorschlag 1), 10 neue Artikel, doppelte Überschrift entfernt, Übersetzungen in 15 Sprachen
