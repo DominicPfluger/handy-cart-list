@@ -655,6 +655,8 @@ function FavoritesPage() {
                 </div>
               </div>
             )}
+            </>
+            )}
             <div className="mt-4 flex gap-2">
               <button
                 onClick={() => setListNameOpen(false)}
@@ -663,11 +665,17 @@ function FavoritesPage() {
                 {t("common.cancel")}
               </button>
               <button
-                onClick={() => listName.trim() && newStore !== "__new__" && transferAllToNewList(listName.trim())}
-                disabled={!listName.trim() || newStore === "__new__"}
+                onClick={() => {
+                  if (transferMode === "existing") {
+                    if (targetListId) transferAllToExistingList(targetListId);
+                  } else if (listName.trim() && newStore !== "__new__") {
+                    transferAllToNewList(listName.trim());
+                  }
+                }}
+                disabled={transferMode === "existing" ? !targetListId : !listName.trim() || newStore === "__new__"}
                 className="flex-1 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground disabled:opacity-50"
               >
-                {t("lm.create")}
+                {transferMode === "existing" ? t("fav.addToExisting") : t("lm.create")}
               </button>
             </div>
           </div>
