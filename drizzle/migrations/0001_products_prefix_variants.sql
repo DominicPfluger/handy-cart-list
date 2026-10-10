@@ -1,0 +1,1 @@
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS prefix_variants text[] NOT NULL DEFAULT '{}';
