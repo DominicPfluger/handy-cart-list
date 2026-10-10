@@ -27,7 +27,11 @@ const coreCacheKey = (locale: string) => `shoppi:catalog-core-${locale}`;
 
 function readCoreCache(locale: string): { t: number; data: CatalogCore } | null {
   const parsed = idbGet<{ t: number; data: CatalogCore }>(coreCacheKey(locale));
-  return parsed?.data?.products?.length ? parsed : null;
+  const products = parsed?.data?.products;
+  // Caches von vor Einführung der Produkt-Icons verwerfen (ohne iconPath-Feld),
+  // sonst bleiben in dieser Sprache alle Icons unsichtbar, bis der Abruf klappt.
+  if (!products?.length || !("iconPath" in (products[0] as object))) return null;
+  return parsed ?? null;
 }
 
 function writeCoreCache(locale: string, data: CatalogCore) {
@@ -83,7 +87,15 @@ export const catalogQueryOptions = (locale: string) => {
 
 const detailsCacheKey = (locale: string) => `shoppi:catalog-details-${locale}`;
 function readDetailsCache(locale: string): { t: number; data: CatalogDetails } | null {
-  return idbGet<{ t: number; data: CatalogDetails }>(detailsCacheKey(locale)) ?? null;
+  const parsed = idbGet<{ t: number; data: CatalogDetails }>(detailsCacheKey(locale));
+  if (!parsed) return null;
+  // Alte Caches ohne Varianten-Icon-Feld verwerfen.
+  const firstVariant = Object.values(parsed.data?.variantImages ?? {})[0];
+  if (firstVariant) {
+    const entry = Object.values(firstVariant)[0];
+    if (entry && !("iconPath" in (entry as object))) return null;
+  }
+  return parsed;
 }
 
 /** Details (Länderküchen, Marken, Synonyme, Varianten, Rezepte) – im Hintergrund nachgeladen, offline aus dem Geräte-Cache. */
