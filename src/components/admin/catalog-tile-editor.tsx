@@ -29,7 +29,7 @@ import { ProductPronunciationEditor } from "@/components/admin/product-pronuncia
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
-import { LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
+import { Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -64,6 +64,10 @@ export function CatalogTileEditor(p: {
   below?: React.ReactNode;
   /** Öffnet die erweiterte Bearbeitung (Übersetzungen, Marken, Aliase …). */
   onAdvanced?: (kind: "department" | "product", id: string) => void;
+  /** Laden-Modus: Eintrag für diesen Laden aus-/einblenden (nie global löschen). */
+  onToggleHidden?: (kind: "department" | "product", id: string) => void;
+  /** Laden-Modus: ist der Eintrag für diesen Laden ausgeblendet? */
+  isHidden?: (id: string) => boolean;
   busy?: boolean;
   onRemoveAlias?: (aliasId: string, name: string) => void;
   /** Wählbare Kategorien für eine neue Alias-Kategorie. */
