@@ -135,11 +135,17 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     const synth = window.speechSynthesis;
     let cancelled = false;
     let spoken = false;
+    let keepAlive = 0;
     const run = () => {
       if (cancelled || spoken) return;
       spoken = true;
       try { synth.resume(); } catch { /* ignore */ }
       speakItem(current);
+      // Chrome bricht lange Ausgaben nach ca. 15 s still ab; periodisches resume() hält sie am Laufen.
+      keepAlive = window.setInterval(() => {
+        if (cancelled) { window.clearInterval(keepAlive); return; }
+        try { if (synth.speaking && !synth.paused) synth.resume(); } catch { /* ignore */ }
+      }, 5000);
     };
     let timer = 0;
     if (synth.getVoices().length === 0) {
