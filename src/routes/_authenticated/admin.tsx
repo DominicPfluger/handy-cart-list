@@ -1011,6 +1011,11 @@ function AdminPage() {
             </optgroup>
           </select>
         )}
+        <select aria-label={T("st.store")} value={storeId} onChange={(e) => setStoreId(e.target.value)}
+          className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
+          <option value="">🌐 {T("st.allStores")}</option>
+          {storeChoices.map((s) => <option key={s.id} value={s.id}>{flagOf(s.market_code)} {s.emoji ?? "🏪"} {s.name}</option>)}
+        </select>
         <select aria-label={T("adm.viewLocale")} value={viewLoc} onChange={(e) => setViewLoc(e.target.value)} className="h-11 min-w-[10rem] flex-1 rounded-xl border border-input bg-background px-3 text-sm">
           <optgroup label={T("adm.viewLocale")}>
             {allLocales().map((l) => <option key={l.id} value={l.id}>{l.flag} {l.label}</option>)}
