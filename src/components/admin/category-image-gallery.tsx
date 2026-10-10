@@ -1,10 +1,12 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ImageOff, Loader2 } from "lucide-react";
+import { Check, ChevronDown, ImageOff, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/i18n";
 import { deptTreeOrder } from "@/lib/dept-order";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+
 
 type Dept = { id: string; name: string; parent_id: string | null };
 type Prod = { id: string; name: string; emoji: string | null; department_id: string; image_path: string | null };
