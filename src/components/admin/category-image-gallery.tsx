@@ -18,6 +18,9 @@ export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; 
   const [cat, setCat] = useState("");
   const [q, setQ] = useState("");
   const [limit, setLimit] = useState(PAGE);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [pickerQ, setPickerQ] = useState("");
+
 
   const deptById = useMemo(() => new Map(depts.map((d) => [d.id, d])), [depts]);
   const path = (id: string) => {
