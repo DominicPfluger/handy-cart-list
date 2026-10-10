@@ -73,8 +73,8 @@ export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; 
   const pick = (id: string) => { setCat(id); setLimit(PAGE); setPickerOpen(false); };
 
   return (
-    <section className="space-y-3 border-t border-border pt-4">
-      <h3 className="text-sm font-semibold text-foreground">{t("adm.imgGallery.title")}{cat || q.trim() ? ` (${items.length})` : ""}</h3>
+    <section className="mt-8 space-y-3 rounded-2xl border border-border bg-card p-4">
+      <h2 className="text-base font-semibold text-foreground">{t("adm.imgGallery.title")}{cat || q.trim() ? ` (${items.length})` : ""}</h2>
       <div className="flex items-center gap-1.5">
         <button type="button" onClick={openPicker} aria-label={t("adm.imgGallery.title")}
           className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg border border-input bg-background px-3 py-2 text-left text-sm text-foreground hover:border-primary">
