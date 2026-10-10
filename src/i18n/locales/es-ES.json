@@ -1039,7 +1039,7 @@
   "tile.enrichImage": "Creando imagen del producto …",
   "tile.enrichPrices": "Estimando precios de mercado …",
   "tile.enrichPartial": "Producto guardado; algunos añadidos fallaron",
-  "tile.enrichDone": "Traducciones y precios a\u00f1adidos",
+  "tile.enrichDone": "Traducciones y precios añadidos",
   "more.dietPreference": "Alimentación preferida",
   "more.dietNone": "Sin restricciones",
   "more.market": "Mercado",
@@ -1476,5 +1476,8 @@
   "speak.tabRules": "Pronunciaciones guardadas",
   "speak.applyToVariants": "Aplicar a todas las variantes del idioma",
   "rk.inPantry": "En despensa",
-  "rk.pantryHint": "Los ingredientes de tu despensa están desmarcados; tócalos para añadirlos igualmente."
+  "rk.pantryHint": "Los ingredientes de tu despensa están desmarcados; tócalos para añadirlos igualmente.",
+  "dept.productVariants": "Variantes del producto",
+  "dept.variantStandard": "Sin variedad",
+  "dlg.properties": "Propiedades (opcional)"
 }

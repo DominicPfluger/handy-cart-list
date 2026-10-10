@@ -8,6 +8,7 @@ import { useMarket } from "../hooks/use-market";
 import { getUnits, formatQuantity, unitLabel, type UnitId } from "../lib/units";
 import { preferredUnits, quantityForUnit, sortByPreferred } from "../lib/product-units";
 import { useT, pickName } from "../i18n";
+import { useStandardVariants } from "../hooks/use-standard-variants";
 
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { getFavoriteQuantity } from "../hooks/use-favorite-quantity";
@@ -102,6 +103,10 @@ export function CatalogProductDialog({
   const [customInput, setCustomInput] = useState("");
   const [expanded, setExpanded] = useState(false);
   const [brand, setBrand] = useState<string | undefined>(undefined);
+  // Eigenschafts-Varianten: frei kombinierbare Zusätze aus dem Admin-Pool (z. B. vegan, laktosefrei)
+  const standardVariants = useStandardVariants();
+  const propertyPool = standardVariants.filter((p) => !(product?.variants ?? []).includes(p.value));
+  const [props, setProps] = useState<string[]>([]);
   const [hideConfirm, setHideConfirm] = useState(false);
   const hideNow = () => {
     if (!product) return;
@@ -123,6 +128,7 @@ export function CatalogProductDialog({
     setCustom([]);
     setCustomInput("");
     setExpanded(false);
+    setProps([]);
     setBrand(initialBrand);
     setSelected(initialVariant && (product.variants ?? []).includes(initialVariant) ? [initialVariant] : []);
     const ids = departmentIdsOf(product, catalog.productAliases ?? []);
@@ -152,7 +158,9 @@ export function CatalogProductDialog({
     if (!product || !validAmount) return;
     const pending = customInput.trim();
     const sorts = pending && !selected.includes(pending) ? [...selected, pending] : selected;
-    const base = sorts.length ? sorts.map((v) => `${product.name} · ${vName(v)}`) : [product.name];
+    const propSuffix = propertyPool.filter((p) => props.includes(p.value)).map((p) => p.label).join(", ");
+    const sorted = sorts.length ? sorts.map((v) => `${product.name} · ${vName(v)}`) : [product.name];
+    const base = propSuffix ? sorted.map((n) => `${n} · ${propSuffix}`) : sorted;
     const names = brand ? base.map((n) => `${n} · ${brand}`) : base;
     for (const name of names) addCatalogItem({
       productId: product.id,
@@ -329,6 +337,23 @@ export function CatalogProductDialog({
             </Button>
           </div>
         </div>
+
+        {propertyPool.length > 0 && (
+          <div className="space-y-2">
+            <Label>{t("dlg.properties")}</Label>
+            <div className="flex flex-wrap gap-1.5">
+              {propertyPool.map((p) => {
+                const on = props.includes(p.value);
+                return (
+                  <button key={p.value} type="button" aria-pressed={on} onClick={() => setProps((prev) => (on ? prev.filter((x) => x !== p.value) : [...prev, p.value]))}
+                    className={`rounded-full border px-3 py-1 text-xs font-medium ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"}`}>
+                    {p.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         <div className="space-y-2">
           <Label htmlFor="catalog-note">{t("dlg.note")}</Label>

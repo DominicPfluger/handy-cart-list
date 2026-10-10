@@ -1476,5 +1476,8 @@
   "speak.tabRules": "Opgeslagen uitspraken",
   "speak.applyToVariants": "Toepassen op alle taalvarianten",
   "rk.inPantry": "In voorraad",
-  "rk.pantryHint": "Ingrediënten uit je voorraad zijn uitgevinkt – tik om ze toch toe te voegen."
+  "rk.pantryHint": "Ingrediënten uit je voorraad zijn uitgevinkt – tik om ze toch toe te voegen.",
+  "dept.productVariants": "Productvarianten",
+  "dept.variantStandard": "Zonder soort",
+  "dlg.properties": "Eigenschappen (optioneel)"
 }
