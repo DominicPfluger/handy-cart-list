@@ -369,14 +369,36 @@ function FavoritesPage() {
     if (!items.length) return;
     const createdId = createListFromItems(name, items);
     if (createdId && newStore !== "__new__") setListStore(createdId, newStore);
-    setListNameOpen(false);
-    setNewStore("default");
-    setNewStoreName("");
-    setNewStoreEmoji("");
+    closeTransferDialog();
     if (createdId) try { sessionStorage.setItem("shoppi:open-list", createdId); } catch { /* ignore */ }
     toast.success(t("fav.toListDone", { count: items.length }));
     navigate({ to: "/" });
   };
+
+  /** Alle Favoriten einer bestehenden Liste hinzufügen (nach dem Wechsel zur Zielliste). */
+  const transferAllToExistingList = (listId: string) => {
+    const items = buildTransferItems();
+    if (!items.length || !listId) return;
+    closeTransferDialog();
+    if (listId === activeList.id) {
+      for (const item of items) addCatalogItem(item);
+      toast.success(t("fav.toListDone", { count: items.length }));
+      navigate({ to: "/" });
+      return;
+    }
+    pendingTransferRef.current = { listId, items };
+    setActiveListId(listId);
+  };
+
+  useEffect(() => {
+    const pending = pendingTransferRef.current;
+    if (!pending || activeList.id !== pending.listId) return;
+    pendingTransferRef.current = null;
+    for (const item of pending.items) addCatalogItem(item);
+    toast.success(t("fav.toListDone", { count: pending.items.length }));
+    navigate({ to: "/" });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeList.id]);
 
   const renderRow = (row: FavRow, { showCategory = false, sec, ids }: { showCategory?: boolean; sec?: string; ids?: string[] } = {}) => {
     const group = groupOfRow(row);
