@@ -31,6 +31,8 @@
   "dept.categories": "Categories",
   "dept.allDepartments": "All Departments",
   "dept.products": "Products",
+  "dept.viewList": "List",
+  "dept.viewTiles": "Tiles",
   "dept.tip": "Tip: arrange, rename and remove departments under More › Arrange & rename departments.",
   "dept.moved": "{name} moved to “{target}”",
   "dept.moveSelf": "A category cannot be moved into itself",

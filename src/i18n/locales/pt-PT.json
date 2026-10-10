@@ -31,6 +31,8 @@
   "dept.categories": "Categorias",
   "dept.allDepartments": "Todas as secções",
   "dept.products": "Produtos",
+  "dept.viewList": "Lista",
+  "dept.viewTiles": "Mosaico",
   "dept.tip": "Dica: ordena, renomeia e elimina departamentos em Mais › Ordenar e renomear departamentos.",
   "dept.moved": "{name} movido para «{target}»",
   "dept.moveSelf": "Não é possível mover uma categoria para dentro de si própria",

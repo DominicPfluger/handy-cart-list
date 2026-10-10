@@ -31,6 +31,8 @@
   "dept.categories": "Categorieën",
   "dept.allDepartments": "Alle afdelingen",
   "dept.products": "Producten",
+  "dept.viewList": "Lijst",
+  "dept.viewTiles": "Tegels",
   "dept.tip": "Tip: afdelingen indelen, hernoemen en verwijderen onder Meer › Afdelingen indelen & hernoemen.",
   "dept.moved": "{name} verplaatst naar „{target}”",
   "dept.moveSelf": "Een categorie kan niet naar zichzelf verplaatst worden",

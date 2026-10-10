@@ -31,6 +31,8 @@
   "dept.categories": "Catégories",
   "dept.allDepartments": "Tous les rayons",
   "dept.products": "Produits",
+  "dept.viewList": "Liste",
+  "dept.viewTiles": "Tuiles",
   "dept.tip": "Astuce : tu organises, renommes et supprimes les départements sous Plus › Organiser et renommer les départements.",
   "dept.moved": "« {name} » déplacé vers « {target} »",
   "dept.moveSelf": "Une catégorie ne peut pas être déplacée dans elle-même",
