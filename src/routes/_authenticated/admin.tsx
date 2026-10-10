@@ -29,6 +29,7 @@ import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
 import { ProductPronunciationEditor } from "@/components/admin/product-pronunciation-editor";
 import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
+import { CategoryMediaPanel } from "@/components/admin/category-media-panel";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
 import { PreviewCollapse, IconCollapse } from "@/components/admin/preview-collapse";
 import { signedCategoryImageUrl } from "@/lib/image-upload";
@@ -165,6 +166,7 @@ function AdminPage() {
   /** Aktiver Admin-Bereich (Tabs). */
   const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "langMarkets" | "health" | "settings" | "more">("catalog");
   const [langMk, setLangMk] = useState<"languages" | "markets" | "stores">("languages");
+  const [mediaTab, setMediaTab] = useState<"products" | "categories">("products");
   const [setTab2, setSetTab2] = useState<"diets" | "units" | "cuisines" | "speech" | "pronunciation" | "variants">("diets");
   const [preview, setPreview] = useState(false);
   useEffect(() => {
@@ -1181,7 +1183,19 @@ function AdminPage() {
         />
       )}
 
-      {tab === "media" && <LoadingGate d={d}><CatalogMediaPanel section="images" depts={d?.depts ?? []} prods={d?.prods ?? []} onEdit={(id) => setSel({ kind: "product", id })} /></LoadingGate>}
+      {tab === "media" && (<div className="space-y-4">
+        <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.tab.media")}>
+          {([["products", "Produktbilder"], ["categories", "Kategorien & Unterkategorien"]] as const).map(([id, label]) => (
+            <button key={id} role="tab" aria-selected={mediaTab === id} type="button" onClick={() => setMediaTab(id)}
+              className={`whitespace-nowrap rounded-full border px-3 py-1 text-xs font-semibold ${mediaTab === id ? "border-primary bg-primary/15 text-foreground" : "border-border bg-card text-muted-foreground"}`}>
+              {label}
+            </button>
+          ))}
+        </div>
+        <LoadingGate d={d}>{mediaTab === "products"
+          ? <CatalogMediaPanel section="images" depts={d?.depts ?? []} prods={d?.prods ?? []} onEdit={(id) => setSel({ kind: "product", id })} />
+          : <CategoryMediaPanel depts={d?.depts ?? []} onChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }} />}</LoadingGate>
+      </div>)}
       {tab === "prices" && <LoadingGate d={d}><div className="space-y-4"><CatalogMediaPanel section="prices" depts={d?.depts ?? []} prods={d?.prods ?? []} onEdit={(id) => setSel({ kind: "product", id })} />{d && <MarketDataImport prods={d.prods.map((p) => ({ id: p.id, name: p.name }))} />}</div></LoadingGate>}
       {tab === "import" && (d ? <ImportPanel depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
 
