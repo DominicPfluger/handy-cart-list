@@ -1,5 +1,8 @@
 # Roadmap
 
+## Aktueller Auftrag
+- [ ] 80 vorgeschlagene Artikel unter „Küchenfertiges Gemüse & Obst“ mit vier Überschriften und allen Lokalisierungen einordnen; ohne KI-Bilder.
+
 ## Erledigt
 - [x] Fertiggerichte-Konserven nach Vorschlag 2 in vier kompakte Gruppen sortiert: Nudel- & Fleischgerichte, Eintöpfe & Bohnengerichte, Suppen, Currys & Salate; Überschriften in allen 16 Katalogsprachen
 - [x] Admin «Bilder»-Tab: Bildergalerie nur noch einmal – als einzige Galerie unter «Produkte ohne Bild», die zweite Galerie am Ende des Tabs entfernt — getestet
