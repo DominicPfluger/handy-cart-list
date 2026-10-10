@@ -141,6 +141,9 @@ function DepartmentsPage() {
   const { addCatalogItem, isFavorite, toggleFavorite, activeList } = useShoppingList();
   const { preferred: preferredDept } = usePreferredDept();
   const [currentId, setCurrentId] = useState<string | null>(null);
+  const [tileMode, setTileMode] = useState(false);
+  useEffect(() => { setTileMode(localStorage.getItem("shoppi:dept-tiles") === "1"); }, []);
+  const toggleTileMode = () => setTileMode((v) => { localStorage.setItem("shoppi:dept-tiles", v ? "0" : "1"); return !v; });
   const [removeTarget, setRemoveTarget] = useState<CatalogDepartment | null>(null);
   const [renameTarget, setRenameTarget] = useState<RenameTarget | null>(null);
   const customNames = useCustomNames();
@@ -624,7 +627,40 @@ function DepartmentsPage() {
         <section>
           <div className="mb-3 flex items-end justify-between gap-3">
             <h2 className="text-base font-semibold text-foreground">{normalizedQuery ? t("common.searchResults") : t("dept.products")}</h2>
+            <div className="flex overflow-hidden rounded-lg border border-border text-xs font-medium">
+              <button type="button" onClick={() => tileMode && toggleTileMode()} aria-pressed={!tileMode} className={`px-2.5 py-1 ${!tileMode ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>{t("dept.viewList")}</button>
+              <button type="button" onClick={() => !tileMode && toggleTileMode()} aria-pressed={tileMode} className={`px-2.5 py-1 ${tileMode ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>{t("dept.viewTiles")}</button>
+            </div>
           </div>
+          {tileMode ? (
+            <div className="grid grid-cols-3 gap-2.5">
+              {shownProducts.map((product) => {
+                const group = groupFor(product);
+                const favorite = isFavorite(product.id);
+                return (
+                  <div key={product.id} className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+                    <button type="button" aria-label={product.name} onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="grid aspect-square w-full place-items-center overflow-hidden bg-primary-soft/25">
+                      <ProductThumb product={product} />
+                    </button>
+                    {favorite && <HeartIcon className="absolute left-1.5 top-1.5 h-3.5 w-3.5 fill-current text-coral" />}
+                    <Button
+                      type="button"
+                      size="icon"
+                      aria-label={t("common.addWithQty", { name: product.name })}
+                      onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(undefined); setSelectedProduct(product); })}
+                      className="absolute right-1.5 top-1.5 h-7 w-7 rounded-full shadow-sm"
+                    >
+                      <PlusIcon className="h-3.5 w-3.5" />
+                    </Button>
+                    <div className="flex min-h-12 flex-1 flex-col justify-center px-1.5 py-1.5 text-center">
+                      <span className="line-clamp-2 text-xs font-semibold leading-4 text-foreground">{product.name}</span>
+                      {normalizedQuery && group && <span className="truncate text-[10px] text-muted-foreground">{group.name}</span>}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
           <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
             {shownProducts.map((product, index) => {
               // Überschrift steht immer direkt vor ihrem Anker-Produkt (auch nach lokaler Umsortierung)
@@ -801,6 +837,7 @@ function DepartmentsPage() {
               );
             })}
           </div>
+          )}
           {!normalizedQuery && currentId && (
             <Button type="button" variant="outline" onClick={() => setAddTarget({ kind: "product", parentId: currentId, parentName: current?.name })} className="mt-3 w-full rounded-xl">
               <PlusIcon className="h-4 w-4" /> {t("add.product")}
