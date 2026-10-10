@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -10,7 +10,13 @@ const db = supabase as any;
 type Row = { id: string; variant: string; locale: string; name: string; is_manual: boolean };
 
 /** Übersetzungs-Knopf + aufklappbarer Bereich je Variante (alle Lokalisierungen, ✨ pro Sprache). */
-export function VariantTranslations({ productId, variant }: { productId: string; variant: string }) {
+export function VariantTranslations({ productId, variant, productName, isPrefix, onTogglePrefix }: {
+  productId: string; variant: string;
+  /** Optional: Reihenfolge pro Sprache festlegen */
+  productName?: (locale: string) => string;
+  isPrefix?: (locale: string) => boolean;
+  onTogglePrefix?: (locale: string) => void;
+}) {
   const qc = useQueryClient();
   const key = ["admin-variant-translations", productId];
   const { data = [] } = useQuery({
@@ -21,6 +27,15 @@ export function VariantTranslations({ productId, variant }: { productId: string;
       return (data ?? []) as Row[];
     },
   });
+  const { data: prodTr = [] } = useQuery({
+    queryKey: ["admin-product-translations", productId],
+    enabled: !!onTogglePrefix,
+    queryFn: async () => {
+      const { data } = await db.from("catalog_translations").select("locale, name").eq("entity_id", productId);
+      return (data ?? []) as { locale: string; name: string }[];
+    },
+  });
+  const prodName = (l: string) => prodTr.find((r) => r.locale === l)?.name || productName?.(l) || "";
   const rows = Object.fromEntries(data.filter((r) => r.variant === variant).map((r) => [r.locale, r]));
   const locales = allLocales();
   const [open, setOpen] = useState(false);
@@ -64,7 +79,18 @@ export function VariantTranslations({ productId, variant }: { productId: string;
           </div>
           {locales.map((l) => (
             <TrField key={l.id + (rows[l.id]?.name ?? "")} label={`${l.flag} ${l.id}`} value={rows[l.id]?.name ?? ""}
-              manual={rows[l.id]?.is_manual} onSave={(v) => void save(l.id, v)} onAi={() => ai(l.id)} />
+              manual={rows[l.id]?.is_manual} onSave={(v) => void save(l.id, v)} onAi={() => ai(l.id)}
+              order={isPrefix && onTogglePrefix ? (() => {
+                const vn = rows[l.id]?.name || variant; const pn = prodName(l.id);
+                const pre = isPrefix(l.id);
+                return (
+                  <button type="button" onClick={() => onTogglePrefix(l.id)} aria-pressed={pre}
+                    title="Reihenfolge in dieser Sprache: Variante vor oder hinter dem Produktnamen"
+                    className={`h-7 max-w-[9rem] truncate rounded-md border px-2 text-[11px] font-medium ${pre ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}>
+                    {pre ? `${vn} ${pn}` : `${pn} ${vn}`}
+                  </button>
+                );
+              })() : null} />
           ))}
         </div>
       )}
@@ -72,11 +98,11 @@ export function VariantTranslations({ productId, variant }: { productId: string;
   );
 }
 
-function TrField({ label, value, manual, onSave, onAi }: { label: string; value: string; manual?: boolean | undefined; onSave: (v: string) => void; onAi: () => Promise<string | undefined> }) {
+function TrField({ label, value, manual, onSave, onAi, order }: { label: string; value: string; manual?: boolean | undefined; onSave: (v: string) => void; onAi: () => Promise<string | undefined>; order?: ReactNode }) {
   const [v, setV] = useState(value);
   const [busy, setBusy] = useState(false);
   return (
-    <div className="grid grid-cols-[5rem_1fr_auto] items-center gap-2 text-xs">
+    <div className={`grid ${order ? "grid-cols-[5rem_1fr_auto_auto]" : "grid-cols-[5rem_1fr_auto]"} items-center gap-2 text-xs`}>
       <span className="text-muted-foreground">{label}</span>
       <input aria-label={label} value={v} onChange={(e) => setV(e.target.value)} onBlur={() => onSave(v)}
         onKeyDown={(e) => e.key === "Enter" && (e.target as HTMLInputElement).blur()}
@@ -84,6 +110,7 @@ function TrField({ label, value, manual, onSave, onAi }: { label: string; value:
       <button type="button" disabled={busy} aria-label={`KI-Übersetzung ${label}`}
         onClick={async () => { setBusy(true); try { const n = await onAi(); if (n) setV(n); else toast.error("Keine Übersetzung"); } catch (e) { toast.error(e instanceof Error ? e.message : String(e)); } finally { setBusy(false); } }}
         className="h-7 rounded-md border border-border px-2 text-xs">{busy ? "…" : "✨"}</button>
+      {order}
     </div>
   );
 }

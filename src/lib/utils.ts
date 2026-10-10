@@ -21,14 +21,25 @@ export function variantDisplayName(variant: string, localizedName: string): stri
 export function joinVariantName(
   base: string,
   rest: string,
-  product?: { prefixVariants?: string[]; variantNames?: Record<string, Record<string, string>> },
+  product?: { prefixVariants?: string[]; prefixVariantsByLocale?: Record<string, string[]>; variantNames?: Record<string, Record<string, string>> },
+  locale?: string,
 ): string {
   if (!rest) return base;
   const [variant, ...extra] = rest.split(" · ");
   const v = (variant ?? "").trim();
   const lower = v.toLocaleLowerCase();
-  const prefix = (product?.prefixVariants ?? []).some((p) =>
+  const prefix = prefixListFor(product, locale).some((p) =>
     p.toLocaleLowerCase() === lower || Object.values(product?.variantNames?.[p] ?? {}).some((n) => n.toLocaleLowerCase() === lower));
   const head = !v ? base : prefix ? `${v} ${base}` : `${base} ${v}`;
   return [head, ...extra].join(" · ");
+}
+
+/** Vorangestellte Varianten für eine Sprache: eigene Einstellung der Sprache, sonst Standard. */
+export function prefixListFor(
+  product: { prefixVariants?: string[]; prefixVariantsByLocale?: Record<string, string[]> } | undefined,
+  locale?: string,
+): string[] {
+  const by = product?.prefixVariantsByLocale ?? {};
+  if (locale && by[locale]) return by[locale]!;
+  return product?.prefixVariants ?? [];
 }

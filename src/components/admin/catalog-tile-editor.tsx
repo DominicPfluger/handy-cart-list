@@ -38,7 +38,7 @@ const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR
 /** Alias-Kategorien: id = "deptalias:<aliasId>", alias_id + dept_id (Original) gesetzt. */
 export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; icon_path?: string | null; alias_id?: string; dept_id?: string };
 /** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
-export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; image_path?: string | null; icon_path?: string | null; variants?: string[]; prefix_variants?: string[]; alias_id?: string; product_id?: string };
+export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; image_path?: string | null; icon_path?: string | null; variants?: string[]; prefix_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; alias_id?: string; product_id?: string };
 
 
 type Target = { kind: "department" | "product"; id: string | null } | null;
@@ -1019,6 +1019,12 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   }, [isDept, prod?.id]);
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [prefixVariants, setPrefixVariants] = useState<string[]>(prod?.prefix_variants ?? []);
+  const [prefixByLocale, setPrefixByLocale] = useState<Record<string, string[]>>(((prod as { prefix_variants_by_locale?: Record<string, string[]> } | undefined)?.prefix_variants_by_locale) ?? {});
+  const togglePrefixLocale = (locale: string, v: string) => setPrefixByLocale((m) => {
+    const cur = m[locale] ?? prefixVariants;
+    return { ...m, [locale]: cur.includes(v) ? cur.filter((y) => y !== v) : [...cur, v] };
+  });
+  const cleanPrefixByLocale = () => Object.fromEntries(Object.entries(prefixByLocale).map(([k, list]) => [k, list.filter((x) => variants.includes(x))]));
   const commonVariants = useStandardVariants();
   const [variantInput, setVariantInput] = useState("");
   const [vDrag, setVDrag] = useState<number | null>(null);
@@ -1104,7 +1110,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
-        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
+        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale() } as never).eq("id", item.id));
       if (item.name !== base.name) {
         await p.must(supabase.from("catalog_translations").delete().eq("entity_id", item.id).eq("is_manual", false));
         await p.translateIds([item.id]);
@@ -1447,7 +1453,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
                     </span>
                     {prod && (prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}
-                    {prod && (prod.variants ?? []).includes(v) && <VariantTranslations productId={prod.id} variant={v} />}
+                    {prod && (prod.variants ?? []).includes(v) && <VariantTranslations productId={prod.id} variant={v}  productName={() => name || prod?.name || ""} isPrefix={(l) => (prefixByLocale[l] ?? prefixVariants).includes(v)} onTogglePrefix={(l) => togglePrefixLocale(l, v)} />}
                   </div>
                 ))}
               </div>

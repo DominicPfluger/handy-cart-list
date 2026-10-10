@@ -1,0 +1,2 @@
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS prefix_variants_by_locale jsonb NOT NULL DEFAULT '{}'::jsonb;
+COMMENT ON COLUMN public.products.prefix_variants_by_locale IS 'Per-locale override of prefix_variants: {locale: [variant,...]}; missing locale falls back to prefix_variants.';
