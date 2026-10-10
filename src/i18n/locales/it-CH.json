@@ -1133,7 +1133,7 @@
   "adm.health.similar": "Nome simile",
   "adm.health.synConflict": "Conflitto di sinonimi",
   "adm.health.merge": "Unisci",
-  "adm.health.mergeConfirm": "{remove} verrà unito in {keep} ed eliminato. Continuare?",
+  "adm.health.mergeConfirm": "{remove} ({removeCat}) verrà unito in {keep} ({keepCat}) ed eliminato. Continuare?",
   "adm.health.merged": "Unito",
   "adm.health.link": "Collega",
   "adm.health.linked": "Collegato",

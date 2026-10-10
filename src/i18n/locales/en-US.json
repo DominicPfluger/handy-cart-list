@@ -1140,7 +1140,7 @@
   "adm.health.similar": "Similar name",
   "adm.health.synConflict": "Synonym conflict",
   "adm.health.merge": "Merge",
-  "adm.health.mergeConfirm": "{remove} will be merged into {keep} and deleted. Continue?",
+  "adm.health.mergeConfirm": "{remove} ({removeCat}) will be merged into {keep} ({keepCat}) and deleted. Continue?",
   "adm.health.merged": "Merged",
   "adm.health.link": "Link",
   "adm.health.linked": "Linked",
