@@ -36,3 +36,4 @@
 - [x] Käse-Lücken füllen (Feta, Halloumi, Reibekäse, Blauschimmel, Burrata, Fondue, Schmelzkäse, pflanzlich)
 - [x] Rezept → Liste: Vorrat-Zutaten vorab abwählen + Hinweis
 - [x] Vibration beim Abhaken (Liste + Einkaufsmodus)
+- [x] Produkt bearbeiten: Variantenbild anklicken zeigt Grossansicht, Menü (⋮) für Hochladen/KI/Löschen

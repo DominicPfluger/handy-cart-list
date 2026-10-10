@@ -1220,6 +1220,8 @@
   "dept.removeVariant": "Rimuovi la tua variante {name}",
   "dept.details": "Dettagli",
   "adm.variantImage": "Immagine variante",
+  "adm.variantImageBig": "Mostra immagine grande",
+  "adm.variantImageMenu": "Modifica immagine",
   "adm.variantImageUpload": "Carica immagine",
   "adm.variantImageRemove": "Elimina immagine",
   "adm.variantRename": "Rinomina variante",

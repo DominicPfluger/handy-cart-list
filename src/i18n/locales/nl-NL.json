@@ -1220,6 +1220,8 @@
   "dept.removeVariant": "Eigen variant {name} verwijderen",
   "dept.details": "Details",
   "adm.variantImage": "Variantafbeelding",
+  "adm.variantImageBig": "Afbeelding groot weergeven",
+  "adm.variantImageMenu": "Afbeelding bewerken",
   "adm.variantImageUpload": "Afbeelding uploaden",
   "adm.variantImageRemove": "Afbeelding verwijderen",
   "adm.variantRename": "Variant hernoemen",
