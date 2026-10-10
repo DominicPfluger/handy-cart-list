@@ -149,7 +149,7 @@ function ListPage() {
     const product = item.productId ? productById.get(item.productId) : undefined;
     if (!product) return stripAnyPrefix(item.name);
     const i = item.name.indexOf(" · ");
-    return stripAnyPrefix(i >= 0 ? joinVariantName(product.name, item.name.slice(i + 3), product) : product.name);
+    return stripAnyPrefix(i >= 0 ? joinVariantName(product.name, item.name.slice(i + 3), product, getLocale()) : product.name);
   };
   const { departments } = useDepartmentOrder(data.departments);
 
@@ -313,7 +313,7 @@ function ListPage() {
       if (product) {
         const k = i.name.indexOf(" · ");
         const base = pickName(product.names, speakLocale, product.baseName);
-        name = stripAnyPrefix(k >= 0 ? joinVariantName(base, i.name.slice(k + 3), product) : base);
+        name = stripAnyPrefix(k >= 0 ? joinVariantName(base, i.name.slice(k + 3), product, speakLocale) : base);
       }
       return {
         id: i.id,
