@@ -30,7 +30,6 @@ export const de = {
   "common.removeFavorite": "{name} aus Favoriten entfernen",
   "common.addFavorite": "{name} favorisieren",
   "dept.productVariants": "Produkt-Varianten",
-  "dept.details": "Details",
   "dept.variantStandard": "Ohne Sorte",
   "dlg.properties": "Eigenschaften (optional)",
   "dept.variants": "{count} Varianten",
