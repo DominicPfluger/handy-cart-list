@@ -47,7 +47,7 @@ export function ProductAliasEditor({ product, prods, options }: { product: Prod;
   const add = () => {
     if (!pick) return;
     const max = Math.max(0, ...prods.filter((p) => p.department_id === pick).map((p) => (p as Prod & { sort_order?: number }).sort_order ?? 0), ...(data ?? []).filter((a) => a.department_id === pick).map((a) => a.sort_order));
-    run(() => supabase.from("product_aliases").insert({ product_id: product.id, department_id: pick, sort_order: max + 1 }));
+    run(() => supabase.from("product_aliases").upsert({ product_id: product.id, department_id: pick, sort_order: max + 1 }, { onConflict: "product_id,department_id", ignoreDuplicates: true }));
     setPick("");
   };
   return (
