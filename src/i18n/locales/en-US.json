@@ -1437,6 +1437,8 @@
   "adm.variantAi.addAll": "Add all",
   "adm.variantAi.none": "No new suggestions found",
   "adm.setUnitSelected": "Change unit …",
+  "adm.setUnitAll": "Unit for all …",
+  "adm.setUnitAllConfirm": "Change the unit of all {n} products to “{unit}”?",
   "list.frozenProduct": "{name} (frozen)",
   "list.cannedProduct": "{name} (canned)",
   "rk.formFresh": "Fresh",
