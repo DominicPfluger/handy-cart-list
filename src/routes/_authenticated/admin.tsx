@@ -35,6 +35,7 @@ import { signedCategoryImageUrl } from "@/lib/image-upload";
 import { deptTreeOrder } from "@/lib/dept-order";
 import { isNonFoodRootName } from "@/lib/dept-colors";
 import { MarketAdmin, MarketAdminsManager } from "@/components/market-admin";
+import { StoreCatalogAdmin, StoreAdminsManager } from "@/components/admin/store-catalog-admin";
 import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
 import { useDiets, dietEmoji, dietLabel } from "@/hooks/use-diet-filter";
@@ -802,14 +803,15 @@ function AdminPage() {
   }, [search, d]);
 
   if (admin.isLoading) return <p className="pt-6 text-sm text-muted-foreground">{T("adm.loading")}</p>;
-  if (!admin.data?.isAdmin && !admin.data?.isViewer && admin.data?.markets?.length)
+  if (!admin.data?.isAdmin && !admin.data?.isViewer && (admin.data?.markets?.length || admin.data?.stores?.length))
     return (
       <div className="space-y-4 pb-10">
         <div className="flex items-center justify-between gap-2">
           <h1 className="text-2xl font-bold text-foreground">{T("adm.title")}</h1>
           <Button variant="ghost" size="sm" onClick={() => supabase.auth.signOut().then(() => location.assign("/"))}>{T("adm.signOut")}</Button>
         </div>
-        <MarketAdmin markets={admin.data.markets} />
+        {admin.data.markets.length > 0 && <MarketAdmin markets={admin.data.markets} />}
+        {admin.data.stores.length > 0 && <StoreCatalogAdmin storeIds={admin.data.stores} />}
       </div>
     );
   if (!admin.data?.isAdmin && !admin.data?.isViewer)
@@ -904,7 +906,7 @@ function AdminPage() {
       )}
 
       <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.title")}>
-        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["settings", "adm.tab.settings"], ["recipes", "adm.tab.recipes"], ["health", "adm.tab.health"], ["langMarkets", "adm.tab.langMarkets"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"]] as const).map(([id, key]) => (
+        {([["catalog", "adm.tab.catalog"], ["media", "adm.tab.media"], ["settings", "adm.tab.settings"], ["recipes", "adm.tab.recipes"], ["health", "adm.tab.health"], ["langMarkets", "adm.tab.langMarkets"], ["prices", "adm.tab.prices"], ["import", "adm.tab.import"], ["stores", "st.tab"]] as const).map(([id, key]) => (
           <button key={id} role="tab" aria-selected={tab === id} type="button" onClick={() => setTab(id)}
             className={`whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${tab === id ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-muted-foreground"}`}>
             {T(key)}
@@ -1103,6 +1105,7 @@ function AdminPage() {
 
 
 {tab === "recipes" && (d ? <><RecipeAdmin depts={d.depts} prods={d.prods} /><RecipeAssignAdmin depts={d.depts} prods={d.prods} /><RecipeTraitsAdmin /></> : <LoadingGate d={d}>{null}</LoadingGate>)}
+      {tab === "stores" && <StoreCatalogAdmin />}
       {tab === "langMarkets" && (<div className="space-y-4">
         <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.tab.langMarkets")}>
           {([["languages", "adm.tab.languages"], ["markets", "adm.tab.markets"]] as const).map(([id, key]) => (
@@ -1116,6 +1119,7 @@ function AdminPage() {
         {langMk === "markets" && (<>
           <MarketsManager />
           <MarketAdminsManager />
+          <StoreAdminsManager />
         </>)}
       </div>)}
       {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={(id) => setSel({ kind: "product", id })}

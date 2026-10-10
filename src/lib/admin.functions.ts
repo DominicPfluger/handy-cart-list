@@ -20,7 +20,8 @@ export const checkAdmin = createServerFn({ method: "GET" })
     const { data } = await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "admin" });
     const { data: m } = await context.supabase.from("market_admins").select("market").eq("user_id", context.userId);
     const { data: v } = data ? { data: false } : await context.supabase.rpc("has_role", { _user_id: context.userId, _role: "viewer" });
-    return { isAdmin: Boolean(data), isViewer: Boolean(v), userId: context.userId, markets: ((m ?? []) as Array<{ market: string }>).map((r) => r.market) };
+    const { data: st } = await context.supabase.from("store_admins").select("supermarket_id").eq("user_id", context.userId);
+    return { isAdmin: Boolean(data), isViewer: Boolean(v), userId: context.userId, markets: ((m ?? []) as Array<{ market: string }>).map((r) => r.market), stores: ((st ?? []) as Array<{ supermarket_id: string }>).map((r) => r.supermarket_id) };
   });
 
 /**
@@ -1067,4 +1068,25 @@ export const translateSingleName = createServerFn({ method: "POST" })
     const { translateNames } = await import("./translate.server");
     const r = await translateNames({ x: data.name }, data.locale);
     return { name: r["x"] ?? "" };
+  });
+
+/** Laden-Admin per E-Mail zuweisen (nur Haupt-Admin). */
+export const addStoreAdmin = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ email: z.string().trim().email().max(200), supermarketId: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const email = data.email.toLowerCase();
+    let userId: string | null = null;
+    for (let page = 1; page <= 20 && !userId; page++) {
+      const { data: res, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage: 200 });
+      if (error) throw new Error(error.message);
+      userId = res.users.find((u) => u.email?.toLowerCase() === email)?.id ?? null;
+      if (res.users.length < 200) break;
+    }
+    if (!userId) throw new Error("Kein Konto mit dieser E-Mail gefunden");
+    const { error } = await context.supabase.from("store_admins").upsert({ user_id: userId, email, supermarket_id: data.supermarketId }, { onConflict: "user_id,supermarket_id", ignoreDuplicates: true });
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
