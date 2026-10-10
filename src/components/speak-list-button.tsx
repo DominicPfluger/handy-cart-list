@@ -41,9 +41,13 @@ export function expandAbbreviations(text: string, locale: string): string {
     .replace(/\bPkg\.?/g, "Packung")
     // „1 Stück“ natürlich als „ein Stück“ statt „eins Stück“ sprechen.
     .replace(/(^|[^\d.,'’])1\s+Stück\b/g, "$1ein Stück")
+    .replace(/(^|[^\d.,'’])2\s+Stück\b/g, "$1zwei Stück")
+    // Maskuline Einheiten: „ein Becher“, „zwei Becher“, „zwei Gläser“ usw.
+    .replace(/(^|[^\d.,'’])1\s+(Becher|Beutel|Glas|Netz|Bund)\b/gi, "$1ein $2")
+    .replace(/(^|[^\d.,'’])2\s+(Becher|Beutel|Netz|Bund|Gläser|Netze)\b/gi, "$1zwei $2")
     // Weibliche Einheiten: „eine Dose“, „zwei Dosen“ usw.
-    .replace(/(^|[^\d.,'’])1\s+(Dose|Flasche|Packung|Tube|Rolle)\b/gi, "$1eine $2")
-    .replace(/(^|[^\d.,'’])2\s+(Dosen|Flaschen|Packungen|Tuben|Rollen)\b/gi, "$1zwei $2");
+    .replace(/(^|[^\d.,'’])1\s+(Dose|Flasche|Packung|Tube|Rolle|Schachtel)\b/gi, "$1eine $2")
+    .replace(/(^|[^\d.,'’])2\s+(Dosen|Flaschen|Packungen|Tuben|Rollen|Schachteln)\b/gi, "$1zwei $2");
 }
 
 export function speakSentences(sentences: string[], locale: string, rate: number, onDone?: () => void) {
