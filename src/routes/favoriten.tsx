@@ -572,6 +572,36 @@ function FavoritesPage() {
           >
             <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-muted" />
             <h2 className="mb-4 text-lg font-bold text-foreground">{t("fav.listNameTitle")}</h2>
+            <div className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-muted p-1">
+              {(["new", "existing"] as const).map((mode) => (
+                <button
+                  key={mode}
+                  type="button"
+                  aria-pressed={transferMode === mode}
+                  onClick={() => setTransferMode(mode)}
+                  className={`rounded-lg px-3 py-2 text-sm font-semibold ${transferMode === mode ? "bg-background text-foreground shadow-sm" : "text-muted-foreground"}`}
+                >
+                  {mode === "new" ? t("fav.modeNew") : t("fav.modeExisting")}
+                </button>
+              ))}
+            </div>
+            {transferMode === "existing" ? (
+              <div className="max-h-56 space-y-1.5 overflow-y-auto">
+                {lists.map((l) => (
+                  <button
+                    key={l.id}
+                    type="button"
+                    onClick={() => setTargetListId(l.id)}
+                    aria-pressed={targetListId === l.id}
+                    className={`flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-2.5 text-left ${targetListId === l.id ? "border-primary bg-primary/10" : "border-border"}`}
+                  >
+                    <span className="min-w-0 truncate text-sm font-semibold text-foreground">{l.name}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{l.items.filter((i) => !i.checked).length}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+            <>
             <input
               autoFocus
               value={listName}
