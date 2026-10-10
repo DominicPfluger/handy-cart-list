@@ -519,7 +519,7 @@ export function CatalogTileEditor(p: {
           {p.children.map((c, i) => (
              <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
                style={{ background: rootColorByName(rootName(c)) }}
-               className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""}`}>
+               className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id || p.isHidden?.(c.id) ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""}`}>
                 <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
                 onClick={click(() => p.setCur(c.dept_id ?? c.id))}
@@ -528,10 +528,16 @@ export function CatalogTileEditor(p: {
                 {img(c.image_path) ? <ZoomableImage src={img(c.image_path)!} className="h-full w-full object-cover" /> : c.emoji ?? "📁"}
               </button>
               <span className="line-clamp-2 text-center text-[13px] font-bold leading-tight text-foreground">{p.nm(c.dept_id ?? c.id, c.name)}{c.alias_id && <span className="block text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</span>
-              {editMode && !c.alias_id && (
-                <button type="button" onClick={() => setTarget({ kind: "department", id: c.id })} aria-label={T("tile.editItem")}
-                  className="absolute right-1 top-1 rounded-full bg-background/80 px-1.5 text-xs">✎</button>
-              )}
+               {editMode && !c.alias_id && (
+                 <button type="button" onClick={() => setTarget({ kind: "department", id: c.id })} aria-label={T("tile.editItem")}
+                   className="absolute right-1 top-1 rounded-full bg-background/80 px-1.5 text-xs">✎</button>
+               )}
+               {editMode && !c.alias_id && p.onToggleHidden && (
+                 <button type="button" onClick={() => p.onToggleHidden!("department", c.id)} aria-label={p.isHidden?.(c.id) ? T("adm.unhide") : T("adm.hide")} title={p.isHidden?.(c.id) ? T("adm.unhide") : T("adm.hide")}
+                   className="absolute left-1 top-1 rounded-full bg-background/80 p-1 text-muted-foreground">
+                   {p.isHidden?.(c.id) ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                 </button>
+               )}
               {editMode && c.alias_id && (
                 <button type="button" onClick={() => p.onRemoveDeptAlias?.(c.alias_id!, p.nm(c.dept_id ?? c.id, c.name))} aria-label={T("adm.delete")}
                   className="absolute right-1 top-1 rounded-full bg-background/80 px-1.5 text-xs text-destructive">✕</button>
@@ -575,7 +581,7 @@ export function CatalogTileEditor(p: {
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
           {p.children.map((c, i) => (
             <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
-              className={`flex items-center gap-3 px-3 py-2 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : "ring-2 ring-inset ring-primary") : ""}`}>
+               className={`flex items-center gap-3 px-3 py-2 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id || p.isHidden?.(c.id) ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : "ring-2 ring-inset ring-primary") : ""}`}>
               <input type="checkbox" checked={selDepts.has(c.id)} onChange={() => toggleDeptSel(c.id)} aria-label={T("adm.select")} className="h-4 w-4 shrink-0 accent-primary" />
               <span onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers} aria-label={T("adm.drag")} title={T("adm.drag")} className="cursor-grab touch-none select-none px-0.5 text-base text-muted-foreground">⠿</span>
               <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
