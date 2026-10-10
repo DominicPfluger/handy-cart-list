@@ -996,7 +996,7 @@ function AdminPage() {
             productAliasOptions={productAliasOptions}
             onAddProductAlias={(productId) => { if (!cur) return; void run(async () => {
               const n = products.length;
-              await must(supabase.from("product_aliases").insert({ product_id: productId, department_id: cur, sort_order: n + 1 }));
+              await must(supabase.from("product_aliases").upsert({ product_id: productId, department_id: cur, sort_order: n + 1 }, { onConflict: "product_id,department_id", ignoreDuplicates: true }));
               await qc.invalidateQueries({ queryKey: ALIAS_KEY });
             }, T("adm.created")); }}
             deptAliasOptions={deptAliasOptions}
