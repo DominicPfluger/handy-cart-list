@@ -31,6 +31,8 @@
   "dept.categories": "Categorie",
   "dept.allDepartments": "Tutti i reparti",
   "dept.products": "Prodotti",
+  "dept.viewList": "Elenco",
+  "dept.viewTiles": "Riquadri",
   "dept.tip": "Suggerimento: ordini, rinomini ed elimini i reparti sotto Altro › Ordina e rinomina i reparti.",
   "dept.moved": "{name} spostato in «{target}»",
   "dept.moveSelf": "Non è possibile spostare una categoria in sé stessa",

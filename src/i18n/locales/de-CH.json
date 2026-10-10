@@ -896,5 +896,7 @@
   "speak.tabRules": "Angelegte Aussprachen",
   "speak.applyToVariants": "Für alle Sprachvarianten übernehmen",
   "rk.inPantry": "Im Vorrat",
-  "rk.pantryHint": "Zutaten aus deinem Vorrat sind abgewählt – antippen, um sie trotzdem zu übernehmen."
+  "rk.pantryHint": "Zutaten aus deinem Vorrat sind abgewählt – antippen, um sie trotzdem zu übernehmen.",
+  "dept.viewList": "Liste",
+  "dept.viewTiles": "Kacheln"
 }

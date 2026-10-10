@@ -687,10 +687,22 @@ function DepartmentsPage() {
                     >
                       <BoltIcon className="h-3.5 w-3.5" />
                     </Button>
-                    <div className="flex min-h-12 flex-1 flex-col justify-center px-1.5 py-1.5 text-center">
-                      <span className="line-clamp-2 text-xs font-semibold leading-4 text-foreground">{product.name}</span>
-                      {normalizedQuery && group && <span className="truncate text-[10px] text-muted-foreground">{group.name}</span>}
+                    <div className="flex min-h-12 flex-1 items-center gap-1 px-1.5 py-1.5">
+                      <div className="min-w-0 flex-1 text-center">
+                        <span className="line-clamp-2 text-xs font-semibold leading-4 text-foreground">{product.name}</span>
+                        {normalizedQuery && group && <span className="block truncate text-[10px] text-muted-foreground">{group.name}</span>}
+                      </div>
+                      <Button
+                        type="button"
+                        size="icon"
+                        aria-label={t("common.addWithQty", { name: product.name })}
+                        onClick={() => { const b = normalizedQuery ? matchedBrand(product) : undefined; gate(() => { setSelectedBrand(b); setSelectedVariant(undefined); setSelectedProduct(product); }); }}
+                        className="h-8 w-8 shrink-0 rounded-full shadow-none"
+                      >
+                        <PlusIcon className="h-4 w-4" />
+                      </Button>
                     </div>
+
                   </div>
                 );
               })}
