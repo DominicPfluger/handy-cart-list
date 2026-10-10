@@ -837,8 +837,8 @@ function AdminPage() {
     const idx = new Map(list.map((x, i) => [x.id, i]));
     return list.slice().sort((a, b) => (m.get(a.id)?.sort_order ?? idx.get(a.id)! * 10) - (m.get(b.id)?.sort_order ?? idx.get(b.id)! * 10));
   };
-  const tileChildren = storeId ? applyStore(children.filter((x) => !x.alias_id), sOv?.d) : children;
-  const tileProducts = storeId ? applyStore(products.filter((x) => !x.alias_id), sOv?.p) : products;
+  const tileChildren = storeId ? applyStore(children.filter((x) => !("alias_id" in x && x.alias_id)), sOv?.d) : children;
+  const tileProducts = storeId ? applyStore(products.filter((x) => !("alias_id" in x && x.alias_id)), sOv?.p) : products;
   const storeUpsert = async (kind: "department" | "product", rows: Array<Record<string, unknown>>) => {
     const table = kind === "department" ? "store_department_overrides" : "store_product_overrides";
     const key = kind === "department" ? "department_id" : "product_id";
