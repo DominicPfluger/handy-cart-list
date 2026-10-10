@@ -29,7 +29,7 @@ import { ProductPronunciationEditor } from "@/components/admin/product-pronuncia
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
-import { LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
+import { Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 
@@ -64,6 +64,10 @@ export function CatalogTileEditor(p: {
   below?: React.ReactNode;
   /** Öffnet die erweiterte Bearbeitung (Übersetzungen, Marken, Aliase …). */
   onAdvanced?: (kind: "department" | "product", id: string) => void;
+  /** Laden-Modus: Eintrag für diesen Laden aus-/einblenden (nie global löschen). */
+  onToggleHidden?: (kind: "department" | "product", id: string) => void;
+  /** Laden-Modus: ist der Eintrag für diesen Laden ausgeblendet? */
+  isHidden?: (id: string) => boolean;
   busy?: boolean;
   onRemoveAlias?: (aliasId: string, name: string) => void;
   /** Wählbare Kategorien für eine neue Alias-Kategorie. */
@@ -515,7 +519,7 @@ export function CatalogTileEditor(p: {
           {p.children.map((c, i) => (
              <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
                style={{ background: rootColorByName(rootName(c)) }}
-               className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""}`}>
+               className={`relative flex flex-col items-center gap-1.5 rounded-2xl bg-primary-soft p-2.5 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id || p.isHidden?.(c.id) ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_4px_0_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_-4px_0_0_0_var(--color-primary)]" : "ring-2 ring-primary") : ""}`}>
                 <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
                 onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers}
                 onClick={click(() => p.setCur(c.dept_id ?? c.id))}
@@ -524,10 +528,16 @@ export function CatalogTileEditor(p: {
                 {img(c.image_path) ? <ZoomableImage src={img(c.image_path)!} className="h-full w-full object-cover" /> : c.emoji ?? "📁"}
               </button>
               <span className="line-clamp-2 text-center text-[13px] font-bold leading-tight text-foreground">{p.nm(c.dept_id ?? c.id, c.name)}{c.alias_id && <span className="block text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</span>
-              {editMode && !c.alias_id && (
-                <button type="button" onClick={() => setTarget({ kind: "department", id: c.id })} aria-label={T("tile.editItem")}
-                  className="absolute right-1 top-1 rounded-full bg-background/80 px-1.5 text-xs">✎</button>
-              )}
+               {editMode && !c.alias_id && (
+                 <button type="button" onClick={() => setTarget({ kind: "department", id: c.id })} aria-label={T("tile.editItem")}
+                   className="absolute right-1 top-1 rounded-full bg-background/80 px-1.5 text-xs">✎</button>
+               )}
+               {editMode && !c.alias_id && p.onToggleHidden && (
+                 <button type="button" onClick={() => p.onToggleHidden!("department", c.id)} aria-label={p.isHidden?.(c.id) ? T("adm.unhide") : T("adm.hide")} title={p.isHidden?.(c.id) ? T("adm.unhide") : T("adm.hide")}
+                   className="absolute left-1 top-1 rounded-full bg-background/80 p-1 text-muted-foreground">
+                   {p.isHidden?.(c.id) ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                 </button>
+               )}
               {editMode && c.alias_id && (
                 <button type="button" onClick={() => p.onRemoveDeptAlias?.(c.alias_id!, p.nm(c.dept_id ?? c.id, c.name))} aria-label={T("adm.delete")}
                   className="absolute right-1 top-1 rounded-full bg-background/80 px-1.5 text-xs text-destructive">✕</button>
@@ -571,7 +581,7 @@ export function CatalogTileEditor(p: {
         <div className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
           {p.children.map((c, i) => (
             <div key={c.id} data-drop="department" data-id={c.id} data-index={i}
-              className={`flex items-center gap-3 px-3 py-2 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : "ring-2 ring-inset ring-primary") : ""}`}>
+               className={`flex items-center gap-3 px-3 py-2 ${c.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === c.id || p.isHidden?.(c.id) ? "opacity-40" : ""} ${over === `department:${c.id}` ? (overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : "ring-2 ring-inset ring-primary") : ""}`}>
               <input type="checkbox" checked={selDepts.has(c.id)} onChange={() => toggleDeptSel(c.id)} aria-label={T("adm.select")} className="h-4 w-4 shrink-0 accent-primary" />
               <span onPointerDown={(e) => startDrag(e, "department", c.id, i, c.emoji ?? "📁")} {...dragHandlers} aria-label={T("adm.drag")} title={T("adm.drag")} className="cursor-grab touch-none select-none px-0.5 text-base text-muted-foreground">⠿</span>
               <button type="button" aria-label={p.nm(c.dept_id ?? c.id, c.name)}
@@ -584,11 +594,16 @@ export function CatalogTileEditor(p: {
               <button type="button" onClick={click(() => p.setCur(c.dept_id ?? c.id))} className="min-w-0 flex-1 text-left">
                 <span className="block truncate text-sm font-semibold text-foreground">{p.nm(c.dept_id ?? c.id, c.name)}{c.alias_id && <span className="ml-1 text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</span>
               </button>
-              {editMode && !c.alias_id && (
-                <Button type="button" variant="ghost" size="icon" aria-label={T("tile.editItem")} title={T("tile.editItem")} onClick={() => setTarget({ kind: "department", id: c.id })} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
-                  <Pencil className="h-3.5 w-3.5" />
-                </Button>
-              )}
+               {editMode && !c.alias_id && (
+                 <Button type="button" variant="ghost" size="icon" aria-label={T("tile.editItem")} title={T("tile.editItem")} onClick={() => setTarget({ kind: "department", id: c.id })} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                   <Pencil className="h-3.5 w-3.5" />
+                 </Button>
+               )}
+               {editMode && !c.alias_id && p.onToggleHidden && (
+                 <Button type="button" variant="ghost" size="icon" aria-label={p.isHidden?.(c.id) ? T("adm.unhide") : T("adm.hide")} title={p.isHidden?.(c.id) ? T("adm.unhide") : T("adm.hide")} onClick={() => p.onToggleHidden!("department", c.id)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                   {p.isHidden?.(c.id) ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                 </Button>
+               )}
               {editMode && c.alias_id && (
                 <Button type="button" variant="ghost" size="icon" aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => p.onRemoveDeptAlias?.(c.alias_id!, p.nm(c.dept_id ?? c.id, c.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
                   <Trash2 className="h-3.5 w-3.5" />
@@ -723,7 +738,7 @@ export function CatalogTileEditor(p: {
                 </div>
               )}
               <div data-drop="product" data-id={x.id} data-index={i}
-                className={`flex items-center gap-3 px-3 py-2 ${x.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) ? "opacity-50" : ""}`}>
+                 className={`flex items-center gap-3 px-3 py-2 ${x.alias_id ? "border border-dashed border-border" : ""} ${drag?.id === x.id ? "opacity-40" : ""} ${over === `product:${x.id}` ? (overPos === "after" ? "shadow-[inset_0_-3px_0_0_var(--color-primary)]" : overPos === "before" ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : "bg-primary-soft") : ""} ${p.unavailable(x) || p.isHidden?.(pid) ? "opacity-50" : ""}`}>
                 <input type="checkbox" checked={selected.has(x.id)} onChange={() => toggleSel(x.id)} aria-label={T("adm.select")} className="h-4 w-4 shrink-0 accent-primary" />
                 <span onPointerDown={(e) => startDrag(e, "product", x.id, i, (x.emoji ?? "•") + (selected.has(x.id) && selected.size > 1 ? ` +${selected.size - 1}` : ""))} {...dragHandlers} aria-label={T("adm.drag")} title={T("adm.drag")} className="cursor-grab touch-none select-none px-0.5 text-base text-muted-foreground">⠿</span>
                 <span
@@ -782,9 +797,14 @@ export function CatalogTileEditor(p: {
                   {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
                   {!getUnits(getLocale()).some((u) => u.id === x.default_unit) && <option value={x.default_unit}>{x.default_unit}</option>}
                 </select>
-                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
-                  <Pencil className="h-3.5 w-3.5" />
-                </Button>
+                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                   <Pencil className="h-3.5 w-3.5" />
+                 </Button>
+                 {p.onToggleHidden && !x.alias_id && (
+                   <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={p.isHidden?.(pid) ? T("adm.unhide") : T("adm.hide")} title={p.isHidden?.(pid) ? T("adm.unhide") : T("adm.hide")} onClick={() => p.onToggleHidden!("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                     {p.isHidden?.(pid) ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                   </Button>
+                 )}
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.estimatePrice")} title={T("adm.estimatePrice")} onClick={() => { setPriceFocus(true); setTarget({ kind: "product", id: pid }); }} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   <Tag className="h-3.5 w-3.5" />
                 </Button>
@@ -799,7 +819,7 @@ export function CatalogTileEditor(p: {
                 <Button type="button" variant="ghost" size="icon" disabled={!editMode || aiBusy === pid} aria-label={T("tile.aiImage")} title={T("tile.aiImage")} onClick={() => quickAiImage(p.products.find((y) => y.id === pid) ?? x)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                   {aiBusy === pid ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                 </Button>
-                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => x.alias_id ? p.onRemoveAlias?.(x.alias_id, p.nm(pid, x.name)) : p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={p.onToggleHidden && !x.alias_id ? T("adm.hide") : T("adm.delete")} title={p.onToggleHidden && !x.alias_id ? T("adm.hide") : T("adm.delete")} onClick={() => x.alias_id ? p.onRemoveAlias?.(x.alias_id, p.nm(pid, x.name)) : p.remove("product", x.id, p.nm(pid, x.name))} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>

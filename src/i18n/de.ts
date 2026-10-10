@@ -1097,6 +1097,8 @@ export const de = {
   "adm.topLevel": "Oberste Ebene",
   "adm.save": "Speichern",
   "adm.delete": "Löschen",
+  "adm.hide": "Ausblenden",
+  "adm.unhide": "Wieder einblenden",
   "adm.languages": "Sprachen",
   "adm.retranslate": "KI neu übersetzen",
   "adm.trHint": "Grün = von Hand bearbeitet, wird von der KI nicht überschrieben. Leeren = Übersetzung löschen.",
