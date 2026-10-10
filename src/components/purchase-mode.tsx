@@ -162,6 +162,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
+      if (keepAlive) window.clearInterval(keepAlive);
       try { synth.cancel(); } catch { /* ignore */ }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
