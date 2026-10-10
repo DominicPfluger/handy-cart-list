@@ -33,6 +33,13 @@ export function CategoryImageGallery({ depts, prods, onEdit }: { depts: Dept[]; 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [depts],
   );
+  const pickerNeedle = pickerQ.trim().toLowerCase();
+  const pickerItems = useMemo(
+    () => (pickerNeedle ? catOptions.filter((c) => c.label.toLowerCase().includes(pickerNeedle)) : catOptions),
+    [catOptions, pickerNeedle],
+  );
+  const catLabel = catOptions.find((c) => c.id === cat)?.label;
+
   const inCat = (deptId: string) => {
     if (!cat) return false;
     let c = deptById.get(deptId); let g = 0;
