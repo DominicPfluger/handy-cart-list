@@ -1,36 +1,37 @@
-# Benutzerkonto mit Profil und Zahlungskarte
+# Ausblenden-Symbol im Kachelmodus + Laden-Löschen nur als Ausblenden
 
 ## Ziel
-Benutzer können ein Konto erstellen, ihre persönlichen Angaben hinterlegen und eine Kreditkarte sicher speichern. Diese Daten nutzt später die Online-Shopping-Funktion.
 
-## Sicherheitsgrundsatz
-Kartennummern werden nie in der App oder Datenbank gespeichert. Die Eingabe läuft über ein sicheres Kartenformular von **Stripe**. Shoppi speichert nur einen Verweis sowie Kartentyp, die letzten 4 Ziffern und das Ablaufdatum (z.B. „Visa •••• 4242, 08/29“). Zuerst läuft alles im Testmodus.
+1. Im Kachelmodus erscheint neben dem Stift-Symbol ein Auge-Symbol, mit dem sich eine Kategorie (und ein Produkt) direkt aus- und wieder einblenden lässt — ohne den Bearbeiten-Dialog zu öffnen.
+2. Wenn ein Laden gewählt ist (Laden-Admin), führt „Löschen" einer Kategorie oder eines Produkts nie zum globalen Löschen, sondern blendet den Eintrag nur für diesen Laden aus.
 
-## Was der Benutzer sieht
-1. **Konto erstellen / Anmelden** (bestehende Seite): E-Mail & Passwort und Google. Das Konto bleibt freiwillig, die App funktioniert weiter ohne.
-2. **Neue Seite „Mein Konto“** (erreichbar über „Mehr“):
-   - Persönliche Angaben: Vorname, Nachname, Telefon
-   - Lieferadresse: Strasse, PLZ, Ort, Land
-   - Rechnungsadresse: optional, sonst „wie Lieferadresse“
-   - **Zahlungsmittel**: Karte hinzufügen, entfernen oder als Standard festlegen
-   - Konto löschen
-3. Datenschutzseite ergänzen: Welche Daten gespeichert werden und wofür.
+## Aktueller Stand (geprüft)
 
-## Ablauf: Karte hinzufügen
-```text
-"Karte hinzufügen" -> sicheres Stripe-Formular -> Stripe speichert die Karte
- -> Shoppi merkt sich nur Verweis + "Visa •••• 4242"
-```
-Belastet wird dabei nichts. Abgebucht wird erst später beim Online-Einkauf.
+- `admin.tsx`: Bei gewähltem Laden leitet `remove` bereits auf `storeToggleHidden` um (Zeile ~1073) — der Katalog bleibt global unberührt. Der Bearbeiten-Dialog nutzt denselben `remove`-Pfad, ist also ebenfalls sicher.
+- `catalog-tile-editor.tsx`: Kategorien-Zeilen (Liste ~588, Kacheln ~523) und Produkt-Zeilen (~785) haben Stift- und Lösch-Knöpfe, aber kein Schnell-Ausblenden-Symbol.
+- Ausgeblendete Einträge bekommen im Laden-Modus bereits ein 🚫 vor dem Namen (`nmStore`).
+
+## Umsetzung
+
+### 1. Neues Auge-Symbol im Kachelmodus (`catalog-tile-editor.tsx`)
+
+- Neue optionale Prop `onToggleHidden?: (kind: "department" | "product", id: string) => void` und `isHidden?: (id: string) => boolean`.
+- Kategorien: Auge-Knopf (Eye / EyeOff aus lucide) direkt neben dem Stift — in der Listenansicht und in der Kachelansicht.
+- Produkte: Auge-Knopf in der Zeilen-Aktionsleiste neben dem Stift.
+- Ausgeblendete Zeilen/Kacheln werden abgedunkelt dargestellt (z. B. `opacity-50`), damit man sieht, was ausgeblendet ist, und sie per Klick wieder einblenden kann.
+- Der Knopf erscheint nur, wenn `onToggleHidden` übergeben wird (also im Laden-Modus) — im globalen Katalog ändert sich nichts.
+
+### 2. Laden-Modus verdrahten (`admin.tsx`)
+
+- `onToggleHidden={storeId ? storeToggleHidden : undefined}` und `isHidden={(id) => Boolean(ovOf(id)?.hidden)}` an `CatalogTileEditor` übergeben.
+- Bestehendes Verhalten bleibt: Der Lösch-Knopf (Papierkorb) ruft im Laden-Modus `storeToggleHidden` auf — als Sicherheit wird der Titel/Tooltip des Papierkorbs im Laden-Modus auf „Ausblenden" geändert, damit klar ist, dass nichts global gelöscht wird.
+
+### 3. i18n (`de.ts`)
+
+- Neue Schlüssel: `adm.hide` („Ausblenden"), `adm.unhide` („Wieder einblenden"). Andere Sprachen fallen auf Deutsch zurück (Admin ist German-first).
 
 ## Technische Details
-- Stripe über die integrierte Zahlungsfunktion aktivieren (Testmodus).
-- Migration: `profiles` (id → auth.users, Name, Telefon, Liefer-/Rechnungsadresse als Spalten, `stripe_customer_id`) mit Trigger, der bei der Registrierung automatisch ein Profil anlegt. `payment_methods` (user_id, stripe_payment_method_id, brand, last4, exp_month, exp_year, is_default). GRANTs + RLS nur für eigene Zeilen; `stripe_customer_id` darf nur der Server setzen.
-- Server-Funktionen (`requireSupabaseAuth`): `createSetupIntent` (legt Stripe-Kunden an falls nötig), `savePaymentMethod`, `removePaymentMethod`, `setDefaultPaymentMethod`, `deleteAccount`.
-- Neue Route `src/routes/_authenticated/konto.tsx`; Stripe Elements (Payment Element im Setup-Modus), clientseitig geladen.
-- Eintrag „Mein Konto“ in `mehr.tsx`; i18n-Schlüssel `acct.*` in `de.ts`.
-- E-Mail-Anmeldung im Backend aktivieren, Google konfigurieren.
-- Regel in AGENTS.md: Karten nur über Stripe speichern, lokal nur Metadaten.
 
-## Nicht enthalten
-Der Shop selbst (Warenkorb, Bestellung, Abbuchung) folgt später.
+- Dateien: `src/components/admin/catalog-tile-editor.tsx`, `src/routes/_authenticated/admin.tsx`, `src/i18n/de.ts`.
+- Keine Datenbank-Änderung nötig — `store_department_overrides`/`store_product_overrides` mit `hidden`-Flag existieren bereits.
+- Kein globaler Löschpfad für Laden-Admins: `remove` bleibt im Laden-Modus auf `storeToggleHidden` umgeleitet.
