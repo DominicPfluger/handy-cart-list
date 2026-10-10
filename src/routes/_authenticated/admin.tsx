@@ -161,7 +161,7 @@ function AdminPage() {
   const [bulkTree, setBulkTree] = useState(false);
   const [sortDlg, setSortDlg] = useState<string | null>(null);
   /** Aktiver Admin-Bereich (Tabs). */
-  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "langMarkets" | "health" | "settings" | "more">("catalog");
+  const [tab, setTab] = useState<"catalog" | "media" | "prices" | "import" | "recipes" | "cuisines" | "langMarkets" | "health" | "settings" | "more" | "stores">("catalog");
   const [langMk, setLangMk] = useState<"languages" | "markets">("languages");
   const [setTab2, setSetTab2] = useState<"diets" | "units" | "cuisines" | "speech" | "pronunciation" | "variants">("diets");
   const [preview, setPreview] = useState(false);
