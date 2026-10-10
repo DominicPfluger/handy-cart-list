@@ -78,6 +78,21 @@ function ProductThumb({ product }: { product: CatalogProduct }) {
   );
 }
 
+// Kacheln zeigen das Originalbild statt des 64px-Icons — sonst wirkt das hochskalierte Icon ausgefranst.
+function TileThumb({ product }: { product: CatalogProduct }) {
+  return (
+    <span className="relative grid h-full w-full place-items-center">
+      <ProductIcon
+        emoji={product.emoji}
+        iconUrl={product.imageUrl ?? product.iconUrl}
+        iconPath={product.imageUrl ? product.imagePath : product.iconPath}
+        symbolClassName="text-5xl"
+      />
+      {hasBio(product) && <span aria-label="Bio" className="absolute bottom-1 right-1 text-xs leading-none">🌿</span>}
+    </span>
+  );
+}
+
 function DepartmentThumb({ department }: { department: CatalogDepartment }) {
   return <DepartmentIcon emoji={department.emoji} imageUrl={department.imageUrl ?? department.iconUrl} imagePath={department.imagePath ?? department.iconPath} />;
 }
@@ -640,7 +655,7 @@ function DepartmentsPage() {
                 return (
                   <div key={product.id} className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm">
                     <button type="button" aria-label={product.name} onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="grid aspect-square w-full place-items-center overflow-hidden bg-primary-soft/25">
-                      <ProductThumb product={product} />
+                      <TileThumb product={product} />
                     </button>
                     <Button
                       type="button"
