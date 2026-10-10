@@ -354,6 +354,19 @@ function FavoritesPage() {
         productId: row.product.departmentId ? row.product.id : row.favorite.productId,
       };
     });
+  };
+
+  const closeTransferDialog = () => {
+    setListNameOpen(false);
+    setNewStore("default");
+    setNewStoreName("");
+    setNewStoreEmoji("");
+  };
+
+  /** Alle Favoriten in eine neue Einkaufsliste übertragen. */
+  const transferAllToNewList = (name: string) => {
+    const items = buildTransferItems();
+    if (!items.length) return;
     const createdId = createListFromItems(name, items);
     if (createdId && newStore !== "__new__") setListStore(createdId, newStore);
     setListNameOpen(false);
