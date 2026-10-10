@@ -1201,7 +1201,7 @@ function AdminPage() {
           <MarketsManager />
           <MarketAdminsManager />
         </>)}
-        {langMk === "stores" && <StoreCatalogAdmin />}
+        {langMk === "stores" && (<><StoreCatalogAdmin /><StoreAdminsManager /></>)}
       </div>)}
       {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={(id) => setSel({ kind: "product", id })}
         onOpenDept={(id) => { setSearch(""); setSel(null); setCur(id); setTab("catalog"); }} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
