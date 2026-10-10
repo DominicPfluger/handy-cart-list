@@ -633,7 +633,7 @@ function DepartmentsPage() {
             </div>
           </div>
           {tileMode ? (
-            <div className="grid grid-cols-3 gap-2.5">
+            <div className="grid grid-cols-2 gap-2.5">
               {shownProducts.map((product) => {
                 const group = groupFor(product);
                 const favorite = isFavorite(product.id);
@@ -642,15 +642,35 @@ function DepartmentsPage() {
                     <button type="button" aria-label={product.name} onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="grid aspect-square w-full place-items-center overflow-hidden bg-primary-soft/25">
                       <ProductThumb product={product} />
                     </button>
-                    {favorite && <HeartIcon className="absolute left-1.5 top-1.5 h-3.5 w-3.5 fill-current text-coral" />}
                     <Button
                       type="button"
+                      variant="ghost"
                       size="icon"
-                      aria-label={t("common.addWithQty", { name: product.name })}
-                      onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(undefined); setSelectedProduct(product); })}
-                      className="absolute right-1.5 top-1.5 h-7 w-7 rounded-full shadow-sm"
+                      aria-label={favorite ? t("common.removeFavorite", { name: product.name }) : t("common.addFavorite", { name: product.name })}
+                      onClick={() => toggleFavorite({
+                        productId: product.id,
+                        name: product.name,
+                        emoji: product.emoji,
+                        imageUrl: product.imageUrl,
+                        defaultQuantity: product.defaultQuantity,
+                        defaultUnit: product.defaultUnit,
+                        organicAvailable: product.organicAvailable,
+                        groupLabel: group?.name,
+                        groupEmoji: group?.emoji ?? undefined,
+                      })}
+                      className={`absolute left-1 top-1 h-8 w-8 ${favorite ? "rounded-full bg-coral/15 text-coral" : "rounded-full bg-background/60 text-muted-foreground"}`}
                     >
-                      <PlusIcon className="h-3.5 w-3.5" />
+                      <HeartIcon className={`h-3.5 w-3.5 ${favorite ? "fill-current" : ""}`} />
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("common.quickAdd", { name: product.name })}
+                      onClick={() => gate(() => quickAddRef.current(product, group))}
+                      className="absolute right-1 top-1 h-8 w-8 rounded-full bg-background/60 text-muted-foreground"
+                    >
+                      <BoltIcon className="h-3.5 w-3.5" />
                     </Button>
                     <div className="flex min-h-12 flex-1 flex-col justify-center px-1.5 py-1.5 text-center">
                       <span className="line-clamp-2 text-xs font-semibold leading-4 text-foreground">{product.name}</span>
