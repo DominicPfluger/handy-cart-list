@@ -141,6 +141,8 @@ function AdminPage() {
   const [sortBy, setSortBy] = useState<"popularity" | "alphabetical" | "price" | "similarity" | "marketRelevance">("popularity");
   /** "" = globale Reihenfolge, sonst Marktcode (z. B. CH) für marktspezifische Relevanz. */
   const [mk, setMk] = useState<string>("");
+  /** "" = gemeinsamer Katalog, sonst Laden-ID: Kachelansicht bearbeitet Laden-Abweichungen. */
+  const [storeId, setStoreId] = useState<string>("");
   /** Anzeigesprache des Katalogs im Admin (nur Anzeige, Bearbeitung bleibt Deutsch). */
   const { locale: uiLocale } = useT();
   const [viewLoc, setViewLoc] = useState<string>(() => getLocale());
