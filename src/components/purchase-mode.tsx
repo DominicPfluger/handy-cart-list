@@ -294,7 +294,7 @@ export function PurchaseMode({ items, onToggle, onClose }: {
               )}
             </div>
             <div className="flex flex-col items-center gap-2">
-              <p className="break-words text-3xl font-bold leading-tight text-foreground">{baseName}{variantName && <span className="text-foreground"> {variantName}</span>}</p>
+              <p className="break-words text-3xl font-bold leading-tight text-foreground">{baseName}{variantName && <span className="text-foreground"> · {variantName}</span>}</p>
               {current.quantity && <p className="text-lg font-medium text-muted-foreground">{current.quantity}</p>}
               <div className="flex flex-wrap justify-center gap-2">
                 {current.organic && <span className="rounded-full bg-primary-soft px-3 py-1 text-sm font-semibold text-primary">🌱 {t("purchase.organic")}</span>}
