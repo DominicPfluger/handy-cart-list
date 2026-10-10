@@ -315,6 +315,8 @@ function FavoritesPage() {
     setNewStore("default");
     setNewStoreName("");
     setNewStoreEmoji("");
+    setTransferMode("new");
+    setTargetListId(lists[0]?.id ?? "");
     setListNameOpen(true);
   };
 
@@ -327,14 +329,14 @@ function FavoritesPage() {
     setNewStoreEmoji("");
   };
 
-  /** Alle Favoriten (in angezeigter Reihenfolge) in eine neue Einkaufsliste übertragen. */
-  const transferAllToNewList = (name: string) => {
+  /** Alle Favoriten (in angezeigter Reihenfolge) als Listeneinträge aufbereiten. */
+  const buildTransferItems = (): ListItem[] => {
     const rows: FavRow[] = [
       ...sections.flatMap((s) => s.entries.map((e) => e.row)),
       ...[...looseFavorites].sort((a, b) => (favOrder[a.favorite.productId] ?? 1e9) - (favOrder[b.favorite.productId] ?? 1e9)),
     ];
-    if (!rows.length) return;
-    const items: ListItem[] = rows.map((row, i) => {
+    if (!rows.length) return [];
+    return rows.map((row, i) => {
       const group = groupOfRow(row);
       return {
         id: `i${Date.now()}-${i}`,
