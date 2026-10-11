@@ -1352,6 +1352,13 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         {!p.imageOnly && (
           <Button className="h-11 w-full rounded-xl" disabled={enriching || (!isDept && Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0))} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
         )}
+        {!p.imageOnly && !isDept && (
+          <SectionCollapse label={T("adm.category")}>
+            <select aria-label={T("adm.category")} value={newDept || (prod?.alias_id ? p.cur : prod?.department_id) || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 w-full rounded-xl border border-input bg-background px-2 text-sm">
+              {newDeptOpts.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+            </select>
+          </SectionCollapse>
+        )}
         {effId && (
           <SectionCollapse label={T("adm.images")} defaultOpen={Boolean(p.imageOnly)} header={(
             <>
@@ -1437,14 +1444,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               </div>
             </details>
           </SectionCollapse>
-        )}
-        {!p.imageOnly && !isDept && (
-          <label className="flex items-center gap-2 text-sm">
-            <span className="shrink-0 text-muted-foreground">{T("adm.category")}</span>
-            <select aria-label={T("adm.category")} value={newDept || (prod?.alias_id ? p.cur : prod?.department_id) || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 min-w-0 flex-1 rounded-xl border border-input bg-background px-2 text-sm">
-              {newDeptOpts.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
-            </select>
-          </label>
         )}
         {!p.imageOnly && isDept && !item && (
           <div className="space-y-1">
