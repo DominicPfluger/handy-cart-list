@@ -1588,11 +1588,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             <ProductBrandEditor key={`brand-${realProdId}`} productId={realProdId} productName={item?.name ?? ""} path={p.depts.find((x) => x.id === prod.department_id)?.name ?? ""} bare />
           </SectionCollapse>
         )}
-        {!p.imageOnly && !isDept && prod && realProdId && (
-          <SectionCollapse label={T("palias.alsoIn")}>
-            <ProductAliasEditor product={{ id: realProdId, name: item?.name ?? "", emoji: prod.emoji ?? null, department_id: prod.department_id }} prods={p.products} options={newDeptOpts} bare />
-          </SectionCollapse>
-        )}
         {!p.imageOnly && item && effId && (
           <SectionCollapse label={T("adm.languages")}>
             {p.onRetranslate && <Button size="sm" variant="outline" className="self-start" onClick={() => p.onRetranslate!(isDept ? effId : (prod?.product_id ?? effId))}>{T("adm.retranslate")}</Button>}
