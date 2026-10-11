@@ -666,7 +666,7 @@ function DepartmentsPage() {
               <Button type="button" variant="outline" size="sm" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="shrink-0 rounded-lg">{t("dept.details")}</Button>
             </div>
             <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
-              {[null, ...expandVariants(product)].map((v) => {
+              {expandVariants(product).map((v) => {
                 const vi = v ? product.variantImages?.[v] : undefined;
                 const vName = v ? variantLabel(product, v) : t("dept.variantStandard");
                 const full = v ? vName : product.name;
