@@ -121,9 +121,9 @@ function FavoritesPage() {
   const displayName = (row: FavRow) => {
     if (row.variant) {
       const translated = pickName(row.product.variantNames?.[row.variant], locale, "");
-      if (translated) return `${row.product.name} · ${translated}`;
+      if (translated) return translated;
       return row.product.variants.includes(row.variant)
-        ? `${row.product.name} · ${row.variant}`
+        ? row.variant
         : row.favorite.name;
     }
     return productById.has(row.product.id) ? row.product.name : row.favorite.name;
@@ -432,7 +432,7 @@ function FavoritesPage() {
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-foreground">{displayName(row)}</p>
-          <p className="mt-0.5 truncate text-xs text-muted-foreground">
+          <p className="mt-0.5 break-words text-xs text-muted-foreground">
             {showCategory && group ? `${group.name} · ` : ""}
             {formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit)}
           </p>

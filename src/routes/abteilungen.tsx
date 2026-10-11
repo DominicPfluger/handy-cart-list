@@ -669,7 +669,7 @@ function DepartmentsPage() {
               {[null, ...expandVariants(product)].map((v) => {
                 const vi = v ? product.variantImages?.[v] : undefined;
                 const vName = v ? variantLabel(product, v) : t("dept.variantStandard");
-                const full = v ? `${product.name} · ${vName}` : product.name;
+                const full = v ? vName : product.name;
                 const favKey = v ? `${product.id}::${v}` : product.id;
                 const vFav = isFavorite(favKey);
                 return (
@@ -677,7 +677,7 @@ function DepartmentsPage() {
                     <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-md bg-primary-soft/25">
                       <ProductIcon emoji={product.emoji} iconUrl={vi?.iconUrl ?? vi?.imageUrl ?? product.iconUrl} iconPath={vi?.iconPath ?? vi?.imagePath ?? product.iconPath} symbolClassName="text-2xl" />
                     </div>
-                    <span className={`min-w-0 flex-1 truncate text-sm ${v ? "text-foreground" : "italic text-muted-foreground"}`}>{vName}</span>
+                    <span className={`min-w-0 flex-1 break-words text-sm ${v ? "text-foreground" : "italic text-muted-foreground"}`}>{vName}</span>
                     {v && (personalVariants[product.id] ?? []).includes(v) && (
                       <Button type="button" variant="ghost" size="icon" aria-label={t("dept.removeVariant", { name: vName })} onClick={() => removePersonalVariant(product.id, v)} className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive">
                         <TrashIcon className="h-3.5 w-3.5" />
@@ -765,7 +765,7 @@ function DepartmentsPage() {
                     </Button>
                     <div className="flex min-h-12 flex-1 items-center gap-1 px-1.5 py-1.5">
                       <div className="min-w-0 flex-1 text-center">
-                        <span className="line-clamp-2 text-xs font-semibold leading-4 text-foreground">{product.name}</span>
+                        <span className="break-words text-xs font-semibold leading-4 text-foreground">{product.name}</span>
                         {normalizedQuery && group && <span className="block truncate text-[10px] text-muted-foreground">{group.name}</span>}
                       </div>
                       <Button
@@ -838,7 +838,7 @@ function DepartmentsPage() {
                   </button>
                   <div className="min-w-0 flex-1">
                     <button type="button" onClick={() => openProduct(product)} className="inline-flex max-w-full text-left text-sm font-semibold text-foreground">
-                      <span className="truncate">{product.name}</span>
+                      <span className="break-words">{product.name}</span>
                     </button>
                     <p className="mt-0.5 truncate text-xs text-muted-foreground">
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
@@ -905,7 +905,7 @@ function DepartmentsPage() {
                             <ProductIcon emoji={product.emoji} iconUrl={vi?.iconUrl ?? vi?.imageUrl ?? product.iconUrl} iconPath={vi?.iconPath ?? vi?.imagePath ?? product.iconPath} symbolClassName="text-4xl" />
                           </button>
                           <div className="min-w-0 flex-1">
-                            <span className="block truncate text-sm font-semibold text-foreground">{product.replaceVariants?.includes(v) ? vName : `${product.name} ${vName}`}</span>
+                            <span className="block break-words text-sm font-semibold text-foreground">{vName}</span>
                             <p className="mt-0.5 truncate text-xs text-muted-foreground">{formatQuantity(product.defaultQuantity, product.defaultUnit)}</p>
                           </div>
                           {(personalVariants[product.id] ?? []).includes(v) && (
@@ -918,7 +918,7 @@ function DepartmentsPage() {
                               type="button"
                               variant="ghost"
                               size="icon"
-                              aria-label={vFav ? t("common.removeFavorite", { name: `${product.name} · ${vName}` }) : t("common.addFavorite", { name: `${product.name} · ${vName}` })}
+                              aria-label={vFav ? t("common.removeFavorite", { name: vName }) : t("common.addFavorite", { name: vName })}
                               onClick={() => toggleFavorite({
                                 productId: `${product.id}::${v}`,
                                 name: `${product.name} · ${vName}`,
@@ -938,7 +938,7 @@ function DepartmentsPage() {
                               type="button"
                               variant="ghost"
                               size="icon"
-                              aria-label={t("common.quickAdd", { name: `${product.name} · ${vName}` })}
+                              aria-label={t("common.quickAdd", { name: vName })}
                               onClick={() => gate(() => quickAddRef.current(product, group, v))}
                               className="h-8 w-8 rounded-full text-muted-foreground"
                             >
@@ -947,7 +947,7 @@ function DepartmentsPage() {
                             <Button
                               type="button"
                               size="icon"
-                              aria-label={t("common.addWithQty", { name: `${product.name} · ${vName}` })}
+                              aria-label={t("common.addWithQty", { name: vName })}
                               onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v); setSelectedProduct(product); })}
                                className="h-[26px] w-[26px] rounded-full shadow-none"
                              >

@@ -31,8 +31,8 @@ export function joinVariantName(
   const prefix = prefixListFor(product, locale).some((p) =>
     p.toLocaleLowerCase() === lower || Object.values(product?.variantNames?.[p] ?? {}).some((n) => n.toLocaleLowerCase() === lower));
   const match = (p: string) => p.toLocaleLowerCase() === lower || Object.values(product?.variantNames?.[p] ?? {}).some((n) => n.toLocaleLowerCase() === lower);
-  if (v && (product?.replaceVariants ?? []).some(match)) return [v, ...extra].join(" · ");
-  const head = !v ? base : prefix ? `${v} ${base}` : `${base} ${v}`;
+  void prefix; void match;
+  const head = v || base;
   return [head, ...extra].join(" · ");
 }
 
