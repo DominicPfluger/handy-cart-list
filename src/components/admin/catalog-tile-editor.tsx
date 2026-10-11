@@ -1365,16 +1365,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </SectionCollapse>
         )}
         {effId && (
-          <SectionCollapse label={T("adm.images")} defaultOpen={Boolean(p.imageOnly)} header={(
-            <>
-              <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted">
-                {(imagePreview === undefined ? p.imgUrl : imagePreview) ? <img src={(imagePreview === undefined ? p.imgUrl : imagePreview)!} alt="" className="h-full w-full object-cover" /> : <span className="text-lg">{emoji || (isDept ? "📁" : "🛒")}</span>}
-              </span>
-              <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-md border border-border bg-muted">
-                {iconInfo.url ? <img src={iconInfo.url} alt="" className="h-full w-full object-contain" /> : <span className="text-[10px]">{emoji || (isDept ? "📁" : "🛒")}</span>}
-              </span>
-            </>
-          )}>
+          <SectionCollapse label={T("adm.images")} defaultOpen={Boolean(p.imageOnly)}>
             <p className="text-xs font-semibold text-muted-foreground">{T("adm.previewImage")}</p>
             <div className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-muted">
               {(imagePreview === undefined ? p.imgUrl : imagePreview) ? <ZoomableImage src={(imagePreview === undefined ? p.imgUrl : imagePreview)!} className="max-h-64 w-full object-contain" /> : <span className="py-10 text-4xl">{emoji || (isDept ? "📁" : "🛒")}</span>}
