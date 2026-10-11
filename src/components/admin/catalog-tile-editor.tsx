@@ -6,7 +6,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { allLocales, getLocale, translate } from "@/i18n";
+import { allLocales, getLocale, pickName, translate } from "@/i18n";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "./ai-image-options";
 import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
@@ -32,6 +32,9 @@ import { VariantNameEdit } from "@/components/admin/variant-rename-button";
 import { Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
+/** Variante in der aktuellen Admin-Sprache anzeigen (Fallback: deutscher Basisname). */
+const vl = (vtr: Map<string, Record<string, Record<string, string>>> | undefined, pid: string | undefined, v: string) =>
+  pickName(pid ? vtr?.get(pid)?.[v] : undefined, getLocale(), v);
 
 const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
@@ -51,6 +54,8 @@ export function CatalogTileEditor(p: {
   setCur: (id: string | null) => void;
   children: TileDept[];
   products: TileProd[];
+  /** Varianten-Übersetzungen: product_id → Variante → Sprache → Name. */
+  vtr?: Map<string, Record<string, Record<string, string>>>;
   path: TileDept[];
   nm: (id: string, base: string) => string;
   unavailable: (prod: TileProd) => boolean;
@@ -830,7 +835,7 @@ export function CatalogTileEditor(p: {
                     <button key={v} type="button" disabled={!editMode}
                       onClick={() => setTarget({ kind: "product", id: x.id })}
                       className="rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
-                      {v}
+                      {vl(p.vtr, x.product_id ?? x.id, v)}
                     </button>
                   ))}
                 </div>
@@ -847,7 +852,7 @@ export function CatalogTileEditor(p: {
 
       {copyOpen && p.cur && <CopyListDialog title={p.path.map((d) => p.nm(d.id, d.name)).join(" › ")} text={copyText} onClose={() => setCopyOpen(false)} />}
 
-      {variantAdd && <VariantAddDialog prod={variantAdd} run={p.run} must={p.must} nm={p.nm} onClose={() => setVariantAdd(null)} />}
+      {variantAdd && <VariantAddDialog prod={variantAdd} run={p.run} must={p.must} nm={p.nm} vtr={p.vtr} onClose={() => setVariantAdd(null)} />}
 
       {headMove && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setHeadMove(null)}>
@@ -1437,7 +1442,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                   >
                     <span className="flex min-w-0 items-center gap-2">
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
-                      <VariantNameEdit productId={prod?.id} variant={v} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
+                      <VariantNameEdit productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
                     </span>
                     <span className="flex shrink-0 items-center gap-1.5">
                       <button
@@ -1447,7 +1452,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                         title={T("adm.variantPosHint")}
                         className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${prefixVariants.includes(v) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}
                       >
-                        {prefixVariants.includes(v) ? `${v} ${name || prod?.name || ""}` : `${name || prod?.name || ""} ${v}`}
+                        {prefixVariants.includes(v) ? `${vl(p.vtr, prod?.id, v)} ${name || prod?.name || ""}` : `${name || prod?.name || ""} ${vl(p.vtr, prod?.id, v)}`}
                       </button>
                       {prod && (prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                       <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
@@ -1745,7 +1750,7 @@ function CopyListDialog(p: { title: string; text: string; onClose: () => void })
   );
 }
 
-function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>, ok?: string) => Promise<void>; must: (q: PromiseLike<{ error: { message: string } | null }>) => Promise<void>; nm: (id: string, base: string) => string; onClose: () => void }) {
+function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>, ok?: string) => Promise<void>; must: (q: PromiseLike<{ error: { message: string } | null }>) => Promise<void>; nm: (id: string, base: string) => string; vtr?: Map<string, Record<string, Record<string, string>>> | undefined; onClose: () => void }) {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [vDrag, setVDrag] = useState<number | null>(null);
@@ -1823,7 +1828,7 @@ function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>,
                 className={`flex items-center gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
               >
                 <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
-                <span className="truncate">{v}</span>
+                <span className="truncate">{vl(p.vtr, p.prod.id, v)}</span>
               </div>
             ))}
           </div>
