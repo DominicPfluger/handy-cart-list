@@ -1082,7 +1082,7 @@ function AdminPage() {
             </div>
           )}
 
-          <CatalogTileEditor key={storeId || "shared"} depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={tileChildren} products={tileProducts}
+          <CatalogTileEditor key={storeId || "shared"} depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={tileChildren} products={tileProducts} vtr={d.vtr}
             imageEditor={imageEditor} imageEditorProduct={imageEditor ? d.prods.find((x) => x.id === imageEditor.id) : undefined} onCloseImageEditor={() => setImageEditor(null)}
             path={path(cur)} nm={storeId ? nmStore : nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
             reorder={storeId ? storeReorder : reorder} remove={(kind, id, name) => (storeId ? storeToggleHidden(kind, id) : remove({ kind, id }, name))}
