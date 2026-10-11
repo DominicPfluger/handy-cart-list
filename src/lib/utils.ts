@@ -21,7 +21,7 @@ export function variantDisplayName(variant: string, localizedName: string): stri
 export function joinVariantName(
   base: string,
   rest: string,
-  product?: { prefixVariants?: string[]; prefixVariantsByLocale?: Record<string, string[]>; variantNames?: Record<string, Record<string, string>> },
+  product?: { replaceVariants?: string[]; prefixVariants?: string[]; prefixVariantsByLocale?: Record<string, string[]>; variantNames?: Record<string, Record<string, string>> },
   locale?: string,
 ): string {
   if (!rest) return base;
@@ -30,6 +30,8 @@ export function joinVariantName(
   const lower = v.toLocaleLowerCase();
   const prefix = prefixListFor(product, locale).some((p) =>
     p.toLocaleLowerCase() === lower || Object.values(product?.variantNames?.[p] ?? {}).some((n) => n.toLocaleLowerCase() === lower));
+  const match = (p: string) => p.toLocaleLowerCase() === lower || Object.values(product?.variantNames?.[p] ?? {}).some((n) => n.toLocaleLowerCase() === lower);
+  if (v && (product?.replaceVariants ?? []).some(match)) return [v, ...extra].join(" · ");
   const head = !v ? base : prefix ? `${v} ${base}` : `${base} ${v}`;
   return [head, ...extra].join(" · ");
 }
