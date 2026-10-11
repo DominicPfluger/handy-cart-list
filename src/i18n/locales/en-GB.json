@@ -1481,5 +1481,6 @@
   "rk.pantryHint": "Ingredients in your pantry are unselected – tap to add them anyway.",
   "dept.productVariants": "Product variants",
   "dept.variantStandard": "No variety",
-  "dlg.properties": "Properties (optional)"
+  "dlg.properties": "Properties (optional)",
+  "adm.unitsSection": "Quantities & default units"
 }

@@ -1480,5 +1480,6 @@
   "rk.pantryHint": "Les ingrédients de ta réserve sont décochés – touche-les pour les ajouter quand même.",
   "dept.productVariants": "Variantes du produit",
   "dept.variantStandard": "Sans variété",
-  "dlg.properties": "Propriétés (facultatif)"
+  "dlg.properties": "Propriétés (facultatif)",
+  "adm.unitsSection": "Quantités et unités par défaut"
 }

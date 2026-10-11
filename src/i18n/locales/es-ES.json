@@ -1480,5 +1480,6 @@
   "rk.pantryHint": "Los ingredientes de tu despensa están desmarcados; tócalos para añadirlos igualmente.",
   "dept.productVariants": "Variantes del producto",
   "dept.variantStandard": "Sin variedad",
-  "dlg.properties": "Propiedades (opcional)"
+  "dlg.properties": "Propiedades (opcional)",
+  "adm.unitsSection": "Cantidades y unidades predeterminadas"
 }

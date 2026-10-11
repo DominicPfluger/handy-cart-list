@@ -1480,5 +1480,6 @@
   "rk.pantryHint": "Ingrediënten uit je voorraad zijn uitgevinkt – tik om ze toch toe te voegen.",
   "dept.productVariants": "Productvarianten",
   "dept.variantStandard": "Zonder soort",
-  "dlg.properties": "Eigenschappen (optioneel)"
+  "dlg.properties": "Eigenschappen (optioneel)",
+  "adm.unitsSection": "Hoeveelheden en standaardeenheden"
 }
