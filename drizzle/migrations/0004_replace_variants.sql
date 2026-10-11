@@ -1,0 +1,1 @@
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS replace_variants text[] NOT NULL DEFAULT '{}';

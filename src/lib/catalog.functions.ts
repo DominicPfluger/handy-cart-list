@@ -39,6 +39,8 @@ export interface CatalogProduct {
   variants: string[];
   /** Varianten, die vor dem Produktnamen stehen („Erdbeer-Joghurt“) */
   prefixVariants?: string[];
+  /** Varianten, die den Produktnamen ganz ersetzen. */
+  replaceVariants?: string[];
   /** Pro Sprache abweichende Voranstellung: Locale → Varianten */
   prefixVariantsByLocale?: Record<string, string[]>;
   /** Suchbegriffe wie „Passionsfrucht" für Maracuja (alle Sprachen) */
@@ -298,7 +300,7 @@ export const getCatalogCore = createServerFn({ method: "GET" })
       fetchAll(
         supabase,
         "products",
-        "id, department_id, name, emoji, image_path, icon_path, default_quantity, default_unit, allowed_units, unit_quantities, organic_available, variants, prefix_variants, prefix_variants_by_locale, excluded_diets, markets, sort_order",
+        "id, department_id, name, emoji, image_path, icon_path, default_quantity, default_unit, allowed_units, unit_quantities, organic_available, variants, prefix_variants, prefix_variants_by_locale, replace_variants, excluded_diets, markets, sort_order",
         ["sort_order", "id"],
       ),
       supabase.from("product_headings").select("id, department_id, before_product_id, name"),
@@ -352,6 +354,7 @@ export const getCatalogCore = createServerFn({ method: "GET" })
         organicAvailable: (r["organic_available"] as boolean) ?? true,
         variants: (r["variants"] as string[] | null) ?? [],
         prefixVariants: (r["prefix_variants"] as string[] | null) ?? [],
+        replaceVariants: (r["replace_variants"] as string[] | null) ?? [],
         prefixVariantsByLocale: (r["prefix_variants_by_locale"] as Record<string, string[]> | null) ?? {},
         synonyms: [],
         variantNames: {},

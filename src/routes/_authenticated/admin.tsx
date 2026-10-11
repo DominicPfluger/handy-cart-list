@@ -81,7 +81,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 type Kind = "department" | "product" | "heading";
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; icon_path: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets: string[]; variants: string[]; prefix_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; markets: string[]; image_path: string | null; icon_path: string | null };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets: string[]; variants: string[]; prefix_variants?: string[]; replace_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; markets: string[]; image_path: string | null; icon_path: string | null };
 type Head = { id: string; name: string; department_id: string; before_product_id: string };
 type Tr = { entity_id: string; locale: string; name: string; is_manual: boolean };
 type Sel = { kind: Kind; id: string } | null;
@@ -100,7 +100,7 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
 async function loadCore() {
   const [depts, prods, heads] = await Promise.all([
     paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path, icon_path").order("sort_order").order("id").range(a, b)),
-    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, allowed_units, unit_quantities, excluded_diets, variants, prefix_variants, prefix_variants_by_locale, markets, image_path, icon_path").order("sort_order").order("id").range(a, b) as never),
+    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, allowed_units, unit_quantities, excluded_diets, variants, prefix_variants, prefix_variants_by_locale, replace_variants, markets, image_path, icon_path").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
   ]);
   return { depts, prods, heads };
@@ -1172,6 +1172,7 @@ function AdminPage() {
               if (patch.diets) upd['excluded_diets'] = patch.diets;
               if (patch.variants) upd['variants'] = patch.variants;
               if (patch.prefixVariants) upd['prefix_variants'] = patch.prefixVariants;
+              if (patch.replaceVariants) upd['replace_variants'] = patch.replaceVariants;
               if (patch.prefixByLocale) upd['prefix_variants_by_locale'] = patch.prefixByLocale;
               await must(supabase.from(TABLE[sel.kind]).update(upd as never).eq("id", sel.id));
               if (sel.kind === "product" && patch.variants) void trVariants({ data: { productId: sel.id } }).catch(() => {});
@@ -1430,7 +1431,7 @@ function UnitSelect({ value, onChange }: { value: string; onChange: (v: string) 
   );
 }
 
-type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; allowedUnits?: string[]; unitQuantities?: Record<string, number>; before?: string; diets?: string[]; variants?: string[]; prefixVariants?: string[]; prefixByLocale?: Record<string, string[]>; heading?: string };
+type Patch = { name?: string; emoji?: string; parent?: string; qty?: number; unit?: string; allowedUnits?: string[]; unitQuantities?: Record<string, number>; before?: string; diets?: string[]; variants?: string[]; prefixVariants?: string[]; replaceVariants?: string[]; prefixByLocale?: Record<string, string[]>; heading?: string };
 
 
 
@@ -1478,6 +1479,13 @@ function Editor(p: {
   const dietRows = useDiets();
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [prefixVariants, setPrefixVariants] = useState<string[]>(prod?.prefix_variants ?? []);
+  const [replaceVariants, setReplaceVariants] = useState<string[]>(prod?.replace_variants ?? []);
+  /** Position durchschalten: hinten → vorne → ersetzt Produktnamen → hinten. */
+  const cycleVariantPos = (v: string) => {
+    if (replaceVariants.includes(v)) { setReplaceVariants((x) => x.filter((y) => y !== v)); return; }
+    if (prefixVariants.includes(v)) { setPrefixVariants((x) => x.filter((y) => y !== v)); setReplaceVariants((x) => [...x, v]); return; }
+    setPrefixVariants((x) => [...x, v]);
+  };
   const [prefixByLocale, setPrefixByLocale] = useState<Record<string, string[]>>(((prod as { prefix_variants_by_locale?: Record<string, string[]> } | undefined)?.prefix_variants_by_locale) ?? {});
   const togglePrefixLocale = (locale: string, v: string) => setPrefixByLocale((m) => {
     const cur = m[locale] ?? prefixVariants;
@@ -1545,7 +1553,7 @@ function Editor(p: {
   const saveItem = () => p.onSave({
     name: name.trim(), emoji, before,
     ...(sel.kind !== "heading" ? { parent } : {}),
-    ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, allowedUnits, unitQuantities, diets, variants, prefixVariants: prefixVariants.filter((x) => variants.includes(x)), prefixByLocale: cleanPrefixByLocale(), heading: headingSel } : {}),
+    ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, allowedUnits, unitQuantities, diets, variants, prefixVariants: prefixVariants.filter((x) => variants.includes(x)), replaceVariants: replaceVariants.filter((x) => variants.includes(x)), prefixByLocale: cleanPrefixByLocale(), heading: headingSel } : {}),
   });
 
   return (
@@ -1636,12 +1644,12 @@ function Editor(p: {
                     </span>
                     <button
                       type="button"
-                      onClick={() => setPrefixVariants((x) => (x.includes(v) ? x.filter((y) => y !== v) : [...x, v]))}
-                      aria-pressed={prefixVariants.includes(v)}
+                      onClick={() => cycleVariantPos(v)}
+                      aria-pressed={prefixVariants.includes(v) || replaceVariants.includes(v)}
                       title={T("adm.variantPosHint")}
-                      className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${prefixVariants.includes(v) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}
+                      className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${replaceVariants.includes(v) ? "border-primary bg-primary text-primary-foreground" : prefixVariants.includes(v) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}
                     >
-                      {prefixVariants.includes(v) ? `${v} ${prod.name}` : `${prod.name} ${v}`}
+                      {replaceVariants.includes(v) ? `= ${v}` : prefixVariants.includes(v) ? `${v} ${prod.name}` : `${prod.name} ${v}`}
                     </button>
                     {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                     {(prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}

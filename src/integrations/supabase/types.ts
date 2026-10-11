@@ -991,6 +991,7 @@ export type Database = {
           organic_available: boolean
           prefix_variants: string[]
           prefix_variants_by_locale: Json
+          replace_variants: string[]
           sort_order: number
           unit_quantities: Json
           updated_at: string
@@ -1013,6 +1014,7 @@ export type Database = {
           organic_available?: boolean
           prefix_variants?: string[]
           prefix_variants_by_locale?: Json
+          replace_variants?: string[]
           sort_order?: number
           unit_quantities?: Json
           updated_at?: string
@@ -1035,6 +1037,7 @@ export type Database = {
           organic_available?: boolean
           prefix_variants?: string[]
           prefix_variants_by_locale?: Json
+          replace_variants?: string[]
           sort_order?: number
           unit_quantities?: Json
           updated_at?: string
