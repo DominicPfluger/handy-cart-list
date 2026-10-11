@@ -844,6 +844,11 @@ function DepartmentsPage() {
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
                     </p>
+                    {!normalizedQuery && expandVariants(product).length > 0 && (
+                      <button type="button" onClick={() => toggleExpanded(product.id)} aria-expanded={expandedId === product.id} aria-label={t("dept.variants", { count: expandVariants(product).length })} className="mt-0.5 block max-w-full truncate text-left text-xs font-medium text-primary">
+                        {t("dept.variants", { count: expandVariants(product).length })} {expandedId === product.id ? "▴" : "▾"}
+                      </button>
+                    )}
                   </div>
                   <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
                   <Button
@@ -888,7 +893,7 @@ function DepartmentsPage() {
                   <span aria-hidden className="w-1.5 shrink-0" />
                   </div>
                 </div>
-                {!normalizedQuery && (
+                {!normalizedQuery && expandedId === product.id && (
                   <>
                     {expandVariants(product).map((v) => {
                       const vi = product.variantImages?.[v];
