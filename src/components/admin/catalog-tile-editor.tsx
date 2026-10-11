@@ -1458,7 +1458,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             {prodLines.trim() && <p className="text-[11px] text-muted-foreground">{T("adm.detected", { n: new Set(prodLines.split(/\r?\n/).map((l) => l.trim()).filter(Boolean)).size })}</p>}
           </div>
         )}
-        {!p.imageOnly && !isDept && <AllowedUnitsPicker value={{ primary: unit, units: allowedUnits, quantities: unitQuantities }} onChange={(next) => { setUnit(next.primary); setAllowedUnits(next.units); setUnitQuantities(next.quantities); setQty(next.quantities[next.primary] ?? 1); }} />}
+        {!p.imageOnly && !isDept && (
+          <SectionCollapse label={T("adm.unitsSection")}>
+            <AllowedUnitsPicker bare value={{ primary: unit, units: allowedUnits, quantities: unitQuantities }} onChange={(next) => { setUnit(next.primary); setAllowedUnits(next.units); setUnitQuantities(next.quantities); setQty(next.quantities[next.primary] ?? 1); }} />
+          </SectionCollapse>
+        )}
         {!p.imageOnly && !isDept && item && heads.length > 0 && (
           <div className="space-y-1.5">
             <h3 className="text-sm font-semibold text-foreground">{T("adm.headingAssign")}</h3>

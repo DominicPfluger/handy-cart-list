@@ -838,6 +838,7 @@ export const de = {
   "adm.iconImage": "Icon (klein)",
   "adm.images": "Bilder",
   "adm.allowedUnits": "Weitere Standard-Einheiten (oben im Mengendialog)",
+  "adm.unitsSection": "Mengen & Standard-Einheiten",
   "adm.previewImage": "Vorschaubild (gross)",
   "adm.iconAutoHint": "Automatisch aus dem Vorschaubild erstellt",
   "adm.aiImagesNew": "KI-Bilder erzeugen",
