@@ -1357,6 +1357,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             <select aria-label={T("adm.category")} value={newDept || (prod?.alias_id ? p.cur : prod?.department_id) || p.cur || ""} onChange={(e) => setNewDept(e.target.value)} className="h-11 w-full rounded-xl border border-input bg-background px-2 text-sm">
               {newDeptOpts.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
             </select>
+            {prod && realProdId && (
+              <SectionCollapse label={T("palias.alsoIn")}>
+                <ProductAliasEditor product={{ id: realProdId, name: item?.name ?? "", emoji: prod.emoji ?? null, department_id: prod.department_id }} prods={p.products} options={newDeptOpts} bare />
+              </SectionCollapse>
+            )}
           </SectionCollapse>
         )}
         {effId && (
@@ -1586,11 +1591,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         {!p.imageOnly && !isDept && prod && realProdId && (
           <SectionCollapse label={T("adm.brands")}>
             <ProductBrandEditor key={`brand-${realProdId}`} productId={realProdId} productName={item?.name ?? ""} path={p.depts.find((x) => x.id === prod.department_id)?.name ?? ""} bare />
-          </SectionCollapse>
-        )}
-        {!p.imageOnly && !isDept && prod && realProdId && (
-          <SectionCollapse label={T("palias.alsoIn")}>
-            <ProductAliasEditor product={{ id: realProdId, name: item?.name ?? "", emoji: prod.emoji ?? null, department_id: prod.department_id }} prods={p.products} options={newDeptOpts} bare />
           </SectionCollapse>
         )}
         {!p.imageOnly && item && effId && (
