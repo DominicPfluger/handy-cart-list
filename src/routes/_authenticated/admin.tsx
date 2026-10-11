@@ -1112,7 +1112,6 @@ function AdminPage() {
             onDeleteSelectedDepts={storeId ? (sel) => { if (sel.deptIds.length && confirm(T("st.hideSelectedConfirm", { n: sel.deptIds.length }))) void storeUpsert("department", sel.deptIds.map((id) => ({ department_id: id, hidden: true }))); } : deleteSelectedDepts}
             onMoveSelected={storeId ? storeOnly : moveSelected}
             moveDeptOptions={deptTreeOrder(d.depts).map((x) => ({ id: x.id, label: path(x.id).map((p) => nm(p.id, p.name)).join(" › ") }))}
-            {...(storeId ? {} : { onAdvanced: (kind: "department" | "product", id: string) => setSel({ kind, id }) })} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
               headings={headings} products={products}
