@@ -32,6 +32,26 @@ export function PreviewCollapse({ label, src, emoji, defaultOpen = false, childr
   );
 }
 
+/** Allgemeiner aufklappbarer Abschnitt: zugeklappt Titel (+ optionale Kopf-Bilder) mit Pfeil, aufgeklappt der Inhalt. */
+export function SectionCollapse({ label, defaultOpen = false, header, children }: {
+  label: string;
+  defaultOpen?: boolean;
+  header?: ReactNode;
+  children?: ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="space-y-2 rounded-xl border border-border p-2">
+      <button type="button" aria-expanded={open} onClick={() => setOpen((v) => !v)} className="flex w-full items-center gap-3 text-left">
+        {header && <span className="flex shrink-0 items-center gap-1.5">{header}</span>}
+        <span className="min-w-0 flex-1 text-sm font-semibold text-foreground">{label}</span>
+        <span aria-hidden="true" className="shrink-0 text-muted-foreground">{open ? "▾" : "▸"}</span>
+      </button>
+      {open && <div className="space-y-2">{children}</div>}
+    </div>
+  );
+}
+
 /** Aufklappbares Icon: zugeklappt nur kleine Vorschau mit Pfeil, aufgeklappt grössere Vorschau plus Aktionen. */
 export function IconCollapse({ label, hint, src, emoji, defaultOpen = false, children }: {
   label: string;

@@ -14,7 +14,7 @@ export const MARKETS = ["DE", "AT", "CH", "US", "GB", "CA", "ES", "MX", "FR", "I
 type Brand = { id: string; name: string; locales: string[]; sort_order: number };
 
 /** Handelsmarken eines Produkts im Admin-Produkt-Editor bearbeiten. */
-export function ProductBrandEditor({ productId, productName, path }: { productId: string; productName: string; path: string }) {
+export function ProductBrandEditor({ productId, productName, path, bare }: { productId: string; productName: string; path: string; bare?: boolean | undefined }) {
   const qc = useQueryClient();
   const suggest = useServerFn(suggestBrands);
   const key = ["admin-brands", productId];
@@ -67,7 +67,7 @@ export function ProductBrandEditor({ productId, productName, path }: { productId
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-foreground">{T("adm.brands")}</h3>
+        {!bare ? <h3 className="text-sm font-semibold text-foreground">{T("adm.brands")}</h3> : <span />}
         <Button size="sm" variant="outline" disabled={busy} onClick={runSuggest}>✨ {T("adm.brandSuggest")}</Button>
       </div>
       <div className="space-y-1">

@@ -1,45 +1,29 @@
-import { VariantAiSuggest } from "@/components/admin/variant-ai-suggest";
-import { VariantSynonyms } from "@/components/admin/variant-synonyms";
-import { VariantTranslations } from "@/components/admin/variant-translations";
-import { useStandardVariants } from "@/hooks/use-standard-variants";
 import { BulkTreeForm, type TreeBlock } from "@/components/admin/bulk-tree-form";
-import { VariantNameEdit } from "@/components/admin/variant-rename-button";
-import { VariantImageButton } from "@/components/admin/variant-image-button";
-import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState, lazy, Suspense } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, suggestVariants, createBulkBackup, undoBulkBackup, translateSingleName } from "@/lib/admin.functions";
+import { checkAdmin, translateMissing, saveHeading, deleteHeading, suggestProducts, rankProducts, translateVariants, createBulkBackup, undoBulkBackup, translateSingleName } from "@/lib/admin.functions";
 import { LOCALES, allLocales, getLocale, translate, setLocale, useT } from "@/i18n";
 import type { MessageKey } from "@/i18n/de";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 import { getUnits } from "@/lib/units";
-import { AllowedUnitsPicker } from "@/components/admin/allowed-units-picker";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ProductCuisinePicker } from "@/components/cuisine-admin";
 
 import { DeptAliasEditor, KEY as DEPT_ALIAS_KEY, loadAliases as loadDeptAliases } from "@/components/dept-alias-admin";
-import { ProductBrandEditor } from "@/components/brand-admin";
-import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
-import { ProductPronunciationEditor } from "@/components/admin/product-pronunciation-editor";
 import { ProductAliasEditor, KEY as ALIAS_KEY, loadAliases } from "@/components/product-alias-admin";
 import { DeptImageEditor } from "@/components/dept-image-admin";
 import { CategoryMediaPanel } from "@/components/admin/category-media-panel";
 import { ZoomableImage } from "@/components/admin/zoomable-image";
-import { PreviewCollapse, IconCollapse } from "@/components/admin/preview-collapse";
-import { signedCategoryImageUrl } from "@/lib/image-upload";
 import { deptTreeOrder } from "@/lib/dept-order";
-import { isNonFoodRootName } from "@/lib/dept-colors";
 import { MarketAdmin, MarketAdminsManager } from "@/components/market-admin";
 import { StoreCatalogAdmin, StoreAdminsManager } from "@/components/admin/store-catalog-admin";
 import { useMarketCodes } from "@/hooks/use-markets";
 import { flagOf } from "@/lib/catalog-query";
-import { useDiets, dietEmoji, dietLabel } from "@/hooks/use-diet-filter";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "@/components/admin/ai-image-options";
 import { generateImageFor } from "@/lib/product-media.functions";
 import type { HeadingGroup } from "@/components/admin/heading-ai-dialog";
@@ -165,6 +149,13 @@ function AdminPage() {
   const [cur, setCur] = useState<string | null>(null);
   const [sel, setSel] = useState<Sel>(null);
   const [imageEditor, setImageEditor] = useState<{ kind: "product"; id: string } | null>(null);
+  const [editTarget, setEditTarget] = useState<{ kind: "product"; id: string } | null>(null);
+  /** Öffnet den einen Produkt-Bearbeiten-Dialog (Kachelmodus-Dialog) aus einem anderen Tab. */
+  const openProduct = (id: string) => {
+    const prod = d?.prods.find((x) => x.id === id);
+    if (!prod) return;
+    setSearch(""); setTab("catalog"); setCur(prod.department_id); setSel(null); setEditTarget({ kind: "product", id });
+  };
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [bulk, setBulk] = useState<false | "plain" | "suggest">(false);
@@ -1066,7 +1057,7 @@ function AdminPage() {
         <div className="space-y-1">
           {results.length === 0 && <p className="text-sm text-muted-foreground">{T("adm.noHits")}</p>}
           {results.map((r) => (
-            <button key={r.kind + r.id} onClick={() => { setCur(r.kind === "department" ? r.id : r.parent); setSel({ kind: r.kind, id: r.id }); setSearch(""); }}
+            <button key={r.kind + r.id} onClick={() => { setSearch(""); if (r.kind === "product") openProduct(r.id); else { setCur(r.kind === "department" ? r.id : r.parent); setSel({ kind: r.kind, id: r.id }); } }}
               className="flex w-full items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-left text-sm">
               <span>{r.kind === "heading" ? "𝐇" : r.emoji ?? (r.kind === "department" ? "📁" : "•")}</span>
               <span className={r.kind === "heading" ? "font-bold" : ""}>{nm(r.id, r.name)}</span>
@@ -1084,7 +1075,9 @@ function AdminPage() {
 
           <CatalogTileEditor key={storeId || "shared"} depts={d.depts} cur={cur} setCur={(id) => { setCur(id); setSel(null); }} children={tileChildren} products={tileProducts} vtr={d.vtr}
             imageEditor={imageEditor} imageEditorProduct={imageEditor ? d.prods.find((x) => x.id === imageEditor.id) : undefined} onCloseImageEditor={() => setImageEditor(null)}
+            editTarget={editTarget} onEditHandled={() => setEditTarget(null)}
             path={path(cur)} nm={storeId ? nmStore : nm} unavailable={(x) => unavailable(x as Prod)} prices={refPrices.data} run={run} must={must} translateIds={translateIds}
+            onRetranslate={(id) => run(async () => { await must(supabase.from("catalog_translations").delete().eq("entity_id", id).eq("is_manual", false)); await translateIds([id]); }, T("adm.retranslated"))}
             reorder={storeId ? storeReorder : reorder} remove={(kind, id, name) => (storeId ? storeToggleHidden(kind, id) : remove({ kind, id }, name))}
             {...(storeId ? { onAdvanced: storeRename, onToggleHidden: storeToggleHidden, isHidden: (id: string) => Boolean(ovOf(id)?.hidden) } : {})}
             busy={busy}
@@ -1118,8 +1111,7 @@ function AdminPage() {
             onDeleteSelected={storeId ? (sel) => { if (sel.productIds.length && confirm(T("st.hideSelectedConfirm", { n: sel.productIds.length }))) void storeUpsert("product", sel.productIds.map((id) => ({ product_id: id, hidden: true }))); } : deleteSelected}
             onDeleteSelectedDepts={storeId ? (sel) => { if (sel.deptIds.length && confirm(T("st.hideSelectedConfirm", { n: sel.deptIds.length }))) void storeUpsert("department", sel.deptIds.map((id) => ({ department_id: id, hidden: true }))); } : deleteSelectedDepts}
             onMoveSelected={storeId ? storeOnly : moveSelected}
-            moveDeptOptions={deptTreeOrder(d.depts).map((x) => ({ id: x.id, label: path(x.id).map((p) => nm(p.id, p.name)).join(" › ") }))}
-            {...(storeId ? {} : { onAdvanced: (kind: "department" | "product", id: string) => setSel({ kind, id }) })} />
+            moveDeptOptions={deptTreeOrder(d.depts).map((x) => ({ id: x.id, label: path(x.id).map((p) => nm(p.id, p.name)).join(" › ") }))} />
           {bulk && (
             <BulkAddForm key={bulk} autoSuggest={bulk === "suggest"} onSuggest={loadSuggestions} market={mk} onCancel={() => setBulk(false)}
               headings={headings} products={products}
@@ -1155,7 +1147,6 @@ function AdminPage() {
       {sel && d && (
         <Editor key={sel.kind + sel.id} market={mk} sel={sel} name={selName} data={d} products={(d.prods).filter((p) => p.department_id === (sel.kind === "heading" ? d.heads.find((h) => h.id === sel.id)?.department_id : undefined))}
           busy={busy} onClose={() => setSel(null)} onDelete={() => remove(sel, selName)}
-          onEditImage={() => { if (sel.kind === "product") { setSearch(""); setTab("catalog"); setImageEditor({ kind: "product", id: sel.id }); } }}
           onSave={(patch) => run(async () => {
             if (sel.kind === "heading") {
               const h = d.heads.find((x) => x.id === sel.id)!;
@@ -1208,10 +1199,10 @@ function AdminPage() {
           ))}
         </div>
         <LoadingGate d={d}>{mediaTab === "products"
-          ? <CatalogMediaPanel section="images" depts={d?.depts ?? []} prods={d?.prods ?? []} onEdit={(id) => setSel({ kind: "product", id })} />
+          ? <CatalogMediaPanel section="images" depts={d?.depts ?? []} prods={d?.prods ?? []} onEdit={openProduct} />
           : <CategoryMediaPanel depts={d?.depts ?? []} onChanged={() => { void qc.invalidateQueries({ queryKey: ["admin-catalog"] }); void qc.invalidateQueries({ queryKey: ["catalog"] }); }} />}</LoadingGate>
       </div>)}
-      {tab === "prices" && <LoadingGate d={d}><div className="space-y-4"><CatalogMediaPanel section="prices" depts={d?.depts ?? []} prods={d?.prods ?? []} onEdit={(id) => setSel({ kind: "product", id })} />{d && <MarketDataImport prods={d.prods.map((p) => ({ id: p.id, name: p.name }))} />}</div></LoadingGate>}
+      {tab === "prices" && <LoadingGate d={d}><div className="space-y-4"><CatalogMediaPanel section="prices" depts={d?.depts ?? []} prods={d?.prods ?? []} onEdit={openProduct} />{d && <MarketDataImport prods={d.prods.map((p) => ({ id: p.id, name: p.name }))} />}</div></LoadingGate>}
       {tab === "import" && (d ? <ImportPanel depts={d.depts} prods={d.prods} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
 
 
@@ -1232,7 +1223,7 @@ function AdminPage() {
         </>)}
         {langMk === "stores" && (<><StoreCatalogAdmin /><StoreAdminsManager /></>)}
       </div>)}
-      {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={(id) => setSel({ kind: "product", id })}
+      {tab === "health" && (d ? <CatalogHealthPanel depts={d.depts} prods={d.prods} tr={d.tr} onEdit={openProduct}
         onOpenDept={(id) => { setSearch(""); setSel(null); setCur(id); setTab("catalog"); }} /> : <LoadingGate d={d}>{null}</LoadingGate>)}
       {tab === "settings" && (<>
         <div className="flex flex-wrap gap-1.5" role="tablist" aria-label={T("adm.tab.settings")}>
@@ -1442,105 +1433,17 @@ function Editor(p: {
   onClose: () => void; onDelete: () => void; onSave: (patch: Patch) => void;
   onTr: (locale: string, v: string, prev?: string) => void; onRetranslate: () => void;
   onImageChanged: () => void;
-  onEditImage: () => void;
 }) {
   const { sel, data } = p;
   const dept = sel.kind === "department" ? data.depts.find((x) => x.id === sel.id) : undefined;
   const prod = sel.kind === "product" ? data.prods.find((x) => x.id === sel.id) : undefined;
   const head = sel.kind === "heading" ? data.heads.find((x) => x.id === sel.id) : undefined;
-  // Non-Food-Produkte (Wurzelkategorie ohne Lebensmittel): Länderküchen-Auswahl ausblenden
-  const prodNonFood = (() => {
-    if (!prod) return false;
-    const byId = new Map(data.depts.map((x) => [x.id, x]));
-    let cur = byId.get(prod.department_id);
-    let guard = 0;
-    while (cur?.parent_id && guard++ < 20) cur = byId.get(cur.parent_id);
-    return cur ? isNonFoodRootName(cur.name) : false;
-  })();
   const [name, setName] = useState(p.name);
   const [emoji, setEmoji] = useState(dept?.emoji ?? prod?.emoji ?? "");
   const [parent, setParent] = useState(dept?.parent_id ?? prod?.department_id ?? "");
-  const [qty, setQty] = useState(String(prod?.default_quantity ?? 1));
-  const [unit, setUnit] = useState(prod?.default_unit ?? "stueck");
-  const [allowedUnits, setAllowedUnits] = useState<string[]>(prod?.allowed_units ?? []);
-  const [unitQuantities, setUnitQuantities] = useState<Record<string, number>>({ ...(prod?.unit_quantities ?? {}), [prod?.default_unit ?? "stueck"]: prod?.default_quantity ?? 1 });
   const [before, setBefore] = useState(head?.before_product_id ?? "");
-  const deptProds = prod ? data.prods.filter((x) => x.department_id === prod.department_id).slice().sort((a, b) => a.sort_order - b.sort_order) : [];
-  const deptHeads = prod ? data.heads.filter((h) => h.department_id === prod.department_id) : [];
-  const curHeadingId = (() => {
-    if (!prod) return "";
-    const idx = deptProds.findIndex((x) => x.id === prod.id);
-    let curH = "";
-    for (const h of deptHeads) { const ai = deptProds.findIndex((x) => x.id === h.before_product_id); if (ai >= 0 && ai <= idx) curH = h.id; }
-    return curH;
-  })();
-  const [headingSel, setHeadingSel] = useState(curHeadingId);
-  const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
-  const dietRows = useDiets();
-  const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
-  const [prefixVariants, setPrefixVariants] = useState<string[]>(prod?.prefix_variants ?? []);
-  const [replaceVariants, setReplaceVariants] = useState<string[]>(prod?.replace_variants ?? []);
-  /** Position durchschalten: hinten → vorne → ersetzt Produktnamen → hinten. */
-  const cycleVariantPos = (v: string) => {
-    if (replaceVariants.includes(v)) { setReplaceVariants((x) => x.filter((y) => y !== v)); return; }
-    if (prefixVariants.includes(v)) { setPrefixVariants((x) => x.filter((y) => y !== v)); setReplaceVariants((x) => [...x, v]); return; }
-    setPrefixVariants((x) => [...x, v]);
-  };
-  const [prefixByLocale, setPrefixByLocale] = useState<Record<string, string[]>>(((prod as { prefix_variants_by_locale?: Record<string, string[]> } | undefined)?.prefix_variants_by_locale) ?? {});
-  const togglePrefixLocale = (locale: string, v: string) => setPrefixByLocale((m) => {
-    const cur = m[locale] ?? prefixVariants;
-    return { ...m, [locale]: cur.includes(v) ? cur.filter((y) => y !== v) : [...cur, v] };
-  });
-  const cleanPrefixByLocale = () => Object.fromEntries(Object.entries(prefixByLocale).map(([k, list]) => [k, list.filter((x) => variants.includes(x))]));
-  const commonVariants = useStandardVariants();
-  const [variantInput, setVariantInput] = useState("");
-  const [vDrag, setVDrag] = useState<number | null>(null);
-  const [vOver, setVOver] = useState<number | null>(null);
-  const suggestFn = useServerFn(suggestVariants);
-  const [askAi, setAskAi] = useState(false);
-  const [aiBusy, setAiBusy] = useState(false);
-  const [aiCount, setAiCount] = useState(10);
-  const [sug, setSug] = useState<string[] | null>(null);
-  const [picked, setPicked] = useState<string[]>([]);
-  const runSuggest = async () => {
-    if (!prod) return;
-    setAskAi(false); setAiBusy(true);
-    try {
-      const r = await suggestFn({ data: { productId: prod.id, count: aiCount } });
-      setSug(r.items); setPicked(r.items);
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : String(e));
-    } finally { setAiBusy(false); }
-  };
-  const applySug = () => {
-    setVariants((x) => {
-      const next = [...x];
-      for (const s of picked) if (!next.some((y) => y.toLowerCase() === s.toLowerCase())) next.push(s);
-      return next;
-    });
-    setSug(null);
-  };
-  const addVariant = (v: string) => {
-    const vals = v.split(/\r?\n/).map((s) => s.trim()).filter(Boolean);
-    setVariants((x) => {
-      const next = [...x];
-      for (const val of vals) if (!next.some((y) => y.toLowerCase() === val.toLowerCase())) next.push(val);
-      return next;
-    });
-    setVariantInput("");
-  };
   const tr = data.tr.get(sel.id) ?? {};
   const title = T(`adm.edit.${sel.kind}` as MessageKey);
-  const [prodImgUrl, setProdImgUrl] = useState<string | null>(null);
-  const [prodIconUrl, setProdIconUrl] = useState<string | null>(null);
-  useEffect(() => {
-    let alive = true;
-    setProdImgUrl(null);
-    setProdIconUrl(null);
-    if (prod?.image_path) signedCategoryImageUrl(prod.image_path).then((u) => { if (alive) setProdImgUrl(u); });
-    if (prod?.icon_path) signedCategoryImageUrl(prod.icon_path).then((u) => { if (alive) setProdIconUrl(u); });
-    return () => { alive = false; };
-  }, [prod?.image_path, prod?.icon_path]);
 
   // ESC bricht ab wie Klick daneben
   useEffect(() => {
@@ -1549,11 +1452,10 @@ function Editor(p: {
     return () => window.removeEventListener("keydown", onKey);
   }, [p.onClose]);
 
-  const saveDisabled = p.busy || !name.trim() || (prod ? Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0) : false);
+  const saveDisabled = p.busy || !name.trim();
   const saveItem = () => p.onSave({
     name: name.trim(), emoji, before,
     ...(sel.kind !== "heading" ? { parent } : {}),
-    ...(prod ? { qty: Number(qty.replace(",", ".")) || 1, unit, allowedUnits, unitQuantities, diets, variants, prefixVariants: prefixVariants.filter((x) => variants.includes(x)), replaceVariants: replaceVariants.filter((x) => variants.includes(x)), prefixByLocale: cleanPrefixByLocale(), heading: headingSel } : {}),
   });
 
   return (
@@ -1575,167 +1477,6 @@ function Editor(p: {
             {p.deptOptions.filter((o) => o.id !== sel.id).map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
           </select>
         )}
-        {prod && (
-          <PreviewCollapse label={T("adm.previewImage")} src={prodImgUrl} emoji={prod.emoji}>
-            <Button type="button" variant="outline" onClick={p.onEditImage}>🖼️ {T("adm.previewImage")}</Button>
-          </PreviewCollapse>
-        )}
-        {prod && (
-          <IconCollapse label={T("adm.iconImage")} src={prodIconUrl} emoji={prod.emoji} />
-        )}
-        {prod && <AllowedUnitsPicker value={{ primary: unit, units: allowedUnits, quantities: unitQuantities }} onChange={(next) => { setUnit(next.primary); setAllowedUnits(next.units); setUnitQuantities(next.quantities); setQty(String(next.quantities[next.primary] ?? 1)); }} />}
-        {prod && deptHeads.length > 0 && (
-          <div className="space-y-1.5">
-            <h3 className="text-sm font-semibold text-foreground">{T("adm.headingAssign")}</h3>
-            <select value={headingSel} onChange={(e) => setHeadingSel(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
-              <option value="">{T("adm.noHeading")}</option>
-              {deptHeads.map((h) => <option key={h.id} value={h.id}>{h.name}</option>)}
-            </select>
-          </div>
-        )}
-        {prod && (
-          <div className="space-y-1.5">
-            <h3 className="text-sm font-semibold text-foreground">{T("adm.diets")}</h3>
-            <div className="flex flex-wrap gap-1.5">
-              {dietRows.map(({ id: diet }) => {
-                const on = diets.includes(diet);
-                return (
-                  <button
-                    key={diet}
-                    type="button"
-                    aria-pressed={on}
-                    onClick={() => setDiets((x) => (on ? x.filter((v) => v !== diet) : [...x, diet]))}
-                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}
-                  >
-                    {dietEmoji(diet)} {dietLabel(diet)}
-                  </button>
-                );
-              })}
-            </div>
-            <p className="text-[11px] text-muted-foreground">{T("adm.dietsHint")}</p>
-          </div>
-        )}
-        {prod && (
-          <div className="space-y-1.5">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
-              <VariantAiBulkButton productId={prod.id} productName={prod.name} variants={prod.variants ?? []} />
-            </div>
-            {variants.length > 0 && (
-              <div className="divide-y divide-border rounded-lg border border-border">
-                {variants.map((v, vi) => (
-                  <div
-                    key={v}
-                    draggable
-                    onDragStart={() => setVDrag(vi)}
-                    onDragOver={(e) => { e.preventDefault(); setVOver(vi); }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      if (vDrag === null || vDrag === vi) { setVDrag(null); setVOver(null); return; }
-                      setVariants((x) => { const next = [...x]; const movedV = next[vDrag]!; next.splice(vDrag, 1); next.splice(vi, 0, movedV); return next; });
-                      setVDrag(null); setVOver(null);
-                    }}
-                    onDragEnd={() => { setVDrag(null); setVOver(null); }}
-                    className={`flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
-                  >
-                    <span className="flex min-w-0 items-center gap-2">
-                      <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
-                      <VariantNameEdit productId={prod.id} variant={v} saved={(prod.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => cycleVariantPos(v)}
-                      aria-pressed={prefixVariants.includes(v) || replaceVariants.includes(v)}
-                      title={T("adm.variantPosHint")}
-                      className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${replaceVariants.includes(v) ? "border-primary bg-primary text-primary-foreground" : prefixVariants.includes(v) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}
-                    >
-                      {replaceVariants.includes(v) ? `= ${v}` : prefixVariants.includes(v) ? `${v} ${prod.name}` : `${prod.name} ${v}`}
-                    </button>
-                    {(prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
-                    {(prod.variants ?? []).includes(v) && <VariantSynonyms productId={prod.id} variant={v} />}
-                    {(prod.variants ?? []).includes(v) && <VariantTranslations productId={prod.id} variant={v}  productName={() => prod.name} isPrefix={(l) => (prefixByLocale[l] ?? prefixVariants).includes(v)} onTogglePrefix={(l) => togglePrefixLocale(l, v)} />}
-                    <button
-                      type="button"
-                      aria-label={`${v} entfernen`}
-                      onClick={() => setVariants((x) => x.filter((y) => y !== v))}
-                      className="shrink-0 text-muted-foreground hover:text-destructive"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="flex items-start gap-2">
-              <textarea
-                value={variantInput}
-                rows={3}
-                placeholder={T("adm.variantPlaceholder")}
-                onChange={(e) => setVariantInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); addVariant(variantInput); } }}
-                className="min-h-[72px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              />
-              <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
-            </div>
-            <VariantAiSuggest name={prod.name} variants={variants} onAdd={(vs) => setVariants((x) => [...x, ...vs.filter((v) => !x.some((y) => y.toLowerCase() === v.toLowerCase()))])} />
-            <div className="flex flex-wrap gap-1.5">
-              {commonVariants.map((cv) => {
-                const on = variants.some((x) => x.toLowerCase() === cv.value.toLowerCase());
-                return (
-                  <button
-                    key={cv.value}
-                    type="button"
-                    disabled={on}
-                    onClick={() => addVariant(cv.value)}
-                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-muted-foreground line-through" : "border-border bg-background text-muted-foreground"}`}
-                  >
-                    {on ? "✓ " : "+ "}{cv.label}
-                  </button>
-                );
-              })}
-            </div>
-            {!sug && !askAi && (
-              <Button type="button" variant="outline" size="sm" disabled={aiBusy} onClick={() => setAskAi(true)}>
-                {aiBusy ? T("adm.working") : `✨ ${T("adm.variantSuggest")}`}
-              </Button>
-            )}
-            {askAi && (
-              <div className="flex flex-col gap-2 rounded-xl border border-border bg-muted/40 p-3 text-sm">
-                <p>{T("adm.variantSuggestConfirm")}</p>
-                <label className="flex items-center gap-2">
-                  <span>{T("adm.suggestCount")}</span>
-                  <select value={aiCount} onChange={(e) => setAiCount(Number(e.target.value))} className="rounded-lg border border-input bg-background px-2 py-1">
-                    {[5, 10, 15].map((n) => <option key={n} value={n}>{n}</option>)}
-                  </select>
-                </label>
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" className="flex-1" onClick={() => setAskAi(false)}>{T("adm.cancel")}</Button>
-                  <Button size="sm" className="flex-1" onClick={() => void runSuggest()}>✨ {T("adm.variantSuggest")}</Button>
-                </div>
-              </div>
-            )}
-            {sug && (
-              <div className="flex flex-col gap-2 rounded-xl border border-border p-3">
-                {sug.length === 0 ? <p className="text-sm text-muted-foreground">{T("adm.variantSuggestNone")}</p> : (
-                  <div className="flex flex-wrap gap-1.5">
-                    {sug.map((s) => {
-                      const on = picked.includes(s);
-                      return (
-                        <button key={s} type="button" aria-pressed={on} onClick={() => setPicked(on ? picked.filter((x) => x !== s) : [...picked, s])}
-                          className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground"}`}>{s}</button>
-                      );
-                    })}
-                  </div>
-                )}
-                <div className="flex gap-2">
-                  <Button size="sm" variant="outline" className="flex-1" onClick={() => setSug(null)}>{T("adm.cancel")}</Button>
-                  <Button size="sm" className="flex-1" disabled={!picked.length} onClick={applySug}>{T("adm.variantSuggestApply")}</Button>
-                </div>
-              </div>
-            )}
-            <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
-          </div>
-        )}
         {head && (
           <select value={before} onChange={(e) => setBefore(e.target.value)} className="w-full rounded-lg border border-input bg-background px-2 py-2 text-sm">
             {p.products.map((x) => <option key={x.id} value={x.id}>{T("adm.above", { name: x.name })}</option>)}
@@ -1747,11 +1488,6 @@ function Editor(p: {
         </div>
         {dept && <DeptImageEditor deptId={dept.id} imagePath={dept.image_path} onChanged={p.onImageChanged} />}
         {dept && <DeptAliasEditor dept={dept} depts={data.depts} options={p.deptOptions} />}
-        {prod && <ProductAliasEditor product={prod} prods={data.prods} options={p.deptOptions} />}
-        {prod && !prodNonFood && <ProductCuisinePicker productId={prod.id} />}
-        {prod && <ProductSynonymEditor key={`syn-${prod.id}`} productId={prod.id} />}
-        {prod && <ProductPronunciationEditor name={prod.name} />}
-        {prod && <ProductBrandEditor key={prod.id} productId={prod.id} productName={prod.name} path={data.depts.find((x) => x.id === prod.department_id)?.name ?? ""} />}
 
         <div className="flex items-center justify-between pt-2">
           <h3 className="text-sm font-semibold text-foreground">{T("adm.languages")}</h3>

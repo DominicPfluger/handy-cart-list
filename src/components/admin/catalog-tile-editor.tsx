@@ -1,4 +1,10 @@
 import { VariantAiSuggest } from "@/components/admin/variant-ai-suggest";
+import { ProductCuisinePicker } from "@/components/cuisine-admin";
+import { ProductAliasEditor } from "@/components/product-alias-admin";
+import { ProductBrandEditor } from "@/components/brand-admin";
+import { ProductSynonymEditor } from "@/components/admin/synonym-editor";
+import { isNonFoodRootName } from "@/lib/dept-colors";
+import { useDiets, dietEmoji, dietLabel } from "@/hooks/use-diet-filter";
 import { VariantSynonyms } from "@/components/admin/variant-synonyms";
 import { VariantTranslations } from "@/components/admin/variant-translations";
 import { useStandardVariants } from "@/hooks/use-standard-variants";
@@ -23,7 +29,7 @@ import { currentMarket, formatRefPrice, type RefPrice } from "@/hooks/use-refere
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ImageZoomOverlay, ZoomableImage } from "@/components/admin/zoomable-image";
-import { PreviewCollapse, IconCollapse } from "@/components/admin/preview-collapse";
+import { SectionCollapse } from "@/components/admin/preview-collapse";
 import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { ProductPronunciationEditor } from "@/components/admin/product-pronunciation-editor";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
@@ -41,7 +47,7 @@ const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR
 /** Alias-Kategorien: id = "deptalias:<aliasId>", alias_id + dept_id (Original) gesetzt. */
 export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; icon_path?: string | null; alias_id?: string; dept_id?: string };
 /** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
-export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; image_path?: string | null; icon_path?: string | null; variants?: string[]; prefix_variants?: string[]; replace_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; alias_id?: string; product_id?: string };
+export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets?: string[]; image_path?: string | null; icon_path?: string | null; variants?: string[]; prefix_variants?: string[]; replace_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; alias_id?: string; product_id?: string };
 
 
 type Target = { kind: "department" | "product"; id: string | null } | null;
@@ -67,8 +73,14 @@ export function CatalogTileEditor(p: {
   remove: (kind: "department" | "product", id: string, name: string) => void;
   /** Zusätzlicher Inhalt unter dem Editor (z. B. Aliase). */
   below?: React.ReactNode;
-  /** Öffnet die erweiterte Bearbeitung (Übersetzungen, Marken, Aliase …). */
+  /** Laden-Modus: eigenen Namen für diesen Laden vergeben (Produkt/Kategorie). */
   onAdvanced?: (kind: "department" | "product", id: string) => void;
+  /** Öffnet den Bearbeiten-Dialog für ein Produkt aus einem anderen Tab (Suche, Bilder, Preise, Pflege). */
+  editTarget?: { kind: "product"; id: string } | null;
+  /** Meldet, dass `editTarget` übernommen wurde. */
+  onEditHandled?: () => void;
+  /** KI-Übersetzungen eines Produkts neu erstellen (ohne manuelle Übersetzungen zu überschreiben). */
+  onRetranslate?: (id: string) => void;
   /** Laden-Modus: Eintrag für diesen Laden aus-/einblenden (nie global löschen). */
   onToggleHidden?: (kind: "department" | "product", id: string) => void;
   /** Laden-Modus: ist der Eintrag für diesen Laden ausgeblendet? */
@@ -120,6 +132,10 @@ export function CatalogTileEditor(p: {
   const headingBefore = useMemo(() => new Map((p.headings ?? []).map((h) => [h.before_product_id, h])), [p.headings]);
   const editMode = true;
   const [target, setTarget] = useState<Target>(null);
+  // Produkt-Bearbeitung aus anderen Tabs (Suche, Bilder, Preise, Pflege) → denselben Dialog öffnen.
+  useEffect(() => {
+    if (p.editTarget) { setTarget({ kind: "product", id: p.editTarget.id }); p.onEditHandled?.(); }
+  }, [p.editTarget]);
   const [priceFocus, setPriceFocus] = useState(false);
   const [drag, setDrag] = useState<Drag>(null);
   const [selected, setSelected] = useState<Set<string>>(() => new Set());
@@ -766,11 +782,11 @@ export function CatalogTileEditor(p: {
                   onPointerMove={(e) => { if (lpTimer.current !== null) { window.clearTimeout(lpTimer.current); lpTimer.current = null; } onMove(e); }}
                   onPointerUp={(e) => { if (lpTimer.current !== null) { window.clearTimeout(lpTimer.current); lpTimer.current = null; } onUp(e); }}
                   onPointerCancel={() => { if (lpTimer.current !== null) { window.clearTimeout(lpTimer.current); lpTimer.current = null; } setDrag(null); setOver(null); setOverPos(null); }}
-                  onClick={() => { if (lpFired.current) { lpFired.current = false; return; } if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; if (x.alias_id) p.onAdvanced?.("product", pid); else setTarget({ kind: "product", id: x.id }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
+                  onClick={() => { if (lpFired.current) { lpFired.current = false; return; } if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; return; } iconClickTimer.current = window.setTimeout(() => { iconClickTimer.current = null; setTarget({ kind: "product", id: pid }); }, 260); }} onDoubleClick={() => { if (iconClickTimer.current !== null) { window.clearTimeout(iconClickTimer.current); iconClickTimer.current = null; } const u = img(x.image_path); if (u) setZoom(u); }}
                   className="flex h-11 w-11 shrink-0 touch-none select-none items-center justify-center overflow-hidden rounded-xl bg-muted text-2xl">
                   {img(x.icon_path ?? x.image_path) ? <ZoomableImage src={img(x.icon_path ?? x.image_path)!} className="h-full w-full object-contain" /> : x.emoji ?? "🛒"}
                 </span>
-                <button type="button" disabled={!editMode} onClick={click(() => x.alias_id ? p.onAdvanced?.("product", pid) : setTarget({ kind: "product", id: x.id }))} className="min-w-0 flex-1 text-left">
+                <button type="button" disabled={!editMode} onClick={click(() => setTarget({ kind: "product", id: pid }))} className="min-w-0 flex-1 text-left">
                   <div className="truncate text-sm font-semibold text-foreground" title={p.nm(pid, x.name)}>{p.nm(pid, x.name)}{x.alias_id && <span className="ml-1 text-[10px] font-normal text-muted-foreground">· {T("adm.alias")}</span>}</div>
                   <div className="truncate text-xs text-muted-foreground">
                     {x.default_quantity} {getUnits(getLocale()).find((u) => u.id === x.default_unit)?.label ?? x.default_unit}
@@ -802,7 +818,7 @@ export function CatalogTileEditor(p: {
                   {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
                   {!getUnits(getLocale()).some((u) => u.id === x.default_unit) && <option value={x.default_unit}>{x.default_unit}</option>}
                 </select>
-                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced?.("product", pid)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                 <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => p.onAdvanced ? p.onAdvanced("product", pid) : setTarget({ kind: "product", id: pid })} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                    <Pencil className="h-3.5 w-3.5" />
                  </Button>
                  {p.onToggleHidden && !x.alias_id && (
@@ -946,6 +962,16 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const isDept = p.target.kind === "department";
   const item = p.target.id ? (isDept ? p.depts.find((d) => d.id === p.target.id) : p.products.find((x) => x.id === p.target.id) ?? p.imageEditorProduct) : undefined;
   const prod = !isDept ? (item as TileProd | undefined) : undefined;
+  const realProdId = prod ? (prod.product_id ?? prod.id) : undefined;
+  // Länderküchen nur bei Lebensmitteln (kein Non-Food-Wurzelkatalog).
+  const prodNonFood = (() => {
+    if (!prod) return false;
+    const byId = new Map(p.depts.map((d) => [d.id, d]));
+    let c = byId.get(prod.department_id);
+    let guard = 0;
+    while (c?.parent_id && guard++ < 20) c = byId.get(c.parent_id);
+    return c ? isNonFoodRootName(c.name) : false;
+  })();
   const [name, setName] = useState(item?.name ?? "");
   const [emoji, setEmoji] = useState(item?.emoji ?? "");
   const [qty, setQty] = useState(prod?.default_quantity ?? 1);
@@ -1022,6 +1048,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     })();
     return () => { off = true; };
   }, [isDept, prod?.id]);
+  const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
+  const dietRows = useDiets();
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [prefixVariants, setPrefixVariants] = useState<string[]>(prod?.prefix_variants ?? []);
   const [replaceVariants, setReplaceVariants] = useState<string[]>(prod?.replace_variants ?? []);
@@ -1122,7 +1150,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
-        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
+        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
       if (item.name !== base.name) {
         await p.must(supabase.from("catalog_translations").delete().eq("entity_id", item.id).eq("is_manual", false));
         await p.translateIds([item.id]);
@@ -1139,7 +1167,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               ? p.products.length + 1
               : await supabase.from("products").select("sort_order").eq("department_id", targetDept).order("sort_order", { ascending: false }).limit(1)
                   .then(({ data }) => ((data?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1);
-            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, variants, sort_order: nextSort } as never).select("id").single();
+            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variants, sort_order: nextSort } as never).select("id").single();
           })();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
@@ -1324,7 +1352,20 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           <Button className="h-11 w-full rounded-xl" disabled={enriching || (!isDept && Object.values(unitQuantities).some((n) => !Number.isFinite(n) || n <= 0))} onClick={() => void save()}>{enriching ? T("adm.working") : T("tile.save")}</Button>
         )}
         {effId && (
-          <PreviewCollapse label={T("adm.previewImage")} src={(imagePreview === undefined ? p.imgUrl : imagePreview) ?? null} emoji={emoji || (isDept ? "📁" : "🛒")} defaultOpen={Boolean(p.imageOnly)}>
+          <SectionCollapse label={T("adm.images")} defaultOpen={Boolean(p.imageOnly)} header={(
+            <>
+              <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-border bg-muted">
+                {(imagePreview === undefined ? p.imgUrl : imagePreview) ? <img src={(imagePreview === undefined ? p.imgUrl : imagePreview)!} alt="" className="h-full w-full object-cover" /> : <span className="text-lg">{emoji || (isDept ? "📁" : "🛒")}</span>}
+              </span>
+              <span className="flex h-7 w-7 items-center justify-center overflow-hidden rounded-md border border-border bg-muted">
+                {iconInfo.url ? <img src={iconInfo.url} alt="" className="h-full w-full object-contain" /> : <span className="text-[10px]">{emoji || (isDept ? "📁" : "🛒")}</span>}
+              </span>
+            </>
+          )}>
+            <p className="text-xs font-semibold text-muted-foreground">{T("adm.previewImage")}</p>
+            <div className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-muted">
+              {(imagePreview === undefined ? p.imgUrl : imagePreview) ? <ZoomableImage src={(imagePreview === undefined ? p.imgUrl : imagePreview)!} className="max-h-64 w-full object-contain" /> : <span className="py-10 text-4xl">{emoji || (isDept ? "📁" : "🛒")}</span>}
+            </div>
             <div className="flex flex-wrap gap-2">
               <Button size="sm" variant="outline" onClick={() => fileRef.current?.click()}>{T("tile.upload")}</Button>
               <Button size="sm" variant="outline" onClick={() => setPicking(true)}>🖼️ {T("tile.pickImage")}</Button>
@@ -1370,10 +1411,13 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               {(imagePreview === undefined ? Boolean(p.imgUrl) : Boolean(imagePreview)) && item &&
                 <Button size="sm" variant="outline" className="text-destructive" disabled={imageBusy || p.busy} onClick={() => void removeImage()}>{T("tile.removeImage")}</Button>}
             </div>
-          </PreviewCollapse>
-        )}
-        {effId && (
-          <IconCollapse label={T("adm.iconImage")} hint={iconInfo.custom ? undefined : T("adm.iconAutoHint")} src={iconInfo.url} emoji={emoji || (isDept ? "📁" : "🛒")}>
+            <div className="mt-1">
+              <p className="text-xs font-semibold text-muted-foreground">{T("adm.iconImage")}</p>
+              {!iconInfo.custom && <p className="text-[11px] text-muted-foreground">{T("adm.iconAutoHint")}</p>}
+            </div>
+            <div className="flex w-full items-center justify-center overflow-hidden rounded-xl border border-border bg-muted py-2">
+              {iconInfo.url ? <img src={iconInfo.url} alt="" className="h-16 w-16 object-contain" /> : <span className="py-4 text-2xl">{emoji || (isDept ? "📁" : "🛒")}</span>}
+            </div>
             <div className="flex flex-wrap gap-2">
               <Button size="sm" variant="outline" onClick={() => iconFileRef.current?.click()}>{T("tile.upload")}</Button>
               {iconInfo.custom && <Button size="sm" variant="ghost" className="text-destructive" onClick={() => { if (window.confirm(T("tile.removeImageConfirm"))) void p.run(async () => { await clearCustomIcon(isDept ? "department" : "product", effId); await loadIcon(effId); await qc.invalidateQueries({ queryKey: ["catalog"] }); }); }}>{T("tile.removeImage")}</Button>}
@@ -1391,7 +1435,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 <AiImageOptionSelects value={iconImgOpts} onChange={setIconImgOpts} />
               </div>
             </details>
-          </IconCollapse>
+          </SectionCollapse>
         )}
         {!p.imageOnly && !isDept && (
           <label className="flex items-center gap-2 text-sm">
@@ -1425,11 +1469,9 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </div>
         )}
         {!p.imageOnly && !isDept && (
-          <div className="space-y-1.5">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold text-foreground">{T("adm.variants")}</h3>
-              {prod && <VariantAiBulkButton productId={prod.id} productName={prod.name} variants={prod.variants ?? []} />}
-            </div>
+          <SectionCollapse label={T("adm.variants")}>
+            <div className="space-y-1.5">
+              {prod && <div className="flex justify-end"><VariantAiBulkButton productId={prod.id} productName={prod.name} variants={prod.variants ?? []} /></div>}
             {variants.length > 0 && (
               <div className="divide-y divide-border rounded-lg border border-border">
                 {variants.map((v, vi) => (
@@ -1494,11 +1536,51 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               })}
             </div>
             <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
-          </div>
+            </div>
+          </SectionCollapse>
         )}
         {!p.imageOnly && !isDept && item && <ProductPronunciationEditor name={item.name} />}
+        {!p.imageOnly && !isDept && prod && realProdId && !prodNonFood && (
+          <SectionCollapse label={T("adm.cuisines")}>
+            <ProductCuisinePicker productId={realProdId} bare />
+          </SectionCollapse>
+        )}
+        {!p.imageOnly && !isDept && prod && (
+          <SectionCollapse label={T("adm.diets")}>
+            <div className="flex flex-wrap gap-1.5">
+              {dietRows.map(({ id: diet }) => {
+                const on = diets.includes(diet);
+                return (
+                  <button key={diet} type="button" aria-pressed={on} onClick={() => setDiets((x) => (on ? x.filter((v) => v !== diet) : [...x, diet]))}
+                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}>
+                    {dietEmoji(diet)} {dietLabel(diet)}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-muted-foreground">{T("adm.dietsHint")}</p>
+          </SectionCollapse>
+        )}
+        {!p.imageOnly && !isDept && prod && realProdId && (
+          <SectionCollapse label={T("adm.synonyms")}>
+            <ProductSynonymEditor key={`syn-${realProdId}`} productId={realProdId} bare />
+          </SectionCollapse>
+        )}
+        {!p.imageOnly && !isDept && prod && realProdId && (
+          <SectionCollapse label={T("adm.brands")}>
+            <ProductBrandEditor key={`brand-${realProdId}`} productId={realProdId} productName={item?.name ?? ""} path={p.depts.find((x) => x.id === prod.department_id)?.name ?? ""} bare />
+          </SectionCollapse>
+        )}
+        {!p.imageOnly && !isDept && prod && realProdId && (
+          <SectionCollapse label={T("palias.alsoIn")}>
+            <ProductAliasEditor product={{ id: realProdId, name: item?.name ?? "", emoji: prod.emoji ?? null, department_id: prod.department_id }} prods={p.products} options={newDeptOpts} bare />
+          </SectionCollapse>
+        )}
         {!p.imageOnly && item && effId && (
-          <SheetTranslations kind={isDept ? "department" : "product"} id={isDept ? effId : (prod?.product_id ?? effId)} baseName={item.name} />
+          <SectionCollapse label={T("adm.languages")}>
+            {p.onRetranslate && <Button size="sm" variant="outline" className="self-start" onClick={() => p.onRetranslate!(isDept ? effId : (prod?.product_id ?? effId))}>{T("adm.retranslate")}</Button>}
+            <SheetTranslations kind={isDept ? "department" : "product"} id={isDept ? effId : (prod?.product_id ?? effId)} baseName={item.name} />
+          </SectionCollapse>
         )}
         {!p.imageOnly && !isDept && (
           <div className="space-y-2">

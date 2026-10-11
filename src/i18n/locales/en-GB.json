@@ -1240,6 +1240,7 @@
   "adm.copyCatalog": "Copy catalogue as text",
   "adm.copyCatalogTitle": "Entire catalogue",
   "adm.iconImage": "Icon (small)",
+  "adm.images": "Images",
   "adm.previewImage": "Preview image (large)",
   "adm.iconAutoHint": "Created automatically from the preview image",
   "adm.iconUseImage": "Icon image like preview image",
