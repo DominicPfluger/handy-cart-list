@@ -730,7 +730,7 @@ function DepartmentsPage() {
                     </div>
                   )}
                   <div className="relative flex min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm">
-                    <button type="button" aria-label={product.name} onClick={() => openProduct(product)} className="grid aspect-square w-full place-items-center overflow-hidden bg-primary-soft/25">
+                    <button type="button" aria-label={product.name} onClick={() => { if (expandVariants(product).length > 0) setVariantLevelId(product.id); else openProduct(product); }} className="grid aspect-square w-full place-items-center overflow-hidden bg-primary-soft/25">
                       <TileThumb product={product} />
                     </button>
                     <Button
