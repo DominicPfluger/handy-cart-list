@@ -6,7 +6,7 @@ import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
-import { allLocales, getLocale, translate } from "@/i18n";
+import { allLocales, getLocale, pickName, translate } from "@/i18n";
 import { AiImageOptionSelects, DEFAULT_AI_IMAGE_OPTS, type AiImageOpts } from "./ai-image-options";
 import type { MessageKey } from "@/i18n/de";
 import { getUnits } from "@/lib/units";
@@ -32,6 +32,9 @@ import { VariantNameEdit } from "@/components/admin/variant-rename-button";
 import { Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
+/** Variante in der aktuellen Admin-Sprache anzeigen (Fallback: deutscher Basisname). */
+const vl = (vtr: Map<string, Record<string, Record<string, string>>> | undefined, pid: string | undefined, v: string) =>
+  pickName(pid ? vtr?.get(pid)?.[v] : undefined, getLocale(), v);
 
 const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR: "EUR", ES: "EUR", MX: "MXN", IT: "EUR", BE: "EUR", NL: "EUR", GB: "GBP", US: "USD", CA: "CAD", PT: "EUR", BR: "BRL" };
 
