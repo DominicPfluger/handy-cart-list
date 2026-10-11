@@ -1750,7 +1750,7 @@ function CopyListDialog(p: { title: string; text: string; onClose: () => void })
   );
 }
 
-function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>, ok?: string) => Promise<void>; must: (q: PromiseLike<{ error: { message: string } | null }>) => Promise<void>; nm: (id: string, base: string) => string; vtr?: Map<string, Record<string, Record<string, string>>>; onClose: () => void }) {
+function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>, ok?: string) => Promise<void>; must: (q: PromiseLike<{ error: { message: string } | null }>) => Promise<void>; nm: (id: string, base: string) => string; vtr?: Map<string, Record<string, Record<string, string>>> | undefined; onClose: () => void }) {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [vDrag, setVDrag] = useState<number | null>(null);
