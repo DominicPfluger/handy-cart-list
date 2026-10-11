@@ -107,19 +107,26 @@ async function loadCore() {
 }
 
 async function loadExtra() {
-  const [trs, mo, mx] = await Promise.all([
+  const [trs, mo, mx, vtrs] = await Promise.all([
     paged<Tr>((a, b) => supabase.from("catalog_translations").select("entity_id, locale, name, is_manual").order("id").range(a, b)),
     paged<{ product_id: string; market: string; sort_order: number }>((a, b) => supabase.from("product_market_order").select("product_id, market, sort_order").order("id").range(a, b)),
     paged<{ product_id: string; market: string }>((a, b) => supabase.from("product_market_exclusions").select("product_id, market").order("id").range(a, b)),
+    paged<{ product_id: string; variant: string; locale: string; name: string }>((a, b) => supabase.from("variant_translations").select("product_id, variant, locale, name").order("id").range(a, b)),
   ]);
   const tr = new Map<string, Record<string, Tr>>();
   for (const t of trs) tr.set(t.entity_id, { ...(tr.get(t.entity_id) ?? {}), [t.locale]: t });
   const order = new Map(mo.map((o) => [`${o.product_id}|${o.market}`, o.sort_order]));
   const excl = new Set(mx.map((o) => `${o.product_id}|${o.market}`));
-  return { tr, order, excl };
+  const vtr = new Map<string, Record<string, Record<string, string>>>();
+  for (const r of vtrs) {
+    const pv = vtr.get(r.product_id) ?? {};
+    pv[r.variant] = { ...(pv[r.variant] ?? {}), [r.locale]: r.name };
+    vtr.set(r.product_id, pv);
+  }
+  return { tr, order, excl, vtr };
 }
 
-const EMPTY_EXTRA: Awaited<ReturnType<typeof loadExtra>> = { tr: new Map(), order: new Map(), excl: new Set() };
+const EMPTY_EXTRA: Awaited<ReturnType<typeof loadExtra>> = { tr: new Map(), order: new Map(), excl: new Set(), vtr: new Map() };
 async function loadAll() {
   return { ...(await loadCore()), ...EMPTY_EXTRA };
 }
