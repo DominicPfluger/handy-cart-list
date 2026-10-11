@@ -171,8 +171,7 @@ function DepartmentsPage() {
   const [variantLevelId, setVariantLevelId] = useState<string | null>(null);
   const variantProduct = variantLevelId ? products.find((p) => p.id === variantLevelId) ?? null : null;
   const openProduct = (product: CatalogProduct) => {
-    if (expandVariants(product).length > 0) { setVariantLevelId(product.id); setQuery(""); window.scrollTo({ top: 0 }); }
-    else navigate({ to: "/produkt/$id", params: { id: product.id } });
+    navigate({ to: "/produkt/$id", params: { id: product.id } });
   };
   const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
   const [headingTarget, setHeadingTarget] = useState<HeadingTarget | null>(null);
@@ -845,11 +844,6 @@ function DepartmentsPage() {
                        {normalizedQuery && synonymHint(product) ? `${t("search.alsoKnownAs", { name: synonymHint(product)! })} · ` : ""}{normalizedQuery && matchedBrand(product) ? `${matchedBrand(product)} · ` : ""}{normalizedQuery && !matchesProductSearch(product.name, normalizedQuery) && matchedVariant(product) ? `${variantLabel(product, matchedVariant(product)!)} · ` : ""}{normalizedQuery && group ? `${group.name} · ` : ""}{formatQuantity(product.defaultQuantity, product.defaultUnit)}
                        {refPrices.data?.get(product.id) ? ` · ${formatRefPrice(refPrices.data.get(product.id)!)}` : ""}
                     </p>
-                    {expandVariants(product).length > 0 && (
-                      <button type="button" onClick={() => toggleExpanded(product.id)} aria-expanded={expandedId === product.id} aria-label={t("dept.variants", { count: expandVariants(product).length })} className="mt-0.5 block max-w-full truncate text-left text-xs font-medium text-primary">
-                        {t("dept.variants", { count: expandVariants(product).length })} {expandedId === product.id ? "▴" : "▾"}
-                      </button>
-                    )}
                   </div>
                   <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
                   <Button
@@ -894,18 +888,21 @@ function DepartmentsPage() {
                   <span aria-hidden className="w-1.5 shrink-0" />
                   </div>
                 </div>
-                {expandedId === product.id && (
-                  <div className="border-t border-dashed border-border bg-muted/30 py-1 pl-8 pr-2.5">
+                {!normalizedQuery && (
+                  <>
                     {expandVariants(product).map((v) => {
                       const vi = product.variantImages?.[v];
                       const vName = variantLabel(product, v);
                       const vFav = isFavorite(`${product.id}::${v}`);
                       return (
-                        <div key={v} className="flex items-center gap-2.5 py-1.5">
-                          <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-primary-soft/25">
-                            <ProductIcon emoji={product.emoji} iconUrl={vi?.iconUrl ?? vi?.imageUrl ?? product.iconUrl} iconPath={vi?.iconPath ?? vi?.imagePath ?? product.iconPath} symbolClassName="text-2xl" />
+                        <div key={v} className="cv-row flex min-h-16 items-center gap-2.5 border-t border-border px-2.5 py-2">
+                          <button type="button" aria-label={`${product.name} · ${vName}`} onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25">
+                            <ProductIcon emoji={product.emoji} iconUrl={vi?.iconUrl ?? vi?.imageUrl ?? product.iconUrl} iconPath={vi?.iconPath ?? vi?.imagePath ?? product.iconPath} symbolClassName="text-4xl" />
+                          </button>
+                          <div className="min-w-0 flex-1">
+                            <span className="block truncate text-sm font-semibold text-foreground">{product.replaceVariants?.includes(v) ? vName : `${product.name} ${vName}`}</span>
+                            <p className="mt-0.5 truncate text-xs text-muted-foreground">{formatQuantity(product.defaultQuantity, product.defaultUnit)}</p>
                           </div>
-                          <span className="min-w-0 flex-1 truncate text-sm text-foreground">{vName}</span>
                           {(personalVariants[product.id] ?? []).includes(v) && (
                             <Button type="button" variant="ghost" size="icon" aria-label={t("dept.removeVariant", { name: vName })} title={t("dept.removeVariant", { name: vName })} onClick={() => removePersonalVariant(product.id, v)} className="h-8 w-8 shrink-0 text-muted-foreground hover:text-destructive">
                               <TrashIcon className="h-3.5 w-3.5" />
@@ -956,7 +953,7 @@ function DepartmentsPage() {
                         </div>
                       );
                     })}
-                  </div>
+                  </>
                 )}
                 </Fragment>
               );
