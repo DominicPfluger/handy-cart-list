@@ -51,6 +51,8 @@ export function CatalogTileEditor(p: {
   setCur: (id: string | null) => void;
   children: TileDept[];
   products: TileProd[];
+  /** Varianten-Übersetzungen: product_id → Variante → Sprache → Name. */
+  vtr?: Map<string, Record<string, Record<string, string>>>;
   path: TileDept[];
   nm: (id: string, base: string) => string;
   unavailable: (prod: TileProd) => boolean;
