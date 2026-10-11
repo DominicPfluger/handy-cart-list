@@ -46,7 +46,7 @@ async function unassign(productIds: string[], cuisineId: string) {
 }
 
 /** Mehrfachauswahl der Küchen im Produkt-Editor. */
-export function ProductCuisinePicker({ productId }: { productId: string }) {
+export function ProductCuisinePicker({ productId, bare }: { productId: string; bare?: boolean | undefined }) {
   const qc = useQueryClient();
   const { data } = useCuisineData();
   if (!data) return null;
@@ -61,7 +61,7 @@ export function ProductCuisinePicker({ productId }: { productId: string }) {
   };
   return (
     <div className="space-y-1.5">
-      <h3 className="text-sm font-semibold text-foreground">{T("adm.cuisines")}</h3>
+      {!bare && <h3 className="text-sm font-semibold text-foreground">{T("adm.cuisines")}</h3>}
       <div className="flex flex-wrap gap-1.5">
         {data.cuisines.map((c) => (
           <button key={c.id} type="button" aria-pressed={mine.has(c.id)} onClick={() => toggle(c)}

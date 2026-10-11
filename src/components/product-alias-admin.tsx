@@ -37,7 +37,7 @@ function useActions() {
 }
 
 /** Im Produkt-Editor: „Auch anzeigen in…" */
-export function ProductAliasEditor({ product, prods, options }: { product: Prod; prods: Prod[]; options: { id: string; label: string }[] }) {
+export function ProductAliasEditor({ product, prods, options, bare }: { product: Prod; prods: Prod[]; options: { id: string; label: string }[]; bare?: boolean | undefined }) {
   const { data } = useQuery({ queryKey: KEY, queryFn: loadAliases });
   const { busy, run } = useActions();
   const [pick, setPick] = useState("");
@@ -51,8 +51,8 @@ export function ProductAliasEditor({ product, prods, options }: { product: Prod;
     setPick("");
   };
   return (
-    <div className="space-y-1.5 rounded-xl border border-border p-2">
-      <p className="text-xs font-semibold text-foreground">{T("palias.alsoIn")}</p>
+    <div className={`space-y-1.5 ${bare ? "" : "rounded-xl border border-border p-2"}`}>
+      {!bare && <p className="text-xs font-semibold text-foreground">{T("palias.alsoIn")}</p>}
       {mine.map((a) => (
         <div key={a.id} className="flex items-center gap-2 text-xs">
           <span className="min-w-0 flex-1 truncate text-foreground">{label(a.department_id)}</span>

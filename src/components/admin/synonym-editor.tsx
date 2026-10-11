@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 type Row = { id: string; term: string; locale: string };
 
 /** Synonyme eines Produkts (pro Sprache) – finden das Produkt in der Suche. */
-export function ProductSynonymEditor({ productId }: { productId: string }) {
+export function ProductSynonymEditor({ productId, bare }: { productId: string; bare?: boolean | undefined }) {
   const { t: T } = useT();
   const [locale, setLocale] = useState<string>(getLocale());
   const [showAll, setShowAll] = useState(false);
@@ -57,7 +57,7 @@ export function ProductSynonymEditor({ productId }: { productId: string }) {
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-foreground">{T("adm.synonyms")}</h3>
+        {!bare ? <h3 className="text-sm font-semibold text-foreground">{T("adm.synonyms")}</h3> : <span />}
         <select value={showAll ? "*" : locale} aria-label={T("adm.synonyms")}
           onChange={(e) => { if (e.target.value === "*") setShowAll(true); else { setShowAll(false); setLocale(e.target.value); } }}
           className="max-w-48 rounded-lg border border-input bg-background px-2 py-1 text-xs">
