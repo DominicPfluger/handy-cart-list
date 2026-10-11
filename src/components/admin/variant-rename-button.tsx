@@ -11,8 +11,8 @@ const T = (k: "adm.variantRename" | "adm.cancel") => translate(getLocale(), k);
  * For variants already saved on the product, the attached picture moves to the
  * new name right away and old translations are dropped (re-translated on save).
  */
-export function VariantNameEdit({ productId, variant, saved, existing, onRenamed }: {
-  productId?: string | undefined; variant: string; saved: boolean; existing: string[]; onRenamed: (next: string) => void;
+export function VariantNameEdit({ productId, variant, label, saved, existing, onRenamed }: {
+  productId?: string | undefined; variant: string; /** Anzeigename in der aktuellen Sprache (Fallback: variant) */ label?: string | undefined; saved: boolean; existing: string[]; onRenamed: (next: string) => void;
 }) {
   const qc = useQueryClient();
   const [edit, setEdit] = useState<string | null>(null);

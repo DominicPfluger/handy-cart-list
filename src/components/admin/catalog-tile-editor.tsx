@@ -1828,7 +1828,7 @@ function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>,
                 className={`flex items-center gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
               >
                 <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
-                <span className="truncate">{v}</span>
+                <span className="truncate">{vl(p.vtr, p.prod.id, v)}</span>
               </div>
             ))}
           </div>
