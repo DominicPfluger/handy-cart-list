@@ -835,7 +835,7 @@ export function CatalogTileEditor(p: {
                     <button key={v} type="button" disabled={!editMode}
                       onClick={() => setTarget({ kind: "product", id: x.id })}
                       className="rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
-                      {v}
+                      {vl(p.vtr, x.product_id ?? x.id, v)}
                     </button>
                   ))}
                 </div>
@@ -1442,7 +1442,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                   >
                     <span className="flex min-w-0 items-center gap-2">
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
-                      <VariantNameEdit productId={prod?.id} variant={v} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
+                      <VariantNameEdit productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => setVariants((x) => x.map((y) => (y === v ? n : y)))} />
                     </span>
                     <span className="flex shrink-0 items-center gap-1.5">
                       <button
@@ -1452,7 +1452,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                         title={T("adm.variantPosHint")}
                         className={`rounded-md border px-2 py-0.5 text-[11px] font-medium ${prefixVariants.includes(v) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}
                       >
-                        {prefixVariants.includes(v) ? `${v} ${name || prod?.name || ""}` : `${name || prod?.name || ""} ${v}`}
+                        {prefixVariants.includes(v) ? `${vl(p.vtr, prod?.id, v)} ${name || prod?.name || ""}` : `${name || prod?.name || ""} ${vl(p.vtr, prod?.id, v)}`}
                       </button>
                       {prod && (prod.variants ?? []).includes(v) && <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />}
                       <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
