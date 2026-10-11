@@ -1530,7 +1530,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </div>
           </SectionCollapse>
         )}
-        {!p.imageOnly && !isDept && item && <ProductPronunciationEditor name={item.name} />}
+        {!p.imageOnly && !isDept && item && (
+          <SectionCollapse label={T("speak.pronunciation")}>
+            <ProductPronunciationEditor name={item.name} bare />
+          </SectionCollapse>
+        )}
         {!p.imageOnly && !isDept && prod && realProdId && !prodNonFood && (
           <SectionCollapse label={T("adm.cuisines")}>
             <ProductCuisinePicker productId={realProdId} bare />

@@ -10,7 +10,7 @@ import { speakSentences } from "@/components/speak-list-button";
 import { pronunciationRulesQueryKey, usePronunciationRules } from "@/lib/pronunciation-rules";
 
 /** Aussprache des Produktnamens für die Sprachausgabe (pro Vorlese-Sprache). */
-export function ProductPronunciationEditor({ name, canEdit = true }: { name: string; canEdit?: boolean }) {
+export function ProductPronunciationEditor({ name, canEdit = true, bare = false }: { name: string; canEdit?: boolean; bare?: boolean }) {
   const { t } = useT();
   const qc = useQueryClient();
   const { data: rules = [] } = usePronunciationRules();
@@ -45,10 +45,12 @@ export function ProductPronunciationEditor({ name, canEdit = true }: { name: str
 
   if (!written) return null;
   return (
-    <div className="space-y-1.5 rounded-xl border border-border p-2">
-      <div className="flex items-center justify-between gap-2">
-        <h3 className="text-sm font-semibold text-foreground">{t("speak.pronunciation")}</h3>
-      </div>
+    <div className={bare ? "space-y-1.5" : "space-y-1.5 rounded-xl border border-border p-2"}>
+      {!bare && (
+        <div className="flex items-center justify-between gap-2">
+          <h3 className="text-sm font-semibold text-foreground">{t("speak.pronunciation")}</h3>
+        </div>
+      )}
       <SpeakLocaleChips value={locale} onChange={setLocale} />
       <div className="flex items-center gap-2">
         <input value={spoken} disabled={!canEdit} onChange={(e) => setSpoken(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); void save(); } }}
