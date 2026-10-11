@@ -1480,5 +1480,6 @@
   "rk.pantryHint": "Gli ingredienti in dispensa sono deselezionati: toccali per aggiungerli comunque.",
   "dept.productVariants": "Varianti del prodotto",
   "dept.variantStandard": "Senza varietà",
-  "dlg.properties": "Proprietà (facoltativo)"
+  "dlg.properties": "Proprietà (facoltativo)",
+  "adm.unitsSection": "Quantità e unità predefinite"
 }

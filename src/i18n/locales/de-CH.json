@@ -902,5 +902,6 @@
   "dept.viewTiles": "Kacheln",
   "dept.productVariants": "Produkt-Varianten",
   "dept.variantStandard": "Ohne Sorte",
-  "dlg.properties": "Eigenschaften (optional)"
+  "dlg.properties": "Eigenschaften (optional)",
+  "adm.unitsSection": "Mengen & Standard-Einheiten"
 }

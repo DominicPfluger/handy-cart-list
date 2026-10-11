@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 export type UnitDefaultsValue = { primary: string; units: string[]; quantities: Record<string, number> };
 
 /** Sortierte Standard-Einheiten mit einer eigenen Standardmenge pro Einheit. */
-export function AllowedUnitsPicker({ value, onChange }: { value: UnitDefaultsValue; onChange: (v: UnitDefaultsValue) => void }) {
+export function AllowedUnitsPicker({ value, onChange, bare }: { value: UnitDefaultsValue; onChange: (v: UnitDefaultsValue) => void; bare?: boolean }) {
   const { t } = useT();
   const units = getUnits(getLocale());
   const selected = [value.primary, ...value.units.filter((id) => id !== value.primary)];
@@ -35,7 +35,7 @@ export function AllowedUnitsPicker({ value, onChange }: { value: UnitDefaultsVal
   };
   return (
     <div className="space-y-2">
-      <p className="text-xs font-semibold text-foreground">{t("adm.allowedUnits")}</p>
+      {!bare && <p className="text-xs font-semibold text-foreground">{t("adm.allowedUnits")}</p>}
       <div className="space-y-1.5">
         {selected.map((id, index) => (
           <div key={id} className="grid grid-cols-[minmax(0,1fr)_5rem_auto] items-center gap-2 rounded-lg border border-border bg-card p-2">
