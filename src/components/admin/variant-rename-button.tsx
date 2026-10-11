@@ -40,7 +40,7 @@ export function VariantNameEdit({ productId, variant, label, saved, existing, on
   if (edit === null) {
     return (
       <span className="flex min-w-0 items-center gap-1.5">
-        <span className="truncate">{variant}</span>
+        <span className="truncate" title={label && label !== variant ? variant : undefined}>{label ?? variant}</span>
         <button type="button" aria-label={T("adm.variantRename")} title={T("adm.variantRename")} onClick={() => setEdit(variant)}
           className="shrink-0 rounded px-1 text-xs text-muted-foreground hover:text-foreground">✎</button>
       </span>
