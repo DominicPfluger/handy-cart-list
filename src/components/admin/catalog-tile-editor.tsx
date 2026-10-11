@@ -1601,8 +1601,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
           </SectionCollapse>
         )}
         {!p.imageOnly && !isDept && (
-          <div className="space-y-2">
-            <h3 className="text-sm font-semibold text-foreground">{T("tile.priceEstimate")}</h3>
+          <SectionCollapse label={T("tile.priceEstimate")} defaultOpen={Boolean(p.openPrices)}>
             <div className="flex gap-2">
               <Input aria-label={T("tile.price")} placeholder={T("tile.price", { market: currentMarket() })} type="number" min={0} step="any" value={price} onChange={(e) => setPrice(e.target.value)} className="h-11 flex-1 rounded-xl" />
               {item && (
@@ -1670,7 +1669,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 )}
               </div>
             )}
-          </div>
+          </SectionCollapse>
         )}
         {!p.imageOnly && <div className="flex flex-wrap gap-2 pt-1">
           {item && p.onAdvanced && <Button variant="outline" className="h-11 rounded-xl" onClick={() => { p.onAdvanced!(p.target.kind, item.id); p.onClose(); }}>⚙ {T("tile.advanced")}</Button>}
