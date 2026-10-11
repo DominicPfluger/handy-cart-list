@@ -852,7 +852,7 @@ export function CatalogTileEditor(p: {
 
       {copyOpen && p.cur && <CopyListDialog title={p.path.map((d) => p.nm(d.id, d.name)).join(" › ")} text={copyText} onClose={() => setCopyOpen(false)} />}
 
-      {variantAdd && <VariantAddDialog prod={variantAdd} run={p.run} must={p.must} nm={p.nm} onClose={() => setVariantAdd(null)} />}
+      {variantAdd && <VariantAddDialog prod={variantAdd} run={p.run} must={p.must} nm={p.nm} vtr={p.vtr} onClose={() => setVariantAdd(null)} />}
 
       {headMove && (
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setHeadMove(null)}>
@@ -1750,7 +1750,7 @@ function CopyListDialog(p: { title: string; text: string; onClose: () => void })
   );
 }
 
-function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>, ok?: string) => Promise<void>; must: (q: PromiseLike<{ error: { message: string } | null }>) => Promise<void>; nm: (id: string, base: string) => string; onClose: () => void }) {
+function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>, ok?: string) => Promise<void>; must: (q: PromiseLike<{ error: { message: string } | null }>) => Promise<void>; nm: (id: string, base: string) => string; vtr?: Map<string, Record<string, Record<string, string>>>; onClose: () => void }) {
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
   const [vDrag, setVDrag] = useState<number | null>(null);
