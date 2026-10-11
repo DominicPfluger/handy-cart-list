@@ -693,8 +693,8 @@ function DepartmentsPage() {
                     <Button type="button" variant="ghost" size="icon" aria-label={t("common.quickAdd", { name: full })} onClick={() => gate(() => quickAddRef.current(product, group, v ?? undefined))} className="h-8 w-8 rounded-full text-muted-foreground">
                       <BoltIcon className="h-3.5 w-3.5" />
                     </Button>
-                    <Button type="button" size="icon" aria-label={t("common.addWithQty", { name: full })} onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v ?? undefined); setSelectedProduct(product); })} className="h-8 w-8 rounded-full shadow-none">
-                      <PlusIcon className="h-3.5 w-3.5" />
+                     <Button type="button" size="icon" aria-label={t("common.addWithQty", { name: full })} onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v ?? undefined); setSelectedProduct(product); })} className="h-[26px] w-[26px] rounded-full shadow-none">
+                       <PlusIcon className="h-[11px] w-[11px]" />
                     </Button>
                   </div>
                 );
@@ -774,9 +774,9 @@ function DepartmentsPage() {
                         size="icon"
                         aria-label={t("common.addWithQty", { name: product.name })}
                         onClick={() => { const b = normalizedQuery ? matchedBrand(product) : undefined; gate(() => { setSelectedBrand(b); setSelectedVariant(undefined); setSelectedProduct(product); }); }}
-                        className="h-8 w-8 shrink-0 rounded-full shadow-none"
+                        className="h-[26px] w-[26px] shrink-0 rounded-full shadow-none"
                       >
-                        <PlusIcon className="h-4 w-4" />
+                        <PlusIcon className="h-[13px] w-[13px]" />
                       </Button>
                     </div>
 
@@ -887,9 +887,9 @@ function DepartmentsPage() {
                     size="icon"
                     aria-label={t("common.addWithQty", { name: product.name })}
                     onClick={() => { const b = normalizedQuery ? matchedBrand(product) : undefined; gate(() => { setSelectedBrand(b); setSelectedVariant(undefined); setSelectedProduct(product); }); }}
-                    className="h-8 w-8 rounded-full shadow-none"
+                    className="h-[26px] w-[26px] rounded-full shadow-none"
                   >
-                    <PlusIcon className="h-3.5 w-3.5" />
+                    <PlusIcon className="h-[11px] w-[11px]" />
                   </Button>
                   <span aria-hidden className="w-1.5 shrink-0" />
                   </div>
@@ -947,9 +947,9 @@ function DepartmentsPage() {
                               size="icon"
                               aria-label={t("common.addWithQty", { name: `${product.name} · ${vName}` })}
                               onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v); setSelectedProduct(product); })}
-                              className="h-8 w-8 rounded-full shadow-none"
-                            >
-                              <PlusIcon className="h-3.5 w-3.5" />
+                               className="h-[26px] w-[26px] rounded-full shadow-none"
+                             >
+                               <PlusIcon className="h-[11px] w-[11px]" />
                             </Button>
                             <span aria-hidden className="w-1.5 shrink-0" />
                           </div>

@@ -463,9 +463,9 @@ function FavoritesPage() {
           size="icon"
           aria-label={t("common.addWithQty", { name: displayName(row) })}
           onClick={() => gate(() => setSelected(row))}
-          className="h-8 w-8 rounded-full shadow-none"
+          className="h-[26px] w-[26px] rounded-full shadow-none"
         >
-          <PlusIcon className="h-3.5 w-3.5" />
+          <PlusIcon className="h-[11px] w-[11px]" />
         </Button>
         <span aria-hidden className="w-1.5 shrink-0" />
         </div>
