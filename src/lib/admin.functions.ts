@@ -1090,3 +1090,51 @@ export const addStoreAdmin = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/** KI erzeugt Such-Synonyme für Produkte in einer Sprache und speichert neue direkt (nur Admins). */
+export const generateProductSynonyms = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d) => z.object({ productIds: z.array(z.string().uuid()).min(1).max(40), locale: z.string().min(2).max(20) }).parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const sb = context.supabase;
+    const { data: prods } = await sb.from("products").select("id, name").in("id", data.productIds);
+    const list = (prods ?? []) as Array<{ id: string; name: string }>;
+    if (!list.length) return { added: 0 };
+    const { data: trs } = await sb.from("catalog_translations").select("entity_id, name").eq("entity_type", "product").eq("locale", data.locale).in("entity_id", data.productIds);
+    const trName = new Map(((trs ?? []) as Array<{ entity_id: string; name: string }>).map((t) => [t.entity_id, t.name]));
+    const { data: existing } = await sb.from("product_synonyms").select("product_id, term").eq("locale", data.locale).in("product_id", data.productIds);
+    const have = new Map<string, Set<string>>();
+    for (const r of (existing ?? []) as Array<{ product_id: string; term: string }>) {
+      if (!have.has(r.product_id)) have.set(r.product_id, new Set());
+      have.get(r.product_id)!.add(r.term.toLowerCase());
+    }
+    const { aiJson } = await import("./translate.server");
+    const r = await aiJson<{ items: Array<{ id: string; terms: string[] }> }>(
+      `Du pflegst Such-Synonyme für eine Einkaufslisten-App. Gib für jedes Produkt 2–5 Begriffe in der Sprache/Region ${data.locale} an, unter denen Kunden es suchen oder sagen würden: Alltagsbegriffe, regionale Bezeichnungen, gängige Umstellungen (z. B. „gehackte Zwiebeln" für „Zwiebeln gewürfelt"). ` +
+        "Keine Marken, keine Oberbegriffe anderer Produkte, nicht den Produktnamen selbst wiederholen, keine bereits vorhandenen Begriffe. Bei de-CH ss statt ß. Wenn nichts Sinnvolles existiert, leere Liste.",
+      JSON.stringify(list.map((p) => ({ id: p.id, name: trName.get(p.id) ?? p.name, vorhanden: [...(have.get(p.id) ?? [])] }))),
+      "synonyms",
+      { type: "object", additionalProperties: false, required: ["items"], properties: { items: { type: "array", items: { type: "object", additionalProperties: false, required: ["id", "terms"], properties: { id: { type: "string" }, terms: { type: "array", items: { type: "string" } } } } } } },
+    );
+    const ids = new Set(list.map((p) => p.id));
+    const rows: Array<{ product_id: string; locale: string; term: string }> = [];
+    for (const it of r.items ?? []) {
+      if (!ids.has(it.id)) continue;
+      const own = (trName.get(it.id) ?? list.find((p) => p.id === it.id)!.name).toLowerCase();
+      const seen = have.get(it.id) ?? new Set<string>();
+      for (const raw of it.terms ?? []) {
+        let t = raw.trim().slice(0, 80);
+        if (data.locale === "de-CH") t = t.replace(/ß/g, "ss");
+        const k = t.toLowerCase();
+        if (!t || k === own || seen.has(k)) continue;
+        seen.add(k);
+        rows.push({ product_id: it.id, locale: data.locale, term: t });
+      }
+    }
+    if (rows.length) {
+      const { error } = await sb.from("product_synonyms").insert(rows);
+      if (error) throw new Error(error.message);
+    }
+    return { added: rows.length };
+  });

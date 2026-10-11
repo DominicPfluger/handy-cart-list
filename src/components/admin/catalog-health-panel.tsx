@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { mergeProducts } from "@/lib/admin.functions";
+import { mergeProducts, generateProductSynonyms } from "@/lib/admin.functions";
 import { allLocales, useT } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +38,8 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   const { t: T, locale } = useT();
   const qc = useQueryClient();
   const merge = useServerFn(mergeProducts);
+  const genSyn = useServerFn(generateProductSynonyms);
+  const [synAi, setSynAi] = useState<string | null>(null);
   const [ignored, setIgnored] = useState<Set<string>>(loadIgnored);
   const [scanned, setScanned] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -239,6 +241,31 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
     setSynTerm("");
     void syns.refetch();
   };
+  const runSynAi = async (ids: string[]) => {
+    if (synLocale === "*") { toast.error(T("adm.health.synAiPickLocale")); return; }
+    let added = 0;
+    try {
+      for (let i = 0; i < ids.length; i += 25) {
+        setSynAi(T("adm.health.synAiProgress", { done: i, total: ids.length }));
+        const r = await genSyn({ data: { productIds: ids.slice(i, i + 25), locale: synLocale } });
+        added += r.added;
+      }
+      toast.success(T("adm.health.synAiDone", { n: added }));
+    } catch (e) { toast.error((e as Error).message); }
+    finally { setSynAi(null); void syns.refetch(); }
+  };
+  const synAiOne = () => {
+    const prod = prods.find((p) => `${p.name} (${deptName.get(p.department_id) ?? "?"})` === synProd || p.name === synProd);
+    if (!prod) { toast.error(T("adm.health.synAddMissing")); return; }
+    void runSynAi([prod.id]);
+  };
+  const synAiMissing = () => {
+    if (synLocale === "*") { toast.error(T("adm.health.synAiPickLocale")); return; }
+    const withSyn = new Set((syns.data ?? []).filter((x) => x.locale === synLocale).map((x) => x.product_id));
+    const ids = prods.filter((p) => !withSyn.has(p.id)).map((p) => p.id);
+    if (!ids.length || !confirm(T("adm.health.synAiConfirm", { n: ids.length }))) return;
+    void runSynAi(ids);
+  };
   const filteredSyns = (syns.data ?? []).filter((s) => synLocale === "*" || s.locale === synLocale).filter((s) => !synSearch.trim() || s.term.toLowerCase().includes(synSearch.trim().toLowerCase()) || (prodById.get(s.product_id)?.name ?? "").toLowerCase().includes(synSearch.trim().toLowerCase()));
   const synNameSet = new Set(prods.map((p) => norm(p.name)));
 
@@ -382,6 +409,12 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
             <Button type="submit" variant="outline" disabled={!synProd.trim() || !synTerm.trim()}>+</Button>
           </form>
         )}
+        <div className="flex flex-wrap items-center gap-2">
+          <Button size="sm" variant="outline" disabled={!!synAi || synLocale === "*" || !synProd.trim()} onClick={synAiOne}>{T("adm.health.synAiOne")}</Button>
+          <Button size="sm" variant="outline" disabled={!!synAi || synLocale === "*"} onClick={synAiMissing}>{T("adm.health.synAiMissing")}</Button>
+          {synAi && <span className="text-xs text-muted-foreground">{synAi}</span>}
+          {synLocale === "*" && <span className="text-xs text-muted-foreground">{T("adm.health.synAiPickLocale")}</span>}
+        </div>
         <ul className="max-h-72 space-y-1 overflow-y-auto rounded-xl border border-border bg-card p-2 text-sm">
           {filteredSyns.slice(0, 200).map((s) => {
             const prod = prodById.get(s.product_id);
