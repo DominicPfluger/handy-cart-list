@@ -295,7 +295,7 @@ export const getPantry = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const sb = context.supabase as unknown as Sb;
-    const { data, error } = await sb.from("pantry_items").select("*").order("created_at");
+    const { data, error } = await sb.from("pantry_items").select("*").order("added_at");
     if (error) throw new Error(error.message);
     return { items: data ?? [] };
   });

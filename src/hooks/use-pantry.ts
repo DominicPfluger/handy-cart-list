@@ -45,7 +45,7 @@ function rowToPantryItem(r: CloudRow): PantryItem {
     organic: !!r.organic,
     emoji: r.emoji ?? null,
     imageUrl: r.image_url ?? null,
-    addedAt: r.created_at ? Date.parse(r.created_at) : Date.now(),
+    addedAt: r.added_at ? Date.parse(r.added_at) : Date.now(),
   };
 }
 
