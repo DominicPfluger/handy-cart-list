@@ -67,7 +67,7 @@ export const Route = createFileRoute("/abteilungen")({
 
 const isBio = (v: string) => v.trim().toLowerCase() === "bio";
 const hasBio = (p: CatalogProduct) => p.variants.some(isBio);
-const expandVariants = (p: CatalogProduct) => p.variants.filter((v) => !isBio(v));
+const expandVariants = (p: CatalogProduct, diets: readonly string[] = []) => p.variants.filter((v) => !isBio(v) && !(diets.length && (p.variantExcludedDiets?.[v] ?? []).some((d) => diets.includes(d))));
 
 function ProductThumb({ product }: { product: CatalogProduct }) {
   return (

@@ -10,8 +10,8 @@ const db = supabase as any;
 type Row = { id: string; variant: string; locale: string; name: string; is_manual: boolean };
 
 /** Übersetzungs-Knopf + aufklappbarer Bereich je Variante (alle Lokalisierungen, ✨ pro Sprache). */
-export function VariantTranslations({ productId, variant, productName, isPrefix, onTogglePrefix }: {
-  productId: string; variant: string;
+export function VariantTranslations({ defaultOpen, productId, variant, productName, isPrefix, onTogglePrefix }: {
+  defaultOpen?: boolean; productId: string; variant: string;
   /** Optional: Reihenfolge pro Sprache festlegen */
   productName?: (locale: string) => string;
   isPrefix?: (locale: string) => boolean;
@@ -38,7 +38,7 @@ export function VariantTranslations({ productId, variant, productName, isPrefix,
   const prodName = (l: string) => prodTr.find((r) => r.locale === l)?.name || productName?.(l) || "";
   const rows = Object.fromEntries(data.filter((r) => r.variant === variant).map((r) => [r.locale, r]));
   const locales = allLocales();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!!defaultOpen);
   const [busyAll, setBusyAll] = useState(false);
   const trFn = useServerFn(translateSingleName);
 
