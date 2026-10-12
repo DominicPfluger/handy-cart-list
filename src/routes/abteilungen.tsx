@@ -686,13 +686,13 @@ function DepartmentsPage() {
                     <Button type="button" variant="ghost" size="icon"
                       aria-label={vFav ? t("common.removeFavorite", { name: full }) : t("common.addFavorite", { name: full })}
                       onClick={() => toggleFavorite({ productId: favKey, name: full, emoji: product.emoji, imageUrl: vi?.imageUrl ?? product.imageUrl ?? undefined, defaultQuantity: product.defaultQuantity, defaultUnit: product.defaultUnit, organicAvailable: product.organicAvailable, groupLabel: group?.name, groupEmoji: group?.emoji ?? undefined })}
-                      className={`h-8 w-8 rounded-full ${vFav ? "bg-coral/15 text-coral" : "text-muted-foreground"}`}>
+                      className={`-ml-1 h-[26px] w-[26px] rounded-full ${vFav ? "bg-coral/15 text-coral" : "text-muted-foreground"}`}>
                       <HeartIcon className={`h-3.5 w-3.5 ${vFav ? "fill-current" : ""}`} />
                     </Button>
-                    <Button type="button" variant="ghost" size="icon" aria-label={t("common.quickAdd", { name: full })} onClick={() => gate(() => quickAddRef.current(product, group, v ?? undefined))} className="h-8 w-8 rounded-full text-muted-foreground">
+                    <Button type="button" variant="ghost" size="icon" aria-label={t("common.quickAdd", { name: full })} onClick={() => gate(() => quickAddRef.current(product, group, v ?? undefined))} className="-ml-2 h-[26px] w-[26px] rounded-full text-muted-foreground">
                       <BoltIcon className="h-3.5 w-3.5" />
                     </Button>
-                     <Button type="button" size="icon" aria-label={t("common.addWithQty", { name: full })} onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v ?? undefined); setSelectedProduct(product); })} className="h-[26px] w-[26px] rounded-full shadow-none">
+                     <Button type="button" size="icon" aria-label={t("common.addWithQty", { name: full })} onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v ?? undefined); setSelectedProduct(product); })} className="-ml-2 h-[26px] w-[26px] rounded-full shadow-none">
                        <PlusIcon className="h-[11px] w-[11px]" />
                     </Button>
                   </div>
@@ -763,7 +763,7 @@ function DepartmentsPage() {
                     >
                       <BoltIcon className="h-3.5 w-3.5" />
                     </Button>
-                    <div className="flex min-h-12 flex-1 items-center gap-1 px-1.5 py-1.5">
+                    <div className="flex min-h-12 flex-1 items-center gap-0.5 px-1 py-1.5">
                       <div className="min-w-0 flex-1 text-center">
                         <span className="break-words text-xs font-semibold leading-4 text-foreground">{product.name}</span>
                         {normalizedQuery && group && <span className="block truncate text-[10px] text-muted-foreground">{group.name}</span>}
@@ -850,7 +850,7 @@ function DepartmentsPage() {
                       </button>
                     )}
                   </div>
-                  <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
+                  <div className="flex shrink-0 items-center gap-0 -mr-1.5 -ml-1">
                   <Button
                     type="button"
                     variant="ghost"
@@ -867,7 +867,7 @@ function DepartmentsPage() {
                       groupLabel: group?.name,
                       groupEmoji: group?.emoji ?? undefined,
                     })}
-                    className={`h-8 w-8 ${favorite ? "rounded-full bg-coral/15 text-coral" : "rounded-full text-muted-foreground"}`}
+                    className={`h-[26px] w-[26px] ${favorite ? "rounded-full bg-coral/15 text-coral" : "rounded-full text-muted-foreground"}`}
                   >
                     <HeartIcon className={`h-3.5 w-3.5 ${favorite ? "fill-current" : ""}`} />
                   </Button>
@@ -877,7 +877,7 @@ function DepartmentsPage() {
                     size="icon"
                     aria-label={t("common.quickAdd", { name: product.name })}
                     onClick={() => gate(() => quickAddRef.current(product, group))}
-                    className="h-8 w-8 rounded-full text-muted-foreground"
+                    className="h-[26px] w-[26px] rounded-full text-muted-foreground"
                   >
                     <BoltIcon className="h-3.5 w-3.5" />
                   </Button>
@@ -913,7 +913,7 @@ function DepartmentsPage() {
                               <TrashIcon className="h-3.5 w-3.5" />
                             </Button>
                           )}
-                          <div className="flex shrink-0 items-center gap-0.5 -mr-1.5">
+                          <div className="flex shrink-0 items-center gap-0 -mr-1.5 -ml-1">
                             <Button
                               type="button"
                               variant="ghost"
@@ -930,7 +930,7 @@ function DepartmentsPage() {
                                 groupLabel: group?.name,
                                 groupEmoji: group?.emoji ?? undefined,
                               })}
-                              className={`h-8 w-8 ${vFav ? "rounded-full bg-coral/15 text-coral" : "rounded-full text-muted-foreground"}`}
+                              className={`h-[26px] w-[26px] ${vFav ? "rounded-full bg-coral/15 text-coral" : "rounded-full text-muted-foreground"}`}
                             >
                               <HeartIcon className={`h-3.5 w-3.5 ${vFav ? "fill-current" : ""}`} />
                             </Button>
@@ -940,7 +940,7 @@ function DepartmentsPage() {
                               size="icon"
                               aria-label={t("common.quickAdd", { name: vName })}
                               onClick={() => gate(() => quickAddRef.current(product, group, v))}
-                              className="h-8 w-8 rounded-full text-muted-foreground"
+                              className="h-[26px] w-[26px] rounded-full text-muted-foreground"
                             >
                               <BoltIcon className="h-3.5 w-3.5" />
                             </Button>
