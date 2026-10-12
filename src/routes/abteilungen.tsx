@@ -686,13 +686,13 @@ function DepartmentsPage() {
                     <Button type="button" variant="ghost" size="icon"
                       aria-label={vFav ? t("common.removeFavorite", { name: full }) : t("common.addFavorite", { name: full })}
                       onClick={() => toggleFavorite({ productId: favKey, name: full, emoji: product.emoji, imageUrl: vi?.imageUrl ?? product.imageUrl ?? undefined, defaultQuantity: product.defaultQuantity, defaultUnit: product.defaultUnit, organicAvailable: product.organicAvailable, groupLabel: group?.name, groupEmoji: group?.emoji ?? undefined })}
-                      className={`-ml-1 h-[26px] w-[26px] rounded-full ${vFav ? "bg-coral/15 text-coral" : "text-muted-foreground"}`}>
+                      className={`ml-1 h-[26px] w-[26px] rounded-full ${vFav ? "bg-coral/15 text-coral" : "text-muted-foreground"}`}>
                       <HeartIcon className={`h-3.5 w-3.5 ${vFav ? "fill-current" : ""}`} />
                     </Button>
-                    <Button type="button" variant="ghost" size="icon" aria-label={t("common.quickAdd", { name: full })} onClick={() => gate(() => quickAddRef.current(product, group, v ?? undefined))} className="-ml-2 h-[26px] w-[26px] rounded-full text-muted-foreground">
+                    <Button type="button" variant="ghost" size="icon" aria-label={t("common.quickAdd", { name: full })} onClick={() => gate(() => quickAddRef.current(product, group, v ?? undefined))} className="ml-2 h-[26px] w-[26px] rounded-full text-muted-foreground">
                       <BoltIcon className="h-3.5 w-3.5" />
                     </Button>
-                     <Button type="button" size="icon" aria-label={t("common.addWithQty", { name: full })} onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v ?? undefined); setSelectedProduct(product); })} className="-ml-2 h-[26px] w-[26px] rounded-full shadow-none">
+                     <Button type="button" size="icon" aria-label={t("common.addWithQty", { name: full })} onClick={() => gate(() => { setSelectedBrand(undefined); setSelectedVariant(v ?? undefined); setSelectedProduct(product); })} className="ml-2 h-[26px] w-[26px] rounded-full shadow-none">
                        <PlusIcon className="h-[11px] w-[11px]" />
                     </Button>
                   </div>
@@ -850,7 +850,7 @@ function DepartmentsPage() {
                       </button>
                     )}
                   </div>
-                  <div className="flex shrink-0 items-center gap-0 -mr-1.5 -ml-1">
+                  <div className="flex shrink-0 items-center gap-2 -mr-1.5">
                   <Button
                     type="button"
                     variant="ghost"
@@ -913,7 +913,7 @@ function DepartmentsPage() {
                               <TrashIcon className="h-3.5 w-3.5" />
                             </Button>
                           )}
-                          <div className="flex shrink-0 items-center gap-0 -mr-1.5 -ml-1">
+                          <div className="flex shrink-0 items-center gap-2 -mr-1.5">
                             <Button
                               type="button"
                               variant="ghost"
