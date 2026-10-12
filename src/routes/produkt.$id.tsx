@@ -12,7 +12,7 @@ import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { ensureCatalog, catalogQueryOptions, brandsFor, originalName, useCatalog } from "../lib/catalog-query";
 import { CachedImage } from "../components/catalog-icon";
 import { useCustomNames } from "../hooks/use-custom-names";
-import { formatQuantity, getUnits } from "../lib/units";
+import { getUnits } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { useFavoriteQuantity } from "../hooks/use-favorite-quantity";
@@ -212,8 +212,8 @@ function ProductPage() {
 
       <div className="mt-4 rounded-2xl bg-card p-4 shadow-sm">
         <div className="text-sm">
-            <dt className="text-muted-foreground">{t("pd.variants")}</dt>
-            {ownVariants.length > 0 && <dd className="mt-1.5 flex flex-wrap gap-1.5">
+            <p className="text-muted-foreground">{t("pd.variants")}</p>
+            {ownVariants.length > 0 && <div className="mt-1.5 flex flex-wrap gap-1.5">
               {ownVariants.map((v) => (
                 <span key={v} className="rounded-full bg-primary-soft/25 px-2.5 py-1 text-xs font-medium text-foreground">
                   {variantLabel(v)}
