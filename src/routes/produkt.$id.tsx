@@ -166,8 +166,8 @@ function ProductPage() {
         )}
         <div className="text-sm">
             <dt className="text-muted-foreground">{t("pd.variants")}</dt>
-            {product.variants.length > 0 && <dd className="mt-1.5 flex flex-wrap gap-1.5">
-              {product.variants.map((v) => (
+            {ownVariants.length > 0 && <dd className="mt-1.5 flex flex-wrap gap-1.5">
+              {ownVariants.map((v) => (
                 <span key={v} className="rounded-full bg-primary-soft/25 px-2.5 py-1 text-xs font-medium text-foreground">
                   {variantLabel(v)}
                   {ownVariants.includes(v) && !sharedVariants.includes(v) ? (
