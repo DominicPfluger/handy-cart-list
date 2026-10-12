@@ -679,7 +679,7 @@ function DepartmentsPage() {
                 <h2 className="truncate text-base font-semibold text-foreground">{product.name}</h2>
                 <p className="text-xs text-muted-foreground">{t("dept.productVariants")}</p>
               </div>
-              <Button type="button" variant="outline" size="sm" onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="shrink-0 rounded-lg">{t("dept.details")}</Button>
+              <Button type="button" variant="outline" size="sm" onClick={() => openProduct(product)} className="shrink-0 rounded-lg">{t("dept.details")}</Button>
             </div>
             <div className="divide-y divide-border overflow-hidden rounded-xl border border-border bg-card">
               {expandVariants(product, diets as string[]).map((v) => {
@@ -917,7 +917,7 @@ function DepartmentsPage() {
                       const vFav = isFavorite(`${product.id}::${v}`);
                       return (
                         <div key={v} className="cv-row flex min-h-16 items-center gap-2.5 border-t border-border px-2.5 py-2">
-                          <button type="button" aria-label={`${product.name} · ${vName}`} onClick={() => navigate({ to: "/produkt/$id", params: { id: product.id } })} className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25">
+                          <button type="button" aria-label={`${product.name} · ${vName}`} onClick={() => openProduct(product)} className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-lg bg-primary-soft/25">
                             <ProductIcon emoji={product.emoji} iconUrl={vi?.iconUrl ?? vi?.imageUrl ?? product.iconUrl} iconPath={vi?.iconPath ?? vi?.imagePath ?? product.iconPath} symbolClassName="text-4xl" />
                           </button>
                           <div className="min-w-0 flex-1">
