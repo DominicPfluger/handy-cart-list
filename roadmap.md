@@ -26,6 +26,7 @@
 - Admin-Katalog: «Kategorien & Produkte anlegen» auch auf oberster Ebene (Hauptkategorien), Knopf + createTree ohne geöffnete Kategorie
 - [x] Abteilungsansicht: Alias-Kategorien in der Farbe der Oberkategorie, unter der sie eingeordnet sind (auch beim HineinNavigieren) — getestet
 - [x] Einkaufsmodus: Produktvariante gross direkt neben der Produktbezeichnung (gleiche Schriftgrösse/-art, grün) — getestet
+- [x] Favoritenherz, Schnell-Hinzufügen (Blitz) und grünes Plus rücken dichter zusammen (einheitlich 26px, engere Abstände) — mehr Platz für die Produktbezeichnung in Listen-, Varianten- und Kachelansicht — getestet
 
 ## Offen
 - [x] Einstellungen: alle Kategorie- und Produktbilder inklusive WebP-Icons auf das Gerät vorladen
