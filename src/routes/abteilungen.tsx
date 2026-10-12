@@ -182,7 +182,7 @@ function DepartmentsPage() {
       const s = JSON.parse(raw) as { currentId: string | null; variantLevelId: string | null; scrollY?: number };
       setCurrentId(s.currentId);
       setVariantLevelId(s.variantLevelId);
-      if (s.scrollY) requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: s.scrollY })));
+      const y = s.scrollY; if (y) requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: y })));
     } catch { /* ignore */ }
   }, []);
   const openProduct = (product: CatalogProduct) => {
