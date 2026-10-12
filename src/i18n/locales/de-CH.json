@@ -903,5 +903,13 @@
   "dept.productVariants": "Produkt-Varianten",
   "dept.variantStandard": "Ohne Sorte",
   "dlg.properties": "Eigenschaften (optional)",
-  "adm.unitsSection": "Mengen & Standard-Einheiten"
+  "adm.unitsSection": "Mengen & Standard-Einheiten",
+  "adm.vBatchList": "Als Liste bearbeiten",
+  "adm.vBatchApply": "Liste übernehmen",
+  "adm.vBatchSelect": "Mehrere auswählen",
+  "adm.vBatchSelected": "{n} ausgewählt",
+  "adm.vBatchRemove": "Auswahl entfernen",
+  "adm.vBatchDiets": "Nicht geeignet für (Auswahl)",
+  "adm.vBatchTranslate": "Alle übersetzen",
+  "adm.vBatchTranslated": "Varianten übersetzt"
 }

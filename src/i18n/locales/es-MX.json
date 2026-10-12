@@ -1481,5 +1481,13 @@
   "dept.productVariants": "Variantes del producto",
   "dept.variantStandard": "Sin variedad",
   "dlg.properties": "Propiedades (opcional)",
-  "adm.unitsSection": "Cantidades y unidades predeterminadas"
+  "adm.unitsSection": "Cantidades y unidades predeterminadas",
+  "adm.vBatchList": "Edit as list",
+  "adm.vBatchApply": "Apply list",
+  "adm.vBatchSelect": "Select multiple",
+  "adm.vBatchSelected": "{n} selected",
+  "adm.vBatchRemove": "Remove selection",
+  "adm.vBatchDiets": "Not suitable for (selection)",
+  "adm.vBatchTranslate": "Translate all",
+  "adm.vBatchTranslated": "Variants translated"
 }

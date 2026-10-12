@@ -1481,5 +1481,13 @@
   "dept.productVariants": "Productvarianten",
   "dept.variantStandard": "Zonder soort",
   "dlg.properties": "Eigenschappen (optioneel)",
-  "adm.unitsSection": "Hoeveelheden en standaardeenheden"
+  "adm.unitsSection": "Hoeveelheden en standaardeenheden",
+  "adm.vBatchList": "Edit as list",
+  "adm.vBatchApply": "Apply list",
+  "adm.vBatchSelect": "Select multiple",
+  "adm.vBatchSelected": "{n} selected",
+  "adm.vBatchRemove": "Remove selection",
+  "adm.vBatchDiets": "Not suitable for (selection)",
+  "adm.vBatchTranslate": "Translate all",
+  "adm.vBatchTranslated": "Variants translated"
 }

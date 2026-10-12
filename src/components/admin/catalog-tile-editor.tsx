@@ -1071,6 +1071,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [variantInput, setVariantInput] = useState("");
   const [vDrag, setVDrag] = useState<number | null>(null);
   const [vEdit, setVEdit] = useState<string | null>(null);
+  const [vListMode, setVListMode] = useState(false);
+  const [vListText, setVListText] = useState("");
+  const [vSelMode, setVSelMode] = useState(false);
+  const [vSel, setVSel] = useState<string[]>([]);
+  const [vTrBusy, setVTrBusy] = useState(false);
   const [vOver, setVOver] = useState<number | null>(null);
   const [prodLines, setProdLines] = useState("");
   const heads = p.headings ?? [];
@@ -1374,8 +1379,49 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         {!p.imageOnly && !isDept && (
           <SectionCollapse label={T("adm.variants")}>
             <div className="space-y-1.5">
-              {prod && <div className="flex justify-end"><VariantAiBulkButton productId={prod.id} productName={prod.name} variants={prod.variants ?? []} /></div>}
-            {variants.length > 0 && (
+              <div className="flex flex-wrap justify-end gap-1.5">
+                <Button type="button" size="sm" variant="outline" aria-pressed={vListMode} onClick={() => { setVListText(variants.join("\n")); setVListMode((m) => !m); setVSelMode(false); }}>{T("adm.vBatchList")}</Button>
+                <Button type="button" size="sm" variant="outline" aria-pressed={vSelMode} disabled={!variants.length} onClick={() => { setVSelMode((m) => !m); setVSel([]); setVListMode(false); }}>{T("adm.vBatchSelect")}</Button>
+                {prod && (prod.variants ?? []).length > 0 && (
+                  <Button type="button" size="sm" variant="outline" disabled={vTrBusy} onClick={async () => { setVTrBusy(true); try { await trVariants({ data: { productId: prod.product_id ?? prod.id } }); toast.success(T("adm.vBatchTranslated")); } catch (e) { toast.error((e as Error).message); } finally { setVTrBusy(false); } }}>{vTrBusy ? "…" : T("adm.vBatchTranslate")}</Button>
+                )}
+                {prod && <VariantAiBulkButton productId={prod.id} productName={prod.name} variants={prod.variants ?? []} />}
+              </div>
+              {vListMode && (
+                <div className="space-y-1.5">
+                  <textarea value={vListText} rows={Math.min(14, Math.max(4, variants.length + 1))} onChange={(e) => setVListText(e.target.value)}
+                    className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" />
+                  <div className="flex justify-end">
+                    <Button type="button" size="sm" variant="outline" onClick={() => {
+                      const seen = new Set<string>(); const next: string[] = [];
+                      for (const raw of vListText.split(/\n/)) { const n = raw.trim(); if (!n || seen.has(n.toLowerCase())) continue; seen.add(n.toLowerCase()); next.push(n); }
+                      setVariants(next); setVEdit(null); setVListMode(false);
+                    }}>{T("adm.vBatchApply")}</Button>
+                  </div>
+                </div>
+              )}
+              {vSelMode && vSel.length > 0 && (
+                <div className="space-y-1.5 rounded-lg border border-primary/40 bg-primary/5 p-2">
+                  <div className="flex items-center justify-between gap-2 text-xs">
+                    <span className="font-medium">{T("adm.vBatchSelected", { n: vSel.length })}</span>
+                    <Button type="button" size="sm" variant="outline" className="h-7 text-destructive" onClick={() => { setVariants((x) => x.filter((y) => !vSel.includes(y))); setVSel([]); }}>{T("adm.vBatchRemove")}</Button>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground">{T("adm.vBatchDiets")}</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {dietRows.map(({ id: diet }) => {
+                      const all = vSel.every((v) => (variantDiets[v] ?? []).includes(diet));
+                      return (
+                        <button key={diet} type="button" aria-pressed={all} disabled={diets.includes(diet)}
+                          onClick={() => setVariantDiets((d) => { const n = { ...d }; for (const v of vSel) { const cur = n[v] ?? []; n[v] = all ? cur.filter((x) => x !== diet) : cur.includes(diet) ? cur : [...cur, diet]; } return n; })}
+                          className={`rounded-full border px-2.5 py-1 text-xs disabled:opacity-60 ${all ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}>
+                          {dietEmoji(diet)} {dietLabel(diet)}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            {!vListMode && variants.length > 0 && (
               <div className="divide-y divide-border rounded-lg border border-border">
                 {variants.map((v, vi) => (
                   <div
@@ -1393,6 +1439,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                     className={`flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
                   >
                     <span className="flex min-w-0 flex-1 items-center gap-2">
+                      {vSelMode && <input type="checkbox" className="h-4 w-4 shrink-0 accent-[hsl(var(--primary))]" aria-label={v} checked={vSel.includes(v)} onChange={() => setVSel((s) => s.includes(v) ? s.filter((x) => x !== v) : [...s, v])} />}
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
                       <span className="min-w-0 flex-1 whitespace-normal break-words text-left text-foreground">{vl(p.vtr, prod?.id, v)}</span>
                     </span>
