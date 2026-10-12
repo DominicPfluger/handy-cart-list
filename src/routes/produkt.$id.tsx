@@ -12,7 +12,7 @@ import { RenameDialog, type RenameTarget } from "../components/rename-dialog";
 import { ensureCatalog, catalogQueryOptions, brandsFor, originalName, useCatalog } from "../lib/catalog-query";
 import { CachedImage } from "../components/catalog-icon";
 import { useCustomNames } from "../hooks/use-custom-names";
-import { formatQuantity, getUnits } from "../lib/units";
+import { getUnits } from "../lib/units";
 import { getLocale, useT } from "../i18n";
 import { useShoppingList } from "../hooks/use-shopping-list";
 import { useFavoriteQuantity } from "../hooks/use-favorite-quantity";
@@ -133,63 +133,6 @@ function ProductPage() {
         )}
       </div>
 
-      <dl className="mt-6 space-y-3 rounded-2xl bg-card p-4 shadow-sm">
-        <div className="flex items-center justify-between text-sm">
-          <dt className="text-muted-foreground">{t("pd.quantity")}</dt>
-          <dd className="font-semibold text-foreground">{formatQuantity(product.defaultQuantity, product.defaultUnit)}</dd>
-        </div>
-        <div className="flex items-center justify-between gap-4 text-sm">
-          <dt className="text-muted-foreground">{t("pd.unit")}</dt>
-          <dd>
-            <select
-              value={product.defaultUnit}
-              disabled={!isAdmin || saving}
-              aria-label={t("pd.unit")}
-              onChange={(e) => void save({ default_unit: e.target.value })}
-              className="rounded-lg border border-border bg-card px-2 py-1 text-sm font-semibold text-foreground disabled:opacity-80"
-            >
-              {units.map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
-            </select>
-          </dd>
-        </div>
-        {product.variants.some((v) => v.trim().toLowerCase() === "bio") && (
-          <div className="flex items-center justify-between text-sm">
-            <dt className="text-muted-foreground">{t("common.organic")}</dt>
-            <dd className="font-semibold text-foreground">🌿</dd>
-          </div>
-        )}
-        {brands.length > 0 && (
-          <div className="flex items-start justify-between gap-4 text-sm">
-            <dt className="shrink-0 text-muted-foreground">{t("pd.brands")}</dt>
-            <dd className="text-right font-semibold text-foreground">{brands.join(", ")}</dd>
-          </div>
-        )}
-        <div className="text-sm">
-            <dt className="text-muted-foreground">{t("pd.variants")}</dt>
-            {ownVariants.length > 0 && <dd className="mt-1.5 flex flex-wrap gap-1.5">
-              {ownVariants.map((v) => (
-                <span key={v} className="rounded-full bg-primary-soft/25 px-2.5 py-1 text-xs font-medium text-foreground">
-                  {variantLabel(v)}
-                  {ownVariants.includes(v) && !sharedVariants.includes(v) ? (
-                    <Button type="button" variant="ghost" size="sm" aria-label={t("dept.removeVariant", { name: variantLabel(v) })} title={t("dept.removeVariant", { name: variantLabel(v) })} onClick={() => removePersonalVariant(product.id, v)} className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
-                  ) : isAdmin ? (
-                    <Button type="button" variant="ghost" size="sm" aria-label={t("pd.removeVariant", { name: variantLabel(v) })} disabled={saving}
-                      onClick={() => void save({ variants: sharedVariants.filter((x) => x !== v) })}
-                      className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
-                  ) : null}
-                </span>
-              ))}
-            </dd>}
-            <form className="mt-2 flex flex-wrap gap-2" onSubmit={(e) => { e.preventDefault(); addOwnVariant(); }}>
-              <input value={personalVariantName} onChange={(e) => setPersonalVariantName(e.target.value)} maxLength={40} placeholder={t("dept.variantPlaceholder")} aria-label={t("dept.variantPlaceholder")}
-                className="min-w-32 flex-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary" />
-              <Button type="submit" size="sm" disabled={!personalVariantName.trim()} className="shrink-0 rounded-full">
-                {t("dept.addVariant")}
-              </Button>
-            </form>
-          </div>
-      </dl>
-
       <div className="mt-4 rounded-2xl bg-card p-4 shadow-sm">
         <p className="text-sm font-semibold text-foreground">{t("pd.favQuantity")}</p>
         <div className="mt-2 flex gap-2">
@@ -236,6 +179,62 @@ function ProductPage() {
             </button>
           )}
         </div>
+      </div>
+
+      <dl className="mt-4 space-y-3 rounded-2xl bg-card p-4 shadow-sm">
+        <div className="flex items-center justify-between gap-4 text-sm">
+          <dt className="text-muted-foreground">{t("pd.unit")}</dt>
+          <dd>
+            <select
+              value={product.defaultUnit}
+              disabled={!isAdmin || saving}
+              aria-label={t("pd.unit")}
+              onChange={(e) => void save({ default_unit: e.target.value })}
+              className="rounded-lg border border-border bg-card px-2 py-1 text-sm font-semibold text-foreground disabled:opacity-80"
+            >
+              {units.map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+            </select>
+          </dd>
+        </div>
+        {product.variants.some((v) => v.trim().toLowerCase() === "bio") && (
+          <div className="flex items-center justify-between text-sm">
+            <dt className="text-muted-foreground">{t("common.organic")}</dt>
+            <dd className="font-semibold text-foreground">🌿</dd>
+          </div>
+        )}
+        {brands.length > 0 && (
+          <div className="flex items-start justify-between gap-4 text-sm">
+            <dt className="shrink-0 text-muted-foreground">{t("pd.brands")}</dt>
+            <dd className="text-right font-semibold text-foreground">{brands.join(", ")}</dd>
+          </div>
+        )}
+      </dl>
+
+      <div className="mt-4 rounded-2xl bg-card p-4 shadow-sm">
+        <div className="text-sm">
+            <p className="text-muted-foreground">{t("pd.variants")}</p>
+            {ownVariants.length > 0 && <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {ownVariants.map((v) => (
+                <span key={v} className="rounded-full bg-primary-soft/25 px-2.5 py-1 text-xs font-medium text-foreground">
+                  {variantLabel(v)}
+                  {ownVariants.includes(v) && !sharedVariants.includes(v) ? (
+                    <Button type="button" variant="ghost" size="sm" aria-label={t("dept.removeVariant", { name: variantLabel(v) })} title={t("dept.removeVariant", { name: variantLabel(v) })} onClick={() => removePersonalVariant(product.id, v)} className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
+                  ) : isAdmin ? (
+                    <Button type="button" variant="ghost" size="sm" aria-label={t("pd.removeVariant", { name: variantLabel(v) })} disabled={saving}
+                      onClick={() => void save({ variants: sharedVariants.filter((x) => x !== v) })}
+                      className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
+                  ) : null}
+                </span>
+              ))}
+            </div>}
+            <form className="mt-2 flex flex-wrap gap-2" onSubmit={(e) => { e.preventDefault(); addOwnVariant(); }}>
+              <input value={personalVariantName} onChange={(e) => setPersonalVariantName(e.target.value)} maxLength={40} placeholder={t("dept.variantPlaceholder")} aria-label={t("dept.variantPlaceholder")}
+                className="min-w-32 flex-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary" />
+              <Button type="submit" size="sm" disabled={!personalVariantName.trim()} className="shrink-0 rounded-full">
+                {t("dept.addVariant")}
+              </Button>
+            </form>
+          </div>
       </div>
 
       <div className="mt-6 flex gap-2">
