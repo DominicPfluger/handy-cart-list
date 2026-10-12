@@ -1366,6 +1366,103 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             )}
           </SectionCollapse>
         )}
+        {!p.imageOnly && !isDept && prod && realProdId && (
+          <SectionCollapse label={T("adm.synonyms")}>
+            <ProductSynonymEditor key={`syn-${realProdId}`} productId={realProdId} bare />
+          </SectionCollapse>
+        )}
+        {!p.imageOnly && !isDept && (
+          <SectionCollapse label={T("adm.variants")}>
+            <div className="space-y-1.5">
+              {prod && <div className="flex justify-end"><VariantAiBulkButton productId={prod.id} productName={prod.name} variants={prod.variants ?? []} /></div>}
+            {variants.length > 0 && (
+              <div className="divide-y divide-border rounded-lg border border-border">
+                {variants.map((v, vi) => (
+                  <div
+                    key={v}
+                    draggable
+                    onDragStart={() => setVDrag(vi)}
+                    onDragOver={(e) => { e.preventDefault(); setVOver(vi); }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      if (vDrag === null || vDrag === vi) { setVDrag(null); setVOver(null); return; }
+                      setVariants((x) => { const next = [...x]; const moved = next[vDrag]; if (moved === undefined) return x; next.splice(vDrag, 1); next.splice(vi, 0, moved); return next; });
+                      setVDrag(null); setVOver(null);
+                    }}
+                    onDragEnd={() => { setVDrag(null); setVOver(null); }}
+                    className={`flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
+                  >
+                    <span className="flex min-w-0 flex-1 items-center gap-2">
+                      <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
+                      <span className="min-w-0 flex-1 whitespace-normal break-words text-left text-foreground">{vl(p.vtr, prod?.id, v)}</span>
+                    </span>
+                    <Button type="button" variant="outline" size="icon" className="h-7 w-7 shrink-0" aria-label={`${T("adm.edit")}: ${vl(p.vtr, prod?.id, v)}`} title={T("adm.edit")} aria-expanded={vEdit === v} onClick={() => setVEdit((current) => current === v ? null : v)}>
+                      <Pencil className="h-3.5 w-3.5" />
+                    </Button>
+                    <button type="button" aria-label={`${v} entfernen`} onClick={() => { setVariants((x) => x.filter((y) => y !== v)); if (vEdit === v) setVEdit(null); }} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
+                    {vEdit === v && (
+                      <div className="basis-full space-y-3 border-t border-border pt-3 pb-1" onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                        <div className="flex flex-wrap items-center gap-2 text-sm">
+                          <VariantNameEdit startEditing productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === v ? n : y))); setVariantDiets((d) => { if (!d[v]) return d; const val = d[v]; const rest = { ...d }; delete rest[v]; return val ? { ...rest, [n]: val } : rest; }); setVEdit(n); }} />
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[11px] font-medium text-muted-foreground">{T("adm.diets")}</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {dietRows.map(({ id: diet }) => {
+                              const inherited = diets.includes(diet);
+                              const on = inherited || (variantDiets[v] ?? []).includes(diet);
+                              return (
+                                <button key={diet} type="button" aria-pressed={on} disabled={inherited} title={inherited ? "Vom Produkt übernommen" : undefined}
+                                  onClick={() => setVariantDiets((d) => { const cur = d[v] ?? []; return { ...d, [v]: cur.includes(diet) ? cur.filter((x) => x !== diet) : [...cur, diet] }; })}
+                                  className={`rounded-full border px-2.5 py-1 text-xs disabled:opacity-60 ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}>
+                                  {dietEmoji(diet)} {dietLabel(diet)}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        {prod && (prod.variants ?? []).includes(v) ? (
+                          <div className="flex flex-wrap items-center gap-2">
+                            <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />
+                            <VariantSynonyms productId={prod.id} variant={v} />
+                            <VariantTranslations defaultOpen productId={prod.id} variant={v} productName={() => name || prod?.name || ""} />
+                          </div>
+                        ) : (
+                          <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex items-start gap-2">
+              <textarea
+                value={variantInput}
+                rows={3}
+                placeholder={T("adm.variantPlaceholder")}
+                onChange={(e) => setVariantInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); addVariant(variantInput); } }}
+                className="min-h-[72px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              />
+              <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
+            </div>
+            <VariantAiSuggest name={prod?.name ?? ""} variants={variants} onAdd={(vs) => setVariants((x) => [...x, ...vs.filter((v) => !x.some((y) => y.toLowerCase() === v.toLowerCase()))])} />
+            <div className="flex flex-wrap gap-1.5">
+              {commonVariants.map((cv) => {
+                const on = variants.some((x) => x.toLowerCase() === cv.value.toLowerCase());
+                return (
+                  <button key={cv.value} type="button" disabled={on} onClick={() => addVariant(cv.value)}
+                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-muted-foreground line-through" : "border-border bg-background text-muted-foreground"}`}>
+                    {on ? "✓ " : "+ "}{cv.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
+            </div>
+          </SectionCollapse>
+        )}
         {effId && (
           <SectionCollapse label={T("adm.images")} defaultOpen={Boolean(p.imageOnly)}>
             <p className="text-xs font-semibold text-muted-foreground">{T("adm.previewImage")}</p>
@@ -1470,98 +1567,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </select>
           </div>
         )}
-        {!p.imageOnly && !isDept && (
-          <SectionCollapse label={T("adm.variants")}>
-            <div className="space-y-1.5">
-              {prod && <div className="flex justify-end"><VariantAiBulkButton productId={prod.id} productName={prod.name} variants={prod.variants ?? []} /></div>}
-            {variants.length > 0 && (
-              <div className="divide-y divide-border rounded-lg border border-border">
-                {variants.map((v, vi) => (
-                  <div
-                    key={v}
-                    draggable
-                    onDragStart={() => setVDrag(vi)}
-                    onDragOver={(e) => { e.preventDefault(); setVOver(vi); }}
-                    onDrop={(e) => {
-                      e.preventDefault();
-                      if (vDrag === null || vDrag === vi) { setVDrag(null); setVOver(null); return; }
-                      setVariants((x) => { const next = [...x]; const moved = next[vDrag]; if (moved === undefined) return x; next.splice(vDrag, 1); next.splice(vi, 0, moved); return next; });
-                      setVDrag(null); setVOver(null);
-                    }}
-                    onDragEnd={() => { setVDrag(null); setVOver(null); }}
-                    className={`flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
-                  >
-                    <span className="flex min-w-0 flex-1 items-center gap-2">
-                      <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
-                      <span className="min-w-0 flex-1 whitespace-normal break-words text-left text-foreground">{vl(p.vtr, prod?.id, v)}</span>
-                    </span>
-                    <Button type="button" variant="outline" size="icon" className="h-7 w-7 shrink-0" aria-label={`${T("adm.edit")}: ${vl(p.vtr, prod?.id, v)}`} title={T("adm.edit")} aria-expanded={vEdit === v} onClick={() => setVEdit((current) => current === v ? null : v)}>
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Button>
-                    <button type="button" aria-label={`${v} entfernen`} onClick={() => { setVariants((x) => x.filter((y) => y !== v)); if (vEdit === v) setVEdit(null); }} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
-                    {vEdit === v && (
-                      <div className="basis-full space-y-3 border-t border-border pt-3 pb-1" onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}>
-                        <div className="flex flex-wrap items-center gap-2 text-sm">
-                          <VariantNameEdit startEditing productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === v ? n : y))); setVariantDiets((d) => { if (!d[v]) return d; const val = d[v]; const rest = { ...d }; delete rest[v]; return val ? { ...rest, [n]: val } : rest; }); setVEdit(n); }} />
-                        </div>
-                        <div className="space-y-1">
-                          <p className="text-[11px] font-medium text-muted-foreground">{T("adm.diets")}</p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {dietRows.map(({ id: diet }) => {
-                              const inherited = diets.includes(diet);
-                              const on = inherited || (variantDiets[v] ?? []).includes(diet);
-                              return (
-                                <button key={diet} type="button" aria-pressed={on} disabled={inherited} title={inherited ? "Vom Produkt übernommen" : undefined}
-                                  onClick={() => setVariantDiets((d) => { const cur = d[v] ?? []; return { ...d, [v]: cur.includes(diet) ? cur.filter((x) => x !== diet) : [...cur, diet] }; })}
-                                  className={`rounded-full border px-2.5 py-1 text-xs disabled:opacity-60 ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}>
-                                  {dietEmoji(diet)} {dietLabel(diet)}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                        {prod && (prod.variants ?? []).includes(v) ? (
-                          <div className="flex flex-wrap items-center gap-2">
-                            <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />
-                            <VariantSynonyms productId={prod.id} variant={v} />
-                            <VariantTranslations defaultOpen productId={prod.id} variant={v} productName={() => name || prod?.name || ""} />
-                          </div>
-                        ) : (
-                          <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-            <div className="flex items-start gap-2">
-              <textarea
-                value={variantInput}
-                rows={3}
-                placeholder={T("adm.variantPlaceholder")}
-                onChange={(e) => setVariantInput(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); addVariant(variantInput); } }}
-                className="min-h-[72px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-              />
-              <Button type="button" variant="outline" onClick={() => addVariant(variantInput)} disabled={!variantInput.trim()}>+</Button>
-            </div>
-            <VariantAiSuggest name={prod?.name ?? ""} variants={variants} onAdd={(vs) => setVariants((x) => [...x, ...vs.filter((v) => !x.some((y) => y.toLowerCase() === v.toLowerCase()))])} />
-            <div className="flex flex-wrap gap-1.5">
-              {commonVariants.map((cv) => {
-                const on = variants.some((x) => x.toLowerCase() === cv.value.toLowerCase());
-                return (
-                  <button key={cv.value} type="button" disabled={on} onClick={() => addVariant(cv.value)}
-                    className={`rounded-full border px-2.5 py-1 text-xs ${on ? "border-primary bg-primary/15 text-muted-foreground line-through" : "border-border bg-background text-muted-foreground"}`}>
-                    {on ? "✓ " : "+ "}{cv.label}
-                  </button>
-                );
-              })}
-            </div>
-            <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
-            </div>
-          </SectionCollapse>
-        )}
         {!p.imageOnly && !isDept && prod && (
           <SectionCollapse label={T("adm.diets")}>
             <div className="flex flex-wrap gap-1.5">
@@ -1586,11 +1591,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         {!p.imageOnly && !isDept && prod && realProdId && !prodNonFood && (
           <SectionCollapse label={T("adm.cuisines")}>
             <ProductCuisinePicker productId={realProdId} bare />
-          </SectionCollapse>
-        )}
-        {!p.imageOnly && !isDept && prod && realProdId && (
-          <SectionCollapse label={T("adm.synonyms")}>
-            <ProductSynonymEditor key={`syn-${realProdId}`} productId={realProdId} bare />
           </SectionCollapse>
         )}
         {!p.imageOnly && !isDept && prod && realProdId && (
