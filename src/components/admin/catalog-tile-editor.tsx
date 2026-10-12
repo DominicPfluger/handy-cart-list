@@ -1463,6 +1463,12 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             </div>
           </SectionCollapse>
         )}
+        {!p.imageOnly && item && effId && (
+          <SectionCollapse label={T("adm.languages")}>
+            {p.onRetranslate && <Button size="sm" variant="outline" className="self-start" onClick={() => p.onRetranslate!(isDept ? effId : (prod?.product_id ?? effId))}>{T("adm.retranslate")}</Button>}
+            <SheetTranslations kind={isDept ? "department" : "product"} id={isDept ? effId : (prod?.product_id ?? effId)} baseName={item.name} />
+          </SectionCollapse>
+        )}
         {effId && (
           <SectionCollapse label={T("adm.images")} defaultOpen={Boolean(p.imageOnly)}>
             <p className="text-xs font-semibold text-muted-foreground">{T("adm.previewImage")}</p>
@@ -1596,12 +1602,6 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
         {!p.imageOnly && !isDept && prod && realProdId && (
           <SectionCollapse label={T("adm.brands")}>
             <ProductBrandEditor key={`brand-${realProdId}`} productId={realProdId} productName={item?.name ?? ""} path={p.depts.find((x) => x.id === prod.department_id)?.name ?? ""} bare />
-          </SectionCollapse>
-        )}
-        {!p.imageOnly && item && effId && (
-          <SectionCollapse label={T("adm.languages")}>
-            {p.onRetranslate && <Button size="sm" variant="outline" className="self-start" onClick={() => p.onRetranslate!(isDept ? effId : (prod?.product_id ?? effId))}>{T("adm.retranslate")}</Button>}
-            <SheetTranslations kind={isDept ? "department" : "product"} id={isDept ? effId : (prod?.product_id ?? effId)} baseName={item.name} />
           </SectionCollapse>
         )}
         {!p.imageOnly && !isDept && (
