@@ -226,7 +226,7 @@ function ProductPage() {
                   ) : null}
                 </span>
               ))}
-            </dd>}
+            </div>}
             <form className="mt-2 flex flex-wrap gap-2" onSubmit={(e) => { e.preventDefault(); addOwnVariant(); }}>
               <input value={personalVariantName} onChange={(e) => setPersonalVariantName(e.target.value)} maxLength={40} placeholder={t("dept.variantPlaceholder")} aria-label={t("dept.variantPlaceholder")}
                 className="min-w-32 flex-1 rounded-full border border-border bg-card px-3 py-1.5 text-sm text-foreground outline-none focus:border-primary" />
