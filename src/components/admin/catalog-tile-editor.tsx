@@ -47,7 +47,7 @@ const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR
 /** Alias-Kategorien: id = "deptalias:<aliasId>", alias_id + dept_id (Original) gesetzt. */
 export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; icon_path?: string | null; alias_id?: string; dept_id?: string };
 /** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
-export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets?: string[]; image_path?: string | null; icon_path?: string | null; variants?: string[]; prefix_variants?: string[]; replace_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; alias_id?: string; product_id?: string };
+export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets?: string[]; variant_excluded_diets?: Record<string, string[]>; image_path?: string | null; icon_path?: string | null; variants?: string[]; prefix_variants?: string[]; replace_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; alias_id?: string; product_id?: string };
 
 
 type Target = { kind: "department" | "product"; id: string | null } | null;
@@ -1051,6 +1051,8 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
   const dietRows = useDiets();
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
+  const [variantDiets, setVariantDiets] = useState<Record<string, string[]>>(prod?.variant_excluded_diets ?? {});
+  const cleanVariantDiets = () => Object.fromEntries(Object.entries(variantDiets).filter(([k, v]) => variants.includes(k) && v.length));
   const [prefixVariants, setPrefixVariants] = useState<string[]>(prod?.prefix_variants ?? []);
   const [replaceVariants, setReplaceVariants] = useState<string[]>(prod?.replace_variants ?? []);
   /** Position durchschalten: hinten → vorne → ersetzt Produktnamen → hinten. */
@@ -1151,7 +1153,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
-        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
+        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
       if (item.name !== base.name) {
         await p.must(supabase.from("catalog_translations").delete().eq("entity_id", item.id).eq("is_manual", false));
         await p.translateIds([item.id]);
@@ -1168,7 +1170,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               ? p.products.length + 1
               : await supabase.from("products").select("sort_order").eq("department_id", targetDept).order("sort_order", { ascending: false }).limit(1)
                   .then(({ data }) => ((data?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1);
-            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variants, sort_order: nextSort } as never).select("id").single();
+            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variants, sort_order: nextSort } as never).select("id").single();
           })();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
@@ -1500,13 +1502,29 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                     {vEdit === v && (
                       <div className="basis-full space-y-3 border-t border-border pt-3 pb-1" onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}>
                         <div className="flex flex-wrap items-center gap-2 text-sm">
-                          <VariantNameEdit productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === v ? n : y))); setVEdit(n); }} />
+                          <VariantNameEdit startEditing productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === v ? n : y))); setVariantDiets((d) => { if (!d[v]) return d; const val = d[v]; const rest = { ...d }; delete rest[v]; return val ? { ...rest, [n]: val } : rest; }); setVEdit(n); }} />
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[11px] font-medium text-muted-foreground">{T("adm.diets")}</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {dietRows.map(({ id: diet }) => {
+                              const inherited = diets.includes(diet);
+                              const on = inherited || (variantDiets[v] ?? []).includes(diet);
+                              return (
+                                <button key={diet} type="button" aria-pressed={on} disabled={inherited} title={inherited ? "Vom Produkt übernommen" : undefined}
+                                  onClick={() => setVariantDiets((d) => { const cur = d[v] ?? []; return { ...d, [v]: cur.includes(diet) ? cur.filter((x) => x !== diet) : [...cur, diet] }; })}
+                                  className={`rounded-full border px-2.5 py-1 text-xs disabled:opacity-60 ${on ? "border-primary bg-primary/15 text-foreground" : "border-border bg-background text-muted-foreground"}`}>
+                                  {dietEmoji(diet)} {dietLabel(diet)}
+                                </button>
+                              );
+                            })}
+                          </div>
                         </div>
                         {prod && (prod.variants ?? []).includes(v) ? (
                           <div className="flex flex-wrap items-center gap-2">
                             <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />
                             <VariantSynonyms productId={prod.id} variant={v} />
-                            <VariantTranslations productId={prod.id} variant={v} productName={() => name || prod?.name || ""} />
+                            <VariantTranslations defaultOpen productId={prod.id} variant={v} productName={() => name || prod?.name || ""} />
                           </div>
                         ) : (
                           <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>

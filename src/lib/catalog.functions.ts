@@ -53,6 +53,8 @@ export interface CatalogProduct {
   variantImages?: Record<string, { imagePath: string | null; iconPath: string | null; imageUrl?: string | null; iconUrl?: string | null }>;
   /** Ernährungsformen, in denen das Produkt nicht erlaubt ist */
   excludedDiets: string[];
+  /** Ernährungsformen je Variante, in denen die Variante nicht erlaubt ist */
+  variantExcludedDiets?: Record<string, string[]>;
   /** Länderküchen, in denen das Produkt typisch ist */
   cuisineIds: string[];
   /** Verbreitete Handelsmarken; markets leer = alle Länder (Ländercodes wie CH, DE) */
@@ -300,7 +302,7 @@ export const getCatalogCore = createServerFn({ method: "GET" })
       fetchAll(
         supabase,
         "products",
-        "id, department_id, name, emoji, image_path, icon_path, default_quantity, default_unit, allowed_units, unit_quantities, organic_available, variants, prefix_variants, prefix_variants_by_locale, replace_variants, excluded_diets, markets, sort_order",
+        "id, department_id, name, emoji, image_path, icon_path, default_quantity, default_unit, allowed_units, unit_quantities, organic_available, variants, prefix_variants, prefix_variants_by_locale, replace_variants, excluded_diets, variant_excluded_diets, markets, sort_order",
         ["sort_order", "id"],
       ),
       supabase.from("product_headings").select("id, department_id, before_product_id, name"),
@@ -360,6 +362,7 @@ export const getCatalogCore = createServerFn({ method: "GET" })
         variantNames: {},
         variantImages: {},
         excludedDiets: (r["excluded_diets"] as string[] | null) ?? [],
+        variantExcludedDiets: (r["variant_excluded_diets"] as Record<string, string[]> | null) ?? {},
         cuisineIds: [],
         brands: [],
         markets: (r["markets"] as string[] | null) ?? [],

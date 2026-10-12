@@ -995,6 +995,7 @@ export type Database = {
           sort_order: number
           unit_quantities: Json
           updated_at: string
+          variant_excluded_diets: Json
           variants: string[]
         }
         Insert: {
@@ -1018,6 +1019,7 @@ export type Database = {
           sort_order?: number
           unit_quantities?: Json
           updated_at?: string
+          variant_excluded_diets?: Json
           variants?: string[]
         }
         Update: {
@@ -1041,6 +1043,7 @@ export type Database = {
           sort_order?: number
           unit_quantities?: Json
           updated_at?: string
+          variant_excluded_diets?: Json
           variants?: string[]
         }
         Relationships: [
