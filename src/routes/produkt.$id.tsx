@@ -182,20 +182,6 @@ function ProductPage() {
       </div>
 
       <dl className="mt-4 space-y-3 rounded-2xl bg-card p-4 shadow-sm">
-        <div className="flex items-center justify-between gap-4 text-sm">
-          <dt className="text-muted-foreground">{t("pd.unit")}</dt>
-          <dd>
-            <select
-              value={product.defaultUnit}
-              disabled={!isAdmin || saving}
-              aria-label={t("pd.unit")}
-              onChange={(e) => void save({ default_unit: e.target.value })}
-              className="rounded-lg border border-border bg-card px-2 py-1 text-sm font-semibold text-foreground disabled:opacity-80"
-            >
-              {units.map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
-            </select>
-          </dd>
-        </div>
         {product.variants.some((v) => v.trim().toLowerCase() === "bio") && (
           <div className="flex items-center justify-between text-sm">
             <dt className="text-muted-foreground">{t("common.organic")}</dt>
