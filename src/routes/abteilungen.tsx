@@ -170,7 +170,23 @@ function DepartmentsPage() {
   // Produkt-Varianten-Ebene: Klick auf ein Produkt mit Sorten öffnet eine eigene Hierarchie-Ebene
   const [variantLevelId, setVariantLevelId] = useState<string | null>(null);
   const variantProduct = variantLevelId ? products.find((p) => p.id === variantLevelId) ?? null : null;
+  // Beim Öffnen der Produkt-Einzelansicht die aktuelle Abteilung merken, damit „Zurück" dorthin führt.
+  const rememberPosition = () => {
+    try { sessionStorage.setItem("shoppi:dept-return", JSON.stringify({ currentId, variantLevelId, scrollY: window.scrollY })); } catch { /* ignore */ }
+  };
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("shoppi:dept-return");
+      if (!raw) return;
+      sessionStorage.removeItem("shoppi:dept-return");
+      const s = JSON.parse(raw) as { currentId: string | null; variantLevelId: string | null; scrollY?: number };
+      setCurrentId(s.currentId);
+      setVariantLevelId(s.variantLevelId);
+      if (s.scrollY) requestAnimationFrame(() => requestAnimationFrame(() => window.scrollTo({ top: s.scrollY })));
+    } catch { /* ignore */ }
+  }, []);
   const openProduct = (product: CatalogProduct) => {
+    rememberPosition();
     navigate({ to: "/produkt/$id", params: { id: product.id } });
   };
   const [addTarget, setAddTarget] = useState<AddEntryTarget | null>(null);
