@@ -437,7 +437,7 @@ function FavoritesPage() {
             {formatQuantity(row.favorite.defaultQuantity, row.favorite.defaultUnit)}
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-0 -mr-1.5 -ml-1">
+        <div className="flex shrink-0 items-center gap-2 -mr-1.5">
         <Button
           type="button"
           variant="ghost"
