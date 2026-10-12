@@ -27,6 +27,7 @@
 ## Landingpage
 - First visit to `/` shows the landing page (flag `shoppi:landing-seen`, src/lib/landing.ts), then the list; website version on `/start`. Why: public page, device-local choice.
 - Admin tile view (catalog-tile-editor.tsx) reuses admin.tsx data + save/reorder/remove callbacks. Why: one write path for list and tile editing.
+- Product variant editing reuses the existing name, image, synonym and translation controls inline beneath its row. Why: keep product editing in one context without a second variant window.
 - Admin-created locales live in app_locales + ui_translations, loaded at runtime by src/i18n; server translation targets = built-in + app_locales (targetLocales). Why: add languages without redeploy.
 - Products keep image_path plus separate 64px icon_path; AI generation of either never overwrites the other. Why: light list rows, stable artwork.
 - Small catalog and list icons share a device-local image/symbol preference; full product photos remain unchanged. Why: one visual choice should apply consistently without changing shared catalog data.

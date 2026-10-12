@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Aktueller Auftrag
+- [ ] Varianten-Bearbeitung im Admin-Produktdialog per Stift direkt unter der Zeile anzeigen und prüfen
 - [x] Umschalter vorangestellt/nachgestellt auch in der Kachelansicht des Produkt-Dialogs
 - [ ] Zwei Varianten-Arten: Sorten am Produkt + Zusätze aus zentralem Pool, beim Einkauf frei kombinierbar
 - [x] Vier Überschriften unter „Küchenfertiges Gemüse & Obst“ in Unterkategorien umgewandelt; 80 Artikel (26/18/18/18) und 60 Kategorieübersetzungen übernommen und geprüft; keine Überschriften verblieben.

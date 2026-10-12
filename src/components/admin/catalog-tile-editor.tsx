@@ -1483,7 +1483,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                     onDrop={(e) => {
                       e.preventDefault();
                       if (vDrag === null || vDrag === vi) { setVDrag(null); setVOver(null); return; }
-                      setVariants((x) => { const next = [...x]; const moved = next[vDrag]!; next.splice(vDrag, 1); next.splice(vi, 0, moved); return next; });
+                      setVariants((x) => { const next = [...x]; const moved = next[vDrag]; if (moved === undefined) return x; next.splice(vDrag, 1); next.splice(vi, 0, moved); return next; });
                       setVDrag(null); setVOver(null);
                     }}
                     onDragEnd={() => { setVDrag(null); setVOver(null); }}
@@ -1491,34 +1491,30 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                   >
                     <span className="flex min-w-0 flex-1 items-center gap-2">
                       <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
-                      <button type="button" onClick={() => setVEdit(v)} className="min-w-0 flex-1 truncate text-left text-foreground hover:text-primary">{vl(p.vtr, prod?.id, v)}</button>
+                      <span className="min-w-0 flex-1 whitespace-normal break-words text-left text-foreground">{vl(p.vtr, prod?.id, v)}</span>
                     </span>
-                    <button type="button" aria-label={`${v} entfernen`} onClick={() => setVariants((x) => x.filter((y) => y !== v))} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
+                    <Button type="button" variant="outline" size="icon" className="h-7 w-7 shrink-0" aria-label={`${T("adm.edit")}: ${vl(p.vtr, prod?.id, v)}`} title={T("adm.edit")} aria-expanded={vEdit === v} onClick={() => setVEdit((current) => current === v ? null : v)}>
+                      <Pencil className="h-3.5 w-3.5" />
+                    </Button>
+                    <button type="button" aria-label={`${v} entfernen`} onClick={() => { setVariants((x) => x.filter((y) => y !== v)); if (vEdit === v) setVEdit(null); }} className="shrink-0 text-muted-foreground hover:text-destructive">✕</button>
+                    {vEdit === v && (
+                      <div className="basis-full space-y-3 border-t border-border pt-3 pb-1" onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                        <div className="flex flex-wrap items-center gap-2 text-sm">
+                          <VariantNameEdit productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === v ? n : y))); setVEdit(n); }} />
+                        </div>
+                        {prod && (prod.variants ?? []).includes(v) ? (
+                          <div className="flex flex-wrap items-center gap-2">
+                            <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />
+                            <VariantSynonyms productId={prod.id} variant={v} />
+                            <VariantTranslations productId={prod.id} variant={v} productName={() => name || prod?.name || ""} />
+                          </div>
+                        ) : (
+                          <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
-              </div>
-            )}
-            {vEdit && variants.includes(vEdit) && (
-              <div className="fixed inset-0 z-[60] flex items-end justify-center bg-black/40 sm:items-center" onClick={() => setVEdit(null)}>
-                <div className="flex max-h-[85vh] w-full max-w-sm flex-col gap-3 overflow-y-auto rounded-t-2xl bg-card p-4 sm:rounded-2xl" onClick={(e) => e.stopPropagation()}>
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm font-bold text-foreground">{prod?.name}</p>
-                    <button type="button" aria-label={T("adm.cancel")} onClick={() => setVEdit(null)} className="text-muted-foreground">✕</button>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2 text-sm">
-                    <VariantNameEdit productId={prod?.id} variant={vEdit} label={vl(p.vtr, prod?.id, vEdit)} saved={(prod?.variants ?? []).includes(vEdit)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === vEdit ? n : y))); setVEdit(n); }} />
-                  </div>
-                  {prod && (prod.variants ?? []).includes(vEdit) ? (
-                    <div className="flex flex-wrap items-center gap-2">
-                      <VariantImageButton productId={prod.id} productName={prod.name} variant={vEdit} />
-                      <VariantSynonyms productId={prod.id} variant={vEdit} />
-                      <VariantTranslations productId={prod.id} variant={vEdit} productName={() => name || prod?.name || ""} />
-                    </div>
-                  ) : (
-                    <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
-                  )}
-                  <Button variant="outline" onClick={() => setVEdit(null)}>OK</Button>
-                </div>
               </div>
             )}
             <div className="flex items-start gap-2">
