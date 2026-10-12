@@ -1424,7 +1424,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                         {prod && (prod.variants ?? []).includes(v) ? (
                           <div className="flex flex-wrap items-center gap-2">
                             <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />
-                            <VariantSynonyms productId={prod.id} variant={v} />
+                            <VariantSynonyms defaultOpen productId={prod.id} variant={v} />
                             <VariantTranslations defaultOpen productId={prod.id} variant={v} productName={() => name || prod?.name || ""} />
                           </div>
                         ) : (

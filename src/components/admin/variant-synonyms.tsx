@@ -8,7 +8,7 @@ const db = supabase as any;
 const T = (k: "vsyn.button" | "vsyn.placeholder" | "vsyn.exists") => translate(getLocale(), k);
 
 /** Synonym-Knopf + aufklappbarer Bereich (Fragment: Knopf in der Zeile, Bereich als volle Breite). */
-export function VariantSynonyms({ productId, variant }: { productId: string; variant: string }) {
+export function VariantSynonyms({ productId, variant, defaultOpen }: { productId: string; variant: string; defaultOpen?: boolean }) {
   const qc = useQueryClient();
   const locale = getLocale();
   const key = ["admin-variant-synonyms", productId];
@@ -21,14 +21,15 @@ export function VariantSynonyms({ productId, variant }: { productId: string; var
     },
   });
   const terms = data.filter((r) => r.variant === variant && r.locale === locale);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!!defaultOpen);
   const [input, setInput] = useState("");
 
   const add = async () => {
-    const term = input.trim();
-    if (!term) return;
-    if (terms.some((r) => r.term.toLowerCase() === term.toLowerCase())) { toast.error(T("vsyn.exists")); return; }
-    const { error } = await db.from("variant_synonyms").insert({ product_id: productId, variant, locale, term });
+    const all = input.split(/[,\n]/).map((s) => s.trim()).filter(Boolean);
+    if (!all.length) return;
+    const fresh = all.filter((t, i) => all.findIndex((x) => x.toLowerCase() === t.toLowerCase()) === i && !terms.some((r) => r.term.toLowerCase() === t.toLowerCase()));
+    if (!fresh.length) { toast.error(T("vsyn.exists")); return; }
+    const { error } = await db.from("variant_synonyms").insert(fresh.map((term) => ({ product_id: productId, variant, locale, term })));
     if (error) { toast.error(error.message); return; }
     setInput("");
     await qc.invalidateQueries({ queryKey: key });
