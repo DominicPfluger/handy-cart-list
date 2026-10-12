@@ -36,6 +36,13 @@
       "when": 1791722302814,
       "tag": "0004_replace_variants",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791801207797,
+      "tag": "0005_variant_excluded_diets",
+      "breakpoints": true
     }
   ]
 }

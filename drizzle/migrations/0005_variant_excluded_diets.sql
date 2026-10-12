@@ -1,0 +1,1 @@
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS variant_excluded_diets jsonb NOT NULL DEFAULT '{}'::jsonb;
