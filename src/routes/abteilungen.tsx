@@ -277,9 +277,17 @@ function DepartmentsPage() {
     walk(null);
     const order = new Map(orderedProducts.map((p, i) => [p.id, i]));
     const big = Number.MAX_SAFE_INTEGER;
-    return orderedProducts
-      .filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId))
-      .filter((product) => matchesProductSearch(product.name, normalizedQuery) || matchesProductSearch(product.baseName ?? "", normalizedQuery) || brandsFor(product, market).some((b) => matchesProductSearch(b, normalizedQuery)) || !!matchedVariant(product) || !!matchedSynonym(product) || !!matchedLocaleName(product))
+    const visible = orderedProducts.filter((p) => !hiddenProductIds.includes(p.id) && !removedIds.has(p.departmentId));
+    // Erst exakte Treffer; Tippfehler-Korrektur nur, wenn nichts exakt passt.
+    const hits = (fz: boolean) => visible.filter((product) => {
+      const m = (s: string) => matchesProductSearch(s, normalizedQuery, fz);
+      return m(product.name) || m(product.baseName ?? "") || brandsFor(product, market).some(m)
+        || (product.variants ?? []).some((v) => m(variantLabel(product, v)) || (product.variantSynonyms?.[v] ?? []).some(m))
+        || (product.synonyms ?? []).some(m)
+        || Object.entries(product.names ?? {}).some(([loc, n]) => loc !== locale && loc.split("-")[0] === langStem && m(n));
+    });
+    const exact = hits(false);
+    return (exact.length ? exact : hits(true))
       .sort((a, b) => (deptRank.get(a.departmentId) ?? big) - (deptRank.get(b.departmentId) ?? big) || (order.get(a.id) ?? big) - (order.get(b.id) ?? big));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [departments, orderedProducts, hiddenProductIds, removedIds, normalizedQuery, market]);
