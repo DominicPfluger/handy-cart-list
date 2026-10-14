@@ -1489,5 +1489,10 @@
   "adm.vBatchRemove": "Remove selection",
   "adm.vBatchDiets": "Not suitable for (selection)",
   "adm.vBatchTranslate": "Translate all",
-  "adm.vBatchTranslated": "Variants translated"
+  "adm.vBatchTranslated": "Variants translated",
+  "gs.placeholder": "Rechercher dans tout le catalogue et ajouter…",
+  "gs.addFree": "Ajouter « {name} » comme entrée libre",
+  "wl.toggle": "Garder l’écran allumé",
+  "wl.on": "L’écran reste allumé",
+  "wl.off": "Verrouillage auto réactivé"
 }

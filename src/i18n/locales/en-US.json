@@ -1502,5 +1502,10 @@
   "adm.vBatchRemove": "Remove selection",
   "adm.vBatchDiets": "Not suitable for (selection)",
   "adm.vBatchTranslate": "Translate all",
-  "adm.vBatchTranslated": "Variants translated"
+  "adm.vBatchTranslated": "Variants translated",
+  "gs.placeholder": "Search the whole catalog & add…",
+  "gs.addFree": "Add “{name}” as a free entry",
+  "wl.toggle": "Keep screen awake",
+  "wl.on": "Screen stays awake",
+  "wl.off": "Auto-lock active again"
 }

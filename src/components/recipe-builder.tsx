@@ -1,3 +1,4 @@
+import { scaleQuantity } from "../lib/scale-quantity";
 import { uploadRecipeImage } from "../lib/recipe-images";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -284,16 +285,18 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
     ? `${catName}: ${chosen.slice(0, 3).map((p) => p.name).join(", ")}${chosen.length > 3 ? " …" : ""}`
     : "";
 
+  const [builderPortions, setBuilderPortions] = useState(1);
   const addAll = () => {
+    const f = builderPortions;
     for (const p of chosen) {
-      if (p.id.startsWith("any:")) { addItem(p.name, "1", "sonstiges"); continue; }
+      if (p.id.startsWith("any:")) { addItem(p.name, String(f), "sonstiges"); continue; }
       const g = catalog.departments.find((d) => d.id === p.departmentId);
       const q = qtyOf(p);
       addCatalogItem({
         productId: p.id,
         departmentId: p.departmentId,
         name: p.name,
-        quantity: isValidQty(q) ? formatQuantity(q.qty, q.unit) : formatQuantity(p.defaultQuantity, p.defaultUnit),
+        quantity: scaleQuantity(isValidQty(q) ? formatQuantity(q.qty, q.unit) : formatQuantity(p.defaultQuantity, p.defaultUnit), f),
         unit: isValidQty(q) ? q.unit : p.defaultUnit,
         organic: false,
         emoji: p.emoji,
@@ -822,6 +825,14 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 {savedMsg ? `📁 ${t("rk.saved")}` : `📁 ${t("rk.save")}`}
               </button>
             )}
+            <div className="mt-3 flex items-center justify-between rounded-2xl border border-border bg-card px-4 py-2">
+              <span className="text-sm font-semibold text-foreground">{t("rs.portions")}</span>
+              <div className="flex items-center gap-3">
+                <button type="button" onClick={() => { setBuilderPortions((p) => Math.max(1, p - 1)); setAdded(false); }} disabled={builderPortions <= 1} aria-label="−" className="grid h-8 w-8 place-items-center rounded-full border border-border text-lg text-foreground disabled:opacity-40">−</button>
+                <span className="min-w-6 text-center text-sm font-bold text-foreground">{builderPortions}</span>
+                <button type="button" onClick={() => { setBuilderPortions((p) => Math.min(12, p + 1)); setAdded(false); }} disabled={builderPortions >= 12} aria-label="+" className="grid h-8 w-8 place-items-center rounded-full border border-border text-lg text-foreground disabled:opacity-40">+</button>
+              </div>
+            </div>
             <button
               onClick={addAll}
               disabled={added}

@@ -1489,5 +1489,10 @@
   "adm.vBatchRemove": "Remove selection",
   "adm.vBatchDiets": "Not suitable for (selection)",
   "adm.vBatchTranslate": "Translate all",
-  "adm.vBatchTranslated": "Variants translated"
+  "adm.vBatchTranslated": "Variants translated",
+  "gs.placeholder": "Cerca nell’intero catalogo e aggiungi…",
+  "gs.addFree": "Aggiungi «{name}» come voce libera",
+  "wl.toggle": "Mantieni lo schermo acceso",
+  "wl.on": "Lo schermo resta acceso",
+  "wl.off": "Blocco automatico di nuovo attivo"
 }
