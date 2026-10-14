@@ -911,5 +911,10 @@
   "adm.vBatchRemove": "Auswahl entfernen",
   "adm.vBatchDiets": "Nicht geeignet für (Auswahl)",
   "adm.vBatchTranslate": "Alle übersetzen",
-  "adm.vBatchTranslated": "Varianten übersetzt"
+  "adm.vBatchTranslated": "Varianten übersetzt",
+  "gs.placeholder": "Ganzen Katalog durchsuchen & hinzufügen…",
+  "gs.addFree": "„{name}“ als freien Eintrag hinzufügen",
+  "wl.toggle": "Bildschirm wach halten",
+  "wl.on": "Bildschirm bleibt wach",
+  "wl.off": "Auto-Sperre wieder aktiv"
 }

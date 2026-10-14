@@ -1489,5 +1489,10 @@
   "adm.vBatchRemove": "Remove selection",
   "adm.vBatchDiets": "Not suitable for (selection)",
   "adm.vBatchTranslate": "Translate all",
-  "adm.vBatchTranslated": "Variants translated"
+  "adm.vBatchTranslated": "Variants translated",
+  "gs.placeholder": "Pesquisar em todo o catálogo e adicionar…",
+  "gs.addFree": "Adicionar “{name}” como item livre",
+  "wl.toggle": "Manter o ecrã ligado",
+  "wl.on": "O ecrã fica ligado",
+  "wl.off": "Bloqueio automático reativado"
 }
