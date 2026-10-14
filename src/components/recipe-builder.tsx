@@ -787,7 +787,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 for (const id of sel) shownIds.add(id);
                 const hiddenCount = ordered.filter((p) => !shownIds.has(p.id)).length;
                 return <div className="contents">
-                  {ordered.filter((p) => shownIds.has(p.id)).map(chip)}
+                  {ordered.filter((p) => shownIds.has(p.id)).map(item)}
                   {ordered.length > PAGE && <Button variant="ghost" size="sm" type="button"
                     onClick={() => setVisibleCount((x) => ({ ...x, [s.key]: expanded ? PAGE : Math.min(ordered.length, limit + PAGE) }))}
                     className="text-xs font-medium text-primary" aria-expanded={expanded}>
@@ -833,7 +833,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                           <span aria-hidden="true" className="mr-1">{gAny.emoji}</span>{gAny.name}
                         </button>
                       )}
-                      {shown.map(chip)}
+                      {shown.map(item)}
                       {gOpen && gHidden > 0 && (
                         <Button variant="ghost" size="sm" type="button"
                           onClick={() => setVisibleCount((x) => ({ ...x, [gKey]: gExpanded ? PAGE : Math.min(group.products.length, gLimit + PAGE) }))}
