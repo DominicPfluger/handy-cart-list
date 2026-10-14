@@ -1433,7 +1433,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       setVariants((x) => { const next = [...x]; const moved = next[vDrag]; if (moved === undefined) return x; next.splice(vDrag, 1); next.splice(vi, 0, moved); return next; });
                       setVDrag(null); setVOver(null);
                     }}
-                    onDragEnd={() => { setVDrag(null); setVOver(null); }}
+                    onDragEnd={() => { setVDrag(null); setVOver(null); setVGrab(null); }}
                     className={`flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
                   >
                     <span className="flex min-w-0 flex-1 items-center gap-2">
@@ -1960,7 +1960,7 @@ function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>,
                   if (vDrag !== null && vDrag !== vi) void reorder(vDrag, vi);
                   setVDrag(null); setVOver(null);
                 }}
-                onDragEnd={() => { setVDrag(null); setVOver(null); }}
+                onDragEnd={() => { setVDrag(null); setVOver(null); setVGrab(null); }}
                 className={`flex items-center gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
               >
                 <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
