@@ -72,6 +72,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
   const [recipeCuisineIds, setRecipeCuisineIds] = useState<string[]>([]);
   const traitsComplete = TRAIT_GROUPS.every((g) => !!traits[g]);
   const [onlyFav, setOnlyFav] = useState(false);
+  const [showAny, setShowAny] = useState(false);
   const [showAllRecent, setShowAllRecent] = useState(false);
   const [showAllPopular, setShowAllPopular] = useState(false);
   const cuisineFilter = useCuisineFilter();
@@ -584,6 +585,15 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
             >
               ♥ {t("rk.onlyFavorites")}
             </button>
+            <button
+              onClick={() => setShowAny((v) => !v)}
+              aria-pressed={showAny}
+              className={`shrink-0 whitespace-nowrap rounded-full border px-2 py-1 text-[11px] font-semibold leading-tight transition ${
+                showAny ? "border-primary bg-primary text-primary-foreground" : "border-border text-foreground"
+              }`}
+            >
+              {t("rk.showAny")}
+            </button>
             <button onClick={surprise} className="shrink-0 whitespace-nowrap rounded-full bg-accent px-2 py-1 text-[11px] font-semibold leading-tight text-accent-foreground">
               {t("rk.surprise")}
             </button>
@@ -651,6 +661,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
           {(() => {
             const ap = anyProduct(s);
             const on = sel0.includes(ap.id);
+            if (!showAny && !on) return null;
             return (
               <button type="button" aria-pressed={on} onClick={() => { setSavedMsg(false); toggle(s.key, ap.id, s.max); }}
                 className={`rounded-full border border-dashed px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${on ? "border-primary bg-primary text-primary-foreground" : "border-primary/60 bg-card text-foreground"}`}>
@@ -758,7 +769,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                       type="button"
                       aria-expanded={gOpen}
                       onClick={() => setOpenGroups((x) => ({ ...x, [gKey]: !gOpen }))}
-                      className={`h-auto shrink-0 gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${gOpen ? "border-primary bg-primary-soft/50 text-foreground" : "border-border bg-muted text-foreground"}`}
+                      className={`h-auto shrink-0 gap-1.5 rounded-full border border-dotted bg-card px-3 py-1.5 text-xs font-semibold text-foreground shadow-none ${gOpen ? "border-primary" : "border-muted-foreground/60"}`}
                     >
                       {group.emoji && <span aria-hidden="true">{group.emoji}</span>}
                       {group.name}
@@ -769,7 +780,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   return (
                     <span key={group.key} className="contents">
                       {catBtn}
-                      {gAny && gOpen && (
+                      {gAny && gOpen && (showAny || gAnyOn) && (
                         <button type="button" aria-pressed={gAnyOn} onClick={() => { setSavedMsg(false); toggle(s.key, gAny.id, s.max); }}
                           className={`rounded-full border border-dashed px-3 py-1.5 text-xs font-semibold transition active:scale-95 ${gAnyOn ? "border-primary bg-primary text-primary-foreground" : "border-primary/60 bg-card text-foreground"}`}>
                           <span aria-hidden="true" className="mr-1">{gAny.emoji}</span>{gAny.name}
