@@ -1494,5 +1494,6 @@
   "gs.addFree": "Aggiungi «{name}» come voce libera",
   "wl.toggle": "Mantieni lo schermo acceso",
   "wl.on": "Lo schermo resta acceso",
-  "wl.off": "Blocco automatico di nuovo attivo"
+  "wl.off": "Blocco automatico di nuovo attivo",
+  "rk.showAny": "Ingrediente a scelta"
 }

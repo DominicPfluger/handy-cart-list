@@ -1494,5 +1494,6 @@
   "gs.addFree": "“{name}” als vrije invoer toevoegen",
   "wl.toggle": "Scherm aan houden",
   "wl.on": "Scherm blijft aan",
-  "wl.off": "Automatische vergrendeling weer actief"
+  "wl.off": "Automatische vergrendeling weer actief",
+  "rk.showAny": "Ingrediënt naar keuze"
 }
