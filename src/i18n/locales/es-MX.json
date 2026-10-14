@@ -1494,5 +1494,6 @@
   "gs.addFree": "Añadir «{name}» como entrada libre",
   "wl.toggle": "Mantener la pantalla encendida",
   "wl.on": "La pantalla permanece encendida",
-  "wl.off": "Bloqueo automático activado de nuevo"
+  "wl.off": "Bloqueo automático activado de nuevo",
+  "rk.showAny": "Ingrediente a elección"
 }

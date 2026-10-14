@@ -61,3 +61,5 @@
 - [x] Abteilungsmodus: Kategoriebilder grösser (Bildfläche 125 -> 150 px, dann um 10 % zurück auf 135 px; füllen die Fläche ohne Abschneiden)
 - [x] Abteilungsmodus: Kategoriebilder auf Standardgrösse zurück (4:3-Bildfläche, Bild füllt 74 %; gemessen 107 px in 144 px hoher Fläche)
 - [x] Abteilungs-Kachelmodus: Überschriften werden über ihren Produktgruppen angezeigt
+- Rezept-Generatoren: «nach Wahl» nur per Schalter; Oberkategorien weiss gepunktet — erledigt
+- Auto-Sperre-Schalter nur im Einkaufsmodus — erledigt

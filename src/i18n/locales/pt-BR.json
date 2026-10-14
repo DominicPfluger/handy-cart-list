@@ -1494,5 +1494,6 @@
   "gs.addFree": "Adicionar “{name}” como item livre",
   "wl.toggle": "Manter o tela ligado",
   "wl.on": "O tela fica ligado",
-  "wl.off": "Bloqueio automático reativado"
+  "wl.off": "Bloqueio automático reativado",
+  "rk.showAny": "Ingrediente à escolha"
 }

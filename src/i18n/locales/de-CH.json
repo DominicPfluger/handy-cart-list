@@ -916,5 +916,6 @@
   "gs.addFree": "„{name}“ als freien Eintrag hinzufügen",
   "wl.toggle": "Bildschirm wach halten",
   "wl.on": "Bildschirm bleibt wach",
-  "wl.off": "Auto-Sperre wieder aktiv"
+  "wl.off": "Auto-Sperre wieder aktiv",
+  "rk.showAny": "Zutat nach Wahl"
 }

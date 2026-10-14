@@ -667,6 +667,7 @@ export const de = {
   "rk.deleteList": "Liste löschen",
   "rk.recent": "Neue Rezept-Kreationen",
   "rk.onlyFavorites": "Nur Favoriten",
+  "rk.showAny": "Zutat nach Wahl",
   "rk.popular": "Beliebte Rezept-Kreationen",
   "rk.showAllRecent": "Alle neuen Rezept-Kreationen anzeigen",
   "rk.showAllPopular": "Alle beliebten Rezept-Kreationen anzeigen",
