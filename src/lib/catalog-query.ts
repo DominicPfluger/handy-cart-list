@@ -316,22 +316,23 @@ export function normalizeSearch(s: string): string {
 }
 
 /** Wortanfang ab 1 Zeichen, beliebiger Teil ab 3 Zeichen; Akzente und ß/ss egal. */
-export function matchesProductSearch(name: string, query: string): boolean {
+export function matchesProductSearch(name: string, query: string, fuzzy = true): boolean {
   const n = normalizeSearch(name);
   const q = normalizeSearch(query);
   if (!q) return false;
   if (q.length >= 3 && n.includes(q)) return true;
   const words = n.split(/[^\p{L}\p{N}]+/u).filter(Boolean);
   if (q.length < 3) return words.some((w) => w.startsWith(q));
-  if (q.length < 4) return false;
-  // Fehlertoleranz: 1 Tippfehler ab 4, 2 ab 7 Zeichen (gegen Wortanfang bzw. ganzes Wort).
-  const max = q.length >= 7 ? 2 : 1;
+  if (!fuzzy || q.length < 4) return false;
+  // Fehlertoleranz: 1 Tippfehler ab 4, 2 erst ab 9 Zeichen; erster Buchstabe muss stimmen.
+  const max = q.length >= 9 ? 2 : 1;
   for (const w of words) {
+    if (w[0] !== q[0]) continue;
     if (Math.abs(w.length - q.length) <= max && editDistance(w, q, max) <= max) return true;
     if (w.length > q.length && editDistance(w.slice(0, q.length), q, max) <= max) return true;
   }
   // Auch zusammengesetzte Wörter: beliebige Teilstücke gleicher Länge prüfen.
-  if (q.length >= 5) {
+  if (q.length >= 6) {
     for (let i = 1; i + q.length - 1 <= n.length; i++) {
       if (editDistance(n.slice(i, i + q.length), q, 1) <= 1) return true;
     }
