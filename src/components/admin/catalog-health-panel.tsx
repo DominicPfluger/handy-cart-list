@@ -356,6 +356,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
             <Button size="sm" variant="outline" disabled={busy} onClick={() => setScanned(true)}>{T("adm.health.scan")}</Button>
           </div>
         </div>
+        <Input value={dupSearch} onChange={(e) => setDupSearch(e.target.value)} placeholder={T("adm.health.dupSearch")} />
         {scanned && (
           pairs.length === 0 ? <p className="text-sm text-muted-foreground">{T("adm.health.noDupes")}</p> : (
             <>
