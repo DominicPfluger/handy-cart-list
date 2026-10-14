@@ -917,9 +917,9 @@ function DepartmentsPage() {
                   <span aria-hidden className="w-1.5 shrink-0" />
                   </div>
                 </div>
-                {!normalizedQuery && expandedId === product.id && (
+                {(normalizedQuery || expandedId === product.id) && (
                   <>
-                    {expandVariants(product, diets as string[]).map((v) => {
+                    {expandVariants(product, diets as string[]).filter((v) => !normalizedQuery || matchesProductSearch(variantLabel(product, v), normalizedQuery, false) || (product.variantSynonyms?.[v] ?? []).some((s) => matchesProductSearch(s, normalizedQuery, false)) || matchesProductSearch(product.name, normalizedQuery, false)).map((v) => {
                       const vi = product.variantImages?.[v];
                       const vName = variantLabel(product, v);
                       const vFav = isFavorite(`${product.id}::${v}`);
