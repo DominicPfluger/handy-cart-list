@@ -128,6 +128,7 @@ function ListPage() {
   const allStores = useStores();
   const activeStore = allStores.find((s) => s.id === activeStoreId);
   const data = useCatalog();
+  useWakeLock(keepAwake && !!openListId);
   const { t } = useT();
   const { data: referencePrices, isPending: pricesPending } = useReferencePrices();
   /** "Beliebige/Beliebiger/Beliebiges …" (und Übersetzungen wie "Any …") nicht anzeigen. */
