@@ -757,6 +757,28 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   </span>
                 );
               };
+              // Gleichnamige Ausführungen (frisch, getrocknet, TK …) erst nach Klick auf die Oberzutat zeigen.
+              const firstOf = new Map<string, string>();
+              for (const p of pool) if (!firstOf.has(p.name)) firstOf.set(p.name, p.id);
+              const item = (p: CatalogProduct) => {
+                if ((dupCount.get(p.name) ?? 0) < 2) return chip(p);
+                if (firstOf.get(p.name) !== p.id) return null;
+                const sibs = pool.filter((x) => x.name === p.name);
+                const dKey = `${s.key}:dup:${p.name}`;
+                const dOpen = !!openGroups[dKey];
+                const anySel = sibs.some((x) => sel.includes(x.id));
+                return (
+                  <span key={dKey} className="contents">
+                    <button type="button" aria-expanded={dOpen}
+                      onClick={() => setOpenGroups((x) => ({ ...x, [dKey]: !dOpen }))}
+                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition active:scale-95 bg-card text-foreground ${dOpen || anySel ? "border-primary" : "border-border"}`}>
+                      {p.emoji ? <ProductEmoji emoji={p.emoji} className="mr-1" /> : null}{p.name}
+                      <span aria-hidden="true" className="ml-1 text-muted-foreground">{dOpen ? "▴" : "▾"}</span>
+                    </button>
+                    {(dOpen ? sibs : sibs.filter((x) => sel.includes(x.id))).map(chip)}
+                  </span>
+                );
+              };
               if (!hasGroups) {
                 const ordered = groups.flatMap((g) => g.products);
                 const limit = visibleCount[s.key] ?? PAGE;
