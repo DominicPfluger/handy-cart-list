@@ -41,7 +41,6 @@ import { toast } from "sonner";
 import { currentMarket, useReferencePrices } from "../hooks/use-reference-prices";
 import { priceForItem } from "../lib/item-price";
 import { PurchaseMode, type PurchaseItem } from "../components/purchase-mode";
-import { GlobalSearch } from "../components/global-search";
 import { useWakeLock, useKeepAwakePref } from "../hooks/use-wake-lock";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useGroupOrder, applyGroupOrder, filterHidden } from "../hooks/use-group-order";
@@ -603,8 +602,6 @@ function ListPage() {
       </div>
 
 
-
-      <GlobalSearch catalog={data} onAdd={addCatalogItem} onAddFree={(n) => addItem(n, "1", "sonstiges")} />
 
       {/* List grouped by category */}
       {items.length === 0 && hydrated && (
