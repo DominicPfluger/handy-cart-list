@@ -63,3 +63,4 @@
 - [x] Abteilungs-Kachelmodus: Überschriften werden über ihren Produktgruppen angezeigt
 - Rezept-Generatoren: «nach Wahl» nur per Schalter; Oberkategorien weiss gepunktet — erledigt
 - Auto-Sperre-Schalter nur im Einkaufsmodus — erledigt
+- Admin-Pflege > Dubletten: Suchfeld für Dubletten-Paare (Name oder Kategorie), getestet (530 Paare, «basilikum» filtert auf 4)
