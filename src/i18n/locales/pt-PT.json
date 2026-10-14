@@ -1131,6 +1131,7 @@
   "adm.health.dupes": "Duplicados",
   "adm.health.scan": "Iniciar verificação",
   "adm.health.noDupes": "Nenhum duplicado encontrado.",
+  "adm.health.dupSearch": "Procurar duplicados …",
   "adm.health.exact": "Mesmo nome",
   "adm.health.similar": "Nome semelhante",
   "adm.health.synConflict": "Conflito de sinónimos",

@@ -1131,6 +1131,7 @@
   "adm.health.dupes": "Duplicaten",
   "adm.health.scan": "Scan starten",
   "adm.health.noDupes": "Geen duplicaten gevonden.",
+  "adm.health.dupSearch": "Dubbelingen zoeken …",
   "adm.health.exact": "Zelfde naam",
   "adm.health.similar": "Vergelijkbare naam",
   "adm.health.synConflict": "Synoniemconflict",
