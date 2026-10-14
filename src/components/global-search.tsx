@@ -71,7 +71,7 @@ export function GlobalSearch({ catalog, onAdd, onAddFree }: { catalog: Catalog; 
         <ul className="absolute left-0 right-0 top-full z-30 mt-1 max-h-80 overflow-y-auto rounded-2xl border border-border bg-card shadow-lg">
           {results.map((r) => (
             <li key={r.key} className="flex items-center gap-3 border-b border-border px-3 py-2 last:border-0">
-              <ProductIcon product={r.p} className="h-8 w-8" />
+              <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden"><ProductIcon emoji={r.p.emoji} iconUrl={r.p.iconUrl} iconPath={r.p.iconPath} symbolClassName="text-xl" /></span>
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-foreground">{r.p.name}{r.variant && ` · ${r.variant}`}</p>
                 <p className="truncate text-xs text-muted-foreground">{r.hint ? `„${r.hint}" · ` : ""}{depts.get(r.p.departmentId)?.name}</p>
