@@ -143,9 +143,21 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         .map((id) => catalog.products.find((p) => p.id === id))
         .filter((p): p is CatalogProduct => !!p);
       // Admin-managed steps have no built-in ingredients: an empty assignment stays empty.
-      const base = fromDb.length > 0
+      const base0 = fromDb.length > 0
         ? fromDb
         : s.ingredients.map((n) => byBase.get(n)).filter((p): p is CatalogProduct => !!p);
+      // Gleichnamige Produkte aus anderen Kategorien (frisch, getrocknet, TK …) mit anzeigen.
+      const seen = new Set(base0.map((p) => p.id));
+      const base: CatalogProduct[] = [];
+      for (const p of base0) {
+        base.push(p);
+        const k = p.baseName.trim().toLocaleLowerCase();
+        for (const q of catalog.products) {
+          if (seen.has(q.id) || q.baseName.trim().toLocaleLowerCase() !== k) continue;
+          seen.add(q.id);
+          base.push(q);
+        }
+      }
       const picked = picks[s.key] ?? [];
       const visible = base.filter((p) => {
         if (picked.includes(p.id)) return true;
@@ -680,8 +692,21 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                 ? [...s.groups.map((g) => ({ key: g.id, name: g.name, emoji: g.emoji, products: pool.filter((p) => s.groupByProduct.get(p.id) === g.id) })),
                     { key: "other", name: t("rk.otherGroup"), emoji: "🧺", products: pool.filter((p) => !s.groups.some((g) => g.id === s.groupByProduct.get(p.id))) }].filter((g) => g.products.length > 0)
                 : [{ key: "all", name: "", emoji: null, products: pool }];
+              const dupCount = new Map<string, number>();
+              for (const p of pool) dupCount.set(p.name, (dupCount.get(p.name) ?? 0) + 1);
+              const formTag = (p: CatalogProduct) => {
+                if ((dupCount.get(p.name) ?? 0) < 2) return "";
+                const d = catalog.departments.find((x) => x.id === p.departmentId);
+                const f = storageFormOf(p.departmentId);
+                if (f === "frozen") return t("rk.formFrozen");
+                if (f === "canned") return t("rk.formCanned");
+                if (d && /getrocknet|gewürz/i.test(d.baseName)) return t("rk.formDried");
+                if (d && /frisch/i.test(d.baseName)) return t("rk.formFresh");
+                return d?.name ?? "";
+              };
               const chip = (p: CatalogProduct) => {
                 const on = sel.includes(p.id);
+                const tag = formTag(p);
                 const btn = (
                   <button
                     key={p.id}
@@ -692,12 +717,12 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                       on ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card text-foreground"
                     }`}
                   >
-                    {p.emoji ? <ProductEmoji emoji={p.emoji} className="mr-1" /> : null}{p.name}
+                    {p.emoji ? <ProductEmoji emoji={p.emoji} className="mr-1" /> : null}{p.name}{tag ? ` ${tag.toLocaleLowerCase()}` : ""}
                     {on && variants[p.id] ? ` · ${vName(p, variants[p.id]!)}` : ""}
                   </button>
                 );
                 const vs = p.variants ?? [];
-                const alts = on ? formAlternatives(catalog.products, p) : {};
+                const alts = on && !tag ? formAlternatives(catalog.products, p) : {};
                 const formList = STORAGE_FORMS.filter((f) => alts[f]);
                 const curForm: StorageForm = forms[p.id] ?? storageFormOf(p.departmentId);
                 const formLabel: Record<StorageForm, string> = { fresh: t("rk.formFresh"), frozen: t("rk.formFrozen"), canned: t("rk.formCanned") };
