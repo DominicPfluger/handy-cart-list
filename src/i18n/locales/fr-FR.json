@@ -1131,6 +1131,7 @@
   "adm.health.dupes": "Doublons",
   "adm.health.scan": "Lancer le scan",
   "adm.health.noDupes": "Aucun doublon trouvé.",
+  "adm.health.dupSearch": "Rechercher des doublons …",
   "adm.health.exact": "Même nom",
   "adm.health.similar": "Nom similaire",
   "adm.health.synConflict": "Conflit de synonyme",

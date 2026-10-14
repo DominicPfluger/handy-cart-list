@@ -51,6 +51,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   const [synTerm, setSynTerm] = useState("");
   const [copyOpen, setCopyOpen] = useState(false);
   const [dupCat, setDupCat] = useState("");
+  const [dupSearch, setDupSearch] = useState("");
 
   const syns = useQuery({
     queryKey: ["health-synonyms"],
@@ -166,8 +167,12 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
       while (c && g++ < 20) { if (c.id === dupCat) return true; c = c.parent_id ? deptById.get(c.parent_id) : undefined; }
       return false;
     };
-    return out.filter((p) => !ignored.has(keyOf(p.a.id, p.b.id)) && (inCat(p.a.department_id) || inCat(p.b.department_id)));
-  }, [scanned, prods, syns.data, prodById, ignored, dupCat, deptById]);
+    const q = norm(dupSearch);
+    return out.filter((p) => !ignored.has(keyOf(p.a.id, p.b.id)) && (inCat(p.a.department_id) || inCat(p.b.department_id))
+      && (!q || norm(p.a.name).includes(q) || norm(p.b.name).includes(q)
+        || norm(deptName.get(p.a.department_id) ?? "").includes(q)
+        || norm(deptName.get(p.b.department_id) ?? "").includes(q)));
+  }, [scanned, prods, syns.data, prodById, ignored, dupCat, dupSearch, deptById, deptName]);
   const catOptions = useMemo(() => deptTreeOrder(depts).map((d) => ({ id: d.id, label: deptPath(d.id) })),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [depts]);
@@ -351,6 +356,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
             <Button size="sm" variant="outline" disabled={busy} onClick={() => setScanned(true)}>{T("adm.health.scan")}</Button>
           </div>
         </div>
+        <Input value={dupSearch} onChange={(e) => setDupSearch(e.target.value)} placeholder={T("adm.health.dupSearch")} />
         {scanned && (
           pairs.length === 0 ? <p className="text-sm text-muted-foreground">{T("adm.health.noDupes")}</p> : (
             <>

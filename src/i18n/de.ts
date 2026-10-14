@@ -812,6 +812,7 @@ export const de = {
   "adm.health.dupes": "Dubletten",
   "adm.health.scan": "Scan starten",
   "adm.health.noDupes": "Keine Dubletten gefunden.",
+  "adm.health.dupSearch": "Dubletten suchen …",
   "adm.health.exact": "Gleicher Name",
   "adm.health.similar": "Ähnlicher Name",
   "adm.health.synConflict": "Synonym-Konflikt",
