@@ -201,7 +201,10 @@ function ProductPage() {
             <p className="text-muted-foreground">{t("pd.variants")}</p>
             {ownVariants.length > 0 && <div className="mt-1.5 flex flex-wrap gap-1.5">
               {ownVariants.map((v) => (
-                <span key={v} className="rounded-full bg-primary-soft/25 px-2.5 py-1 text-xs font-medium text-foreground">
+                <span key={v} role="button" tabIndex={0} title={t("pd.variantCopied")}
+                  onClick={() => { void navigator.clipboard?.writeText(variantLabel(v)).then(() => toast.success(t("pd.variantCopied"))).catch(() => {}); }}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); void navigator.clipboard?.writeText(variantLabel(v)).then(() => toast.success(t("pd.variantCopied"))).catch(() => {}); } }}
+                  className="cursor-copy select-text rounded-full bg-primary-soft/25 px-2.5 py-1 text-xs font-medium text-foreground">
                   {variantLabel(v)}
                   {ownVariants.includes(v) && !sharedVariants.includes(v) ? (
                     <Button type="button" variant="ghost" size="sm" aria-label={t("dept.removeVariant", { name: variantLabel(v) })} title={t("dept.removeVariant", { name: variantLabel(v) })} onClick={() => removePersonalVariant(product.id, v)} className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
