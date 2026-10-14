@@ -32,7 +32,6 @@ export const de = {
   "rk.formFrozen": "Tiefgekühlt",
   "rk.formCanned": "Konserve",
   "rk.formDried": "Getrocknet",
-  "rk.formDried": "Getrocknet",
   "rk.form": "Lagerform",
   "common.removeFavorite": "{name} aus Favoriten entfernen",
   "common.addFavorite": "{name} favorisieren",
