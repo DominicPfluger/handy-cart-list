@@ -1341,6 +1341,7 @@ export const de = {
   "pd.quantity": "Menge",
   "pd.brands": "Marken",
   "pd.variants": "Varianten",
+  "pd.variantCopied": "Variante kopiert",
   "pd.addToList": "Zur Liste hinzufügen",
   "pd.favQuantity": "Meine Lieblingsmenge",
   "pd.saveFavQuantity": "Speichern",
