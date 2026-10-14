@@ -35,7 +35,7 @@ import { ProductPronunciationEditor } from "@/components/admin/product-pronuncia
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
-import { Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
+import { Copy, Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 /** Variante in der aktuellen Admin-Sprache anzeigen (Fallback: deutscher Basisname). */
@@ -1070,6 +1070,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const commonVariants = useStandardVariants();
   const [variantInput, setVariantInput] = useState("");
   const [vDrag, setVDrag] = useState<number | null>(null);
+  const [vGrab, setVGrab] = useState<number | null>(null);
   const [vEdit, setVEdit] = useState<string | null>(null);
   const [vListMode, setVListMode] = useState(false);
   const [vListText, setVListText] = useState("");
@@ -1423,7 +1424,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                 {variants.map((v, vi) => (
                   <div
                     key={v}
-                    draggable
+                    draggable={vGrab === vi || vDrag === vi}
                     onDragStart={() => setVDrag(vi)}
                     onDragOver={(e) => { e.preventDefault(); setVOver(vi); }}
                     onDrop={(e) => {
@@ -1432,14 +1433,18 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                       setVariants((x) => { const next = [...x]; const moved = next[vDrag]; if (moved === undefined) return x; next.splice(vDrag, 1); next.splice(vi, 0, moved); return next; });
                       setVDrag(null); setVOver(null);
                     }}
-                    onDragEnd={() => { setVDrag(null); setVOver(null); }}
+                    onDragEnd={() => { setVDrag(null); setVOver(null); setVGrab(null); }}
                     className={`flex flex-wrap items-center justify-between gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
                   >
                     <span className="flex min-w-0 flex-1 items-center gap-2">
                       {vSelMode && <input type="checkbox" className="h-4 w-4 shrink-0 accent-[hsl(var(--primary))]" aria-label={v} checked={vSel.includes(v)} onChange={() => setVSel((s) => s.includes(v) ? s.filter((x) => x !== v) : [...s, v])} />}
-                      <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
-                      <span className="min-w-0 flex-1 whitespace-normal break-words text-left text-foreground">{vl(p.vtr, prod?.id, v)}</span>
+                      <span aria-hidden className="cursor-grab select-none text-muted-foreground" onMouseDown={() => setVGrab(vi)} onTouchStart={() => setVGrab(vi)} onMouseUp={() => setVGrab(null)}>⠿</span>
+                      <span className="min-w-0 flex-1 cursor-text select-text whitespace-normal break-words text-left text-foreground" title={T("adm.edit")} onDoubleClick={() => setVEdit(v)}>{vl(p.vtr, prod?.id, v)}</span>
                     </span>
+                    <Button type="button" variant="outline" size="icon" className="h-7 w-7 shrink-0" aria-label={`Kopieren: ${vl(p.vtr, prod?.id, v)}`} title="Kopieren"
+                      onClick={() => { void navigator.clipboard?.writeText(vl(p.vtr, prod?.id, v)).then(() => toast.success("Variante kopiert"), () => toast.error("Kopieren fehlgeschlagen")); }}>
+                      <Copy className="h-3.5 w-3.5" />
+                    </Button>
                     <Button type="button" variant="outline" size="icon" className="h-7 w-7 shrink-0" aria-label={`${T("adm.edit")}: ${vl(p.vtr, prod?.id, v)}`} title={T("adm.edit")} aria-expanded={vEdit === v} onClick={() => setVEdit((current) => current === v ? null : v)}>
                       <Pencil className="h-3.5 w-3.5" />
                     </Button>
