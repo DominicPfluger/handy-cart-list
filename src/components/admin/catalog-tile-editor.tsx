@@ -1960,7 +1960,7 @@ function VariantAddDialog(p: { prod: TileProd; run: (fn: () => Promise<unknown>,
                   if (vDrag !== null && vDrag !== vi) void reorder(vDrag, vi);
                   setVDrag(null); setVOver(null);
                 }}
-                onDragEnd={() => { setVDrag(null); setVOver(null); setVGrab(null); }}
+                onDragEnd={() => { setVDrag(null); setVOver(null); }}
                 className={`flex items-center gap-2 px-3 py-1.5 text-sm ${vDrag === vi ? "opacity-40" : ""} ${vOver === vi && vDrag !== null && vDrag !== vi ? "bg-primary-soft" : ""}`}
               >
                 <span aria-hidden className="cursor-grab select-none text-muted-foreground">⠿</span>
