@@ -8,6 +8,7 @@
 - [x] 80 vorgeschlagene Artikel unter „Küchenfertiges Gemüse & Obst“ mit vier Überschriften und 1260 Übersetzungen in 15 weiteren Sprachversionen eingeordnet; ohne KI-Bilder. Daten und Anzeige mit 80 Produktzeilen und vier Überschriften geprüft.
 
 ## Erledigt
+- [x] Einkaufsliste: Suchfeld «Ganzen Katalog durchsuchen & hinzufügen» entfernt (Komponente global-search.tsx gelöscht) — getestet (Liste geöffnet: kein Suchfeld mehr, alle 6 Artikel wie vorher)
 - [x] Einzelner Bearbeitungsdialog: Bereich «Produkte fürs Bild» entfernt (Kategorie- und Produkt-Dialog); KI-Bildvorschlag per ↻ bleibt erhalten — getestet (Kategorie- und Produkt-Dialog im Browser geprüft)
 - [x] Fertiggerichte-Konserven nach Vorschlag 2 in vier kompakte Gruppen sortiert: Nudel- & Fleischgerichte, Eintöpfe & Bohnengerichte, Suppen, Currys & Salate; Überschriften in allen 16 Katalogsprachen
 - [x] Admin «Bilder»-Tab: Bildergalerie nur noch einmal – als einzige Galerie unter «Produkte ohne Bild», die zweite Galerie am Ende des Tabs entfernt — getestet
