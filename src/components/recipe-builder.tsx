@@ -143,9 +143,21 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         .map((id) => catalog.products.find((p) => p.id === id))
         .filter((p): p is CatalogProduct => !!p);
       // Admin-managed steps have no built-in ingredients: an empty assignment stays empty.
-      const base = fromDb.length > 0
+      const base0 = fromDb.length > 0
         ? fromDb
         : s.ingredients.map((n) => byBase.get(n)).filter((p): p is CatalogProduct => !!p);
+      // Gleichnamige Produkte aus anderen Kategorien (frisch, getrocknet, TK …) mit anzeigen.
+      const seen = new Set(base0.map((p) => p.id));
+      const base: CatalogProduct[] = [];
+      for (const p of base0) {
+        base.push(p);
+        const k = p.baseName.trim().toLocaleLowerCase();
+        for (const q of catalog.products) {
+          if (seen.has(q.id) || q.baseName.trim().toLocaleLowerCase() !== k) continue;
+          seen.add(q.id);
+          base.push(q);
+        }
+      }
       const picked = picks[s.key] ?? [];
       const visible = base.filter((p) => {
         if (picked.includes(p.id)) return true;
