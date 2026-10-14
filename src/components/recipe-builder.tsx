@@ -764,7 +764,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
                   );
                   if (!shown.length && !gOpen && !gAnyOn) return catBtn;
                   return (
-                    <span key={group.key} className="inline-flex min-w-0 flex-wrap items-center gap-2">
+                    <span key={group.key} className="contents">
                       {catBtn}
                       {gAny && gOpen && (
                         <button type="button" aria-pressed={gAnyOn} onClick={() => { setSavedMsg(false); toggle(s.key, gAny.id, s.max); }}
