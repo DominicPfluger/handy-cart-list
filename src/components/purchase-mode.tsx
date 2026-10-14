@@ -5,6 +5,8 @@ import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { expandAbbreviations, findVoice } from "./speak-list-button";
 import { CheckIcon } from "./icons";
 import { CachedImage } from "./catalog-icon";
+import { toast } from "sonner";
+import { useWakeLock, useKeepAwakePref } from "../hooks/use-wake-lock";
 
 const SPEAK_KEY = "shoppi:purchase-speak";
 
@@ -43,6 +45,8 @@ export function PurchaseMode({ items, onToggle, onClose }: {
   onClose: () => void;
 }) {
   const { t } = useT();
+  const [keepAwake, setKeepAwake] = useKeepAwakePref();
+  useWakeLock(keepAwake);
   const [rate] = useSpeakRate();
   const [speakLocale] = useSpeakLocale();
   const [speakOn, setSpeakOn] = useState<boolean>(readSpeakEnabled);
@@ -262,6 +266,18 @@ export function PurchaseMode({ items, onToggle, onClose }: {
                 <path d="m16 9 6 6" />
               </>
             )}
+          </svg>
+        </button>
+        <button
+          onClick={() => { setKeepAwake(!keepAwake); toast.success(t(keepAwake ? "wl.off" : "wl.on")); }}
+          aria-label={t("wl.toggle")}
+          aria-pressed={keepAwake}
+          title={t("wl.toggle")}
+          className={`grid h-10 w-10 place-items-center rounded-full active:bg-muted ${keepAwake ? "text-primary" : "text-muted-foreground"}`}
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" />{keepAwake && <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />}
+            {!keepAwake && <path d="m3 3 18 18" />}
           </svg>
         </button>
         <button onClick={onClose} aria-label={t("common.close")} className="grid h-10 w-10 place-items-center rounded-full text-muted-foreground active:bg-muted">

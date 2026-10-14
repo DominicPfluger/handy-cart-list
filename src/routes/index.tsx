@@ -41,7 +41,6 @@ import { toast } from "sonner";
 import { currentMarket, useReferencePrices } from "../hooks/use-reference-prices";
 import { priceForItem } from "../lib/item-price";
 import { PurchaseMode, type PurchaseItem } from "../components/purchase-mode";
-import { useWakeLock, useKeepAwakePref } from "../hooks/use-wake-lock";
 import { useSpeakLocale } from "../hooks/use-speak-locale";
 import { useGroupOrder, applyGroupOrder, filterHidden } from "../hooks/use-group-order";
 import { useStores } from "../hooks/use-stores";
@@ -89,7 +88,6 @@ function ListPage() {
   } = useShoppingList();
   const [managerOpen, setManagerOpen] = useState(false);
   const [purchaseOpen, setPurchaseOpen] = useState(false);
-  const [keepAwake, setKeepAwake] = useKeepAwakePref();
   // Übersicht zuerst: erst nach Auswahl einer Liste wird deren Inhalt geladen.
   const [openListId, setOpenListId] = useState<string | null>(null);
   const [editListId, setEditListId] = useState<string | null>(null);
@@ -127,7 +125,6 @@ function ListPage() {
   const allStores = useStores();
   const activeStore = allStores.find((s) => s.id === activeStoreId);
   const data = useCatalog();
-  useWakeLock(keepAwake && !!openListId);
   const { t } = useT();
   const { data: referencePrices, isPending: pricesPending } = useReferencePrices();
   /** "Beliebige/Beliebiger/Beliebiges …" (und Übersetzungen wie "Any …") nicht anzeigen. */
@@ -516,18 +513,6 @@ function ListPage() {
             {activeStore && <p className="truncate text-xs text-muted-foreground">{activeStore.emoji ?? "🏪"} {activeStore.name}</p>}
           </button>
           <div className="-mr-1 flex shrink-0 items-center gap-0">
-          <button
-            onClick={() => { setKeepAwake(!keepAwake); toast.success(t(keepAwake ? "wl.off" : "wl.on")); }}
-            aria-label={t("wl.toggle")}
-            aria-pressed={keepAwake}
-            title={t("wl.toggle")}
-            className={`grid h-8 w-8 shrink-0 place-items-center rounded-full active:bg-muted ${keepAwake ? "text-primary" : "text-muted-foreground"}`}
-          >
-            <svg viewBox="0 0 24 24" className="h-[18px] w-[18px]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="4" />{keepAwake && <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />}
-              {!keepAwake && <path d="m3 3 18 18" />}
-            </svg>
-          </button>
           <button
             onClick={() => setPurchaseOpen(true)}
             aria-label={t("purchase.title")}
