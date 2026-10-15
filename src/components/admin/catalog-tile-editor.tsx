@@ -1491,6 +1491,16 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                             })}
                           </div>
                         </div>
+                        <div className="space-y-1">
+                          <p className="text-[11px] font-medium text-muted-foreground">{T("adm.ingredients")}</p>
+                          <textarea value={variantIng[v] ?? ""} onChange={(e) => setVariantIng((m) => ({ ...m, [v]: e.target.value }))} rows={3} maxLength={4000}
+                            placeholder={ingredients || T("adm.ingPlaceholder")} aria-label={`${T("adm.ingredients")} ${v}`}
+                            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                          <Button type="button" variant="outline" size="sm" disabled={!(variantIng[v] ?? "").trim()}
+                            onClick={() => { const found = dietsFromIngredients(variantIng[v] ?? "").filter((d) => !diets.includes(d)); if (!found.length) { toast.info(T("adm.ingNone")); return; } setVariantDiets((d) => ({ ...d, [v]: [...new Set([...(d[v] ?? []), ...found])] })); toast.success(T("adm.ingDerived", { n: String(found.length) })); }}>
+                            {T("adm.ingDerive")}
+                          </Button>
+                        </div>
                         {prod && (prod.variants ?? []).includes(v) ? (
                           <div className="flex flex-wrap items-center gap-2">
                             <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />
