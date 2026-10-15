@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Loader2, Upload } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -16,7 +17,7 @@ const T = (k: MessageKey, p?: Record<string, string | number>) => translate(getL
 type Row = { variant: string; image_path: string | null; icon_path: string | null };
 
 /** Admin control for one variant's picture: click the picture for a large view, use the menu to upload, generate or remove. */
-export function VariantImageButton({ productId, productName, variant, actions }: { productId: string; productName?: string; variant: string; actions?: boolean }) {
+export function VariantImageButton({ productId, productName, variant, actions, uploadOnly, disabled }: { productId: string; productName?: string; variant: string; actions?: boolean; uploadOnly?: boolean; disabled?: boolean }) {
   const qc = useQueryClient();
   const file = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -83,6 +84,16 @@ export function VariantImageButton({ productId, productName, variant, actions }:
       if (error) throw error;
     }, "tile.imageRemoved");
   };
+
+  if (uploadOnly) return (
+    <>
+      <button type="button" disabled={busy || disabled} aria-label={T("adm.variantImageUpload")} title={T("adm.variantImageUpload")} onClick={() => file.current?.click()}
+        className="grid h-6 w-6 shrink-0 place-items-center rounded text-muted-foreground hover:text-foreground disabled:opacity-50">
+        {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+      </button>
+      <input ref={file} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; if (f) void upload(f); }} />
+    </>
+  );
 
   return (
     <span className="relative flex shrink-0 items-center gap-1">

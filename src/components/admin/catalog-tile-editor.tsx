@@ -938,7 +938,6 @@ export function CatalogTileEditor(p: {
                   className={`flex w-full items-center gap-2 border-l-4 border-primary/40 bg-primary-soft/60 py-2 pl-8 pr-3 ${rowDrag?.pid === pid && rowDrag.idx === vi ? "opacity-40" : ""} ${rowDrag?.pid === pid && rowOver === vi && rowDrag.idx !== vi ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : ""}`}>
                   <span aria-label={T("adm.drag")} title={T("adm.drag")} onMouseDown={() => setRowGrab(busyKey)} onMouseUp={() => setRowGrab(null)}
                     className={`select-none px-0.5 text-base text-muted-foreground ${editMode ? "cursor-grab" : ""}`}>⠿</span>
-                  <Tags className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
                   <VariantImageButton productId={pid} productName={p.nm(pid, x.name)} variant={v} />
                   {rowEdit === busyKey ? (
                     <span className="flex min-w-0 flex-1">
@@ -970,6 +969,7 @@ export function CatalogTileEditor(p: {
                     className={`h-6 w-6 shrink-0 rounded ${vBio ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
                     <Leaf className="h-3.5 w-3.5" />
                   </Button>
+                  <VariantImageButton uploadOnly disabled={!editMode} productId={pid} productName={p.nm(pid, x.name)} variant={v} />
                   <Button type="button" variant="ghost" size="icon" disabled={!editMode || aiBusy === busyKey} aria-label={T("tile.aiImage")} title={T("tile.aiImage")} onClick={() => quickVariantAi(x, v)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
                     {aiBusy === busyKey ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
                   </Button>
