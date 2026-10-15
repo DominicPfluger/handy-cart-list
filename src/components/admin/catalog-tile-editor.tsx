@@ -1051,10 +1051,16 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   }, [isDept, prod?.id]);
   const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
   const [ingredients, setIngredients] = useState("");
+  const [variantIng, setVariantIng] = useState<Record<string, string>>({});
   useEffect(() => {
     if (isDept || !prod?.id) return;
     let off = false;
-    void supabase.from("products").select("ingredients").eq("id", prod.product_id ?? prod.id).maybeSingle().then(({ data }) => { if (!off) setIngredients((data as { ingredients?: string | null } | null)?.ingredients ?? ""); });
+    void supabase.from("products").select("ingredients, variant_ingredients").eq("id", prod.product_id ?? prod.id).maybeSingle().then(({ data }) => {
+      if (off) return;
+      const d = data as { ingredients?: string | null; variant_ingredients?: Record<string, string> | null } | null;
+      setIngredients(d?.ingredients ?? "");
+      setVariantIng(d?.variant_ingredients ?? {});
+    });
     return () => { off = true; };
   }, [isDept, prod?.id, prod?.product_id]);
   const deriveDiets = () => {
@@ -1067,6 +1073,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantDiets, setVariantDiets] = useState<Record<string, string[]>>(prod?.variant_excluded_diets ?? {});
   const cleanVariantDiets = () => Object.fromEntries(Object.entries(variantDiets).filter(([k, v]) => variants.includes(k) && v.length));
+  const cleanVariantIng = () => Object.fromEntries(Object.entries(variantIng).map(([k, v]) => [k, v.trim()] as const).filter(([k, v]) => variants.includes(k) && v));
   const [prefixVariants, setPrefixVariants] = useState<string[]>(prod?.prefix_variants ?? []);
   const [replaceVariants, setReplaceVariants] = useState<string[]>(prod?.replace_variants ?? []);
   /** Position durchschalten: hinten → vorne → ersetzt Produktnamen → hinten. */
