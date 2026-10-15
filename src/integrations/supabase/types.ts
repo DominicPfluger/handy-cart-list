@@ -986,6 +986,7 @@ export type Database = {
           icon_path: string | null
           id: string
           image_path: string | null
+          ingredients: string | null
           markets: string[]
           name: string
           organic_available: boolean
@@ -1010,6 +1011,7 @@ export type Database = {
           icon_path?: string | null
           id?: string
           image_path?: string | null
+          ingredients?: string | null
           markets?: string[]
           name: string
           organic_available?: boolean
@@ -1034,6 +1036,7 @@ export type Database = {
           icon_path?: string | null
           id?: string
           image_path?: string | null
+          ingredients?: string | null
           markets?: string[]
           name?: string
           organic_available?: boolean
