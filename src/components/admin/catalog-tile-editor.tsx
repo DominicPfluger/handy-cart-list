@@ -933,6 +933,12 @@ export function CatalogTileEditor(p: {
                     {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
                     {!getUnits(getLocale()).some((u) => u.id === vunit) && <option value={vunit}>{vunit}</option>}
                   </select>
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("tile.advanced")} title={T("tile.advanced")} onClick={() => setTarget({ kind: "product", id: x.id })} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.estimatePrice")} title={T("adm.estimatePrice")} onClick={() => { setPriceFocus(true); setTarget({ kind: "product", id: x.id }); }} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                    <Tag className="h-3.5 w-3.5" />
+                  </Button>
                   <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label="Bio" title="Bio umschalten" onClick={() => saveVariantUnit(x, v, { organic: !vBio })}
                     className={`h-6 w-6 shrink-0 rounded ${vBio ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
                     <Leaf className="h-3.5 w-3.5" />
