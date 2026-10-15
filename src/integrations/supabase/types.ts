@@ -998,6 +998,7 @@ export type Database = {
           updated_at: string
           variant_excluded_diets: Json
           variant_ingredients: Json
+          variant_units: Json
           variants: string[]
         }
         Insert: {
@@ -1024,6 +1025,7 @@ export type Database = {
           updated_at?: string
           variant_excluded_diets?: Json
           variant_ingredients?: Json
+          variant_units?: Json
           variants?: string[]
         }
         Update: {
@@ -1050,6 +1052,7 @@ export type Database = {
           updated_at?: string
           variant_excluded_diets?: Json
           variant_ingredients?: Json
+          variant_units?: Json
           variants?: string[]
         }
         Relationships: [
