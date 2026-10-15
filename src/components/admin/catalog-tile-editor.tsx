@@ -1502,10 +1502,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                           </Button>
                         </div>
                         {prod && (prod.variants ?? []).includes(v) ? (
-                          <div className="flex flex-wrap items-center gap-2">
-                            <VariantImageButton productId={prod.id} productName={prod.name} variant={v} />
-                            <VariantSynonyms defaultOpen productId={prod.id} variant={v} />
-                            <VariantTranslations defaultOpen productId={prod.id} variant={v} productName={() => name || prod?.name || ""} />
+                          <div className="space-y-2">
+                            <div className="space-y-1">
+                              <p className="text-[11px] font-medium text-muted-foreground">{T("adm.images")}</p>
+                              <VariantImageButton actions productId={prod.id} productName={prod.name} variant={v} />
+                            </div>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <VariantSynonyms defaultOpen productId={prod.id} variant={v} />
+                              <VariantTranslations defaultOpen productId={prod.id} variant={v} productName={() => name || prod?.name || ""} />
+                            </div>
                           </div>
                         ) : (
                           <p className="text-[11px] text-muted-foreground">{T("adm.variantsHint")}</p>
