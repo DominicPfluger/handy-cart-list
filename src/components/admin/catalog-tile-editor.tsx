@@ -34,7 +34,8 @@ import { SectionCollapse } from "@/components/admin/preview-collapse";
 import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { ProductPronunciationEditor } from "@/components/admin/product-pronunciation-editor";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
-import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
+import { VariantAiBulkButton, generateVariantWithOptions } from "@/components/admin/variant-ai-dialog";
+import { generateVariantImage } from "@/lib/product-media.functions";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
 import { ChevronRight, Copy, Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
