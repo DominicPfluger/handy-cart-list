@@ -1496,5 +1496,8 @@
   "wl.toggle": "Garder l’écran allumé",
   "wl.on": "L’écran reste allumé",
   "wl.off": "Verrouillage auto réactivé",
-  "rk.showAny": "Ingrédient au choix"
+  "rk.showAny": "Ingrédient au choix",
+  "settings.checkedDisplay.collapse": "Replier",
+  "adm.health.trFilter": "Marchés cibles",
+  "adm.health.trAll": "Tous"
 }

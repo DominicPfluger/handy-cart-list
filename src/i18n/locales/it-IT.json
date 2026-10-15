@@ -1496,5 +1496,8 @@
   "wl.toggle": "Mantieni lo schermo acceso",
   "wl.on": "Lo schermo resta acceso",
   "wl.off": "Blocco automatico di nuovo attivo",
-  "rk.showAny": "Ingrediente a scelta"
+  "rk.showAny": "Ingrediente a scelta",
+  "settings.checkedDisplay.collapse": "Comprimi",
+  "adm.health.trFilter": "Mercati target",
+  "adm.health.trAll": "Tutti"
 }

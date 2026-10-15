@@ -286,7 +286,7 @@ function ListPage() {
   const doneCount = items.filter((i) => i.checked).length;
   const [checkedDisplay] = useCheckedDisplay();
   const [showDone, setShowDone] = useState(false);
-  const hideDone = checkedDisplay === "hide" && !showDone;
+  const hideDone = checkedDisplay === "hide" || (checkedDisplay === "collapse" && !showDone);
   const visibleGroups = useMemo(
     () => hideDone ? grouped.map((g) => ({ ...g, items: g.items.filter((i) => !i.checked) })).filter((g) => g.items.length > 0) : grouped,
     [grouped, hideDone],
@@ -694,7 +694,7 @@ function ListPage() {
         </div>
       )}
 
-      {checkedDisplay === "hide" && doneCount > 0 && (
+      {checkedDisplay === "collapse" && doneCount > 0 && (
         <button
           type="button"
           onClick={() => setShowDone((v) => !v)}

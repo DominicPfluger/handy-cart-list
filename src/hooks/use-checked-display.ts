@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 
 const KEY = "shoppi:checked-display";
 const EVENT = "shoppi:checked-display-changed";
-export type CheckedDisplay = "strike" | "hide";
+export type CheckedDisplay = "strike" | "collapse" | "hide";
 
 function read(): CheckedDisplay {
   if (typeof window === "undefined") return "strike";
-  return window.localStorage.getItem(KEY) === "hide" ? "hide" : "strike";
+  const v = window.localStorage.getItem(KEY); return v === "hide" || v === "collapse" ? v : "strike";
 }
 
 /** Geräte-lokal: erledigte Artikel durchstreichen oder ausblenden. */

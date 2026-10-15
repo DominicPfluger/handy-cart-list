@@ -1496,5 +1496,8 @@
   "wl.toggle": "Mantener la pantalla encendida",
   "wl.on": "La pantalla permanece encendida",
   "wl.off": "Bloqueo automático activado de nuevo",
-  "rk.showAny": "Ingrediente a elección"
+  "rk.showAny": "Ingrediente a elección",
+  "settings.checkedDisplay.collapse": "Contraer",
+  "adm.health.trFilter": "Mercados objetivo",
+  "adm.health.trAll": "Todos"
 }

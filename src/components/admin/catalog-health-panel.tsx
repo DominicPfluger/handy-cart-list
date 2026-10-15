@@ -42,6 +42,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
   const [synAi, setSynAi] = useState<string | null>(null);
   const [ignored, setIgnored] = useState<Set<string>>(loadIgnored);
   const [scanned, setScanned] = useState(false);
+  const [trLocales, setTrLocales] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [openGap, setOpenGap] = useState<string | null>(null);
   const [openEmptyRows, setOpenEmptyRows] = useState<Set<string>>(new Set());
@@ -102,7 +103,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
     const noPrice = priced.data ? prods.filter((p) => !priced.data.has(p.id)) : [];
     const missingTr = prods.map((p) => {
       const rec = tr.get(p.id) ?? {};
-      const missing = LOCALES.filter((l) => !rec[l]?.name?.trim());
+      const missing = (trLocales.length ? trLocales : LOCALES).filter((l) => !rec[l]?.name?.trim());
       return { p, missing };
     }).filter((x) => x.missing.length > 0);
     const treePos = new Map(deptTreeOrder(depts).map((d, i) => [d.id, i]));
@@ -111,7 +112,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
       .sort((a, b) => (treePos.get(a.id) ?? 0) - (treePos.get(b.id) ?? 0));
     const deptNoImage = depts.filter((d) => !d.image_path);
     return { noImage, noEmoji, noPrice, missingTr, emptyDepts, deptNoImage };
-  }, [prods, depts, tr, priced.data, prodCountByDept]);
+  }, [prods, depts, tr, priced.data, prodCountByDept, trLocales]);
 
   const pairs = useMemo<Pair[]>(() => {
     if (!scanned) return [];
@@ -228,7 +229,7 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
     { id: "noImage", label: T("adm.health.noImage"), count: gaps.noImage.length, items: gaps.noImage.slice(0, 50).map((p) => ({ id: p.id, label: `${p.emoji ?? "🛒"} ${p.name} (${deptName.get(p.department_id) ?? "?"})`, productId: p.id })) },
     { id: "noEmoji", label: T("adm.health.noEmoji"), count: gaps.noEmoji.length, items: gaps.noEmoji.slice(0, 50).map((p) => ({ id: p.id, label: `${p.name} (${deptName.get(p.department_id) ?? "?"})`, productId: p.id })) },
     { id: "noPrice", label: T("adm.health.noPrice"), count: gaps.noPrice.length, items: gaps.noPrice.slice(0, 50).map((p) => ({ id: p.id, label: `${p.emoji ?? "🛒"} ${p.name}`, productId: p.id })) },
-    { id: "missingTr", label: T("adm.health.missingTr"), count: gaps.missingTr.length, items: gaps.missingTr.slice(0, 50).map((x) => ({ id: x.p.id, label: `${x.p.emoji ?? "🛒"} ${x.p.name} (${x.missing.length})`, productId: x.p.id })) },
+    { id: "missingTr", label: T("adm.health.missingTr"), count: gaps.missingTr.length, items: gaps.missingTr.slice(0, 200).map((x) => ({ id: x.p.id, label: `${x.p.emoji ?? "🛒"} ${x.p.name} (${x.missing.length})`, productId: x.p.id })) },
     { id: "emptyDepts", label: T("adm.health.emptyDept"), count: gaps.emptyDepts.length, items: gaps.emptyDepts.map((d) => ({ id: d.id, label: `${d.emoji ?? "📁"} ${d.name}`, deptId: d.id })) },
     { id: "deptNoImage", label: T("adm.health.deptNoImage"), count: gaps.deptNoImage.length, items: gaps.deptNoImage.map((d) => ({ id: d.id, label: `${d.emoji ?? "📁"} ${d.name}` })) },
   ];
@@ -309,6 +310,16 @@ export function CatalogHealthPanel({ depts, prods, tr, onEdit, onOpenDept }: {
             </button>
           ))}
         </div>
+        {openGap === "missingTr" && (
+          <div className="flex flex-wrap items-center gap-1" aria-label={T("adm.health.trFilter")}>
+            <span className="text-xs text-muted-foreground">{T("adm.health.trFilter")}:</span>
+            <button type="button" onClick={() => setTrLocales([])} className={`rounded-full border px-2 py-0.5 text-[11px] ${trLocales.length === 0 ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}>{T("adm.health.trAll")}</button>
+            {LOCALES.map((l) => (
+              <button key={l} type="button" aria-pressed={trLocales.includes(l)} onClick={() => setTrLocales((s) => s.includes(l) ? s.filter((x) => x !== l) : [...s, l])}
+                className={`rounded-full border px-2 py-0.5 text-[11px] ${trLocales.includes(l) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}>{l}</button>
+            ))}
+          </div>
+        )}
         {openGap && (
           <ul className="max-h-64 space-y-1 overflow-y-auto rounded-xl border border-border bg-card p-2 text-sm">
             {gapCards.find((g) => g.id === openGap)?.items.map((it) => (

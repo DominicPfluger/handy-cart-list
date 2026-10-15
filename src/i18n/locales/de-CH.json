@@ -918,5 +918,8 @@
   "wl.toggle": "Bildschirm wach halten",
   "wl.on": "Bildschirm bleibt wach",
   "wl.off": "Auto-Sperre wieder aktiv",
-  "rk.showAny": "Zutat nach Wahl"
+  "rk.showAny": "Zutat nach Wahl",
+  "settings.checkedDisplay.collapse": "Einklappen",
+  "adm.health.trFilter": "Zielmärkte",
+  "adm.health.trAll": "Alle"
 }

@@ -1496,5 +1496,8 @@
   "wl.toggle": "Scherm aan houden",
   "wl.on": "Scherm blijft aan",
   "wl.off": "Automatische vergrendeling weer actief",
-  "rk.showAny": "Ingrediënt naar keuze"
+  "rk.showAny": "Ingrediënt naar keuze",
+  "settings.checkedDisplay.collapse": "Inklappen",
+  "adm.health.trFilter": "Doelmarkten",
+  "adm.health.trAll": "Alle"
 }
