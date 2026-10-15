@@ -1473,7 +1473,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                     {vEdit === v && (
                       <div className="basis-full space-y-3 border-t border-border pt-3 pb-1" onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}>
                         <div className="flex flex-wrap items-center gap-2 text-sm">
-                          <VariantNameEdit startEditing productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === v ? n : y))); setVariantDiets((d) => { if (!d[v]) return d; const val = d[v]; const rest = { ...d }; delete rest[v]; return val ? { ...rest, [n]: val } : rest; }); setVEdit(n); }} />
+                          <VariantNameEdit startEditing productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === v ? n : y))); setVariantDiets((d) => { if (!d[v]) return d; const val = d[v]; const rest = { ...d }; delete rest[v]; return val ? { ...rest, [n]: val } : rest; }); setVariantIng((m) => { if (!(v in m)) return m; const { [v]: val, ...rest } = m; return { ...rest, [n]: val }; }); setVEdit(n); }} />
                         </div>
                         <div className="space-y-1">
                           <p className="text-[11px] font-medium text-muted-foreground">{T("adm.diets")}</p>
