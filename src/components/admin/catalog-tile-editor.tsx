@@ -22,6 +22,7 @@ import { deptTreeOrder } from "@/lib/dept-order";
 import { prepareCategoryImage } from "@/lib/image-upload";
 import { clearCustomIcon, saveCustomIcon, saveCustomIconFromPath, saveProductIcon, setPreviewImageOnly } from "@/lib/product-icon";
 import { toast } from "sonner";
+import { dietsFromIngredients } from "@/lib/ingredient-diets";
 import { forgetCatalogImage } from "@/lib/catalog-image-cache";
 import { estimateProductPrice, estimateProductPricesAllMarkets, generateImageFor, listProductImages } from "@/lib/product-media.functions";
 import { suggestCategoryProducts, suggestImagePrompt, translateSingleName, translateVariants, suggestVariants } from "@/lib/admin.functions";
