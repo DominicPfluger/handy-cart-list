@@ -216,7 +216,7 @@ export function CatalogTileEditor(p: {
       const id = prodId(prod);
       const { data, error } = await supabase.from("products").select("variants, variant_units, variant_excluded_diets, variant_ingredients, prefix_variants, replace_variants").eq("id", id).single();
       if (error) throw new Error(error.message);
-      const r = data as Record<string, unknown>;
+      const r = data as unknown as { variants: unknown; variant_units: unknown; variant_excluded_diets: unknown; variant_ingredients: unknown; prefix_variants: unknown; replace_variants: unknown };
       const mv = (o: unknown) => { const m = { ...((o ?? {}) as Record<string, unknown>) }; if (from in m) { m[to] = m[from]; delete m[from]; } return m; };
       const arr = (a: unknown) => ((a ?? []) as string[]).map((x) => (x === from ? to : x));
       await p.must(supabase.from("products").update({
