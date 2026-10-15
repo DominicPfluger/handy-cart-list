@@ -853,15 +853,50 @@ export function CatalogTileEditor(p: {
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>
-              {!x.alias_id && (x.variants ?? []).length > 0 && openVars.has(x.id) && (x.variants ?? []).map((v) => (
-                <button key={v} type="button" disabled={!editMode}
-                  onClick={() => setTarget({ kind: "product", id: x.id })}
-                  className="flex w-full items-center gap-3 border-l-4 border-primary/40 bg-primary-soft/60 py-2 pl-12 pr-3 text-left">
+              {!x.alias_id && (x.variants ?? []).length > 0 && openVars.has(x.id) && (x.variants ?? []).map((v, vi) => {
+                const vu = x.variant_units?.[v];
+                const vq = vu?.quantity ?? x.default_quantity;
+                const vunit = vu?.unit ?? x.default_unit;
+                const vBio = Boolean(vu?.organic);
+                const busyKey = `${pid}::${v}`;
+                return (
+                <div key={v}
+                  draggable={editMode && rowGrab === busyKey}
+                  onDragStart={(e) => { e.stopPropagation(); setRowDrag({ pid, idx: vi }); }}
+                  onDragOver={(e) => { if (rowDrag?.pid === pid) { e.preventDefault(); setRowOver(vi); } }}
+                  onDrop={(e) => { e.preventDefault(); e.stopPropagation(); if (rowDrag?.pid === pid && rowDrag.idx !== vi) moveVariant(x, rowDrag.idx, vi); setRowDrag(null); setRowOver(null); setRowGrab(null); }}
+                  onDragEnd={() => { setRowDrag(null); setRowOver(null); setRowGrab(null); }}
+                  className={`flex w-full items-center gap-2 border-l-4 border-primary/40 bg-primary-soft/60 py-2 pl-8 pr-3 ${rowDrag?.pid === pid && rowDrag.idx === vi ? "opacity-40" : ""} ${rowDrag?.pid === pid && rowOver === vi && rowDrag.idx !== vi ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : ""}`}>
+                  <span aria-label={T("adm.drag")} title={T("adm.drag")} onMouseDown={() => setRowGrab(busyKey)} onMouseUp={() => setRowGrab(null)}
+                    className={`select-none px-0.5 text-base text-muted-foreground ${editMode ? "cursor-grab" : ""}`}>⠿</span>
                   <Tags className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-                  <span className="min-w-0 flex-1 truncate text-sm text-foreground">{vl(p.vtr, x.product_id ?? x.id, v)}</span>
-                  <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
-                </button>
-              ))}
+                  <button type="button" disabled={!editMode} onClick={() => setTarget({ kind: "product", id: x.id })} className="min-w-0 flex-1 truncate text-left text-sm text-foreground">
+                    {vl(p.vtr, pid, v)}{vBio && <span className="ml-1 text-[10px] font-semibold text-primary">Bio</span>}
+                  </button>
+                  <select value={String(vq)} disabled={!editMode} aria-label={T("adm.defaultQty")} title={T("adm.defaultQty")}
+                    onChange={(e) => saveVariantUnit(x, v, { quantity: Number(e.target.value), unit: vunit })}
+                    className="h-7 w-[4.2rem] shrink-0 rounded-lg border border-input bg-background px-1 text-xs text-foreground">
+                    {(QTY_OPTIONS.includes(vq) ? QTY_OPTIONS : [...QTY_OPTIONS, vq].sort((a, b) => a - b)).map((q) => <option key={q} value={String(q)}>{q}</option>)}
+                  </select>
+                  <select value={vunit} disabled={!editMode} aria-label={T("adm.defaultUnit")} title={T("adm.defaultUnit")}
+                    onChange={(e) => saveVariantUnit(x, v, { quantity: vq, unit: e.target.value })}
+                    className="h-7 w-[5.5rem] shrink-0 rounded-lg border border-input bg-background px-1 text-xs text-foreground">
+                    {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+                    {!getUnits(getLocale()).some((u) => u.id === vunit) && <option value={vunit}>{vunit}</option>}
+                  </select>
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label="Bio" title="Bio umschalten" onClick={() => saveVariantUnit(x, v, { organic: !vBio })}
+                    className={`h-6 w-6 shrink-0 rounded ${vBio ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+                    <Leaf className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode || aiBusy === busyKey} aria-label={T("tile.aiImage")} title={T("tile.aiImage")} onClick={() => quickVariantAi(x, v)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                    {aiBusy === busyKey ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                  </Button>
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => deleteVariant(x, v)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+                );
+              })}
               </Fragment>
             );
           })}
