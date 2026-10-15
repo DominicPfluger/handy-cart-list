@@ -939,6 +939,7 @@ export function CatalogTileEditor(p: {
                   <span aria-label={T("adm.drag")} title={T("adm.drag")} onMouseDown={() => setRowGrab(busyKey)} onMouseUp={() => setRowGrab(null)}
                     className={`select-none px-0.5 text-base text-muted-foreground ${editMode ? "cursor-grab" : ""}`}>⠿</span>
                   <Tags className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                  <VariantImageButton productId={pid} productName={p.nm(pid, x.name)} variant={v} />
                   {rowEdit === busyKey ? (
                     <span className="flex min-w-0 flex-1">
                       <VariantNameEdit startEditing productId={pid} variant={v} label={vl(p.vtr, pid, v)} saved existing={x.variants ?? []} onRenamed={(n) => renameVariantRow(x, v, n)} />
