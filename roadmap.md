@@ -64,5 +64,5 @@
 - Rezept-Generatoren: «nach Wahl» nur per Schalter; Oberkategorien weiss gepunktet — erledigt
 - Auto-Sperre-Schalter nur im Einkaufsmodus — erledigt
 - Admin-Pflege > Dubletten: Suchfeld für Dubletten-Paare (Name oder Kategorie), getestet (530 Paare, «basilikum» filtert auf 4)
-- [ ] Synonyme beim Produkt hinzufügen/bearbeiten
-- [ ] Varianten in Admin-Liste per Klick auf Namen inline umbenennen
+- [x] Synonyme beim Produkt hinzufügen/bearbeiten
+- [x] Varianten in Admin-Liste per Klick auf Namen inline umbenennen
