@@ -202,6 +202,54 @@ export function CatalogTileEditor(p: {
     }, T("adm.defaultsSaved"));
   };
   const QTY_OPTIONS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 50, 100, 250, 500];
+  const [rowDrag, setRowDrag] = useState<{ pid: string; idx: number } | null>(null);
+  const [rowOver, setRowOver] = useState<number | null>(null);
+  const [rowGrab, setRowGrab] = useState<string | null>(null);
+  const prodId = (prod: TileProd) => prod.product_id ?? prod.id;
+  /** Reihenfolge der Varianten direkt aus der Liste ändern. */
+  const moveVariant = (prod: TileProd, from: number, to: number) => {
+    const next = [...(prod.variants ?? [])];
+    const [m] = next.splice(from, 1);
+    if (m === undefined) return;
+    next.splice(to, 0, m);
+    void p.run(async () => {
+      await p.must(supabase.from("products").update({ variants: next } as never).eq("id", prodId(prod)));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
+  /** Menge/Einheit/Bio einer Variante speichern (Fallback: Werte des Hauptprodukts). */
+  const saveVariantUnit = (prod: TileProd, v: string, patch: { quantity?: number; unit?: string; organic?: boolean }) => {
+    const all = { ...(prod.variant_units ?? {}) };
+    all[v] = { ...(all[v] ?? {}), ...patch };
+    void p.run(async () => {
+      await p.must(supabase.from("products").update({ variant_units: all } as never).eq("id", prodId(prod)));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
+  const deleteVariant = (prod: TileProd, v: string) => {
+    if (!window.confirm(`${v} – ${T("adm.delete")}?`)) return;
+    const next = (prod.variants ?? []).filter((x) => x !== v);
+    const units = { ...(prod.variant_units ?? {}) }; delete units[v];
+    const diets = { ...(prod.variant_excluded_diets ?? {}) }; delete diets[v];
+    void p.run(async () => {
+      await p.must(supabase.from("products").update({ variants: next, variant_units: units, variant_excluded_diets: diets, prefix_variants: (prod.prefix_variants ?? []).filter((x) => x !== v), replace_variants: (prod.replace_variants ?? []).filter((x) => x !== v) } as never).eq("id", prodId(prod)));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
+  const genVariantImg = useServerFn(generateVariantImage);
+  const quickVariantAi = (prod: TileProd, v: string) => {
+    if (!window.confirm(T("adm.variantImageAiConfirm", { name: `${prod.name} · ${v}` }))) return;
+    const key = `${prodId(prod)}::${v}`;
+    setAiBusy(key);
+    void p.run(async () => {
+      try {
+        await generateVariantWithOptions(genVariantImg, prodId(prod), v, { hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS }, both: false });
+        await qc.invalidateQueries({ queryKey: ["catalog"] });
+      } catch (e) {
+        toast.error(e instanceof Error ? e.message : String(e));
+      } finally { setAiBusy(null); }
+    });
+  };
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
   const [genAllDlg, setGenAllDlg] = useState<{ all: boolean; hint: string; opts: AiImageOpts } | null>(null);
