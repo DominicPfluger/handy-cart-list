@@ -59,6 +59,12 @@ function ProductPage() {
   const product = data.products.find((p) => p.id === id);
   const refPrices = useReferencePrices();
   const refPrice = refPrices.data?.get(id);
+  const [ingredients, setIngredients] = useState<string | null>(null);
+  useEffect(() => {
+    let off = false;
+    void supabase.from("products").select("ingredients").eq("id", id).maybeSingle().then(({ data }) => { if (!off) setIngredients((data as { ingredients?: string | null } | null)?.ingredients ?? null); });
+    return () => { off = true; };
+  }, [id]);
   useEffect(() => {
     setFavQty(String(fav.value?.quantity ?? product?.defaultQuantity ?? 1));
     setFavUnit(fav.value?.unit ?? product?.defaultUnit ?? "stueck");
@@ -195,6 +201,13 @@ function ProductPage() {
           </div>
         )}
       </dl>
+
+      {ingredients?.trim() && (
+        <div className="mt-4 rounded-2xl bg-card p-4 shadow-sm">
+          <p className="text-sm text-muted-foreground">{t("pd.ingredients")}</p>
+          <p className="mt-1 whitespace-pre-line text-sm text-foreground">{ingredients}</p>
+        </div>
+      )}
 
       <div className="mt-4 rounded-2xl bg-card p-4 shadow-sm">
         <div className="text-sm">
