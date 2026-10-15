@@ -1177,7 +1177,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
-        : supabase.from("products").update({ ...base, ingredients: ingredients.trim() || null, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
+        : supabase.from("products").update({ ...base, ingredients: ingredients.trim() || null, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variant_ingredients: cleanVariantIng(), variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
       if (item.name !== base.name) {
         await p.must(supabase.from("catalog_translations").delete().eq("entity_id", item.id).eq("is_manual", false));
         await p.translateIds([item.id]);
@@ -1194,7 +1194,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               ? p.products.length + 1
               : await supabase.from("products").select("sort_order").eq("department_id", targetDept).order("sort_order", { ascending: false }).limit(1)
                   .then(({ data }) => ((data?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1);
-            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variants, sort_order: nextSort } as never).select("id").single();
+            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variant_ingredients: cleanVariantIng(), variants, sort_order: nextSort } as never).select("id").single();
           })();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
