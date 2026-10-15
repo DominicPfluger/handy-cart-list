@@ -65,7 +65,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 type Kind = "department" | "product" | "heading";
 type Dept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; icon_path: string | null };
-type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets: string[]; variant_excluded_diets?: Record<string, string[]>; variants: string[]; prefix_variants?: string[]; replace_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; markets: string[]; image_path: string | null; icon_path: string | null };
+type Prod = { id: string; name: string; emoji: string | null; department_id: string; sort_order: number; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets: string[]; variant_excluded_diets?: Record<string, string[]>; variant_units?: Record<string, { quantity?: number; unit?: string; organic?: boolean }>; variants: string[]; prefix_variants?: string[]; replace_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; markets: string[]; image_path: string | null; icon_path: string | null };
 type Head = { id: string; name: string; department_id: string; before_product_id: string };
 type Tr = { entity_id: string; locale: string; name: string; is_manual: boolean };
 type Sel = { kind: Kind; id: string } | null;
@@ -84,7 +84,7 @@ async function paged<T>(fn: (from: number, to: number) => PromiseLike<{ data: T[
 async function loadCore() {
   const [depts, prods, heads] = await Promise.all([
     paged<Dept>((a, b) => supabase.from("departments").select("id, name, emoji, parent_id, sort_order, image_path, icon_path").order("sort_order").order("id").range(a, b)),
-    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, allowed_units, unit_quantities, excluded_diets, variant_excluded_diets, variants, prefix_variants, prefix_variants_by_locale, replace_variants, markets, image_path, icon_path").order("sort_order").order("id").range(a, b) as never),
+    paged<Prod>((a, b) => supabase.from("products").select("id, name, emoji, department_id, sort_order, default_quantity, default_unit, allowed_units, unit_quantities, excluded_diets, variant_excluded_diets, variant_units, variants, prefix_variants, prefix_variants_by_locale, replace_variants, markets, image_path, icon_path").order("sort_order").order("id").range(a, b) as never),
     paged<Head>((a, b) => supabase.from("product_headings").select("id, name, department_id, before_product_id").order("id").range(a, b)),
   ]);
   return { depts, prods, heads };

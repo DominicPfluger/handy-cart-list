@@ -34,7 +34,8 @@ import { SectionCollapse } from "@/components/admin/preview-collapse";
 import { HeadingAiDialog, type HeadingGroup } from "@/components/admin/heading-ai-dialog";
 import { ProductPronunciationEditor } from "@/components/admin/product-pronunciation-editor";
 import { VariantImageButton } from "@/components/admin/variant-image-button";
-import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
+import { VariantAiBulkButton, generateVariantWithOptions } from "@/components/admin/variant-ai-dialog";
+import { generateVariantImage } from "@/lib/product-media.functions";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
 import { ChevronRight, Copy, Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
@@ -48,7 +49,7 @@ const MARKET_CCY: Record<string, string> = { CH: "CHF", DE: "EUR", AT: "EUR", FR
 /** Alias-Kategorien: id = "deptalias:<aliasId>", alias_id + dept_id (Original) gesetzt. */
 export type TileDept = { id: string; name: string; emoji: string | null; parent_id: string | null; sort_order: number; image_path: string | null; icon_path?: string | null; alias_id?: string; dept_id?: string };
 /** Alias-Einträge: id = "alias:<aliasId>", alias_id + product_id gesetzt. */
-export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets?: string[]; variant_excluded_diets?: Record<string, string[]>; image_path?: string | null; icon_path?: string | null; variants?: string[]; prefix_variants?: string[]; replace_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; alias_id?: string; product_id?: string };
+export type TileProd = { id: string; name: string; emoji: string | null; department_id: string; default_quantity: number; default_unit: string; allowed_units?: string[]; unit_quantities?: Record<string, number>; excluded_diets?: string[]; variant_excluded_diets?: Record<string, string[]>; variant_units?: Record<string, { quantity?: number; unit?: string; organic?: boolean }>; image_path?: string | null; icon_path?: string | null; variants?: string[]; prefix_variants?: string[]; replace_variants?: string[]; prefix_variants_by_locale?: Record<string, string[]>; alias_id?: string; product_id?: string };
 
 
 type Target = { kind: "department" | "product"; id: string | null } | null;
@@ -202,6 +203,54 @@ export function CatalogTileEditor(p: {
     }, T("adm.defaultsSaved"));
   };
   const QTY_OPTIONS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 50, 100, 250, 500];
+  const [rowDrag, setRowDrag] = useState<{ pid: string; idx: number } | null>(null);
+  const [rowOver, setRowOver] = useState<number | null>(null);
+  const [rowGrab, setRowGrab] = useState<string | null>(null);
+  const prodId = (prod: TileProd) => prod.product_id ?? prod.id;
+  /** Reihenfolge der Varianten direkt aus der Liste ändern. */
+  const moveVariant = (prod: TileProd, from: number, to: number) => {
+    const next = [...(prod.variants ?? [])];
+    const [m] = next.splice(from, 1);
+    if (m === undefined) return;
+    next.splice(to, 0, m);
+    void p.run(async () => {
+      await p.must(supabase.from("products").update({ variants: next } as never).eq("id", prodId(prod)));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
+  /** Menge/Einheit/Bio einer Variante speichern (Fallback: Werte des Hauptprodukts). */
+  const saveVariantUnit = (prod: TileProd, v: string, patch: { quantity?: number; unit?: string; organic?: boolean }) => {
+    const all = { ...(prod.variant_units ?? {}) };
+    all[v] = { ...(all[v] ?? {}), ...patch };
+    void p.run(async () => {
+      await p.must(supabase.from("products").update({ variant_units: all } as never).eq("id", prodId(prod)));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
+  const deleteVariant = (prod: TileProd, v: string) => {
+    if (!window.confirm(`${v} – ${T("adm.delete")}?`)) return;
+    const next = (prod.variants ?? []).filter((x) => x !== v);
+    const units = { ...(prod.variant_units ?? {}) }; delete units[v];
+    const diets = { ...(prod.variant_excluded_diets ?? {}) }; delete diets[v];
+    void p.run(async () => {
+      await p.must(supabase.from("products").update({ variants: next, variant_units: units, variant_excluded_diets: diets, prefix_variants: (prod.prefix_variants ?? []).filter((x) => x !== v), replace_variants: (prod.replace_variants ?? []).filter((x) => x !== v) } as never).eq("id", prodId(prod)));
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
+  const genVariantImg = useServerFn(generateVariantImage);
+  const quickVariantAi = (prod: TileProd, v: string) => {
+    if (!window.confirm(T("adm.variantImageAiConfirm", { name: `${prod.name} · ${v}` }))) return;
+    const key = `${prodId(prod)}::${v}`;
+    setAiBusy(key);
+    void p.run(async () => {
+      try {
+        await generateVariantWithOptions(genVariantImg, prodId(prod), v, { hint: "", opts: { ...DEFAULT_AI_IMAGE_OPTS }, both: false });
+        await qc.invalidateQueries({ queryKey: ["catalog"] });
+      } catch (e) {
+        toast.error(e instanceof Error ? e.message : String(e));
+      } finally { setAiBusy(null); }
+    });
+  };
   const genImgAll = useServerFn(generateImageFor);
   const [imgProg, setImgProg] = useState<{ done: number; total: number } | null>(null);
   const [genAllDlg, setGenAllDlg] = useState<{ all: boolean; hint: string; opts: AiImageOpts } | null>(null);
@@ -853,15 +902,50 @@ export function CatalogTileEditor(p: {
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>
-              {!x.alias_id && (x.variants ?? []).length > 0 && openVars.has(x.id) && (x.variants ?? []).map((v) => (
-                <button key={v} type="button" disabled={!editMode}
-                  onClick={() => setTarget({ kind: "product", id: x.id })}
-                  className="flex w-full items-center gap-3 border-l-4 border-primary/40 bg-primary-soft/60 py-2 pl-12 pr-3 text-left">
+              {!x.alias_id && (x.variants ?? []).length > 0 && openVars.has(x.id) && (x.variants ?? []).map((v, vi) => {
+                const vu = x.variant_units?.[v];
+                const vq = vu?.quantity ?? x.default_quantity;
+                const vunit = vu?.unit ?? x.default_unit;
+                const vBio = Boolean(vu?.organic);
+                const busyKey = `${pid}::${v}`;
+                return (
+                <div key={v}
+                  draggable={editMode && rowGrab === busyKey}
+                  onDragStart={(e) => { e.stopPropagation(); setRowDrag({ pid, idx: vi }); }}
+                  onDragOver={(e) => { if (rowDrag?.pid === pid) { e.preventDefault(); setRowOver(vi); } }}
+                  onDrop={(e) => { e.preventDefault(); e.stopPropagation(); if (rowDrag?.pid === pid && rowDrag.idx !== vi) moveVariant(x, rowDrag.idx, vi); setRowDrag(null); setRowOver(null); setRowGrab(null); }}
+                  onDragEnd={() => { setRowDrag(null); setRowOver(null); setRowGrab(null); }}
+                  className={`flex w-full items-center gap-2 border-l-4 border-primary/40 bg-primary-soft/60 py-2 pl-8 pr-3 ${rowDrag?.pid === pid && rowDrag.idx === vi ? "opacity-40" : ""} ${rowDrag?.pid === pid && rowOver === vi && rowDrag.idx !== vi ? "shadow-[inset_0_3px_0_0_var(--color-primary)]" : ""}`}>
+                  <span aria-label={T("adm.drag")} title={T("adm.drag")} onMouseDown={() => setRowGrab(busyKey)} onMouseUp={() => setRowGrab(null)}
+                    className={`select-none px-0.5 text-base text-muted-foreground ${editMode ? "cursor-grab" : ""}`}>⠿</span>
                   <Tags className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-                  <span className="min-w-0 flex-1 truncate text-sm text-foreground">{vl(p.vtr, x.product_id ?? x.id, v)}</span>
-                  <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
-                </button>
-              ))}
+                  <button type="button" disabled={!editMode} onClick={() => setTarget({ kind: "product", id: x.id })} className="min-w-0 flex-1 truncate text-left text-sm text-foreground">
+                    {vl(p.vtr, pid, v)}{vBio && <span className="ml-1 text-[10px] font-semibold text-primary">Bio</span>}
+                  </button>
+                  <select value={String(vq)} disabled={!editMode} aria-label={T("adm.defaultQty")} title={T("adm.defaultQty")}
+                    onChange={(e) => saveVariantUnit(x, v, { quantity: Number(e.target.value), unit: vunit })}
+                    className="h-7 w-[4.2rem] shrink-0 rounded-lg border border-input bg-background px-1 text-xs text-foreground">
+                    {(QTY_OPTIONS.includes(vq) ? QTY_OPTIONS : [...QTY_OPTIONS, vq].sort((a, b) => a - b)).map((q) => <option key={q} value={String(q)}>{q}</option>)}
+                  </select>
+                  <select value={vunit} disabled={!editMode} aria-label={T("adm.defaultUnit")} title={T("adm.defaultUnit")}
+                    onChange={(e) => saveVariantUnit(x, v, { quantity: vq, unit: e.target.value })}
+                    className="h-7 w-[5.5rem] shrink-0 rounded-lg border border-input bg-background px-1 text-xs text-foreground">
+                    {getUnits(getLocale()).map((u) => <option key={u.id} value={u.id}>{u.label}</option>)}
+                    {!getUnits(getLocale()).some((u) => u.id === vunit) && <option value={vunit}>{vunit}</option>}
+                  </select>
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label="Bio" title="Bio umschalten" onClick={() => saveVariantUnit(x, v, { organic: !vBio })}
+                    className={`h-6 w-6 shrink-0 rounded ${vBio ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+                    <Leaf className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode || aiBusy === busyKey} aria-label={T("tile.aiImage")} title={T("tile.aiImage")} onClick={() => quickVariantAi(x, v)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-foreground">
+                    {aiBusy === busyKey ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                  </Button>
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label={T("adm.delete")} title={T("adm.delete")} onClick={() => deleteVariant(x, v)} className="h-6 w-6 shrink-0 rounded text-muted-foreground hover:text-destructive">
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+                );
+              })}
               </Fragment>
             );
           })}
