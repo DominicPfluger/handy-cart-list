@@ -1504,5 +1504,8 @@
   "adm.ingHint": "Adds to “Not suitable for” – check before saving.",
   "adm.ingNone": "No exclusions found in ingredients",
   "adm.ingDerived": "{n} diets added",
-  "pd.ingredients": "Ingredients"
+  "pd.ingredients": "Ingredients",
+  "settings.checkedDisplay.collapse": "Collapse",
+  "adm.health.trFilter": "Target markets",
+  "adm.health.trAll": "All"
 }

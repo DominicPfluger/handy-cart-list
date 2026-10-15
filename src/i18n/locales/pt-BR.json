@@ -1496,5 +1496,8 @@
   "wl.toggle": "Manter o tela ligado",
   "wl.on": "O tela fica ligado",
   "wl.off": "Bloqueio automático reativado",
-  "rk.showAny": "Ingrediente à escolha"
+  "rk.showAny": "Ingrediente à escolha",
+  "settings.checkedDisplay.collapse": "Recolher",
+  "adm.health.trFilter": "Mercados-alvo",
+  "adm.health.trAll": "Todos"
 }

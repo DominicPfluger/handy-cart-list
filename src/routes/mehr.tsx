@@ -496,8 +496,8 @@ function CheckedDisplayRow() {
       </div>
       <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-foreground">{t("settings.checkedDisplay")}</p>
-        <div className="mt-2 grid grid-cols-2 gap-1 rounded-xl bg-muted p-1" role="radiogroup" aria-label={t("settings.checkedDisplay")}>
-          {(["strike", "hide"] as const).map((m) => (
+        <div className="mt-2 grid grid-cols-3 gap-1 rounded-xl bg-muted p-1" role="radiogroup" aria-label={t("settings.checkedDisplay")}>
+          {(["strike", "collapse", "hide"] as const).map((m) => (
             <button
               key={m}
               type="button"
@@ -506,7 +506,7 @@ function CheckedDisplayRow() {
               onClick={() => setMode(m)}
               className={`rounded-lg py-1.5 text-xs font-medium transition ${mode === m ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}
             >
-              {t(m === "strike" ? "settings.checkedDisplay.strike" : "settings.checkedDisplay.hide")}
+              {t(`settings.checkedDisplay.${m}`)}
             </button>
           ))}
         </div>
