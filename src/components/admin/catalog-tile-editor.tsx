@@ -1511,9 +1511,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             )}
           </SectionCollapse>
         )}
-        {!p.imageOnly && !isDept && prod && realProdId && (
+        {!p.imageOnly && !isDept && (
           <SectionCollapse label={T("adm.synonyms")}>
-            <ProductSynonymEditor key={`syn-${realProdId}`} productId={realProdId} bare />
+            {(realProdId ?? newId)
+              ? <ProductSynonymEditor key={`syn-${realProdId ?? newId}`} productId={(realProdId ?? newId)!} bare />
+              : <p className="text-xs text-muted-foreground">{T("adm.synAfterSave")}</p>}
           </SectionCollapse>
         )}
         {!p.imageOnly && !isDept && (
