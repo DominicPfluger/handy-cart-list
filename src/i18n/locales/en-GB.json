@@ -1497,5 +1497,12 @@
   "wl.toggle": "Keep screen awake",
   "wl.on": "Screen stays awake",
   "wl.off": "Auto-lock active again",
-  "rk.showAny": "Any ingredient"
+  "rk.showAny": "Any ingredient",
+  "adm.ingredients": "Ingredients",
+  "adm.ingPlaceholder": "e.g. wheat flour, water, yeast, salt, olive oil",
+  "adm.ingDerive": "Derive diets from ingredients",
+  "adm.ingHint": "Adds to “Not suitable for” – check before saving.",
+  "adm.ingNone": "No exclusions found in ingredients",
+  "adm.ingDerived": "{n} diets added",
+  "pd.ingredients": "Ingredients"
 }
