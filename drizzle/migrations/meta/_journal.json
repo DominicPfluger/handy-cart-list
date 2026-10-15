@@ -50,6 +50,13 @@
       "when": 1792061793284,
       "tag": "0006_product_ingredients",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1792063113611,
+      "tag": "0007_variant_ingredients",
+      "breakpoints": true
     }
   ]
 }
