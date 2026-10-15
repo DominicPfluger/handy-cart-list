@@ -207,6 +207,25 @@ export function CatalogTileEditor(p: {
   const [rowOver, setRowOver] = useState<number | null>(null);
   const [rowGrab, setRowGrab] = useState<string | null>(null);
   const prodId = (prod: TileProd) => prod.product_id ?? prod.id;
+  const [rowEdit, setRowEdit] = useState<string | null>(null);
+  /** Variante direkt in der Liste umbenennen; alle variantenbezogenen Felder ziehen mit. */
+  const renameVariantRow = (prod: TileProd, from: string, to: string) => {
+    setRowEdit(null);
+    void p.run(async () => {
+      const id = prodId(prod);
+      const { data, error } = await supabase.from("products").select("variants, variant_units, variant_excluded_diets, variant_ingredients, prefix_variants, replace_variants").eq("id", id).single();
+      if (error) throw new Error(error.message);
+      const r = data as Record<string, unknown>;
+      const mv = (o: unknown) => { const m = { ...((o ?? {}) as Record<string, unknown>) }; if (from in m) { m[to] = m[from]; delete m[from]; } return m; };
+      const arr = (a: unknown) => ((a ?? []) as string[]).map((x) => (x === from ? to : x));
+      await p.must(supabase.from("products").update({
+        variants: arr(r.variants), variant_units: mv(r.variant_units), variant_excluded_diets: mv(r.variant_excluded_diets),
+        variant_ingredients: mv(r.variant_ingredients), prefix_variants: arr(r.prefix_variants), replace_variants: arr(r.replace_variants),
+      } as never).eq("id", id));
+      void trVariants({ data: { productId: id } }).catch(() => {});
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
   /** Reihenfolge der Varianten direkt aus der Liste ändern. */
   const moveVariant = (prod: TileProd, from: number, to: number) => {
     const next = [...(prod.variants ?? [])];
