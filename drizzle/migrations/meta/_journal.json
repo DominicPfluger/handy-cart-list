@@ -43,6 +43,13 @@
       "when": 1791801207797,
       "tag": "0005_variant_excluded_diets",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1792061793284,
+      "tag": "0006_product_ingredients",
+      "breakpoints": true
     }
   ]
 }
