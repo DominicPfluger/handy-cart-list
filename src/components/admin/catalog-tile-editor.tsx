@@ -36,7 +36,7 @@ import { ProductPronunciationEditor } from "@/components/admin/product-pronuncia
 import { VariantImageButton } from "@/components/admin/variant-image-button";
 import { VariantAiBulkButton } from "@/components/admin/variant-ai-dialog";
 import { VariantNameEdit } from "@/components/admin/variant-rename-button";
-import { Copy, Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
+import { ChevronRight, Copy, Eye, EyeOff, LayoutGrid, Leaf, List, Loader2, Pencil, Sparkles, Tag, Tags, Trash2 } from "lucide-react";
 
 const T = (key: MessageKey, vars?: Record<string, string | number>) => translate(getLocale(), key, vars);
 /** Variante in der aktuellen Admin-Sprache anzeigen (Fallback: deutscher Basisname). */
@@ -150,6 +150,8 @@ export function CatalogTileEditor(p: {
   const toggleSel = (id: string) => setSelected((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const selectAll = () => setSelected(new Set(p.products.map((x) => x.id)));
   const clearSelection = () => setSelected(new Set());
+  const [openVars, setOpenVars] = useState<Set<string>>(() => new Set());
+  const toggleVars = (id: string) => setOpenVars((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
   const deptSelCount = selDepts.size;
   const allDeptsSelected = p.children.length > 0 && selDepts.size === p.children.length;
   const toggleDeptSel = (id: string) => setSelDepts((s) => { const n = new Set(s); if (n.has(id)) n.delete(id); else n.add(id); return n; });
@@ -794,6 +796,12 @@ export function CatalogTileEditor(p: {
                     {price ? ` · ${formatRefPrice(price)}` : ""}
                   </div>
                 </button>
+                {!x.alias_id && (x.variants ?? []).length > 0 && (
+                  <button type="button" onClick={() => toggleVars(x.id)} aria-expanded={openVars.has(x.id)}
+                    className="flex h-7 shrink-0 items-center gap-0.5 rounded-lg border border-primary/40 bg-primary-soft px-1.5 text-xs font-semibold text-primary">
+                    <ChevronRight className={`h-3.5 w-3.5 transition-transform ${openVars.has(x.id) ? "rotate-90" : ""}`} />{(x.variants ?? []).length}
+                  </button>
+                )}
                 <select
                   value={String(x.default_quantity)}
                   disabled={!editMode || Boolean(x.alias_id)}
@@ -845,18 +853,15 @@ export function CatalogTileEditor(p: {
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>
-              {!x.alias_id && (x.variants ?? []).length > 0 && (
-                <div className="flex flex-wrap items-center gap-1 bg-primary-soft/40 py-1.5 pl-14 pr-3">
-                  <Tags className="h-3 w-3 shrink-0 text-muted-foreground" aria-hidden />
-                  {(x.variants ?? []).map((v) => (
-                    <button key={v} type="button" disabled={!editMode}
-                      onClick={() => setTarget({ kind: "product", id: x.id })}
-                      className="rounded-full border border-border bg-background px-2 py-0.5 text-[11px] text-muted-foreground">
-                      {vl(p.vtr, x.product_id ?? x.id, v)}
-                    </button>
-                  ))}
-                </div>
-              )}
+              {!x.alias_id && (x.variants ?? []).length > 0 && openVars.has(x.id) && (x.variants ?? []).map((v) => (
+                <button key={v} type="button" disabled={!editMode}
+                  onClick={() => setTarget({ kind: "product", id: x.id })}
+                  className="flex w-full items-center gap-3 border-l-4 border-primary/40 bg-primary-soft/60 py-2 pl-12 pr-3 text-left">
+                  <Tags className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
+                  <span className="min-w-0 flex-1 truncate text-sm text-foreground">{vl(p.vtr, x.product_id ?? x.id, v)}</span>
+                  <Pencil className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                </button>
+              ))}
               </Fragment>
             );
           })}
