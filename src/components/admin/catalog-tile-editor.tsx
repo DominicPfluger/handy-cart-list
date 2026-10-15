@@ -1049,6 +1049,19 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     return () => { off = true; };
   }, [isDept, prod?.id]);
   const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
+  const [ingredients, setIngredients] = useState("");
+  useEffect(() => {
+    if (isDept || !prod?.id) return;
+    let off = false;
+    void supabase.from("products").select("ingredients").eq("id", prod.product_id ?? prod.id).maybeSingle().then(({ data }) => { if (!off) setIngredients((data as { ingredients?: string | null } | null)?.ingredients ?? ""); });
+    return () => { off = true; };
+  }, [isDept, prod?.id, prod?.product_id]);
+  const deriveDiets = () => {
+    const found = dietsFromIngredients(ingredients);
+    if (!found.length) { toast.info(T("adm.ingNone")); return; }
+    setDiets((x) => [...new Set([...x, ...found])]);
+    toast.success(T("adm.ingDerived", { n: String(found.length) }));
+  };
   const dietRows = useDiets();
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantDiets, setVariantDiets] = useState<Record<string, string[]>>(prod?.variant_excluded_diets ?? {});
@@ -1156,7 +1169,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
-        : supabase.from("products").update({ ...base, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
+        : supabase.from("products").update({ ...base, ingredients: ingredients.trim() || null, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
       if (item.name !== base.name) {
         await p.must(supabase.from("catalog_translations").delete().eq("entity_id", item.id).eq("is_manual", false));
         await p.translateIds([item.id]);
@@ -1613,6 +1626,15 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               })}
             </div>
             <p className="text-[11px] text-muted-foreground">{T("adm.dietsHint")}</p>
+          </SectionCollapse>
+        )}
+        {!p.imageOnly && !isDept && prod && (
+          <SectionCollapse label={T("adm.ingredients")}>
+            <textarea value={ingredients} onChange={(e) => setIngredients(e.target.value)} rows={4} maxLength={4000}
+              placeholder={T("adm.ingPlaceholder")} aria-label={T("adm.ingredients")}
+              className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-primary" />
+            <Button type="button" variant="outline" size="sm" onClick={deriveDiets} disabled={!ingredients.trim()}>{T("adm.ingDerive")}</Button>
+            <p className="text-[11px] text-muted-foreground">{T("adm.ingHint")}</p>
           </SectionCollapse>
         )}
         {!p.imageOnly && !isDept && item && (
