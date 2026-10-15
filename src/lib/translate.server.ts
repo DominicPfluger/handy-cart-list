@@ -7,6 +7,7 @@ export const LOCALE_HINTS: Record<string, string> = {
   "es-ES": "Spanish of Spain (patatas, zumo, melocotón).",
   "es-MX": "Mexican Spanish (papas, jugo, durazno, ejotes, jitomate).",
   "fr-FR": "French of France.",
+  "fr-CH": "Swiss French (Suisse romande); standard French, everyday Swiss shelf terms where they differ from France.",
   "fr-CA": "Canadian French grocery terms (patates, bleuets, crème glacée).",
   "it-IT": "Italian of Italy.",
   "it-CH": "Swiss Italian (Ticino) grocery terms where they differ.",
