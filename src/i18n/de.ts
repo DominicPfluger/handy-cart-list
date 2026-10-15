@@ -1196,6 +1196,7 @@ export const de = {
   "adm.suggestStart": "Suche starten",
   "adm.suggestWebFailed": "Websuche ergab nichts – Vorschläge stammen nur von der KI.",
   "adm.synonyms": "Synonyme",
+  "adm.synAfterSave": "Zuerst speichern – danach kannst du hier direkt Synonyme hinzufügen.",
   "adm.synonymPlaceholder": "z. B. Passionsfrucht (Komma trennt)",
   "adm.synonymsHint": "Weitere Namen, unter denen das Produkt in der Suche gefunden wird. Gilt für die gewählte Sprache.",
   "adm.synAllLocales": "Alle Sprachen",

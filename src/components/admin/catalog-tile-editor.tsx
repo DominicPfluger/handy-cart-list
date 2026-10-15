@@ -207,6 +207,26 @@ export function CatalogTileEditor(p: {
   const [rowOver, setRowOver] = useState<number | null>(null);
   const [rowGrab, setRowGrab] = useState<string | null>(null);
   const prodId = (prod: TileProd) => prod.product_id ?? prod.id;
+  const [rowEdit, setRowEdit] = useState<string | null>(null);
+  const trVariants = useServerFn(translateVariants);
+  /** Variante direkt in der Liste umbenennen; alle variantenbezogenen Felder ziehen mit. */
+  const renameVariantRow = (prod: TileProd, from: string, to: string) => {
+    setRowEdit(null);
+    void p.run(async () => {
+      const id = prodId(prod);
+      const { data, error } = await supabase.from("products").select("variants, variant_units, variant_excluded_diets, variant_ingredients, prefix_variants, replace_variants").eq("id", id).single();
+      if (error) throw new Error(error.message);
+      const r = data as unknown as { variants: unknown; variant_units: unknown; variant_excluded_diets: unknown; variant_ingredients: unknown; prefix_variants: unknown; replace_variants: unknown };
+      const mv = (o: unknown) => { const m = { ...((o ?? {}) as Record<string, unknown>) }; if (from in m) { m[to] = m[from]; delete m[from]; } return m; };
+      const arr = (a: unknown) => ((a ?? []) as string[]).map((x) => (x === from ? to : x));
+      await p.must(supabase.from("products").update({
+        variants: arr(r.variants), variant_units: mv(r.variant_units), variant_excluded_diets: mv(r.variant_excluded_diets),
+        variant_ingredients: mv(r.variant_ingredients), prefix_variants: arr(r.prefix_variants), replace_variants: arr(r.replace_variants),
+      } as never).eq("id", id));
+      void trVariants({ data: { productId: id } }).catch(() => {});
+      await qc.invalidateQueries({ queryKey: ["catalog"] });
+    }, T("adm.defaultsSaved"));
+  };
   /** Reihenfolge der Varianten direkt aus der Liste ändern. */
   const moveVariant = (prod: TileProd, from: number, to: number) => {
     const next = [...(prod.variants ?? [])];
@@ -919,9 +939,15 @@ export function CatalogTileEditor(p: {
                   <span aria-label={T("adm.drag")} title={T("adm.drag")} onMouseDown={() => setRowGrab(busyKey)} onMouseUp={() => setRowGrab(null)}
                     className={`select-none px-0.5 text-base text-muted-foreground ${editMode ? "cursor-grab" : ""}`}>⠿</span>
                   <Tags className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-                  <button type="button" disabled={!editMode} onClick={() => setTarget({ kind: "product", id: x.id })} className="min-w-0 flex-1 truncate text-left text-sm text-foreground">
-                    {vl(p.vtr, pid, v)}{vBio && <span className="ml-1 text-[10px] font-semibold text-primary">Bio</span>}
-                  </button>
+                  {rowEdit === busyKey ? (
+                    <span className="flex min-w-0 flex-1">
+                      <VariantNameEdit startEditing productId={pid} variant={v} label={vl(p.vtr, pid, v)} saved existing={x.variants ?? []} onRenamed={(n) => renameVariantRow(x, v, n)} />
+                    </span>
+                  ) : (
+                    <button type="button" disabled={!editMode} title={T("adm.variantRename")} onClick={() => setRowEdit(busyKey)} className="min-w-0 flex-1 cursor-text truncate text-left text-sm text-foreground">
+                      {vl(p.vtr, pid, v)}{vBio && <span className="ml-1 text-[10px] font-semibold text-primary">Bio</span>}
+                    </button>
+                  )}
                   <select value={String(vq)} disabled={!editMode} aria-label={T("adm.defaultQty")} title={T("adm.defaultQty")}
                     onChange={(e) => saveVariantUnit(x, v, { quantity: Number(e.target.value), unit: vunit })}
                     className="h-7 w-[4.2rem] shrink-0 rounded-lg border border-input bg-background px-1 text-xs text-foreground">
@@ -1485,9 +1511,11 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
             )}
           </SectionCollapse>
         )}
-        {!p.imageOnly && !isDept && prod && realProdId && (
+        {!p.imageOnly && !isDept && (
           <SectionCollapse label={T("adm.synonyms")}>
-            <ProductSynonymEditor key={`syn-${realProdId}`} productId={realProdId} bare />
+            {(realProdId ?? newId)
+              ? <ProductSynonymEditor key={`syn-${realProdId ?? newId}`} productId={(realProdId ?? newId)!} bare />
+              : <p className="text-xs text-muted-foreground">{T("adm.synAfterSave")}</p>}
           </SectionCollapse>
         )}
         {!p.imageOnly && !isDept && (
