@@ -865,10 +865,10 @@ export function CatalogTileEditor(p: {
                     {price ? ` · ${formatRefPrice(price)}` : ""}
                   </div>
                 </button>
-                {!x.alias_id && (x.variants ?? []).length > 0 && (
+                {!x.alias_id && (x.variants ?? []).filter((v) => v.trim().toLowerCase() !== "bio").length > 0 && (
                   <button type="button" onClick={() => toggleVars(x.id)} aria-expanded={openVars.has(x.id)}
                     className="flex h-7 shrink-0 items-center gap-0.5 rounded-lg border border-primary/40 bg-primary-soft px-1.5 text-xs font-semibold text-primary">
-                    <ChevronRight className={`h-3.5 w-3.5 transition-transform ${openVars.has(x.id) ? "rotate-90" : ""}`} />{(x.variants ?? []).length}
+                    <ChevronRight className={`h-3.5 w-3.5 transition-transform ${openVars.has(x.id) ? "rotate-90" : ""}`} />{(x.variants ?? []).filter((v) => v.trim().toLowerCase() !== "bio").length}
                   </button>
                 )}
                 <select
@@ -911,7 +911,7 @@ export function CatalogTileEditor(p: {
                   <Tags className="h-3.5 w-3.5" />
                 </Button>
                 {!x.alias_id && (
-                  <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label="Bio" title="Bio-Variante umschalten" onClick={() => toggleBio(x)} className={`h-6 w-6 shrink-0 rounded ${(x.variants ?? []).some((v) => v.toLowerCase() === "bio") ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
+                  <Button type="button" variant="ghost" size="icon" disabled={!editMode} aria-label="Bio" title="Bio-Eigenschaft umschalten" onClick={() => toggleBio(x)} className={`h-6 w-6 shrink-0 rounded ${(x.variants ?? []).some((v) => v.toLowerCase() === "bio") ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}>
                     <Leaf className="h-3.5 w-3.5" />
                   </Button>
                 )}
@@ -922,7 +922,8 @@ export function CatalogTileEditor(p: {
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>
-              {!x.alias_id && (x.variants ?? []).length > 0 && openVars.has(x.id) && (x.variants ?? []).map((v, vi) => {
+              {!x.alias_id && openVars.has(x.id) && (x.variants ?? []).map((v, vi) => {
+                if (v.trim().toLowerCase() === "bio") return null;
                 const vu = x.variant_units?.[v];
                 const vq = vu?.quantity ?? x.default_quantity;
                 const vunit = vu?.unit ?? x.default_unit;
