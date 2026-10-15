@@ -1051,10 +1051,16 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   }, [isDept, prod?.id]);
   const [diets, setDiets] = useState<string[]>(prod?.excluded_diets ?? []);
   const [ingredients, setIngredients] = useState("");
+  const [variantIng, setVariantIng] = useState<Record<string, string>>({});
   useEffect(() => {
     if (isDept || !prod?.id) return;
     let off = false;
-    void supabase.from("products").select("ingredients").eq("id", prod.product_id ?? prod.id).maybeSingle().then(({ data }) => { if (!off) setIngredients((data as { ingredients?: string | null } | null)?.ingredients ?? ""); });
+    void supabase.from("products").select("ingredients, variant_ingredients").eq("id", prod.product_id ?? prod.id).maybeSingle().then(({ data }) => {
+      if (off) return;
+      const d = data as { ingredients?: string | null; variant_ingredients?: Record<string, string> | null } | null;
+      setIngredients(d?.ingredients ?? "");
+      setVariantIng(d?.variant_ingredients ?? {});
+    });
     return () => { off = true; };
   }, [isDept, prod?.id, prod?.product_id]);
   const deriveDiets = () => {
@@ -1067,6 +1073,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
   const [variants, setVariants] = useState<string[]>(prod?.variants ?? []);
   const [variantDiets, setVariantDiets] = useState<Record<string, string[]>>(prod?.variant_excluded_diets ?? {});
   const cleanVariantDiets = () => Object.fromEntries(Object.entries(variantDiets).filter(([k, v]) => variants.includes(k) && v.length));
+  const cleanVariantIng = () => Object.fromEntries(Object.entries(variantIng).map(([k, v]) => [k, v.trim()] as const).filter(([k, v]) => variants.includes(k) && v));
   const [prefixVariants, setPrefixVariants] = useState<string[]>(prod?.prefix_variants ?? []);
   const [replaceVariants, setReplaceVariants] = useState<string[]>(prod?.replace_variants ?? []);
   /** Position durchschalten: hinten → vorne → ersetzt Produktnamen → hinten. */
@@ -1170,7 +1177,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
     if (item) {
       await p.must(isDept
         ? supabase.from("departments").update(base).eq("id", item.id)
-        : supabase.from("products").update({ ...base, ingredients: ingredients.trim() || null, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
+        : supabase.from("products").update({ ...base, ingredients: ingredients.trim() || null, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variant_ingredients: cleanVariantIng(), variants, prefix_variants: prefixVariants.filter((x) => variants.includes(x)), prefix_variants_by_locale: cleanPrefixByLocale(), replace_variants: replaceVariants.filter((x) => variants.includes(x)) } as never).eq("id", item.id));
       if (item.name !== base.name) {
         await p.must(supabase.from("catalog_translations").delete().eq("entity_id", item.id).eq("is_manual", false));
         await p.translateIds([item.id]);
@@ -1187,7 +1194,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
               ? p.products.length + 1
               : await supabase.from("products").select("sort_order").eq("department_id", targetDept).order("sort_order", { ascending: false }).limit(1)
                   .then(({ data }) => ((data?.[0] as { sort_order: number } | undefined)?.sort_order ?? 0) + 1);
-            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variants, sort_order: nextSort } as never).select("id").single();
+            return supabase.from("products").insert({ ...base, department_id: targetDept, default_quantity: qty, default_unit: unit as never, allowed_units: allowedUnits.filter((u) => u !== unit), unit_quantities: unitQuantities, excluded_diets: diets, variant_excluded_diets: cleanVariantDiets(), variant_ingredients: cleanVariantIng(), variants, sort_order: nextSort } as never).select("id").single();
           })();
       if (r.error) throw new Error(r.error.message);
       id = r.data.id;
@@ -1466,7 +1473,7 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                     {vEdit === v && (
                       <div className="basis-full space-y-3 border-t border-border pt-3 pb-1" onDragStart={(e) => { e.preventDefault(); e.stopPropagation(); }}>
                         <div className="flex flex-wrap items-center gap-2 text-sm">
-                          <VariantNameEdit startEditing productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === v ? n : y))); setVariantDiets((d) => { if (!d[v]) return d; const val = d[v]; const rest = { ...d }; delete rest[v]; return val ? { ...rest, [n]: val } : rest; }); setVEdit(n); }} />
+                          <VariantNameEdit startEditing productId={prod?.id} variant={v} label={vl(p.vtr, prod?.id, v)} saved={(prod?.variants ?? []).includes(v)} existing={variants} onRenamed={(n) => { setVariants((x) => x.map((y) => (y === v ? n : y))); setVariantDiets((d) => { if (!d[v]) return d; const val = d[v]; const rest = { ...d }; delete rest[v]; return val ? { ...rest, [n]: val } : rest; }); setVariantIng((m) => { if (!(v in m)) return m; const { [v]: val, ...rest } = m; return { ...rest, [n]: val ?? "" }; }); setVEdit(n); }} />
                         </div>
                         <div className="space-y-1">
                           <p className="text-[11px] font-medium text-muted-foreground">{T("adm.diets")}</p>
@@ -1483,6 +1490,16 @@ function ItemSheet(p: Parameters<typeof CatalogTileEditor>[0] & { target: NonNul
                               );
                             })}
                           </div>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[11px] font-medium text-muted-foreground">{T("adm.ingredients")}</p>
+                          <textarea value={variantIng[v] ?? ""} onChange={(e) => setVariantIng((m) => ({ ...m, [v]: e.target.value }))} rows={3} maxLength={4000}
+                            placeholder={ingredients || T("adm.ingPlaceholder")} aria-label={`${T("adm.ingredients")} ${v}`}
+                            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+                          <Button type="button" variant="outline" size="sm" disabled={!(variantIng[v] ?? "").trim()}
+                            onClick={() => { const found = dietsFromIngredients(variantIng[v] ?? "").filter((d) => !diets.includes(d)); if (!found.length) { toast.info(T("adm.ingNone")); return; } setVariantDiets((d) => ({ ...d, [v]: [...new Set([...(d[v] ?? []), ...found])] })); toast.success(T("adm.ingDerived", { n: String(found.length) })); }}>
+                            {T("adm.ingDerive")}
+                          </Button>
                         </div>
                         {prod && (prod.variants ?? []).includes(v) ? (
                           <div className="flex flex-wrap items-center gap-2">
