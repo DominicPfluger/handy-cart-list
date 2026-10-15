@@ -16,7 +16,7 @@ const T = (k: MessageKey, p?: Record<string, string | number>) => translate(getL
 type Row = { variant: string; image_path: string | null; icon_path: string | null };
 
 /** Admin control for one variant's picture: click the picture for a large view, use the menu to upload, generate or remove. */
-export function VariantImageButton({ productId, productName, variant }: { productId: string; productName?: string; variant: string }) {
+export function VariantImageButton({ productId, productName, variant, actions }: { productId: string; productName?: string; variant: string; actions?: boolean }) {
   const qc = useQueryClient();
   const file = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -91,8 +91,16 @@ export function VariantImageButton({ productId, productName, variant }: { produc
         className="grid h-8 w-8 place-items-center overflow-hidden rounded-md border border-border bg-muted text-xs">
         {busy ? "⏳" : thumb ? <img src={thumb} alt="" className="h-full w-full object-cover" /> : "🖼️"}
       </button>
+      {actions ? (
+        <>
+          <button type="button" disabled={busy} onClick={() => file.current?.click()} className="h-8 rounded-md border border-border bg-background px-2 text-xs hover:bg-muted">📷 {T("adm.variantImageUpload")}</button>
+          <button type="button" disabled={busy} onClick={generate} className="h-8 rounded-md border border-border bg-background px-2 text-xs hover:bg-muted">✨ {T("tile.aiImage")}</button>
+          {row && <button type="button" disabled={busy} onClick={remove} aria-label={T("adm.variantImageRemove")} title={T("adm.variantImageRemove")} className="h-8 rounded-md border border-border bg-background px-2 text-xs text-destructive hover:bg-muted">🗑️</button>}
+        </>
+      ) : (
       <button type="button" aria-label={T("adm.variantImageMenu")} title={T("adm.variantImageMenu")} onClick={() => setOpen((o) => !o)} disabled={busy}
         className="grid h-8 w-6 place-items-center rounded-md border border-border bg-muted text-xs text-muted-foreground hover:bg-background">⋮</button>
+      )}
       {open && (
         <span className="absolute right-0 top-9 z-10 flex w-44 flex-col rounded-lg border border-border bg-background p-1 text-left text-sm shadow-md">
           <button type="button" className="rounded px-2 py-1.5 text-left hover:bg-muted" onClick={() => file.current?.click()}>📷 {T("adm.variantImageUpload")}</button>
