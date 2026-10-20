@@ -1,4 +1,7 @@
 {
+  "offline.catalogUnavailable": "Catalogue currently unavailable",
+  "offline.localListsAvailable": "Saved lists remain available. Shared lists may show an older version.",
+  "offline.retrying": "Checking connection…",
   "dlg.hide": "Hide",
   "splash.slogan": "Together. Simply. Shop.",
   "splash.subtitle": "The smart shopping list for your everyday life.",

@@ -1,4 +1,7 @@
 {
+  "offline.catalogUnavailable": "Catalogus momenteel niet beschikbaar",
+  "offline.localListsAvailable": "Opgeslagen lijsten blijven beschikbaar. Gedeelde lijsten kunnen een oudere versie tonen.",
+  "offline.retrying": "Verbinding controleren…",
   "dlg.hide": "Verbergen",
   "splash.slogan": "Samen. Eenvoudig. Boodschappen doen.",
   "splash.subtitle": "Het slimme boodschappenlijstje voor elke dag.",

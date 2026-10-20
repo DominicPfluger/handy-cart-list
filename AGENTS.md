@@ -36,6 +36,6 @@
 - Admin product creation can target a heading; new items go to that group's end, shifting sort_order. Why: precise placement.
 - Units live in public.units; products keep ordered preferred units with a quantity per unit, and the first mirrors the legacy default. Why: editable units and package-specific defaults.
 - Unshared cloud lists are edited device-locally (`shoppi:local-lists` holds dirty ids + last synced base) and pushed only via the manual sync button as a diff; shared lists (>1 member) stay live. Why: no network traffic while shopping, user controls when the web copy updates.
-- Offline catalog cache lives in IndexedDB (src/lib/catalog-idb.ts) with an in-memory mirror; route loaders use ensureCatalog to await it. Why: localStorage 5 MB limit and synchronous parsing.
+- Catalog: IndexedDB mirror; bounded startup reads return cached/empty data, never persist fallbacks; retry notice + reconnect refresh. Why: Cloud outages must not block local lists.
 - Adding a catalog item that matches an open entry (same product/name, organic flag, unit, numeric qty, no note/photo) sums quantities instead of duplicating. Why: avoid duplicate rows.
 - Store-specific catalog changes live as overrides in store_department_overrides/store_product_overrides (merged in useCatalog by the device-selected store); store_admins + is_store_admin gate writes. Why: shared catalog stays untouched, per-store views stay resettable.

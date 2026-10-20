@@ -1,4 +1,7 @@
 {
+  "offline.catalogUnavailable": "Catalogue momentanément indisponible",
+  "offline.localListsAvailable": "Les listes enregistrées restent disponibles. Les listes partagées peuvent afficher une version plus ancienne.",
+  "offline.retrying": "Vérification de la connexion…",
   "dlg.hide": "Masquer",
   "splash.slogan": "Ensemble. Simplement. Faire les courses.",
   "splash.subtitle": "La liste d’épicerie intelligente pour ton quotidien.",

@@ -1,4 +1,7 @@
 {
+  "offline.catalogUnavailable": "Catálogo indisponível de momento",
+  "offline.localListsAvailable": "As listas guardadas continuam disponíveis. As listas partilhadas podem mostrar uma versão anterior.",
+  "offline.retrying": "A verificar a ligação…",
   "dlg.hide": "Ocultar",
   "splash.slogan": "Juntos. Simples. Fazer compras.",
   "splash.subtitle": "A lista de compras inteligente para o teu dia a dia.",
