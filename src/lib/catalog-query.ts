@@ -11,6 +11,8 @@ import { catalogCacheReady, idbGet, idbKeys, idbSet } from "./catalog-idb";
 import type { QueryClient } from "@tanstack/react-query";
 import { useGroupOrder } from "../hooks/use-group-order";
 import { supabase } from "@/integrations/supabase/client";
+import { resilientRead, withTimeout } from "./resilient-read";
+import { setCatalogUnavailable } from "./catalog-availability";
 
 type StoreOverrides = {
   d: Record<string, { name: string | null; sort_order: number | null; hidden: boolean }>;
@@ -82,7 +84,7 @@ function writeCoreCache(locale: string, data: CatalogCore) {
 
 /** Loader-Helfer: wartet auf den Offline-Katalog aus IndexedDB, damit er sofort erscheint. */
 export async function ensureCatalog(queryClient: QueryClient, locale: string) {
-  await catalogCacheReady;
+  await withTimeout(catalogCacheReady, 1500).catch(() => {});
   return queryClient.ensureQueryData(catalogQueryOptions(locale));
 }
 
@@ -91,12 +93,16 @@ export const catalogQueryOptions = (locale: string) => {
   const cached = typeof window !== "undefined" ? readCoreCache(locale) : null;
   return queryOptions({
     queryKey: ["catalog", "core", locale],
-    queryFn: async () => {
-      try {
-        const fresh = await getCatalogCore({ data: { locale } });
+    networkMode: "always",
+    queryFn: () => resilientRead({
+      read: () => getCatalogCore({ data: { locale } }),
+      timeout: 8000,
+      onSuccess: (fresh) => {
         writeCoreCache(locale, fresh);
-        return fresh;
-      } catch (e) {
+        setCatalogUnavailable(locale, false);
+      },
+      onFailure: () => setCatalogUnavailable(locale, true),
+      fallback: () => {
         // Offline: letzten gespeicherten Katalog zeigen, statt auf den Ladebildschirm zu hängen
         const cached = readCoreCache(locale);
         if (cached) return cached.data;
@@ -111,19 +117,18 @@ export const catalogQueryOptions = (locale: string) => {
         } catch { /* ignore */ }
         // Letzter Ausweg: leerer Katalog, damit gespeicherte Listen trotzdem erscheinen
         const empty: CatalogCore = { departments: [], products: [], headings: [], departmentAliases: [], productAliases: [] };
-        if (typeof navigator !== "undefined" && !navigator.onLine) return empty;
-        throw e;
-      }
-    },
+        return empty;
+      },
+    }),
     // Gespeicherter Stand erscheint sofort und wird im Hintergrund aufgefrischt.
     initialData: cached?.data,
     initialDataUpdatedAt: cached?.t ?? 0,
     // Neue Kategorien und Produkte sollen nach kurzer Zeit auch in bereits geöffneten Apps erscheinen.
     staleTime: 60 * 1000,
-    // Loader uses ensureQueryData (fetchQuery = no retry by default). Retry so a
-    // single interrupted request (reload/HMR during the large download) doesn't blank the page.
-    retry: 3,
-    retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
+    // Retry via the visible button or reconnect, not a blocking startup loop.
+    retry: false,
+    refetchOnReconnect: "always",
+    refetchOnWindowFocus: "always",
   });
 };
 
@@ -147,7 +152,7 @@ export const catalogDetailsQueryOptions = (locale: string) => {
     queryKey: ["catalog", "details", locale],
     queryFn: async () => {
       try {
-        const fresh = await getCatalogDetails({ data: { locale } });
+        const fresh = await withTimeout(getCatalogDetails({ data: { locale } }), 8000);
         idbSet(detailsCacheKey(locale), { t: Date.now(), data: fresh });
         return fresh;
       } catch (e) {
@@ -159,18 +164,18 @@ export const catalogDetailsQueryOptions = (locale: string) => {
     initialData: cached?.data,
     initialDataUpdatedAt: cached?.t ?? 0,
     staleTime: 10 * 60 * 1000,
-    retry: 2,
-    retryDelay: (attempt) => Math.min(500 * 2 ** attempt, 4000),
+    retry: false,
+    refetchOnReconnect: "always",
   });
 };
 
 /** Signierte Bild-Adressen erneuern, bevor sie ablaufen; gespeicherte Dateien bleiben im Geräte-Cache. */
 export const catalogImagesQueryOptions = queryOptions({
   queryKey: ["catalog-images"],
-  queryFn: () => getCatalogImageUrls(),
+  queryFn: () => withTimeout(getCatalogImageUrls(), 8000),
   staleTime: 45 * 60 * 1000,
   refetchInterval: 45 * 60 * 1000,
-  retry: 2,
+  retry: false,
 });
 
 /** Übersetzter Katalogname ohne persönliche Umbenennung. */

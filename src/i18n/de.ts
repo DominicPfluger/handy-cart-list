@@ -58,6 +58,9 @@ export const de = {
   "common.backToList": "Zurück zur Liste",
   "common.error": "Etwas ist schiefgelaufen",
   "common.retry": "Erneut versuchen",
+  "offline.catalogUnavailable": "Katalog gerade nicht erreichbar",
+  "offline.localListsAvailable": "Gespeicherte Listen bleiben verfügbar. Geteilte Listen können einen älteren Stand zeigen.",
+  "offline.retrying": "Verbindung wird geprüft …",
 
   "diet.filter": "Ernährungsform",
   "cuisine.filter": "Länderküche",

@@ -23,6 +23,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
 import { EscapeCloser } from "@/components/escape-closer";
 import { ShareSheet } from "@/components/share-sheet";
+import { CatalogConnectionNotice } from "@/components/catalog-connection-notice";
 import {
   ListIcon,
   ListIconFilled,
@@ -200,6 +201,7 @@ function RootComponent() {
       <PronunciationRulesLoader />
       <div className={`relative mx-auto min-h-screen w-full bg-background ${isAdmin ? "max-w-[440px] md:max-w-5xl xl:max-w-7xl md:px-4" : "max-w-[440px]"}`}>
         <main className="px-5 pb-36 pt-5">
+          <CatalogConnectionNotice />
           <Outlet />
           <Toaster position="top-center" />
           <EscapeCloser />

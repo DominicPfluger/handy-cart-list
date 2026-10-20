@@ -22,6 +22,7 @@ import {
 import { useAuthUser, type AuthUser } from "./use-auth-user";
 import { renameListStore } from "./use-group-order";
 import type { MessageKey } from "../i18n/de";
+import { withTimeout } from "../lib/resilient-read";
 
 export type CategoryId =
   | "obst-gemuese"
@@ -638,7 +639,7 @@ function useCloudLists(
   const fetchCloud = useCallback(async () => {
     const seq = ++fetchSeqRef.current;
     try {
-      const res = await getMyLists();
+      const res = await withTimeout(getMyLists(), 8000);
       // Veraltete Antwort (neueres Neuladen läuft bereits) verwerfen
       if (seq !== fetchSeqRef.current) return;
       const now = Date.now();
@@ -781,6 +782,7 @@ function useCloudLists(
       setHydrated(true);
     } catch {
       // Offline oder Fehler: letzten gespeicherten Stand zeigen, Änderungen landen in der Warteschlange
+      if (seq !== fetchSeqRef.current) return;
       try {
         const raw = localStorage.getItem(SNAPSHOT_KEY);
         const snap = raw ? (JSON.parse(raw) as { lists: ShoppingList[]; members: string[]; selfName: string }) : null;

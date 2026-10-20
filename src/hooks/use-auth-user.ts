@@ -21,6 +21,10 @@ export function useAuthUser(): AuthUser | null | undefined {
 
   useEffect(() => {
     let active = true;
+    // A stalled session refresh must not hide device-local lists indefinitely.
+    const startupTimer = setTimeout(() => {
+      if (active) setUser(lastKnown ?? null);
+    }, 8000);
     type RawUser = { id: string; email?: string | null; user_metadata?: Record<string, unknown> } | null | undefined;
     const toUser = (u: RawUser): AuthUser | null =>
       u
@@ -35,6 +39,7 @@ export function useAuthUser(): AuthUser | null | undefined {
     const read = async () => {
       // Zuerst gespeicherte Sitzung (funktioniert offline), danach online bestätigen.
       const { data: s } = await supabase.auth.getSession();
+      clearTimeout(startupTimer);
       if (!active) return;
       const local = toUser(s.session?.user);
       setUser(local);
@@ -52,12 +57,13 @@ export function useAuthUser(): AuthUser | null | undefined {
         /* offline */
       }
     };
-    read();
+    void read().catch(() => { if (active) setUser(lastKnown ?? null); });
     const { data: sub } = supabase.auth.onAuthStateChange(() => {
-      read();
+      void read().catch(() => { if (active) setUser(lastKnown ?? null); });
     });
     return () => {
       active = false;
+      clearTimeout(startupTimer);
       sub.subscription.unsubscribe();
     };
   }, []);
