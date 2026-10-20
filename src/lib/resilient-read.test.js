@@ -7,7 +7,7 @@ describe("offline startup reads", () => {
     let writes = 0;
     let unavailable = false;
     const result = await resilientRead({
-      read: () => new Promise< typeof saved>(() => {}), timeout: 10,
+      read: () => new Promise(() => {}), timeout: 10,
       fallback: () => saved, onSuccess: () => { writes++; },
       onFailure: () => { unavailable = true; },
     });
@@ -18,14 +18,14 @@ describe("offline startup reads", () => {
   test("first visit can open without a saved catalog when the server fails", async () => {
     const result = await resilientRead({
       read: async () => { throw new Error("HTTP 530"); }, timeout: 10,
-      fallback: () => ({ products: [] as string[] }),
+      fallback: () => ({ products: [] }),
       onSuccess: () => { throw new Error("must not persist fallback"); }, onFailure: () => {},
     });
     expect(result.products).toEqual([]);
   });
   test("retry after recovery saves the real catalog and clears the outage", async () => {
     let unavailable = true;
-    let saved: string[] = [];
+    let saved = [];
     const result = await resilientRead({
       read: async () => ["Milch", "Brot"], timeout: 10, fallback: () => [],
       onSuccess: (value) => { saved = value; unavailable = false; }, onFailure: () => {},
@@ -37,7 +37,7 @@ describe("offline startup reads", () => {
   test("late responses cannot overwrite the fallback after a timeout", async () => {
     let writes = 0;
     await resilientRead({
-      read: () => new Promise<string>((resolve) => setTimeout(() => resolve("late"), 30)),
+      read: () => new Promise((resolve) => setTimeout(() => resolve("late"), 30)),
       timeout: 5, fallback: () => "saved", onSuccess: () => { writes++; }, onFailure: () => {},
     });
     await new Promise((resolve) => setTimeout(resolve, 40));
