@@ -1,4 +1,7 @@
 {
+  "offline.catalogUnavailable": "Katalog gerade nicht erreichbar",
+  "offline.localListsAvailable": "Gespeicherte Listen bleiben verfügbar. Geteilte Listen können einen älteren Stand zeigen.",
+  "offline.retrying": "Verbindung wird geprüft …",
   "splash.slogan": "Gemeinsam.Einfach.Einkaufen.",
   "splash.subtitle": "Die smarte Einkaufsliste für deinen Alltag.",
   "splash.loading": "Shoppi lädt …",
