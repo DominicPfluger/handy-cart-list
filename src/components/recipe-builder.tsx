@@ -309,7 +309,7 @@ export function RecipeBuilder({ onTemplateChange, mode = "generator", loadRecipe
         productId: p.id,
         departmentId: p.departmentId,
         name: p.name,
-        quantity: scaleQuantity(isValidQty(q) ? formatQuantity(q.qty, q.unit) : formatQuantity(p.defaultQuantity, p.defaultUnit), f),
+        quantity: scaleQuantity(isValidQty(q) ? formatQuantity(q.qty, q.unit) : formatQuantity(p.defaultQuantity, p.defaultUnit), f, locale),
         unit: isValidQty(q) ? q.unit : p.defaultUnit,
         organic: false,
         emoji: p.emoji,
