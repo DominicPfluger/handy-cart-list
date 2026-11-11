@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Aktueller Auftrag
+- [x] Monitoring: grosse Rezeptmengen korrekt skalieren und Standardvarianten auf Produktseiten wieder anzeigen; 21 Tests bestanden, 1000 g × 2 als 2000 g in der Liste und gemeinsame Anzeige eigener/Standardvarianten im Browser geprüft.
 - [ ] Offline-Fehlerabsicherung: begrenzte Start-Wartezeit, gespeicherte Listen erhalten, verständlicher Hinweis mit erneutem Laden; Ausfall und Wiederverbindung prüfen.
 - [x] Varianten-Bearbeitung im Admin-Produktdialog per Stift direkt unter der Zeile; angemeldet geprüft: Umbenennen, Synonyme, Übersetzungen, Auf-/Zuklappen ohne zusätzliches Variantenfenster
 - [x] Umschalter vorangestellt/nachgestellt auch in der Kachelansicht des Produkt-Dialogs

@@ -212,8 +212,8 @@ function ProductPage() {
       <div className="mt-4 rounded-2xl bg-card p-4 shadow-sm">
         <div className="text-sm">
             <p className="text-muted-foreground">{t("pd.variants")}</p>
-            {ownVariants.length > 0 && <div className="mt-1.5 flex flex-wrap gap-1.5">
-              {ownVariants.map((v) => (
+            {product.variants.length > 0 && <div className="mt-1.5 flex flex-wrap gap-1.5">
+              {product.variants.map((v) => (
                 <span key={v} role="button" tabIndex={0} title={t("pd.variantCopied")}
                   onClick={() => { void navigator.clipboard?.writeText(variantLabel(v)).then(() => toast.success(t("pd.variantCopied"))).catch(() => {}); }}
                   onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); void navigator.clipboard?.writeText(variantLabel(v)).then(() => toast.success(t("pd.variantCopied"))).catch(() => {}); } }}
@@ -222,7 +222,7 @@ function ProductPage() {
                   {ownVariants.includes(v) && !sharedVariants.includes(v) ? (
                     <Button type="button" variant="ghost" size="sm" aria-label={t("dept.removeVariant", { name: variantLabel(v) })} title={t("dept.removeVariant", { name: variantLabel(v) })} onClick={() => removePersonalVariant(product.id, v)} className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
                   ) : isAdmin ? (
-                    <Button type="button" variant="ghost" size="sm" aria-label={t("pd.removeVariant", { name: variantLabel(v) })} disabled={saving}
+                    <Button type="button" variant="outline" size="sm" aria-label={t("pd.removeVariant", { name: variantLabel(v) })} disabled={saving}
                       onClick={() => void save({ variants: sharedVariants.filter((x) => x !== v) })}
                       className="ml-1 h-5 min-w-5 p-0 text-muted-foreground">×</Button>
                   ) : null}
