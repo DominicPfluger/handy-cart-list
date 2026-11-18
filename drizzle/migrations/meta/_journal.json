@@ -64,6 +64,13 @@
       "when": 1792066124981,
       "tag": "0008_variant_units",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1795023382654,
+      "tag": "0009_migration",
+      "breakpoints": true
     }
   ]
 }
