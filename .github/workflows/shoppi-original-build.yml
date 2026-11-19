@@ -1,0 +1,30 @@
+name: Shoppi Original React TypeScript Build
+on:
+  push:
+    branches:
+      - shoppi-original-buildtest-2026-11-19
+  workflow_dispatch:
+jobs:
+  original-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install original dependencies
+        run: bun install --frozen-lockfile
+      - name: Build original TanStack Start app
+        run: bun run build
+      - name: Store build output (if successful)
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: shoppi-original-react-build
+          path: |
+            .output/
+            dist/
+          if-no-files-found: warn
